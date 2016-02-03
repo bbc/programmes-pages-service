@@ -1,0 +1,27 @@
+{
+    "name": "bbc/programmes-pages-service",
+    "license": "proprietary",
+    "type": "library",
+    "description": "A library for building /programmes pages",
+    "autoload": {
+        "psr-4": { "BBC\\ProgrammesPagesService\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Tests\\BBC\\ProgrammesPagesService\\": "tests/" }
+    },
+    "require": {
+        "php": ">=7.0.1",
+        "doctrine/orm": "^2.5",
+        "gedmo/doctrine-extensions": "^2.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.1",
+        "squizlabs/php_codesniffer": "^2.5",
+        "escapestudios/symfony2-coding-standard": "^2.0"
+    },
+    "config": {
+        "platform": {
+            "php": "7.0.1"
+        }
+    }
+}

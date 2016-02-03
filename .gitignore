@@ -1,0 +1,5 @@
+vendor
+build/reports
+
+# Local overrides of phpunit config (e.g. to disable coverage reporting)
+/phpunit.xml

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<ruleset name="Symfony-Programmes">
+    <description>Symfony CS for /programmes</description>
+    <!-- Requires adding https://github.com/escapestudios/Symfony2-coding-standard to
+    your composer.json -->
+
+   <file>.</file>
+
+    <exclude-pattern type="relative">*.js</exclude-pattern>
+    <exclude-pattern>./build/</exclude-pattern>
+    <exclude-pattern>./vendor/</exclude-pattern>
+    <exclude-pattern>./bin/</exclude-pattern>
+    <exclude-pattern>./tmp/</exclude-pattern>
+    <exclude-pattern>./var/</exclude-pattern>
+    <exclude-pattern>./node_modules/</exclude-pattern>
+    <exclude-pattern>./web/</exclude-pattern>
+    <exclude-pattern>./app/</exclude-pattern>
+
+    <!-- There should not be any code in the bundle Resources directory. -->
+    <exclude-pattern>*/Resources/*</exclude-pattern>
+
+    <arg value="p"/>
+
+    <!-- Include the whole Symfony2 standard -->
+    <rule ref="vendor/escapestudios/symfony2-coding-standard/Symfony2">
+        <!-- Ignore missing function docblocks as we hint parameter and return
+            types using proper typehints -->
+        <exclude name="Symfony2.Commenting.FunctionComment.MissingParamComment"/>
+        <exclude name="Symfony2.Commenting.FunctionComment.MissingParamTag"/>
+        <exclude name="Symfony2.Commenting.FunctionComment.Missing"/>
+        <exclude name="Symfony2.Commenting.FunctionComment.MissingReturn"/>
+        <exclude name="Symfony2.Commenting.ClassComment.Missing"/>
+
+        <!-- We don't care about requiring a blank line before a return -->
+        <exclude name="Symfony2.Formatting.BlankLineBeforeReturn"/>
+
+        <!-- We don't care about abstract class names having to be prefixed with "Abstract" -->
+        <exclude name="Symfony2.NamingConventions.ValidClassName.InvalidAbstractName"/>
+
+        <!-- We don't care if parameter names all line up as if one changes then
+            the diff will be noisy -->
+        <exclude name="Symfony2.Commenting.FunctionComment.SpacingAfterParamType"/>
+
+        <!-- This doesn't enforce what we want it to.
+        See https://github.com/escapestudios/Symfony2-coding-standard/issues/27 -->
+        <exclude name="PEAR.Functions.FunctionCallSignature.Indent"/>
+    </rule>
+
+    <!-- Concatenation should be surrounded by a single space -->
+    <rule ref="Squiz.Strings.ConcatenationSpacing">
+        <properties>
+           <property name="spacing" value="1"/>
+           <property name="ignoreNewlines" value="true"/>
+        </properties>
+    </rule>
+
+    <!-- The Mappers that convert nitro/pips to DB entites can have variables
+        with underscores in them as that's what they look like in the nitro/pips apis -->
+    <rule ref="Zend.NamingConventions.ValidVariableName">
+        <exclude-pattern>src/FaucetBundle/Mapper/*</exclude-pattern>
+    </rule>
+</ruleset>

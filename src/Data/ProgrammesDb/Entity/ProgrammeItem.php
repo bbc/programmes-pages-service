@@ -1,0 +1,130 @@
+<?php
+
+namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
+
+use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
+use Doctrine\ORM\Mapping as ORM;
+use DateTime;
+use InvalidArgumentException;
+
+/**
+ * @ORM\MappedSuperclass()
+ */
+abstract class ProgrammeItem extends Programme
+{
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $mediaType = MediaTypeEnum::UNKNOWN;
+
+    /**
+     * @var Version|null
+     * @ORM\OneToOne(targetEntity="Version")
+     */
+    private $streamableVersion;
+
+    /**
+     * @var DateTime|null
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $streamableFrom;
+
+    /**
+     * @var DateTime|null
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $streamableUntil;
+
+    /**
+     * Duration - taken from the streamable version
+     *
+     * @var int|null
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $duration;
+
+
+    public function getMediaType(): string
+    {
+        return $this->mediaType;
+    }
+
+    /**
+     * @param string $mediaType
+     * @throws InvalidArgumentException
+     */
+    public function setMediaType($mediaType)
+    {
+        if (!in_array($mediaType, [MediaTypeEnum::AUDIO, MediaTypeEnum::VIDEO, MediaTypeEnum::UNKNOWN])) {
+            throw new InvalidArgumentException(sprintf(
+                'Called setMediaType with an invalid value. Expected one of "%s", "%s" or "%s" but got "%s"',
+                MediaTypeEnum::AUDIO,
+                MediaTypeEnum::VIDEO,
+                MediaTypeEnum::UNKNOWN,
+                $mediaType
+            ));
+        }
+
+        $this->mediaType = $mediaType;
+    }
+
+    /**
+     * @return Version|null
+     */
+    public function getStreamableVersion()
+    {
+        return $this->streamableVersion;
+    }
+
+    public function setStreamableVersion(Version $streamableVersion = null)
+    {
+        $this->streamableVersion = $streamableVersion;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getStreamableFrom()
+    {
+        return $this->streamableFrom;
+    }
+
+    public function setStreamableFrom(DateTime $streamableFrom = null)
+    {
+        $this->streamableFrom = $streamableFrom;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getStreamableUntil()
+    {
+        return $this->streamableUntil;
+    }
+
+    public function setStreamableUntil(DateTime $streamableUntil = null)
+    {
+        $this->streamableUntil = $streamableUntil;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @param int|null $duration
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+    }
+}

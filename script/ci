@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+RESULT=0
+
+# Run PHPUnit
+vendor/bin/phpunit || RESULT=1
+
+# Run PHPCS
+vendor/bin/phpcs --report=checkstyle --report-file=build/reports/checkstyle.xml || RESULT=1
+
+exit $RESULT
