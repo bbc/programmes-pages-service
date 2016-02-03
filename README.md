@@ -49,7 +49,7 @@ doctrine:
         mappings:
             ProgrammesPagesService:
                 type: annotation
-                dir: "%kernel.root_dir%/../vendor/bbc/programmes-pages-service/src/ProgrammesPagesService"
+                dir: "%kernel.root_dir%/../vendor/bbc/programmes-pages-service/src/Data/ProgrammesDb/Entity"
                 is_bundle: false
                 prefix: BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity
         filters:
