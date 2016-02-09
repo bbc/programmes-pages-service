@@ -166,7 +166,7 @@ abstract class CoreEntity
         return $this->searchTitle;
     }
 
-    public function setSearchTitle($searchTitle): string
+    public function setSearchTitle(string $searchTitle)
     {
         $this->searchTitle = $searchTitle;
     }

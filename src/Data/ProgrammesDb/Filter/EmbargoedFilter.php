@@ -15,6 +15,6 @@ class EmbargoedFilter extends SQLFilter
             return "";
         }
 
-        return $targetTableAlias . '.' . $targetEntity->getColumnName($embargoedField) . '= 0';
+        return $targetTableAlias . '.' . $targetEntity->getColumnName($embargoedField) . ' = 0';
     }
 }

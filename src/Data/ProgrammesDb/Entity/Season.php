@@ -13,14 +13,14 @@ class Season extends GroupProgrammeContainer
     use Traits\AggregatedBroadcastsCountTrait;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $startDate;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */

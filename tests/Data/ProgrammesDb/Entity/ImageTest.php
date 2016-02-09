@@ -11,6 +11,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
     {
         $image = new Image();
 
+        $this->assertEquals(null, $image->getId());
         $this->assertEquals(null, $image->getPid());
         $this->assertEquals('', $image->getTitle());
         $this->assertEquals('', $image->getShortSynopsis());

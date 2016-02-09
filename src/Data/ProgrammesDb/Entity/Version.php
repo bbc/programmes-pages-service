@@ -50,17 +50,23 @@ class Version
         $this->versionTypes = new ArrayCollection();
     }
 
-    public function getId(): int
+    /**
+     * @return int|null
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getPid(): string
+    /**
+     * @return string|null
+     */
+    public function getPid()
     {
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid = null)
     {
         $this->pid = $pid;
     }
@@ -78,11 +84,6 @@ class Version
         $this->duration = $duration;
     }
 
-    public function setProgrammeItem(ProgrammeItem $programme)
-    {
-        return $this->programme = $programme;
-    }
-
     /**
      * @return ProgrammeItem
      */
@@ -91,7 +92,12 @@ class Version
         return $this->programmeItem;
     }
 
-    public function getVersionTypes(): PersistentCollection
+    public function setProgrammeItem(ProgrammeItem $programmeItem)
+    {
+        return $this->programmeItem = $programmeItem;
+    }
+
+    public function getVersionTypes(): ArrayCollection
     {
         return $this->versionTypes;
     }

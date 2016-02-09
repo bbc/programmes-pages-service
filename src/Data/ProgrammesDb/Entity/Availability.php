@@ -62,17 +62,23 @@ class Availability
         $this->mediaSets = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId()
     {
         return $this->id;
     }
 
-    public function getVersion(): Version
+    /**
+     * @return Version|null
+     */
+    public function getVersion()
     {
         return $this->version;
     }
 
-    public function setVersion(Version $version)
+    public function setVersion(Version $version = null)
     {
         $this->version = $version;
     }
@@ -90,7 +96,10 @@ class Availability
         $this->end = $end;
     }
 
-    public function getStart(): DateTime
+    /**
+     * @return DateTime|null
+     */
+    public function getStart()
     {
         return $this->start;
     }
