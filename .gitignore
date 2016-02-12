@@ -2,4 +2,6 @@
 /vendor
 /phpunit.xml
 
+/tests/db.sqlite
+
 /composer.phar
