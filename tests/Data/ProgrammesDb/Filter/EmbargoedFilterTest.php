@@ -23,6 +23,11 @@ class EmbargoedFilterTest extends PHPUnit_Framework_TestCase
 
     public function testEmbargoableItem()
     {
+        $this->mockEntityManager = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+
+        $this->mockClassMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'Doctrine\ORM\Mapping\ClassMetaData'
+        );
         $this->mockClassMetadata
             ->expects($this->any())
             ->method('hasField')
@@ -42,6 +47,11 @@ class EmbargoedFilterTest extends PHPUnit_Framework_TestCase
 
     public function testNotEmbargoableItem()
     {
+        $this->mockEntityManager = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+
+        $this->mockClassMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'Doctrine\ORM\Mapping\ClassMetaData'
+        );
         $this->mockClassMetadata
             ->expects($this->any())
             ->method('hasField')
