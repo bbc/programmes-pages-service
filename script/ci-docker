@@ -36,7 +36,7 @@ vendor/bin/phpunit || RESULT=1
 vendor/bin/phpcs --report=checkstyle --report-file=build/reports/checkstyle.xml || RESULT=1
 
 if [ "$RESULT" = "0" ]; then
-    php composer.phar --no-ansi --no-interaction --version --no-dev --optimize-autoloader --prefer-dist install || RESULT=1
+    php composer.phar --no-ansi --no-interaction --no-dev --optimize-autoloader --prefer-dist install || RESULT=1
 fi
 
 exit $RESULT
