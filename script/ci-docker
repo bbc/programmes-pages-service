@@ -10,8 +10,6 @@ if ! (php --version | grep -q "PHP 7") ; then
     exit 1
 fi
 
-export SYMFONY_ENV=prod;
-
 # Download and run composer
 if [ ! -f "composer.phar" ]; then
     curl -sS https://getcomposer.org/installer | php
@@ -34,9 +32,5 @@ vendor/bin/phpunit || RESULT=1
 
 # Run PHPCS
 vendor/bin/phpcs --report=checkstyle --report-file=build/reports/checkstyle.xml || RESULT=1
-
-if [ "$RESULT" = "0" ]; then
-    php composer.phar --no-ansi --no-interaction --no-dev --optimize-autoloader --prefer-dist install || RESULT=1
-fi
 
 exit $RESULT

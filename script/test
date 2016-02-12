@@ -8,4 +8,5 @@ if ! (php --version | grep -q "PHP 7.0.") ; then
     fi
 fi
 
-php app/console server:run 0.0.0.0:8000
+vendor/bin/phpunit
+vendor/bin/phpcs
