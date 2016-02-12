@@ -9,6 +9,7 @@ class EmbargoedFilterTest extends PHPUnit_Framework_TestCase
 {
     private $mockEntityManager;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $mockClassMetadata;
 
     public function setup()
