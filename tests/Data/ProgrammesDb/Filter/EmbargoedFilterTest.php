@@ -23,11 +23,15 @@ class EmbargoedFilterTest extends PHPUnit_Framework_TestCase
 
     public function testEmbargoableItem()
     {
-        $this->mockClassMetadata->method('hasField')
+        $this->mockClassMetadata
+            ->expects($this->any())
+            ->method('hasField')
             ->with($this->equalTo('isEmbargoed'))
             ->willReturn(true);
 
-        $this->mockClassMetadata->method('getColumnName')
+        $this->mockClassMetadata
+            ->expects($this->any())
+            ->method('getColumnName')
             ->with($this->equalTo('isEmbargoed'))
             ->willReturn('isEmbargo');
 
@@ -38,7 +42,9 @@ class EmbargoedFilterTest extends PHPUnit_Framework_TestCase
 
     public function testNotEmbargoableItem()
     {
-        $this->mockClassMetadata->method('hasField')
+        $this->mockClassMetadata
+            ->expects($this->any())
+            ->method('hasField')
             ->with($this->equalTo('isEmbargoed'))
             ->willReturn(false);
 
