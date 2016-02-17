@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
+namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
@@ -8,33 +8,8 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepo
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class CoreEntityRepositoryTest extends AbstractDatabaseTest
+class CoreEntityRepositoryFindAllTest extends AbstractDatabaseTest
 {
-    public function testFindByPidFull()
-    {
-        $this->loadFixtures(['MongrelsFixture']);
-        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-
-        $entity = $repo->findByPidFull('b00swyx1');
-        $this->assertInternalType('array', $entity);
-        $this->assertEquals('b00swyx1', $entity['pid']);
-
-        // findByPid query and the parent lookup query
-        $this->assertCount(2, $this->getDbQueries());
-    }
-
-    public function testFindByPidFullWhenEmptyResult()
-    {
-        $this->loadFixtures(['MongrelsFixture']);
-        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-
-        $entity = $repo->findByPidFull('qqqqqqq');
-        $this->assertNull($entity);
-
-        // findByPid query only
-        $this->assertCount(1, $this->getDbQueries());
-    }
-
     /**
      * @dataProvider findAllWithParentsDataProvider
      */
@@ -53,8 +28,8 @@ class CoreEntityRepositoryTest extends AbstractDatabaseTest
     public function findAllWithParentsDataProvider()
     {
         return [
-            [50, 0, ['b010t19z', 'b00tf1zy', 'b00swgkn', 'b00syxx6', 'b00t0ycf', 'b0175lqm', 'b0176rgj', 'b0177ffr', 'b00swyx1', 'b010t150']],
-            [2, 3, ['b00syxx6', 'b00t0ycf']],
+            [50, 0, ['b010t19z', 'b00tf1zy', 'p00h64pq', 'b00swgkn', 'b00syxx6', 'b00t0ycf', 'b0175lqm', 'b0176rgj', 'b0177ffr', 'p00hv9yz', 'p008k0l5', 'p008k0jy', 'p008nhl4', 'b00swyx1', 'b010t150']],
+            [2, 3, ['b00swgkn', 'b00syxx6']],
         ];
     }
 
@@ -75,7 +50,7 @@ class CoreEntityRepositoryTest extends AbstractDatabaseTest
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $this->assertEquals(10, $repo->countAll());
+        $this->assertEquals(15, $repo->countAll());
 
         // count query only
         $this->assertCount(1, $this->getDbQueries());

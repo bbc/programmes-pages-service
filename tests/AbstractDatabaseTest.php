@@ -30,12 +30,17 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
 
         // Reset the SQL Logger so we only care about Queries made after the
         // fixtures have loaded
-        $this->getEntityManager()->getConfiguration()->setSQLLogger(new DebugStack());
+        $this->resetDbQueryLogger();
     }
 
     protected function getDbQueries()
     {
         return $this->getEntityManager()->getConfiguration()->getSQLLogger()->queries;
+    }
+
+    protected function resetDbQueryLogger()
+    {
+        $this->getEntityManager()->getConfiguration()->setSQLLogger(new DebugStack());
     }
 
     protected function getOrmExecutor()
