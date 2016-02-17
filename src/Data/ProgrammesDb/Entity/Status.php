@@ -102,7 +102,10 @@ class Status
         $this->latestChangeEventId = $latestChangeEventId;
     }
 
-    public function getLatestChangeEventCreatedAt(): DateTime
+    /**
+     * @return DateTime|null
+     */
+    public function getLatestChangeEventCreatedAt()
     {
         return $this->latestChangeEventCreatedAt;
     }
@@ -112,7 +115,10 @@ class Status
         $this->latestChangeEventCreatedAt = $latestChangeEventCreatedAt;
     }
 
-    public function getLatestChangeEventProcessedAt(): DateTime
+    /**
+     * @return DateTime|null
+     */
+    public function getLatestChangeEventProcessedAt()
     {
         return $this->latestChangeEventProcessedAt;
     }
@@ -122,7 +128,7 @@ class Status
         $this->latestChangeEventProcessedAt = $latestChangeEventProcessedAt;
     }
 
-    public function getPipsLatestId(): DateTime
+    public function getPipsLatestId(): string
     {
         return $this->pipsLatestId;
     }
@@ -132,7 +138,10 @@ class Status
         $this->pipsLatestId = $pipsLatestId;
     }
 
-    public function getPipsLatestTime(): DateTime
+    /**
+     * @return DateTime|null
+     */
+    public function getPipsLatestTime()
     {
         return $this->pipsLatestTime;
     }
@@ -152,7 +161,10 @@ class Status
         $this->nitroLastMessageId = $nitroLastMessageId;
     }
 
-    public function getNitroLastMessageTime(): DateTime
+    /**
+     * @return DateTime|null
+     */
+    public function getNitroLastMessageTime()
     {
         return $this->nitroLastMessageTime;
     }
@@ -172,7 +184,10 @@ class Status
         $this->nitroLatestPid = $nitroLatestPid;
     }
 
-    public function getNitroLatestTime(): DateTime
+    /**
+     * @return DateTime|null
+     */
+    public function getNitroLatestTime()
     {
         return $this->nitroLatestTime;
     }
