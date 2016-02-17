@@ -45,6 +45,13 @@ class CoreEntityRepository extends MaterializedPathRepository
         return $this->resolveParents($result);
     }
 
+    public function countAll()
+    {
+        $qb = $this->createQueryBuilder('programme')
+            ->select(['count(programme.id)']);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function findChildren($programmeId, $limit, $offset)
     {
         $qb = $this->createQueryBuilder('programme')
@@ -56,13 +63,6 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->setParameter('parentId', $programmeId);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-    }
-
-    public function countAll()
-    {
-        $qb = $this->createQueryBuilder('programme')
-            ->select(['count(programme.id)']);
-        return $qb->getQuery()->getSingleScalarResult();
     }
 
     public function countChildren($programmeId)
@@ -96,11 +96,6 @@ class CoreEntityRepository extends MaterializedPathRepository
      */
     private function resolveParents(array $programmes)
     {
-        //No programmes so do nothing
-        if (empty($programmes)) {
-            return $programmes;
-        }
-
         // Build a list of all unique parentIds found in all of the programmes
         $listOfAllParentIds = [];
         foreach ($programmes as $programme) {
@@ -150,6 +145,9 @@ class CoreEntityRepository extends MaterializedPathRepository
 
     private function searchSetForProgrammeWithId(array $resultSet, int $id)
     {
+        // TODO we should come up with a way of storing all programmes using
+        // their ID as a key, so we can lookup a programme from it's ID in
+        // O(1) time, instead of O(n)
         foreach ($resultSet as $programme) {
             if ($programme['id'] == $id) {
                 return $programme;

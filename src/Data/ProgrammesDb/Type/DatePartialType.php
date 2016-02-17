@@ -4,7 +4,9 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Type;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use Doctrine\DBAL\Types\DateType;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use InvalidArgumentException;
 
 class DatePartialType extends DateType
 {
@@ -33,10 +35,7 @@ class DatePartialType extends DateType
             return $value->formatMysql();
         }
 
-        throw ConversionException::conversionFailedInvalidType($value, $this->getName(), [
-            'null',
-            'BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate',
-        ]);
+        throw ConversionException::conversionFailed($value, $this->getName());
     }
 
     /**
@@ -50,12 +49,11 @@ class DatePartialType extends DateType
             return $value;
         }
 
-        $val = new PartialDate($value);
-        if (!$val) {
+        try {
+            return new PartialDate($value);
+        } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateFormatString());
         }
-
-        return $val;
     }
 
     /**

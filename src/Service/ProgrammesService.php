@@ -40,6 +40,11 @@ class ProgrammesService
         );
     }
 
+    public function countAll(): int
+    {
+        return $this->programmeRepository->countAll();
+    }
+
     public function findByPidFull(
         Pid $pid
     ): EntitySingleServiceResult {

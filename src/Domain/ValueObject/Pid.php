@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Domain\ValueObject;
 
+use InvalidArgumentException;
 use JsonSerializable;
 
 class Pid implements JsonSerializable
@@ -10,22 +11,20 @@ class Pid implements JsonSerializable
 
     public function __construct(string $pid)
     {
-        // @todo - validate and throw exceptions
-        $this->pid = $pid;
-    }
+        if (!preg_match('/^[0-9|b-d|f-h|j-n|p-t|v-z]{8,}$/i', $pid)) {
+            throw new InvalidArgumentException('Could not create a Pid from string "' . $pid . '". Expected an alphanumeric string of at least 8 characters that does not contain any vowels');
+        }
 
-    public function getValue(): string
-    {
-        return $this->pid;
+        $this->pid = $pid;
     }
 
     public function __toString(): string
     {
-        return $this->getValue();
+         return $this->pid;
     }
 
     public function jsonSerialize()
     {
-        return $this->getValue();
+        return (string) $this;
     }
 }

@@ -91,4 +91,37 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(101, $programme->getPosition());
         $this->assertEquals(1001, $programme->getExpectedChildCount());
     }
+
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Tried to create a ProgrammeContainer with an invalid isPodcastable. Expected one of "high", "low" or "no" but got "wrongwrongwrong"
+     */
+    public function testInvalidMediaType()
+    {
+        $pid = new Pid('p01m5mss');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+
+        $pid = new Pid('p01m5mss');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+
+        $programme = new Brand(
+            $pid,
+            'Title',
+            'Search Title',
+            'Short Synopsis',
+            'Longest Synopsis',
+            $image,
+            1,
+            2,
+            true,
+            true,
+            11,
+            12,
+            13,
+            14,
+            15,
+            'wrongwrongwrong'
+        );
+    }
 }

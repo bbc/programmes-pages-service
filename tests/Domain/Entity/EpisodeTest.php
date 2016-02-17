@@ -92,4 +92,31 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Tried to create a ProgrammeItem with an invalid MediaType. Expected one of "audio", "video" or "" but got "wrongwrongwrong"
+     */
+    public function testInvalidMediaType()
+    {
+        $pid = new Pid('p01m5mss');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+
+        $programme = new Episode(
+            $pid,
+            'Title',
+            'Search Title',
+            'Short Synopsis',
+            'Longest Synopsis',
+            $image,
+            1,
+            2,
+            true,
+            true,
+            'wrongwrongwrong',
+            11,
+            12,
+            13
+        );
+    }
 }

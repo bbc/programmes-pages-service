@@ -27,6 +27,9 @@ $conn = [
     'path' => __DIR__ . '/db.sqlite',
 ];
 $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . "/../src/Data/ProgrammesDb/Entity"], true, null, null, false);
+$config->addEntityNamespace('ProgrammesPagesService', 'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity');
+$config->setSQLLogger(new Doctrine\DBAL\Logging\DebugStack());
+$config->addFilter("embargoed_filter", "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Filter\EmbargoedFilter");
 
 // obtaining the entity manager
 return \Doctrine\ORM\EntityManager::create($conn, $config, $evm);
