@@ -31,11 +31,11 @@ abstract class Programme extends CoreEntity
     private $hasSupportingContent = false;
 
     /**
-     * @var string|null
+     * @var int|null
      *
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $position;
+    private $position;
 
 
     public function getPromotionsCount(): int

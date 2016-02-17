@@ -55,14 +55,18 @@ class ProgrammesService
         );
     }
 
-    public function findChildrenByPid(
+    public function findEpisodeGuideChildrenByPid(
         Pid $pid,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): EntityCollectionServiceResult {
         $parent = $this->programmeRepository->findByPidFull((string) $pid);
 
-        $dbEntities = $this->programmeRepository->findChildren(
+        if (is_null($parent)) {
+            return new EntityCollectionServiceResult([], $limit, $page);
+        }
+
+        $dbEntities = $this->programmeRepository->findEpisodeGuideChildren(
             $parent['id'],
             $limit,
             $this->getOffset($limit, $page)
@@ -75,11 +79,15 @@ class ProgrammesService
         );
     }
 
-    public function countChildrenByPid(Pid $pid): int
+    public function countEpisodeGuideChildrenByPid(Pid $pid): int
     {
         $parent = $this->programmeRepository->findByPidFull((string) $pid);
 
-        return $this->programmeRepository->countChildren($parent['id']);
+        if (is_null($parent)) {
+            return 0;
+        }
+
+        return $this->programmeRepository->countEpisodeGuideChildren($parent['id']);
     }
 
     public function findDescendantsByPid(
