@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class MediaSet
+class RefMediaSet
 {
     /**
      * @var int|null
@@ -23,7 +23,7 @@ class MediaSet
      *
      * @ORM\Column(type="string", nullable=false, unique=true)
      */
-    private $type;
+    private $name;
 
     /**
      * @return string|null
@@ -36,13 +36,13 @@ class MediaSet
     /**
      * @return string|null
      */
-    public function getType()
+    public function getName()
     {
-        return $this->type;
+        return $this->name;
     }
 
-    public function setType(string $type)
+    public function setName(string $name)
     {
-        $this->type = $type;
+        $this->name = $name;
     }
 }

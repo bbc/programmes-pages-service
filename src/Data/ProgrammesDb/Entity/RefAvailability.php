@@ -11,7 +11,7 @@ use InvalidArgumentException;
 /**
  * @ORM\Entity()
  */
-class Availability
+class RefAvailability
 {
     /**
      * @var int|null
@@ -30,6 +30,13 @@ class Availability
     private $status = AvailabilityStatusEnum::PENDING;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $type;
+
+    /**
      * @var Version
      *
      * @ORM\ManyToOne(targetEntity="Version")
@@ -37,23 +44,37 @@ class Availability
     private $version;
 
     /**
+     * @var ProgrammeItem
+     *
+     * @ORM\ManyToOne(targetEntity="ProgrammeItem")
+     */
+    private $programmeItem;
+
+    /**
      * @var DateTime
      *
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $start;
+    private $scheduledStart;
 
     /**
      * @var DateTime
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $end;
+    private $scheduledEnd;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $actualStart;
 
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="MediaSet")
+     * @ORM\ManyToMany(targetEntity="RefMediaSet")
      */
     private $mediaSets;
 
@@ -84,29 +105,71 @@ class Availability
     }
 
     /**
-     * @return DateTime|null
+     * @return string
      */
-    public function getEnd()
+    public function getType()
     {
-        return $this->end;
+        return $this->type;
     }
 
-    public function setEnd(DateTime $end = null)
+    public function setType(string $type)
     {
-        $this->end = $end;
+        $this->type = $type;
     }
 
     /**
-     * @return DateTime|null
+     * @return ProgrammeItem
      */
-    public function getStart()
+    public function getProgrammeItem()
     {
-        return $this->start;
+        return $this->programmeItem;
     }
 
-    public function setStart(DateTime $start)
+    public function setProgrammeItem(ProgrammeItem $programmeItem)
     {
-        $this->start = $start;
+        $this->programmeItem = $programmeItem;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getScheduledStart()
+    {
+        return $this->scheduledStart;
+    }
+
+    public function setScheduledStart(DateTime $scheduledStart)
+    {
+        $this->scheduledStart = $scheduledStart;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getScheduledEnd()
+    {
+        return $this->scheduledEnd;
+    }
+
+    /**
+     * @param DateTime $scheduledEnd
+     */
+    public function setScheduledEnd($scheduledEnd)
+    {
+        $this->scheduledEnd = $scheduledEnd;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getActualStart()
+    {
+        return $this->actualStart;
+    }
+
+    public function setActualStart(DateTime $actualStart)
+    {
+        $this->actualStart = $actualStart;
     }
 
     public function getStatus(): string
@@ -139,7 +202,7 @@ class Availability
         $this->mediaSets = $mediaSets;
     }
 
-    public function addMediaSet(MediaSet $mediaSet)
+    public function addMediaSet(RefMediaSet $mediaSet)
     {
         $this->mediaSets[] = $mediaSet;
     }
