@@ -67,21 +67,17 @@ class RefAvailability
     /**
      * @var DateTime
      *
-     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $actualStart;
 
     /**
-     * @var ArrayCollection
+     * @var RefMediaSet
      *
-     * @ORM\ManyToMany(targetEntity="RefMediaSet")
+     * @ORM\ManyToOne(targetEntity="RefMediaSet")
      */
-    private $mediaSets;
+    private $mediaSet;
 
-    public function __construct()
-    {
-        $this->mediaSets = new ArrayCollection();
-    }
 
     /**
      * @return int|null
@@ -192,18 +188,13 @@ class RefAvailability
         $this->status = $status;
     }
 
-    public function getMediaSets(): ArrayCollection
+    public function getMediaSet(): RefMediaSet
     {
-        return $this->mediaSets;
+        return $this->mediaSet;
     }
 
-    public function setMediaSets(ArrayCollection $mediaSets)
+    public function setMediaSet(RefMediaSet $mediaSet)
     {
-        $this->mediaSets = $mediaSets;
-    }
-
-    public function addMediaSet(RefMediaSet $mediaSet)
-    {
-        $this->mediaSets[] = $mediaSet;
+        $this->mediaSet = $mediaSet;
     }
 }

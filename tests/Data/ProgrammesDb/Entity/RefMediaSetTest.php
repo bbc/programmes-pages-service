@@ -2,17 +2,17 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MediaSet;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefMediaSet;
 use PHPUnit_Framework_TestCase;
 
 class MediaSetTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new MediaSet();
+        $entity = new RefMediaSet();
 
         $this->assertEquals(null, $entity->getId());
-        $this->assertEquals(null, $entity->getType());
+        $this->assertEquals(null, $entity->getName());
     }
 
     /**
@@ -20,7 +20,7 @@ class MediaSetTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $entity = new MediaSet();
+        $entity = new RefMediaSet();
 
         $entity->{'set' . $name}($validValue);
         $this->assertEquals($validValue, $entity->{'get' . $name}());
@@ -29,7 +29,7 @@ class MediaSetTest extends PHPUnit_Framework_TestCase
     public function setterDataProvider()
     {
         return [
-            ['type', 'default'],
+            ['Name', 'default'],
         ];
     }
 }
