@@ -99,7 +99,14 @@ abstract class CoreEntity
      *
      * @ORM\Column(type="string", nullable=false)
      */
-    private $longestSynopsis = '';
+    private $mediumSynopsis = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $longSynopsis = '';
 
     /**
      * @var Image|null
@@ -109,6 +116,13 @@ abstract class CoreEntity
     private $image;
 
     //// Denormalisations
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $longestSynopsis = '';
 
     /**
      * @var int
@@ -200,6 +214,26 @@ abstract class CoreEntity
     public function setShortSynopsis(string $shortSynopsis)
     {
         $this->shortSynopsis = $shortSynopsis;
+    }
+
+    public function getMediumSynopsis(): string
+    {
+        return $this->mediumSynopsis;
+    }
+
+    public function setMediumSynopsis(string $mediumSynopsis)
+    {
+        $this->mediumSynopsis = $mediumSynopsis;
+    }
+
+    public function getLongSynopsis(): string
+    {
+        return $this->longSynopsis;
+    }
+
+    public function setLongSynopsis($longSynopsis)
+    {
+        $this->longSynopsis = $longSynopsis;
     }
 
     public function getLongestSynopsis(): string

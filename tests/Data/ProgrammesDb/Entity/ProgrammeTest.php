@@ -21,7 +21,6 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $entity->getPromotionsCount());
         $this->assertEquals(false, $entity->getIsStreamable());
         $this->assertEquals(false, $entity->getHasSupportingContent());
-        $this->assertEquals(null, $entity->getReleaseDate());
         $this->assertEquals(null, $entity->getPosition());
     }
 
@@ -44,7 +43,6 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
             ['PromotionsCount', 1],
             ['IsStreamable', true],
             ['HasSupportingContent', true],
-            ['ReleaseDate', new PartialDate('2016')],
             ['Position', 1],
         ];
     }

@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
+use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use PHPUnit_Framework_TestCase;
 use DateTime;
 
@@ -25,6 +26,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(null, $entity->getStreamableFrom());
         $this->assertEquals(null, $entity->getStreamableUntil());
         $this->assertEquals(null, $entity->getDuration());
+        $this->assertEquals(null, $entity->getReleaseDate());
     }
 
     /**
@@ -49,6 +51,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
             ['StreamableVersion', new Version()],
             ['StreamableFrom', new DateTime()],
             ['StreamableUntil', new DateTime()],
+            ['ReleaseDate', new PartialDate('2016')],
             ['Duration', 1],
         ];
     }

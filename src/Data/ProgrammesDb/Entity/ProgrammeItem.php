@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
+use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use InvalidArgumentException;
@@ -13,11 +14,25 @@ use InvalidArgumentException;
 abstract class ProgrammeItem extends Programme
 {
     /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $embeddable;
+
+    /**
      * @var DateTime
      *
      * @ORM\Column(type="string", nullable=false)
      */
     private $mediaType = MediaTypeEnum::UNKNOWN;
+
+    /**
+     * @var PartialDate|null
+     *
+     * @ORM\Column(type="date_partial", nullable=true)
+     */
+    private $releaseDate;
 
     /**
      * @var Version|null
@@ -81,6 +96,19 @@ abstract class ProgrammeItem extends Programme
     }
 
     /**
+     * @return PartialDate|null
+     */
+    public function getReleaseDate()
+    {
+        return $this->releaseDate;
+    }
+
+    public function setReleaseDate(PartialDate $releaseDate = null)
+    {
+        $this->releaseDate = $releaseDate;
+    }
+
+    /**
      * @return Version|null
      */
     public function getStreamableVersion()
@@ -130,6 +158,16 @@ abstract class ProgrammeItem extends Programme
     public function setStreamable(bool $streamable)
     {
         $this->streamable = $streamable;
+    }
+
+    public function isEmbeddable(): bool
+    {
+        return $this->embeddable;
+    }
+
+    public function setEmbeddable(bool $embeddable)
+    {
+        $this->embeddable = $embeddable;
     }
 
     /**
