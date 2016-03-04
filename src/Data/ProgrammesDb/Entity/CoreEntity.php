@@ -120,7 +120,7 @@ abstract class CoreEntity
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="text", nullable=false)
      */
     private $longestSynopsis = '';
 
