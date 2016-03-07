@@ -5,9 +5,11 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Relationship Type Table. Never queried directly.
+ * Instead used for denormalisations
  * @ORM\Entity()
  */
-class RefMediaSet
+class RefRelationshipType
 {
     /**
      * @var int|null
@@ -17,6 +19,12 @@ class RefMediaSet
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="string", nullable=false, unique=true)
+     */
+    private $pid;
 
     /**
      * @var string|null
@@ -31,6 +39,19 @@ class RefMediaSet
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPid()
+    {
+        return $this->pid;
+    }
+
+    public function setPid(string $pid = null)
+    {
+        $this->pid = $pid;
     }
 
     /**

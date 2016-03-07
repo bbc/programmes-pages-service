@@ -3,7 +3,6 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Enumeration\AvailabilityStatusEnum;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use InvalidArgumentException;
