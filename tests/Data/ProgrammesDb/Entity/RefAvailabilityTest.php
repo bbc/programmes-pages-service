@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefAvailability;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefMediaSet;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
@@ -45,6 +45,8 @@ class AvailabilityTest extends PHPUnit_Framework_TestCase
             ['ScheduledEnd', new DateTime()],
             ['ActualStart', new DateTime()],
             ['MediaSet', new RefMediaSet()],
+            ['Type', 'audio_nondrm_download'],
+            ['ProgrammeItem', new Episode()],
         ];
     }
 
