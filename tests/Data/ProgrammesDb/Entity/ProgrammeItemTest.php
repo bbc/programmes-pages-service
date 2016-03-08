@@ -20,11 +20,11 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
             $entity
         );
 
-        $this->assertEquals(MediaTypeEnum::UNKNOWN, $entity->getMediaType());
-        $this->assertEquals(null, $entity->getStreamableVersion());
-        $this->assertEquals(null, $entity->getStreamableFrom());
-        $this->assertEquals(null, $entity->getStreamableUntil());
-        $this->assertEquals(null, $entity->getDuration());
+        $this->assertSame(MediaTypeEnum::UNKNOWN, $entity->getMediaType());
+        $this->assertSame(null, $entity->getStreamableVersion());
+        $this->assertSame(null, $entity->getStreamableFrom());
+        $this->assertSame(null, $entity->getStreamableUntil());
+        $this->assertSame(null, $entity->getDuration());
     }
 
     /**
@@ -37,7 +37,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
         );
 
         $entity->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $entity->{'get' . $name}());
+        $this->assertSame($validValue, $entity->{'get' . $name}());
     }
 
     public function setterDataProvider()

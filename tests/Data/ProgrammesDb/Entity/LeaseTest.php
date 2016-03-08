@@ -11,8 +11,8 @@ class LeaseTest extends PHPUnit_Framework_TestCase
     {
         $lease = new Lease();
 
-        $this->assertEquals(null, $lease->getId());
-        $this->assertEquals('unassigned', $lease->getWorkerId());
+        $this->assertSame(null, $lease->getId());
+        $this->assertSame('unassigned', $lease->getWorkerId());
         $this->assertInstanceOf('\Datetime', $lease->getLeaseExpiration());
     }
 
@@ -20,10 +20,10 @@ class LeaseTest extends PHPUnit_Framework_TestCase
     {
         $lease = new Lease();
         $lease->setWorkerId('worker-1');
-        $this->assertEquals('worker-1', $lease->getWorkerId());
+        $this->assertSame('worker-1', $lease->getWorkerId());
 
         $now = new \DateTime('now');
         $lease->setLeaseExpiration($now);
-        $this->assertEquals($now, $lease->getLeaseExpiration());
+        $this->assertSame($now, $lease->getLeaseExpiration());
     }
 }

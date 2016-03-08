@@ -12,11 +12,11 @@ class RefRelationshipTest extends PHPUnit_Framework_TestCase
     {
         $entity = new RefRelationship();
 
-        $this->assertEquals(null, $entity->getId());
-        $this->assertEquals(null, $entity->getPid());
-        $this->assertEquals(null, $entity->getSubjectPid());
-        $this->assertEquals(null, $entity->getObjectPid());
-        $this->assertEquals(null, $entity->getRelationshipType());
+        $this->assertSame(null, $entity->getId());
+        $this->assertSame(null, $entity->getPid());
+        $this->assertSame(null, $entity->getSubjectPid());
+        $this->assertSame(null, $entity->getObjectPid());
+        $this->assertSame(null, $entity->getRelationshipType());
     }
 
     /**
@@ -27,7 +27,7 @@ class RefRelationshipTest extends PHPUnit_Framework_TestCase
         $entity = new RefRelationship();
 
         $entity->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $entity->{'get' . $name}());
+        $this->assertSame($validValue, $entity->{'get' . $name}());
     }
 
     public function setterDataProvider()

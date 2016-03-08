@@ -11,12 +11,12 @@ class ImageTest extends PHPUnit_Framework_TestCase
     {
         $image = new Image();
 
-        $this->assertEquals(null, $image->getId());
-        $this->assertEquals(null, $image->getPid());
-        $this->assertEquals('', $image->getTitle());
-        $this->assertEquals('', $image->getShortSynopsis());
-        $this->assertEquals('', $image->getType());
-        $this->assertEquals('jpg', $image->getExtension());
+        $this->assertSame(null, $image->getId());
+        $this->assertSame(null, $image->getPid());
+        $this->assertSame('', $image->getTitle());
+        $this->assertSame('', $image->getShortSynopsis());
+        $this->assertSame(null, $image->getType());
+        $this->assertSame('jpg', $image->getExtension());
     }
 
     /**

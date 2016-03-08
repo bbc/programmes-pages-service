@@ -14,10 +14,10 @@ class VersionTest extends PHPUnit_Framework_TestCase
     {
         $entity = new Version();
 
-        $this->assertEquals(null, $entity->getId());
-        $this->assertEquals(null, $entity->getPid());
-        $this->assertEquals(null, $entity->getDuration());
-        $this->assertEquals(null, $entity->getProgrammeItem());
+        $this->assertSame(null, $entity->getId());
+        $this->assertSame(null, $entity->getPid());
+        $this->assertSame(null, $entity->getDuration());
+        $this->assertSame(null, $entity->getProgrammeItem());
         $this->assertEquals(new ArrayCollection(), $entity->getVersionTypes());
     }
 
@@ -29,7 +29,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $entity = new Version();
 
         $entity->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $entity->{'get' . $name}());
+        $this->assertSame($validValue, $entity->{'get' . $name}());
     }
 
     public function setterDataProvider()
@@ -38,7 +38,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
 
         return [
             ['Pid', 'a-string'],
-            ['Duration', '1'],
+            ['Duration', 1],
             ['ProgrammeItem', new Episode()],
             ['VersionTypes', $versionTypes],
         ];

@@ -11,8 +11,8 @@ class MediaSetTest extends PHPUnit_Framework_TestCase
     {
         $entity = new RefMediaSet();
 
-        $this->assertEquals(null, $entity->getId());
-        $this->assertEquals(null, $entity->getName());
+        $this->assertSame(null, $entity->getId());
+        $this->assertSame(null, $entity->getName());
     }
 
     /**
@@ -23,7 +23,7 @@ class MediaSetTest extends PHPUnit_Framework_TestCase
         $entity = new RefMediaSet();
 
         $entity->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $entity->{'get' . $name}());
+        $this->assertSame($validValue, $entity->{'get' . $name}());
     }
 
     public function setterDataProvider()

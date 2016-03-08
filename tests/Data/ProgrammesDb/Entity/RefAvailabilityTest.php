@@ -17,12 +17,12 @@ class AvailabilityTest extends PHPUnit_Framework_TestCase
     {
         $entity = new RefAvailability();
 
-        $this->assertEquals(null, $entity->getId());
-        $this->assertEquals(AvailabilityStatusEnum::PENDING, $entity->getStatus());
-        $this->assertEquals(null, $entity->getVersion());
-        $this->assertEquals(null, $entity->getScheduledStart());
-        $this->assertEquals(null, $entity->getScheduledEnd());
-        $this->assertEquals(null, $entity->getActualStart());
+        $this->assertSame(null, $entity->getId());
+        $this->assertSame(AvailabilityStatusEnum::PENDING, $entity->getStatus());
+        $this->assertSame(null, $entity->getVersion());
+        $this->assertSame(null, $entity->getScheduledStart());
+        $this->assertSame(null, $entity->getScheduledEnd());
+        $this->assertSame(null, $entity->getActualStart());
     }
 
     /**
@@ -33,7 +33,7 @@ class AvailabilityTest extends PHPUnit_Framework_TestCase
         $entity = new RefAvailability();
 
         $entity->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $entity->{'get' . $name}());
+        $this->assertSame($validValue, $entity->{'get' . $name}());
     }
 
     public function setterDataProvider()

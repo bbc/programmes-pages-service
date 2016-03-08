@@ -18,11 +18,11 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
             $entity
         );
 
-        $this->assertEquals(0, $entity->getPromotionsCount());
-        $this->assertEquals(false, $entity->getIsStreamable());
-        $this->assertEquals(false, $entity->getHasSupportingContent());
-        $this->assertEquals(null, $entity->getReleaseDate());
-        $this->assertEquals(null, $entity->getPosition());
+        $this->assertSame(0, $entity->getPromotionsCount());
+        $this->assertSame(false, $entity->getIsStreamable());
+        $this->assertSame(false, $entity->getHasSupportingContent());
+        $this->assertSame(null, $entity->getReleaseDate());
+        $this->assertSame(null, $entity->getPosition());
     }
 
     /**
@@ -35,7 +35,7 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
         );
 
         $entity->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $entity->{'get' . $name}());
+        $this->assertSame($validValue, $entity->{'get' . $name}());
     }
 
     public function setterDataProvider()
