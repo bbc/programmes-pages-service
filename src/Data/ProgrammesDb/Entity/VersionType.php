@@ -26,6 +26,13 @@ class VersionType
     private $type;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $name;
+
+    /**
      * @return int
      */
     public function getId()
@@ -47,5 +54,21 @@ class VersionType
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 }
