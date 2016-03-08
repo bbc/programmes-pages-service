@@ -61,7 +61,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Series'
         );
-        $releaseDate = new PartialDate('2015-01-02');
+        $releaseDate = new PartialDate(2015, 01, 02);
 
         $programme = new Series(
             $pid,

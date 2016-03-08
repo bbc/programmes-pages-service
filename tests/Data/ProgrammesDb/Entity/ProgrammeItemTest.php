@@ -51,7 +51,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
             ['StreamableVersion', new Version()],
             ['StreamableFrom', new DateTime()],
             ['StreamableUntil', new DateTime()],
-            ['ReleaseDate', new PartialDate('2016')],
+            ['ReleaseDate', new PartialDate(2016)],
             ['Duration', 1],
         ];
     }

@@ -55,7 +55,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             'availableGalleriesCount' => 15,
             'isPodcastable' => IsPodcastableEnum::NO,
             'parent' => null,
-            'releaseDate' => new PartialDate('2015-01-02'),
+            'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'expectedChildCount' => 1001,
         ];
@@ -78,7 +78,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             15,
             IsPodcastableEnum::NO,
             null,
-            new PartialDate('2015-01-02'),
+            new PartialDate(2015, 01, 02),
             101,
             1001
         );
@@ -115,7 +115,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             'availableGalleriesCount' => 15,
             'isPodcastable' => IsPodcastableEnum::NO,
             'parent' => null,
-            'releaseDate' => new PartialDate('2015-01-02'),
+            'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'expectedChildCount' => 1001,
         ];
@@ -138,7 +138,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             15,
             IsPodcastableEnum::NO,
             null,
-            new PartialDate('2015-01-02'),
+            new PartialDate(2015, 01, 02),
             101,
             1001
         );
@@ -173,7 +173,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             'availableClipsCount' => 12,
             'availableGalleriesCount' => 13,
             'parent' => null,
-            'releaseDate' => new PartialDate('2015-01-02'),
+            'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'duration' => 102,
             'streamableFrom' => new DateTime('2015-01-03'),
@@ -196,7 +196,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             12,
             13,
             null,
-            new PartialDate('2015-01-02'),
+            new PartialDate(2015, 01, 02),
             101,
             102,
             new DateTimeImmutable('2015-01-03'),
@@ -230,7 +230,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             'isStreamable' => true,
             'mediaType' => MediaTypeEnum::UNKNOWN,
             'parent' => null,
-            'releaseDate' => new PartialDate('2015-01-02'),
+            'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'duration' => 102,
             'streamableFrom' => new DateTime('2015-01-03'),
@@ -250,7 +250,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             true,
             MediaTypeEnum::UNKNOWN,
             null,
-            new PartialDate('2015-01-02'),
+            new PartialDate(2015, 01, 02),
             101,
             102,
             new DateTimeImmutable('2015-01-03'),
@@ -282,7 +282,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             'availableGalleriesCount' => 15,
             'isPodcastable' => IsPodcastableEnum::NO,
             'parent' => null,
-            'releaseDate' => new PartialDate('2015-01-02'),
+            'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'expectedChildCount' => 1001,
         ];
@@ -305,7 +305,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             15,
             IsPodcastableEnum::NO,
             null,
-            new PartialDate('2015-01-02'),
+            new PartialDate(2015, 01, 02),
             101,
             1001
         );
@@ -342,7 +342,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             'availableGalleriesCount' => 15,
             'isPodcastable' => IsPodcastableEnum::NO,
             'parent' => null,
-            'releaseDate' => new PartialDate('2015-01-02'),
+            'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'expectedChildCount' => 1001,
             'parent' => [
@@ -372,7 +372,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
                 'availableGalleriesCount' => 15,
                 'isPodcastable' => IsPodcastableEnum::NO,
                 'parent' => null,
-                'releaseDate' => new PartialDate('2015-01-02'),
+                'releaseDate' => new PartialDate(2015, 01, 02),
                 'position' => 101,
                 'expectedChildCount' => 1001,
             ],
@@ -413,11 +413,11 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
                 15,
                 IsPodcastableEnum::NO,
                 null,
-                new PartialDate('2015-01-02'),
+                new PartialDate(2015, 01, 02),
                 101,
                 1001
             ),
-            new PartialDate('2015-01-02'),
+            new PartialDate(2015, 01, 02),
             101,
             1001
         );

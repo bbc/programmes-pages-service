@@ -33,7 +33,7 @@ class DatePartialTypeTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(null, $this->type->convertToDatabaseValue(null, $this->platform));
 
-        $this->assertEquals('2015-01-00', $this->type->convertToDatabaseValue(new PartialDate('2015-01'), $this->platform));
+        $this->assertEquals('2015-01-00', $this->type->convertToDatabaseValue(new PartialDate(2015, 1), $this->platform));
     }
 
     /**
@@ -48,8 +48,8 @@ class DatePartialTypeTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(null, $this->type->convertToPHPValue(null, $this->platform));
 
-        $this->assertEquals(new PartialDate('2015-01'), $this->type->convertToPHPValue(new PartialDate('2015-01'), $this->platform));
-        $this->assertEquals(new PartialDate('2015-01'), $this->type->convertToPHPValue('2015-01-00', $this->platform));
+        $this->assertEquals(new PartialDate(2015, 1), $this->type->convertToPHPValue(new PartialDate(2015, 1), $this->platform));
+        $this->assertEquals(new PartialDate(2015, 1), $this->type->convertToPHPValue('2015-01-00', $this->platform));
     }
 
     /**
@@ -57,6 +57,6 @@ class DatePartialTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testToPhpValueInvalid()
     {
-        $this->type->convertToPHPValue(3, $this->platform);
+        $this->type->convertToPHPValue("-3", $this->platform);
     }
 }

@@ -48,9 +48,11 @@ class DatePartialType extends DateType
         if ($value === null || $value instanceof PartialDate) {
             return $value;
         }
-
         try {
-            return new PartialDate($value);
+            $values = explode('-', $value);
+            return new PartialDate(...$values);
+
+
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateFormatString());
         }

@@ -51,7 +51,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Series'
         );
-        $releaseDate = new PartialDate('2015-01-02');
+        $releaseDate = new PartialDate(2015, 01, 02);
 
         $streamableFrom = new DateTimeImmutable();
         $streamableUntil = new DateTimeImmutable();
