@@ -8,7 +8,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Table(
- *   indexes={ @ORM\Index(name="pid_idx", columns={"pid", "id", "ancestry"})}
+ *   indexes={ @ORM\Index(name="pid_idx", columns={"pid"}), @ORM\Index(name="ancestry_idx", columns={"ancestry"})}
  * )
  * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
