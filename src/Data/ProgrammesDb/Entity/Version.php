@@ -47,11 +47,13 @@ class Version
 
     /**
      * @ORM\ManyToOne(targetEntity="ProgrammeItem")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $programmeItem;
 
     /**
      * @ORM\ManyToMany(targetEntity="VersionType",cascade="persist")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $versionTypes;
 

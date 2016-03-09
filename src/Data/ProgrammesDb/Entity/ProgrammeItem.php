@@ -37,6 +37,7 @@ abstract class ProgrammeItem extends Programme
     /**
      * @var Version|null
      * @ORM\OneToOne(targetEntity="Version")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $streamableVersion;
 

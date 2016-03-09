@@ -75,6 +75,7 @@ abstract class CoreEntity
      * @var CoreEntity|null
      *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      * @Gedmo\TreeParent()
      */
     private $parent;
@@ -112,6 +113,7 @@ abstract class CoreEntity
      * @var Image|null
      *
      * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $image;
 
