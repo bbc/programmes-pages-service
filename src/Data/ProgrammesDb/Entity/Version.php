@@ -91,7 +91,7 @@ class Version
         return $this->duration;
     }
 
-    public function setDuration(int $duration)
+    public function setDuration(int $duration = null)
     {
         $this->duration = $duration;
     }
