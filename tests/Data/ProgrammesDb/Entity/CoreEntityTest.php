@@ -14,17 +14,17 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity'
         );
 
-        $this->assertEquals(null, $entity->getId());
-        $this->assertEquals(null, $entity->getPid());
-        $this->assertEquals(false, $entity->getIsEmbargoed());
-        $this->assertEquals('', $entity->getTitle());
-        $this->assertEquals('', $entity->getSearchTitle());
-        $this->assertEquals(null, $entity->getParent());
-        $this->assertEquals('', $entity->getAncestry());
-        $this->assertEquals('', $entity->getShortSynopsis());
-        $this->assertEquals('', $entity->getLongestSynopsis());
-        $this->assertEquals(null, $entity->getImage());
-        $this->assertEquals(0, $entity->getRelatedLinksCount());
+        $this->assertSame(null, $entity->getId());
+        $this->assertSame(null, $entity->getPid());
+        $this->assertSame(false, $entity->getIsEmbargoed());
+        $this->assertSame('', $entity->getTitle());
+        $this->assertSame('', $entity->getSearchTitle());
+        $this->assertSame(null, $entity->getParent());
+        $this->assertSame('', $entity->getAncestry());
+        $this->assertSame('', $entity->getShortSynopsis());
+        $this->assertSame('', $entity->getLongestSynopsis());
+        $this->assertSame(null, $entity->getImage());
+        $this->assertSame(0, $entity->getRelatedLinksCount());
     }
 
     /**

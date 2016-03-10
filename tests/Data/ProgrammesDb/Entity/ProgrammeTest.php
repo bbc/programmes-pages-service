@@ -22,6 +22,7 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $entity->getIsStreamable());
         $this->assertEquals(false, $entity->getHasSupportingContent());
         $this->assertEquals(null, $entity->getPosition());
+
     }
 
     /**
@@ -34,7 +35,7 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
         );
 
         $entity->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $entity->{'get' . $name}());
+        $this->assertSame($validValue, $entity->{'get' . $name}());
     }
 
     public function setterDataProvider()

@@ -11,8 +11,8 @@ class VersionTypeTest extends PHPUnit_Framework_TestCase
     {
         $entity = new VersionType();
 
-        $this->assertEquals(null, $entity->getId());
-        $this->assertEquals(null, $entity->getType());
+        $this->assertSame(null, $entity->getId());
+        $this->assertSame(null, $entity->getType());
     }
 
     /**
@@ -23,7 +23,7 @@ class VersionTypeTest extends PHPUnit_Framework_TestCase
         $entity = new VersionType();
 
         $entity->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $entity->{'get' . $name}());
+        $this->assertSame($validValue, $entity->{'get' . $name}());
     }
 
     public function setterDataProvider()

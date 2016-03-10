@@ -26,8 +26,8 @@ class SeasonTest extends PHPUnit_Framework_TestCase
             $entity
         );
 
-        $this->assertEquals(null, $entity->getStartDate());
-        $this->assertEquals(null, $entity->getEndDate());
+        $this->assertSame(null, $entity->getStartDate());
+        $this->assertSame(null, $entity->getEndDate());
     }
 
     /**
@@ -38,7 +38,7 @@ class SeasonTest extends PHPUnit_Framework_TestCase
         $entity = new Season();
 
         $entity->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $entity->{'get' . $name}());
+        $this->assertSame($validValue, $entity->{'get' . $name}());
     }
 
     public function setterDataProvider()

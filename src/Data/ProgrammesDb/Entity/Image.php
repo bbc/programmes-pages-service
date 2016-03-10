@@ -42,9 +42,9 @@ class Image
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $type = '';
+    private $type;
 
     /**
      * @var string
@@ -95,12 +95,12 @@ class Image
         $this->shortSynopsis = $shortSynopsis;
     }
 
-    public function getType(): string
+    public function getType()
     {
         return $this->type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type = null)
     {
         $this->type = $type;
     }

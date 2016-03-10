@@ -39,7 +39,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
         );
 
         $entity->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $entity->{'get' . $name}());
+        $this->assertSame($validValue, $entity->{'get' . $name}());
     }
 
     public function setterDataProvider()
