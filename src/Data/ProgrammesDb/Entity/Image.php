@@ -35,15 +35,38 @@ class Image
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="text", nullable=false)
      */
     private $shortSynopsis = '';
 
     /**
      * @var string
      *
+     * @ORM\Column(type="text", nullable=false)
+     */
+    private $mediumSynopsis = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=false)
+     */
+    private $longSynopsis = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=false)
+     */
+    private $longestSynopsis = '';
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="string", nullable=true)
      */
+
     private $type;
 
     /**
@@ -95,7 +118,37 @@ class Image
         $this->shortSynopsis = $shortSynopsis;
     }
 
-    public function getType()
+    public function getMediumSynopsis(): string
+    {
+        return $this->mediumSynopsis;
+    }
+
+    public function setMediumSynopsis(string $mediumSynopsis)
+    {
+        $this->mediumSynopsis = $mediumSynopsis;
+    }
+
+    public function getLongSynopsis(): string
+    {
+        return $this->shortSynopsis;
+    }
+
+    public function setLongSynopsis(string $longSynopsis)
+    {
+        $this->longSynopsis = $longSynopsis;
+    }
+
+    public function getLongestSynopsis(): string
+    {
+        return $this->longestSynopsis;
+    }
+
+    public function setLongestSynopsis(string $longestSynopsis)
+    {
+        $this->longestSynopsis = $longestSynopsis;
+    }
+
+    public function getType(): string
     {
         return $this->type;
     }

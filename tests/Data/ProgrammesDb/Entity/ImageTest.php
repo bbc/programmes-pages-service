@@ -15,6 +15,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
         $this->assertSame(null, $image->getPid());
         $this->assertSame('', $image->getTitle());
         $this->assertSame('', $image->getShortSynopsis());
+        $this->assertSame('', $image->getLongestSynopsis());
         $this->assertSame(null, $image->getType());
         $this->assertSame('jpg', $image->getExtension());
     }
@@ -36,6 +37,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
             ['Pid', 'a-string'],
             ['Title', 'a-string'],
             ['ShortSynopsis', 'a-string'],
+            ['LongestSynopsis', 'a-string'],
             ['Type', 'standard'],
             ['Extension', 'png'],
         ];
