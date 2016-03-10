@@ -18,7 +18,7 @@ abstract class ProgrammeItem extends Programme
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $embeddable;
+    private $embeddable = false;
 
     /**
      * @var DateTime
