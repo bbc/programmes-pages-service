@@ -54,7 +54,7 @@ class Image
     private $longSynopsis = '';
 
     /**
-     * @var string|null
+     * @var string
      *
      * @ORM\Column(type="string", nullable=false)
      */
