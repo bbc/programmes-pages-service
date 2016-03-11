@@ -95,7 +95,6 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Tried to create a ProgrammeItem with an invalid MediaType. Expected one of "audio", "video" or "" but got "wrongwrongwrong"
      */
     public function testInvalidMediaType()
     {

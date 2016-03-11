@@ -58,7 +58,6 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Called setMediaType with an invalid value. Expected one of "audio", "video" or "" but got "garbage"
      */
     public function testUnknownMediaTypeThrowsException()
     {
