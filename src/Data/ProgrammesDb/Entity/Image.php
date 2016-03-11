@@ -56,10 +56,10 @@ class Image
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=false)
      */
 
-    private $type;
+    private $type = 'standard';
 
     /**
      * @var string

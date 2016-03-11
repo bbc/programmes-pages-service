@@ -17,7 +17,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
         $this->assertSame('', $image->getShortSynopsis());
         $this->assertSame('', $image->getMediumSynopsis());
         $this->assertSame('', $image->getLongSynopsis());
-        $this->assertSame(null, $image->getType());
+        $this->assertSame(standard, $image->getType());
         $this->assertSame('jpg', $image->getExtension());
     }
 

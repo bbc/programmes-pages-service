@@ -41,7 +41,7 @@ class Image
         string $title,
         string $shortSynopsis,
         string $longestSynopsis,
-        string $type = null,
+        string $type,
         string $extension
     ) {
         $this->pid = $pid;
@@ -83,5 +83,10 @@ class Image
     public function isLetterBox(): bool
     {
         return ($this->type == 'letterbox');
+    }
+
+    public function getType() : string
+    {
+        return $this->type;
     }
 }
