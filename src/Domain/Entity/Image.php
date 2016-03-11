@@ -22,12 +22,7 @@ class Image
     private $shortSynopsis;
 
     /**
-     * @var string
-     */
-    private $longestSynopsis;
-
-    /**
-     * @var string
+     * @var string|null
      */
     private $type;
 
@@ -40,14 +35,12 @@ class Image
         Pid $pid,
         string $title,
         string $shortSynopsis,
-        string $longestSynopsis,
-        string $type,
+        string $type = null,
         string $extension
     ) {
         $this->pid = $pid;
         $this->title = $title;
         $this->shortSynopsis = $shortSynopsis;
-        $this->longestSynopsis = $longestSynopsis;
         $this->type = $type;
         $this->filename = (string) $pid . '.' . $extension;
     }
@@ -65,11 +58,6 @@ class Image
     public function getShortSynopsis(): string
     {
         return $this->shortSynopsis;
-    }
-
-    public function getLongestSynopsis(): string
-    {
-        return $this->longestSynopsis;
     }
 
     public function getUrl($width, $height = 'n'): string

@@ -62,7 +62,7 @@ class Image
 
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", nullable=true)
      */
@@ -148,7 +148,7 @@ class Image
         $this->longestSynopsis = $longestSynopsis;
     }
 
-    public function getType(): string
+    public function getType()
     {
         return $this->type;
     }
