@@ -120,13 +120,6 @@ abstract class CoreEntity
     //// Denormalisations
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=false)
-     */
-    private $longestSynopsis = '';
-
-    /**
      * @var int
      *
      * @ORM\Column(type="integer", nullable=false)
@@ -236,16 +229,6 @@ abstract class CoreEntity
     public function setLongSynopsis($longSynopsis)
     {
         $this->longSynopsis = $longSynopsis;
-    }
-
-    public function getLongestSynopsis(): string
-    {
-        return $this->longestSynopsis;
-    }
-
-    public function setLongestSynopsis(string $longestSynopsis)
-    {
-        $this->longestSynopsis = $longestSynopsis;
     }
 
     /**

@@ -54,14 +54,6 @@ class Image
     private $longSynopsis = '';
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=false)
-     */
-    private $longestSynopsis = '';
-
-
-    /**
      * @var string|null
      *
      * @ORM\Column(type="string", nullable=true)
@@ -130,22 +122,12 @@ class Image
 
     public function getLongSynopsis(): string
     {
-        return $this->shortSynopsis;
+        return $this->longSynopsis;
     }
 
     public function setLongSynopsis(string $longSynopsis)
     {
         $this->longSynopsis = $longSynopsis;
-    }
-
-    public function getLongestSynopsis(): string
-    {
-        return $this->longestSynopsis;
-    }
-
-    public function setLongestSynopsis(string $longestSynopsis)
-    {
-        $this->longestSynopsis = $longestSynopsis;
     }
 
     public function getType()
