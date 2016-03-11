@@ -43,14 +43,4 @@ class VersionTest extends PHPUnit_Framework_TestCase
             ['VersionTypes', $versionTypes],
         ];
     }
-
-    public function testAddVersionType()
-    {
-        $vt = new VersionType();
-
-        $version = new Version();
-        $version->addVersionType($vt);
-
-        $this->assertEquals(new ArrayCollection([$vt]), $version->getVersionTypes());
-    }
 }

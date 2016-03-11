@@ -11,7 +11,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $this->assertEquals($pid, $image->getPid());
         $this->assertEquals('Title', $image->getTitle());
@@ -25,7 +25,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
     public function testIsLetterBox()
     {
         $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'letterbox', 'jpg');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'letterbox', 'jpg');
 
         $this->assertTrue($image->isLetterBox());
     }
@@ -33,7 +33,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
     public function testGetUrlPng()
     {
         $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'png');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'png');
 
         $this->assertEquals('//ichef.bbci.co.uk/images/ic/320xn/p01m5mss.png', $image->getUrl(320));
         $this->assertEquals('//ichef.bbci.co.uk/images/ic/320x180/p01m5mss.png', $image->getUrl(320, 180));

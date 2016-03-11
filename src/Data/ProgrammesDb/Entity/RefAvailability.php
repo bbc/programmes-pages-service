@@ -39,6 +39,7 @@ class RefAvailability
      * @var Version
      *
      * @ORM\ManyToOne(targetEntity="Version")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $version;
 
@@ -46,6 +47,7 @@ class RefAvailability
      * @var ProgrammeItem
      *
      * @ORM\ManyToOne(targetEntity="ProgrammeItem")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $programmeItem;
 
@@ -74,6 +76,7 @@ class RefAvailability
      * @var RefMediaSet
      *
      * @ORM\ManyToOne(targetEntity="RefMediaSet")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $mediaSet;
 

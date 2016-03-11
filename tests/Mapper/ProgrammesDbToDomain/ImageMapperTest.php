@@ -16,12 +16,13 @@ class ImageMapperTest extends PHPUnit_Framework_TestCase
             'pid' => 'p01m5mss',
             'title' => 'Title',
             'shortSynopsis' => 'ShortSynopsis',
+            'longSynopsis' => 'LongestSynopsis',
             'type' => 'standard',
             'extension' => 'jpg',
         ];
 
         $pid = new Pid('p01m5mss');
-        $expectedEntity = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+        $expectedEntity = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $mapper = new ImageMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));

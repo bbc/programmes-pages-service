@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
+use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use PHPUnit_Framework_TestCase;
 use DateTime;
 
@@ -20,11 +21,12 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
             $entity
         );
 
-        $this->assertSame(MediaTypeEnum::UNKNOWN, $entity->getMediaType());
-        $this->assertSame(null, $entity->getStreamableVersion());
-        $this->assertSame(null, $entity->getStreamableFrom());
-        $this->assertSame(null, $entity->getStreamableUntil());
-        $this->assertSame(null, $entity->getDuration());
+        $this->assertEquals(MediaTypeEnum::UNKNOWN, $entity->getMediaType());
+        $this->assertEquals(null, $entity->getStreamableVersion());
+        $this->assertEquals(null, $entity->getStreamableFrom());
+        $this->assertEquals(null, $entity->getStreamableUntil());
+        $this->assertEquals(null, $entity->getDuration());
+        $this->assertEquals(null, $entity->getReleaseDate());
     }
 
     /**
@@ -49,13 +51,13 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
             ['StreamableVersion', new Version()],
             ['StreamableFrom', new DateTime()],
             ['StreamableUntil', new DateTime()],
+            ['ReleaseDate', new PartialDate(2016)],
             ['Duration', 1],
         ];
     }
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Called setMediaType with an invalid value. Expected one of "audio", "video" or "" but got "garbage"
      */
     public function testUnknownMediaTypeThrowsException()
     {

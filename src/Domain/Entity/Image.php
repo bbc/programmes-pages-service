@@ -24,6 +24,11 @@ class Image
     /**
      * @var string
      */
+    protected $longestSynopsis;
+
+    /**
+     * @var string|null
+     */
     private $type;
 
     /**
@@ -35,12 +40,14 @@ class Image
         Pid $pid,
         string $title,
         string $shortSynopsis,
+        string $longestSynopsis,
         string $type,
         string $extension
     ) {
         $this->pid = $pid;
         $this->title = $title;
         $this->shortSynopsis = $shortSynopsis;
+        $this->longestSynopsis = $longestSynopsis;
         $this->type = $type;
         $this->filename = (string) $pid . '.' . $extension;
     }
@@ -60,6 +67,11 @@ class Image
         return $this->shortSynopsis;
     }
 
+    public function getLongestSynopsis(): string
+    {
+        return $this->longestSynopsis;
+    }
+
     public function getUrl($width, $height = 'n'): string
     {
         // TODO Fix this if the TAs haven't yet got around to making ichef.bbci
@@ -71,5 +83,10 @@ class Image
     public function isLetterBox(): bool
     {
         return ($this->type == 'letterbox');
+    }
+
+    public function getType() : string
+    {
+        return $this->type;
     }
 }

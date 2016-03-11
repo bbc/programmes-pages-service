@@ -14,8 +14,20 @@ class ImageMapper implements MapperInterface
             new Pid($dbImage['pid']),
             $dbImage['title'],
             $dbImage['shortSynopsis'],
+            $this->getLongestSynopsis($dbImage),
             $dbImage['type'],
             $dbImage['extension']
         );
+    }
+
+    private function getLongestSynopsis($dbImage): string
+    {
+        if (!empty($dbImage['longSynopsis'])) {
+            return $dbImage['longSynopsis'];
+        }
+        if (!empty($dbImage['mediumSynopsis'])) {
+            return $dbImage['mediumSynopsis'];
+        }
+        return $dbImage['shortSynopsis'];
     }
 }

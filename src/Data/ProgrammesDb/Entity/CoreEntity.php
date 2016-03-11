@@ -8,7 +8,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Table(
- *   indexes={ @ORM\Index(name="pid_idx", columns={"pid", "id", "ancestry"})}
+ *   indexes={ @ORM\Index(name="pid_idx", columns={"pid"}), @ORM\Index(name="ancestry_idx", columns={"ancestry"})}
  * )
  * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
@@ -75,6 +75,7 @@ abstract class CoreEntity
      * @var CoreEntity|null
      *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      * @Gedmo\TreeParent()
      */
     private $parent;
@@ -90,21 +91,29 @@ abstract class CoreEntity
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="text", nullable=false)
      */
     private $shortSynopsis = '';
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="text", nullable=false)
      */
-    private $longestSynopsis = '';
+    private $mediumSynopsis = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=false)
+     */
+    private $longSynopsis = '';
 
     /**
      * @var Image|null
      *
      * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $image;
 
@@ -202,14 +211,24 @@ abstract class CoreEntity
         $this->shortSynopsis = $shortSynopsis;
     }
 
-    public function getLongestSynopsis(): string
+    public function getMediumSynopsis(): string
     {
-        return $this->longestSynopsis;
+        return $this->mediumSynopsis;
     }
 
-    public function setLongestSynopsis(string $longestSynopsis)
+    public function setMediumSynopsis(string $mediumSynopsis)
     {
-        $this->longestSynopsis = $longestSynopsis;
+        $this->mediumSynopsis = $mediumSynopsis;
+    }
+
+    public function getLongSynopsis(): string
+    {
+        return $this->longSynopsis;
+    }
+
+    public function setLongSynopsis($longSynopsis)
+    {
+        $this->longSynopsis = $longSynopsis;
     }
 
     /**

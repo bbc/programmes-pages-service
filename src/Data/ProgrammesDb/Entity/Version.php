@@ -23,25 +23,37 @@ class Version
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=false, unique=true)
      */
     private $pid;
 
     /**
      * @var int
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $duration;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $guidanceWarningCodes;
+
+    /**
+     * @var string
+     * @ORM\Column(type="boolean", options={"default":false})
+     */
+    private $competitionWarning = false;
+
+    /**
      * @ORM\ManyToOne(targetEntity="ProgrammeItem")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $programmeItem;
 
     /**
      * @ORM\ManyToMany(targetEntity="VersionType",cascade="persist")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $versionTypes;
 
@@ -79,9 +91,35 @@ class Version
         return $this->duration;
     }
 
-    public function setDuration(int $duration)
+    public function setDuration(int $duration = null)
     {
         $this->duration = $duration;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGuidanceWarningCodes()
+    {
+        return $this->guidanceWarningCodes;
+    }
+
+    public function setGuidanceWarningCodes(string $guidanceWarningCodes = null)
+    {
+        $this->guidanceWarningCodes = $guidanceWarningCodes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCompetitionWarning()
+    {
+        return $this->competitionWarning;
+    }
+
+    public function setCompetitionWarning(bool $competitionWarning)
+    {
+        $this->competitionWarning = $competitionWarning;
     }
 
     /**
@@ -105,10 +143,5 @@ class Version
     public function setVersionTypes(ArrayCollection $versionTypes)
     {
         $this->versionTypes = $versionTypes;
-    }
-
-    public function addVersionType(VersionType $versionType)
-    {
-        $this->versionTypes[] = $versionType;
     }
 }

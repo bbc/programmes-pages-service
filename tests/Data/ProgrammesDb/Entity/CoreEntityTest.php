@@ -22,7 +22,8 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
         $this->assertSame(null, $entity->getParent());
         $this->assertSame('', $entity->getAncestry());
         $this->assertSame('', $entity->getShortSynopsis());
-        $this->assertSame('', $entity->getLongestSynopsis());
+        $this->assertSame('', $entity->getLongSynopsis());
+        $this->assertSame('', $entity->getMediumSynopsis());
         $this->assertSame(null, $entity->getImage());
         $this->assertSame(0, $entity->getRelatedLinksCount());
     }
@@ -50,7 +51,8 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
             ['Parent', new Brand()],
             //ancestry
             ['ShortSynopsis', 'a-string'],
-            ['LongestSynopsis', 'a-string'],
+            ['MediumSynopsis', 'a-string'],
+            ['LongSynopsis', 'a-string'],
             ['Image', new Image()],
             ['RelatedLinksCount', 1],
         ];

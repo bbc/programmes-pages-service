@@ -2,7 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,13 +29,6 @@ abstract class Programme extends CoreEntity
      * @ORM\Column(type="boolean", nullable=false)
      */
     private $hasSupportingContent = false;
-
-    /**
-     * @var PartialDate|null
-     *
-     * @ORM\Column(type="date_partial", nullable=true)
-     */
-    private $releaseDate;
 
     /**
      * @var string|null
@@ -74,19 +66,6 @@ abstract class Programme extends CoreEntity
     public function setHasSupportingContent(bool $hasSupportingContent)
     {
         $this->hasSupportingContent = $hasSupportingContent;
-    }
-
-    /**
-     * @return PartialDate|null
-     */
-    public function getReleaseDate()
-    {
-        return $this->releaseDate;
-    }
-
-    public function setReleaseDate(PartialDate $releaseDate = null)
-    {
-        $this->releaseDate = $releaseDate;
     }
 
     /**

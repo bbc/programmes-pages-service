@@ -15,7 +15,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
     public function testConstructorRequiredArgs()
     {
         $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Episode(
             $pid,
@@ -53,11 +53,11 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
     public function testConstructorOptionalArgs()
     {
         $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Series'
         );
-        $releaseDate = new PartialDate('2015-01-02');
+        $releaseDate = new PartialDate(2015, 01, 02);
 
         $streamableFrom = new DateTimeImmutable();
         $streamableUntil = new DateTimeImmutable();
@@ -95,12 +95,11 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Tried to create a ProgrammeItem with an invalid MediaType. Expected one of "audio", "video" or "" but got "wrongwrongwrong"
      */
     public function testInvalidMediaType()
     {
         $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Episode(
             $pid,

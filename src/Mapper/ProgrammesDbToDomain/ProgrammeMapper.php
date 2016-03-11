@@ -49,7 +49,7 @@ class ProgrammeMapper implements MapperInterface
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
             $dbProgramme['shortSynopsis'],
-            $dbProgramme['longestSynopsis'],
+            $this->getLongestSynopsis($dbProgramme),
             $this->getImageModel($dbProgramme),
             $dbProgramme['promotionsCount'],
             $dbProgramme['relatedLinksCount'],
@@ -75,7 +75,7 @@ class ProgrammeMapper implements MapperInterface
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
             $dbProgramme['shortSynopsis'],
-            $dbProgramme['longestSynopsis'],
+            $this->getLongestSynopsis($dbProgramme),
             $this->getImageModel($dbProgramme),
             $dbProgramme['promotionsCount'],
             $dbProgramme['relatedLinksCount'],
@@ -101,7 +101,7 @@ class ProgrammeMapper implements MapperInterface
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
             $dbProgramme['shortSynopsis'],
-            $dbProgramme['longestSynopsis'],
+            $this->getLongestSynopsis($dbProgramme),
             $this->getImageModel($dbProgramme),
             $dbProgramme['promotionsCount'],
             $dbProgramme['relatedLinksCount'],
@@ -127,7 +127,7 @@ class ProgrammeMapper implements MapperInterface
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
             $dbProgramme['shortSynopsis'],
-            $dbProgramme['longestSynopsis'],
+            $this->getLongestSynopsis($dbProgramme),
             $this->getImageModel($dbProgramme),
             $dbProgramme['promotionsCount'],
             $dbProgramme['relatedLinksCount'],
@@ -162,11 +162,23 @@ class ProgrammeMapper implements MapperInterface
                 new Pid('p01tqv8z'),
                 'bbc_640x360.png',
                 'BBC Blocks for /programmes',
+                'BBC Blocks for /programmes',
                 'standard',
                 'png'
             );
         }
 
         return $this->imageMapper->getDomainModel($dbProgramme[$key]);
+    }
+
+    private function getLongestSynopsis($dbProgramme): string
+    {
+        if (!empty($dbProgramme['longSynopsis'])) {
+            return $dbProgramme['longSynopsis'];
+        }
+        if (!empty($dbProgramme['mediumSynopsis'])) {
+            return $dbProgramme['mediumSynopsis'];
+        }
+        return $dbProgramme['shortSynopsis'];
     }
 }
