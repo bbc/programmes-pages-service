@@ -162,6 +162,7 @@ class ProgrammeMapper implements MapperInterface
                 new Pid('p01tqv8z'),
                 'bbc_640x360.png',
                 'BBC Blocks for /programmes',
+                'BBC Blocks for /programmes',
                 'standard',
                 'png'
             );

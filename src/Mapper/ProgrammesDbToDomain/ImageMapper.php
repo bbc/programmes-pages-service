@@ -14,6 +14,7 @@ class ImageMapper implements MapperInterface
             new Pid($dbImage['pid']),
             $dbImage['title'],
             $dbImage['shortSynopsis'],
+            $dbImage['longestSynopsis'],
             $dbImage['type'],
             $dbImage['extension']
         );

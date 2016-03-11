@@ -14,7 +14,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
     public function testConstructorRequiredArgs()
     {
         $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Brand(
             $pid,
@@ -57,7 +57,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
     public function testConstructorOptionalArgs()
     {
         $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Brand'
         );
@@ -100,10 +100,10 @@ class BrandTest extends PHPUnit_Framework_TestCase
     public function testInvalidMediaType()
     {
         $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'standard', 'jpg');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Brand(
             $pid,
