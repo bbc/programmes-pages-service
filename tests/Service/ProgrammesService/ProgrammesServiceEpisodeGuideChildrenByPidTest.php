@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Service\EntityCollectionServiceResult;
 
 class ProgrammesServiceFindEpisodeGuideChildrenByPidTest extends AbstractProgrammesServiceTest
 {
@@ -24,14 +23,8 @@ class ProgrammesServiceFindEpisodeGuideChildrenByPidTest extends AbstractProgram
             ->with($this->equalTo($mockBrandId), $this->equalTo(50), $this->equalTo(0))
             ->willReturn($dbData);
 
-        $expectedResult = new EntityCollectionServiceResult(
-            $this->programmesFromDbData($dbData),
-            50,
-            1
-        );
-
         $result = $this->programmesService()->findEpisodeGuideChildrenByPid($pid);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 
     public function testFindEpisodeGuideChildrenByPidCustomPagination()
@@ -51,14 +44,8 @@ class ProgrammesServiceFindEpisodeGuideChildrenByPidTest extends AbstractProgram
             ->with($this->equalTo($mockBrandId), $this->equalTo(5), $this->equalTo(10))
             ->willReturn($dbData);
 
-        $expectedResult = new EntityCollectionServiceResult(
-            $this->programmesFromDbData($dbData),
-            5,
-            3
-        );
-
         $result = $this->programmesService()->findEpisodeGuideChildrenByPid($pid, 5, 3);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 
     public function testCountEpisodeGuideChildrenByPid()
@@ -91,10 +78,8 @@ class ProgrammesServiceFindEpisodeGuideChildrenByPidTest extends AbstractProgram
         $this->mockRepository->expects($this->never())
             ->method('findEpisodeGuideChildren');
 
-        $expectedResult = new EntityCollectionServiceResult([], 50, 1);
-
         $result = $this->programmesService()->findEpisodeGuideChildrenByPid($pid);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals([], $result);
 
     }
 
