@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Service\EntitySingleServiceResult;
 
 class ProgrammesServiceFindByPidTest extends AbstractProgrammesServiceTest
 {
@@ -17,10 +16,8 @@ class ProgrammesServiceFindByPidTest extends AbstractProgrammesServiceTest
             ->with($this->equalTo($pid))
             ->willReturn($dbData);
 
-        $expectedResult = new EntitySingleServiceResult($this->programmeFromDbData($dbData));
-
         $result = $this->programmesService()->findByPidFull($pid);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($this->programmeFromDbData($dbData), $result);
     }
 
     public function testFindByPidEmptyData()
@@ -32,9 +29,7 @@ class ProgrammesServiceFindByPidTest extends AbstractProgrammesServiceTest
             ->with($this->equalTo($pid))
             ->willReturn(null);
 
-        $expectedResult = new EntitySingleServiceResult(null);
-
         $result = $this->programmesService()->findByPidFull($pid);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals(null, $result);
     }
 }

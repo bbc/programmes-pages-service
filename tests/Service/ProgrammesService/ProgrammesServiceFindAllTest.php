@@ -2,8 +2,6 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
-use BBC\ProgrammesPagesService\Service\EntityCollectionServiceResult;
-
 class ProgrammesServiceFindAllTest extends AbstractProgrammesServiceTest
 {
     public function testFindAllDefaultPagination()
@@ -15,14 +13,8 @@ class ProgrammesServiceFindAllTest extends AbstractProgrammesServiceTest
             ->with($this->equalTo(50), $this->equalTo(0))
             ->willReturn($dbData);
 
-        $expectedResult = new EntityCollectionServiceResult(
-            $this->programmesFromDbData($dbData),
-            50,
-            1
-        );
-
         $result = $this->programmesService()->findAll();
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 
     public function testFindAllCustomPagination()
@@ -34,14 +26,8 @@ class ProgrammesServiceFindAllTest extends AbstractProgrammesServiceTest
             ->with($this->equalTo(5), $this->equalTo(10))
             ->willReturn($dbData);
 
-        $expectedResult = new EntityCollectionServiceResult(
-            $this->programmesFromDbData($dbData),
-            5,
-            3
-        );
-
         $result = $this->programmesService()->findAll(5, 3);
-        $this->assertEquals($expectedResult, $result);
+        $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 
     public function testCountAll()

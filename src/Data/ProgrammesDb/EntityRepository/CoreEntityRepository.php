@@ -9,13 +9,6 @@ use InvalidArgumentException;
 
 class CoreEntityRepository extends MaterializedPathRepository
 {
-    const PROGRAMME_ENTITY_TYPE_LIST = "(" .
-        'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand,' .
-        'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Series,' .
-        'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode,' .
-        'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Clip' .
-    ")";
-
     /**
      * Full Find By Pid
      *
@@ -52,27 +45,40 @@ class CoreEntityRepository extends MaterializedPathRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function findChildren($programmeId, $limit, $offset)
+    public function findEpisodeGuideChildren($programmeId, $limit, $offset)
     {
-        $qb = $this->createQueryBuilder('programme')
-            ->addSelect(['image'])
-            ->leftJoin('programme.image', 'image')
-            ->where('programme.parent = :parentId')
+        $qText = <<<QUERY
+SELECT programme, image
+FROM ProgrammesPagesService:Programme programme
+LEFT JOIN programme.image image
+LEFT JOIN ProgrammesPagesService:ProgrammeItem pi WITH programme.id = pi.id
+WHERE programme.parent = :parentId
+AND programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode)
+ORDER BY programme.position DESC, pi.releaseDate DESC, programme.title ASC
+QUERY;
+
+        $q = $this->getEntityManager()->createQuery($qText)
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->setParameter('parentId', $programmeId);
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $q->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
     }
 
-    public function countChildren($programmeId)
+    public function countEpisodeGuideChildren($programmeId)
     {
-        $qb = $this->createQueryBuilder('programme')
-            ->select(['count(programme.id)'])
-            ->where('programme.parent = :parentId')
+        $qText = <<<QUERY
+SELECT count(programme.id)
+FROM ProgrammesPagesService:Programme programme
+WHERE programme.parent = :parentId
+AND programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode)
+QUERY;
+
+        $q = $this->getEntityManager()->createQuery($qText)
             ->setParameter('parentId', $programmeId);
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return $q->getSingleScalarResult();
     }
 
     public function findDescendants($programme, $limit, $offset)

@@ -3,8 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Service\EntityCollectionServiceResult;
-use BBC\ProgrammesPagesService\Service\EntitySingleServiceResult;
 use BBC\ProgrammesPagesService\Service\ProgrammesService;
 use PHPUnit_Framework_TestCase;
 

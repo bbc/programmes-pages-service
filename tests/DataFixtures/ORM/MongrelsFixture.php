@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Clip;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Series;
 
@@ -21,7 +22,7 @@ class MongrelsFixture extends AbstractFixture
         $series1 = $this->buildSeries('b00swyx1', 'Series 1', 1, $brand);
         $series2 = $this->buildSeries('b010t150', 'Series 2', 2, $brand);
         $episodeUnderBrand = $this->buildEpisode('b00tf1zy', 'Mongrels Uncovered', 3, $brand);
-        // OK strictly speaking this clip doesn't actually live under the brand
+        // OK strictly speaking this clip doesn't live under the brand
         // but Mongrels doesn't have an actual clip that lives here in the
         // hierarchy. I won't tell anyone if you won't.
         $clipUnderBrand = $this->buildClip('p00h64pq', 'Mongrels Series 2 Trailer', 4, $brand);
@@ -77,7 +78,7 @@ class MongrelsFixture extends AbstractFixture
 
     private function buildClip($pid, $title, $position, $parent = null)
     {
-        $entity = new Episode();
+        $entity = new Clip();
         $entity->setPid($pid);
         $entity->setTitle($title);
         $entity->setPosition($position);
