@@ -92,6 +92,22 @@ QUERY;
         return $this->resolveParents($result);
     }
 
+    public function countStreamableClipDescendants($programme)
+    {
+        $qb = $this->getChildrenQueryBuilder($programme)
+            ->select('count(id) as count')
+            ->andWhere('type = "clip"');
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function countStreamableEpisodeDescendants($programme)
+    {
+        $qb = $this->getChildrenQueryBuilder($programme)
+            ->select('count(id) as count')
+            ->andWhere('type = "episode"');
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
     /**
      * Takes an array of Programme array representations, finds all the
      * ancestors for all the programmes and attaches the full entities onto the
