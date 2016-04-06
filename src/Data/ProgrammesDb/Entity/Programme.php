@@ -21,13 +21,6 @@ abstract class Programme extends CoreEntity
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $isStreamable = false;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(type="boolean", nullable=false)
-     */
     private $hasSupportingContent = false;
 
     /**
@@ -46,16 +39,6 @@ abstract class Programme extends CoreEntity
     public function setPromotionsCount(int $promotionsCount)
     {
         $this->promotionsCount = $promotionsCount;
-    }
-
-    public function getIsStreamable(): bool
-    {
-        return $this->isStreamable;
-    }
-
-    public function setIsStreamable(bool $isStreamable)
-    {
-        $this->isStreamable = $isStreamable;
     }
 
     public function getHasSupportingContent(): bool

@@ -94,18 +94,34 @@ QUERY;
 
     public function countStreamableClipDescendants($programme)
     {
-        $qb = $this->getChildrenQueryBuilder($programme)
-            ->select('count(id) as count')
-            ->andWhere('type = "clip"');
-        return $qb->getQuery()->getSingleScalarResult();
+        $qText = <<<QUERY
+SELECT count(programme.id)
+FROM ProgrammesPagesService:Clip programme
+WHERE programme.ancestry LIKE :ancestry
+AND programme.streamable = :streamable
+QUERY;
+
+        $q = $this->getEntityManager()->createQuery($qText)
+            ->setParameter('ancestry', $programme->getAncestry() . ',%')
+            ->setParameter('streamable', true);
+
+        return $q->getSingleScalarResult();
     }
 
     public function countStreamableEpisodeDescendants($programme)
     {
-        $qb = $this->getChildrenQueryBuilder($programme)
-            ->select('count(id) as count')
-            ->andWhere('type = "episode"');
-        return $qb->getQuery()->getSingleScalarResult();
+        $qText = <<<QUERY
+SELECT count(programme.id)
+FROM ProgrammesPagesService:Episode programme
+WHERE programme.ancestry LIKE :ancestry
+AND programme.streamable = :streamable
+QUERY;
+
+        $q = $this->getEntityManager()->createQuery($qText)
+            ->setParameter('ancestry', $programme->getAncestry() . ',%')
+            ->setParameter('streamable', true);
+
+        return $q->getSingleScalarResult();
     }
 
     /**
