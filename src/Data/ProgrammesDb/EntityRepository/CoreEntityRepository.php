@@ -92,38 +92,6 @@ QUERY;
         return $this->resolveParents($result);
     }
 
-    public function countStreamableClipDescendants($programme)
-    {
-        $qText = <<<QUERY
-SELECT count(programme.id)
-FROM ProgrammesPagesService:Clip programme
-WHERE programme.ancestry LIKE :ancestry
-AND programme.streamable = :streamable
-QUERY;
-
-        $q = $this->getEntityManager()->createQuery($qText)
-            ->setParameter('ancestry', $programme->getAncestry() . ',%')
-            ->setParameter('streamable', true);
-
-        return $q->getSingleScalarResult();
-    }
-
-    public function countStreamableEpisodeDescendants($programme)
-    {
-        $qText = <<<QUERY
-SELECT count(programme.id)
-FROM ProgrammesPagesService:Episode programme
-WHERE programme.ancestry LIKE :ancestry
-AND programme.streamable = :streamable
-QUERY;
-
-        $q = $this->getEntityManager()->createQuery($qText)
-            ->setParameter('ancestry', $programme->getAncestry() . ',%')
-            ->setParameter('streamable', true);
-
-        return $q->getSingleScalarResult();
-    }
-
     /**
      * Takes an array of Programme array representations, finds all the
      * ancestors for all the programmes and attaches the full entities onto the

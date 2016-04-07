@@ -2,9 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 
 /**
  * @ORM\Entity()
@@ -135,12 +134,12 @@ class Version
         return $this->programmeItem = $programmeItem;
     }
 
-    public function getVersionTypes()
+    public function getVersionTypes(): Collection
     {
         return $this->versionTypes;
     }
 
-    public function setVersionTypes(ArrayCollection $versionTypes)
+    public function setVersionTypes(Collection $versionTypes)
     {
         $this->versionTypes = $versionTypes;
     }
