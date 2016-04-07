@@ -135,7 +135,7 @@ class Version
         return $this->programmeItem = $programmeItem;
     }
 
-    public function getVersionTypes(): ArrayCollection
+    public function getVersionTypes()
     {
         return $this->versionTypes;
     }
