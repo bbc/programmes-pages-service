@@ -48,16 +48,6 @@ abstract class Programme extends CoreEntity
         $this->promotionsCount = $promotionsCount;
     }
 
-    public function getHasSupportingContent(): bool
-    {
-        return $this->hasSupportingContent;
-    }
-
-    public function setHasSupportingContent(bool $hasSupportingContent)
-    {
-        $this->hasSupportingContent = $hasSupportingContent;
-    }
-
     /**
      * @return boolean
      */
@@ -69,6 +59,16 @@ abstract class Programme extends CoreEntity
     public function setStreamable(bool $streamable)
     {
         $this->streamable = $streamable;
+    }
+
+    public function getHasSupportingContent(): bool
+    {
+        return $this->hasSupportingContent;
+    }
+
+    public function setHasSupportingContent(bool $hasSupportingContent)
+    {
+        $this->hasSupportingContent = $hasSupportingContent;
     }
 
     /**
