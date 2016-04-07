@@ -24,5 +24,4 @@ QUERY;
 
         return $q->getResult();
     }
-
 }
