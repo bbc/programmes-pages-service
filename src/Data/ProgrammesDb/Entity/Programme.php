@@ -35,7 +35,7 @@ abstract class Programme extends CoreEntity
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $streamable;
+    private $streamable = false;
 
 
     public function getPromotionsCount(): int
