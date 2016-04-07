@@ -17,10 +17,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $this->assertSame(null, $entity->getPid());
         $this->assertSame(null, $entity->getDuration());
         $this->assertSame(null, $entity->getProgrammeItem());
-        $this->assertEquals(
-            new ArrayCollection(),
-            $entity->getVersionTypes()
-        );
+        $this->assertEquals(new ArrayCollection(), $entity->getVersionTypes());
     }
 
     /**
