@@ -30,6 +30,13 @@ abstract class Programme extends CoreEntity
      */
     private $position;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $streamable;
+
 
     public function getPromotionsCount(): int
     {
@@ -49,6 +56,19 @@ abstract class Programme extends CoreEntity
     public function setHasSupportingContent(bool $hasSupportingContent)
     {
         $this->hasSupportingContent = $hasSupportingContent;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getStreamable()
+    {
+        return $this->streamable;
+    }
+
+    public function setStreamable(bool $streamable)
+    {
+        $this->streamable = $streamable;
     }
 
     /**

@@ -5,7 +5,6 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\VersionType;
 use PHPUnit_Framework_TestCase;
 
 class VersionTest extends PHPUnit_Framework_TestCase
@@ -18,7 +17,10 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $this->assertSame(null, $entity->getPid());
         $this->assertSame(null, $entity->getDuration());
         $this->assertSame(null, $entity->getProgrammeItem());
-        $this->assertEquals(new ArrayCollection(), $entity->getVersionTypes());
+        $this->assertEquals(
+            new ArrayCollection(),
+            $entity->getVersionTypes()
+        );
     }
 
     /**

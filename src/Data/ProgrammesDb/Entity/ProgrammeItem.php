@@ -56,13 +56,6 @@ abstract class ProgrammeItem extends Programme
     private $streamableUntil;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(type="boolean", nullable=false)
-     */
-    private $streamable;
-
-    /**
      * Duration - taken from the streamable version
      *
      * @var int|null
@@ -146,19 +139,6 @@ abstract class ProgrammeItem extends Programme
     public function setStreamableUntil(DateTime $streamableUntil = null)
     {
         $this->streamableUntil = $streamableUntil;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isStreamable()
-    {
-        return $this->streamable;
-    }
-
-    public function setStreamable(bool $streamable)
-    {
-        $this->streamable = $streamable;
     }
 
     public function isEmbeddable(): bool
