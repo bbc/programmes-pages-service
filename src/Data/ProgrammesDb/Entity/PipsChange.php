@@ -26,6 +26,7 @@ class PipsChange
      *
      * @ORM\Column(type="datetime", nullable=false)
      */
+    
     private $createdTime;
     /**
      * @var string
@@ -74,11 +75,9 @@ class PipsChange
         return $this->cid;
     }
 
-    public function setCid(int $cid): PipsChange
+    public function setCid(int $cid)
     {
         $this->cid = $cid;
-
-        return $this;
     }
 
     public function getCreatedTime(): \DateTime
@@ -86,11 +85,9 @@ class PipsChange
         return $this->createdTime;
     }
 
-    public function setCreatedTime(\DateTime $createdTime): PipsChange
+    public function setCreatedTime(\DateTime $createdTime)
     {
         $this->createdTime = $createdTime;
-
-        return $this;
     }
 
     /**
@@ -103,13 +100,10 @@ class PipsChange
 
     /**
      * @param \DateTime $processedTime
-     * @return PipsChange
      */
-    public function setProcessedTime($processedTime): PipsChange
+    public function setProcessedTime($processedTime)
     {
         $this->processedTime = $processedTime;
-
-        return $this;
     }
 
     public function getEntityId(): string
@@ -117,11 +111,9 @@ class PipsChange
         return $this->entityId;
     }
 
-    public function setEntityId(string $entityId): PipsChange
+    public function setEntityId(string $entityId)
     {
         $this->entityId = $entityId;
-
-        return $this;
     }
 
     public function getEntityType(): string
@@ -129,11 +121,9 @@ class PipsChange
         return $this->entityType;
     }
 
-    public function setEntityType(string $entityType): PipsChange
+    public function setEntityType(string $entityType)
     {
         $this->entityType = $entityType;
-
-        return $this;
     }
 
     public function getEntityUrl(): string
@@ -141,11 +131,9 @@ class PipsChange
         return $this->entityUrl;
     }
 
-    public function setEntityUrl(string $entityUrl): PipsChange
+    public function setEntityUrl(string $entityUrl)
     {
         $this->entityUrl = $entityUrl;
-
-        return $this;
     }
 
     public function getStatus(): string
@@ -153,11 +141,9 @@ class PipsChange
         return $this->status;
     }
 
-    public function setStatus(string $status): PipsChange
+    public function setStatus(string $status)
     {
         $this->status = $status;
-
-        return $this;
     }
 
     public function getType(): string
@@ -165,10 +151,8 @@ class PipsChange
         return $this->type;
     }
 
-    public function setType(string $type): PipsChange
+    public function setType(string $type)
     {
         $this->type = $type;
-
-        return $this;
     }
 }
