@@ -26,8 +26,8 @@ class PipsChange
      *
      * @ORM\Column(type="datetime", nullable=false)
      */
-    
     private $createdTime;
+    
     /**
      * @var string
      *
