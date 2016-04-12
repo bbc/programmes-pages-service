@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Programmes\Pipsqueak\Enums\PipsEntityType;
 
 /**
  * PipsChange
@@ -22,14 +23,14 @@ class PipsChange
     private $cid;
 
     /**
-     * @var string
+     * @var \DateTime
      *
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $createdTime;
 
     /**
-     * @var string
+     * @var \DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -69,6 +70,18 @@ class PipsChange
      * @ORM\Column(type="string", nullable=false)
      */
     private $type;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $queuedAt;
+
+    public function __construct()
+    {
+        $this->queuedAt = new \DateTime();
+    }
 
     public function getCid(): int
     {
@@ -154,5 +167,10 @@ class PipsChange
     public function setType(string $type)
     {
         $this->type = $type;
+    }
+
+    public function getQueuedAt(): \DateTime
+    {
+        return $this->queuedAt;
     }
 }

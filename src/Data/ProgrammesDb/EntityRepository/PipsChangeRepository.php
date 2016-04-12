@@ -31,13 +31,17 @@ class PipsChangeRepository extends EntityRepository
         }
     }
 
-    public function findLatestByType(array $types = [])
+    /**
+     * @return PipsChange
+     */
+    public function findLatestProcessed()
     {
         try {
-            return $this->findOneBy([
-                'processedTime' => null,
-                'entityType' => $types,
-            ], ['cid' => 'Desc']);
+            $qb = $this->createQueryBuilder('pipsChange')
+                ->where('pipsChange.processedTime IS NOT NULL')
+                ->addOrderBy('pipsChange.processedTime', 'Desc');
+
+            return $qb->getQuery()->getOneOrNullResult();
         } catch (NoResultException $e) {
             return null;
         }
@@ -45,18 +49,36 @@ class PipsChangeRepository extends EntityRepository
 
     public function findLatestResults(int $limit = 10, $startCid = null)
     {
+        try {
+            $qb = $this->createQueryBuilder('pipsChange')
+                ->where('pipsChange.processedTime IS NULL')
+                ->setMaxResults($limit)
+                ->addOrderBy('pipsChange.cid', 'Desc');
 
-        return [];
+            if ($startCid) {
+                $qb->andWhere('pipsChange.cid >= :cid')
+                    ->setParameter(':cid', $startCid);
+            }
+            $query = $qb->getQuery();
+
+            return $query->getArrayResult();
+        } catch (NoResultException $e) {
+            return [];
+        }
     }
 
-    public function findLatestResultsByType(array $types = [], int $limit = 10, $startCid = null): array
+    public function setAsProcessed(PipsChange $change)
     {
-
-        return [];
+        $change->setProcessedTime(new \DateTime());
+        $this->addChange($change);
     }
 
-    public function setAsProcessed($changes)
+    /**
+     * @param mixed $cid
+     * @return null|PipsChange
+     */
+    public function findById($cid)
     {
-
+        return $this->find($cid);
     }
 }

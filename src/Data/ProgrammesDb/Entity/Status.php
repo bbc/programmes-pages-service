@@ -7,8 +7,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use DateTime;
 
 /**
- * @ORM\Table()
- * @ORM\Entity
+ * Status
+ *
+ * @ORM\Table(name="status")
+ * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\StatusRepository")
  */
 class Status
 {
