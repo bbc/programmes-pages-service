@@ -61,7 +61,7 @@ class PipsChangeRepository extends EntityRepository
             }
             $query = $qb->getQuery();
 
-            return $query->getArrayResult();
+            return $query->getResult();
         } catch (NoResultException $e) {
             return [];
         }
