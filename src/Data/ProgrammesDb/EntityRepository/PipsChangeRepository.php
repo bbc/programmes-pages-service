@@ -67,6 +67,16 @@ class PipsChangeRepository extends EntityRepository
         }
     }
 
+    public function getUnprocessedCount(): int
+    {
+        $query = $this->createQueryBuilder('pipsChange')
+            ->select('count(pipsChange.cid)')
+            ->where('pipsChange.processedTime IS NULL')
+            ->getQuery();
+
+        return $query->getSingleScalarResult();
+    }
+
     public function setAsProcessed(PipsChange $change)
     {
         $change->setProcessedTime(new \DateTime());
