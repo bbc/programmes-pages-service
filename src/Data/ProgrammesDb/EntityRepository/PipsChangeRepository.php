@@ -23,9 +23,7 @@ class PipsChangeRepository extends EntityRepository
     public function findLatest()
     {
         try {
-            return $this->findOneBy([
-                'processedTime' => null,
-            ], ['cid' => 'Desc']);
+            return $this->findOneBy([], ['cid' => 'Desc']);
         } catch (NoResultException $e) {
             return null;
         }
@@ -60,6 +58,21 @@ class PipsChangeRepository extends EntityRepository
                     ->setParameter(':cid', $startCid);
             }
             $query = $qb->getQuery();
+
+            return $query->getResult();
+        } catch (NoResultException $e) {
+            return [];
+        }
+    }
+
+    public function findOldestUnprocessedItems(int $limit = 10)
+    {
+        try {
+            $query = $this->createQueryBuilder('pipsChange')
+                ->where('pipsChange.processedTime IS NULL')
+                ->setMaxResults($limit)
+                ->addOrderBy('pipsChange.cid', 'Asc')
+                ->getQuery();
 
             return $query->getResult();
         } catch (NoResultException $e) {
