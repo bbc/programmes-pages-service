@@ -30,18 +30,6 @@ class RefRelationship
      * @var string|null
      * @ORM\Column(type="string", nullable=false)
      */
-    private $subjectPid;
-
-    /**
-     * @var string|null
-     * @ORM\Column(type="string", nullable=false)
-     */
-    private $objectPid;
-
-    /**
-     * @var string|null
-     * @ORM\Column(type="string", nullable=false)
-     */
     private $subjectId;
 
     /**
@@ -88,32 +76,6 @@ class RefRelationship
     public function setPid(string $pid = null)
     {
         $this->pid = $pid;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getSubjectPid()
-    {
-        return $this->subjectPid;
-    }
-
-    public function setSubjectPid(string $subjectPid = null)
-    {
-        $this->subjectPid = $subjectPid;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getObjectPid()
-    {
-        return $this->objectPid;
-    }
-
-    public function setObjectPid(string $objectPid = null)
-    {
-        $this->objectPid = $objectPid;
     }
 
     /**
