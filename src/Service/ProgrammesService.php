@@ -12,15 +12,15 @@ class ProgrammesService
     const DEFAULT_PAGE = 1;
     const DEFAULT_LIMIT = 50;
 
-    protected $programmeRepository;
+    protected $coreEntityRepository;
 
     protected $programmeMapper;
 
     public function __construct(
-        CoreEntityRepository $programmeRepository,
+        CoreEntityRepository $coreEntityRepository,
         ProgrammeMapper $programmeMapper
     ) {
-        $this->programmeRepository = $programmeRepository;
+        $this->coreEntityRepository = $coreEntityRepository;
         $this->programmeMapper = $programmeMapper;
     }
 
@@ -28,7 +28,7 @@ class ProgrammesService
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
-        $dbEntities = $this->programmeRepository->findAllWithParents(
+        $dbEntities = $this->coreEntityRepository->findAllWithParents(
             $limit,
             $this->getOffset($limit, $page)
         );
@@ -38,7 +38,7 @@ class ProgrammesService
 
     public function countAll(): int
     {
-        return $this->programmeRepository->countAll();
+        return $this->coreEntityRepository->countAll();
     }
 
     /**
@@ -46,7 +46,7 @@ class ProgrammesService
      */
     public function findByPidFull(Pid $pid)
     {
-        $dbEntity = $this->programmeRepository->findByPidFull($pid);
+        $dbEntity = $this->coreEntityRepository->findByPidFull($pid);
 
         return $this->mapSingleProgrammeEntity($dbEntity);
     }
@@ -56,13 +56,13 @@ class ProgrammesService
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
-        $parent = $this->programmeRepository->findByPidFull((string) $pid);
+        $parent = $this->coreEntityRepository->findByPidFull((string) $pid);
 
         if (is_null($parent)) {
             return [];
         }
 
-        $dbEntities = $this->programmeRepository->findEpisodeGuideChildren(
+        $dbEntities = $this->coreEntityRepository->findEpisodeGuideChildren(
             $parent['id'],
             $limit,
             $this->getOffset($limit, $page)
@@ -73,13 +73,13 @@ class ProgrammesService
 
     public function countEpisodeGuideChildrenByPid(Pid $pid): int
     {
-        $parent = $this->programmeRepository->findByPidFull((string) $pid);
+        $parent = $this->coreEntityRepository->findByPidFull((string) $pid);
 
         if (is_null($parent)) {
             return 0;
         }
 
-        return $this->programmeRepository->countEpisodeGuideChildren($parent['id']);
+        return $this->coreEntityRepository->countEpisodeGuideChildren($parent['id']);
     }
 
     public function findDescendantsByPid(
@@ -90,12 +90,12 @@ class ProgrammesService
         // in order for this to be efficient, we need to know the original programme database ID.
         // @todo - investigate another way to do this so we don't need this effectively redundant query
 
-        $dbEntity = $this->programmeRepository->findByPidFull($pid);
+        $dbEntity = $this->coreEntityRepository->findByPidFull($pid);
         if (!$dbEntity) {
             return null;
         }
 
-        $dbEntities = $this->programmeRepository->findDescendants(
+        $dbEntities = $this->coreEntityRepository->findDescendants(
             $dbEntity,
             $limit,
             $this->getOffset($limit, $page)
