@@ -9,7 +9,7 @@ use DateTime;
 /**
  * @ORM\Entity()
  * @ORM\Table(
- *   indexes={ @ORM\Index(name="url_key_idx", columns={"urlKey"})}
+ *   indexes={ @ORM\Index(name="url_key_idx", columns={"url_key"})}
  * )
  */
 class Network
