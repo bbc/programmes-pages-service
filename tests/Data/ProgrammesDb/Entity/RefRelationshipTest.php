@@ -14,8 +14,10 @@ class RefRelationshipTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(null, $entity->getId());
         $this->assertSame(null, $entity->getPid());
-        $this->assertSame(null, $entity->getSubjectPid());
-        $this->assertSame(null, $entity->getObjectPid());
+        $this->assertSame(null, $entity->getSubjectId());
+        $this->assertSame(null, $entity->getSubjectType());
+        $this->assertSame(null, $entity->getObjectId());
+        $this->assertSame(null, $entity->getObjectType());
         $this->assertSame(null, $entity->getRelationshipType());
     }
 
@@ -34,8 +36,10 @@ class RefRelationshipTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['Pid', 'b006q20x'],
-            ['SubjectPid', 'b006q20y'],
-            ['ObjectPid', 'b006q20z'],
+            ['SubjectId', 'b006q20y'],
+            ['SubjectType', 'image'],
+            ['ObjectId', 'b006q20z'],
+            ['ObjectType', 'episode'],
             ['RelationshipType', new RefRelationshipType()],
         ];
     }
