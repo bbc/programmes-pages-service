@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use DateTime;
@@ -19,6 +20,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
         $this->assertSame(null, $entity->getUrlKey());
         $this->assertSame(null, $entity->getType());
         $this->assertSame(null, $entity->getMedium());
+        $this->assertSame(null, $entity->getImage());
         $this->assertSame(null, $entity->getDefaultService());
         $this->assertSame(false, $entity->getIsPublicOutlet());
         $this->assertSame(false, $entity->getIsChildrens());
@@ -48,6 +50,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
             ['UrlKey', 'urlKey'],
             ['Type', 'type'],
             ['Medium', 'medium'],
+            ['Image', new Image()],
             ['DefaultService', new Service('sid', 'name', 'type', 'mediaType')],
             ['IsPublicOutlet', true],
             ['IsChildrens', true],

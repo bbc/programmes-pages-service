@@ -40,15 +40,23 @@ class MasterBrand
      * @var Network|null
      *
      * @ORM\ManyToOne(targetEntity="Network")
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $network;
+
+    /**
+     * @var Image|null
+     *
+     * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $image;
 
     /**
      * @var Version|null
      *
      * @ORM\ManyToOne(targetEntity="Version")
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $competitionWarning;
 
@@ -132,6 +140,19 @@ class MasterBrand
     public function setNetwork(Network $network = null)
     {
         $this->network = $network;
+    }
+
+    /**
+     * @return Image|null
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage(Image $image = null)
+    {
+        $this->image = $image;
     }
 
     /**

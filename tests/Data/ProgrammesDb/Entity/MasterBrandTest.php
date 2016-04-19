@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
@@ -18,6 +19,7 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
         $this->assertSame('mid', $entity->getMid());
         $this->assertSame('name', $entity->getName());
         $this->assertSame(null, $entity->getNetwork());
+        $this->assertSame(null, $entity->getImage());
         $this->assertSame(null, $entity->getCompetitionWarning());
         $this->assertSame(null, $entity->getColour());
         $this->assertSame(null, $entity->getUrlKey());
@@ -43,6 +45,7 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
             ['Mid', 'newMid'],
             ['Name', 'newName'],
             ['Network', new Network('nid', 'network')],
+            ['Image', new Image()],
             ['CompetitionWarning', new Version()],
             ['Colour', 'colour'],
             ['UrlKey', 'urlkey'],

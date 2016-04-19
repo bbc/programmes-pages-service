@@ -58,6 +58,14 @@ class Network
     private $medium;
 
     /**
+     * @var Image|null
+     *
+     * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $image;
+
+    /**
      * @var Service|null
      *
      * @ORM\ManyToOne(targetEntity="Service")
@@ -185,6 +193,19 @@ class Network
     public function setMedium(string $medium = null)
     {
         $this->medium = $medium;
+    }
+
+    /**
+     * @return Image|null
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage(Image $image = null)
+    {
+        $this->image = $image;
     }
 
     /**
