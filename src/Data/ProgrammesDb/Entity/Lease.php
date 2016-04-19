@@ -37,7 +37,7 @@ class Lease
 
     public function __construct()
     {
-        $this->leaseExpiration = new \DateTime('now');
+        $this->leaseExpiration = new DateTime('now');
     }
 
     /**
@@ -46,11 +46,6 @@ class Lease
     public function getId()
     {
         return $this->id;
-    }
-
-    public function setId(int $id)
-    {
-        $this->id = $id;
     }
 
     public function getWorkerId(): string
