@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use DateTime;
 
 /**
@@ -13,6 +14,8 @@ use DateTime;
  */
 class MasterBrand
 {
+    use TimestampableEntity;
+
     /**
      * @var int|null
      *

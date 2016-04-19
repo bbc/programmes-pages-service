@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * Relationship Type Table. Never queried directly.
@@ -11,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class RefRelationshipType
 {
+    use TimestampableEntity;
+
     /**
      * @var int|null
      *

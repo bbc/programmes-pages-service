@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Enumeration\AvailabilityStatusEnum;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use DateTime;
 use InvalidArgumentException;
 
@@ -12,6 +13,8 @@ use InvalidArgumentException;
  */
 class RefAvailability
 {
+    use TimestampableEntity;
+
     /**
      * @var int|null
      *
