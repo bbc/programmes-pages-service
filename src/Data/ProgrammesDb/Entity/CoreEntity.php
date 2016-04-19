@@ -113,9 +113,17 @@ abstract class CoreEntity
      * @var Image|null
      *
      * @ORM\ManyToOne(targetEntity="Image")
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $image;
+
+    /**
+     * @var MasterBrand|null
+     *
+     * @ORM\ManyToOne(targetEntity="MasterBrand")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $masterBrand;
 
     //// Denormalisations
 
@@ -239,12 +247,22 @@ abstract class CoreEntity
         return $this->image;
     }
 
-    /**
-     * @param Image|null $image
-     */
     public function setImage(Image $image = null)
     {
         $this->image = $image;
+    }
+
+    /**
+     * @return MasterBrand|null
+     */
+    public function getMasterBrand()
+    {
+        return $this->masterBrand;
+    }
+
+    public function setMasterBrand(MasterBrand $masterBrand = null)
+    {
+        $this->masterBrand = $masterBrand;
     }
 
     public function getRelatedLinksCount(): int

@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
 use PHPUnit_Framework_TestCase;
 
 class CoreEntityTest extends PHPUnit_Framework_TestCase
@@ -25,6 +26,7 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
         $this->assertSame('', $entity->getLongSynopsis());
         $this->assertSame('', $entity->getMediumSynopsis());
         $this->assertSame(null, $entity->getImage());
+        $this->assertSame(null, $entity->getMasterBrand());
         $this->assertSame(0, $entity->getRelatedLinksCount());
     }
 
@@ -54,6 +56,7 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
             ['MediumSynopsis', 'a-string'],
             ['LongSynopsis', 'a-string'],
             ['Image', new Image()],
+            ['MasterBrand', new MasterBrand('mid', 'name')],
             ['RelatedLinksCount', 1],
         ];
     }
