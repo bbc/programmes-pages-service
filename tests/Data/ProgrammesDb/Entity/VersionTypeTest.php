@@ -30,6 +30,7 @@ class VersionTypeTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['type', 'default'],
+            ['name', 'name'],
         ];
     }
 }

@@ -18,6 +18,8 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $this->assertSame(null, $entity->getDuration());
         $this->assertSame(null, $entity->getProgrammeItem());
         $this->assertEquals(new ArrayCollection(), $entity->getVersionTypes());
+        $this->assertSame(null, $entity->getGuidanceWarningCodes());
+        $this->assertSame(false, $entity->getCompetitionWarning());
     }
 
     /**
@@ -40,6 +42,8 @@ class VersionTest extends PHPUnit_Framework_TestCase
             ['Duration', 1],
             ['ProgrammeItem', new Episode()],
             ['VersionTypes', $versionTypes],
+            ['GuidanceWarningCodes', 'warningCodes'],
+            ['CompetitionWarning', true],
         ];
     }
 }

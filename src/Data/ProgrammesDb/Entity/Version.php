@@ -34,7 +34,7 @@ class Version
     private $duration;
 
     /**
-     * @var string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     private $guidanceWarningCodes;
@@ -109,10 +109,7 @@ class Version
         $this->guidanceWarningCodes = $guidanceWarningCodes;
     }
 
-    /**
-     * @return bool
-     */
-    public function getCompetitionWarning()
+    public function getCompetitionWarning(): bool
     {
         return $this->competitionWarning;
     }
