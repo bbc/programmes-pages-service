@@ -13,7 +13,7 @@ class VersionType
     use TimestampableEntity;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Id()
      * @ORM\Column(type="integer", nullable=false)
@@ -35,42 +35,36 @@ class VersionType
      */
     private $name;
 
+    public function __construct($type, $name)
+    {
+        $this->type = $type;
+        $this->name = $name;
+    }
+
     /**
-     * @return int
+     * @return int|null
      */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }

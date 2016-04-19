@@ -9,7 +9,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new Clip();
+        $entity = new Clip('pid', 'title');
 
         $this->assertInstanceOf(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',

@@ -12,13 +12,14 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity',
+            ['pid', 'title']
         );
 
         $this->assertSame(null, $entity->getId());
-        $this->assertSame(null, $entity->getPid());
+        $this->assertSame('pid', $entity->getPid());
         $this->assertSame(false, $entity->getIsEmbargoed());
-        $this->assertSame('', $entity->getTitle());
+        $this->assertSame('title', $entity->getTitle());
         $this->assertSame('', $entity->getSearchTitle());
         $this->assertSame(null, $entity->getParent());
         $this->assertSame('', $entity->getAncestry());
@@ -36,7 +37,8 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
     public function testSetters($name, $validValue)
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity',
+            ['pid', 'title']
         );
 
         $entity->{'set' . $name}($validValue);
@@ -50,12 +52,12 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
             ['IsEmbargoed', true],
             ['Title', 'a-string'],
             ['SearchTitle', 'a-string'],
-            ['Parent', new Brand()],
+            ['Parent', new Brand('pid', 'title')],
             //ancestry
             ['ShortSynopsis', 'a-string'],
             ['MediumSynopsis', 'a-string'],
             ['LongSynopsis', 'a-string'],
-            ['Image', new Image()],
+            ['Image', new Image('ipid', 'title')],
             ['MasterBrand', new MasterBrand('mid', 'name')],
             ['RelatedLinksCount', 1],
         ];

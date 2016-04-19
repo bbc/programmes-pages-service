@@ -61,7 +61,7 @@ abstract class CoreEntity
      *
      * @ORM\Column(type="string", nullable=false)
      */
-    private $title = '';
+    private $title;
 
     /**
      * @var string
@@ -135,6 +135,12 @@ abstract class CoreEntity
     private $relatedLinksCount = 0;
 
 
+    public function __construct(string $pid, string $title)
+    {
+        $this->pid = $pid;
+        $this->title = $title;
+    }
+
     /**
      * @return int|null
      */
@@ -143,15 +149,12 @@ abstract class CoreEntity
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPid()
+    public function getPid(): string
     {
         return $this->pid;
     }
 
-    public function setPid(string $pid = null)
+    public function setPid(string $pid)
     {
         // TOOD Validate PID
 

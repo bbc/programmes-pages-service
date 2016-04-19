@@ -13,7 +13,8 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',
+            ['pid', 'title']
         );
 
         $this->assertInstanceOf(
@@ -35,7 +36,8 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
     public function testSetters($name, $validValue)
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',
+            ['pid', 'title']
         );
 
         $entity->{'set' . $name}($validValue);
@@ -48,7 +50,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
             ['MediaType', MediaTypeEnum::AUDIO],
             ['MediaType', MediaTypeEnum::VIDEO],
             ['MediaType', MediaTypeEnum::UNKNOWN],
-            ['StreamableVersion', new Version()],
+            ['StreamableVersion', new Version('pid')],
             ['StreamableFrom', new DateTime()],
             ['StreamableUntil', new DateTime()],
             ['ReleaseDate', new PartialDate(2016)],
@@ -62,7 +64,8 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
     public function testUnknownMediaTypeThrowsException()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',
+            ['pid', 'title']
         );
 
         $entity->setMediaType('garbage');

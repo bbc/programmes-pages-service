@@ -24,17 +24,23 @@ class RefRelationshipType
     private $id;
 
     /**
-     * @var string|null
+     * @var string
      * @ORM\Column(type="string", nullable=false, unique=true)
      */
     private $pid;
 
     /**
-     * @var string|null
+     * @var string
      *
      * @ORM\Column(type="string", nullable=false, unique=true)
      */
     private $name;
+
+    public function __construct(string $pid, string $name)
+    {
+        $this->pid = $pid;
+        $this->name = $name;
+    }
 
     /**
      * @return int|null
@@ -44,23 +50,17 @@ class RefRelationshipType
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getPid()
+    public function getPid(): string
     {
         return $this->pid;
     }
 
-    public function setPid(string $pid = null)
+    public function setPid(string $pid)
     {
         $this->pid = $pid;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

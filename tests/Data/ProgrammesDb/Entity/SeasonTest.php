@@ -19,7 +19,7 @@ class SeasonTest extends PHPUnit_Framework_TestCase
 
     public function testDefaults()
     {
-        $entity = new Season();
+        $entity = new Season('pid', 'title');
 
         $this->assertInstanceOf(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\GroupProgrammeContainer',
@@ -35,7 +35,7 @@ class SeasonTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $entity = new Season();
+        $entity = new Season('pid', 'title');
 
         $entity->{'set' . $name}($validValue);
         $this->assertSame($validValue, $entity->{'get' . $name}());

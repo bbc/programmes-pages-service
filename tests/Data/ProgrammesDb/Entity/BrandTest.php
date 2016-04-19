@@ -9,7 +9,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new Brand();
+        $entity = new Brand('pid', 'title');
 
         $this->assertInstanceOf(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer',

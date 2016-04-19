@@ -10,7 +10,8 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme',
+            ['pid', 'title']
         );
 
         $this->assertInstanceOf(
@@ -31,7 +32,8 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
     public function testSetters($name, $validValue)
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme',
+            ['pid', 'title']
         );
 
         $entity->{'set' . $name}($validValue);

@@ -29,18 +29,14 @@ class EmbargoedProgrammeFixture extends AbstractFixture
 
     private function buildBrand($pid, $title)
     {
-        $entity = new Brand();
-        $entity->setPid($pid);
-        $entity->setTitle($title);
+        $entity = new Brand($pid, $title);
         $this->manager->persist($entity);
         return $entity;
     }
 
     private function buildEpisode($pid, $title, $parent = null, $embargoed = false)
     {
-        $entity = new Episode();
-        $entity->setPid($pid);
-        $entity->setTitle($title);
+        $entity = new Episode($pid, $title);
         $entity->setParent($parent);
         $entity->setIsEmbargoed($embargoed);
         $this->manager->persist($entity);

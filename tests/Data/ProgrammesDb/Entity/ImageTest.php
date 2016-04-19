@@ -9,11 +9,11 @@ class ImageTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $image = new Image();
+        $image = new Image('pid', 'title');
 
         $this->assertSame(null, $image->getId());
-        $this->assertSame(null, $image->getPid());
-        $this->assertSame('', $image->getTitle());
+        $this->assertSame('pid', $image->getPid());
+        $this->assertSame('title', $image->getTitle());
         $this->assertSame('', $image->getShortSynopsis());
         $this->assertSame('', $image->getMediumSynopsis());
         $this->assertSame('', $image->getLongSynopsis());
@@ -26,7 +26,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $image = new Image();
+        $image = new Image('pid', 'title');
 
         $image->{'set' . $name}($validValue);
         $this->assertEquals($validValue, $image->{'get' . $name}());

@@ -42,7 +42,7 @@ class RefAvailability
      * @var Version
      *
      * @ORM\ManyToOne(targetEntity="Version")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $version;
 
@@ -50,9 +50,17 @@ class RefAvailability
      * @var ProgrammeItem
      *
      * @ORM\ManyToOne(targetEntity="ProgrammeItem")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $programmeItem;
+
+    /**
+     * @var RefMediaSet
+     *
+     * @ORM\ManyToOne(targetEntity="RefMediaSet")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $mediaSet;
 
     /**
      * @var DateTime
@@ -75,14 +83,19 @@ class RefAvailability
      */
     private $actualStart;
 
-    /**
-     * @var RefMediaSet
-     *
-     * @ORM\ManyToOne(targetEntity="RefMediaSet")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    private $mediaSet;
-
+    public function __construct(
+        string $type,
+        Version $version,
+        ProgrammeItem $programmeItem,
+        RefMediaSet $mediaSet,
+        DateTime $scheduledStart
+    ) {
+        $this->type = $type;
+        $this->version = $version;
+        $this->programmeItem = $programmeItem;
+        $this->mediaSet = $mediaSet;
+        $this->scheduledStart = $scheduledStart;
+    }
 
     /**
      * @return int|null
@@ -92,23 +105,7 @@ class RefAvailability
         return $this->id;
     }
 
-    /**
-     * @return Version|null
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    public function setVersion(Version $version = null)
-    {
-        $this->version = $version;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -118,10 +115,17 @@ class RefAvailability
         $this->type = $type;
     }
 
-    /**
-     * @return ProgrammeItem
-     */
-    public function getProgrammeItem()
+    public function getVersion(): Version
+    {
+        return $this->version;
+    }
+
+    public function setVersion(Version $version)
+    {
+        $this->version = $version;
+    }
+
+    public function getProgrammeItem(): ProgrammeItem
     {
         return $this->programmeItem;
     }
@@ -131,10 +135,17 @@ class RefAvailability
         $this->programmeItem = $programmeItem;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getScheduledStart()
+    public function getMediaSet(): RefMediaSet
+    {
+        return $this->mediaSet;
+    }
+
+    public function setMediaSet(RefMediaSet $mediaSet)
+    {
+        $this->mediaSet = $mediaSet;
+    }
+
+    public function getScheduledStart(): DateTime
     {
         return $this->scheduledStart;
     }
@@ -145,30 +156,27 @@ class RefAvailability
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getScheduledEnd()
     {
         return $this->scheduledEnd;
     }
 
-    /**
-     * @param DateTime $scheduledEnd
-     */
-    public function setScheduledEnd($scheduledEnd)
+    public function setScheduledEnd(DateTime $scheduledEnd = null)
     {
         $this->scheduledEnd = $scheduledEnd;
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getActualStart()
     {
         return $this->actualStart;
     }
 
-    public function setActualStart(DateTime $actualStart)
+    public function setActualStart(DateTime $actualStart = null)
     {
         $this->actualStart = $actualStart;
     }
@@ -191,15 +199,5 @@ class RefAvailability
         }
 
         $this->status = $status;
-    }
-
-    public function getMediaSet(): RefMediaSet
-    {
-        return $this->mediaSet;
-    }
-
-    public function setMediaSet(RefMediaSet $mediaSet)
-    {
-        $this->mediaSet = $mediaSet;
     }
 }

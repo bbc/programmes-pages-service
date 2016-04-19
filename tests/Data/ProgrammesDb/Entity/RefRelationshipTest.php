@@ -10,15 +10,24 @@ class RefRelationshipTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new RefRelationship();
+        $relationshipType = new RefRelationshipType('pid', 'name');
+
+        $entity = new RefRelationship(
+            'pid',
+            'subjectId',
+            'subjectType',
+            'objectId',
+            'objectType',
+            $relationshipType
+        );
 
         $this->assertSame(null, $entity->getId());
-        $this->assertSame(null, $entity->getPid());
-        $this->assertSame(null, $entity->getSubjectId());
-        $this->assertSame(null, $entity->getSubjectType());
-        $this->assertSame(null, $entity->getObjectId());
-        $this->assertSame(null, $entity->getObjectType());
-        $this->assertSame(null, $entity->getRelationshipType());
+        $this->assertSame('pid', $entity->getPid());
+        $this->assertSame('subjectId', $entity->getSubjectId());
+        $this->assertSame('subjectType', $entity->getSubjectType());
+        $this->assertSame('objectId', $entity->getObjectId());
+        $this->assertSame('objectType', $entity->getObjectType());
+        $this->assertSame($relationshipType, $entity->getRelationshipType());
     }
 
     /**
@@ -26,7 +35,14 @@ class RefRelationshipTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $entity = new RefRelationship();
+        $entity = new RefRelationship(
+            'pid',
+            'subjectId',
+            'subjectType',
+            'objectId',
+            'objectType',
+            new RefRelationshipType('pid', 'name')
+        );
 
         $entity->{'set' . $name}($validValue);
         $this->assertSame($validValue, $entity->{'get' . $name}());
@@ -40,7 +56,7 @@ class RefRelationshipTest extends PHPUnit_Framework_TestCase
             ['SubjectType', 'image'],
             ['ObjectId', 'b006q20z'],
             ['ObjectType', 'episode'],
-            ['RelationshipType', new RefRelationshipType()],
+            ['RelationshipType', new RefRelationshipType('pid', 'name')],
         ];
     }
 }

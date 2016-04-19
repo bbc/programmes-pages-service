@@ -11,18 +11,32 @@ use PHPUnit_Framework_TestCase;
 use DateTime;
 use InvalidArgumentException;
 
-class AvailabilityTest extends PHPUnit_Framework_TestCase
+class RefAvailabilityTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new RefAvailability();
+        $version = new Version('pid');
+        $programmeItem = new Episode('pid', 'title');
+        $mediaSet = new RefMediaSet('media');
+        $scheduledStart = new DateTime();
+
+        $entity = new RefAvailability(
+            'type',
+            $version,
+            $programmeItem,
+            $mediaSet,
+            $scheduledStart
+        );
 
         $this->assertSame(null, $entity->getId());
-        $this->assertSame(AvailabilityStatusEnum::PENDING, $entity->getStatus());
-        $this->assertSame(null, $entity->getVersion());
-        $this->assertSame(null, $entity->getScheduledStart());
+        $this->assertSame('type', $entity->getType());
+        $this->assertSame($version, $entity->getVersion());
+        $this->assertSame($programmeItem, $entity->getProgrammeItem());
+        $this->assertSame($mediaSet, $entity->getMediaSet());
+        $this->assertSame($scheduledStart, $entity->getScheduledStart());
         $this->assertSame(null, $entity->getScheduledEnd());
         $this->assertSame(null, $entity->getActualStart());
+        $this->assertSame(AvailabilityStatusEnum::PENDING, $entity->getStatus());
     }
 
     /**
@@ -30,7 +44,13 @@ class AvailabilityTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $entity = new RefAvailability();
+        $entity = new RefAvailability(
+            'type',
+            new Version('pid'),
+            new Episode('pid', 'title'),
+            new RefMediaSet('media'),
+            new DateTime()
+        );
 
         $entity->{'set' . $name}($validValue);
         $this->assertSame($validValue, $entity->{'get' . $name}());
@@ -39,14 +59,14 @@ class AvailabilityTest extends PHPUnit_Framework_TestCase
     public function setterDataProvider()
     {
         return [
-            ['Status', AvailabilityStatusEnum::AVAILABLE],
-            ['Version', new Version()],
+            ['Type', 'audio_nondrm_download'],
+            ['Version', new Version('pid')],
+            ['ProgrammeItem', new Episode('pid', 'title')],
+            ['MediaSet', new RefMediaSet('mediaSet')],
             ['ScheduledStart', new DateTime()],
             ['ScheduledEnd', new DateTime()],
             ['ActualStart', new DateTime()],
-            ['MediaSet', new RefMediaSet()],
-            ['Type', 'audio_nondrm_download'],
-            ['ProgrammeItem', new Episode()],
+            ['Status', AvailabilityStatusEnum::AVAILABLE],
         ];
     }
 
@@ -56,7 +76,13 @@ class AvailabilityTest extends PHPUnit_Framework_TestCase
      */
     public function testUnknownStatusThrowsException()
     {
-        $entity = new RefAvailability();
+        $entity = new RefAvailability(
+            'type',
+            new Version('pid'),
+            new Episode('pid', 'title'),
+            new RefMediaSet('media'),
+            new DateTime()
+        );
 
         $entity->setStatus('garbage');
     }
