@@ -9,7 +9,7 @@ echo "Stopping existing Container..."
 docker stop registry.ci.rmp.api.bbci.co.uk/programmes-docker-base || true
 
 echo "Running CI in container..."
-docker run -u `id -u`:`id -g` -e OAUTH="$OAUTH_TOKEN" -v "$WORKSPACE":/mnt/ registry.ci.rmp.api.bbci.co.uk/programmes-docker-base script/ci-docker
+docker run --rm -u `id -u`:`id -g` -e OAUTH="$OAUTH_TOKEN" -v "$WORKSPACE":/mnt/ registry.ci.rmp.api.bbci.co.uk/programmes-docker-base script/ci-docker
 
 echo "Stopping container..."
 docker stop registry.ci.rmp.api.bbci.co.uk/programmes-docker-base || true
