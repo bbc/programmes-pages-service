@@ -37,9 +37,10 @@ class PipsChangeRepository extends EntityRepository
         try {
             $qb = $this->createQueryBuilder('pipsChange')
                 ->where('pipsChange.processedTime IS NOT NULL')
-                ->addOrderBy('pipsChange.processedTime', 'Desc');
+                ->addOrderBy('pipsChange.processedTime', 'Desc')
+                ->setMaxResults(1);
 
-            return $qb->getQuery()->getOneOrNullResult();
+            return $qb->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
             return null;
         }
