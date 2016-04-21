@@ -31,8 +31,12 @@ class PidTest extends PHPUnit_Framework_TestCase
         return [
             // Too Short
             ['1234567'],
+            // Contains uppercase characters
+            ['B2345678'],
             // Contains non-alphanumeric characters
+            ['b23_45678'],
             ['b23-45678'],
+            ['b23|45678'],
             // Contains vowels
             ['abcdefgh'],
         ];
