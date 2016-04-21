@@ -37,7 +37,7 @@ class Version
     private $pid;
 
     /**
-     * @var int
+     * @var int|null
      * @ORM\Column(type="integer", nullable=true)
      */
     private $duration;
@@ -49,7 +49,7 @@ class Version
     private $guidanceWarningCodes;
 
     /**
-     * @var string
+     * @var bool
      * @ORM\Column(type="boolean")
      */
     private $competitionWarning = false;

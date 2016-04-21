@@ -2,9 +2,11 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use DateTime;
+use InvalidArgumentException;
 
 /**
  * @ORM\Entity()
@@ -54,11 +56,11 @@ class Network
     private $type;
 
     /**
-     * @var string|null
+     * @var string
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=false)
      */
-    private $medium;
+    private $medium = NetworkMediumEnum::UNKNOWN;
 
     /**
      * @var Image|null
@@ -67,6 +69,13 @@ class Network
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $image;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $position;
 
     /**
      * @var Service|null
@@ -185,16 +194,23 @@ class Network
         $this->type = $type;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMedium()
+    public function getMedium(): string
     {
         return $this->medium;
     }
 
-    public function setMedium(string $medium = null)
+    public function setMedium(string $medium)
     {
+        if (!in_array($medium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV, NetworkMediumEnum::UNKNOWN])) {
+            throw new InvalidArgumentException(sprintf(
+                'Called setMedium with an invalid value. Expected one of "%s", "%s" or "%s" but got "%s"',
+                NetworkMediumEnum::RADIO,
+                NetworkMediumEnum::TV,
+                NetworkMediumEnum::UNKNOWN,
+                $medium
+            ));
+        }
+
         $this->medium = $medium;
     }
 
@@ -209,6 +225,19 @@ class Network
     public function setImage(Image $image = null)
     {
         $this->image = $image;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position = null)
+    {
+        $this->position = $position;
     }
 
     /**

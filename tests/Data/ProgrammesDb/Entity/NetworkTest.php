@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
+use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use DateTime;
 use PHPUnit_Framework_TestCase;
 
@@ -19,7 +20,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
         $this->assertSame('name', $entity->getName());
         $this->assertSame(null, $entity->getUrlKey());
         $this->assertSame(null, $entity->getType());
-        $this->assertSame(null, $entity->getMedium());
+        $this->assertSame(NetworkMediumEnum::UNKNOWN, $entity->getMedium());
         $this->assertSame(null, $entity->getImage());
         $this->assertSame(null, $entity->getDefaultService());
         $this->assertSame(false, $entity->getIsPublicOutlet());
@@ -49,8 +50,9 @@ class NetworkTest extends PHPUnit_Framework_TestCase
             ['Name', 'newName'],
             ['UrlKey', 'urlKey'],
             ['Type', 'type'],
-            ['Medium', 'medium'],
+            ['Medium', NetworkMediumEnum::RADIO],
             ['Image', new Image('pid', 'title')],
+            ['Position', 101],
             ['DefaultService', new Service('sid', 'name', 'type', 'mediaType')],
             ['IsPublicOutlet', true],
             ['IsChildrens', true],
@@ -60,5 +62,15 @@ class NetworkTest extends PHPUnit_Framework_TestCase
             ['StartDate', new DateTime()],
             ['EndDate', new DateTime()],
         ];
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testUnknownMediumThrowsException()
+    {
+        $entity = new Network('nid', 'name');
+
+        $entity->setMedium('garbage');
     }
 }
