@@ -14,7 +14,6 @@ class Duration implements JsonSerializable
     public function __construct(string $duration)
     {
         $this->interval = new DateInterval($duration);
-        return $this;
     }
 
     public function getSeconds(): int
@@ -26,7 +25,7 @@ class Duration implements JsonSerializable
 
     public function __toString(): string
     {
-        return $this->interval->format('%d days %h hours %m minutes %s seconds');
+        return $this->interval->format('%d days %h hours %i minutes %s seconds');
     }
 
     public function jsonSerialize(): int
