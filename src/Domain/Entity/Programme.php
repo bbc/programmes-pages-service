@@ -8,7 +8,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 abstract class Programme
 {
     /**
-     * @var string
+     * @var Pid
      */
     protected $pid;
 

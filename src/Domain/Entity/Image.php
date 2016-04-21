@@ -7,7 +7,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 class Image
 {
     /**
-     * @var string
+     * @var Pid
      */
     private $pid;
 
