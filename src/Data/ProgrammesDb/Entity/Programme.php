@@ -83,4 +83,52 @@ abstract class Programme extends CoreEntity
     {
         $this->position = $position;
     }
+
+    /**
+     * The property is defined on the CoreEntity class, because doctrine throws
+     * all of its toys out of the pram if I define it here, it can only
+     * be get/set here though.
+     *
+     * @return Category[]|null
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param Category[] $categories
+     */
+    public function setCategories(array $categories)
+    {
+        $this->categories = $categories;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFormats()
+    {
+        $formats = array();
+        foreach ($this->categories as $category) {
+            if ($category instanceof Format) {
+                $formats[] = $category;
+            }
+        }
+        return $formats;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGenres()
+    {
+        $genres = array();
+        foreach ($this->categories as $category) {
+            if ($category instanceof Genre) {
+                $genres[] = $category;
+            }
+        }
+        return $genres;
+    }
 }
