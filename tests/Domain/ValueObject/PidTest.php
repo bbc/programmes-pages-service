@@ -15,7 +15,6 @@ class PidTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('["b010t19z"]', json_encode([$pid]));
     }
 
-
     /**
      * @dataProvider invalidPidDataProvider
      * @expectedException InvalidArgumentException
@@ -23,7 +22,7 @@ class PidTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidPids($input)
     {
-        $pd = new Pid($input);
+        $pid = new Pid($input);
     }
 
     public function invalidPidDataProvider()
