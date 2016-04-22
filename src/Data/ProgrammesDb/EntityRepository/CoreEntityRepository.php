@@ -138,9 +138,13 @@ QUERY;
      * @return array
      */
     private function combineAncestry(
-        array $programme,
+        $programme,
         array $potentialAncestors = []
-    ): array {
+    ) {
+        // an embargoed ancestor will come through as null
+        if (is_null($programme)) {
+            return null;
+        }
         $parentIds = $this->getParentIdsFromAncestry($programme['ancestry']);
         if ($parentIds) {
             $resolvedParent = $this->searchSetForProgrammeWithId($potentialAncestors, end($parentIds));
