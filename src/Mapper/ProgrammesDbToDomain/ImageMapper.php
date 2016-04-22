@@ -20,6 +20,18 @@ class ImageMapper implements MapperInterface
         );
     }
 
+    public function getDefaultImage(): Image
+    {
+        return new Image(
+            new Pid('p01tqv8z'),
+            'bbc_640x360.png',
+            'BBC Blocks for /programmes',
+            'BBC Blocks for /programmes',
+            'standard',
+            'png'
+        );
+    }
+
     private function getLongestSynopsis($dbImage): string
     {
         if (!empty($dbImage['longSynopsis'])) {

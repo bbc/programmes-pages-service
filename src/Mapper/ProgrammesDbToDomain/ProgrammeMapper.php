@@ -162,14 +162,7 @@ class ProgrammeMapper implements MapperInterface
             // TODO Build inheritance hierarchy
 
             // Use default Image
-            return new Image(
-                new Pid('p01tqv8z'),
-                'bbc_640x360.png',
-                'BBC Blocks for /programmes',
-                'BBC Blocks for /programmes',
-                'standard',
-                'png'
-            );
+            return $this->imageMapper->getDefaultImage();
         }
 
         return $this->imageMapper->getDomainModel($dbProgramme[$key]);

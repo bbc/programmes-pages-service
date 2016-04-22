@@ -27,4 +27,19 @@ class ImageMapperTest extends PHPUnit_Framework_TestCase
         $mapper = new ImageMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
     }
+
+    public function testGetDefaultImage()
+    {
+        $expectedEntity = new Image(
+            new Pid('p01tqv8z'),
+            'bbc_640x360.png',
+            'BBC Blocks for /programmes',
+            'BBC Blocks for /programmes',
+            'standard',
+            'png'
+        );
+
+        $mapper = new ImageMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDefaultImage());
+    }
 }
