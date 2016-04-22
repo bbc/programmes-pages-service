@@ -11,9 +11,17 @@ class LeaseTest extends PHPUnit_Framework_TestCase
     {
         $lease = new Lease();
 
-        $this->assertSame(null, $lease->getId());
-        $this->assertSame('unassigned', $lease->getWorkerId());
+        $this->assertSame(1, $lease->getId());
+        $this->assertSame('Unassigned', $lease->getWorkerId());
         $this->assertInstanceOf('\Datetime', $lease->getLeaseExpiration());
+    }
+
+    public function testAllLeasesHAveTheSameId()
+    {
+        $lease = new Lease();
+        $this->assertSame(1, $lease->getId());
+        $lease = new Lease();
+        $this->assertSame(1, $lease->getId());
     }
 
     public function testSetters()
