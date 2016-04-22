@@ -2,19 +2,24 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsEmbargoedTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
+ * @ORM\Table(
+ *   indexes={
+ *     @ORM\Index(name="vpid_idx", columns={"pid"}),
+ *     @ORM\Index(name="vprogramme_idx", columns={"programme_item_id"})
+ *   }
+ * )
  * @ORM\Entity()
  */
 class Version
 {
-    use IsEmbargoedTrait;
     use TimestampableEntity;
+    use Traits\IsEmbargoedTrait;
 
     /**
      * @var int

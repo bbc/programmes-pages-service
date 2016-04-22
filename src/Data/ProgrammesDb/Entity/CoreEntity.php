@@ -2,7 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsEmbargoedTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -26,13 +25,11 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *   "franchise"="Franchise"
  * })
  * @Gedmo\Tree(type="materializedPath")
- *
- * TODO Properties: masterbrand(link)
  */
 abstract class CoreEntity
 {
-    use IsEmbargoedTrait;
     use TimestampableEntity;
+    use Traits\IsEmbargoedTrait;
 
     /**
      * @var int|null
@@ -151,7 +148,7 @@ abstract class CoreEntity
 
     public function setPid(string $pid)
     {
-        // TOOD Validate PID
+        // TODO Validate PID
 
         $this->pid = $pid;
     }
