@@ -22,11 +22,16 @@ class RefMediaSet
     private $id;
 
     /**
-     * @var string|null
+     * @var string
      *
      * @ORM\Column(type="string", nullable=false, unique=true)
      */
     private $name;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
 
     /**
      * @return int|null
@@ -36,10 +41,7 @@ class RefMediaSet
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

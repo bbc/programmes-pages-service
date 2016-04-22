@@ -22,7 +22,7 @@ class Image
     private $id;
 
     /**
-     * @var string|null
+     * @var string
      *
      * @ORM\Column(type="string", nullable=false, unique=true)
      */
@@ -33,7 +33,7 @@ class Image
      *
      * @ORM\Column(type="string", nullable=false)
      */
-    private $title = '';
+    private $title;
 
     /**
      * @var string
@@ -72,6 +72,12 @@ class Image
     private $extension = 'jpg';
 
 
+    public function __construct(string $pid, string $title)
+    {
+        $this->pid = $pid;
+        $this->title = $title;
+    }
+
     /**
      * @return int|null
      */
@@ -80,10 +86,7 @@ class Image
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPid()
+    public function getPid(): string
     {
         return $this->pid;
     }

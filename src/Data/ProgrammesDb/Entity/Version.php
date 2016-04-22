@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsEmbargoedTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +13,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Version
 {
+    use IsEmbargoedTrait;
     use TimestampableEntity;
 
     /**
@@ -43,7 +45,7 @@ class Version
 
     /**
      * @var string
-     * @ORM\Column(type="boolean", options={"default":false})
+     * @ORM\Column(type="boolean")
      */
     private $competitionWarning = false;
 
@@ -54,13 +56,14 @@ class Version
     private $programmeItem;
 
     /**
-     * @ORM\ManyToMany(targetEntity="VersionType",cascade="persist")
+     * @ORM\ManyToMany(targetEntity="VersionType", cascade="persist")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $versionTypes;
 
-    public function __construct()
+    public function __construct(string $pid)
     {
+        $this->pid = $pid;
         $this->versionTypes = new ArrayCollection();
     }
 
@@ -72,15 +75,12 @@ class Version
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPid()
+    public function getPid(): string
     {
         return $this->pid;
     }
 
-    public function setPid(string $pid = null)
+    public function setPid(string $pid)
     {
         $this->pid = $pid;
     }

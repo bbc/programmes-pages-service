@@ -10,7 +10,7 @@ class GalleryTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new Gallery();
+        $entity = new Gallery('pid', 'title');
 
         $this->assertInstanceOf(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Group',

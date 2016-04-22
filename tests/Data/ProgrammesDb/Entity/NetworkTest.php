@@ -50,7 +50,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
             ['UrlKey', 'urlKey'],
             ['Type', 'type'],
             ['Medium', 'medium'],
-            ['Image', new Image()],
+            ['Image', new Image('pid', 'title')],
             ['DefaultService', new Service('sid', 'name', 'type', 'mediaType')],
             ['IsPublicOutlet', true],
             ['IsChildrens', true],

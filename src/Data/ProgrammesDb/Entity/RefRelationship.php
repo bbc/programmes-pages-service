@@ -24,31 +24,31 @@ class RefRelationship
     private $id;
 
     /**
-     * @var string|null
+     * @var string
      * @ORM\Column(type="string", nullable=false, unique=true)
      */
     private $pid;
 
     /**
-     * @var string|null
+     * @var string
      * @ORM\Column(type="string", nullable=false)
      */
     private $subjectId;
 
     /**
-     * @var string|null
+     * @var string
      * @ORM\Column(type="string", nullable=false)
      */
     private $subjectType;
 
     /**
-     * @var string|null
+     * @var string
      * @ORM\Column(type="string", nullable=false)
      */
     private $objectId;
 
     /**
-     * @var string|null
+     * @var string
      * @ORM\Column(type="string", nullable=false)
      */
     private $objectType;
@@ -57,8 +57,25 @@ class RefRelationship
      * @var RefRelationshipType
      *
      * @ORM\ManyToOne(targetEntity="RefRelationshipType")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $relationshipType;
+
+    public function __construct(
+        string $pid,
+        string $subjectId,
+        string $subjectType,
+        string $objectId,
+        string $objectType,
+        RefRelationshipType $relationshipType
+    ) {
+        $this->pid = $pid;
+        $this->subjectId = $subjectId;
+        $this->subjectType = $subjectType;
+        $this->objectId = $objectId;
+        $this->objectType = $objectType;
+        $this->relationshipType = $relationshipType;
+    }
 
     /**
      * @return int|null
@@ -68,80 +85,62 @@ class RefRelationship
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPid()
+    public function getPid(): string
     {
         return $this->pid;
     }
 
-    public function setPid(string $pid = null)
+    public function setPid(string $pid)
     {
         $this->pid = $pid;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSubjectId()
+    public function getSubjectId(): string
     {
         return $this->subjectId;
     }
 
-    public function setSubjectId(string $subjectId = null)
+    public function setSubjectId(string $subjectId)
     {
         $this->subjectId = $subjectId;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSubjectType()
+    public function getSubjectType(): string
     {
         return $this->subjectType;
     }
 
-    public function setSubjectType(string $subjectType = null)
+    public function setSubjectType(string $subjectType)
     {
         $this->subjectType = $subjectType;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getObjectId()
+    public function getObjectId(): string
     {
         return $this->objectId;
     }
 
-    public function setObjectId(string $objectId = null)
+    public function setObjectId(string $objectId)
     {
         $this->objectId = $objectId;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getObjectType()
+    public function getObjectType(): string
     {
         return $this->objectType;
     }
 
-    public function setObjectType(string $objectType = null)
+    public function setObjectType(string $objectType)
     {
         $this->objectType = $objectType;
     }
 
-    /**
-     * @return RefRelationshipType|null
-     */
-    public function getRelationshipType()
+    public function getRelationshipType(): RefRelationshipType
     {
         return $this->relationshipType;
     }
 
-    public function setRelationshipType(RefRelationshipType $relationshipType = null)
+    public function setRelationshipType(RefRelationshipType $relationshipType)
     {
         $this->relationshipType = $relationshipType;
     }

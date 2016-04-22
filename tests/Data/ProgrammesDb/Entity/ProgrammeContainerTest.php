@@ -24,7 +24,8 @@ class ProgrammeContainerTest extends PHPUnit_Framework_TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer',
+            ['pid', 'title']
         );
 
         $this->assertInstanceOf(
@@ -41,7 +42,8 @@ class ProgrammeContainerTest extends PHPUnit_Framework_TestCase
     public function testSetters($name, $validValue)
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer',
+            ['pid', 'title']
         );
 
         $entity->{'set' . $name}($validValue);

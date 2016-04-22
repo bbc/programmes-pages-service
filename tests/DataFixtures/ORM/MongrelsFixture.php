@@ -47,18 +47,14 @@ class MongrelsFixture extends AbstractFixture
 
     private function buildBrand($pid, $title)
     {
-        $entity = new Brand();
-        $entity->setPid($pid);
-        $entity->setTitle($title);
+        $entity = new Brand($pid, $title);
         $this->manager->persist($entity);
         return $entity;
     }
 
     private function buildSeries($pid, $title, $position, $parent = null)
     {
-        $entity = new Series();
-        $entity->setPid($pid);
-        $entity->setTitle($title);
+        $entity = new Series($pid, $title);
         $entity->setPosition($position);
         $entity->setParent($parent);
         $this->manager->persist($entity);
@@ -67,9 +63,7 @@ class MongrelsFixture extends AbstractFixture
 
     private function buildEpisode($pid, $title, $position, $parent = null)
     {
-        $entity = new Episode();
-        $entity->setPid($pid);
-        $entity->setTitle($title);
+        $entity = new Episode($pid, $title);
         $entity->setPosition($position);
         $entity->setParent($parent);
         $this->manager->persist($entity);
@@ -78,11 +72,8 @@ class MongrelsFixture extends AbstractFixture
 
     private function buildClip($pid, $title, $position, $parent = null)
     {
-        $entity = new Clip();
-        $entity->setPid($pid);
-        $entity->setTitle($title);
+        $entity = new Clip($pid, $title);
         $entity->setPosition($position);
-
         $entity->setParent($parent);
         $this->manager->persist($entity);
         return $entity;

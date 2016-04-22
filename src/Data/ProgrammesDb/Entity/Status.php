@@ -9,8 +9,8 @@ use DateTime;
 /**
  * Status
  *
+ * @ORM\Entity()
  * @ORM\Table(name="status")
- * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\StatusRepository")
  */
 class Status
 {

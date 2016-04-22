@@ -12,7 +12,7 @@ class EmbargoedFilter extends SQLFilter
         $embargoedField = 'isEmbargoed';
 
         if (!$targetEntity->hasField($embargoedField)) {
-            return "";
+            return '';
         }
 
         return $targetTableAlias . '.' . $targetEntity->getColumnName($embargoedField) . ' = 0';

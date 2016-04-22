@@ -20,7 +20,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
 
     public function testDefaults()
     {
-        $entity = new Episode();
+        $entity = new Episode('pid', 'title');
 
         $this->assertInstanceOf(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',

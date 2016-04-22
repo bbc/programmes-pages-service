@@ -11,10 +11,10 @@ class VersionTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new Version();
+        $entity = new Version('pid');
 
         $this->assertSame(null, $entity->getId());
-        $this->assertSame(null, $entity->getPid());
+        $this->assertSame('pid', $entity->getPid());
         $this->assertSame(null, $entity->getDuration());
         $this->assertSame(null, $entity->getProgrammeItem());
         $this->assertEquals(new ArrayCollection(), $entity->getVersionTypes());
@@ -27,7 +27,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $entity = new Version();
+        $entity = new Version('pid');
 
         $entity->{'set' . $name}($validValue);
         $this->assertSame($validValue, $entity->{'get' . $name}());
@@ -40,7 +40,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         return [
             ['Pid', 'a-string'],
             ['Duration', 1],
-            ['ProgrammeItem', new Episode()],
+            ['ProgrammeItem', new Episode('pid', 'title')],
             ['VersionTypes', $versionTypes],
             ['GuidanceWarningCodes', 'warningCodes'],
             ['CompetitionWarning', true],

@@ -18,7 +18,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
     public function testDefaults()
     {
-        $entity = new Collection();
+        $entity = new Collection('pid', 'title');
 
         $this->assertInstanceOf(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\GroupProgrammeContainer',

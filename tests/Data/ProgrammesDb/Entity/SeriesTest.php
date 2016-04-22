@@ -9,7 +9,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new Series();
+        $entity = new Series('pid', 'title');
 
         $this->assertInstanceOf(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer',

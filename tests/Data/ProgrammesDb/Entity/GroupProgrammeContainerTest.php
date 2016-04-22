@@ -21,7 +21,8 @@ class GroupProgrammeContainerTest extends PHPUnit_Framework_TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\GroupProgrammeContainer'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\GroupProgrammeContainer',
+            ['pid', 'title']
         );
 
         $this->assertInstanceOf(

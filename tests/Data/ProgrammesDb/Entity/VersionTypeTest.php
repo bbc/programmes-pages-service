@@ -9,10 +9,11 @@ class VersionTypeTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new VersionType();
+        $entity = new VersionType('type', 'name');
 
         $this->assertSame(null, $entity->getId());
-        $this->assertSame(null, $entity->getType());
+        $this->assertSame('type', $entity->getType());
+        $this->assertSame('name', $entity->getName());
     }
 
     /**
@@ -20,7 +21,7 @@ class VersionTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $entity = new VersionType();
+        $entity = new VersionType('type', 'name');
 
         $entity->{'set' . $name}($validValue);
         $this->assertSame($validValue, $entity->{'get' . $name}());
@@ -29,8 +30,8 @@ class VersionTypeTest extends PHPUnit_Framework_TestCase
     public function setterDataProvider()
     {
         return [
-            ['type', 'default'],
-            ['name', 'name'],
+            ['type', 'newType'],
+            ['name', 'newName'],
         ];
     }
 }
