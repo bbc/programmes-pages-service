@@ -9,19 +9,11 @@ use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
-class ProgrammeMapper implements MapperInterface
+class ProgrammeMapper extends AbstractMapper
 {
-    protected $imageMapper;
-
-    public function __construct(ImageMapper $imageMapper)
-    {
-        $this->imageMapper = $imageMapper;
-    }
-
     public function getDomainModel(array $dbProgramme): Programme
     {
         if (array_key_exists('type', $dbProgramme)) {
@@ -162,16 +154,22 @@ class ProgrammeMapper implements MapperInterface
             // TODO Build inheritance hierarchy
 
             // Use default Image
-            return $this->imageMapper->getDefaultImage();
+            return $this->mapperProvider->getImageMapper()->getDefaultImage();
         }
 
-        return $this->imageMapper->getDomainModel($dbProgramme[$key]);
+        return $this->mapperProvider->getImageMapper()->getDomainModel($dbProgramme[$key]);
     }
 
     private function getMasterBrandModel($dbProgramme, $key = 'masterBrand')
     {
-        // TODO
-        return null;
+        if (!array_key_exists($key, $dbProgramme) || is_null($dbProgramme[$key])) {
+            // TODO Build inheritance hierarchy
+
+            // Otherwise return null
+            return null;
+        }
+
+        return $this->mapperProvider->getMasterBrandMapper()->getDomainModel($dbProgramme[$key]);
     }
 
     private function getLongestSynopsis($dbProgramme): string

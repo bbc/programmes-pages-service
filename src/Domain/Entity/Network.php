@@ -84,7 +84,7 @@ class Network
     ) {
         if (!in_array($medium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV, NetworkMediumEnum::UNKNOWN])) {
             throw new InvalidArgumentException(sprintf(
-                'Called setMedium with an invalid value. Expected one of "%s", "%s" or "%s" but got "%s"',
+                '$medium has an invalid value. Expected one of "%s", "%s" or "%s" but got "%s"',
                 NetworkMediumEnum::RADIO,
                 NetworkMediumEnum::TV,
                 NetworkMediumEnum::UNKNOWN,

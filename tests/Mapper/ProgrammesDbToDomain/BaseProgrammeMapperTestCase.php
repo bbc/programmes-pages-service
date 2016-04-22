@@ -7,11 +7,12 @@ use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Enumeration\IsPodcastableEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use PHPUnit_Framework_TestCase;
 
-abstract class BaseProgrammeMapperTestCase extends PHPUnit_Framework_TestCase
+abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 {
     protected $mockImageMapper;
+
+    protected $mockMasterBrandMapper;
 
     protected $mockDefaultImage;
 
@@ -19,6 +20,10 @@ abstract class BaseProgrammeMapperTestCase extends PHPUnit_Framework_TestCase
     {
         $this->mockImageMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper'
+        );
+
+        $this->mockMasterBrandMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MasterBrandMapper'
         );
 
         $this->mockDefaultImage = $this->getMockWithoutInvokingTheOriginalConstructor(
@@ -32,14 +37,17 @@ abstract class BaseProgrammeMapperTestCase extends PHPUnit_Framework_TestCase
 
     protected function getMapper(): ProgrammeMapper
     {
-        return new ProgrammeMapper($this->mockImageMapper);
+        return new ProgrammeMapper($this->getMapperProvider([
+            'ImageMapper' => $this->mockImageMapper,
+            'MasterBrandMapper' => $this->mockMasterBrandMapper,
+        ]));
     }
 
     /**
      * A sample DB Entity that can be used for testing any mappers that the
      * ProgrammeMapper depends upon.
      */
-    protected function getSampleProgrammeDbEntity($pid, $image)
+    protected function getSampleProgrammeDbEntity($pid, $image, $masterBrand)
     {
         return [
             'type' => 'series',
@@ -64,7 +72,7 @@ abstract class BaseProgrammeMapperTestCase extends PHPUnit_Framework_TestCase
             'parent' => null,
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
-            'masterBrand' => null,
+            'masterBrand' => $masterBrand,
             'expectedChildCount' => 1001,
         ];
     }
@@ -73,7 +81,7 @@ abstract class BaseProgrammeMapperTestCase extends PHPUnit_Framework_TestCase
      * A sample expected domain model that can be used for testing any mappers
      * that the ProgrammeMapper depends upon.
      */
-    protected function getSampleProgrammeDomainEntity($pid, $image)
+    protected function getSampleProgrammeDomainEntity($pid, $image, $masterBrand)
     {
         return new Series(
             new Pid($pid),
@@ -95,7 +103,7 @@ abstract class BaseProgrammeMapperTestCase extends PHPUnit_Framework_TestCase
             null,
             new PartialDate(2015, 01, 02),
             101,
-            null,
+            $masterBrand,
             1001
         );
     }
