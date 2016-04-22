@@ -13,11 +13,10 @@ class Lease
 {
 
     /**
-     * @var int|null
+     * @var int
      *
      * @ORM\Id()
      * @ORM\Column(type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -37,7 +36,9 @@ class Lease
 
     public function __construct()
     {
+        $this->id = 1;
         $this->leaseExpiration = new DateTime('now');
+        $this->workerId = 'Unassigned';
     }
 
     /**
