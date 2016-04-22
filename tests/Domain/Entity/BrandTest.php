@@ -4,8 +4,10 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\Enumeration\IsPodcastableEnum;
 use PHPUnit_Framework_TestCase;
 
@@ -61,6 +63,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Brand'
         );
+        $masterBrand = new MasterBrand(new Mid('bbc_one'), 'BBC One', $image);
         $releaseDate = new PartialDate(2015, 01, 02);
 
         $programme = new Brand(
@@ -83,12 +86,14 @@ class BrandTest extends PHPUnit_Framework_TestCase
             $parent,
             $releaseDate,
             101,
+            $masterBrand,
             1001
         );
 
         $this->assertEquals($parent, $programme->getParent());
         $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(101, $programme->getPosition());
+        $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals(1001, $programme->getExpectedChildCount());
     }
 

@@ -64,6 +64,7 @@ abstract class ProgrammeContainer extends Programme
         Programme $parent = null,
         PartialDate $releaseDate = null,
         int $position = null,
+        MasterBrand $masterBrand = null,
         int $expectedChildCount = null
     ) {
         if (!in_array($isPodcastable, [IsPodcastableEnum::HIGH, IsPodcastableEnum::LOW, IsPodcastableEnum::NO])) {
@@ -89,7 +90,8 @@ abstract class ProgrammeContainer extends Programme
             $isStreamable,
             $parent,
             $releaseDate,
-            $position
+            $position,
+            $masterBrand
         );
 
         $this->aggregatedBroadcastsCount = $aggregatedBroadcastsCount;

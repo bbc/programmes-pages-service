@@ -73,6 +73,11 @@ abstract class Programme
      */
     protected $position;
 
+    /**
+     * @var MasterBrand|null
+     */
+    protected $masterBrand;
+
     public function __construct(
         Pid $pid,
         string $title,
@@ -86,7 +91,8 @@ abstract class Programme
         bool $isStreamable,
         Programme $parent = null,
         PartialDate $releaseDate = null,
-        int $position = null
+        int $position = null,
+        MasterBrand $masterBrand = null
     ) {
         $this->pid = $pid;
         $this->title = $title;
@@ -101,6 +107,7 @@ abstract class Programme
         $this->parent = $parent;
         $this->releaseDate = $releaseDate;
         $this->position = $position;
+        $this->masterBrand = $masterBrand;
     }
 
     public function getPid(): Pid
@@ -175,5 +182,21 @@ abstract class Programme
     public function getPosition()
     {
         return $this->position;
+    }
+
+    /**
+     * @return MasterBrand|null
+     */
+    public function getMasterBrand()
+    {
+        return $this->masterBrand;
+    }
+
+    /**
+     * @return Network|null
+     */
+    public function getNetwork()
+    {
+        return $this->masterBrand->getNetwork() ?? null;
     }
 }

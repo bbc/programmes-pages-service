@@ -45,6 +45,7 @@ abstract class ProgrammeItem extends Programme
         Programme $parent = null,
         PartialDate $releaseDate = null,
         int $position = null,
+        MasterBrand $masterBrand = null,
         int $duration = null,
         DateTimeImmutable $streamableFrom = null,
         DateTimeImmutable $streamableUntil = null
@@ -72,7 +73,8 @@ abstract class ProgrammeItem extends Programme
             $isStreamable,
             $parent,
             $releaseDate,
-            $position
+            $position,
+            $masterBrand
         );
 
         $this->mediaType = $mediaType;

@@ -4,8 +4,10 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use PHPUnit_Framework_TestCase;
 use DateTimeImmutable;
@@ -51,6 +53,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Series'
         );
+        $masterBrand = new MasterBrand(new Mid('bbc_one'), 'BBC One', $image);
         $releaseDate = new PartialDate(2015, 01, 02);
 
         $streamableFrom = new DateTimeImmutable();
@@ -71,6 +74,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
             $parent,
             $releaseDate,
             101,
+            $masterBrand,
             1001,
             $streamableFrom,
             $streamableUntil
@@ -79,6 +83,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($parent, $programme->getParent());
         $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(101, $programme->getPosition());
+        $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals(1001, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());

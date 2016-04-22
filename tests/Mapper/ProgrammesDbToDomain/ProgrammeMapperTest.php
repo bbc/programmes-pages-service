@@ -83,6 +83,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             null,
             new PartialDate(2015, 01, 02),
             101,
+            null,
             1001
         );
 
@@ -146,6 +147,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             null,
             new PartialDate(2015, 01, 02),
             101,
+            null,
             1001
         );
 
@@ -207,6 +209,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             null,
             new PartialDate(2015, 01, 02),
             101,
+            null,
             102,
             new DateTimeImmutable('2015-01-03'),
             new DateTimeImmutable('2015-01-04')
@@ -262,6 +265,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             null,
             new PartialDate(2015, 01, 02),
             101,
+            null,
             102,
             new DateTimeImmutable('2015-01-03'),
             new DateTimeImmutable('2015-01-04')
@@ -317,6 +321,7 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
             null,
             new PartialDate(2015, 01, 02),
             101,
+            null,
             1001
         );
 
@@ -426,10 +431,12 @@ class ProgrammeMapperTest extends PHPUnit_Framework_TestCase
                 null,
                 new PartialDate(2015, 01, 02),
                 101,
+                null,
                 1001
             ),
             new PartialDate(2015, 01, 02),
             101,
+            null,
             1001
         );
 
