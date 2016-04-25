@@ -19,7 +19,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Version
 {
     use TimestampableEntity;
-    use Traits\IsEmbargoedTrait;
 
     /**
      * @var int
