@@ -2,10 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
-use InvalidArgumentException;
 
 class CoreEntityRepository extends MaterializedPathRepository
 {
