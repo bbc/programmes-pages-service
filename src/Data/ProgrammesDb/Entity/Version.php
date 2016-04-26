@@ -55,7 +55,7 @@ class Version
 
     /**
      * @ORM\ManyToOne(targetEntity="ProgrammeItem")
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $programmeItem;
 
