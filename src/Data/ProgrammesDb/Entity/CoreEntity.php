@@ -30,6 +30,7 @@ abstract class CoreEntity
 {
     use TimestampableEntity;
     use Traits\IsEmbargoedTrait;
+    use Traits\SynopsesTrait;
 
     /**
      * @var int|null
@@ -79,27 +80,6 @@ abstract class CoreEntity
      * @Gedmo\TreePath(endsWithSeparator=false)
      */
     private $ancestry = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=false)
-     */
-    private $shortSynopsis = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=false)
-     */
-    private $mediumSynopsis = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=false)
-     */
-    private $longSynopsis = '';
 
     /**
      * @var Image|null
@@ -192,36 +172,6 @@ abstract class CoreEntity
     public function getAncestry(): string
     {
         return $this->ancestry;
-    }
-
-    public function getShortSynopsis(): string
-    {
-        return $this->shortSynopsis;
-    }
-
-    public function setShortSynopsis(string $shortSynopsis)
-    {
-        $this->shortSynopsis = $shortSynopsis;
-    }
-
-    public function getMediumSynopsis(): string
-    {
-        return $this->mediumSynopsis;
-    }
-
-    public function setMediumSynopsis(string $mediumSynopsis)
-    {
-        $this->mediumSynopsis = $mediumSynopsis;
-    }
-
-    public function getLongSynopsis(): string
-    {
-        return $this->longSynopsis;
-    }
-
-    public function setLongSynopsis($longSynopsis)
-    {
-        $this->longSynopsis = $longSynopsis;
     }
 
     /**

@@ -11,6 +11,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Image
 {
     use TimestampableEntity;
+    use Traits\SynopsesTrait;
 
     /**
      * @var int|null
@@ -34,27 +35,6 @@ class Image
      * @ORM\Column(type="string", nullable=false)
      */
     private $title;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=false)
-     */
-    private $shortSynopsis = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=false)
-     */
-    private $mediumSynopsis = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=false)
-     */
-    private $longSynopsis = '';
 
     /**
      * @var string
@@ -104,36 +84,6 @@ class Image
     public function setTitle(string $title)
     {
         $this->title = $title;
-    }
-
-    public function getShortSynopsis(): string
-    {
-        return $this->shortSynopsis;
-    }
-
-    public function setShortSynopsis(string $shortSynopsis)
-    {
-        $this->shortSynopsis = $shortSynopsis;
-    }
-
-    public function getMediumSynopsis(): string
-    {
-        return $this->mediumSynopsis;
-    }
-
-    public function setMediumSynopsis(string $mediumSynopsis)
-    {
-        $this->mediumSynopsis = $mediumSynopsis;
-    }
-
-    public function getLongSynopsis(): string
-    {
-        return $this->longSynopsis;
-    }
-
-    public function setLongSynopsis(string $longSynopsis)
-    {
-        $this->longSynopsis = $longSynopsis;
     }
 
     public function getType()
