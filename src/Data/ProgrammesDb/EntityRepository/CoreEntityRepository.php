@@ -20,7 +20,6 @@ class CoreEntityRepository extends MaterializedPathRepository
         $qb = $this->createQueryBuilder('programme')
             ->where('programme.pid = :pid')
             ->setParameter('pid', $pid);
-
         $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
         return $result ? $this->resolveParents([$result])[0] : $result;
     }

@@ -28,7 +28,7 @@ class Version
     private $hasCompetitionWarning;
 
     /**
-     * @var ProgrammeItem|null
+     * @var ProgrammeItem
      */
     private $programmeItem;
 
@@ -39,10 +39,10 @@ class Version
 
     public function __construct(
         Pid $pid,
+        ProgrammeItem $programmeItem,
         int $duration = null,
         string $guidanceWarningCodes = null,
         bool $hasCompetitionWarning = false,
-        ProgrammeItem $programmeItem = null,
         array $versionTypes = []
     ) {
         foreach ($versionTypes as $vt) {

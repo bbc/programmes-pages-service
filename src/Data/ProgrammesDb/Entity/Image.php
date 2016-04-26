@@ -11,6 +11,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Image
 {
     use TimestampableEntity;
+    use Traits\IsEmbargoedTrait;
     use Traits\SynopsesTrait;
 
     /**
