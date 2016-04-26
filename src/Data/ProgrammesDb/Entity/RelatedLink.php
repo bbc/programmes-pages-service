@@ -62,7 +62,7 @@ class RelatedLink
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer")
      */
     private $position;
 
@@ -79,7 +79,6 @@ class RelatedLink
         string $title,
         string $uri,
         string $type,
-        int $position,
         bool $external
     ) {
         $this->relatedTo = $relatedTo;
@@ -87,7 +86,6 @@ class RelatedLink
         $this->title = $title;
         $this->uri = $uri;
         $this->type = $type;
-        $this->position = $position;
         $this->external = $external;
     }
 
@@ -147,12 +145,18 @@ class RelatedLink
         $this->type = $type;
     }
 
-    public function getPosition(): int
+    /**
+     * @return int
+     */
+    public function getPosition()
     {
         return $this->position;
     }
 
-    public function setPosition(int $position)
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
     {
         $this->position = $position;
     }

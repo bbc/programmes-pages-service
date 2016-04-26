@@ -11,21 +11,21 @@ class RelatedLinkTest extends PHPUnit_Framework_TestCase
     public function testDefaults()
     {
         $coreEntity = new Clip('pid', 'title');
-        $link = new RelatedLink($coreEntity, 'pid', 'title', 'uri', 'type', 1, false);
+        $link = new RelatedLink($coreEntity, 'pid', 'title', 'uri', 'type', false);
         $this->assertSame($coreEntity, $link->getRelatedTo());
         $this->assertSame(null, $link->getId());
         $this->assertSame('pid', $link->getPid());
         $this->assertSame('title', $link->getTitle());
         $this->assertSame('uri', $link->getUri());
         $this->assertSame('type', $link->getType());
-        $this->assertSame(1, $link->getPosition());
+        $this->assertSame(null, $link->getPosition());
         $this->assertSame(false, $link->isExternal());
     }
 
     public function testSetters()
     {
         $coreEntity = new Clip('pid', 'title');
-        $link = new RelatedLink($coreEntity, '', '', '', '', 1, false);
+        $link = new RelatedLink($coreEntity, '', '', '', '',false);
 
         $link->setPid('pid');
         $link->setTitle('title');
