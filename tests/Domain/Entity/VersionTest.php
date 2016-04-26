@@ -17,21 +17,8 @@ class VersionTest extends PHPUnit_Framework_TestCase
 
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
-        $episode = new Episode(
-            new Pid('p0000001'),
-            'Ep',
-            'Ep',
-            'Syn',
-            'Syn',
-            $image,
-            0,
-            0,
-            false,
-            false,
-            'audio',
-            0,
-            0,
-            0
+        $episode = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'BBC\ProgrammesPagesService\Domain\Entity\Episode'
         );
 
         $version = new Version($pid, $episode);

@@ -10,17 +10,17 @@ class VersionRepository extends EntityRepository
 {
     public function findByPid(string $pid)
     {
-        $qb = $this->getQueryBuilder()
+        $qb = $this->createQueryBuilder('version')
             ->andWhere('version.pid = :pid')
             ->setParameter('pid', $pid);
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    private function getQueryBuilder(): QueryBuilder
+    public function createQueryBuilder($alias, $indexBy = null)
     {
         // Any time versions are fetched here they must be joined to their
         // programme entity and checked for embargo.
-        return $this->createQueryBuilder('version')
+        return parent::createQueryBuilder($alias)
             ->join('version.programmeItem', 'p')
             ->andWhere('p.isEmbargoed = false');
     }

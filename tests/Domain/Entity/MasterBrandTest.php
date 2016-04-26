@@ -37,21 +37,8 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $network = new Network(new Nid('bbc_1xtra'), '1 Xtra', $image);
 
-        $episode = new Episode(
-            new Pid('p0000001'),
-            'Ep',
-            'Ep',
-            'Syn',
-            'Syn',
-            $image,
-            0,
-            0,
-            false,
-            false,
-            'audio',
-            0,
-            0,
-            0
+        $episode = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'BBC\ProgrammesPagesService\Domain\Entity\Episode'
         );
 
         $version = new Version(new Pid('b00tf1z5'), $episode);
