@@ -19,6 +19,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
         $this->assertSame('', $image->getLongSynopsis());
         $this->assertSame('standard', $image->getType());
         $this->assertSame('jpg', $image->getExtension());
+        $this->assertSame(false, $image->getIsEmbargoed());
     }
 
     /**
@@ -42,6 +43,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
             ['LongSynopsis', 'a-string'],
             ['Type', 'standard'],
             ['Extension', 'png'],
+            ['IsEmbargoed', true],
         ];
     }
 }

@@ -6,7 +6,6 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use PHPUnit_Framework_TestCase;
 
 class VersionMapperTest extends BaseMapperTestCase
 {
@@ -19,7 +18,11 @@ class VersionMapperTest extends BaseMapperTestCase
         );
     }
 
-    public function testGetDomainModel()
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage All versions must be joined to a ProgrammeItem
+     */
+    public function testGetDomainModelWithNoProgramme()
     {
         $dbEntityArray = [
             'id' => 1,
@@ -29,10 +32,7 @@ class VersionMapperTest extends BaseMapperTestCase
             'competitionWarning' => true,
         ];
 
-        $pid = new Pid('b0007c3v');
-        $expectedEntity = new Version($pid, 360, 'warnings', true);
-
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $this->getMapper()->getDomainModel($dbEntityArray);
     }
 
     public function testGetDomainModelWithSetProgrammeItem()
@@ -58,19 +58,31 @@ class VersionMapperTest extends BaseMapperTestCase
         ];
 
         $pid = new Pid('b0007c3v');
-        $expectedEntity = new Version($pid, 360, 'warnings', true, $expectedProgrammeDomainEntity);
+        $expectedEntity = new Version($pid, $expectedProgrammeDomainEntity, 360, 'warnings', true);
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
     public function testGetDomainModelWithSetVersionTypes()
     {
+        $programmeDbEntity = ['pid' => 'p01m5mss'];
+
+        $expectedProgrammeDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem'
+        );
+
+        $this->mockProgrammeMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($programmeDbEntity)
+            ->willReturn($expectedProgrammeDomainEntity);
+
         $dbEntityArray = [
             'id' => 1,
             'pid' => 'b0007c3v',
             'duration' => '360',
             'guidanceWarningCodes' => 'warnings',
             'competitionWarning' => true,
+            'programmeItem' => $programmeDbEntity,
             'versionTypes' => [
                 ['type' => 'original', 'name' => 'Original Version'],
                 ['type' => 'ad', 'name' => 'Audio Described'],
@@ -83,7 +95,14 @@ class VersionMapperTest extends BaseMapperTestCase
         ];
 
         $pid = new Pid('b0007c3v');
-        $expectedEntity = new Version($pid, 360, 'warnings', true, null, $expectedVersionTypes);
+        $expectedEntity = new Version(
+            $pid,
+            $expectedProgrammeDomainEntity,
+            360,
+            'warnings',
+            true,
+            $expectedVersionTypes
+        );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }

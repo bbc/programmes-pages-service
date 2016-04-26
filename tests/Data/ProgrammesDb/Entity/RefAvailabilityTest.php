@@ -15,8 +15,8 @@ class RefAvailabilityTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $version = new Version('pid');
         $programmeItem = new Episode('pid', 'title');
+        $version = new Version('pid', $programmeItem);
         $mediaSet = new RefMediaSet('media');
         $scheduledStart = new DateTime();
 
@@ -44,10 +44,12 @@ class RefAvailabilityTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
+        $episode = new Episode('pid', 'title');
+
         $entity = new RefAvailability(
             'type',
-            new Version('pid'),
-            new Episode('pid', 'title'),
+            new Version('pid', $episode),
+            $episode,
             new RefMediaSet('media'),
             new DateTime()
         );
@@ -58,10 +60,12 @@ class RefAvailabilityTest extends PHPUnit_Framework_TestCase
 
     public function setterDataProvider()
     {
+        $episode = new Episode('pid', 'title');
+
         return [
             ['Type', 'audio_nondrm_download'],
-            ['Version', new Version('pid')],
-            ['ProgrammeItem', new Episode('pid', 'title')],
+            ['Version', new Version('pid', $episode)],
+            ['ProgrammeItem', $episode],
             ['MediaSet', new RefMediaSet('mediaSet')],
             ['ScheduledStart', new DateTime()],
             ['ScheduledEnd', new DateTime()],
@@ -76,10 +80,12 @@ class RefAvailabilityTest extends PHPUnit_Framework_TestCase
      */
     public function testUnknownStatusThrowsException()
     {
+        $episode = new Episode('pid', 'title');
+
         $entity = new RefAvailability(
             'type',
-            new Version('pid'),
-            new Episode('pid', 'title'),
+            new Version('pid', $episode),
+            $episode,
             new RefMediaSet('media'),
             new DateTime()
         );

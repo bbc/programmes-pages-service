@@ -14,7 +14,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *     @ORM\Index(name="vprogramme_idx", columns={"programme_item_id"})
  *   }
  * )
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository")
  */
 class Version
 {
@@ -55,7 +55,7 @@ class Version
 
     /**
      * @ORM\ManyToOne(targetEntity="ProgrammeItem")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $programmeItem;
 
@@ -65,10 +65,11 @@ class Version
      */
     private $versionTypes;
 
-    public function __construct(string $pid)
+    public function __construct(string $pid, ProgrammeItem $programmeItem)
     {
         $this->pid = $pid;
         $this->versionTypes = new ArrayCollection();
+        $this->setProgrammeItem($programmeItem);
     }
 
     /**

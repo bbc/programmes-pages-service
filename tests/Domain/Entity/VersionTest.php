@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Episode;
+use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -13,9 +15,16 @@ class VersionTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
 
-        $version = new Version($pid);
+        $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+
+        $episode = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'BBC\ProgrammesPagesService\Domain\Entity\Episode'
+        );
+
+        $version = new Version($pid, $episode);
 
         $this->assertEquals($pid, $version->getPid());
+        $this->assertEquals($episode, $version->getProgrammeItem());
         $this->assertEquals(false, $version->hasCompetitionWarning());
     }
 
@@ -30,10 +39,10 @@ class VersionTest extends PHPUnit_Framework_TestCase
 
         $version = new Version(
             $pid,
+            $programmeItem,
             101,
             'GuidanceWarnings',
             true,
-            $programmeItem,
             [$versionType]
         );
 
@@ -45,7 +54,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage versionTypes must be an array containing only instance of "BBC\ProgrammesPagesService\Domain\Entity\VersionType". Found instance of "string"
      */
     public function testInvalidVersionTypeUseScalar()
@@ -56,18 +65,18 @@ class VersionTest extends PHPUnit_Framework_TestCase
             'BBC\ProgrammesPagesService\Domain\Entity\Episode'
         );
 
-        $version = new Version(
+        new Version(
             $pid,
+            $programmeItem,
             101,
             'GuidanceWarnings',
             true,
-            $programmeItem,
             ['I am not a VersionType']
         );
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage versionTypes must be an array containing only instance of "BBC\ProgrammesPagesService\Domain\Entity\VersionType". Found instance of "BBC\ProgrammesPagesService\Domain\ValueObject\Pid"
      */
     public function testInvalidVersionTypeUseObject()
@@ -78,12 +87,12 @@ class VersionTest extends PHPUnit_Framework_TestCase
             'BBC\ProgrammesPagesService\Domain\Entity\Episode'
         );
 
-        $version = new Version(
+        new Version(
             $pid,
+            $programmeItem,
             101,
             'GuidanceWarnings',
             true,
-            $programmeItem,
             [$pid]
         );
     }

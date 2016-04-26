@@ -46,11 +46,16 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
 
     public function setterDataProvider()
     {
+        $entity = $this->getMockForAbstractClass(
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',
+            ['pid', 'title']
+        );
+
         return [
             ['MediaType', MediaTypeEnum::AUDIO],
             ['MediaType', MediaTypeEnum::VIDEO],
             ['MediaType', MediaTypeEnum::UNKNOWN],
-            ['StreamableVersion', new Version('pid')],
+            ['StreamableVersion', new Version('pid', $entity)],
             ['StreamableFrom', new DateTime()],
             ['StreamableUntil', new DateTime()],
             ['ReleaseDate', new PartialDate(2016)],
@@ -59,7 +64,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testUnknownMediaTypeThrowsException()
     {

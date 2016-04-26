@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
@@ -46,7 +47,7 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
             ['Name', 'newName'],
             ['Network', new Network('nid', 'network')],
             ['Image', new Image('pid', 'title')],
-            ['CompetitionWarning', new Version('vpid')],
+            ['CompetitionWarning', new Version('vpid', new Episode('p0000001', 'Ep'))],
             ['Colour', 'colour'],
             ['UrlKey', 'urlkey'],
             ['Position', 1],
