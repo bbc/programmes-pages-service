@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -13,7 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *      @ORM\Index(name="categories_type_idx", columns={"type"}),
  * })
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\MaterializedPathRepository")
- * @Gedmo\Tree(type="materializedPath")
+ * @Gedmo\Tree(type="materializedPath", cascadeDeletes=false)
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\MappedSuperclass()
  * @ORM\DiscriminatorColumn(name="type", type="string")
@@ -40,14 +41,14 @@ abstract class Category
      * @ORM\Column(type="string", nullable=true)
      * @Gedmo\TreePath(endsWithSeparator=false)
      */
-    private $ancestry = '';
+    private $ancestry;
 
     /**
      * @var int|null
      *
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
      */
     private $parent;
 
@@ -100,7 +101,7 @@ abstract class Category
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getId()
     {
@@ -117,9 +118,6 @@ abstract class Category
         return $this->title;
     }
 
-    /**
-     * @return string
-     */
     public function getPipId(): string
     {
         return $this->pipId;
@@ -154,19 +152,11 @@ abstract class Category
     }
 
     /**
-     * @return array
+     * @return DoctrineCollection;
      */
     public function getChildren()
     {
         return $this->children;
-    }
-
-    /**
-     * @param array $children
-     */
-    public function setChildren($children)
-    {
-        $this->children = $children;
     }
 
     public function getRoot()

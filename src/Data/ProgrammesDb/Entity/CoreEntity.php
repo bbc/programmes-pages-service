@@ -24,7 +24,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *   "gallery"="Gallery",
  *   "franchise"="Franchise"
  * })
- * @Gedmo\Tree(type="materializedPath")
+ * @Gedmo\Tree(type="materializedPath", cascadeDeletes=false)
  */
 abstract class CoreEntity
 {
@@ -77,7 +77,7 @@ abstract class CoreEntity
      * @var string
      *
      * @ORM\Column(type="string", nullable=false)
-     * @Gedmo\TreePath(endsWithSeparator=false)
+     * @Gedmo\TreePath()
      */
     private $ancestry = '';
 
