@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * RelatedLink
- *
- * @ORM\Table(name="related_link")
+ * @ORM\Table(indexes={
+ *     @ORM\Index(name="related_link_pid_idx", columns={"pid"}),
+ * })
  * @ORM\Entity()
  */
 class RelatedLink
@@ -24,12 +24,6 @@ class RelatedLink
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    private $relatedTo;
 
     /**
      * @var string
@@ -60,33 +54,40 @@ class RelatedLink
     private $type;
 
     /**
-     * @var integer
+     * @ORM\ManyToOne(targetEntity="CoreEntity")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $relatedTo;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isExternal;
+
+    /**
+     * @var int
      *
      * @ORM\Column(type="integer")
      */
     private $position;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", nullable=false)
-     */
-    private $external;
 
     public function __construct(
-        CoreEntity $relatedTo,
         string $pid,
         string $title,
         string $uri,
         string $type,
-        bool $external
+        CoreEntity $relatedTo,
+        bool $isExternal
     ) {
-        $this->relatedTo = $relatedTo;
         $this->pid = $pid;
         $this->title = $title;
         $this->uri = $uri;
         $this->type = $type;
-        $this->external = $external;
+        $this->relatedTo = $relatedTo;
+        $this->isExternal = $isExternal;
     }
 
     /**
@@ -105,14 +106,6 @@ class RelatedLink
     public function setPid(string $pid)
     {
         $this->pid = $pid;
-    }
-
-    /**
-     * @return CoreEntity
-     */
-    public function getRelatedTo()
-    {
-        return $this->relatedTo;
     }
 
     public function getTitle(): string
@@ -145,8 +138,28 @@ class RelatedLink
         $this->type = $type;
     }
 
+    public function getRelatedTo(): CoreEntity
+    {
+        return $this->relatedTo;
+    }
+
+    public function setRelatedTo(CoreEntity $relatedTo)
+    {
+        $this->relatedTo = $relatedTo;
+    }
+
+    public function getIsExternal(): bool
+    {
+        return $this->isExternal;
+    }
+
+    public function setIsExternal(bool $isExternal)
+    {
+        $this->isExternal = $isExternal;
+    }
+
     /**
-     * @return int
+     * @return int|null
      */
     public function getPosition()
     {
@@ -154,20 +167,10 @@ class RelatedLink
     }
 
     /**
-     * @param int $position
+     * @param int|null $position
      */
     public function setPosition($position)
     {
         $this->position = $position;
-    }
-
-    public function isExternal(): bool
-    {
-        return $this->external;
-    }
-
-    public function setExternal(bool $external)
-    {
-        $this->external = $external;
     }
 }
