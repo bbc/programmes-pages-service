@@ -7,11 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Table(name="categories", indexes={
- *      @ORM\Index(name="categories_id_idx", columns={"id"}),
- *      @ORM\Index(name="categories_ancestry_idx", columns={"ancestry"}),
- *      @ORM\Index(name="categories_parent_id_idx", columns={"parent_id"}),
- *      @ORM\Index(name="categories_type_idx", columns={"type"}),
+ * @ORM\Table(indexes={
+ *      @ORM\Index(name="category_ancestry_idx", columns={"ancestry"}),
+ *      @ORM\Index(name="category_parent_id_idx", columns={"parent_id"}),
+ *      @ORM\Index(name="category_type_idx", columns={"type"}),
  * })
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\MaterializedPathRepository")
  * @Gedmo\Tree(type="materializedPath", cascadeDeletes=false)
@@ -39,7 +38,7 @@ abstract class Category
      * @var string|null
      *
      * @ORM\Column(type="string", nullable=true)
-     * @Gedmo\TreePath(endsWithSeparator=false)
+     * @Gedmo\TreePath()
      */
     private $ancestry;
 
@@ -108,6 +107,14 @@ abstract class Category
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
+    public function getAncestry()
+    {
+        return $this->ancestry;
+    }
+
     public function setTitle(string $title)
     {
         $this->title = $title;
@@ -157,10 +164,5 @@ abstract class Category
     public function getChildren()
     {
         return $this->children;
-    }
-
-    public function getRoot()
-    {
-        return $this->root;
     }
 }

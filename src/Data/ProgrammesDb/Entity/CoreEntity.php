@@ -103,7 +103,7 @@ abstract class CoreEntity
      * front end.
      *
      * @ORM\ManyToMany(targetEntity="Category")
-     * @ORM\JoinTable(name="ref_programmes_categories",
+     * @ORM\JoinTable(name="ref_programme_category",
      *   joinColumns={@ORM\JoinColumn(name="programme_id", referencedColumnName="id", onDelete="CASCADE")},
      *   inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -116,7 +116,7 @@ abstract class CoreEntity
      * This field is denormalised and is what's actually used for genre/format display
      *
      * @ORM\ManyToMany(targetEntity="Category")
-     * @ORM\JoinTable(name="programmes_categories",
+     * @ORM\JoinTable(name="programme_category",
      *   joinColumns={@ORM\JoinColumn(name="programme_id", referencedColumnName="id", onDelete="CASCADE")},
      *   inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")}
      * )

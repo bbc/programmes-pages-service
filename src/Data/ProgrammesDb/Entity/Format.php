@@ -21,20 +21,4 @@ class Format extends Category
     {
         return null;
     }
-
-    /**
-     * @return array
-     */
-    public function getChildren()
-    {
-        return [];
-    }
-
-    /**
-     * @param array $children
-     */
-    public function setChildren($children)
-    {
-        // FORMATS DO NOT HAVE CHILDREN. GOODNIGHT.
-    }
 }
