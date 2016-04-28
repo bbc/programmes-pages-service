@@ -7,9 +7,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\Table(
- *   indexes={ @ORM\Index(name="pid_idx", columns={"pid"}), @ORM\Index(name="ancestry_idx", columns={"ancestry"})}
- * )
+ * @ORM\Table(indexes={
+ *   @ORM\Index(name="core_entity_pid_idx", columns={"pid"}),
+ *   @ORM\Index(name="core_entity_ancestry_idx", columns={"ancestry"}),
+ *   @ORM\Index(name="core_entity_type_idx", columns={"type"}),
+ *  })
  * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\MappedSuperclass()

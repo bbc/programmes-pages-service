@@ -9,7 +9,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Table(indexes={
  *      @ORM\Index(name="category_ancestry_idx", columns={"ancestry"}),
- *      @ORM\Index(name="category_parent_id_idx", columns={"parent_id"}),
  *      @ORM\Index(name="category_type_idx", columns={"type"}),
  * })
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\MaterializedPathRepository")

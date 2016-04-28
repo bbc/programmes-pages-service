@@ -6,8 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * Relationship Type Table. Never queried directly.
- * Instead used for denormalisations
+ * @ORM\Table(indexes={
+ *     @ORM\Index(name="ref_relationship_type_pid_idx", columns={"pid"}),
+ * })
  * @ORM\Entity()
  */
 class RefRelationshipType
