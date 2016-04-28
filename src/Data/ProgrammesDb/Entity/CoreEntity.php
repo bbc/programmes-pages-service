@@ -24,7 +24,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *   "gallery"="Gallery",
  *   "franchise"="Franchise"
  * })
- * @Gedmo\Tree(type="materializedPath")
+ * @Gedmo\Tree(type="materializedPath", cascadeDeletes=false)
  */
 abstract class CoreEntity
 {
@@ -77,7 +77,7 @@ abstract class CoreEntity
      * @var string
      *
      * @ORM\Column(type="string", nullable=false)
-     * @Gedmo\TreePath(endsWithSeparator=false)
+     * @Gedmo\TreePath()
      */
     private $ancestry = '';
 
@@ -97,7 +97,31 @@ abstract class CoreEntity
      */
     private $masterBrand;
 
+    /**
+     * This field is the actual category information from PIPs. For the front end, we denormalise
+     * category information from parent programmes onto the child, do not query this field from the
+     * front end.
+     *
+     * @ORM\ManyToMany(targetEntity="Category")
+     * @ORM\JoinTable(name="ref_programme_category",
+     *   joinColumns={@ORM\JoinColumn(name="programme_id", referencedColumnName="id", onDelete="CASCADE")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     */
+    protected $directCategories;
+
     //// Denormalisations
+
+    /**
+     * This field is denormalised and is what's actually used for genre/format display
+     *
+     * @ORM\ManyToMany(targetEntity="Category")
+     * @ORM\JoinTable(name="programme_category",
+     *   joinColumns={@ORM\JoinColumn(name="programme_id", referencedColumnName="id", onDelete="CASCADE")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     */
+    protected $categories;
 
     /**
      * @var int
@@ -105,7 +129,6 @@ abstract class CoreEntity
      * @ORM\Column(type="integer", nullable=false)
      */
     private $relatedLinksCount = 0;
-
 
     public function __construct(string $pid, string $title)
     {

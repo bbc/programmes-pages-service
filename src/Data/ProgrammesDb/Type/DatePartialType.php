@@ -51,8 +51,6 @@ class DatePartialType extends DateType
         try {
             $values = explode('-', $value);
             return new PartialDate(...$values);
-
-
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateFormatString());
         }

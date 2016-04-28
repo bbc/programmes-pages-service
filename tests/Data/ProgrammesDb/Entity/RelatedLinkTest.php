@@ -25,7 +25,7 @@ class RelatedLinkTest extends PHPUnit_Framework_TestCase
     public function testSetters()
     {
         $coreEntity = new Clip('pid', 'title');
-        $link = new RelatedLink($coreEntity, '', '', '', '',false);
+        $link = new RelatedLink($coreEntity, '', '', '', '', false);
 
         $link->setPid('pid');
         $link->setTitle('title');
