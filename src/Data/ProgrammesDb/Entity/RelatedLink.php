@@ -55,7 +55,7 @@ class RelatedLink
 
     /**
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $relatedTo;
 
@@ -69,7 +69,7 @@ class RelatedLink
     /**
      * @var int
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $position;
 
@@ -166,10 +166,7 @@ class RelatedLink
         return $this->position;
     }
 
-    /**
-     * @param int|null $position
-     */
-    public function setPosition($position)
+    public function setPosition(int $position = null)
     {
         $this->position = $position;
     }
