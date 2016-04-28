@@ -4,12 +4,12 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2c3bc43bb29df27b31a03671190c1821",
-    "content-hash": "fea792b8dc10fb33bf5581accef196fe",
+    "hash": "87e1edbb77ab1bcb4425f6c562c76228",
+    "content-hash": "a97f7597488a3e83699ba0fb8c97e863",
     "packages": [
         {
             "name": "bbc/doctrine-extensions",
-            "version": "dev-master",
+            "version": "v2.4.135",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bbc/DoctrineExtensions.git",
@@ -85,7 +85,7 @@
             "support": {
                 "email": "gediminas.morkevicius@gmail.com",
                 "wiki": "https://github.com/Atlantic18/DoctrineExtensions/tree/master/doc",
-                "source": "https://github.com/bbc/DoctrineExtensions/tree/master"
+                "source": "https://github.com/bbc/DoctrineExtensions/tree/v2.4.135"
             },
             "time": "2016-04-27 17:05:59"
         },
@@ -2119,9 +2119,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "bbc/doctrine-extensions": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
