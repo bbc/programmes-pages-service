@@ -168,6 +168,7 @@ QUERY;
         // $ancestry contains a string of all IDs including the current one
         // Thus for parent ids we want an array of all but the last item (which
         // is the current id)
-        return array_slice(explode(',', $ancestry), 0, -1);
+        $ancestors = explode(',', $ancestry, -2);
+        return $ancestors ?? [];
     }
 }
