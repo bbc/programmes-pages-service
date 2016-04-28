@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Table(indexes={
@@ -23,6 +24,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 abstract class Category
 {
+    use TimestampableEntity;
+
     /**
      * @var int
      *
