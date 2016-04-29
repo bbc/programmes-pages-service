@@ -13,7 +13,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *
  * @ORM\Table(
  *   indexes={
- *     @ORM\Index(name="simulcast_start_at_idx", columns={"start_at"})
+ *     @ORM\Index(name="simulcast_start_at_idx", columns={"start_at"}),
  *     @ORM\Index(name="simulcast_end_at_idx", columns={"end_at"})
  *   }
  * )
