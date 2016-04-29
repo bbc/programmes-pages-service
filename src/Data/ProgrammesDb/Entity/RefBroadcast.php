@@ -11,8 +11,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * @ORM\Table(
  *   indexes={
  *     @ORM\Index(name="ref_broadcast_pid_idx", columns={"pid"}),
- *     @ORM\Index(name="ref_broadcast_version_id_idx", columns={"version_id"}),
- *     @ORM\Index(name="ref_broadcast_service_id_idx", columns={"service_id"})
  *   }
  * )
  * @ORM\Entity()
