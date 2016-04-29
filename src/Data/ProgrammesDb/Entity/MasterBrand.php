@@ -42,7 +42,7 @@ class MasterBrand
     /**
      * @var Network|null
      *
-     * @ORM\ManyToOne(targetEntity="Network")
+     * @ORM\ManyToOne(targetEntity="Network", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $network;
