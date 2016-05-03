@@ -3,8 +3,11 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
+use BBC\ProgrammesPagesService\Domain\Entity\Format;
+use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
+use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
@@ -66,6 +69,10 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $masterBrand = new MasterBrand(new Mid('bbc_one'), 'BBC One', $image);
         $releaseDate = new PartialDate(2015, 01, 02);
 
+        $genre = new Genre('Title', 'url_key');
+        $format = new Format('Title', 'url_key');
+        $relatedLink = new RelatedLink('Title', 'http://example.com', '', '', '', false);
+
         $programme = new Brand(
             $pid,
             'Title',
@@ -87,6 +94,9 @@ class BrandTest extends PHPUnit_Framework_TestCase
             $releaseDate,
             101,
             $masterBrand,
+            [$genre],
+            [$format],
+            [$relatedLink],
             1001
         );
 
@@ -94,6 +104,9 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(101, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
+        $this->assertEquals([$genre], $programme->getGenres());
+        $this->assertEquals([$format], $programme->getFormats());
+        $this->assertEquals([$relatedLink], $programme->getRelatedLinks());
         $this->assertEquals(1001, $programme->getExpectedChildCount());
     }
 
@@ -104,9 +117,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidMediaType()
     {
-        $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
@@ -127,6 +137,114 @@ class BrandTest extends PHPUnit_Framework_TestCase
             14,
             15,
             'wrongwrongwrong'
+        );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Tried to create a Programme with invalid genres. Expected an array of BBC\ProgrammesPagesService\Domain\Entity\Genre but the array contained an instance of "string"
+     */
+    public function testInvalidGenres()
+    {
+        $pid = new Pid('p01m5mss');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+
+        $programme = new Brand(
+            $pid,
+            'Title',
+            'Search Title',
+            'Short Synopsis',
+            'Longest Synopsis',
+            $image,
+            1,
+            2,
+            true,
+            true,
+            11,
+            12,
+            13,
+            14,
+            15,
+            IsPodcastableEnum::NO,
+            null,
+            null,
+            101,
+            null,
+            ['wrongwrongwrong'],
+            [],
+            []
+        );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Tried to create a Programme with invalid formats. Expected an array of BBC\ProgrammesPagesService\Domain\Entity\Format but the array contained an instance of "string"
+     */
+    public function testInvalidFormats()
+    {
+        $pid = new Pid('p01m5mss');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+
+        $programme = new Brand(
+            $pid,
+            'Title',
+            'Search Title',
+            'Short Synopsis',
+            'Longest Synopsis',
+            $image,
+            1,
+            2,
+            true,
+            true,
+            11,
+            12,
+            13,
+            14,
+            15,
+            IsPodcastableEnum::NO,
+            null,
+            null,
+            101,
+            null,
+            [],
+            ['wrongwrongwrong'],
+            []
+        );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Tried to create a Programme with invalid relatedLinks. Expected an array of BBC\ProgrammesPagesService\Domain\Entity\RelatedLink but the array contained an instance of "string"
+     */
+    public function testInvalidRelatedLinks()
+    {
+        $pid = new Pid('p01m5mss');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+
+        $programme = new Brand(
+            $pid,
+            'Title',
+            'Search Title',
+            'Short Synopsis',
+            'Longest Synopsis',
+            $image,
+            1,
+            2,
+            true,
+            true,
+            11,
+            12,
+            13,
+            14,
+            15,
+            IsPodcastableEnum::NO,
+            null,
+            null,
+            101,
+            null,
+            [],
+            [],
+            ['wrongwrongwrong']
         );
     }
 }

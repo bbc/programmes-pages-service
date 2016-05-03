@@ -104,6 +104,9 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             new PartialDate(2015, 01, 02),
             101,
             $masterBrand,
+            [],
+            [],
+            [],
             1001
         );
     }

@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
+use InvalidArgumentException;
 
 abstract class Programme
 {
@@ -78,6 +79,21 @@ abstract class Programme
      */
     protected $masterBrand;
 
+    /**
+     * @var Genres[]
+     */
+    protected $genres;
+
+    /**
+     * @var Formats[]
+     */
+    protected $formats;
+
+    /**
+     * @var RelatedLink[]
+     */
+    protected $relatedLinks;
+
     public function __construct(
         Pid $pid,
         string $title,
@@ -92,8 +108,15 @@ abstract class Programme
         Programme $parent = null,
         PartialDate $releaseDate = null,
         int $position = null,
-        MasterBrand $masterBrand = null
+        MasterBrand $masterBrand = null,
+        array $genres = [],
+        array $formats = [],
+        array $relatedLinks = []
     ) {
+        $this->assertArrayOfType('genres', $genres, Genre::CLASS);
+        $this->assertArrayOfType('formats', $formats, Format::CLASS);
+        $this->assertArrayOfType('relatedLinks', $relatedLinks, RelatedLink::CLASS);
+
         $this->pid = $pid;
         $this->title = $title;
         $this->searchTitle = $searchTitle;
@@ -108,6 +131,9 @@ abstract class Programme
         $this->releaseDate = $releaseDate;
         $this->position = $position;
         $this->masterBrand = $masterBrand;
+        $this->genres = $genres;
+        $this->formats = $formats;
+        $this->relatedLinks = $relatedLinks;
     }
 
     public function getPid(): Pid
@@ -193,10 +219,50 @@ abstract class Programme
     }
 
     /**
+     * @return Genre[]
+     */
+    public function getGenres(): array
+    {
+        return $this->genres;
+    }
+
+    /**
+     * @return Format[]
+     */
+    public function getFormats(): array
+    {
+        return $this->formats;
+    }
+
+    /**
+     * @return RelatedLink[]
+     */
+    public function getRelatedLinks(): array
+    {
+        return $this->relatedLinks;
+    }
+
+    /**
      * @return Network|null
      */
     public function getNetwork()
     {
         return $this->masterBrand->getNetwork() ?? null;
+    }
+
+    private function assertArrayOfType($property, $array, $expectedType)
+    {
+        foreach ($array as $item) {
+            if (!$item instanceof $expectedType) {
+                throw new InvalidArgumentException(sprintf(
+                    'Tried to create a Programme with invalid %s. Expected an array of %s but the array contained an instance of "%s"',
+                    $property,
+                    $expectedType,
+                    (is_object($item) ? get_class($item) : gettype($item))
+                ));
+            }
+        }
+
+        return true;
     }
 }

@@ -3,8 +3,11 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
+use BBC\ProgrammesPagesService\Domain\Entity\Format;
+use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
+use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
@@ -56,6 +59,10 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $masterBrand = new MasterBrand(new Mid('bbc_one'), 'BBC One', $image);
         $releaseDate = new PartialDate(2015, 01, 02);
 
+        $genre = new Genre('Title', 'url_key');
+        $format = new Format('Title', 'url_key');
+        $relatedLink = new RelatedLink('Title', 'http://example.com', '', '', '', false);
+
         $streamableFrom = new DateTimeImmutable();
         $streamableUntil = new DateTimeImmutable();
 
@@ -75,6 +82,9 @@ class ClipTest extends PHPUnit_Framework_TestCase
             $releaseDate,
             101,
             $masterBrand,
+            [$genre],
+            [$format],
+            [$relatedLink],
             1001,
             $streamableFrom,
             $streamableUntil
@@ -84,6 +94,9 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(101, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
+        $this->assertEquals([$genre], $programme->getGenres());
+        $this->assertEquals([$format], $programme->getFormats());
+        $this->assertEquals([$relatedLink], $programme->getRelatedLinks());
         $this->assertEquals(1001, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());

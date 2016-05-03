@@ -43,6 +43,9 @@ class Episode extends ProgrammeItem
         PartialDate $releaseDate = null,
         int $position = null,
         MasterBrand $masterBrand = null,
+        array $genres = [],
+        array $formats = [],
+        array $relatedLinks = [],
         int $duration = null,
         DateTimeImmutable $streamableFrom = null,
         DateTimeImmutable $streamableUntil = null
@@ -63,6 +66,9 @@ class Episode extends ProgrammeItem
             $releaseDate,
             $position,
             $masterBrand,
+            $genres,
+            $formats,
+            $relatedLinks,
             $duration,
             $streamableFrom,
             $streamableUntil

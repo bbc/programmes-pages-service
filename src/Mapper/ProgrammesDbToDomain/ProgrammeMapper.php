@@ -57,6 +57,9 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['releaseDate'],
             $dbProgramme['position'],
             $this->getMasterBrandModel($dbProgramme),
+            [],
+            [],
+            [],
             $dbProgramme['expectedChildCount']
         );
     }
@@ -84,6 +87,9 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['releaseDate'],
             $dbProgramme['position'],
             $this->getMasterBrandModel($dbProgramme),
+            [],
+            [],
+            [],
             $dbProgramme['expectedChildCount']
         );
     }
@@ -109,6 +115,9 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['releaseDate'],
             $dbProgramme['position'] ?? null,
             $this->getMasterBrandModel($dbProgramme),
+            [],
+            [],
+            [],
             $dbProgramme['duration'] ?? null,
             ($dbProgramme['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableFrom']) : null),
             ($dbProgramme['streamableUntil'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableUntil']) : null)
@@ -133,6 +142,9 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['releaseDate'],
             $dbProgramme['position'] ?? null,
             $this->getMasterBrandModel($dbProgramme),
+            [],
+            [],
+            [],
             $dbProgramme['duration'] ?? null,
             ($dbProgramme['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableFrom']) : null),
             ($dbProgramme['streamableUntil'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableUntil']) : null)
