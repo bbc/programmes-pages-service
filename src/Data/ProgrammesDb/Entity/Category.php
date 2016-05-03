@@ -117,14 +117,14 @@ abstract class Category
         return $this->ancestry;
     }
 
-    public function setTitle(string $title)
-    {
-        $this->title = $title;
-    }
-
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setTitle(string $title)
+    {
+        $this->title = $title;
     }
 
     public function getPipId(): string
@@ -137,17 +137,17 @@ abstract class Category
         $this->pipId = $pipId;
     }
 
-    public function setParent(Category $parent = null)
-    {
-        $this->parent = $parent;
-    }
-
     /**
      * @return Category|null
      */
     public function getParent()
     {
         return $this->parent;
+    }
+
+    public function setParent(Category $parent = null)
+    {
+        $this->parent = $parent;
     }
 
     public function getUrlKey(): string
@@ -161,7 +161,7 @@ abstract class Category
     }
 
     /**
-     * @return DoctrineCollection;
+     * @return DoctrineCollection
      */
     public function getChildren()
     {
