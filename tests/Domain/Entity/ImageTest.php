@@ -16,6 +16,8 @@ class ImageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($pid, $image->getPid());
         $this->assertEquals('Title', $image->getTitle());
         $this->assertEquals('ShortSynopsis', $image->getShortSynopsis());
+        $this->assertEquals('LongestSynopsis', $image->getLongestSynopsis());
+        $this->assertEquals('standard', $image->getType());
         $this->assertFalse($image->isLetterBox());
 
         $this->assertEquals('//ichef.bbci.co.uk/images/ic/320xn/p01m5mss.jpg', $image->getUrl(320));
