@@ -14,6 +14,10 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
     protected $mockMasterBrandMapper;
 
+    protected $mockCategoryMapper;
+
+    protected $mockRelatedLinkMapper;
+
     protected $mockDefaultImage;
 
     public function setUp()
@@ -24,6 +28,14 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
         $this->mockMasterBrandMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MasterBrandMapper'
+        );
+
+        $this->mockCategoryMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper'
+        );
+
+        $this->mockRelatedLinkMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper'
         );
 
         $this->mockDefaultImage = $this->getMockWithoutInvokingTheOriginalConstructor(
@@ -40,6 +52,8 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         return new ProgrammeMapper($this->getMapperProvider([
             'ImageMapper' => $this->mockImageMapper,
             'MasterBrandMapper' => $this->mockMasterBrandMapper,
+            'CategoryMapper' => $this->mockCategoryMapper,
+            'RelatedLinkMapper' => $this->mockRelatedLinkMapper,
         ]));
     }
 
@@ -47,8 +61,13 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
      * A sample DB Entity that can be used for testing any mappers that the
      * ProgrammeMapper depends upon.
      */
-    protected function getSampleProgrammeDbEntity($pid, $image, $masterBrand)
-    {
+    protected function getSampleProgrammeDbEntity(
+        $pid,
+        $image = null,
+        $masterBrand = null,
+        array $categories = [],
+        array $relatedLinks = []
+    ) {
         return [
             'type' => 'series',
             'id' => '1',
@@ -73,6 +92,8 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'masterBrand' => $masterBrand,
+            'categories' => $categories,
+            'relatedLinks' => $relatedLinks,
             'expectedChildCount' => 1001,
         ];
     }
@@ -81,8 +102,14 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
      * A sample expected domain model that can be used for testing any mappers
      * that the ProgrammeMapper depends upon.
      */
-    protected function getSampleProgrammeDomainEntity($pid, $image, $masterBrand)
-    {
+    protected function getSampleProgrammeDomainEntity(
+        $pid,
+        $image = null,
+        $masterBrand = null,
+        array $genres = [],
+        array $formats = [],
+        array $relatedLinks = []
+    ) {
         return new Series(
             new Pid($pid),
             'Title',
@@ -104,9 +131,9 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             new PartialDate(2015, 01, 02),
             101,
             $masterBrand,
-            [],
-            [],
-            [],
+            $genres,
+            $formats,
+            $relatedLinks,
             1001
         );
     }

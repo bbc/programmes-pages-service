@@ -6,6 +6,15 @@ class MapperProvider
 {
     protected $mapperInstances = [];
 
+    public function getCategoryMapper(): CategoryMapper
+    {
+        if (!array_key_exists('CategoryMapper', $this->mapperInstances)) {
+            $this->mapperInstances['CategoryMapper'] = new CategoryMapper();
+        }
+
+        return $this->mapperInstances['CategoryMapper'];
+    }
+
     public function getImageMapper(): ImageMapper
     {
         if (!array_key_exists('ImageMapper', $this->mapperInstances)) {
@@ -14,7 +23,6 @@ class MapperProvider
 
         return $this->mapperInstances['ImageMapper'];
     }
-
 
     public function getMasterBrandMapper(): MasterBrandMapper
     {
@@ -41,6 +49,15 @@ class MapperProvider
         }
 
         return $this->mapperInstances['ProgrammeMapper'];
+    }
+
+    public function getRelatedLinkMapper(): RelatedLinkMapper
+    {
+        if (!array_key_exists('RelatedLinkMapper', $this->mapperInstances)) {
+            $this->mapperInstances['RelatedLinkMapper'] = new RelatedLinkMapper();
+        }
+
+        return $this->mapperInstances['RelatedLinkMapper'];
     }
 
     public function getServiceMapper(): ServiceMapper
