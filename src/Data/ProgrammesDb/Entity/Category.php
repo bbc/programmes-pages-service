@@ -9,6 +9,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Table(indexes={
+ *      @ORM\Index(name="category_pip_id_idx", columns={"pip_id"}),
  *      @ORM\Index(name="category_ancestry_idx", columns={"ancestry"}),
  *      @ORM\Index(name="category_type_idx", columns={"type"}),
  * })
@@ -83,7 +84,7 @@ abstract class Category
     /**
      * @var string
      *
-     * @ORM\Column(length=32, nullable=false)
+     * @ORM\Column(length=32, nullable=false, unique=true)
      */
     private $pipId;
 
