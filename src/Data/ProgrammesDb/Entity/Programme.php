@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -89,18 +90,13 @@ abstract class Programme extends CoreEntity
      * all of its toys out of the pram if I define it here, it can only
      * be get/set here though.
      * This is the list of categories directly associated with a programme.
-     *
-     * @return Category[]|null
      */
-    public function getDirectCategories()
+    public function getDirectCategories(): DoctrineCollection
     {
         return $this->directCategories;
     }
 
-    /**
-     * @param Category[] $directCategories
-     */
-    public function setDirectCategories(array $directCategories)
+    public function setDirectCategories(DoctrineCollection $directCategories)
     {
         $this->directCategories = $directCategories;
     }
@@ -112,17 +108,13 @@ abstract class Programme extends CoreEntity
      * This is the denormalized list of categories associated with a programme,
      * or any any of its ancestors
      *
-     * @return Category[]|null
      */
-    public function getCategories()
+    public function getCategories(): DoctrineCollection
     {
         return $this->categories;
     }
 
-    /**
-     * @param Category[] $categories
-     */
-    public function setCategories(array $categories)
+    public function setCategories(DoctrineCollection $categories)
     {
         $this->categories = $categories;
     }

@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use PHPUnit_Framework_TestCase;
 
@@ -23,6 +24,8 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $entity->getStreamable());
         $this->assertEquals(false, $entity->getHasSupportingContent());
         $this->assertEquals(null, $entity->getPosition());
+        $this->assertEquals(new ArrayCollection(), $entity->getDirectCategories());
+        $this->assertEquals(new ArrayCollection(), $entity->getCategories());
 
     }
 
@@ -51,8 +54,8 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
             ['Streamable', true],
             ['HasSupportingContent', true],
             ['Position', 1],
-            ['DirectCategories', [$genre]],
-            ['Categories', [$genre]],
+            ['DirectCategories', new ArrayCollection([$genre])],
+            ['Categories', new ArrayCollection([$genre])],
         ];
     }
 }

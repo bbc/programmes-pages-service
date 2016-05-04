@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -100,6 +101,7 @@ abstract class Category
         $this->pipId = $pipId;
         $this->title = $title;
         $this->urlKey = $urlKey;
+        $this->children = new ArrayCollection();
     }
 
     /**
@@ -161,10 +163,7 @@ abstract class Category
         $this->urlKey = $urlKey;
     }
 
-    /**
-     * @return DoctrineCollection
-     */
-    public function getChildren()
+    public function getChildren(): DoctrineCollection
     {
         return $this->children;
     }

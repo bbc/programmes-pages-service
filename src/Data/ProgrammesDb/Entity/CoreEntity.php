@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -136,6 +137,8 @@ abstract class CoreEntity
     {
         $this->pid = $pid;
         $this->title = $title;
+        $this->directCategories = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     /**
