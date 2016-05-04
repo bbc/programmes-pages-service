@@ -88,6 +88,29 @@ abstract class Programme extends CoreEntity
      * The property is defined on the CoreEntity class, because doctrine throws
      * all of its toys out of the pram if I define it here, it can only
      * be get/set here though.
+     * This is the list of categories directly associated with a programme.
+     *
+     * @return Category[]|null
+     */
+    public function getDirectCategories()
+    {
+        return $this->directCategories;
+    }
+
+    /**
+     * @param Category[] $directCategories
+     */
+    public function setDirectCategories(array $directCategories)
+    {
+        $this->directCategories = $directCategories;
+    }
+
+    /**
+     * The property is defined on the CoreEntity class, because doctrine throws
+     * all of its toys out of the pram if I define it here, it can only
+     * be get/set here though.
+     * This is the denormalized list of categories associated with a programme,
+     * or any any of its ancestors
      *
      * @return Category[]|null
      */
@@ -102,33 +125,5 @@ abstract class Programme extends CoreEntity
     public function setCategories(array $categories)
     {
         $this->categories = $categories;
-    }
-
-    /**
-     * @return array
-     */
-    public function getFormats()
-    {
-        $formats = array();
-        foreach ($this->categories as $category) {
-            if ($category instanceof Format) {
-                $formats[] = $category;
-            }
-        }
-        return $formats;
-    }
-
-    /**
-     * @return array
-     */
-    public function getGenres()
-    {
-        $genres = array();
-        foreach ($this->categories as $category) {
-            if ($category instanceof Genre) {
-                $genres[] = $category;
-            }
-        }
-        return $genres;
     }
 }
