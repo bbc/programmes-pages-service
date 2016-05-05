@@ -11,8 +11,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * @ORM\Table(
  *   indexes={
  *     @ORM\Index(name="pid_idx", columns={"pid"}),
- *     @ORM\Index(name="vpid_idx", columns={"broadcast_of_id"}),
- *     @ORM\Index(name="service_idx", columns={"broadcaster_id"})
+ *     @ORM\Index(name="vpid_idx", columns={"version_id"}),
+ *     @ORM\Index(name="service_idx", columns={"service_id"})
  *   }
  * )
  * @ORM\Entity()
@@ -42,13 +42,13 @@ class RefBroadcast
      * @ORM\ManyToOne(targetEntity="Version")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $broadcastOf;
+    private $version;
 
     /**
      * @ORM\ManyToOne(targetEntity="Service")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $broadcaster;
+    private $service;
 
     /**
      * @var bool
@@ -84,7 +84,7 @@ class RefBroadcast
      * @ORM\Column(type="boolean", nullable=false)
      */
     private $audioDescribed = false;
-    
+
     /**
      * @var bool
      *
@@ -94,14 +94,14 @@ class RefBroadcast
 
     public function __construct(
         string $pid,
-        Service $broadcaster,
-        Version $broadcastOf,
+        Service $service,
+        Version $version,
         DateTime $start,
         DateTime $end
     ) {
         $this->pid = $pid;
-        $this->broadcaster = $broadcaster;
-        $this->broadcastOf = $broadcastOf;
+        $this->service = $service;
+        $this->version = $version;
         $this->startAt = $start;
         $this->endAt = $end;
         $this->updateDuration();
@@ -125,24 +125,24 @@ class RefBroadcast
         $this->pid = $pid;
     }
 
-    public function getBroadcastOf(): Version
+    public function getVersion(): Version
     {
-        return $this->broadcastOf;
+        return $this->version;
     }
 
-    public function setBroadcastOf(Version $broadcastOf)
+    public function setVersion(Version $version)
     {
-        $this->broadcastOf = $broadcastOf;
+        $this->version = $version;
     }
 
-    public function getBroadcaster(): Service
+    public function getService(): Service
     {
-        return $this->broadcaster;
+        return $this->service;
     }
 
-    public function setBroadcaster(Service $broadcaster)
+    public function setService(Service $service)
     {
-        $this->broadcaster = $broadcaster;
+        $this->service = $service;
     }
 
     public function isLive(): bool
