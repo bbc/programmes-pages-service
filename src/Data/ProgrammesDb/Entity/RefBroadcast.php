@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\DurationTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -10,14 +11,16 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * @ORM\Table(
  *   indexes={
  *     @ORM\Index(name="pid_idx", columns={"pid"}),
- *     @ORM\Index(name="vpid_idx", columns={"broadcast_of"}),
- *     @ORM\Index(name="service_idx", columns={"broadcaster"})
+ *     @ORM\Index(name="vpid_idx", columns={"broadcast_of_id"}),
+ *     @ORM\Index(name="service_idx", columns={"broadcaster_id"})
  *   }
  * )
  * @ORM\Entity()
  */
-class Broadcast
+class RefBroadcast
 {
+
+    use DurationTrait;
     use TimestampableEntity;
 
     /**
@@ -48,26 +51,6 @@ class Broadcast
     private $broadcaster;
 
     /**
-     * @var DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=false)
-     */
-    private $start;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=false)
-     */
-    private $end;
-
-    /**
-     * @var int|null
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    private $duration;
-
-    /**
      * @var bool
      *
      * @ORM\Column(type="boolean", nullable=false)
@@ -86,7 +69,7 @@ class Broadcast
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $repeat = false;
+    private $isRepeat = false;
 
     /**
      * @var bool
@@ -107,15 +90,14 @@ class Broadcast
         Service $broadcaster,
         Version $broadcastOf,
         DateTime $start,
-        DateTime $end,
-        int $duration
+        DateTime $end
     ) {
         $this->pid = $pid;
-        $this->broadcastOf = $broadcastOf;
         $this->broadcaster = $broadcaster;
-        $this->start = $start;
-        $this->end = $end;
-        $this->duration = $duration;
+        $this->broadcastOf = $broadcastOf;
+        $this->startAt = $start;
+        $this->endAt = $end;
+        $this->updateDuration();
     }
 
     /**
@@ -156,36 +138,6 @@ class Broadcast
         $this->broadcaster = $broadcaster;
     }
 
-    public function getStart(): DateTime
-    {
-        return $this->start;
-    }
-
-    public function setStart(DateTime $start)
-    {
-        $this->start = $start;
-    }
-
-    public function getEnd(): DateTime
-    {
-        return $this->end;
-    }
-
-    public function setEnd(DateTime $end)
-    {
-        $this->end = $end;
-    }
-
-    public function getDuration(): int
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(int $duration)
-    {
-        $this->duration = $duration;
-    }
-
     public function isLive(): bool
     {
         return $this->live;
@@ -208,12 +160,12 @@ class Broadcast
 
     public function isRepeat(): bool
     {
-        return $this->repeat;
+        return $this->isRepeat;
     }
 
-    public function setRepeat(bool $repeat)
+    public function setRepeat(bool $isRepeat)
     {
-        $this->repeat = $repeat;
+        $this->isRepeat = $isRepeat;
     }
 
     public function isCritical(): bool

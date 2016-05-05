@@ -2,13 +2,13 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Broadcast;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefBroadcast;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use PHPUnit_Framework_TestCase;
 
-class BroadcastTest extends PHPUnit_Framework_TestCase
+class RefBroadcastTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
@@ -18,7 +18,7 @@ class BroadcastTest extends PHPUnit_Framework_TestCase
         $start = new \DateTime('now');
         $end = new \DateTime('now');
 
-        $entity = new Broadcast('broadcast_pid', $service, $version, $start, $end, 60);
+        $entity = new RefBroadcast('broadcast_pid', $service, $version, $start, $end);
 
         $this->assertSame(null, $entity->getId());
         $this->assertSame('broadcast_pid', $entity->getPid());
@@ -26,7 +26,7 @@ class BroadcastTest extends PHPUnit_Framework_TestCase
         $this->assertSame($version, $entity->getBroadcastOf());
         $this->assertSame($start, $entity->getStart());
         $this->assertSame($end, $entity->getEnd());
-        $this->assertSame(60, $entity->getDuration());
+        $this->assertSame(0, $entity->getDuration());
         $this->assertSame(false, $entity->isAudioDescribed());
         $this->assertSame(false, $entity->isBlanked());
         $this->assertSame(false, $entity->isCritical());
