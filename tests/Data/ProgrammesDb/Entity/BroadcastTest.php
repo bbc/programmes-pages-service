@@ -2,13 +2,13 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefBroadcast;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use PHPUnit_Framework_TestCase;
 
-class RefBroadcastTest extends PHPUnit_Framework_TestCase
+class BroadcastTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
@@ -18,7 +18,7 @@ class RefBroadcastTest extends PHPUnit_Framework_TestCase
         $start = new \DateTime('now');
         $end = new \DateTime('now');
 
-        $broadcast = new RefBroadcast('broadcast_pid', $service, $version, $start, $end);
+        $broadcast = new Broadcast('broadcast_pid', $service, $version, $start, $end);
 
         $this->assertSame(null, $broadcast->getId());
         $this->assertSame('broadcast_pid', $broadcast->getPid());
@@ -45,7 +45,7 @@ class RefBroadcastTest extends PHPUnit_Framework_TestCase
         $service = new Service('bbc_radio_1', 'Radio 1', 'radio', 'audio');
         $start = new \DateTime('now');
         $end = new \DateTime('now');
-        $broadcast = new RefBroadcast('broadcast_pid', $service, $version, $start, $end);
+        $broadcast = new Broadcast('broadcast_pid', $service, $version, $start, $end);
 
         $broadcast->{'set' . $name}($validValue);
         $this->assertEquals($validValue, $broadcast->{'get' . $name}());

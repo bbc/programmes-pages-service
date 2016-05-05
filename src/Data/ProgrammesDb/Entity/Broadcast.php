@@ -10,12 +10,14 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 /**
  * @ORM\Table(
  *   indexes={
- *     @ORM\Index(name="ref_broadcast_pid_idx", columns={"pid"}),
+ *     @ORM\Index(name="broadcast_start_at_idx", columns={"start_at"}),
+ *     @ORM\Index(name="broadcast_end_at_idx", columns={"end_at"}),
+ *     @ORM\Index(name="broadcast_service_id_idx", columns={"service_id"})
  *   }
  * )
  * @ORM\Entity()
  */
-class RefBroadcast
+class Broadcast
 {
 
     use DurationTrait;
