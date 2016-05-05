@@ -73,14 +73,14 @@ class Broadcast
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $live = false;
+    private $isLive = false;
 
     /**
      * @var bool
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $blanked = false;
+    private $isBlanked = false;
 
     /**
      * @var bool
@@ -94,14 +94,14 @@ class Broadcast
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $critical = false;
+    private $isCritical = false;
 
     /**
      * @var bool
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $audioDescribed = false;
+    private $isAudioDescribed = false;
 
     /**
      * @var bool
@@ -163,54 +163,54 @@ class Broadcast
         $this->service = $service;
     }
 
-    public function isLive(): bool
+    public function getIsLive(): bool
     {
-        return $this->live;
+        return $this->isLive;
     }
 
-    public function setLive(bool $live)
+    public function setIsLive(bool $isLive)
     {
-        $this->live = $live;
+        $this->isLive = $isLive;
     }
 
-    public function isBlanked(): bool
+    public function getIsBlanked(): bool
     {
-        return $this->blanked;
+        return $this->isBlanked;
     }
 
-    public function setBlanked(bool $blanked)
+    public function setIsBlanked(bool $isBlanked)
     {
-        $this->blanked = $blanked;
+        $this->isBlanked = $isBlanked;
     }
 
-    public function isRepeat(): bool
+    public function getIsRepeat(): bool
     {
         return $this->isRepeat;
     }
 
-    public function setRepeat(bool $isRepeat)
+    public function setIsRepeat(bool $isRepeat)
     {
         $this->isRepeat = $isRepeat;
     }
 
-    public function isCritical(): bool
+    public function getIsCritical(): bool
     {
-        return $this->critical;
+        return $this->isCritical;
     }
 
-    public function setCritical(bool $critical)
+    public function setIsCritical(bool $isCritical)
     {
-        $this->critical = $critical;
+        $this->isCritical = $isCritical;
     }
 
-    public function isAudioDescribed(): bool
+    public function getIsAudioDescribed(): bool
     {
-        return $this->audioDescribed;
+        return $this->isAudioDescribed;
     }
 
-    public function setAudioDescribed(bool $audioDescribed)
+    public function setIsAudioDescribed(bool $isAudioDescribed)
     {
-        $this->audioDescribed = $audioDescribed;
+        $this->isAudioDescribed = $isAudioDescribed;
     }
 
     public function getIsWebcast(): bool
