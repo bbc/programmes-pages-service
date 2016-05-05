@@ -84,6 +84,13 @@ class RefBroadcast
      * @ORM\Column(type="boolean", nullable=false)
      */
     private $audioDescribed = false;
+    
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isWebcast = false;
 
     public function __construct(
         string $pid,
@@ -186,5 +193,15 @@ class RefBroadcast
     public function setAudioDescribed(bool $audioDescribed)
     {
         $this->audioDescribed = $audioDescribed;
+    }
+
+    public function getIsWebcast(): bool
+    {
+        return $this->isWebcast;
+    }
+
+    public function setIsWebcast(bool $isWebcast)
+    {
+        $this->isWebcast = $isWebcast;
     }
 }
