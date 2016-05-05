@@ -2,13 +2,14 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait;
 use PHPUnit_Framework_TestCase;
 
 class SynopsesTraitTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        /** @var $entity */
+        /** @var SynopsesTrait $entity */
         $entity = $this->getMockForTrait('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait');
 
         $this->assertEquals('', $entity->getShortSynopsis());
@@ -18,6 +19,7 @@ class SynopsesTraitTest extends PHPUnit_Framework_TestCase
 
     public function testSetters()
     {
+        /** @var SynopsesTrait $entity */
         $entity = $this->getMockForTrait('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait');
 
         $entity->setShortSynopsis('short');
