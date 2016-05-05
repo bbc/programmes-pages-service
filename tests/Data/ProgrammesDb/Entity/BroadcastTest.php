@@ -43,9 +43,11 @@ class BroadcastTest extends PHPUnit_Framework_TestCase
         $episode = new Episode('episode_pid', 'episode_title');
         $version = new Version('version_pid', $episode);
         $service = new Service('bbc_radio_1', 'Radio 1', 'radio', 'audio');
-        $start = new \DateTime('now');
-        $end = new \DateTime('now');
+        $start = new \DateTime('2016-01-01 00:00:00');
+        $end = new \DateTime('2016-01-01 00:01:00');
         $broadcast = new Broadcast('broadcast_pid', $service, $version, $start, $end);
+        // check the duration logic happened correctly
+        $this->assertEquals(60, $broadcast->getDuration());
 
         $broadcast->{'set' . $name}($validValue);
         $this->assertEquals($validValue, $broadcast->{'get' . $name}());
