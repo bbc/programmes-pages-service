@@ -4,7 +4,6 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 
 class VersionRepository extends EntityRepository
 {
@@ -13,6 +12,7 @@ class VersionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('version')
             ->andWhere('version.pid = :pid')
             ->setParameter('pid', $pid);
+
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
@@ -20,8 +20,10 @@ class VersionRepository extends EntityRepository
     {
         // Any time versions are fetched here they must be joined to their
         // programme entity and checked for embargo.
+        // This ensures that SegmentEvents that belong to an embargoed programme
+        // are never returned
         return parent::createQueryBuilder($alias)
-            ->join('version.programmeItem', 'p')
+            ->join($alias . '.programmeItem', 'p')
             ->andWhere('p.isEmbargoed = false');
     }
 }
