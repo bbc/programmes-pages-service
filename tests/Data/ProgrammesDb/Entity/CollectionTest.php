@@ -10,7 +10,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Collection');
+        $reflection = new ReflectionClass(Collection::CLASS);
         $this->assertEquals([
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsPodcastableTrait',
         ], $reflection->getTraitNames());

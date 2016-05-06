@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use PHPUnit_Framework_TestCase;
 
@@ -11,7 +12,7 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme',
+            Programme::CLASS,
             ['pid', 'title']
         );
 
@@ -35,7 +36,7 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
     public function testSetters($name, $validValue)
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme',
+            Programme::CLASS,
             ['pid', 'title']
         );
 

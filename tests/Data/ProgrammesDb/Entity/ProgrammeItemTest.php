@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
@@ -13,7 +14,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',
+            ProgrammeItem::CLASS,
             ['pid', 'title']
         );
 
@@ -36,7 +37,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
     public function testSetters($name, $validValue)
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',
+            ProgrammeItem::CLASS,
             ['pid', 'title']
         );
 
@@ -47,7 +48,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
     public function setterDataProvider()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',
+            ProgrammeItem::CLASS,
             ['pid', 'title']
         );
 
@@ -69,7 +70,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
     public function testUnknownMediaTypeThrowsException()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',
+            ProgrammeItem::CLASS,
             ['pid', 'title']
         );
 

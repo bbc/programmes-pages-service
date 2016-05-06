@@ -11,7 +11,7 @@ class SeasonTest extends PHPUnit_Framework_TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Season');
+        $reflection = new ReflectionClass(Season::CLASS);
         $this->assertEquals([
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountTrait',
         ], $reflection->getTraitNames());

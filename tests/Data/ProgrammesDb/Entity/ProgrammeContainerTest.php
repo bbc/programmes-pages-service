@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
@@ -10,7 +11,7 @@ class ProgrammeContainerTest extends PHPUnit_Framework_TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer');
+        $reflection = new ReflectionClass(ProgrammeContainer::CLASS);
         $this->assertEquals([
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedEpisodesCountTrait',
@@ -24,7 +25,7 @@ class ProgrammeContainerTest extends PHPUnit_Framework_TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer',
+            ProgrammeContainer::CLASS,
             ['pid', 'title']
         );
 
@@ -42,7 +43,7 @@ class ProgrammeContainerTest extends PHPUnit_Framework_TestCase
     public function testSetters($name, $validValue)
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer',
+            ProgrammeContainer::CLASS,
             ['pid', 'title']
         );
 

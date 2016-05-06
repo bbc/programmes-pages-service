@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\GroupProgrammeContainer;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 
@@ -9,7 +10,7 @@ class GroupProgrammeContainerTest extends PHPUnit_Framework_TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\GroupProgrammeContainer');
+        $reflection = new ReflectionClass(GroupProgrammeContainer::CLASS);
         $this->assertEquals([
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedEpisodesCountTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountTrait',
@@ -21,7 +22,7 @@ class GroupProgrammeContainerTest extends PHPUnit_Framework_TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\GroupProgrammeContainer',
+            GroupProgrammeContainer::CLASS,
             ['pid', 'title']
         );
 
