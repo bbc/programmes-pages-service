@@ -46,7 +46,7 @@ class Broadcast
      * @ORM\ManyToOne(targetEntity="Service")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $service = null;
+    private $service;
 
     /**
      * @var DateTime
@@ -151,6 +151,9 @@ class Broadcast
         $this->version = $version;
     }
 
+    /**
+     * @return Service|null
+     */
     public function getService()
     {
         return $this->service;
