@@ -44,9 +44,9 @@ class Broadcast
 
     /**
      * @ORM\ManyToOne(targetEntity="Service")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $service;
+    private $service = null;
 
     /**
      * @var DateTime
@@ -112,13 +112,11 @@ class Broadcast
 
     public function __construct(
         string $pid,
-        Service $service,
         Version $version,
         DateTime $start,
         DateTime $end
     ) {
         $this->pid = $pid;
-        $this->service = $service;
         $this->version = $version;
         $this->startAt = $start;
         $this->endAt = $end;
@@ -153,12 +151,12 @@ class Broadcast
         $this->version = $version;
     }
 
-    public function getService(): Service
+    public function getService()
     {
         return $this->service;
     }
 
-    public function setService(Service $service)
+    public function setService(Service $service = null)
     {
         $this->service = $service;
     }

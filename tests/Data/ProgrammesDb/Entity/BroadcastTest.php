@@ -14,19 +14,18 @@ class BroadcastTest extends PHPUnit_Framework_TestCase
     {
         $episode = new Episode('episode_pid', 'episode_title');
         $version = new Version('version_pid', $episode);
-        $service = new Service('bbc_radio_1', 'Radio 1', 'radio', 'audio');
         $start = new \DateTime('now');
         $end = new \DateTime('now');
 
-        $broadcast = new Broadcast('broadcast_pid', $service, $version, $start, $end);
+        $broadcast = new Broadcast('broadcast_pid', $version, $start, $end);
 
         $this->assertSame(null, $broadcast->getId());
         $this->assertSame('broadcast_pid', $broadcast->getPid());
-        $this->assertSame($service, $broadcast->getService());
         $this->assertSame($version, $broadcast->getVersion());
         $this->assertSame($start, $broadcast->getStart());
         $this->assertSame($end, $broadcast->getEnd());
         $this->assertSame(0, $broadcast->getDuration());
+        $this->assertSame(null, $broadcast->getService());
         $this->assertSame(false, $broadcast->getIsAudioDescribed());
         $this->assertSame(false, $broadcast->getIsBlanked());
         $this->assertSame(false, $broadcast->getIsCritical());
@@ -42,10 +41,9 @@ class BroadcastTest extends PHPUnit_Framework_TestCase
     {
         $episode = new Episode('episode_pid', 'episode_title');
         $version = new Version('version_pid', $episode);
-        $service = new Service('bbc_radio_1', 'Radio 1', 'radio', 'audio');
         $start = new \DateTime('2016-01-01 00:00:00');
         $end = new \DateTime('2016-01-01 00:01:00');
-        $broadcast = new Broadcast('broadcast_pid', $service, $version, $start, $end);
+        $broadcast = new Broadcast('broadcast_pid', $version, $start, $end);
         // check the duration logic happened correctly
         $this->assertEquals(60, $broadcast->getDuration());
 
