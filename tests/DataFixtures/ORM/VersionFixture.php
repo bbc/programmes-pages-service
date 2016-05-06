@@ -28,6 +28,7 @@ class VersionFixture extends AbstractFixture
     {
         $entity = new Version($pid, $parent);
         $this->manager->persist($entity);
+        $this->addReference($pid, $entity);
         return $entity;
     }
 
@@ -35,6 +36,7 @@ class VersionFixture extends AbstractFixture
     {
         $entity = new Episode($pid, $title);
         $entity->setIsEmbargoed($embargoed);
+        $this->addReference($pid, $entity);
         $this->manager->persist($entity);
         return $entity;
     }
