@@ -52,6 +52,78 @@ class Segment
      */
     private $duration;
 
+    // The following properties should only apply to Music Segments
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $musicRecordId;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $releaseTitle;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $catalogueNumber;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $recordLabel;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $publisher;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $trackNumber;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $trackSide;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $sourceMedia;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $musicCode;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $recordingDate;
+
     public function __construct(string $pid, string $type)
     {
         $this->pid = $pid;
@@ -110,5 +182,135 @@ class Segment
     public function setDuration(int $duration = null)
     {
         $this->duration = $duration;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMusicRecordId()
+    {
+        return $this->musicRecordId;
+    }
+
+    public function setMusicRecordId(string $musicRecordId = null)
+    {
+        $this->musicRecordId = $musicRecordId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReleaseTitle()
+    {
+        return $this->releaseTitle;
+    }
+
+    public function setReleaseTitle(string $releaseTitle = null)
+    {
+        $this->releaseTitle = $releaseTitle;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCatalogueNumber()
+    {
+        return $this->catalogueNumber;
+    }
+
+    public function setCatalogueNumber(string $catalogueNumber = null)
+    {
+        $this->catalogueNumber = $catalogueNumber;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRecordLabel()
+    {
+        return $this->recordLabel;
+    }
+
+    public function setRecordLabel(string $recordLabel = null)
+    {
+        $this->recordLabel = $recordLabel;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPublisher()
+    {
+        return $this->publisher;
+    }
+
+    public function setPublisher(string $publisher = null)
+    {
+        $this->publisher = $publisher;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTrackNumber()
+    {
+        return $this->trackNumber;
+    }
+
+    public function setTrackNumber(string $trackNumber = null)
+    {
+        $this->trackNumber = $trackNumber;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTrackSide()
+    {
+        return $this->trackSide;
+    }
+
+    public function setTrackSide(string $trackSide = null)
+    {
+        $this->trackSide = $trackSide;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSourceMedia()
+    {
+        return $this->sourceMedia;
+    }
+
+    public function setSourceMedia(string $sourceMedia = null)
+    {
+        $this->sourceMedia = $sourceMedia;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMusicCode()
+    {
+        return $this->musicCode;
+    }
+
+    public function setMusicCode(string $musicCode = null)
+    {
+        $this->musicCode = $musicCode;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRecordingDate()
+    {
+        return $this->recordingDate;
+    }
+
+    public function setRecordingDate(string $recordingDate = null)
+    {
+        $this->recordingDate = $recordingDate;
     }
 }

@@ -26,6 +26,16 @@ class SegmentTest extends PHPUnit_Framework_TestCase
         $this->assertSame('type', $entity->getType());
         $this->assertSame(null, $entity->getTitle());
         $this->assertSame(null, $entity->getDuration());
+        $this->assertSame(null, $entity->getMusicRecordId());
+        $this->assertSame(null, $entity->getReleaseTitle());
+        $this->assertSame(null, $entity->getCatalogueNumber());
+        $this->assertSame(null, $entity->getRecordLabel());
+        $this->assertSame(null, $entity->getPublisher());
+        $this->assertSame(null, $entity->getTrackNumber());
+        $this->assertSame(null, $entity->getTrackSide());
+        $this->assertSame(null, $entity->getSourceMedia());
+        $this->assertSame(null, $entity->getMusicCode());
+        $this->assertSame(null, $entity->getRecordingDate());
     }
 
     /**
@@ -46,6 +56,16 @@ class SegmentTest extends PHPUnit_Framework_TestCase
             ['Type', 'newType'],
             ['Title', 'newTitle'],
             ['Duration', 1],
+            ['MusicRecordId', 'newMusicRecordId'],
+            ['ReleaseTitle', 'newReleaseTitle'],
+            ['CatalogueNumber', 'newCatalogueNumber'],
+            ['RecordLabel', 'newRecordLabel'],
+            ['Publisher', 'newPublisher'],
+            ['TrackNumber', 'newTrackNumber'],
+            ['TrackSide', 'newTrackSide'],
+            ['SourceMedia', 'newSourceMedia'],
+            ['MusicCode', 'newMusicCode'],
+            ['RecordingDate', 'newRecordingDate'],
         ];
     }
 }
