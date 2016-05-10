@@ -48,24 +48,23 @@ abstract class CoreEntity
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(type="string", length=15, nullable=false, unique=true)
      */
     private $pid;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=128, nullable=false)
      */
     private $title;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=128, nullable=false)
      */
     private $searchTitle = '';
-
 
     /**
      * @var CoreEntity|null

@@ -38,14 +38,14 @@ class PipsChange
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=15, nullable=false)
      */
     private $entityId;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=64, nullable=false)
      */
     private $entityType;
 
@@ -59,14 +59,14 @@ class PipsChange
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=32, nullable=false)
      */
     private $status;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=32, nullable=false)
      */
     private $type;
 

@@ -29,28 +29,28 @@ class Service
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(type="string", length=64, nullable=false, unique=true)
      */
     private $sid;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=32, nullable=false)
      */
     private $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=64, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=64, nullable=false)
      */
     private $shortName;
 
@@ -64,7 +64,7 @@ class Service
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=32, nullable=false)
      */
     private $mediaType;
 

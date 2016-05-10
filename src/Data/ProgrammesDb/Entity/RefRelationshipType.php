@@ -26,14 +26,14 @@ class RefRelationshipType
 
     /**
      * @var string
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(type="string", length=15, nullable=false, unique=true)
      */
     private $pid;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(type="string", length=128, nullable=false, unique=true)
      */
     private $name;
 

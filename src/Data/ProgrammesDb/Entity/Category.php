@@ -71,14 +71,14 @@ abstract class Category
     /**
      * @var string
      *
-     * @ORM\Column(length=255, nullable=false)
+     * @ORM\Column(nullable=false)
      */
     private $title;
 
     /**
      * @var string
      *
-     * @ORM\Column(length=255, nullable=false)
+     * @ORM\Column(nullable=false)
      */
     private $urlKey;
 

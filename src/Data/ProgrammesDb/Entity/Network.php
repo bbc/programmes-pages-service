@@ -31,14 +31,14 @@ class Network
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(type="string", length=64, nullable=false, unique=true)
      */
     private $nid;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=64, nullable=false)
      */
     private $name;
 
@@ -52,14 +52,14 @@ class Network
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=32, nullable=true)
      */
     private $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=32, nullable=false)
      */
     private $medium = NetworkMediumEnum::UNKNOWN;
 
