@@ -2,7 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChange;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChangeBase;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
@@ -10,7 +10,7 @@ use Doctrine\ORM\Query;
 class PipsChangeRepository extends EntityRepository
 {
 
-    public function addChange(PipsChange $pipsChange)
+    public function addChange(PipsChangeBase $pipsChange)
     {
         $em = $this->getEntityManager();
         $em->persist($pipsChange);
@@ -91,7 +91,7 @@ class PipsChangeRepository extends EntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function setAsProcessed(PipsChange $change)
+    public function setAsProcessed(PipsChangeBase $change)
     {
         $change->setProcessedTime(new \DateTime());
         $this->addChange($change);
