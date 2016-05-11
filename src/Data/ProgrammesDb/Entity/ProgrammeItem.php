@@ -65,7 +65,7 @@ abstract class ProgrammeItem extends Programme
     /**
      * @var DateTime
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="simple_array", nullable=true)
      */
     private $downloadableMediaSets;
 
@@ -169,14 +169,14 @@ abstract class ProgrammeItem extends Programme
     }
 
     /**
-     * @return string|null
+     * @return array|null
      */
     public function getDownloadableMediaSets()
     {
         return $this->downloadableMediaSets;
     }
 
-    public function setDownloadableMediaSets(string $downloadableMediaSets = null)
+    public function setDownloadableMediaSets(array $downloadableMediaSets = null)
     {
         $this->downloadableMediaSets = $downloadableMediaSets;
     }
