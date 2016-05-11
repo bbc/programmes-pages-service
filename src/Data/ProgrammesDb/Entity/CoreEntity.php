@@ -70,7 +70,7 @@ abstract class CoreEntity
      * @var CoreEntity|null
      *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @Gedmo\TreeParent()
      */
     private $parent;
@@ -78,7 +78,7 @@ abstract class CoreEntity
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      * @Gedmo\TreePath()
      */
     private $ancestry = '';

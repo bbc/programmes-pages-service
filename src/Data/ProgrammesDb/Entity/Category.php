@@ -41,7 +41,7 @@ abstract class Category
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\TreePath()
      */
     private $ancestry;
@@ -51,17 +51,9 @@ abstract class Category
      *
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $parent;
-
-    /**
-     * @var int
-     *
-     * @Gedmo\TreeLevel
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $level;
 
     /**
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
@@ -71,21 +63,21 @@ abstract class Category
     /**
      * @var string
      *
-     * @ORM\Column(nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $title;
 
     /**
      * @var string
      *
-     * @ORM\Column(nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $urlKey;
 
     /**
      * @var string
      *
-     * @ORM\Column(length=32, nullable=false, unique=true)
+     * @ORM\Column(type="string", length=32, nullable=false, unique=true)
      */
     private $pipId;
 

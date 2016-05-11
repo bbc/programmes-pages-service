@@ -57,7 +57,7 @@ class Service
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $urlKey;
 
@@ -72,7 +72,7 @@ class Service
      * @var MasterBrand|null
      *
      * @ORM\ManyToOne(targetEntity="MasterBrand")
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $masterBrand;
 
@@ -80,7 +80,7 @@ class Service
      * @var Network|null
      *
      * @ORM\ManyToOne(targetEntity="Network", cascade={"persist"})
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $network;
 
@@ -101,7 +101,7 @@ class Service
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $liveStreamUrl;
 
