@@ -45,6 +45,13 @@ class Contributor
     /**
      * @var string|null
      *
+     * @ORM\Column(type="string", length=36, nullable=true)
+     */
+    private $musicBrainzId;
+
+    /**
+     * @var string|null
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $presentationName;
@@ -133,6 +140,19 @@ class Contributor
     public function setName(string $name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMusicBrainzId()
+    {
+        return $this->musicBrainzId;
+    }
+
+    public function setMusicBrainzId(string $musicBrainzId = null)
+    {
+        $this->musicBrainzId = $musicBrainzId;
     }
 
     /**

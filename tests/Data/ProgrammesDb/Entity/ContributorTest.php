@@ -23,6 +23,7 @@ class ContributorTest extends PHPUnit_Framework_TestCase
         $this->assertSame('pid', $contributor->getPid());
         $this->assertSame('type', $contributor->getType());
         $this->assertSame('', $contributor->getName());
+        $this->assertSame(null, $contributor->getMusicBrainzId());
         $this->assertSame(null, $contributor->getPresentationName());
         $this->assertSame(null, $contributor->getGivenName());
         $this->assertSame(null, $contributor->getFamilyName());
@@ -49,6 +50,7 @@ class ContributorTest extends PHPUnit_Framework_TestCase
             ['Pid', 'a-string'],
             ['Type', 'a-string'],
             ['Name', 'a-string'],
+            ['MusicBrainzId', 'a-string'],
             ['PresentationName', 'a-string'],
             ['GivenName', 'a-string'],
             ['FamilyName', 'a-string'],
