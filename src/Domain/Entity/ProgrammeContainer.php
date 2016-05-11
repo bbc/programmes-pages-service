@@ -2,10 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
-use BBC\ProgrammesPagesService\Domain\Enumeration\IsPodcastableEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
-use InvalidArgumentException;
 
 abstract class ProgrammeContainer extends Programme
 {
@@ -60,7 +58,7 @@ abstract class ProgrammeContainer extends Programme
         int $availableClipsCount,
         int $availableEpisodesCount,
         int $availableGalleriesCount,
-        string $isPodcastable,
+        bool $isPodcastable,
         Programme $parent = null,
         PartialDate $releaseDate = null,
         int $position = null,
@@ -70,16 +68,6 @@ abstract class ProgrammeContainer extends Programme
         array $relatedLinks = [],
         int $expectedChildCount = null
     ) {
-        if (!in_array($isPodcastable, [IsPodcastableEnum::HIGH, IsPodcastableEnum::LOW, IsPodcastableEnum::NO])) {
-            throw new InvalidArgumentException(sprintf(
-                'Tried to create a ProgrammeContainer with an invalid isPodcastable. Expected one of "%s", "%s" or "%s" but got "%s"',
-                IsPodcastableEnum::HIGH,
-                IsPodcastableEnum::LOW,
-                IsPodcastableEnum::NO,
-                $isPodcastable
-            ));
-        }
-
         parent::__construct(
             $pid,
             $title,

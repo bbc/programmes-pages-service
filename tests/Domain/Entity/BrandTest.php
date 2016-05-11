@@ -11,7 +11,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
-use BBC\ProgrammesPagesService\Domain\Enumeration\IsPodcastableEnum;
+use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 
 class BrandTest extends PHPUnit_Framework_TestCase
@@ -37,7 +37,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO
+            false
         );
 
         $this->assertEquals($pid, $programme->getPid());
@@ -55,7 +55,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(13, $programme->getAvailableClipsCount());
         $this->assertEquals(14, $programme->getAvailableEpisodesCount());
         $this->assertEquals(15, $programme->getAvailableGalleriesCount());
-        $this->assertEquals(IsPodcastableEnum::NO, $programme->IsPodcastable());
+        $this->assertEquals(false, $programme->IsPodcastable());
 
     }
 
@@ -89,7 +89,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO,
+            false,
             $parent,
             $releaseDate,
             101,
@@ -108,36 +108,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([$format], $programme->getFormats());
         $this->assertEquals([$relatedLink], $programme->getRelatedLinks());
         $this->assertEquals(1001, $programme->getExpectedChildCount());
-    }
-
-
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Tried to create a ProgrammeContainer with an invalid isPodcastable. Expected one of "high", "low" or "no" but got "wrongwrongwrong"
-     */
-    public function testInvalidMediaType()
-    {
-        $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-
-        $programme = new Brand(
-            $pid,
-            'Title',
-            'Search Title',
-            'Short Synopsis',
-            'Longest Synopsis',
-            $image,
-            1,
-            2,
-            true,
-            true,
-            11,
-            12,
-            13,
-            14,
-            15,
-            'wrongwrongwrong'
-        );
     }
 
     /**
@@ -165,7 +135,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO,
+            false,
             null,
             null,
             101,
@@ -201,7 +171,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO,
+            false,
             null,
             null,
             101,
@@ -237,7 +207,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO,
+            false,
             null,
             null,
             101,

@@ -42,6 +42,8 @@ class MongrelsFixture extends AbstractFixture
 
         $s1e3c1 = $this->buildClip('p008nhl4', "Guide dog training", 1, $s2e3);
 
+        $s1e1->setDownloadableMediaSets(['ms1', 'ms2']);
+
         $manager->flush();
     }
 

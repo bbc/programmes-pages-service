@@ -56,6 +56,20 @@ abstract class ProgrammeItem extends Programme
     private $streamableUntil;
 
     /**
+     * @var Version|null
+     * @ORM\OneToOne(targetEntity="Version")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $downloadableVersion;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
+    private $downloadableMediaSets;
+
+    /**
      * Duration - taken from the streamable version
      *
      * @var int|null
@@ -139,6 +153,32 @@ abstract class ProgrammeItem extends Programme
     public function setStreamableUntil(DateTime $streamableUntil = null)
     {
         $this->streamableUntil = $streamableUntil;
+    }
+
+    /**
+     * @return Version|null
+     */
+    public function getDownloadableVersion()
+    {
+        return $this->downloadableVersion;
+    }
+
+    public function setDownloadableVersion(Version $downloadableVersion = null)
+    {
+        $this->downloadableVersion = $downloadableVersion;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getDownloadableMediaSets()
+    {
+        return $this->downloadableMediaSets;
+    }
+
+    public function setDownloadableMediaSets(array $downloadableMediaSets = null)
+    {
+        $this->downloadableMediaSets = $downloadableMediaSets;
     }
 
     public function isEmbeddable(): bool

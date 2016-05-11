@@ -25,6 +25,7 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $entity->getMediaType());
         $this->assertEquals(null, $entity->getStreamableVersion());
+        $this->assertEquals(null, $entity->getDownloadableVersion());
         $this->assertEquals(null, $entity->getStreamableFrom());
         $this->assertEquals(null, $entity->getStreamableUntil());
         $this->assertEquals(null, $entity->getDuration());
@@ -57,9 +58,11 @@ class ProgrammeItemTest extends PHPUnit_Framework_TestCase
             ['MediaType', MediaTypeEnum::VIDEO],
             ['MediaType', MediaTypeEnum::UNKNOWN],
             ['StreamableVersion', new Version('pid', $entity)],
+            ['DownloadableVersion', new Version('pid', $entity)],
             ['StreamableFrom', new DateTime()],
             ['StreamableUntil', new DateTime()],
             ['ReleaseDate', new PartialDate(2016)],
+            ['DownloadableMediaSets', ['audio-nondrm-download', 'audio-nondrm-download-low']],
             ['Duration', 1],
         ];
     }
