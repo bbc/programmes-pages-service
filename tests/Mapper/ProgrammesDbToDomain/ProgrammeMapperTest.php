@@ -2,12 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
-use BBC\ProgrammesPagesService\Domain\Enumeration\IsPodcastableEnum;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -37,7 +35,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'availableClipsCount' => 13,
             'availableEpisodesCount' => 14,
             'availableGalleriesCount' => 15,
-            'isPodcastable' => IsPodcastableEnum::NO,
+            'isPodcastable' => false,
             'parent' => null,
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
@@ -60,7 +58,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO,
+            false,
             null,
             new PartialDate(2015, 01, 02),
             101,
@@ -95,7 +93,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'availableClipsCount' => 13,
             'availableEpisodesCount' => 14,
             'availableGalleriesCount' => 15,
-            'isPodcastable' => IsPodcastableEnum::NO,
+            'isPodcastable' => false,
             'parent' => null,
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
@@ -118,7 +116,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO,
+            false,
             null,
             new PartialDate(2015, 01, 02),
             101,
@@ -261,7 +259,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'availableClipsCount' => 13,
             'availableEpisodesCount' => 14,
             'availableGalleriesCount' => 15,
-            'isPodcastable' => IsPodcastableEnum::NO,
+            'isPodcastable' => false,
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'expectedChildCount' => 1001,
@@ -283,7 +281,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'availableClipsCount' => 13,
                 'availableEpisodesCount' => 14,
                 'availableGalleriesCount' => 15,
-                'isPodcastable' => IsPodcastableEnum::NO,
+                'isPodcastable' => false,
                 'parent' => null,
                 'releaseDate' => new PartialDate(2015, 01, 02),
                 'position' => 101,
@@ -307,7 +305,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO,
+            false,
             new Brand(
                 new Pid('b010t19z'),
                 'Title',
@@ -324,7 +322,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 13,
                 14,
                 15,
-                IsPodcastableEnum::NO,
+                false,
                 null,
                 new PartialDate(2015, 01, 02),
                 101,

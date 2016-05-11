@@ -4,7 +4,6 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
-use BBC\ProgrammesPagesService\Domain\Enumeration\IsPodcastableEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
@@ -87,7 +86,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'availableClipsCount' => 13,
             'availableEpisodesCount' => 14,
             'availableGalleriesCount' => 15,
-            'isPodcastable' => IsPodcastableEnum::NO,
+            'isPodcastable' => false,
             'parent' => null,
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
@@ -126,7 +125,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO,
+            false,
             null,
             new PartialDate(2015, 01, 02),
             101,

@@ -2,36 +2,24 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits;
 
-use BBC\ProgrammesPagesService\Domain\Enumeration\IsPodcastableEnum;
 use Doctrine\ORM\Mapping as ORM;
-use InvalidArgumentException;
 
 trait IsPodcastableTrait
 {
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="boolean", nullable=false)
      */
-    protected $isPodcastable = IsPodcastableEnum::NO;
+    protected $isPodcastable = false;
 
-    public function getIsPodcastable(): string
+    public function getIsPodcastable(): bool
     {
         return $this->isPodcastable;
     }
 
-    public function setIsPodcastable(string $isPodcastable)
+    public function setIsPodcastable(bool $isPodcastable)
     {
-        if (!in_array($isPodcastable, [IsPodcastableEnum::HIGH, IsPodcastableEnum::LOW, IsPodcastableEnum::NO])) {
-            throw new InvalidArgumentException(sprintf(
-                'Called setIsPodcastable with an invalid value. Expected one of "%s", "%s" or "%s" but got "%s"',
-                IsPodcastableEnum::HIGH,
-                IsPodcastableEnum::LOW,
-                IsPodcastableEnum::NO,
-                $isPodcastable
-            ));
-        }
-
         $this->isPodcastable = $isPodcastable;
     }
 }

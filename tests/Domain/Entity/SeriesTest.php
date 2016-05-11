@@ -11,7 +11,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
-use BBC\ProgrammesPagesService\Domain\Enumeration\IsPodcastableEnum;
 use PHPUnit_Framework_TestCase;
 
 class SeriesTest extends PHPUnit_Framework_TestCase
@@ -37,7 +36,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO
+            false
         );
 
         $this->assertEquals($pid, $programme->getPid());
@@ -55,7 +54,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(13, $programme->getAvailableClipsCount());
         $this->assertEquals(14, $programme->getAvailableEpisodesCount());
         $this->assertEquals(15, $programme->getAvailableGalleriesCount());
-        $this->assertEquals(IsPodcastableEnum::NO, $programme->IsPodcastable());
+        $this->assertEquals(false, $programme->IsPodcastable());
 
     }
 
@@ -89,7 +88,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             13,
             14,
             15,
-            IsPodcastableEnum::NO,
+            false,
             $parent,
             $releaseDate,
             101,
