@@ -58,14 +58,14 @@ abstract class ProgrammeItem extends Programme
     /**
      * @var Version|null
      * @ORM\OneToOne(targetEntity="Version")
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $downloadableVersion;
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $downloadableMediaSets;
 
