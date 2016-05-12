@@ -14,4 +14,3 @@ class PipsChange extends PipsChangeBase
 {
 
 }
-
