@@ -22,6 +22,17 @@ class CoreEntityRepositoryFindByPidTest extends AbstractDatabaseTest
         $this->assertCount(2, $this->getDbQueries());
     }
 
+    public function testFindByPidFullData()
+    {
+        $this->loadFixtures(['MongrelsFixture']);
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+
+        $entity = $repo->findByPidFull('b00swgkn');
+        $this->assertInternalType('array', $entity);
+        $this->assertEquals('b00swgkn', $entity['pid']);
+        $this->assertEquals(['ms1', 'ms2'], $entity['downloadableMediaSets']);
+    }
+
     public function testFindByPidFullWhenEmptyResult()
     {
         $this->loadFixtures(['MongrelsFixture']);
