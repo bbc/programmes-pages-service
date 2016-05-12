@@ -48,30 +48,29 @@ abstract class CoreEntity
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(type="string", length=15, nullable=false, unique=true)
      */
     private $pid;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=128, nullable=false)
      */
     private $title;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=128, nullable=false)
      */
     private $searchTitle = '';
-
 
     /**
      * @var CoreEntity|null
      *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @Gedmo\TreeParent()
      */
     private $parent;
@@ -79,7 +78,7 @@ abstract class CoreEntity
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      * @Gedmo\TreePath()
      */
     private $ancestry = '';

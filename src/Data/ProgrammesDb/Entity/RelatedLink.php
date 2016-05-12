@@ -28,28 +28,28 @@ class RelatedLink
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(type="string", length=15, nullable=false, unique=true)
      */
     private $pid;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=128, nullable=false)
      */
     private $title;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $uri;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=64, nullable=false)
      */
     private $type;
 
@@ -72,7 +72,6 @@ class RelatedLink
      * @ORM\Column(type="integer", nullable=true)
      */
     private $position;
-
 
     public function __construct(
         string $pid,

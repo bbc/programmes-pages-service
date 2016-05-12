@@ -28,7 +28,7 @@ class SegmentEvent
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(type="string", length=15, nullable=false, unique=true)
      */
     private $pid;
 
@@ -47,7 +47,7 @@ class SegmentEvent
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=128, nullable=true)
      */
     private $title;
 

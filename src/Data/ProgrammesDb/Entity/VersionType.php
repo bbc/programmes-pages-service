@@ -27,14 +27,14 @@ class VersionType
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(type="string", length=128, nullable=false, unique=true)
      */
     private $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=128, nullable=false)
      */
     private $name;
 

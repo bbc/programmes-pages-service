@@ -21,9 +21,9 @@ abstract class ProgrammeItem extends Programme
     private $embeddable = false;
 
     /**
-     * @var DateTime
+     * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=16, nullable=false)
      */
     private $mediaType = MediaTypeEnum::UNKNOWN;
 
@@ -37,7 +37,7 @@ abstract class ProgrammeItem extends Programme
     /**
      * @var Version|null
      * @ORM\OneToOne(targetEntity="Version")
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $streamableVersion;
 
