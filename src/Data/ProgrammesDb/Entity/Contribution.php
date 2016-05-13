@@ -77,18 +77,18 @@ class Contribution
      * @param string $pid
      * @param Contributor $contributor
      * @param CreditRole $creditRole
-     * @param Programme|Segment|Version $contributedTo
+     * @param Programme|Segment|Version $contributionTo
      */
     public function __construct(
         string $pid,
         Contributor $contributor,
         CreditRole $creditRole,
-        $contributedTo
+        $contributionTo
     ) {
         $this->pid = $pid;
         $this->contributor = $contributor;
         $this->creditRole = $creditRole;
-        $this->setContributedTo($contributedTo);
+        $this->setContributionTo($contributionTo);
     }
 
     /**
@@ -132,7 +132,7 @@ class Contribution
     /**
      * @return Programme|Segment|Version
      */
-    public function getContributedTo()
+    public function getContributionTo()
     {
         return $this->programme ?? $this->segment ?? $this->version;
     }
@@ -164,17 +164,17 @@ class Contribution
     /**
      * @param Programme|Segment|Version $item
      */
-    public function setContributedTo($item)
+    public function setContributionTo($item)
     {
         if ($item instanceof Programme) {
-            $this->setContributedToTrio($item, null, null);
+            $this->setContributionToTrio($item, null, null);
         } elseif ($item instanceof Segment) {
-            $this->setContributedToTrio(null, $item, null);
+            $this->setContributionToTrio(null, $item, null);
         } elseif ($item instanceof Version) {
-            $this->setContributedToTrio(null, null, $item);
+            $this->setContributionToTrio(null, null, $item);
         } else {
             throw new InvalidArgumentException(sprintf(
-                'Expected setContributedTo() to be called with an an instance of "%s", "%s" or "%s". Found instance of "%s"',
+                'Expected setContributionTo() to be called with an an instance of "%s", "%s" or "%s". Found instance of "%s"',
                 Programme::CLASS,
                 Segment::CLASS,
                 Version::CLASS,
@@ -209,7 +209,7 @@ class Contribution
         $this->characterName = $characterName;
     }
 
-    private function setContributedToTrio(
+    private function setContributionToTrio(
         Programme $programme = null,
         Segment $segment = null,
         Version $version = null

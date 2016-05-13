@@ -86,7 +86,7 @@ class CreditRole
         return $this->description;
     }
 
-    public function setDescription(string $description = null)
+    public function setDescription(string $description)
     {
         $this->description = $description;
     }
