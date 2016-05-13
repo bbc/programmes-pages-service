@@ -33,6 +33,13 @@ class MasterBrand
     private $mid;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=false, unique=true)
+     */
+    private $pid;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="string", length=64, nullable=false)
@@ -98,9 +105,10 @@ class MasterBrand
      */
     private $endDate;
 
-    public function __construct(string $mid, string $name)
+    public function __construct(string $mid, string $pid, string $name)
     {
         $this->mid = $mid;
+        $this->pid = $pid;
         $this->name = $name;
     }
 
@@ -120,6 +128,18 @@ class MasterBrand
     public function setMid(string $mid)
     {
         $this->mid = $mid;
+    }
+
+    public function getPid(): string
+    {
+        return $this->pid;
+    }
+
+    public function setPid(string $pid)
+    {
+        // TODO Validate PID
+
+        $this->pid = $pid;
     }
 
     public function getName(): string

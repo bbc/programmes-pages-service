@@ -12,10 +12,11 @@ class ServiceTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new Service('sid', 'name', 'type', 'mediaType');
+        $entity = new Service('sid', 'pid', 'name', 'type', 'mediaType');
 
         $this->assertSame(null, $entity->getId());
         $this->assertSame('sid', $entity->getSid());
+        $this->assertSame('pid', $entity->getPid());
         $this->assertSame('type', $entity->getType());
         $this->assertSame('name', $entity->getName());
         $this->assertSame('name', $entity->getShortName());
@@ -26,7 +27,6 @@ class ServiceTest extends PHPUnit_Framework_TestCase
         $this->assertSame(null, $entity->getStartDate());
         $this->assertSame(null, $entity->getEndDate());
         $this->assertSame(null, $entity->getLiveStreamUrl());
-
     }
 
     /**
@@ -34,7 +34,7 @@ class ServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $entity = new Service('sid', 'name', 'type', 'mediaType');
+        $entity = new Service('sid', 'pid', 'name', 'type', 'mediaType');
 
         $entity->{'set' . $name}($validValue);
         $this->assertSame($validValue, $entity->{'get' . $name}());
@@ -49,7 +49,7 @@ class ServiceTest extends PHPUnit_Framework_TestCase
             ['ShortName', 'newShortName'],
             ['UrlKey', 'newUrlKey'],
             ['MediaType', 'newMediaType'],
-            ['MasterBrand', new MasterBrand('mid', 'masterbrand')],
+            ['MasterBrand', new MasterBrand('mid', 'pid', 'masterbrand')],
             ['Network', new Network('nid', 'network')],
             ['StartDate', new DateTime()],
             ['EndDate', new DateTime()],

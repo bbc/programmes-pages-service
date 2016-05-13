@@ -53,7 +53,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
             ['Medium', NetworkMediumEnum::RADIO],
             ['Image', new Image('pid', 'title')],
             ['Position', 101],
-            ['DefaultService', new Service('sid', 'name', 'type', 'mediaType')],
+            ['DefaultService', new Service('sid', 'pid', 'name', 'type', 'mediaType')],
             ['IsPublicOutlet', true],
             ['IsChildrens', true],
             ['IsWorldServiceInternational', true],
@@ -65,7 +65,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testUnknownMediumThrowsException()
     {

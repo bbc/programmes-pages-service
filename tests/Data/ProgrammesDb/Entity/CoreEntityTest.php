@@ -58,7 +58,7 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
             ['MediumSynopsis', 'a-string'],
             ['LongSynopsis', 'a-string'],
             ['Image', new Image('ipid', 'title')],
-            ['MasterBrand', new MasterBrand('mid', 'name')],
+            ['MasterBrand', new MasterBrand('mid', 'pid', 'name')],
             ['RelatedLinksCount', 1],
         ];
     }

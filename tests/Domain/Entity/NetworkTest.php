@@ -3,15 +3,12 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
-use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
-use DateTimeImmutable;
 use PHPUnit_Framework_TestCase;
 
 class NetworkTest extends PHPUnit_Framework_TestCase
@@ -66,7 +63,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testInvalidMedium()
     {

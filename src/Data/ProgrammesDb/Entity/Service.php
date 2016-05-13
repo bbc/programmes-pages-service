@@ -10,6 +10,7 @@ use DateTime;
  * @ORM\Table(indexes={
  *     @ORM\Index(name="service_sid_idx", columns={"sid"}),
  *     @ORM\Index(name="service_url_key_idx", columns={"url_key"}),
+ *     @ORM\Index(name="service_pid_idx", columns={"pid"}),
  * })
  * @ORM\Entity()
  */
@@ -32,6 +33,13 @@ class Service
      * @ORM\Column(type="string", length=64, nullable=false, unique=true)
      */
     private $sid;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=false, unique=true)
+     */
+    private $pid;
 
     /**
      * @var string
@@ -105,9 +113,10 @@ class Service
      */
     private $liveStreamUrl;
 
-    public function __construct(string $sid, string $name, string $type, string $mediaType)
+    public function __construct(string $sid, string $pid, string $name, string $type, string $mediaType)
     {
         $this->sid = $sid;
+        $this->pid = $pid;
         $this->name = $name;
         $this->type = $type;
         $this->mediaType = $mediaType;
@@ -133,6 +142,18 @@ class Service
     public function setSid(string $sid)
     {
         $this->sid = $sid;
+    }
+
+    public function getPid(): string
+    {
+        return $this->pid;
+    }
+
+    public function setPid(string $pid)
+    {
+        // TODO Validate PID
+
+        $this->pid = $pid;
     }
 
     public function getType(): string

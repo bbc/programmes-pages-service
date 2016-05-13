@@ -55,7 +55,7 @@ class BroadcastTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['Version', new Version('version_pid', new Episode('episode_pid', 'episode_title'))],
-            ['Service', new Service('bbc_radio_1', 'Radio 1', 'radio', 'audio')],
+            ['Service', new Service('bbc_radio_1', 'pid', 'Radio 1', 'radio', 'audio')],
             ['IsBlanked', true],
             ['IsLive', true],
             ['IsRepeat', true],

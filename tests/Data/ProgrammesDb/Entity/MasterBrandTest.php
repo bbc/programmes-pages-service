@@ -14,10 +14,11 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $entity = new MasterBrand('mid', 'name');
+        $entity = new MasterBrand('mid', 'pid', 'name');
 
         $this->assertSame(null, $entity->getId());
         $this->assertSame('mid', $entity->getMid());
+        $this->assertSame('pid', $entity->getPid());
         $this->assertSame('name', $entity->getName());
         $this->assertSame(null, $entity->getNetwork());
         $this->assertSame(null, $entity->getImage());
@@ -34,7 +35,7 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $entity = new MasterBrand('mid', 'name');
+        $entity = new MasterBrand('mid', 'pid', 'name');
 
         $entity->{'set' . $name}($validValue);
         $this->assertSame($validValue, $entity->{'get' . $name}());
