@@ -89,11 +89,6 @@ abstract class Programme
      */
     protected $formats;
 
-    /**
-     * @var RelatedLink[]
-     */
-    protected $relatedLinks;
-
     public function __construct(
         Pid $pid,
         string $title,
@@ -110,12 +105,10 @@ abstract class Programme
         int $position = null,
         MasterBrand $masterBrand = null,
         array $genres = [],
-        array $formats = [],
-        array $relatedLinks = []
+        array $formats = []
     ) {
         $this->assertArrayOfType('genres', $genres, Genre::CLASS);
         $this->assertArrayOfType('formats', $formats, Format::CLASS);
-        $this->assertArrayOfType('relatedLinks', $relatedLinks, RelatedLink::CLASS);
 
         $this->pid = $pid;
         $this->title = $title;
@@ -133,7 +126,6 @@ abstract class Programme
         $this->masterBrand = $masterBrand;
         $this->genres = $genres;
         $this->formats = $formats;
-        $this->relatedLinks = $relatedLinks;
     }
 
     public function getPid(): Pid
@@ -232,14 +224,6 @@ abstract class Programme
     public function getFormats(): array
     {
         return $this->formats;
-    }
-
-    /**
-     * @return RelatedLink[]
-     */
-    public function getRelatedLinks(): array
-    {
-        return $this->relatedLinks;
     }
 
     /**

@@ -7,7 +7,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
-use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
@@ -61,7 +60,6 @@ class ClipTest extends PHPUnit_Framework_TestCase
 
         $genre = new Genre('Title', 'url_key');
         $format = new Format('Title', 'url_key');
-        $relatedLink = new RelatedLink('Title', 'http://example.com', '', '', '', false);
 
         $streamableFrom = new DateTimeImmutable();
         $streamableUntil = new DateTimeImmutable();
@@ -84,7 +82,6 @@ class ClipTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
-            [$relatedLink],
             1001,
             $streamableFrom,
             $streamableUntil
@@ -96,7 +93,6 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());
-        $this->assertEquals([$relatedLink], $programme->getRelatedLinks());
         $this->assertEquals(1001, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());

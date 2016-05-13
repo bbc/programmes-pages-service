@@ -48,7 +48,6 @@ abstract class ProgrammeItem extends Programme
         MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
-        array $relatedLinks = [],
         int $duration = null,
         DateTimeImmutable $streamableFrom = null,
         DateTimeImmutable $streamableUntil = null
@@ -79,8 +78,7 @@ abstract class ProgrammeItem extends Programme
             $position,
             $masterBrand,
             $genres,
-            $formats,
-            $relatedLinks
+            $formats
         );
 
         $this->mediaType = $mediaType;

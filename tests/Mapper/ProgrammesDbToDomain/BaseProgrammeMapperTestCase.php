@@ -15,8 +15,6 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
     protected $mockCategoryMapper;
 
-    protected $mockRelatedLinkMapper;
-
     protected $mockDefaultImage;
 
     public function setUp()
@@ -31,10 +29,6 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
         $this->mockCategoryMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper'
-        );
-
-        $this->mockRelatedLinkMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper'
         );
 
         $this->mockDefaultImage = $this->getMockWithoutInvokingTheOriginalConstructor(
@@ -52,7 +46,6 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'ImageMapper' => $this->mockImageMapper,
             'MasterBrandMapper' => $this->mockMasterBrandMapper,
             'CategoryMapper' => $this->mockCategoryMapper,
-            'RelatedLinkMapper' => $this->mockRelatedLinkMapper,
         ]));
     }
 
@@ -64,8 +57,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         $pid,
         $image = null,
         $masterBrand = null,
-        array $categories = [],
-        array $relatedLinks = []
+        array $categories = []
     ) {
         return [
             'type' => 'series',
@@ -92,7 +84,6 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'position' => 101,
             'masterBrand' => $masterBrand,
             'categories' => $categories,
-            'relatedLinks' => $relatedLinks,
             'expectedChildCount' => 1001,
         ];
     }
@@ -106,8 +97,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         $image = null,
         $masterBrand = null,
         array $genres = [],
-        array $formats = [],
-        array $relatedLinks = []
+        array $formats = []
     ) {
         return new Series(
             new Pid($pid),
@@ -132,7 +122,6 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             $masterBrand,
             $genres,
             $formats,
-            $relatedLinks,
             1001
         );
     }

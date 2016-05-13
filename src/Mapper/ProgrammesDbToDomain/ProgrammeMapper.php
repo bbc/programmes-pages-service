@@ -59,7 +59,6 @@ class ProgrammeMapper extends AbstractMapper
             $this->getMasterBrandModel($dbProgramme),
             $this->getCategoriesModels('genre', $dbProgramme, 'categories'),
             $this->getCategoriesModels('format', $dbProgramme, 'categories'),
-            $this->getRelatedLinksModels($dbProgramme, 'relatedLinks'),
             $dbProgramme['expectedChildCount']
         );
     }
@@ -89,7 +88,6 @@ class ProgrammeMapper extends AbstractMapper
             $this->getMasterBrandModel($dbProgramme),
             $this->getCategoriesModels('genre', $dbProgramme, 'categories'),
             $this->getCategoriesModels('format', $dbProgramme, 'categories'),
-            $this->getRelatedLinksModels($dbProgramme, 'relatedLinks'),
             $dbProgramme['expectedChildCount']
         );
     }
@@ -117,7 +115,6 @@ class ProgrammeMapper extends AbstractMapper
             $this->getMasterBrandModel($dbProgramme),
             $this->getCategoriesModels('genre', $dbProgramme, 'categories'),
             $this->getCategoriesModels('format', $dbProgramme, 'categories'),
-            $this->getRelatedLinksModels($dbProgramme, 'relatedLinks'),
             $dbProgramme['duration'] ?? null,
             ($dbProgramme['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableFrom']) : null),
             ($dbProgramme['streamableUntil'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableUntil']) : null)
@@ -144,7 +141,6 @@ class ProgrammeMapper extends AbstractMapper
             $this->getMasterBrandModel($dbProgramme),
             $this->getCategoriesModels('genre', $dbProgramme, 'categories'),
             $this->getCategoriesModels('format', $dbProgramme, 'categories'),
-            $this->getRelatedLinksModels($dbProgramme, 'relatedLinks'),
             $dbProgramme['duration'] ?? null,
             ($dbProgramme['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableFrom']) : null),
             ($dbProgramme['streamableUntil'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableUntil']) : null)
@@ -199,21 +195,6 @@ class ProgrammeMapper extends AbstractMapper
         }
 
         return $categories;
-    }
-
-    private function getRelatedLinksModels($dbProgramme, $key = 'relatedLinks'): array
-    {
-        if (!array_key_exists($key, $dbProgramme) || is_null($dbProgramme[$key])) {
-            return [];
-        }
-
-        $relatedLinksMapper = $this->mapperProvider->getRelatedLinkMapper();
-        $relatedLinks = [];
-        foreach ($dbProgramme[$key] as $dbRelatedLink) {
-            $relatedLinks[] = $relatedLinksMapper->getDomainModel($dbRelatedLink);
-        }
-
-        return $relatedLinks;
     }
 
     private function getLongestSynopsis($dbProgramme): string

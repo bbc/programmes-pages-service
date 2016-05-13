@@ -65,7 +65,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            [],
             1001
         );
 
@@ -123,7 +122,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            [],
             1001
         );
 
@@ -179,7 +177,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            [],
             102,
             new DateTimeImmutable('2015-01-03'),
             new DateTimeImmutable('2015-01-04')
@@ -228,7 +225,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             new PartialDate(2015, 01, 02),
             101,
             null,
-            [],
             [],
             [],
             102,
@@ -329,13 +325,11 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 null,
                 [],
                 [],
-                [],
                 1001
             ),
             new PartialDate(2015, 01, 02),
             101,
             null,
-            [],
             [],
             [],
             1001
