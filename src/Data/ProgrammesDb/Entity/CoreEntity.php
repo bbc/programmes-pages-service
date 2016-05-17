@@ -9,7 +9,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Table(indexes={
- *   @ORM\Index(name="core_entity_pid_idx", columns={"pid"}),
  *   @ORM\Index(name="core_entity_ancestry_idx", columns={"ancestry"}),
  *   @ORM\Index(name="core_entity_type_idx", columns={"type"}),
  *  })

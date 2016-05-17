@@ -6,9 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\Table(indexes={
- *     @ORM\Index(name="segment_pid_idx", columns={"pid"}),
- * })
  * @ORM\Entity()
  */
 class Segment

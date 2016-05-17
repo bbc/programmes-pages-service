@@ -10,7 +10,6 @@ use InvalidArgumentException;
 
 /**
  * @ORM\Table(indexes={
- *     @ORM\Index(name="network_nid_idx", columns={"nid"}),
  *     @ORM\Index(name="network_url_key_idx", columns={"url_key"}),
  * })
  * @ORM\Entity()

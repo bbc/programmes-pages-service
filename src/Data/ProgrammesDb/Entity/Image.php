@@ -6,9 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\Table(indexes={
- *     @ORM\Index(name="image_pid_idx", columns={"pid"}),
- * })
  * @ORM\Entity()
  */
 class Image

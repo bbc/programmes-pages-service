@@ -7,7 +7,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Table(indexes={
- *     @ORM\Index(name="ref_relationship_pid_idx", columns={"pid"}),
  *     @ORM\Index(name="ref_relationship_object_id_idx", columns={"object_id"}),
  * })
  * @ORM\Entity()
