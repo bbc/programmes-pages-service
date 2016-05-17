@@ -8,9 +8,7 @@ use DateTime;
 
 /**
  * @ORM\Table(indexes={
- *     @ORM\Index(name="service_sid_idx", columns={"sid"}),
  *     @ORM\Index(name="service_url_key_idx", columns={"url_key"}),
- *     @ORM\Index(name="service_pid_idx", columns={"pid"}),
  * })
  * @ORM\Entity()
  */

@@ -6,9 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\Table(indexes={
- *     @ORM\Index(name="version_type_type_idx", columns={"type"}),
- * })
  * @ORM\Entity()
  */
 class VersionType

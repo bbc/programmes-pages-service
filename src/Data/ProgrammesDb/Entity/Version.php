@@ -8,9 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\Table(indexes={
- *     @ORM\Index(name="version_pid_idx", columns={"pid"}),
- * })
  * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository")
  */
 class Version
