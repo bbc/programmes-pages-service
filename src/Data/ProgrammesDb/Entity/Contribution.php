@@ -42,20 +42,32 @@ class Contribution
     private $creditRole;
 
     /**
+     * One of Programme, Segment or Version must be set. So even though, this is
+     * nullable, we do want deleting a programme to cascade to delete the
+     * contributions made to the programme
+     *
      * @ORM\ManyToOne(targetEntity="Programme")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $programme;
 
     /**
+     * One of Programme, Segment or Version must be set. So even though, this is
+     * nullable, we do want deleting a segment to cascade to delete the
+     * contributions made to the segment
+     *
      * @ORM\ManyToOne(targetEntity="Segment")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $segment;
 
     /**
+     * One of Programme, Segment or Version must be set. So even though, this is
+     * nullable, we do want deleting a version to cascade to delete the
+     * contributions made to the version
+     *
      * @ORM\ManyToOne(targetEntity="Version")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $version;
 
@@ -167,11 +179,11 @@ class Contribution
     public function setContributionTo($item)
     {
         if ($item instanceof Programme) {
-            $this->setContributionToTrio($item, null, null);
+            $this->setContributionToBatch($item, null, null);
         } elseif ($item instanceof Segment) {
-            $this->setContributionToTrio(null, $item, null);
+            $this->setContributionToBatch(null, $item, null);
         } elseif ($item instanceof Version) {
-            $this->setContributionToTrio(null, null, $item);
+            $this->setContributionToBatch(null, null, $item);
         } else {
             throw new InvalidArgumentException(sprintf(
                 'Expected setContributionTo() to be called with an an instance of "%s", "%s" or "%s". Found instance of "%s"',
@@ -209,7 +221,7 @@ class Contribution
         $this->characterName = $characterName;
     }
 
-    private function setContributionToTrio(
+    private function setContributionToBatch(
         Programme $programme = null,
         Segment $segment = null,
         Version $version = null
