@@ -28,4 +28,38 @@ class ServiceRepository extends EntityRepository
             ->setParameter('ids', $ids)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
+
+    public function findByPid(string $pid): ?Service
+    {
+        $qb = $this->createQueryBuilder('service')
+            ->andWhere('service.pid = :pid')
+            ->setParameter('pid', $pid);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
+
+    public function findByPidFull(string $pid): ?Service
+    {
+        $qb = $this->createQueryBuilder('service')
+            ->addSelect('network')
+            ->andWhere('service.pid = :pid')
+            ->join('service.network', 'network')
+            ->setParameter('pid', $pid);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
+
+    public function findAllInNetworks(): array
+    {
+        $alias = 's';
+        $qb = $this->createQueryBuilder($alias)
+            ->select($alias, 'network')
+            ->addSelect('CASE WHEN network.position IS NULL THEN 1 ELSE 0 AS HIDDEN hasPosition')
+            ->join($alias . '.network', 'network')
+            ->addOrderBy('hasPosition', 'ASC')
+            ->addOrderBy('network.position', 'ASC')
+            ->addOrderBy($alias . '.shortName', 'ASC');
+
+        return $qb->getQuery()->getArrayResult();
+    }
 }

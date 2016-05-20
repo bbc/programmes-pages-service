@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use DateTimeImmutable;
 
@@ -39,6 +40,7 @@ class Service
     public function __construct(
         int $dbId,
         Sid $sid,
+        Pid $pid,
         string $name,
         ?string $shortName = null,
         ?string $urlKey = null,
@@ -49,6 +51,7 @@ class Service
     ) {
         $this->dbId = $dbId;
         $this->sid = $sid;
+        $this->pid = $pid;
         $this->name = $name;
         $this->shortName = (!is_null($shortName) ? $shortName : $name);
         $this->urlKey = (!is_null($urlKey) ? $urlKey : (string) $sid);
@@ -72,6 +75,11 @@ class Service
     public function getSid(): Sid
     {
         return $this->sid;
+    }
+
+    public function getPid(): Pid
+    {
+        return $this->pid;
     }
 
     public function getName(): string
