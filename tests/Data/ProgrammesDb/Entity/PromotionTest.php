@@ -20,17 +20,18 @@ class PromotionTest extends PHPUnit_Framework_TestCase
 
     public function testDefaults()
     {
+        $context = $this->mockCoreEntity();
         $coreEntity = $this->mockCoreEntity();
         $image = $this->mockImage();
         $startDate = new DateTime();
         $endDate = new DateTime();
 
-        $promotion = new Promotion('pid', $coreEntity, $startDate, $endDate, 1);
+        $promotion = new Promotion('pid', $context, $coreEntity, $startDate, $endDate, 1);
         $this->assertSame(null, $promotion->getId());
         $this->assertSame('pid', $promotion->getPid());
-        $this->assertSame($coreEntity, $promotion->getPromotedItem());
-        $this->assertSame($coreEntity, $promotion->getPromotedCoreEntity());
-        $this->assertSame(null, $promotion->getPromotedImage());
+        $this->assertSame($coreEntity, $promotion->getPromotionOf());
+        $this->assertSame($coreEntity, $promotion->getPromotionOfCoreEntity());
+        $this->assertSame(null, $promotion->getPromotionOfImage());
         $this->assertSame($startDate, $promotion->getStartDate());
         $this->assertSame($endDate, $promotion->getEndDate());
         $this->assertSame(false, $promotion->getIsActive());
@@ -40,10 +41,10 @@ class PromotionTest extends PHPUnit_Framework_TestCase
         $this->assertSame('', $promotion->getUri());
         $this->assertSame(false, $promotion->getCascadesToDescendants());
 
-        $promotion = new Promotion('pid', $image, $startDate, $endDate, 1);
-        $this->assertSame($image, $promotion->getPromotedItem());
-        $this->assertSame(null, $promotion->getPromotedCoreEntity());
-        $this->assertSame($image, $promotion->getPromotedImage());
+        $promotion = new Promotion('pid', $context, $image, $startDate, $endDate, 1);
+        $this->assertSame($image, $promotion->getPromotionOf());
+        $this->assertSame(null, $promotion->getPromotionOfCoreEntity());
+        $this->assertSame($image, $promotion->getPromotionOfImage());
     }
 
     /**
@@ -51,11 +52,12 @@ class PromotionTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
+        $context = $this->mockCoreEntity();
         $coreEntity = $this->mockCoreEntity();
         $startDate = new DateTime();
         $endDate = new DateTime();
 
-        $promotion = new Promotion('pid', $coreEntity, $startDate, $endDate, 1);
+        $promotion = new Promotion('pid', $context, $coreEntity, $startDate, $endDate, 1);
 
         $promotion->{'set' . $name}($validValue);
         $this->assertEquals($validValue, $promotion->{'get' . $name}());
@@ -65,6 +67,7 @@ class PromotionTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['Pid', 'pid'],
+            ['Context', $this->mockCoreEntity()],
             ['StartDate', new DateTime()],
             ['EndDate', new DateTime()],
             ['IsActive', true],
@@ -77,25 +80,26 @@ class PromotionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider setPromotedItemDataProvider
+     * @dataProvider setPromotionOfDataProvider
      */
-    public function testSetPromotedItem($promotedItem, $expectedCoreEntity, $expectedImage)
+    public function testSetPromotionOf($promotedItem, $expectedCoreEntity, $expectedImage)
     {
         $promotion = new Promotion(
             'pid',
+            $this->mockCoreEntity(),
             $this->mockCoreEntity(),
             new DateTime(),
             new DateTime(),
             1
         );
-        $promotion->setPromotedItem($promotedItem);
+        $promotion->setPromotionOf($promotedItem);
 
-        $this->assertSame($promotedItem, $promotion->getPromotedItem());
-        $this->assertSame($expectedCoreEntity, $promotion->getPromotedCoreEntity());
-        $this->assertSame($expectedImage, $promotion->getPromotedImage());
+        $this->assertSame($promotedItem, $promotion->getPromotionOf());
+        $this->assertSame($expectedCoreEntity, $promotion->getPromotionOfCoreEntity());
+        $this->assertSame($expectedImage, $promotion->getPromotionOfImage());
     }
 
-    public function setPromotedItemDataProvider()
+    public function setPromotionOfDataProvider()
     {
         $coreEntity = $this->mockCoreEntity();
         $image = $this->mockImage();
@@ -113,6 +117,7 @@ class PromotionTest extends PHPUnit_Framework_TestCase
     {
         new Promotion(
             'pid',
+            $this->mockCoreEntity(),
             'wrongwrongwrong',
             new DateTime(),
             new DateTime(),
@@ -128,11 +133,12 @@ class PromotionTest extends PHPUnit_Framework_TestCase
         $promotion = new Promotion(
             'pid',
             $this->mockCoreEntity(),
+            $this->mockCoreEntity(),
             new DateTime(),
             new DateTime(),
             1
         );
-        $promotion->setPromotedItem('wrongwrongwrong');
+        $promotion->setPromotionOf('wrongwrongwrong');
     }
 
     private function mockCoreEntity()

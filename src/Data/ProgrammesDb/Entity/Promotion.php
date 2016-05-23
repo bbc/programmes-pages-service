@@ -32,24 +32,30 @@ class Promotion
     private $pid;
 
     /**
-     * One of promotedCoreEntity or promotedImage must be set. So even though
+     * @ORM\ManyToOne(targetEntity="CoreEntity")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $context;
+
+    /**
+     * One of promotionOfCoreEntity or promotionOfImage must be set. So even though
      * this is nullable, we do want deleting a coreEntity to cascade to delete
      * the promotions attached to the coreEntity
      *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $promotedCoreEntity;
+    private $promotionOfCoreEntity;
 
     /**
-    * One of promotedCoreEntity or promotedImage must be set. So even though
+    * One of promotionOfCoreEntity or promotionOfImage must be set. So even though
      * this is nullable, we do want deleting a coreEntity to cascade to delete
      * the promotions attached to the image
      *
      * @ORM\ManyToOne(targetEntity="Image")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $promotedImage;
+    private $promotionOfImage;
 
     /**
      * @var DateTime
@@ -109,6 +115,7 @@ class Promotion
 
     /**
      * @param string $pid
+     * @param CoreEntity $context
      * @param CoreEntity|Image $promotedItem
      * @param DateTime $startDate
      * @param DateTime $endDate
@@ -116,13 +123,15 @@ class Promotion
      */
     public function __construct(
         string $pid,
+        CoreEntity $context,
         $promotedItem,
         DateTime $startDate,
         DateTime $endDate,
         int $weighting
     ) {
         $this->pid = $pid;
-        $this->setPromotedItem($promotedItem);
+
+        $this->setPromotionOf($promotedItem);
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->weighting = $weighting;
@@ -146,42 +155,52 @@ class Promotion
         $this->pid = $pid;
     }
 
+    public function getContext(): CoreEntity
+    {
+        return $this->context;
+    }
+
+    public function setContext(CoreEntity $context)
+    {
+        $this->context = $context;
+    }
+
     /**
      * @return CoreEntity|Image
      */
-    public function getPromotedItem()
+    public function getPromotionOf()
     {
-        return $this->promotedCoreEntity ?? $this->promotedImage;
+        return $this->promotionOfCoreEntity ?? $this->promotionOfImage;
     }
 
     /**
      * @return CoreEntity|null
      */
-    public function getPromotedCoreEntity()
+    public function getPromotionOfCoreEntity()
     {
-        return $this->promotedCoreEntity;
+        return $this->promotionOfCoreEntity;
     }
 
     /**
      * @return Image|null
      */
-    public function getPromotedImage()
+    public function getPromotionOfImage()
     {
-        return $this->promotedImage;
+        return $this->promotionOfImage;
     }
 
     /**
      * @param CoreEntity|Image $item
      */
-    public function setPromotedItem($item)
+    public function setPromotionOf($item)
     {
         if ($item instanceof CoreEntity) {
-            $this->setPromotedItemBatch($item, null);
+            $this->setPromotionOfBatch($item, null);
         } elseif ($item instanceof Image) {
-            $this->setPromotedItemBatch(null, $item);
+            $this->setPromotionOfBatch(null, $item);
         } else {
             throw new InvalidArgumentException(sprintf(
-                'Expected setPromotedItem() to be called with an an instance of "%s" or "%s". Found instance of "%s"',
+                'Expected setPromotionOf() to be called with an an instance of "%s" or "%s". Found instance of "%s"',
                 CoreEntity::CLASS,
                 Image::CLASS,
                 (is_object($item) ? get_class($item) : gettype($item))
@@ -273,11 +292,11 @@ class Promotion
         $this->cascadesToDescendants = $cascadesToDescendants;
     }
 
-    private function setPromotedItemBatch(
-        CoreEntity $promotedCoreEntity = null,
-        Image $promotedImage = null
+    private function setPromotionOfBatch(
+        CoreEntity $promotionOfCoreEntity = null,
+        Image $promotionOfImage = null
     ) {
-        $this->promotedCoreEntity = $promotedCoreEntity;
-        $this->promotedImage = $promotedImage;
+        $this->promotionOfCoreEntity = $promotionOfCoreEntity;
+        $this->promotionOfImage = $promotionOfImage;
     }
 }
