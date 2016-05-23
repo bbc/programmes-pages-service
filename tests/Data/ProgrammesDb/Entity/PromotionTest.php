@@ -29,6 +29,7 @@ class PromotionTest extends PHPUnit_Framework_TestCase
         $promotion = new Promotion('pid', $context, $coreEntity, $startDate, $endDate, 1);
         $this->assertSame(null, $promotion->getId());
         $this->assertSame('pid', $promotion->getPid());
+        $this->assertSame($context, $promotion->getContext());
         $this->assertSame($coreEntity, $promotion->getPromotionOf());
         $this->assertSame($coreEntity, $promotion->getPromotionOfCoreEntity());
         $this->assertSame(null, $promotion->getPromotionOfImage());

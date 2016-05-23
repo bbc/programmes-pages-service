@@ -130,7 +130,7 @@ class Promotion
         int $weighting
     ) {
         $this->pid = $pid;
-
+        $this->context = $context;
         $this->setPromotionOf($promotedItem);
         $this->startDate = $startDate;
         $this->endDate = $endDate;
