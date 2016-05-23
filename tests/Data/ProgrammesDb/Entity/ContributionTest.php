@@ -30,23 +30,23 @@ class ContributionTest extends PHPUnit_Framework_TestCase
         $this->assertSame($contributor, $contribution->getContributor());
         $this->assertSame($creditRole, $contribution->getCreditRole());
         $this->assertSame($episode, $contribution->getContributionTo());
-        $this->assertSame($episode, $contribution->getProgramme());
-        $this->assertSame(null, $contribution->getSegment());
-        $this->assertSame(null, $contribution->getVersion());
+        $this->assertSame($episode, $contribution->getContributionToProgramme());
+        $this->assertSame(null, $contribution->getContributionToSegment());
+        $this->assertSame(null, $contribution->getContributionToVersion());
         $this->assertSame(null, $contribution->getPosition());
         $this->assertSame(null, $contribution->getCharacterName());
 
         $contribution = new Contribution('pid', $contributor, $creditRole, $segment);
         $this->assertSame($segment, $contribution->getContributionTo());
-        $this->assertSame(null, $contribution->getProgramme());
-        $this->assertSame($segment, $contribution->getSegment());
-        $this->assertSame(null, $contribution->getVersion());
+        $this->assertSame(null, $contribution->getContributionToProgramme());
+        $this->assertSame($segment, $contribution->getContributionToSegment());
+        $this->assertSame(null, $contribution->getContributionToVersion());
 
         $contribution = new Contribution('pid', $contributor, $creditRole, $version);
         $this->assertSame($version, $contribution->getContributionTo());
-        $this->assertSame(null, $contribution->getProgramme());
-        $this->assertSame(null, $contribution->getSegment());
-        $this->assertSame($version, $contribution->getVersion());
+        $this->assertSame(null, $contribution->getContributionToProgramme());
+        $this->assertSame(null, $contribution->getContributionToSegment());
+        $this->assertSame($version, $contribution->getContributionToVersion());
     }
 
     /**
@@ -91,9 +91,9 @@ class ContributionTest extends PHPUnit_Framework_TestCase
         $contribution->setContributionTo($contributionTo);
 
         $this->assertSame($contributionTo, $contribution->getContributionTo());
-        $this->assertSame($expectedProgramme, $contribution->getProgramme());
-        $this->assertSame($expectedSegment, $contribution->getSegment());
-        $this->assertSame($expectedVersion, $contribution->getVersion());
+        $this->assertSame($expectedProgramme, $contribution->getContributionToProgramme());
+        $this->assertSame($expectedSegment, $contribution->getContributionToSegment());
+        $this->assertSame($expectedVersion, $contribution->getContributionToVersion());
     }
 
     public function setContributionToDataProvider()

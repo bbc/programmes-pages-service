@@ -42,34 +42,37 @@ class Contribution
     private $creditRole;
 
     /**
-     * One of Programme, Segment or Version must be set. So even though, this is
-     * nullable, we do want deleting a programme to cascade to delete the
-     * contributions made to the programme
+     * One of contributionToProgramme, contributionToSegment or
+     * contributionToVersion must be set. So even though this is nullable, we do
+     * want deleting a Programme to cascade to delete the contributions
+     * attached to the Programme
      *
      * @ORM\ManyToOne(targetEntity="Programme")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $programme;
+    private $contributionToProgramme;
 
     /**
-     * One of Programme, Segment or Version must be set. So even though, this is
-     * nullable, we do want deleting a segment to cascade to delete the
-     * contributions made to the segment
+     * One of contributionToProgramme, contributionToSegment or
+     * contributionToVersion must be set. So even though this is nullable, we do
+     * want deleting a Segment to cascade to delete the contributions
+     * attached to the Segment
      *
      * @ORM\ManyToOne(targetEntity="Segment")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $segment;
+    private $contributionToSegment;
 
     /**
-     * One of Programme, Segment or Version must be set. So even though, this is
-     * nullable, we do want deleting a version to cascade to delete the
-     * contributions made to the version
+     * One of contributionToProgramme, contributionToSegment or
+     * contributionToVersion must be set. So even though this is nullable, we do
+     * want deleting a Version to cascade to delete the contributions
+     * attached to the Version
      *
      * @ORM\ManyToOne(targetEntity="Version")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $version;
+    private $contributionToVersion;
 
     /**
      * @var int|null
@@ -146,31 +149,31 @@ class Contribution
      */
     public function getContributionTo()
     {
-        return $this->programme ?? $this->segment ?? $this->version;
+        return $this->contributionToProgramme ?? $this->contributionToSegment ?? $this->contributionToVersion;
     }
 
     /**
      * @return Programme|null
      */
-    public function getProgramme()
+    public function getContributionToProgramme()
     {
-        return $this->programme;
+        return $this->contributionToProgramme;
     }
 
     /**
      * @return Segment|null
      */
-    public function getSegment()
+    public function getContributionToSegment()
     {
-        return $this->segment;
+        return $this->contributionToSegment;
     }
 
     /**
      * @return Version|null
      */
-    public function getVersion()
+    public function getContributionToVersion()
     {
-        return $this->version;
+        return $this->contributionToVersion;
     }
 
     /**
@@ -222,12 +225,12 @@ class Contribution
     }
 
     private function setContributionToBatch(
-        Programme $programme = null,
-        Segment $segment = null,
-        Version $version = null
+        Programme $contributionToProgramme = null,
+        Segment $contributionToSegment = null,
+        Version $contributionToVersion = null
     ) {
-        $this->programme = $programme;
-        $this->segment = $segment;
-        $this->version = $version;
+        $this->contributionToProgramme = $contributionToProgramme;
+        $this->contributionToSegment = $contributionToSegment;
+        $this->contributionToVersion = $contributionToVersion;
     }
 }
