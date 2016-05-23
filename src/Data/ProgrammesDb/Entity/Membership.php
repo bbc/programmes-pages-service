@@ -38,24 +38,24 @@ class Membership
     private $group;
 
     /**
-     * One of coreEntityMember or imageMember must be set. So even though this
+     * One of memberCoreEntity or memberImage must be set. So even though this
      * is nullable, we do want deleting a coreEntity to cascade to delete the
      * memberships that the coreEntity belonged to
      *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $coreEntityMember;
+    private $memberCoreEntity;
 
     /**
-     * One of coreEntityMember or imageMember must be set. So even though this
+     * One of memberCoreEntity or memberImage must be set. So even though this
      * is nullable, we do want deleting an image to cascade to delete the
      * memberships that the image belonged to
      *
      * @ORM\ManyToOne(targetEntity="Image")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $imageMember;
+    private $memberImage;
 
     /**
      * @var int|null
@@ -112,23 +112,23 @@ class Membership
      */
     public function getMember()
     {
-        return $this->coreEntityMember ?? $this->imageMember;
+        return $this->memberCoreEntity ?? $this->memberImage;
     }
 
     /**
      * @return CoreEntity|null
      */
-    public function getCoreEntityMember()
+    public function getMemberCoreEntity()
     {
-        return $this->coreEntityMember;
+        return $this->memberCoreEntity;
     }
 
     /**
      * @return Image|null
      */
-    public function getImageMember()
+    public function getMemberImage()
     {
-        return $this->imageMember;
+        return $this->memberImage;
     }
 
     /**
@@ -164,10 +164,10 @@ class Membership
     }
 
     private function setMemberBatch(
-        CoreEntity $coreEntityMember = null,
-        Image $imageMember = null
+        CoreEntity $memberCoreEntity = null,
+        Image $memberImage = null
     ) {
-        $this->coreEntityMember = $coreEntityMember;
-        $this->imageMember = $imageMember;
+        $this->memberCoreEntity = $memberCoreEntity;
+        $this->memberImage = $memberImage;
     }
 }

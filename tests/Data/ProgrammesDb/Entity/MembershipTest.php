@@ -27,14 +27,14 @@ class MembershipTest extends PHPUnit_Framework_TestCase
         $this->assertSame('pid', $contribution->getPid());
         $this->assertSame($group, $contribution->getGroup());
         $this->assertSame($episode, $contribution->getMember());
-        $this->assertSame($episode, $contribution->getCoreEntityMember());
-        $this->assertSame(null, $contribution->getImageMember());
+        $this->assertSame($episode, $contribution->getMemberCoreEntity());
+        $this->assertSame(null, $contribution->getMemberImage());
         $this->assertSame(null, $contribution->getPosition());
 
         $contribution = new Membership('pid', $group, $image);
         $this->assertSame($image, $contribution->getMember());
-        $this->assertSame(null, $contribution->getCoreEntityMember());
-        $this->assertSame($image, $contribution->getImageMember());
+        $this->assertSame(null, $contribution->getMemberCoreEntity());
+        $this->assertSame($image, $contribution->getMemberImage());
     }
 
     /**
@@ -74,8 +74,8 @@ class MembershipTest extends PHPUnit_Framework_TestCase
         $contribution->setMember($member);
 
         $this->assertSame($member, $contribution->getMember());
-        $this->assertSame($expectedCoreEntity, $contribution->getCoreEntityMember());
-        $this->assertSame($expectedImage, $contribution->getImageMember());
+        $this->assertSame($expectedCoreEntity, $contribution->getMemberCoreEntity());
+        $this->assertSame($expectedImage, $contribution->getMemberImage());
     }
 
     public function setMemberDataProvider()
