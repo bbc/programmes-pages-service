@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use InvalidArgumentException;
 
 /**
  * @ORM\Entity()
@@ -51,10 +52,34 @@ class RelatedLink
     private $type;
 
     /**
+     * One of relatedToCoreEntity, relatedToPromotion or relatedToImage must be
+     * set. So even though this is nullable, we do want deleting a CoreEntity to
+     * cascade to delete the relatedLinks attached to the CoreEntity
+     *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $relatedTo;
+    private $relatedToCoreEntity;
+
+
+    /**
+     * One of relatedToCoreEntity, relatedToPromotion or relatedToImage must be
+     * set. So even though this is nullable, we do want deleting a Promotion to
+     * cascade to delete the relatedLinks attached to the Promotion
+     * @ORM\ManyToOne(targetEntity="Promotion")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     */
+    private $relatedToPromotion;
+
+    /**
+     * One of relatedToCoreEntity, relatedToPromotion or relatedToImage must be
+     * set. So even though this is nullable, we do want deleting an Image to
+     * cascade to delete the relatedLinks attached to the Image
+     *
+     * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     */
+    private $relatedToImage;
 
     /**
      * @var bool
@@ -70,19 +95,27 @@ class RelatedLink
      */
     private $position;
 
+    /**
+     * @param string $pid
+     * @param string $title
+     * @param string $uri
+     * @param string $type
+     * @param CoreEntity|Promotion|Image $relatedTo
+     * @param bool $isExternal
+     */
     public function __construct(
         string $pid,
         string $title,
         string $uri,
         string $type,
-        CoreEntity $relatedTo,
+        $relatedTo,
         bool $isExternal
     ) {
         $this->pid = $pid;
         $this->title = $title;
         $this->uri = $uri;
         $this->type = $type;
-        $this->relatedTo = $relatedTo;
+        $this->setRelatedTo($relatedTo);
         $this->isExternal = $isExternal;
     }
 
@@ -134,14 +167,58 @@ class RelatedLink
         $this->type = $type;
     }
 
-    public function getRelatedTo(): CoreEntity
+    /**
+     * @return CoreEntity|Promotion|Image
+     */
+    public function getRelatedTo()
     {
-        return $this->relatedTo;
+        return $this->relatedToCoreEntity ?? $this->relatedToPromotion ?? $this->relatedToImage;
     }
 
-    public function setRelatedTo(CoreEntity $relatedTo)
+    /**
+     * @return CoreEntity|null
+     */
+    public function getRelatedToCoreEntity()
     {
-        $this->relatedTo = $relatedTo;
+        return $this->relatedToCoreEntity;
+    }
+
+    /**
+     * @return Promotion|null
+     */
+    public function getRelatedToPromotion()
+    {
+        return $this->relatedToPromotion;
+    }
+
+    /**
+     * @return Image|null
+     */
+    public function getRelatedToImage()
+    {
+        return $this->relatedToImage;
+    }
+
+    /**
+     * @param CoreEntity|Promotion|Image $relatedTo
+     */
+    public function setRelatedTo($relatedTo)
+    {
+        if ($relatedTo instanceof CoreEntity) {
+            $this->setRelatedToBatch($relatedTo, null, null);
+        } elseif ($relatedTo instanceof Promotion) {
+            $this->setRelatedToBatch(null, $relatedTo, null);
+        } elseif ($relatedTo instanceof Image) {
+            $this->setRelatedToBatch(null, null, $relatedTo);
+        } else {
+            throw new InvalidArgumentException(sprintf(
+                'Expected setRelatedTo() to be called with an an instance of "%s", "%s" or "%s". Found instance of "%s"',
+                CoreEntity::CLASS,
+                Promotion::CLASS,
+                Image::CLASS,
+                (is_object($relatedTo) ? get_class($relatedTo) : gettype($relatedTo))
+            ));
+        }
     }
 
     public function getIsExternal(): bool
@@ -165,5 +242,15 @@ class RelatedLink
     public function setPosition(int $position = null)
     {
         $this->position = $position;
+    }
+
+    private function setRelatedToBatch(
+        CoreEntity $relatedToCoreEntity = null,
+        Promotion $relatedToPromotion = null,
+        Image $relatedToImage = null
+    ) {
+        $this->relatedToCoreEntity = $relatedToCoreEntity;
+        $this->relatedToPromotion = $relatedToPromotion;
+        $this->relatedToImage = $relatedToImage;
     }
 }
