@@ -32,12 +32,6 @@ class Promotion
     private $pid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
-    private $context;
-
-    /**
      * One of promotionOfCoreEntity or promotionOfImage must be set. So even though
      * this is nullable, we do want deleting a coreEntity to cascade to delete
      * the promotions attached to the coreEntity
@@ -86,6 +80,12 @@ class Promotion
     private $isActive = false;
 
     /**
+     * @ORM\ManyToOne(targetEntity="CoreEntity")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $context;
+
+    /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -115,7 +115,6 @@ class Promotion
 
     /**
      * @param string $pid
-     * @param CoreEntity $context
      * @param CoreEntity|Image $promotedItem
      * @param DateTime $startDate
      * @param DateTime $endDate
@@ -123,14 +122,12 @@ class Promotion
      */
     public function __construct(
         string $pid,
-        CoreEntity $context,
         $promotedItem,
         DateTime $startDate,
         DateTime $endDate,
         int $weighting
     ) {
         $this->pid = $pid;
-        $this->context = $context;
         $this->setPromotionOf($promotedItem);
         $this->startDate = $startDate;
         $this->endDate = $endDate;
@@ -153,16 +150,6 @@ class Promotion
     public function setPid(string $pid)
     {
         $this->pid = $pid;
-    }
-
-    public function getContext(): CoreEntity
-    {
-        return $this->context;
-    }
-
-    public function setContext(CoreEntity $context)
-    {
-        $this->context = $context;
     }
 
     /**
@@ -246,6 +233,19 @@ class Promotion
     public function setIsActive(bool $isActive)
     {
         $this->isActive = $isActive;
+    }
+
+    /**
+     * @return CoreEntity|null
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    public function setContext(CoreEntity $context = null)
+    {
+        $this->context = $context;
     }
 
     /**

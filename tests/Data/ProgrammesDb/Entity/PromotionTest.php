@@ -20,29 +20,28 @@ class PromotionTest extends PHPUnit_Framework_TestCase
 
     public function testDefaults()
     {
-        $context = $this->mockCoreEntity();
         $coreEntity = $this->mockCoreEntity();
         $image = $this->mockImage();
         $startDate = new DateTime();
         $endDate = new DateTime();
 
-        $promotion = new Promotion('pid', $context, $coreEntity, $startDate, $endDate, 1);
+        $promotion = new Promotion('pid', $coreEntity, $startDate, $endDate, 1);
         $this->assertSame(null, $promotion->getId());
         $this->assertSame('pid', $promotion->getPid());
-        $this->assertSame($context, $promotion->getContext());
         $this->assertSame($coreEntity, $promotion->getPromotionOf());
         $this->assertSame($coreEntity, $promotion->getPromotionOfCoreEntity());
         $this->assertSame(null, $promotion->getPromotionOfImage());
         $this->assertSame($startDate, $promotion->getStartDate());
         $this->assertSame($endDate, $promotion->getEndDate());
-        $this->assertSame(false, $promotion->getIsActive());
         $this->assertSame(1, $promotion->getWeighting());
+        $this->assertSame(false, $promotion->getIsActive());
+        $this->assertSame(null, $promotion->getContext());
         $this->assertSame(null, $promotion->getPromotedFor());
         $this->assertSame('', $promotion->getTitle());
         $this->assertSame('', $promotion->getUri());
         $this->assertSame(false, $promotion->getCascadesToDescendants());
 
-        $promotion = new Promotion('pid', $context, $image, $startDate, $endDate, 1);
+        $promotion = new Promotion('pid', $image, $startDate, $endDate, 1);
         $this->assertSame($image, $promotion->getPromotionOf());
         $this->assertSame(null, $promotion->getPromotionOfCoreEntity());
         $this->assertSame($image, $promotion->getPromotionOfImage());
@@ -53,12 +52,11 @@ class PromotionTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $context = $this->mockCoreEntity();
         $coreEntity = $this->mockCoreEntity();
         $startDate = new DateTime();
         $endDate = new DateTime();
 
-        $promotion = new Promotion('pid', $context, $coreEntity, $startDate, $endDate, 1);
+        $promotion = new Promotion('pid', $coreEntity, $startDate, $endDate, 1);
 
         $promotion->{'set' . $name}($validValue);
         $this->assertEquals($validValue, $promotion->{'get' . $name}());
@@ -68,11 +66,11 @@ class PromotionTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['Pid', 'pid'],
-            ['Context', $this->mockCoreEntity()],
             ['StartDate', new DateTime()],
             ['EndDate', new DateTime()],
             ['IsActive', true],
             ['Weighting', 20],
+            ['Context', $this->mockCoreEntity()],
             ['PromotedFor', 'a-string'],
             ['Title', 'a-string'],
             ['Uri', 'a-string'],
@@ -87,7 +85,6 @@ class PromotionTest extends PHPUnit_Framework_TestCase
     {
         $promotion = new Promotion(
             'pid',
-            $this->mockCoreEntity(),
             $this->mockCoreEntity(),
             new DateTime(),
             new DateTime(),
@@ -118,7 +115,6 @@ class PromotionTest extends PHPUnit_Framework_TestCase
     {
         new Promotion(
             'pid',
-            $this->mockCoreEntity(),
             'wrongwrongwrong',
             new DateTime(),
             new DateTime(),
@@ -133,7 +129,6 @@ class PromotionTest extends PHPUnit_Framework_TestCase
     {
         $promotion = new Promotion(
             'pid',
-            $this->mockCoreEntity(),
             $this->mockCoreEntity(),
             new DateTime(),
             new DateTime(),
