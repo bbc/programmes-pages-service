@@ -81,7 +81,7 @@ class Promotion
 
     /**
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $context;
 
@@ -115,20 +115,20 @@ class Promotion
 
     /**
      * @param string $pid
-     * @param CoreEntity|Image $promotedItem
+     * @param CoreEntity|Image $promotionOf
      * @param DateTime $startDate
      * @param DateTime $endDate
      * @param int $weighting
      */
     public function __construct(
         string $pid,
-        $promotedItem,
+        $promotionOf,
         DateTime $startDate,
         DateTime $endDate,
         int $weighting
     ) {
         $this->pid = $pid;
-        $this->setPromotionOf($promotedItem);
+        $this->setPromotionOf($promotionOf);
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->weighting = $weighting;
