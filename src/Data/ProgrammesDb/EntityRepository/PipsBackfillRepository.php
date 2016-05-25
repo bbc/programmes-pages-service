@@ -62,6 +62,28 @@ class PipsBackfillRepository extends PipsChangeRepository
         }
     }
 
+    /**
+     * This locks rows, so only call it when you're about to commit a transaction...
+     *
+     * @param mixed $cid
+     * @return null|PipsChange
+     */
+    public function findById($cid)
+    {
+        $query = $this->createQueryBuilder('pipsBackfill')
+            ->where('pipsBackfill.cid = :cid')
+            ->setMaxResults(1)
+            ->setParameter('cid', $cid)
+            ->getQuery();
+
+        $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
+        $results = $query->getResult();
+        if (!empty($results)) {
+            return reset($results);
+        }
+        return null;
+    }
+
     public function setAsProcessed(PipsChangeBase $change)
     {
         $change->setProcessedTime(new \DateTime());
