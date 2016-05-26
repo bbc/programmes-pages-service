@@ -4,8 +4,10 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChange;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChangeBase;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker\ForceIndexWalker;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+
 
 class PipsBackfillRepository extends PipsChangeRepository
 {
@@ -44,6 +46,9 @@ class PipsBackfillRepository extends PipsChangeRepository
                 ->getQuery();
 
             $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
+            // Extremely nasty hack to force doctrine to include FORCE INDEX in query
+            $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, '\BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker\ForceIndexWalker');
+            $query->setHint(ForceIndexWalker::HINT_USE_INDEX, 'pips_backfill_locking_idx');
             $result = $query->getResult();
             $now = new \DateTime();
             foreach ($result as $item) {
@@ -60,28 +65,6 @@ class PipsBackfillRepository extends PipsChangeRepository
             $this->lockedChanges = [];
             throw $e;
         }
-    }
-
-    /**
-     * This locks rows, so only call it when you're about to commit a transaction...
-     *
-     * @param mixed $cid
-     * @return null|PipsChange
-     */
-    public function findById($cid)
-    {
-        $query = $this->createQueryBuilder('pipsBackfill')
-            ->where('pipsBackfill.cid = :cid')
-            ->setMaxResults(1)
-            ->setParameter('cid', $cid)
-            ->getQuery();
-
-        $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
-        $results = $query->getResult();
-        if (!empty($results)) {
-            return reset($results);
-        }
-        return null;
     }
 
     public function setAsProcessed(PipsChangeBase $change)
