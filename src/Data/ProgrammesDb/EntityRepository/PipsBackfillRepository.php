@@ -11,9 +11,6 @@ use Doctrine\ORM\Query;
 
 class PipsBackfillRepository extends PipsChangeRepository
 {
-    /** How long do locked rows stay locked for if they fail? */
-    const LOCK_INTERVAL = 'PT5M';
-
     /**
      * @var PipsChange[]
      */
@@ -34,15 +31,12 @@ class PipsBackfillRepository extends PipsChangeRepository
     {
         $em = $this->getEntityManager();
         try {
-            $expired = new \DateTime();
-            $expired->sub(new \DateInterval(self::LOCK_INTERVAL));
             $em->getConnection()->beginTransaction();
             $query = $this->createQueryBuilder('pipsBackfill')
                 ->where('pipsBackfill.processedTime IS NULL')
-                ->andWhere('pipsBackfill.lockedAt IS NULL OR pipsBackfill.lockedAt < :expired')
+                ->andWhere('pipsBackfill.locked = 0')
                 ->setMaxResults($limit)
                 ->addOrderBy('pipsBackfill.cid', 'Asc')
-                ->setParameter('expired', $expired, \Doctrine\DBAL\Types\Type::DATETIME)
                 ->getQuery();
 
             $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
@@ -53,6 +47,7 @@ class PipsBackfillRepository extends PipsChangeRepository
             $now = new \DateTime();
             foreach ($result as $item) {
                 $item->setLockedAt($now);
+                $item->setLocked(true);
                 $em->persist($item);
                 $this->lockedChanges[$item->getCid()] = $item;
             }
@@ -71,6 +66,7 @@ class PipsBackfillRepository extends PipsChangeRepository
     {
         $change->setProcessedTime(new \DateTime());
         $change->setLockedAt(null);
+        $change->setLocked(false);
         if (isset($this->lockedChanges[$change->getCid()])) {
             unset($this->lockedChanges[$change->getCid()]);
         }
@@ -80,6 +76,7 @@ class PipsBackfillRepository extends PipsChangeRepository
     public function unlock(PipsChangeBase $change)
     {
         $change->setLockedAt(null);
+        $change->setLocked(false);
         if (isset($this->lockedChanges[$change->getCid()])) {
             unset($this->lockedChanges[$change->getCid()]);
         }
@@ -96,19 +93,17 @@ class PipsBackfillRepository extends PipsChangeRepository
         foreach ($this->lockedChanges as $change) {
             $cids[] = $change->getCid();
         }
-        $expired = new \DateTime();
-        $expired->sub(new \DateInterval(self::LOCK_INTERVAL));
         try {
             $em->getConnection()->beginTransaction();
             $query = $this->createQueryBuilder('pipsBackfill')
                 ->where('pipsBackfill.cid IN (:cids)')
-                ->andWhere('pipsBackfill.lockedAt IS NOT NULL OR pipsBackfill.lockedAt > :expired')
+                ->andWhere('pipsBackfill.locked = 1')
                 ->setParameter('cids', $cids)
-                ->setParameter('expired', $expired, \Doctrine\DBAL\Types\Type::DATETIME)
                 ->getQuery();
             $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
             foreach ($query->getResult() as $changeEvent) {
                 $changeEvent->setLockedAt(null);
+                $changeEvent->setLocked(false);
                 $em->persist($changeEvent);
             }
             $em->flush();
