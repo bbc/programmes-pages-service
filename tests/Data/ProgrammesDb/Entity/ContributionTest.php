@@ -20,17 +20,17 @@ class ContributionTest extends PHPUnit_Framework_TestCase
     {
         $contributor = $this->mockContributor();
         $creditRole = $this->mockCreditRole();
-        $episode = $this->mockEpisode();
+        $coreEntity = $this->mockCoreEntity();
         $segment = $this->mockSegment();
         $version = $this->mockVersion();
 
-        $contribution = new Contribution('pid', $contributor, $creditRole, $episode);
+        $contribution = new Contribution('pid', $contributor, $creditRole, $coreEntity);
         $this->assertSame(null, $contribution->getId());
         $this->assertSame('pid', $contribution->getPid());
         $this->assertSame($contributor, $contribution->getContributor());
         $this->assertSame($creditRole, $contribution->getCreditRole());
-        $this->assertSame($episode, $contribution->getContributionTo());
-        $this->assertSame($episode, $contribution->getContributionToProgramme());
+        $this->assertSame($coreEntity, $contribution->getContributionTo());
+        $this->assertSame($coreEntity, $contribution->getContributionToCoreEntity());
         $this->assertSame(null, $contribution->getContributionToSegment());
         $this->assertSame(null, $contribution->getContributionToVersion());
         $this->assertSame(null, $contribution->getPosition());
@@ -38,13 +38,13 @@ class ContributionTest extends PHPUnit_Framework_TestCase
 
         $contribution = new Contribution('pid', $contributor, $creditRole, $segment);
         $this->assertSame($segment, $contribution->getContributionTo());
-        $this->assertSame(null, $contribution->getContributionToProgramme());
+        $this->assertSame(null, $contribution->getContributionToCoreEntity());
         $this->assertSame($segment, $contribution->getContributionToSegment());
         $this->assertSame(null, $contribution->getContributionToVersion());
 
         $contribution = new Contribution('pid', $contributor, $creditRole, $version);
         $this->assertSame($version, $contribution->getContributionTo());
-        $this->assertSame(null, $contribution->getContributionToProgramme());
+        $this->assertSame(null, $contribution->getContributionToCoreEntity());
         $this->assertSame(null, $contribution->getContributionToSegment());
         $this->assertSame($version, $contribution->getContributionToVersion());
     }
@@ -56,9 +56,9 @@ class ContributionTest extends PHPUnit_Framework_TestCase
     {
         $contributor = $this->mockContributor();
         $creditRole = $this->mockCreditRole();
-        $episode = $this->mockEpisode();
+        $coreEntity = $this->mockCoreEntity();
 
-        $contribution = new Contribution('pid', $contributor, $creditRole, $episode);
+        $contribution = new Contribution('pid', $contributor, $creditRole, $coreEntity);
 
         $contribution->{'set' . $name}($validValue);
         $this->assertEquals($validValue, $contribution->{'get' . $name}());
@@ -85,25 +85,25 @@ class ContributionTest extends PHPUnit_Framework_TestCase
     {
         $contributor = $this->mockContributor();
         $creditRole = $this->mockCreditRole();
-        $episode = $this->mockEpisode();
+        $coreEntity = $this->mockCoreEntity();
 
-        $contribution = new Contribution('pid', $contributor, $creditRole, $episode);
+        $contribution = new Contribution('pid', $contributor, $creditRole, $coreEntity);
         $contribution->setContributionTo($contributionTo);
 
         $this->assertSame($contributionTo, $contribution->getContributionTo());
-        $this->assertSame($expectedProgramme, $contribution->getContributionToProgramme());
+        $this->assertSame($expectedProgramme, $contribution->getContributionToCoreEntity());
         $this->assertSame($expectedSegment, $contribution->getContributionToSegment());
         $this->assertSame($expectedVersion, $contribution->getContributionToVersion());
     }
 
     public function setContributionToDataProvider()
     {
-        $episode = $this->mockEpisode();
+        $coreEntity = $this->mockCoreEntity();
         $segment = $this->mockSegment();
         $version = $this->mockVersion();
 
         return [
-            [$episode, $episode, null, null],
+            [$coreEntity, $coreEntity, null, null],
             [$segment, null, $segment, null],
             [$version, null, null, $version],
         ];
@@ -131,7 +131,7 @@ class ContributionTest extends PHPUnit_Framework_TestCase
             'pid',
             $this->mockContributor(),
             $this->mockCreditRole(),
-            $this->mockEpisode()
+            $this->mockCoreEntity()
         );
         $contribution->setContributionTo('wrongwrongwrong');
     }
@@ -150,10 +150,10 @@ class ContributionTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    private function mockEpisode()
+    private function mockCoreEntity()
     {
         return $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode'
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity'
         );
     }
 

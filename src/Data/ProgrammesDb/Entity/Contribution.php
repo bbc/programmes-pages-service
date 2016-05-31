@@ -42,18 +42,18 @@ class Contribution
     private $creditRole;
 
     /**
-     * One of contributionToProgramme, contributionToSegment or
+     * One of contributionToCoreEntity, contributionToSegment or
      * contributionToVersion must be set. So even though this is nullable, we do
-     * want deleting a Programme to cascade to delete the contributions
-     * attached to the Programme
+     * want deleting a CoreEntity to cascade to delete the contributions
+     * attached to the CoreEntity
      *
-     * @ORM\ManyToOne(targetEntity="Programme")
+     * @ORM\ManyToOne(targetEntity="CoreEntity")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $contributionToProgramme;
+    private $contributionToCoreEntity;
 
     /**
-     * One of contributionToProgramme, contributionToSegment or
+     * One of contributionToCoreEntity, contributionToSegment or
      * contributionToVersion must be set. So even though this is nullable, we do
      * want deleting a Segment to cascade to delete the contributions
      * attached to the Segment
@@ -64,7 +64,7 @@ class Contribution
     private $contributionToSegment;
 
     /**
-     * One of contributionToProgramme, contributionToSegment or
+     * One of contributionToCoreEntity, contributionToSegment or
      * contributionToVersion must be set. So even though this is nullable, we do
      * want deleting a Version to cascade to delete the contributions
      * attached to the Version
@@ -92,7 +92,7 @@ class Contribution
      * @param string $pid
      * @param Contributor $contributor
      * @param CreditRole $creditRole
-     * @param Programme|Segment|Version $contributionTo
+     * @param CoreEntity|Segment|Version $contributionTo
      */
     public function __construct(
         string $pid,
@@ -145,19 +145,19 @@ class Contribution
     }
 
     /**
-     * @return Programme|Segment|Version
+     * @return CoreEntity|Segment|Version
      */
     public function getContributionTo()
     {
-        return $this->contributionToProgramme ?? $this->contributionToSegment ?? $this->contributionToVersion;
+        return $this->contributionToCoreEntity ?? $this->contributionToSegment ?? $this->contributionToVersion;
     }
 
     /**
-     * @return Programme|null
+     * @return CoreEntity|null
      */
-    public function getContributionToProgramme()
+    public function getContributionToCoreEntity()
     {
-        return $this->contributionToProgramme;
+        return $this->contributionToCoreEntity;
     }
 
     /**
@@ -177,11 +177,11 @@ class Contribution
     }
 
     /**
-     * @param Programme|Segment|Version $item
+     * @param CoreEntity|Segment|Version $item
      */
     public function setContributionTo($item)
     {
-        if ($item instanceof Programme) {
+        if ($item instanceof CoreEntity) {
             $this->setContributionToBatch($item, null, null);
         } elseif ($item instanceof Segment) {
             $this->setContributionToBatch(null, $item, null);
@@ -190,7 +190,7 @@ class Contribution
         } else {
             throw new InvalidArgumentException(sprintf(
                 'Expected setContributionTo() to be called with an an instance of "%s", "%s" or "%s". Found instance of "%s"',
-                Programme::CLASS,
+                CoreEntity::CLASS,
                 Segment::CLASS,
                 Version::CLASS,
                 (is_object($item) ? get_class($item) : gettype($item))
@@ -225,11 +225,11 @@ class Contribution
     }
 
     private function setContributionToBatch(
-        Programme $contributionToProgramme = null,
+        CoreEntity $contributionToCoreEntity = null,
         Segment $contributionToSegment = null,
         Version $contributionToVersion = null
     ) {
-        $this->contributionToProgramme = $contributionToProgramme;
+        $this->contributionToCoreEntity = $contributionToCoreEntity;
         $this->contributionToSegment = $contributionToSegment;
         $this->contributionToVersion = $contributionToVersion;
     }
