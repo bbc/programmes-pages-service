@@ -45,7 +45,10 @@ class Contribution
      * One of contributionToCoreEntity, contributionToSegment or
      * contributionToVersion must be set. So even though this is nullable, we do
      * want deleting a CoreEntity to cascade to delete the contributions
-     * attached to the CoreEntity
+     * attached to the CoreEntity.
+     *
+     * Attaching a contribution to a Group doesn't really make any sense, but it
+     * can and has happened in PIPS, so we need to handle it.
      *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
