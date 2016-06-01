@@ -8,7 +8,6 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker\ForceIndexWalker;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
-
 class PipsBackfillRepository extends PipsChangeRepository
 {
     /**

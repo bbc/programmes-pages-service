@@ -9,6 +9,8 @@ class PipsBackfillRepositoryTest extends AbstractDatabaseTest
 {
     public function testLockingWorks()
     {
+        $this->markTestSkipped("Contains MySQL specific code that can't be tested in SQLLite");
+
         $this->loadFixtures(['PipsBackfillFixture']);
         /** @var PipsBackfillRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:PipsBackfill');
