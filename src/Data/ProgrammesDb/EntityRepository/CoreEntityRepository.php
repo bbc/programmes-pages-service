@@ -18,6 +18,10 @@ class CoreEntityRepository extends MaterializedPathRepository
     public function findByPidFull($pid)
     {
         $qb = $this->createQueryBuilder('programme')
+            ->addSelect(['image', 'masterBrand', 'network'])
+            ->leftJoin('programme.image', 'image')
+            ->leftJoin('programme.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
             ->where('programme.pid = :pid')
             ->setParameter('pid', $pid);
         $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
@@ -115,6 +119,10 @@ QUERY;
 
         // Get all said programmes from the DB.
         $parentProgrammes = $this->createQueryBuilder('programme')
+            ->addSelect(['image', 'masterBrand', 'network'])
+            ->leftJoin('programme.image', 'image')
+            ->leftJoin('programme.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
             ->where("programme.id IN(:ids)")
             ->setParameter('ids', $listOfAllParentIds)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);

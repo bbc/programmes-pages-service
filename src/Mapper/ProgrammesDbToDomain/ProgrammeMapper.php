@@ -171,9 +171,8 @@ class ProgrammeMapper extends AbstractMapper
     private function getMasterBrandModel($dbProgramme, $key = 'masterBrand')
     {
         if (!array_key_exists($key, $dbProgramme) || is_null($dbProgramme[$key])) {
-            // TODO Build inheritance hierarchy
-
-            // Otherwise return null
+            // MasterBrand may be null if not requested or a Programme has no
+            // MasterBrand attached to it
             return null;
         }
 
