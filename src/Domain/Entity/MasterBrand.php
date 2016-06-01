@@ -22,7 +22,7 @@ class MasterBrand
     private $image;
 
     /**
-     * @var Network|null
+     * @var Network
      */
     private $network;
 
@@ -36,7 +36,7 @@ class MasterBrand
         Mid $mid,
         string $name,
         Image $image,
-        Network $network = null,
+        Network $network,
         Version $competitionWarning = null
     ) {
         $this->mid = $mid;
@@ -61,10 +61,7 @@ class MasterBrand
         return $this->image;
     }
 
-    /**
-     * @return Network|null
-     */
-    public function getNetwork()
+    public function getNetwork(): Network
     {
         return $this->network;
     }

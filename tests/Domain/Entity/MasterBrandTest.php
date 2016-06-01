@@ -18,16 +18,19 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
     {
         $mid = new Mid('bbc_1xtra');
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $network = new Network(new Nid('bbc_1xtra'), '1 Xtra', $image);
 
         $masterBrand = new MasterBrand(
             $mid,
             'Name',
-            $image
+            $image,
+            $network
         );
 
         $this->assertEquals($mid, $masterBrand->getMid());
         $this->assertEquals('Name', $masterBrand->getName());
         $this->assertEquals($image, $masterBrand->getImage());
+        $this->assertEquals($network, $masterBrand->getNetwork());
 
     }
 
@@ -51,7 +54,6 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
             $version
         );
 
-        $this->assertEquals($network, $masterBrand->getNetwork());
         $this->assertEquals($version, $masterBrand->getCompetitionWarning());
     }
 }

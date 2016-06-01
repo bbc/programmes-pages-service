@@ -7,13 +7,28 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 
 class MasterBrandMapper extends AbstractMapper
 {
-    public function getDomainModel(array $dbMasterBrand): MasterBrand
+    /**
+     * @return MasterBrand|null
+     */
+    public function getDomainModel(array $dbMasterBrand)
     {
+        // A MasterBrand must have a Network attached to it.
+        // A MasterBrand without a Network is not valid.
+        // It may temporarily occur in the database in the time between creating
+        // a new MasterBrand and the Networks denorm running (which creates the
+        // network entity for that MasterBrand), however we consider this
+        // incomplete data and we should treat it as though the MasterBrand does
+        // not exist, as it is in an incomplete state.
+        $network = $this->getNetworkModel($dbMasterBrand);
+        if (!$network) {
+            return null;
+        }
+
         return new MasterBrand(
             new Mid($dbMasterBrand['mid']),
             $dbMasterBrand['name'],
             $this->getImageModel($dbMasterBrand),
-            $this->getNetworkModel($dbMasterBrand),
+            $network,
             $this->getCompetitionWarningModel($dbMasterBrand)
         );
     }

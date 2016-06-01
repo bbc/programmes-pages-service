@@ -11,11 +11,13 @@ class MasterBrandMapperTest extends BaseMapperTestCase
 {
     protected $mockImageMapper;
 
-    protected $mockDefaultImage;
-
     protected $mockNetworkMapper;
 
     protected $mockVersionMapper;
+
+    protected $mockDefaultImage;
+
+    protected $mockNetwork;
 
     public function setUp()
     {
@@ -35,6 +37,10 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
         );
 
+        $this->mockNetwork = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'BBC\ProgrammesPagesService\Domain\Entity\Network'
+        );
+
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
             ->willReturn($this->mockDefaultImage);
@@ -42,21 +48,52 @@ class MasterBrandMapperTest extends BaseMapperTestCase
 
     public function testGetDomainModel()
     {
+        $networkDbEntity = ['nid' => 'bbc_one'];
+
+        $this->setupNetworkMapper($networkDbEntity, $this->mockNetwork);
+
+        $dbEntityArray = [
+            'id' => 1,
+            'mid' => 'bbc_three',
+            'name' => 'Three',
+            'network' => $networkDbEntity,
+        ];
+
+        $mid = new Mid('bbc_three');
+        $expectedEntity = new MasterBrand($mid, 'Three', $this->mockDefaultImage, $this->mockNetwork);
+
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+    }
+
+    public function testGetDomainModelWithoutSetNetworkReturnsNull()
+    {
         $dbEntityArray = [
             'id' => 1,
             'mid' => 'bbc_three',
             'name' => 'Three',
         ];
 
-        $mid = new Mid('bbc_three');
-        $expectedEntity = new MasterBrand($mid, 'Three', $this->mockDefaultImage);
+        $this->assertEquals(null, $this->getMapper()->getDomainModel($dbEntityArray));
+    }
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+    public function testGetDomainModelWithSetButNullNetworkReturnsNull()
+    {
+        $dbEntityArray = [
+            'id' => 1,
+            'mid' => 'bbc_three',
+            'name' => 'Three',
+            'network' => null,
+        ];
+
+        $this->assertEquals(null, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
     public function testGetDomainModelWithSetImage()
     {
+        $networkDbEntity = ['nid' => 'bbc_one'];
         $imageDbEntity = ['pid' => 'p01m5mss'];
+
+        $this->setupNetworkMapper($networkDbEntity, $this->mockNetwork);
 
         $expectedImageDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
@@ -71,50 +108,23 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'id' => 1,
             'mid' => 'bbc_three',
             'name' => 'Three',
+            'network' => $networkDbEntity,
             'image' => $imageDbEntity,
         ];
 
         $mid = new Mid('bbc_three');
-        $expectedEntity = new MasterBrand($mid, 'Three', $expectedImageDomainEntity);
+        $expectedEntity = new MasterBrand($mid, 'Three', $expectedImageDomainEntity, $this->mockNetwork);
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
-    public function testGetDomainModelWithSetNetwork()
-    {
-        $networkDbEntity = ['nid' => 'bbc_one'];
-
-        $expectedNetworkDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Domain\Entity\Network'
-        );
-
-        $this->mockNetworkMapper->expects($this->once())
-            ->method('getDomainModel')
-            ->with($networkDbEntity)
-            ->willReturn($expectedNetworkDomainEntity);
-
-        $dbEntityArray = [
-            'id' => 1,
-            'mid' => 'bbc_three',
-            'name' => 'Three',
-            'network' => $networkDbEntity,
-        ];
-
-        $mid = new Mid('bbc_three');
-        $expectedEntity = new MasterBrand(
-            $mid,
-            'Three',
-            $this->mockDefaultImage,
-            $expectedNetworkDomainEntity,
-            null
-        );
-
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
-    }
 
     public function testGetDomainModelWithSetCompetitionWarning()
     {
+        $networkDbEntity = ['nid' => 'bbc_one'];
         $versionDbEntity = ['pid' => 'p01m5mss'];
+
+        $this->setupNetworkMapper($networkDbEntity, $this->mockNetwork);
 
         $expectedVersionDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Version'
@@ -129,6 +139,8 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'id' => 1,
             'mid' => 'bbc_three',
             'name' => 'Three',
+            'network' => $networkDbEntity,
+
             'competitionWarning' => $versionDbEntity,
         ];
 
@@ -136,13 +148,20 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             new Mid('bbc_three'),
             'Three',
             $this->mockDefaultImage,
-            null,
+            $this->mockNetwork,
             $expectedVersionDomainEntity
         );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
+    private function setupNetworkMapper($expectedDbEntity, $result)
+    {
+        $this->mockNetworkMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($expectedDbEntity)
+            ->willReturn($result);
+    }
 
     private function getMapper(): MasterBrandMapper
     {

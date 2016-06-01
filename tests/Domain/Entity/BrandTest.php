@@ -6,7 +6,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
-use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
@@ -65,7 +64,9 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Brand'
         );
-        $masterBrand = new MasterBrand(new Mid('bbc_one'), 'BBC One', $image);
+        $masterBrand = $this->getMockWithoutInvokingTheOriginalConstructor(
+            'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
+        );
         $releaseDate = new PartialDate(2015, 01, 02);
 
         $genre = new Genre('Title', 'url_key');
