@@ -231,7 +231,7 @@ abstract class Programme
      */
     public function getNetwork()
     {
-        return $this->masterBrand->getNetwork() ?? null;
+        return $this->masterBrand ? $this->masterBrand->getNetwork() : null;
     }
 
     private function assertArrayOfType($property, $array, $expectedType)
