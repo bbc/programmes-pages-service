@@ -34,8 +34,7 @@ class ProgrammeMapperCategoryTest extends BaseProgrammeMapperTestCase
             'b010t19z',
             null,
             null,
-            [$genreDbEntity, $formatDbEntity],
-            []
+            [$genreDbEntity, $formatDbEntity]
         );
 
         $expectedEntity = $this->getSampleProgrammeDomainEntity(
@@ -43,8 +42,7 @@ class ProgrammeMapperCategoryTest extends BaseProgrammeMapperTestCase
             $this->mockDefaultImage,
             null,
             [$expectedGenreDomainEntity],
-            [$expectedFormatDomainEntity],
-            []
+            [$expectedFormatDomainEntity]
         );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));

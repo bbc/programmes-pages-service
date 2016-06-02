@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -35,9 +36,12 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
         );
 
+        $this->mockDefaultImage->method('getTitle')->willReturn('DefaultImage');
+
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
             ->willReturn($this->mockDefaultImage);
+
     }
 
     protected function getMapper(): ProgrammeMapper
@@ -57,7 +61,8 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         $pid,
         $image = null,
         $masterBrand = null,
-        array $categories = []
+        array $categories = [],
+        array $parent = null
     ) {
         return [
             'type' => 'series',
@@ -79,7 +84,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'availableEpisodesCount' => 14,
             'availableGalleriesCount' => 15,
             'isPodcastable' => false,
-            'parent' => null,
+            'parent' => $parent,
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'masterBrand' => $masterBrand,
@@ -97,7 +102,8 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         $image = null,
         $masterBrand = null,
         array $genres = [],
-        array $formats = []
+        array $formats = [],
+        Programme $parent = null
     ) {
         return new Series(
             1,
@@ -117,7 +123,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             14,
             15,
             false,
-            null,
+            $parent,
             new PartialDate(2015, 01, 02),
             101,
             $masterBrand,

@@ -162,14 +162,25 @@ class ProgrammeMapper extends AbstractMapper
 
     private function getImageModel($dbProgramme, $key = 'image')
     {
-        if (!array_key_exists($key, $dbProgramme) || is_null($dbProgramme[$key])) {
-            // TODO Build inheritance hierarchy
+        $imageMapper = $this->mapperFactory->getImageMapper();
 
-            // Use default Image
-            return $this->mapperFactory->getImageMapper()->getDefaultImage();
+        // Image inheritance. If the current programme does not have an image
+        // attached to it, look to see if its parent has an image, and use that.
+        // Keep going up the ancestry chain till an image is found, otherwise
+        // fall back to a default image.
+        $currentItem = $dbProgramme;
+        while ($currentItem) {
+            // If the current Programme has an image then use that!
+            if (isset($currentItem[$key])) {
+                return $imageMapper->getDomainModel($currentItem[$key]);
+            }
+
+            // Otherwise set the current Programme to the parent
+            $currentItem = $currentItem['parent'] ?? null;
         }
 
-        return $this->mapperFactory->getImageMapper()->getDomainModel($dbProgramme[$key]);
+        // Couldn't find anything in the hierarchy, so use the default Image
+        return $imageMapper->getDefaultImage();
     }
 
     private function getMasterBrandModel($dbProgramme, $key = 'masterBrand')
