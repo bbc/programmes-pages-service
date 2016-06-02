@@ -23,7 +23,7 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceFactory = new ServiceFactory(
             $this->entityManager($expectedRepository),
-            $this->mapperProvider($expectedMapper)
+            $this->mapperFactory($expectedMapper)
         );
 
         $service = $serviceFactory->{'get' . $serviceName}();
@@ -62,20 +62,20 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
         return $mockEntityManager;
     }
 
-    private function mapperProvider($mapperClass)
+    private function mapperFactory($mapperClass)
     {
-        $mockMapperProvider = $this->getMockWithoutInvokingTheOriginalConstructor(
-            self::MAPPER_NS . 'MapperProvider'
+        $mockMapperFactory = $this->getMockWithoutInvokingTheOriginalConstructor(
+            self::MAPPER_NS . 'MapperFactory'
         );
 
         $mockMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
             self::MAPPER_NS . $mapperClass
         );
 
-        $mockMapperProvider->expects($this->atLeastOnce())
+        $mockMapperFactory->expects($this->atLeastOnce())
             ->method('get' . $mapperClass)
             ->willReturn($mockMapper);
 
-        return $mockMapperProvider;
+        return $mockMapperFactory;
     }
 }

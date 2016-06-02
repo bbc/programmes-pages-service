@@ -162,7 +162,7 @@ class NetworkMapperTest extends BaseMapperTestCase
 
     private function getMapper(): NetworkMapper
     {
-        return new NetworkMapper($this->getMapperProvider([
+        return new NetworkMapper($this->getMapperFactory([
             'ImageMapper' => $this->mockImageMapper,
             'ServiceMapper' => $this->mockServiceMapper,
         ]));

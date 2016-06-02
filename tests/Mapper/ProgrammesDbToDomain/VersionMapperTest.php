@@ -109,7 +109,7 @@ class VersionMapperTest extends BaseMapperTestCase
 
     private function getMapper(): VersionMapper
     {
-        return new VersionMapper($this->getMapperProvider([
+        return new VersionMapper($this->getMapperFactory([
             'ProgrammeMapper' => $this->mockProgrammeMapper,
         ]));
     }

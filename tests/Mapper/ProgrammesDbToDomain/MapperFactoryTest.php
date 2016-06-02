@@ -2,10 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperProvider;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 use PHPUnit_Framework_TestCase;
 
-class MapperProviderTest extends PHPUnit_Framework_TestCase
+class MapperFactoryTest extends PHPUnit_Framework_TestCase
 {
     const MAPPER_NS = 'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\\';
 
@@ -14,16 +14,16 @@ class MapperProviderTest extends PHPUnit_Framework_TestCase
      */
     public function testGetters($mapperName)
     {
-        $mapperProvider = new MapperProvider();
+        $mapperFactory = new MapperFactory();
 
-        $mapper = $mapperProvider->{'get' . $mapperName}();
+        $mapper = $mapperFactory->{'get' . $mapperName}();
 
         // Assert it returns an instance of the correct class
         $this->assertInstanceOf(self::MAPPER_NS . $mapperName, $mapper);
 
         // Requesting the same mapper multiple times reuses the same instance of
         // a mapper, rather than creating a new one every time
-        $this->assertSame($mapper, $mapperProvider->{'get' . $mapperName}());
+        $this->assertSame($mapper, $mapperFactory->{'get' . $mapperName}());
     }
 
     public function mapperNamesDataProvider()

@@ -162,10 +162,10 @@ class ProgrammeMapper extends AbstractMapper
             // TODO Build inheritance hierarchy
 
             // Use default Image
-            return $this->mapperProvider->getImageMapper()->getDefaultImage();
+            return $this->mapperFactory->getImageMapper()->getDefaultImage();
         }
 
-        return $this->mapperProvider->getImageMapper()->getDomainModel($dbProgramme[$key]);
+        return $this->mapperFactory->getImageMapper()->getDomainModel($dbProgramme[$key]);
     }
 
     private function getMasterBrandModel($dbProgramme, $key = 'masterBrand')
@@ -176,7 +176,7 @@ class ProgrammeMapper extends AbstractMapper
             return null;
         }
 
-        return $this->mapperProvider->getMasterBrandMapper()->getDomainModel($dbProgramme[$key]);
+        return $this->mapperFactory->getMasterBrandMapper()->getDomainModel($dbProgramme[$key]);
     }
 
     private function getCategoriesModels($filterType, $dbProgramme, $key = 'categories'): array
@@ -185,7 +185,7 @@ class ProgrammeMapper extends AbstractMapper
             return [];
         }
 
-        $categoryMapper = $this->mapperProvider->getCategoryMapper();
+        $categoryMapper = $this->mapperFactory->getCategoryMapper();
         $categories = [];
         foreach ($dbProgramme[$key] as $dbCategory) {
             if (array_key_exists('type', $dbCategory) && $dbCategory['type'] == $filterType) {

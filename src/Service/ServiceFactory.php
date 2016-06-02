@@ -3,7 +3,7 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use Doctrine\ORM\EntityManager;
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperProvider;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 
 class ServiceFactory
 {
@@ -11,14 +11,14 @@ class ServiceFactory
 
     protected $entityManager;
 
-    protected $mapperProvider;
+    protected $mapperFactory;
 
     public function __construct(
         EntityManager $entityManager,
-        MapperProvider $mapperProvider
+        MapperFactory $mapperFactory
     ) {
         $this->entityManager = $entityManager;
-        $this->mapperProvider = $mapperProvider;
+        $this->mapperFactory = $mapperFactory;
     }
 
     public function getProgrammesService(): ProgrammesService
@@ -26,7 +26,7 @@ class ServiceFactory
         if (!array_key_exists('ProgrammesService', $this->instances)) {
             $this->instances['ProgrammesService'] = new ProgrammesService(
                 $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
-                $this->mapperProvider->getProgrammeMapper()
+                $this->mapperFactory->getProgrammeMapper()
             );
         }
 
@@ -38,7 +38,7 @@ class ServiceFactory
         if (!array_key_exists('RelatedLinksService', $this->instances)) {
             $this->instances['RelatedLinksService'] = new RelatedLinksService(
                 $this->entityManager->getRepository('ProgrammesPagesService:RelatedLink'),
-                $this->mapperProvider->getRelatedLinkMapper()
+                $this->mapperFactory->getRelatedLinkMapper()
             );
         }
 

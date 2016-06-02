@@ -2,7 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-class MapperProvider
+class MapperFactory
 {
     protected $instances = [];
 

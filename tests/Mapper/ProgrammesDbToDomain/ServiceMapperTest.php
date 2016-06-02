@@ -92,7 +92,7 @@ class ServiceMapperTest extends BaseMapperTestCase
 
     private function getMapper(): ServiceMapper
     {
-        return new ServiceMapper($this->getMapperProvider([
+        return new ServiceMapper($this->getMapperFactory([
             'NetworkMapper' => $this->mockNetworkMapper,
         ]));
     }

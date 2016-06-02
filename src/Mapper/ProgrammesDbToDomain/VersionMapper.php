@@ -28,7 +28,7 @@ class VersionMapper extends AbstractMapper
             throw new DataNotFetchedException('All versions must be joined to a ProgrammeItem');
         }
 
-        return $this->mapperProvider->getProgrammeMapper()->getDomainModel($dbVersion[$key]);
+        return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbVersion[$key]);
     }
 
     private function getVersionTypes($dbVersion, $key = 'versionTypes'): array

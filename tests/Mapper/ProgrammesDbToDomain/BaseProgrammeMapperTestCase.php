@@ -42,7 +42,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
     protected function getMapper(): ProgrammeMapper
     {
-        return new ProgrammeMapper($this->getMapperProvider([
+        return new ProgrammeMapper($this->getMapperFactory([
             'ImageMapper' => $this->mockImageMapper,
             'MasterBrandMapper' => $this->mockMasterBrandMapper,
             'CategoryMapper' => $this->mockCategoryMapper,

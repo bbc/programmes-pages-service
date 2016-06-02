@@ -74,22 +74,22 @@ services.yml):
 
 ```yaml
 services:
-    clifton.mapper_provider:
-        class: BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperProvider
+    pps.mapper_factory:
+        class: BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory
         public: false
 
-    clifton.domain_service_factory:
+    pps.domain_service_factory:
         class: BBC\ProgrammesPagesService\Service\ServiceFactory
         arguments:
             - '@doctrine.orm.default_entity_manager'
-            - '@clifton.mapper_provider'
+            - '@pps.mapper_factory'
 
-    clifton.programmes_service:
+    pps.programmes_service:
         class: BBC\ProgrammesPagesService\Service\ProgrammesService
-        factory: [ '@clifton.domain_service_factory', 'getProgrammesService']
+        factory: [ '@pps.domain_service_factory', 'getProgrammesService']
 ```
 
-You can repeat the `clifton.programmes_service` definition, changing the
+You can repeat the `pps.programmes_service` definition, changing the
 'getProgrammesService' method for each of the services you want to access, to
 save you having to request it through the ServiceFactory every time.
 

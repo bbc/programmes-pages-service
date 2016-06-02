@@ -6,10 +6,10 @@ use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 
 abstract class AbstractMapper implements MapperInterface
 {
-    protected $mapperProvider;
+    protected $mapperFactory;
 
-    public function __construct(MapperProvider $mapperProvider)
+    public function __construct(MapperFactory $mapperFactory)
     {
-        $this->mapperProvider = $mapperProvider;
+        $this->mapperFactory = $mapperFactory;
     }
 }

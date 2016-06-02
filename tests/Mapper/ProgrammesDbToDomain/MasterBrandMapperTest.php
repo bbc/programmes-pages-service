@@ -165,7 +165,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
 
     private function getMapper(): MasterBrandMapper
     {
-        return new MasterBrandMapper($this->getMapperProvider([
+        return new MasterBrandMapper($this->getMapperFactory([
             'ImageMapper' => $this->mockImageMapper,
             'NetworkMapper' => $this->mockNetworkMapper,
             'VersionMapper' => $this->mockVersionMapper,

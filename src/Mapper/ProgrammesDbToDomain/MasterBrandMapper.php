@@ -37,10 +37,10 @@ class MasterBrandMapper extends AbstractMapper
     {
         if (!array_key_exists($key, $dbMasterBrand) || is_null($dbMasterBrand[$key])) {
             // Use default Image
-            return $this->mapperProvider->getImageMapper()->getDefaultImage();
+            return $this->mapperFactory->getImageMapper()->getDefaultImage();
         }
 
-        return $this->mapperProvider->getImageMapper()->getDomainModel($dbMasterBrand[$key]);
+        return $this->mapperFactory->getImageMapper()->getDomainModel($dbMasterBrand[$key]);
     }
 
     private function getNetworkModel($dbMasterBrand, $key = 'network')
@@ -49,7 +49,7 @@ class MasterBrandMapper extends AbstractMapper
             return null;
         }
 
-        return $this->mapperProvider->getNetworkMapper()->getDomainModel($dbMasterBrand[$key]);
+        return $this->mapperFactory->getNetworkMapper()->getDomainModel($dbMasterBrand[$key]);
     }
 
     private function getCompetitionWarningModel($dbMasterBrand, $key = 'competitionWarning')
@@ -58,6 +58,6 @@ class MasterBrandMapper extends AbstractMapper
             return null;
         }
 
-        return $this->mapperProvider->getVersionMapper()->getDomainModel($dbMasterBrand[$key]);
+        return $this->mapperFactory->getVersionMapper()->getDomainModel($dbMasterBrand[$key]);
     }
 }

@@ -28,6 +28,6 @@ class ServiceMapper extends AbstractMapper
             return null;
         }
 
-        return $this->mapperProvider->getNetworkMapper()->getDomainModel($dbService[$key]);
+        return $this->mapperFactory->getNetworkMapper()->getDomainModel($dbService[$key]);
     }
 }

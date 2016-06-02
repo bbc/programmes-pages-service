@@ -29,10 +29,10 @@ class NetworkMapper extends AbstractMapper
     {
         if (!array_key_exists($key, $dbMasterBrand) || is_null($dbMasterBrand[$key])) {
             // Use default Image
-            return $this->mapperProvider->getImageMapper()->getDefaultImage();
+            return $this->mapperFactory->getImageMapper()->getDefaultImage();
         }
 
-        return $this->mapperProvider->getImageMapper()->getDomainModel($dbMasterBrand[$key]);
+        return $this->mapperFactory->getImageMapper()->getDomainModel($dbMasterBrand[$key]);
     }
 
     private function getServiceModel($dbNetwork, $key = 'defaultService')
@@ -41,6 +41,6 @@ class NetworkMapper extends AbstractMapper
             return null;
         }
 
-        return $this->mapperProvider->getServiceMapper()->getDomainModel($dbNetwork[$key]);
+        return $this->mapperFactory->getServiceMapper()->getDomainModel($dbNetwork[$key]);
     }
 }
