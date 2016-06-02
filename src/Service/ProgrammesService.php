@@ -43,19 +43,13 @@ class ProgrammesService extends AbstractService
         return $this->mapSingleEntity($dbEntity);
     }
 
-    public function findEpisodeGuideChildrenByPid(
-        Pid $pid,
+    public function findEpisodeGuideChildrenByDbId(
+        int $dbId,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
-        $parent = $this->repository->findByPidFull((string) $pid);
-
-        if (is_null($parent)) {
-            return [];
-        }
-
         $dbEntities = $this->repository->findEpisodeGuideChildren(
-            $parent['id'],
+            $dbId,
             $limit,
             $this->getOffset($limit, $page)
         );
@@ -63,15 +57,9 @@ class ProgrammesService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function countEpisodeGuideChildrenByPid(Pid $pid): int
+    public function countEpisodeGuideChildrenByDbId(int $dbId): int
     {
-        $parent = $this->repository->findByPidFull((string) $pid);
-
-        if (is_null($parent)) {
-            return 0;
-        }
-
-        return $this->repository->countEpisodeGuideChildren($parent['id']);
+        return $this->repository->countEpisodeGuideChildren($dbId);
     }
 
     public function findDescendantsByPid(

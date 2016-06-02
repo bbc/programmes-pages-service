@@ -46,14 +46,14 @@ class CoreEntityRepository extends MaterializedPathRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function findEpisodeGuideChildren($programmeId, $limit, $offset)
+    public function findEpisodeGuideChildren($dbId, $limit, $offset)
     {
         $qText = <<<QUERY
 SELECT programme, image
 FROM ProgrammesPagesService:Programme programme
 LEFT JOIN programme.image image
 LEFT JOIN ProgrammesPagesService:ProgrammeItem pi WITH programme.id = pi.id
-WHERE programme.parent = :parentId
+WHERE programme.parent = :dbId
 AND programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode)
 ORDER BY programme.position DESC, pi.releaseDate DESC, programme.title ASC
 QUERY;
@@ -61,23 +61,23 @@ QUERY;
         $q = $this->getEntityManager()->createQuery($qText)
             ->setMaxResults($limit)
             ->setFirstResult($offset)
-            ->setParameter('parentId', $programmeId);
+            ->setParameter('dbId', $dbId);
 
         $result = $q->getResult(Query::HYDRATE_ARRAY);
         return $this->resolveParents($result);
     }
 
-    public function countEpisodeGuideChildren($programmeId)
+    public function countEpisodeGuideChildren($dbId)
     {
         $qText = <<<QUERY
 SELECT count(programme.id)
 FROM ProgrammesPagesService:Programme programme
-WHERE programme.parent = :parentId
+WHERE programme.parent = :dbId
 AND programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode)
 QUERY;
 
         $q = $this->getEntityManager()->createQuery($qText)
-            ->setParameter('parentId', $programmeId);
+            ->setParameter('dbId', $dbId);
 
         return $q->getSingleScalarResult();
     }
