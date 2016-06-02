@@ -4,77 +4,77 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 class MapperProvider
 {
-    protected $mapperInstances = [];
+    protected $instances = [];
 
     public function getCategoryMapper(): CategoryMapper
     {
-        if (!array_key_exists('CategoryMapper', $this->mapperInstances)) {
-            $this->mapperInstances['CategoryMapper'] = new CategoryMapper();
+        if (!array_key_exists('CategoryMapper', $this->instances)) {
+            $this->instances['CategoryMapper'] = new CategoryMapper();
         }
 
-        return $this->mapperInstances['CategoryMapper'];
+        return $this->instances['CategoryMapper'];
     }
 
     public function getImageMapper(): ImageMapper
     {
-        if (!array_key_exists('ImageMapper', $this->mapperInstances)) {
-            $this->mapperInstances['ImageMapper'] = new ImageMapper();
+        if (!array_key_exists('ImageMapper', $this->instances)) {
+            $this->instances['ImageMapper'] = new ImageMapper();
         }
 
-        return $this->mapperInstances['ImageMapper'];
+        return $this->instances['ImageMapper'];
     }
 
     public function getMasterBrandMapper(): MasterBrandMapper
     {
-        if (!array_key_exists('MasterBrandMapper', $this->mapperInstances)) {
-            $this->mapperInstances['MasterBrandMapper'] = new MasterBrandMapper($this);
+        if (!array_key_exists('MasterBrandMapper', $this->instances)) {
+            $this->instances['MasterBrandMapper'] = new MasterBrandMapper($this);
         }
 
-        return $this->mapperInstances['MasterBrandMapper'];
+        return $this->instances['MasterBrandMapper'];
     }
 
     public function getNetworkMapper(): NetworkMapper
     {
-        if (!array_key_exists('NetworkMapper', $this->mapperInstances)) {
-            $this->mapperInstances['NetworkMapper'] = new NetworkMapper($this);
+        if (!array_key_exists('NetworkMapper', $this->instances)) {
+            $this->instances['NetworkMapper'] = new NetworkMapper($this);
         }
 
-        return $this->mapperInstances['NetworkMapper'];
+        return $this->instances['NetworkMapper'];
     }
 
     public function getProgrammeMapper(): ProgrammeMapper
     {
-        if (!array_key_exists('ProgrammeMapper', $this->mapperInstances)) {
-            $this->mapperInstances['ProgrammeMapper'] = new ProgrammeMapper($this);
+        if (!array_key_exists('ProgrammeMapper', $this->instances)) {
+            $this->instances['ProgrammeMapper'] = new ProgrammeMapper($this);
         }
 
-        return $this->mapperInstances['ProgrammeMapper'];
+        return $this->instances['ProgrammeMapper'];
     }
 
     public function getRelatedLinkMapper(): RelatedLinkMapper
     {
-        if (!array_key_exists('RelatedLinkMapper', $this->mapperInstances)) {
-            $this->mapperInstances['RelatedLinkMapper'] = new RelatedLinkMapper();
+        if (!array_key_exists('RelatedLinkMapper', $this->instances)) {
+            $this->instances['RelatedLinkMapper'] = new RelatedLinkMapper();
         }
 
-        return $this->mapperInstances['RelatedLinkMapper'];
+        return $this->instances['RelatedLinkMapper'];
     }
 
     public function getServiceMapper(): ServiceMapper
     {
-        if (!array_key_exists('ServiceMapper', $this->mapperInstances)) {
-            $this->mapperInstances['ServiceMapper'] = new ServiceMapper($this);
+        if (!array_key_exists('ServiceMapper', $this->instances)) {
+            $this->instances['ServiceMapper'] = new ServiceMapper($this);
         }
 
-        return $this->mapperInstances['ServiceMapper'];
+        return $this->instances['ServiceMapper'];
     }
 
     public function getVersionMapper(): VersionMapper
     {
-        if (!array_key_exists('VersionMapper', $this->mapperInstances)) {
-            $this->mapperInstances['VersionMapper'] = new VersionMapper($this);
+        if (!array_key_exists('VersionMapper', $this->instances)) {
+            $this->instances['VersionMapper'] = new VersionMapper($this);
         }
 
-        return $this->mapperInstances['VersionMapper'];
+        return $this->instances['VersionMapper'];
     }
 }

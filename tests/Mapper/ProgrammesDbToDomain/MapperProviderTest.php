@@ -9,16 +9,34 @@ class MapperProviderTest extends PHPUnit_Framework_TestCase
 {
     const MAPPER_NS = 'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\\';
 
-    public function testGetters()
+    /**
+     * @dataProvider mapperNamesDataProvider
+     */
+    public function testGetters($mapperName)
     {
-        $mp = new MapperProvider();
-        $this->assertInstanceOf(self::MAPPER_NS . 'CategoryMapper', $mp->getCategoryMapper());
-        $this->assertInstanceOf(self::MAPPER_NS . 'ImageMapper', $mp->getImageMapper());
-        $this->assertInstanceOf(self::MAPPER_NS . 'MasterBrandMapper', $mp->getMasterBrandMapper());
-        $this->assertInstanceOf(self::MAPPER_NS . 'NetworkMapper', $mp->getNetworkMapper());
-        $this->assertInstanceOf(self::MAPPER_NS . 'ProgrammeMapper', $mp->getProgrammeMapper());
-        $this->assertInstanceOf(self::MAPPER_NS . 'RelatedLinkMapper', $mp->getRelatedLinkMapper());
-        $this->assertInstanceOf(self::MAPPER_NS . 'ServiceMapper', $mp->getServiceMapper());
-        $this->assertInstanceOf(self::MAPPER_NS . 'VersionMapper', $mp->getVersionMapper());
+        $mapperProvider = new MapperProvider();
+
+        $mapper = $mapperProvider->{'get' . $mapperName}();
+
+        // Assert it returns an instance of the correct class
+        $this->assertInstanceOf(self::MAPPER_NS . $mapperName, $mapper);
+
+        // Requesting the same mapper multiple times reuses the same instance of
+        // a mapper, rather than creating a new one every time
+        $this->assertSame($mapper, $mapperProvider->{'get' . $mapperName}());
+    }
+
+    public function mapperNamesDataProvider()
+    {
+        return [
+            ['CategoryMapper'],
+            ['ImageMapper'],
+            ['MasterBrandMapper'],
+            ['NetworkMapper'],
+            ['ProgrammeMapper'],
+            ['RelatedLinkMapper'],
+            ['ServiceMapper'],
+            ['VersionMapper'],
+        ];
     }
 }
