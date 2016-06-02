@@ -4,26 +4,74 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
+use InvalidArgumentException;
 
 class CoreEntityRepository extends MaterializedPathRepository
 {
+    /**
+     * Get an entity's ID, based upon its PID
+     * Used when a page wants to find out about data related to an entity, but
+     * doesn't need the entity itself.
+     *
+     * @param string $pid        The pid to lookup
+     * @param string $entityType Filter results by "Programme", "Group" or "CoreEntity"
+     * @return int|null
+     */
+    public function findIdByPid(string $pid, string $entityType = 'CoreEntity')
+    {
+        if (!in_array($entityType, ['Programme', 'Group', 'CoreEntity'])) {
+            throw new InvalidArgumentException(sprintf(
+                'Called findByPidFull with an invalid type. Expected one of "%s", "%s" or "%s" but got "%s"',
+                'Programme',
+                'Group',
+                'CoreEntity',
+                $entityType
+            ));
+        }
+
+        $qText = <<<QUERY
+SELECT entity.id
+FROM ProgrammesPagesService:$entityType entity
+WHERE entity.pid = :pid
+QUERY;
+
+        $q = $this->getEntityManager()->createQuery($qText)
+            ->setParameter('pid', $pid);
+
+        $result = $q->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+        return !is_null($result) ? (int) $result : null;
+    }
+
     /**
      * Full Find By Pid
      *
      * This resolves all parents
      *
-     * @param  string $pid
+     * @param string $pid        The pid to lookup
+     * @param string $entityType Filter results by "Programme", "Group" or "CoreEntity" to not filter
      * @return array|null
      */
-    public function findByPidFull($pid)
+    public function findByPidFull(string $pid, string $entityType = 'CoreEntity')
     {
-        $qb = $this->createQueryBuilder('programme')
-            ->addSelect(['image', 'masterBrand', 'network'])
-            ->leftJoin('programme.image', 'image')
-            ->leftJoin('programme.masterBrand', 'masterBrand')
+        if (!in_array($entityType, ['Programme', 'Group', 'CoreEntity'])) {
+            throw new InvalidArgumentException(sprintf(
+                'Called findByPidFull with an invalid type. Expected one of "%s", "%s" or "%s" but got "%s"',
+                'Programme',
+                'Group',
+                'CoreEntity',
+                $entityType
+            ));
+        }
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['entity', 'image', 'masterBrand', 'network'])
+            ->from('ProgrammesPagesService:' . $entityType, 'entity') // For filtering on type
+            ->leftJoin('entity.image', 'image')
+            ->leftJoin('entity.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
-            ->where('programme.pid = :pid')
+            ->where('entity.pid = :pid')
             ->setParameter('pid', $pid);
+
         $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
         return $result ? $this->resolveParents([$result])[0] : $result;
     }
@@ -35,7 +83,6 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->setFirstResult($offset);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
         return $this->resolveParents($result);
     }
 

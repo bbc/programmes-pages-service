@@ -7,7 +7,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class CoreEntityRepositoryFindByPidTest extends AbstractDatabaseTest
+class CoreEntityRepositoryFindByPidFullTest extends AbstractDatabaseTest
 {
     public function testFindByPidFull()
     {

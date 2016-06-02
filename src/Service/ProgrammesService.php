@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+use BBC\ProgrammesPagesService\Domain\Entity\Group;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
 
@@ -34,11 +35,19 @@ class ProgrammesService extends AbstractService
     }
 
     /**
-     * @return CoreEntity|null
+     * @return int|null
+     */
+    public function findIdByPid(Pid $pid)
+    {
+        return $this->repository->findIdByPid($pid, 'Programme');
+    }
+
+    /**
+     * @return Programme|null
      */
     public function findByPidFull(Pid $pid)
     {
-        $dbEntity = $this->repository->findByPidFull($pid);
+        $dbEntity = $this->repository->findByPidFull($pid, 'Programme');
 
         return $this->mapSingleEntity($dbEntity);
     }
