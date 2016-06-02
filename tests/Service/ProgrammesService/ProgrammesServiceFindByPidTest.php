@@ -13,10 +13,10 @@ class ProgrammesServiceFindByPidTest extends AbstractProgrammesServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
-            ->with($this->equalTo($pid))
+            ->with($pid)
             ->willReturn($dbData);
 
-        $result = $this->programmesService()->findByPidFull($pid);
+        $result = $this->service()->findByPidFull($pid);
         $this->assertEquals($this->programmeFromDbData($dbData), $result);
     }
 
@@ -26,10 +26,10 @@ class ProgrammesServiceFindByPidTest extends AbstractProgrammesServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
-            ->with($this->equalTo($pid))
+            ->with($pid)
             ->willReturn(null);
 
-        $result = $this->programmesService()->findByPidFull($pid);
+        $result = $this->service()->findByPidFull($pid);
         $this->assertEquals(null, $result);
     }
 }

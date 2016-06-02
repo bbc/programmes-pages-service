@@ -13,17 +13,17 @@ class ProgrammesServiceFindEpisodeGuideChildrenByPidTest extends AbstractProgram
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
-            ->with($this->equalTo($pid))
+            ->with($pid)
             ->willReturn(['id' => $mockBrandId]);
 
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
         $this->mockRepository->expects($this->once())
             ->method('findEpisodeGuideChildren')
-            ->with($this->equalTo($mockBrandId), $this->equalTo(50), $this->equalTo(0))
+            ->with($mockBrandId, 50, 0)
             ->willReturn($dbData);
 
-        $result = $this->programmesService()->findEpisodeGuideChildrenByPid($pid);
+        $result = $this->service()->findEpisodeGuideChildrenByPid($pid);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 
@@ -34,17 +34,17 @@ class ProgrammesServiceFindEpisodeGuideChildrenByPidTest extends AbstractProgram
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
-            ->with($this->equalTo($pid))
+            ->with($pid)
             ->willReturn(['id' => $mockBrandId]);
 
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
         $this->mockRepository->expects($this->once())
             ->method('findEpisodeGuideChildren')
-            ->with($this->equalTo($mockBrandId), $this->equalTo(5), $this->equalTo(10))
+            ->with($mockBrandId, 5, 10)
             ->willReturn($dbData);
 
-        $result = $this->programmesService()->findEpisodeGuideChildrenByPid($pid, 5, 3);
+        $result = $this->service()->findEpisodeGuideChildrenByPid($pid, 5, 3);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 
@@ -55,15 +55,15 @@ class ProgrammesServiceFindEpisodeGuideChildrenByPidTest extends AbstractProgram
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
-            ->with($this->equalTo($pid))
+            ->with($pid)
             ->willReturn(['id' => $mockBrandId]);
 
         $this->mockRepository->expects($this->once())
             ->method('countEpisodeGuideChildren')
-            ->with($this->equalTo($mockBrandId))
+            ->with($mockBrandId)
             ->willReturn(10);
 
-        $this->assertEquals(10, $this->programmesService()->countEpisodeGuideChildrenByPid($pid));
+        $this->assertEquals(10, $this->service()->countEpisodeGuideChildrenByPid($pid));
     }
 
     public function testFindEpisodeGuideChildrenByPidWithNonExistantPid()
@@ -72,13 +72,13 @@ class ProgrammesServiceFindEpisodeGuideChildrenByPidTest extends AbstractProgram
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
-            ->with($this->equalTo($pid))
+            ->with($pid)
             ->willReturn(null);
 
         $this->mockRepository->expects($this->never())
             ->method('findEpisodeGuideChildren');
 
-        $result = $this->programmesService()->findEpisodeGuideChildrenByPid($pid);
+        $result = $this->service()->findEpisodeGuideChildrenByPid($pid);
         $this->assertEquals([], $result);
 
     }
@@ -89,12 +89,12 @@ class ProgrammesServiceFindEpisodeGuideChildrenByPidTest extends AbstractProgram
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
-            ->with($this->equalTo($pid))
+            ->with($pid)
             ->willReturn(null);
 
         $this->mockRepository->expects($this->never())
             ->method('countEpisodeGuideChildren');
 
-        $this->assertEquals(0, $this->programmesService()->countEpisodeGuideChildrenByPid($pid));
+        $this->assertEquals(0, $this->service()->countEpisodeGuideChildrenByPid($pid));
     }
 }

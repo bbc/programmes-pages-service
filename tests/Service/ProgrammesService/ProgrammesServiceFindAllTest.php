@@ -10,10 +10,10 @@ class ProgrammesServiceFindAllTest extends AbstractProgrammesServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findAllWithParents')
-            ->with($this->equalTo(50), $this->equalTo(0))
+            ->with(50, 0)
             ->willReturn($dbData);
 
-        $result = $this->programmesService()->findAll();
+        $result = $this->service()->findAll();
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 
@@ -23,10 +23,10 @@ class ProgrammesServiceFindAllTest extends AbstractProgrammesServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findAllWithParents')
-            ->with($this->equalTo(5), $this->equalTo(10))
+            ->with(5, 10)
             ->willReturn($dbData);
 
-        $result = $this->programmesService()->findAll(5, 3);
+        $result = $this->service()->findAll(5, 3);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 
@@ -36,6 +36,6 @@ class ProgrammesServiceFindAllTest extends AbstractProgrammesServiceTest
             ->method('countAll')
             ->willReturn(10);
 
-        $this->assertEquals(10, $this->programmesService()->countAll());
+        $this->assertEquals(10, $this->service()->countAll());
     }
 }
