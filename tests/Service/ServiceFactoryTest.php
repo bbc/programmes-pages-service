@@ -10,60 +10,72 @@ use PHPUnit_Framework_TestCase;
  */
 class ServiceFactoryTest extends PHPUnit_Framework_TestCase
 {
-    private $mockEntityManager;
+    const SERVICE_NS = 'BBC\ProgrammesPagesService\Service\\';
 
-    private $mockMapperProvider;
+    const MAPPER_NS = 'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\\';
 
-    public function setUp()
+    const ENTITY_REPOSITORY_NS = 'BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\\';
+
+    /**
+     * @dataProvider serviceNamesDataProvider
+     */
+    public function testGetters($serviceName, $expectedRepository, $expectedMapper)
     {
-        $this->mockEntityManager = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $serviceFactory = new ServiceFactory(
+            $this->entityManager($expectedRepository),
+            $this->mapperProvider($expectedMapper)
+        );
+
+        $service = $serviceFactory->{'get' . $serviceName}();
+
+        // Assert it returns an instance of the correct class
+        $this->assertInstanceOf(self::SERVICE_NS . $serviceName, $service);
+
+        // Requesting the same service multiple times reuses the same instance
+        // of a service, rather than creating a new one every time
+        $this->assertSame($service, $serviceFactory->{'get' . $serviceName}());
+    }
+
+    public function serviceNamesDataProvider()
+    {
+        return [
+            ['ProgrammesService', 'CoreEntity', 'ProgrammeMapper'],
+            ['RelatedLinksService', 'RelatedLink', 'RelatedLinkMapper'],
+        ];
+    }
+
+    private function entityManager($repoName)
+    {
+        $mockEntityManager = $this->getMockWithoutInvokingTheOriginalConstructor(
             'Doctrine\ORM\EntityManager'
         );
 
-        $this->mockMapperProvider = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperProvider'
-        );
-    }
-
-    public function testGetProgrammesService()
-    {
-        $this->setUpEntityManager(
-            'ProgrammesPagesService:CoreEntity',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository'
+        $mockRepo = $this->getMockWithoutInvokingTheOriginalConstructor(
+            self::ENTITY_REPOSITORY_NS . $repoName . 'Repository'
         );
 
-        $this->setUpMapperProvider(
-            'getProgrammeMapper',
-            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper'
-        );
-
-        $serviceFactory = new ServiceFactory(
-            $this->mockEntityManager,
-            $this->mockMapperProvider
-        );
-
-        $this->assertInstanceOf(
-            'BBC\ProgrammesPagesService\Service\ProgrammesService',
-            $serviceFactory->getProgrammesService()
-        );
-    }
-
-    private function setUpEntityManager($repoName, $repoClass)
-    {
-        $mockRepo = $this->getMockWithoutInvokingTheOriginalConstructor($repoClass);
-
-        $this->mockEntityManager->expects($this->once())
+        $mockEntityManager->expects($this->atLeastOnce())
             ->method('getRepository')
-            ->with($this->equalTo($repoName))
+            ->with('ProgrammesPagesService:' . $repoName)
             ->willReturn($mockRepo);
+
+        return $mockEntityManager;
     }
 
-    private function setUpMapperProvider($method, $mapperClass)
+    private function mapperProvider($mapperClass)
     {
-        $mockMapper = $this->getMockWithoutInvokingTheOriginalConstructor($mapperClass);
+        $mockMapperProvider = $this->getMockWithoutInvokingTheOriginalConstructor(
+            self::MAPPER_NS . 'MapperProvider'
+        );
 
-        $this->mockMapperProvider->expects($this->once())
-            ->method($method)
+        $mockMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+            self::MAPPER_NS . $mapperClass
+        );
+
+        $mockMapperProvider->expects($this->atLeastOnce())
+            ->method('get' . $mapperClass)
             ->willReturn($mockMapper);
+
+        return $mockMapperProvider;
     }
 }

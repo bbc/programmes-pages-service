@@ -7,7 +7,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\RelatedLinkRepository")
  */
 class RelatedLink
 {

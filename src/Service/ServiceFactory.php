@@ -7,6 +7,8 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperProvider;
 
 class ServiceFactory
 {
+    protected $instances = [];
+
     protected $entityManager;
 
     protected $mapperProvider;
@@ -21,9 +23,25 @@ class ServiceFactory
 
     public function getProgrammesService(): ProgrammesService
     {
-        return new ProgrammesService(
-            $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
-            $this->mapperProvider->getProgrammeMapper()
-        );
+        if (!array_key_exists('ProgrammesService', $this->instances)) {
+            $this->instances['ProgrammesService'] = new ProgrammesService(
+                $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
+                $this->mapperProvider->getProgrammeMapper()
+            );
+        }
+
+        return $this->instances['ProgrammesService'];
+    }
+
+    public function getRelatedLinksService(): RelatedLinksService
+    {
+        if (!array_key_exists('RelatedLinksService', $this->instances)) {
+            $this->instances['RelatedLinksService'] = new RelatedLinksService(
+                $this->entityManager->getRepository('ProgrammesPagesService:RelatedLink'),
+                $this->mapperProvider->getRelatedLinkMapper()
+            );
+        }
+
+        return $this->instances['RelatedLinksService'];
     }
 }
