@@ -21,6 +21,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Episode(
+            0,
             $pid,
             'Title',
             'Search Title',
@@ -37,6 +38,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             13
         );
 
+        $this->assertEquals(0, $programme->getDbId());
         $this->assertEquals($pid, $programme->getPid());
         $this->assertEquals('Title', $programme->getTitle());
         $this->assertEquals('Search Title', $programme->getSearchTitle());
@@ -72,6 +74,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $streamableUntil = new DateTimeImmutable();
 
         $programme = new Episode(
+            0,
             $pid,
             'Title',
             'Search Title',
@@ -117,6 +120,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Episode(
+            0,
             $pid,
             'Title',
             'Search Title',

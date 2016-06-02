@@ -100,6 +100,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         array $formats = []
     ) {
         return new Series(
+            1,
             new Pid($pid),
             'Title',
             'Search Title',

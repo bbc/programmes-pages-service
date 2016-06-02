@@ -20,6 +20,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Brand(
+            0,
             $pid,
             'Title',
             'Search Title',
@@ -38,6 +39,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             false
         );
 
+        $this->assertEquals(0, $programme->getDbId());
         $this->assertEquals($pid, $programme->getPid());
         $this->assertEquals('Title', $programme->getTitle());
         $this->assertEquals('Search Title', $programme->getSearchTitle());
@@ -73,6 +75,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $format = new Format('Title', 'url_key');
 
         $programme = new Brand(
+            0,
             $pid,
             'Title',
             'Search Title',
@@ -117,6 +120,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Brand(
+            0,
             $pid,
             'Title',
             'Search Title',
@@ -152,6 +156,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Brand(
+            0,
             $pid,
             'Title',
             'Search Title',

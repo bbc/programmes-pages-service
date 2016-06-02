@@ -10,39 +10,40 @@ abstract class ProgrammeContainer extends Programme
     /**
      * @var int
      */
-    protected $aggregatedBroadcastsCount;
+    private $aggregatedBroadcastsCount;
 
     /**
      * @var int
      */
-    protected $aggregatedEpisodesCount;
+    private $aggregatedEpisodesCount;
 
     /**
      * @var int
      */
-    protected $availableClipsCount;
+    private $availableClipsCount;
 
     /**
      * @var int
      */
-    protected $availableEpisodesCount;
+    private $availableEpisodesCount;
 
     /**
      * @var int
      */
-    protected $availableGalleriesCount;
+    private $availableGalleriesCount;
 
     /**
      * @var string
      */
-    protected $isPodcastable;
+    private $isPodcastable;
 
     /**
      * @var int|null
      */
-    protected $expectedChildCount;
+    private $expectedChildCount;
 
     public function __construct(
+        int $dbId,
         Pid $pid,
         string $title,
         string $searchTitle,
@@ -68,6 +69,7 @@ abstract class ProgrammeContainer extends Programme
         int $expectedChildCount = null
     ) {
         parent::__construct(
+            $dbId,
             $pid,
             $title,
             $searchTitle,

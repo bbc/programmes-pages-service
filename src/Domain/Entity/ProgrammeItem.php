@@ -13,24 +13,25 @@ abstract class ProgrammeItem extends Programme
     /**
      * @var string
      */
-    protected $mediaType;
+    private $mediaType;
 
     /**
      * @var int|null
      */
-    protected $duration;
+    private $duration;
 
     /**
      * @var DateTimeImmutable|null
      */
-    protected $streamableFrom;
+    private $streamableFrom;
 
     /**
      * @var DateTimeImmutable|null
      */
-    protected $streamableUntil;
+    private $streamableUntil;
 
     public function __construct(
+        int $dbId,
         Pid $pid,
         string $title,
         string $searchTitle,
@@ -63,6 +64,7 @@ abstract class ProgrammeItem extends Programme
         }
 
         parent::__construct(
+            $dbId,
             $pid,
             $title,
             $searchTitle,

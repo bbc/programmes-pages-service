@@ -4,48 +4,48 @@ namespace Tests\BBC\ProgrammesPagesService\Service\RelatedLinksService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
-class RelatedLinksServiceFindByRelatedToProgrammeTest extends AbstractRelatedLinksServiceTest
+class RelatedLinksServiceFindByRelatedToProgrammeDbIdTest extends AbstractRelatedLinksServiceTest
 {
-    public function testFindByRelatedToProgrammeDefaultPagination()
+    public function testFindByRelatedToProgrammeDbIdDefaultPagination()
     {
-        $pid = new Pid('b010t19z');
+        $dbId = 101;
 
         $dbData = [['title' => 'RelatedLink1'], ['title' => 'RelatedLink2']];
 
         $this->mockRepository->expects($this->once())
             ->method('findByRelatedTo')
-            ->with([$pid], 'programme', 50, 0)
+            ->with([$dbId], 'programme', 50, 0)
             ->willReturn($dbData);
 
-        $result = $this->service()->findByRelatedToProgramme($pid);
+        $result = $this->service()->findByRelatedToProgrammeDbId($dbId);
         $this->assertEquals($this->relatedLinksFromDbData($dbData), $result);
     }
 
-    public function testFindByRelatedToProgrammeCustomPagination()
+    public function testFindByRelatedToProgrammeDbIdCustomPagination()
     {
-        $pid = new Pid('b010t19z');
+        $dbId = 101;
 
         $dbData = [['title' => 'RelatedLink1'], ['title' => 'RelatedLink2']];
 
         $this->mockRepository->expects($this->once())
             ->method('findByRelatedTo')
-            ->with([$pid], 'programme', 5, 10)
+            ->with([$dbId], 'programme', 5, 10)
             ->willReturn($dbData);
 
-        $result = $this->service()->findByRelatedToProgramme($pid, 5, 3);
+        $result = $this->service()->findByRelatedToProgrammeDbId($dbId, 5, 3);
         $this->assertEquals($this->relatedLinksFromDbData($dbData), $result);
     }
 
-    public function testFindByRelatedToProgrammeWithNonExistantPid()
+    public function testFindByRelatedToProgrammeDbIdWithNonExistantPid()
     {
-        $pid = new Pid('qqqqqqqq');
+        $dbId = 999;
 
         $this->mockRepository->expects($this->once())
             ->method('findByRelatedTo')
-            ->with([$pid], 'programme', 5, 10)
+            ->with([$dbId], 'programme', 5, 10)
             ->willReturn([]);
 
-        $result = $this->service()->findByRelatedToProgramme($pid, 5, 3);
+        $result = $this->service()->findByRelatedToProgrammeDbId($dbId, 5, 3);
         $this->assertEquals([], $result);
     }
 }

@@ -16,13 +16,13 @@ class RelatedLinksService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findByRelatedToProgramme(
-        Pid $pid,
+    public function findByRelatedToProgrammeDbId(
+        int $dbid,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByRelatedTo(
-            [$pid],
+            [$dbid],
             'programme',
             $limit,
             $this->getOffset($limit, $page)

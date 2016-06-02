@@ -43,6 +43,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         ];
 
         $expectedEntity = new Brand(
+            1,
             new Pid('b010t19z'),
             'Title',
             'Search Title',
@@ -100,6 +101,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         ];
 
         $expectedEntity = new Series(
+            1,
             new Pid('b010t19z'),
             'Title',
             'Search Title',
@@ -157,6 +159,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         ];
 
         $expectedEntity = new Episode(
+            1,
             new Pid('b010t19z'),
             'Title',
             'Search Title',
@@ -210,6 +213,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         ];
 
         $expectedEntity = new Clip(
+            1,
             new Pid('b010t19z'),
             'Title',
             'Search Title',
@@ -239,7 +243,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
     {
         $dbEntityArray = [
             'type' => 'series',
-            'id' => '1',
+            'id' => '2',
             'pid' => 'b010t19z',
             'title' => 'Title',
             'searchTitle' => 'Search Title',
@@ -286,6 +290,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         ];
 
         $expectedEntity = new Series(
+            2,
             new Pid('b010t19z'),
             'Title',
             'Search Title',
@@ -303,6 +308,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             15,
             false,
             new Brand(
+                1,
                 new Pid('b010t19z'),
                 'Title',
                 'Search Title',

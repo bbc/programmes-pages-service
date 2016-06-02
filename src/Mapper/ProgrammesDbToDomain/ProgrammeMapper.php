@@ -37,6 +37,7 @@ class ProgrammeMapper extends AbstractMapper
     private function getBrandModel(array $dbProgramme): Brand
     {
         return new Brand(
+            $dbProgramme['id'],
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
@@ -66,6 +67,7 @@ class ProgrammeMapper extends AbstractMapper
     private function getSeriesModel(array $dbProgramme): Series
     {
         return new Series(
+            $dbProgramme['id'],
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
@@ -95,6 +97,7 @@ class ProgrammeMapper extends AbstractMapper
     private function getEpisodeModel(array $dbProgramme): Episode
     {
         return new Episode(
+            $dbProgramme['id'],
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
@@ -124,6 +127,7 @@ class ProgrammeMapper extends AbstractMapper
     private function getClipModel(array $dbProgramme): Clip
     {
         return new Clip(
+            $dbProgramme['id'],
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],

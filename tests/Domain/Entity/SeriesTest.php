@@ -19,6 +19,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Series(
+            0,
             $pid,
             'Title',
             'Search Title',
@@ -37,6 +38,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             false
         );
 
+        $this->assertEquals(0, $programme->getDbId());
         $this->assertEquals($pid, $programme->getPid());
         $this->assertEquals('Title', $programme->getTitle());
         $this->assertEquals('Search Title', $programme->getSearchTitle());
@@ -72,6 +74,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $format = new Format('Title', 'url_key');
 
         $programme = new Series(
+            0,
             $pid,
             'Title',
             'Search Title',

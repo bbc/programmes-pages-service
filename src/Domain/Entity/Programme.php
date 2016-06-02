@@ -9,87 +9,92 @@ use InvalidArgumentException;
 abstract class Programme
 {
     /**
+     * @var int
+     */
+    private $dbId;
+
+    /**
      * @var Pid
      */
-    protected $pid;
+    private $pid;
 
     /**
      * @var string
      */
-    protected $title;
+    private $title;
 
     /**
      * @var string
      */
-    protected $searchTitle;
+    private $searchTitle;
 
     /**
      * @var string
      */
-
-    protected $shortSynopsis;
+    private $shortSynopsis;
 
     /**
      * @var string
      */
-    protected $longestSynopsis;
+    private $longestSynopsis;
 
     /**
      * @var Image
      */
-    protected $image;
+    private $image;
 
     /**
      * @var int
      */
-    protected $promotionsCount;
+    private $promotionsCount;
 
     /**
      * @var int
      */
-    protected $relatedLinksCount;
+    private $relatedLinksCount;
 
     /**
      * @var bool
      */
-    protected $hasSupportingContent;
+    private $hasSupportingContent;
 
     /**
      * @var bool
      */
-    protected $isStreamable;
+    private $isStreamable;
 
     /**
      * @var Programme|null
      */
-    protected $parent;
+    private $parent;
 
     /**
      * @var PartialDate|null
      */
-    protected $releaseDate;
+    private $releaseDate;
 
     /**
      * @var int|null
      */
-    protected $position;
+    private $position;
 
     /**
      * @var MasterBrand|null
      */
-    protected $masterBrand;
+    private $masterBrand;
 
     /**
      * @var Genres[]
      */
-    protected $genres;
+    private $genres;
 
     /**
      * @var Formats[]
      */
-    protected $formats;
+    private $formats;
 
     public function __construct(
+        int $dbId,
         Pid $pid,
         string $title,
         string $searchTitle,
@@ -110,6 +115,7 @@ abstract class Programme
         $this->assertArrayOfType('genres', $genres, Genre::CLASS);
         $this->assertArrayOfType('formats', $formats, Format::CLASS);
 
+        $this->dbId = $dbId;
         $this->pid = $pid;
         $this->title = $title;
         $this->searchTitle = $searchTitle;
@@ -126,6 +132,22 @@ abstract class Programme
         $this->masterBrand = $masterBrand;
         $this->genres = $genres;
         $this->formats = $formats;
+    }
+
+    /**
+     * Database ID. Yes, this is a leaky abstraction as Database Ids are
+     * implementation details of how we're storing data, rather than anything
+     * intrinsic to a PIPS entity. However if we keep it pure then when we look
+     * up things like "All related links that belong to a Programme" then we
+     * have to use the Programme PID as the key, which requires a join to the
+     * CoreEntity table. This join can be avoided if we already know the Foreign
+     * Key value on the Related Links table (i.e. the Programme ID field).
+     * Removing these joins shall result in faster DB queries which is more
+     * important that keeping a pure Domain model.
+     */
+    public function getDbId(): int
+    {
+        return $this->dbId;
     }
 
     public function getPid(): Pid

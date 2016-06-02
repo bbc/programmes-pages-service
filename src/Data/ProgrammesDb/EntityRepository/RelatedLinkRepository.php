@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 
 class RelatedLinkRepository extends EntityRepository
 {
-    public function findByRelatedTo(array $pids, string $type, int $limit, int $offset)
+    public function findByRelatedTo(array $dbIds, string $type, int $limit, int $offset)
     {
         $columnNameLookup = [
             'programme' => 'relatedToCoreEntity',
@@ -17,11 +17,10 @@ class RelatedLinkRepository extends EntityRepository
         $columnName = $columnNameLookup[$type] ?? 'relatedToCoreEntity';
 
         $qb = $this->createQueryBuilder('relatedLink')
-            ->innerJoin('relatedLink.' . $columnName, 'relatedTo')
-            ->andWhere('relatedTo.pid IN (:pids)')
+            ->andWhere('relatedLink.' . $columnName . ' IN (:dbIds)')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
-            ->setParameter('pids', $pids);
+            ->setParameter('dbIds', $dbIds);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

@@ -11,20 +11,21 @@ class Episode extends ProgrammeItem
     /**
      * @var int
      */
-    protected $aggregatedBroadcastsCount;
+    private $aggregatedBroadcastsCount;
 
     /**
      * @var int
      */
-    protected $availableClipsCount;
+    private $availableClipsCount;
 
     /**
      * @var int
      */
-    protected $availableGalleriesCount;
+    private $availableGalleriesCount;
 
 
     public function __construct(
+        int $dbId,
         Pid $pid,
         string $title,
         string $searchTitle,
@@ -50,6 +51,7 @@ class Episode extends ProgrammeItem
         DateTimeImmutable $streamableUntil = null
     ) {
         parent::__construct(
+            $dbId,
             $pid,
             $title,
             $searchTitle,
