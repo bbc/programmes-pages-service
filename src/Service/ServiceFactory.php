@@ -44,4 +44,16 @@ class ServiceFactory
 
         return $this->instances['RelatedLinksService'];
     }
+
+    public function getVersionsService(): VersionsService
+    {
+        if (!array_key_exists('VersionsService', $this->instances)) {
+            $this->instances['VersionsService'] = new VersionsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Version'),
+                $this->mapperFactory->getVersionMapper()
+            );
+        }
+
+        return $this->instances['VersionsService'];
+    }
 }
