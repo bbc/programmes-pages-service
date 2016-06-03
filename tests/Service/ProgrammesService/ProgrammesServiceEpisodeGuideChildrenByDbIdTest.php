@@ -14,7 +14,7 @@ class ProgrammesServiceFindEpisodeGuideChildrenByDbIdTest extends AbstractProgra
 
         $this->mockRepository->expects($this->once())
             ->method('findEpisodeGuideChildren')
-            ->with($dbId, 50, 0)
+            ->with($dbId, 300, 0)
             ->willReturn($dbData);
 
         $result = $this->service()->findEpisodeGuideChildrenByDbId($dbId);
@@ -54,10 +54,10 @@ class ProgrammesServiceFindEpisodeGuideChildrenByDbIdTest extends AbstractProgra
 
         $this->mockRepository->expects($this->once())
             ->method('findEpisodeGuideChildren')
-            ->with($dbId, 50, 0)
+            ->with($dbId, 5, 10)
             ->willReturn([]);
 
-        $result = $this->service()->findEpisodeGuideChildrenByDbId($dbId);
+        $result = $this->service()->findEpisodeGuideChildrenByDbId($dbId, 5, 3);
         $this->assertEquals([], $result);
 
     }

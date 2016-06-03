@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 abstract class AbstractService
 {
     const DEFAULT_PAGE = 1;
-    const DEFAULT_LIMIT = 50;
+    const DEFAULT_LIMIT = 300;
 
     /**
      * @var MapperInterface

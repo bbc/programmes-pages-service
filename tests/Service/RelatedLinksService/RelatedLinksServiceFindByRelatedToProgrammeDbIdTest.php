@@ -14,7 +14,7 @@ class RelatedLinksServiceFindByRelatedToProgrammeDbIdTest extends AbstractRelate
 
         $this->mockRepository->expects($this->once())
             ->method('findByRelatedTo')
-            ->with([$dbId], 'programme', 50, 0)
+            ->with([$dbId], 'programme', 300, 0)
             ->willReturn($dbData);
 
         $result = $this->service()->findByRelatedToProgrammeDbId($dbId);

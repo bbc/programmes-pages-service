@@ -10,7 +10,7 @@ class ProgrammesServiceFindAllTest extends AbstractProgrammesServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findAllWithParents')
-            ->with(50, 0)
+            ->with(300, 0)
             ->willReturn($dbData);
 
         $result = $this->service()->findAll();
