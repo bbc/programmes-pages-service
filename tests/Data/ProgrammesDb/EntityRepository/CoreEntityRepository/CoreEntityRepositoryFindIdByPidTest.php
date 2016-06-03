@@ -13,8 +13,7 @@ class CoreEntityRepositoryFindIdByPidTest extends AbstractDatabaseTest
     {
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        $expectedId = $repo->findOneByPid('b00swyx1')->getId();
-        $this->resetDbQueryLogger();
+        $expectedId = $this->getCoreEntityDbId('b00swyx1');
 
         $id = $repo->findIdByPid('b00swyx1');
         $this->assertSame($expectedId, $id);

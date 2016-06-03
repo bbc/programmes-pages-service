@@ -17,8 +17,7 @@ class CoreEntityRepositoryFindEpisodeGuideChildrenTest extends AbstractDatabaseT
     {
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        $id = $repo->findOneByPid($pid)->getId();
-        $this->resetDbQueryLogger();
+        $id = $this->getCoreEntityDbId($pid);
 
         $entities = $repo->findEpisodeGuideChildren($id, $limit, $offset);
         $this->assertEquals($expectedPids, array_column($entities, 'pid'));
@@ -53,8 +52,7 @@ class CoreEntityRepositoryFindEpisodeGuideChildrenTest extends AbstractDatabaseT
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $id = $repo->findOneByPid('b010t19z')->getId();
-        $this->resetDbQueryLogger();
+        $id = $this->getCoreEntityDbId('b010t19z');
 
         $this->assertEquals(3, $repo->countEpisodeGuideChildren($id));
 

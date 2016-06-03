@@ -58,4 +58,18 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
 
         return self::$entityManager;
     }
+
+    protected function getCoreEntityDbId($coreEntityPid)
+    {
+        // Disable the logger for this call as we don't want to count it
+        $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = false;
+
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+        $id = $repo->findOneByPid($coreEntityPid)->getId();
+
+        // Re enable the SQL logger
+        $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = true;
+
+        return $id;
+    }
 }
