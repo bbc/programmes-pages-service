@@ -9,7 +9,6 @@ class ProgrammesServiceFindEpisodeGuideChildrenByDbIdTest extends AbstractProgra
     public function testFindEpisodeGuideChildrenByDbIdDefaultPagination()
     {
         $dbId = 1;
-
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
         $this->mockRepository->expects($this->once())
@@ -24,7 +23,6 @@ class ProgrammesServiceFindEpisodeGuideChildrenByDbIdTest extends AbstractProgra
     public function testFindEpisodeGuideChildrenByDbIdCustomPagination()
     {
         $dbId = 1;
-
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
         $this->mockRepository->expects($this->once())

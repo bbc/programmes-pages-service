@@ -71,6 +71,18 @@ class ProgrammesService extends AbstractService
         return $this->repository->countEpisodeGuideChildren($dbId);
     }
 
+    public function findNextSiblingByProgramme(Programme $programme)
+    {
+        $dbEntities = $this->repository->findImmediateSibling($programme, 'next');
+        return $this->mapSingleEntity($dbEntities);
+    }
+
+    public function findPreviousSiblingByProgramme(Programme $programme)
+    {
+        $dbEntities = $this->repository->findImmediateSibling($programme, 'previous');
+        return $this->mapSingleEntity($dbEntities);
+    }
+
     public function findDescendantsByPid(
         Pid $pid,
         int $limit = self::DEFAULT_LIMIT,

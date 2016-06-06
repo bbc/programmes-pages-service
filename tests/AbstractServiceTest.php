@@ -31,4 +31,11 @@ abstract class AbstractServiceTest extends PHPUnit_Framework_TestCase
                 return call_user_func([$this, $entityBuilderMethod], $entity);
             }));
     }
+
+    protected function mockEntity($name)
+    {
+        return $this->getMockWithoutInvokingTheOriginalConstructor(
+            self::ENTITY_NS . $name
+        );
+    }
 }
