@@ -81,11 +81,11 @@ class ClipTest extends PHPUnit_Framework_TestCase
             true,
             MediaTypeEnum::UNKNOWN,
             $parent,
-            $releaseDate,
             101,
             $masterBrand,
             [$genre],
             [$format],
+            $releaseDate,
             1001,
             $streamableFrom,
             $streamableUntil

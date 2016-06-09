@@ -6,7 +6,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
-use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use InvalidArgumentException;
@@ -69,7 +68,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $masterBrand = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
         );
-        $releaseDate = new PartialDate(2015, 01, 02);
 
         $genre = new Genre('Title', 'url_key');
         $format = new Format('Title', 'url_key');
@@ -93,7 +91,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
             15,
             false,
             $parent,
-            $releaseDate,
             101,
             $masterBrand,
             [$genre],
@@ -102,7 +99,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($parent, $programme->getParent());
-        $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(101, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
@@ -138,7 +134,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
             15,
             false,
             null,
-            null,
             101,
             null,
             ['wrongwrongwrong'],
@@ -173,7 +168,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
             14,
             15,
             false,
-            null,
             null,
             101,
             null,

@@ -6,7 +6,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
-use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use PHPUnit_Framework_TestCase;
@@ -68,7 +67,6 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $masterBrand = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
         );
-        $releaseDate = new PartialDate(2015, 01, 02);
 
         $genre = new Genre('Title', 'url_key');
         $format = new Format('Title', 'url_key');
@@ -92,7 +90,6 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             15,
             false,
             $parent,
-            $releaseDate,
             101,
             $masterBrand,
             [$genre],
@@ -101,7 +98,6 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($parent, $programme->getParent());
-        $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(101, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());

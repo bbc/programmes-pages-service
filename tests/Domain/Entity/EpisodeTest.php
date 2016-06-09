@@ -90,22 +90,22 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             12,
             13,
             $parent,
-            $releaseDate,
             101,
             $masterBrand,
             [$genre],
             [$format],
+            $releaseDate,
             1001,
             $streamableFrom,
             $streamableUntil
         );
 
         $this->assertEquals($parent, $programme->getParent());
-        $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(101, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());
+        $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(1001, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());
