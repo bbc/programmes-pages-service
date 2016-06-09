@@ -68,8 +68,8 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
         );
 
-        $genre = new Genre('Title', 'url_key');
-        $format = new Format('Title', 'url_key');
+        $genre = new Genre('id', 'Title', 'url_key');
+        $format = new Format('id2', 'Title', 'url_key');
 
         $programme = new Series(
             0,

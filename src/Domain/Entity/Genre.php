@@ -7,6 +7,11 @@ class Genre
     /**
      * @var string
      */
+    private $id;
+
+    /**
+     * @var string
+     */
     private $title;
 
     /**
@@ -20,13 +25,20 @@ class Genre
     private $parent;
 
     public function __construct(
+        string $id,
         string $title,
         string $urlKey,
         Genre $parent = null
     ) {
+        $this->id = $id;
         $this->title = $title;
         $this->urlKey = $urlKey;
         $this->parent = $parent;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function getTitle(): string
