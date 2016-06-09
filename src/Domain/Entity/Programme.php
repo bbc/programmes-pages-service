@@ -3,7 +3,6 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use InvalidArgumentException;
 
 abstract class Programme
@@ -74,11 +73,6 @@ abstract class Programme
     private $parent;
 
     /**
-     * @var PartialDate|null
-     */
-    private $releaseDate;
-
-    /**
      * @var int|null
      */
     private $position;
@@ -112,7 +106,6 @@ abstract class Programme
         bool $hasSupportingContent,
         bool $isStreamable,
         Programme $parent = null,
-        PartialDate $releaseDate = null,
         int $position = null,
         MasterBrand $masterBrand = null,
         array $genres = [],
@@ -134,7 +127,6 @@ abstract class Programme
         $this->hasSupportingContent = $hasSupportingContent;
         $this->isStreamable = $isStreamable;
         $this->parent = $parent;
-        $this->releaseDate = $releaseDate;
         $this->position = $position;
         $this->masterBrand = $masterBrand;
         $this->genres = $genres;
@@ -221,14 +213,6 @@ abstract class Programme
     public function getParent()
     {
         return $this->parent;
-    }
-
-    /**
-     * @return PartialDate|null
-     */
-    public function getReleaseDate()
-    {
-        return $this->releaseDate;
     }
 
     /**

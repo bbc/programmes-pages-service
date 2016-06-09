@@ -16,6 +16,11 @@ abstract class ProgrammeItem extends Programme
     private $mediaType;
 
     /**
+     * @var PartialDate|null
+     */
+    private $releaseDate;
+
+    /**
      * @var int|null
      */
     private $duration;
@@ -45,11 +50,11 @@ abstract class ProgrammeItem extends Programme
         bool $isStreamable,
         string $mediaType,
         Programme $parent = null,
-        PartialDate $releaseDate = null,
         int $position = null,
         MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
+        PartialDate $releaseDate = null,
         int $duration = null,
         DateTimeImmutable $streamableFrom = null,
         DateTimeImmutable $streamableUntil = null
@@ -78,7 +83,6 @@ abstract class ProgrammeItem extends Programme
             $hasSupportingContent,
             $isStreamable,
             $parent,
-            $releaseDate,
             $position,
             $masterBrand,
             $genres,
@@ -86,6 +90,7 @@ abstract class ProgrammeItem extends Programme
         );
 
         $this->mediaType = $mediaType;
+        $this->releaseDate = $releaseDate;
         $this->duration = $duration;
         $this->streamableFrom = $streamableFrom;
         $this->streamableUntil = $streamableUntil;
@@ -94,6 +99,14 @@ abstract class ProgrammeItem extends Programme
     public function getMediaType(): string
     {
         return $this->mediaType;
+    }
+
+    /**
+     * @return PartialDate|null
+     */
+    public function getReleaseDate()
+    {
+        return $this->releaseDate;
     }
 
     /**

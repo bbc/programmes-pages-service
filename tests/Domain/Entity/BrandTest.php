@@ -71,11 +71,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $masterBrand = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
         $releaseDate = new PartialDate(2015, 01, 02);
 
         $genre = new Genre('Title', 'url_key');
@@ -101,7 +97,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
             15,
             false,
             $parent,
-            $releaseDate,
             101,
             $masterBrand,
             [$genre],
@@ -110,7 +105,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($parent, $programme->getParent());
-        $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(101, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals($alternativeImage, $programme->getAlternativeImage());
@@ -148,7 +142,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
             15,
             false,
             null,
-            null,
             101,
             null,
             ['wrongwrongwrong'],
@@ -184,7 +177,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
             14,
             15,
             false,
-            null,
             null,
             101,
             null,
