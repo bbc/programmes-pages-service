@@ -20,7 +20,7 @@ class DatePartialTypeTest extends PHPUnit_Framework_TestCase
         }
 
         $this->type = Type::getType('date_partial');
-        $this->platform = $this->getMock('Doctrine\DBAL\Platforms\AbstractPlatform');
+        $this->platform = $this->createMock('Doctrine\DBAL\Platforms\AbstractPlatform');
     }
 
     public function testBasics()

@@ -14,11 +14,13 @@ class EmbargoedFilterTest extends PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->mockEntityManager = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $this->mockEntityManager = $this->createMock('Doctrine\ORM\EntityManagerInterface');
 
-        $this->mockClassMetadata = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockClassMetadata = $this->getMockBuilder(
             'Doctrine\ORM\Mapping\ClassMetadata'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testEmbargoableItem()

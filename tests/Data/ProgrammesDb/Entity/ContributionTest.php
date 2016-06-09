@@ -138,36 +138,46 @@ class ContributionTest extends PHPUnit_Framework_TestCase
 
     private function mockContributor()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
+        return $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Contributor'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private function mockCreditRole()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
+        return $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CreditRole'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private function mockCoreEntity()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
+        return $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private function mockSegment()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
+        return $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private function mockVersion()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
+        return $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

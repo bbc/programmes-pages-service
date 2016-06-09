@@ -11,13 +11,17 @@ class ProgrammeMapperCategoryTest extends BaseProgrammeMapperTestCase
         $genreDbEntity = ['type' => 'genre'];
         $formatDbEntity = ['type' => 'format'];
 
-        $expectedGenreDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $expectedGenreDomainEntity = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Genre'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $expectedFormatDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $expectedFormatDomainEntity = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Format'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mockCategoryMapper->expects($this->exactly(2))
             ->method('getDomainModel')

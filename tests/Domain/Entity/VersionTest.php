@@ -17,9 +17,11 @@ class VersionTest extends PHPUnit_Framework_TestCase
 
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
-        $episode = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $episode = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Episode'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $version = new Version($pid, $episode);
 
@@ -33,9 +35,11 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $versionType = new VersionType('original', 'Original version');
 
-        $programmeItem = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $programmeItem = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Episode'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $version = new Version(
             $pid,
@@ -61,9 +65,11 @@ class VersionTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
 
-        $programmeItem = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $programmeItem = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Episode'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         new Version(
             $pid,
@@ -83,9 +89,11 @@ class VersionTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
 
-        $programmeItem = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $programmeItem = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Episode'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         new Version(
             $pid,

@@ -116,22 +116,28 @@ class MembershipTest extends PHPUnit_Framework_TestCase
 
     private function mockGroup()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
+        return $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Group'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private function mockEpisode()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
+        return $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private function mockImage()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
+        return $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

@@ -17,17 +17,23 @@ class NetworkMapperTest extends BaseMapperTestCase
 
     public function setUp()
     {
-        $this->mockImageMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockImageMapper = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->mockServiceMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockServiceMapper = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->mockDefaultImage = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockDefaultImage = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
@@ -72,9 +78,11 @@ class NetworkMapperTest extends BaseMapperTestCase
     {
         $imageDbEntity = ['pid' => 'p01m5mss'];
 
-        $expectedImageDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $expectedImageDomainEntity = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mockImageMapper->expects($this->once())
             ->method('getDomainModel')
@@ -118,9 +126,11 @@ class NetworkMapperTest extends BaseMapperTestCase
     {
         $serviceDbEntity = ['sid' => 'bbc_one'];
 
-        $expectedServiceDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $expectedServiceDomainEntity = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Service'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mockServiceMapper->expects($this->once())
             ->method('getDomainModel')

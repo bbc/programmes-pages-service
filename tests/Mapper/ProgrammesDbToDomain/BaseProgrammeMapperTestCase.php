@@ -20,21 +20,29 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
     public function setUp()
     {
-        $this->mockImageMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockImageMapper = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->mockMasterBrandMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockMasterBrandMapper = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MasterBrandMapper'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->mockCategoryMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockCategoryMapper = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->mockDefaultImage = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockDefaultImage = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mockDefaultImage->method('getTitle')->willReturn('DefaultImage');
 
@@ -74,6 +82,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'mediumSynopsis' => 'Mediumest Synopsis',
             'longSynopsis' => 'Longest Synopsis',
             'image' => $image,
+            'alternativeImage' => null,
             'promotionsCount' => 1,
             'relatedLinksCount' => 2,
             'hasSupportingContent' => true,
@@ -113,6 +122,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
+            null,
             1,
             2,
             true,

@@ -20,9 +20,11 @@ abstract class AbstractRelatedLinksServiceTest extends AbstractServiceTest
 
     protected function relatedLinkFromDbData(array $entity)
     {
-        $mockRelatedLink = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $mockRelatedLink = $this->getMockBuilder(
             self::ENTITY_NS . 'RelatedLink'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockRelatedLink->method('getTitle')->willReturn($entity['title']);
         return $mockRelatedLink;

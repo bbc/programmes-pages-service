@@ -46,9 +46,11 @@ class ProgrammeTest extends PHPUnit_Framework_TestCase
 
     public function setterDataProvider()
     {
-        $genre = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $genre = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Genre'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         return [
             ['PromotionsCount', 1],

@@ -13,9 +13,11 @@ class VersionMapperTest extends BaseMapperTestCase
 
     public function setUp()
     {
-        $this->mockProgrammeMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockProgrammeMapper = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -39,9 +41,11 @@ class VersionMapperTest extends BaseMapperTestCase
     {
         $programmeDbEntity = ['pid' => 'p01m5mss'];
 
-        $expectedProgrammeDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $expectedProgrammeDomainEntity = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mockProgrammeMapper->expects($this->once())
             ->method('getDomainModel')
@@ -67,9 +71,11 @@ class VersionMapperTest extends BaseMapperTestCase
     {
         $programmeDbEntity = ['pid' => 'p01m5mss'];
 
-        $expectedProgrammeDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $expectedProgrammeDomainEntity = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mockProgrammeMapper->expects($this->once())
             ->method('getDomainModel')

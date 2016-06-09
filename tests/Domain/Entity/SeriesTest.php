@@ -26,6 +26,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
+            null,
             1,
             2,
             true,
@@ -45,6 +46,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Short Synopsis', $programme->getShortSynopsis());
         $this->assertEquals('Longest Synopsis', $programme->getLongestSynopsis());
         $this->assertEquals($image, $programme->getImage());
+        $this->assertEmpty($programme->getAlternativeImage());
         $this->assertEquals(1, $programme->getPromotionsCount());
         $this->assertEquals(2, $programme->getRelatedLinksCount());
         $this->assertEquals(true, $programme->hasSupportingContent());
@@ -62,12 +64,16 @@ class SeriesTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $parent = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Series'
-        );
-        $masterBrand = $this->getMockWithoutInvokingTheOriginalConstructor(
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $masterBrand = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         $releaseDate = new PartialDate(2015, 01, 02);
 
         $genre = new Genre('Title', 'url_key');
@@ -81,6 +87,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
+            null,
             1,
             2,
             true,
@@ -103,6 +110,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($parent, $programme->getParent());
         $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(101, $programme->getPosition());
+        $this->assertEmpty($programme->getAlternativeImage());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());

@@ -8,9 +8,11 @@ abstract class BaseMapperTestCase extends PHPUnit_Framework_TestCase
 {
     protected function getMapperFactory(array $config)
     {
-        $mockMapperFactory = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $mockMapperFactory = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         foreach ($config as $name => $mock) {
             $mockMapperFactory->expects($this->any())

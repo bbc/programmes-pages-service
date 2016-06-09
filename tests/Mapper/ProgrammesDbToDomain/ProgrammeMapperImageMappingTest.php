@@ -24,9 +24,11 @@ class ProgrammeMapperImageMappingTest extends BaseProgrammeMapperTestCase
     {
         $imageDbEntity = ['pid' => 'p01m5mss'];
 
-        $expectedImageDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $expectedImageDomainEntity = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $expectedImageDomainEntity->method('getTitle')->willReturn('SetImage');
 
@@ -49,9 +51,11 @@ class ProgrammeMapperImageMappingTest extends BaseProgrammeMapperTestCase
     {
         $imageDbEntity = ['pid' => 'p01m5mss'];
 
-        $expectedImageDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $expectedImageDomainEntity = $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $expectedImageDomainEntity->method('getTitle')->willReturn('InheritedImage');
 

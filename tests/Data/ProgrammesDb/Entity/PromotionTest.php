@@ -139,15 +139,19 @@ class PromotionTest extends PHPUnit_Framework_TestCase
 
     private function mockCoreEntity()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
+        return $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private function mockImage()
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
+        return $this->getMockBuilder(
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image'
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }
