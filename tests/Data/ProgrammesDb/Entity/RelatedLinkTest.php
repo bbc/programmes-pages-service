@@ -124,28 +124,16 @@ class RelatedLinkTest extends PHPUnit_Framework_TestCase
 
     private function mockCoreEntity()
     {
-        return $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity');
     }
 
     private function mockPromotion()
     {
-        return $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Promotion'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Promotion');
     }
 
     private function mockImage()
     {
-        return $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image');
     }
 }

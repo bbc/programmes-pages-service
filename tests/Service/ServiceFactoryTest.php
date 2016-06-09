@@ -47,17 +47,9 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
 
     private function entityManager($repoName)
     {
-        $mockEntityManager = $this->getMockBuilder(
-            'Doctrine\ORM\EntityManager'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockEntityManager = $this->createMock('Doctrine\ORM\EntityManager');
 
-        $mockRepo = $this->getMockBuilder(
-            self::ENTITY_REPOSITORY_NS . $repoName . 'Repository'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockRepo = $this->createMock(self::ENTITY_REPOSITORY_NS . $repoName . 'Repository');
 
         $mockEntityManager->expects($this->atLeastOnce())
             ->method('getRepository')
@@ -69,17 +61,9 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
 
     private function mapperFactory($mapperClass)
     {
-        $mockMapperFactory = $this->getMockBuilder(
-            self::MAPPER_NS . 'MapperFactory'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockMapperFactory = $this->createMock(self::MAPPER_NS . 'MapperFactory');
 
-        $mockMapper = $this->getMockBuilder(
-            self::MAPPER_NS . $mapperClass
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockMapper = $this->createMock(self::MAPPER_NS . $mapperClass);
 
         $mockMapperFactory->expects($this->atLeastOnce())
             ->method('get' . $mapperClass)

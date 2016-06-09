@@ -6,9 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
-use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use PHPUnit_Framework_TestCase;
 
 class SeriesTest extends PHPUnit_Framework_TestCase
@@ -26,7 +24,6 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            null,
             1,
             2,
             true,
@@ -64,13 +61,8 @@ class SeriesTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $parent = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Domain\Entity\Series'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Series');
         $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
-        $releaseDate = new PartialDate(2015, 01, 02);
 
         $genre = new Genre('Title', 'url_key');
         $format = new Format('Title', 'url_key');
@@ -83,7 +75,6 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            null,
             1,
             2,
             true,
@@ -99,6 +90,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
+            null,
             1001
         );
 

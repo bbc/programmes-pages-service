@@ -27,7 +27,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            null,
             1,
             2,
             true,
@@ -57,7 +56,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(13, $programme->getAvailableClipsCount());
         $this->assertEquals(14, $programme->getAvailableEpisodesCount());
         $this->assertEquals(15, $programme->getAvailableGalleriesCount());
-        $this->assertEquals(false, $programme->IsPodcastable());
+        $this->assertEquals(false, $programme->isPodcastable());
 
     }
 
@@ -66,13 +65,8 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $alternativeImage = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $parent = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Domain\Entity\Brand'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Brand');
         $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
-        $releaseDate = new PartialDate(2015, 01, 02);
 
         $genre = new Genre('Title', 'url_key');
         $format = new Format('Title', 'url_key');
@@ -85,7 +79,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            $alternativeImage,
             1,
             2,
             true,
@@ -101,6 +94,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
+            $alternativeImage,
             1001
         );
 
@@ -130,7 +124,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            null,
             1,
             2,
             true,
@@ -166,7 +159,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            null,
             1,
             2,
             true,

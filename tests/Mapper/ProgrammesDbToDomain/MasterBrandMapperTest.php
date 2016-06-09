@@ -21,35 +21,25 @@ class MasterBrandMapperTest extends BaseMapperTestCase
 
     public function setUp()
     {
-        $this->mockImageMapper = $this->getMockBuilder(
+        $this->mockImageMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->mockNetworkMapper = $this->getMockBuilder(
+        $this->mockNetworkMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->mockVersionMapper = $this->getMockBuilder(
+        $this->mockVersionMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->mockDefaultImage = $this->getMockBuilder(
+        $this->mockDefaultImage = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->mockNetwork = $this->getMockBuilder(
+        $this->mockNetwork = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Network'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
@@ -105,11 +95,9 @@ class MasterBrandMapperTest extends BaseMapperTestCase
 
         $this->setupNetworkMapper($networkDbEntity, $this->mockNetwork);
 
-        $expectedImageDomainEntity = $this->getMockBuilder(
+        $expectedImageDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $this->mockImageMapper->expects($this->once())
             ->method('getDomainModel')
@@ -138,11 +126,9 @@ class MasterBrandMapperTest extends BaseMapperTestCase
 
         $this->setupNetworkMapper($networkDbEntity, $this->mockNetwork);
 
-        $expectedVersionDomainEntity = $this->getMockBuilder(
+        $expectedVersionDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Version'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $this->mockVersionMapper->expects($this->once())
             ->method('getDomainModel')

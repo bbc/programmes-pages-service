@@ -19,16 +19,8 @@ class SegmentEventTest extends PHPUnit_Framework_TestCase
 
     public function testDefaults()
     {
-        $mockVersion = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockSegment = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment'
-        )->disableOriginalConstructor()
-            ->getMock();
+        $mockVersion = $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version');
+        $mockSegment = $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment');
 
         $entity = new SegmentEvent('pid', $mockVersion, $mockSegment);
 
@@ -47,17 +39,8 @@ class SegmentEventTest extends PHPUnit_Framework_TestCase
      */
     public function testSetters($name, $validValue)
     {
-        $mockVersion = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockSegment = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockVersion = $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version');
+        $mockSegment = $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment');
 
         $entity = new SegmentEvent('pid', $mockVersion, $mockSegment);
 
@@ -67,17 +50,8 @@ class SegmentEventTest extends PHPUnit_Framework_TestCase
 
     public function setterDataProvider()
     {
-        $mockVersion = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockSegment = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockVersion = $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version');
+        $mockSegment = $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment');
 
         return [
             ['Pid', 'newPid'],

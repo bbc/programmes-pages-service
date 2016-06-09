@@ -28,7 +28,6 @@ class ClipTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            null,
             1,
             2,
             true,
@@ -55,16 +54,8 @@ class ClipTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $parent = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Domain\Entity\Series'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $masterBrand = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Series');
+        $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
         $releaseDate = new PartialDate(2015, 01, 02);
 
         $genre = new Genre('Title', 'url_key');
@@ -81,7 +72,6 @@ class ClipTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            null,
             1,
             2,
             true,
@@ -92,6 +82,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
+            null,
             $releaseDate,
             1001,
             $streamableFrom,

@@ -29,7 +29,6 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            $alternativeImage,
             1,
             2,
             true,
@@ -47,7 +46,6 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Short Synopsis', $programme->getShortSynopsis());
         $this->assertEquals('Longest Synopsis', $programme->getLongestSynopsis());
         $this->assertEquals($image, $programme->getImage());
-        $this->assertEquals($alternativeImage, $programme->getAlternativeImage());
         $this->assertEquals(1, $programme->getPromotionsCount());
         $this->assertEquals(2, $programme->getRelatedLinksCount());
         $this->assertEquals(true, $programme->hasSupportingContent());
@@ -63,16 +61,8 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $alternativeImage = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $parent = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Domain\Entity\Series'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $masterBrand = $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Series');
+        $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
         $releaseDate = new PartialDate(2015, 01, 02);
 
         $genre = new Genre('Title', 'url_key');
@@ -89,7 +79,6 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            $alternativeImage,
             1,
             2,
             true,
@@ -103,6 +92,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
+            $alternativeImage,
             $releaseDate,
             1001,
             $streamableFrom,
@@ -136,7 +126,6 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            null,
             1,
             2,
             true,

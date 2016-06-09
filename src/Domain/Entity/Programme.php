@@ -100,7 +100,6 @@ abstract class Programme
         string $shortSynopsis,
         string $longestSynopsis,
         Image $image,
-        Image $alternativeImage = null,
         int $promotionsCount,
         int $relatedLinksCount,
         bool $hasSupportingContent,
@@ -109,7 +108,8 @@ abstract class Programme
         int $position = null,
         MasterBrand $masterBrand = null,
         array $genres = [],
-        array $formats = []
+        array $formats = [],
+        Image $alternativeImage = null
     ) {
         $this->assertArrayOfType('genres', $genres, Genre::CLASS);
         $this->assertArrayOfType('formats', $formats, Format::CLASS);
@@ -121,7 +121,6 @@ abstract class Programme
         $this->shortSynopsis = $shortSynopsis;
         $this->longestSynopsis = $longestSynopsis;
         $this->image = $image;
-        $this->alternativeImage = $alternativeImage;
         $this->promotionsCount = $promotionsCount;
         $this->relatedLinksCount = $relatedLinksCount;
         $this->hasSupportingContent = $hasSupportingContent;
@@ -131,6 +130,7 @@ abstract class Programme
         $this->masterBrand = $masterBrand;
         $this->genres = $genres;
         $this->formats = $formats;
+        $this->alternativeImage = $alternativeImage;
     }
 
     /**

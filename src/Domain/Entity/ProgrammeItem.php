@@ -43,7 +43,6 @@ abstract class ProgrammeItem extends Programme
         string $shortSynopsis,
         string $longestSynopsis,
         Image $image,
-        Image $alternativeImage = null,
         int $promotionsCount,
         int $relatedLinksCount,
         bool $hasSupportingContent,
@@ -54,6 +53,7 @@ abstract class ProgrammeItem extends Programme
         MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
+        Image $alternativeImage = null,
         PartialDate $releaseDate = null,
         int $duration = null,
         DateTimeImmutable $streamableFrom = null,
@@ -77,7 +77,6 @@ abstract class ProgrammeItem extends Programme
             $shortSynopsis,
             $longestSynopsis,
             $image,
-            $alternativeImage,
             $promotionsCount,
             $relatedLinksCount,
             $hasSupportingContent,
@@ -86,7 +85,8 @@ abstract class ProgrammeItem extends Programme
             $position,
             $masterBrand,
             $genres,
-            $formats
+            $formats,
+            $alternativeImage
         );
 
         $this->mediaType = $mediaType;

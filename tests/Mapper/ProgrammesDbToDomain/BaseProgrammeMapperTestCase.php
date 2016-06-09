@@ -20,29 +20,21 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
     public function setUp()
     {
-        $this->mockImageMapper = $this->getMockBuilder(
+        $this->mockImageMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->mockMasterBrandMapper = $this->getMockBuilder(
+        $this->mockMasterBrandMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MasterBrandMapper'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->mockCategoryMapper = $this->getMockBuilder(
+        $this->mockCategoryMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->mockDefaultImage = $this->getMockBuilder(
+        $this->mockDefaultImage = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $this->mockDefaultImage->method('getTitle')->willReturn('DefaultImage');
 
@@ -121,7 +113,6 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'Short Synopsis',
             'Longest Synopsis',
             $image,
-            null,
             1,
             2,
             true,
@@ -137,6 +128,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             $masterBrand,
             $genres,
             $formats,
+            null,
             1001
         );
     }

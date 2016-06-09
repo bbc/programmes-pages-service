@@ -138,46 +138,26 @@ class ContributionTest extends PHPUnit_Framework_TestCase
 
     private function mockContributor()
     {
-        return $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Contributor'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Contributor');
     }
 
     private function mockCreditRole()
     {
-        return $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CreditRole'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CreditRole');
     }
 
     private function mockCoreEntity()
     {
-        return $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity');
     }
 
     private function mockSegment()
     {
-        return $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment');
     }
 
     private function mockVersion()
     {
-        return $this->getMockBuilder(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version');
     }
 }

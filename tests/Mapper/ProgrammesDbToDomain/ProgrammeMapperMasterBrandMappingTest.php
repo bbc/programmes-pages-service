@@ -10,11 +10,9 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
     {
         $masterBrandDbEntity = ['mid' => 'bbc_one'];
 
-        $expectedMasterBrandDomainEntity = $this->getMockBuilder(
+        $expectedMasterBrandDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $this->mockMasterBrandMapper->expects($this->once())
             ->method('getDomainModel')

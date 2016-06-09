@@ -20,9 +20,7 @@ abstract class AbstractVersionsServiceTest extends AbstractServiceTest
 
     protected function versionFromDbData(array $entity)
     {
-        $mockVersion = $this->getMockBuilder(self::ENTITY_NS . 'Version')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockVersion = $this->createMock(self::ENTITY_NS . 'Version');
         $mockVersion->method('getPid')->willReturn($entity['pid']);
         return $mockVersion;
     }

@@ -50,7 +50,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'Short Synopsis',
             'Longest Synopsis',
             $this->mockDefaultImage,
-            null,
             1,
             2,
             true,
@@ -66,6 +65,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
+            null,
             1001
         );
 
@@ -108,7 +108,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'Short Synopsis',
             'Longest Synopsis',
             $this->mockDefaultImage,
-            null,
             1,
             2,
             true,
@@ -124,6 +123,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
+            null,
             1001
         );
 
@@ -167,7 +167,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'Short Synopsis',
             'Longest Synopsis',
             $this->mockDefaultImage,
-            null,
             1,
             2,
             true,
@@ -181,6 +180,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
+            null,
             new PartialDate(2015, 01, 02),
             102,
             new DateTimeImmutable('2015-01-03'),
@@ -223,7 +223,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'Short Synopsis',
             'Longest Synopsis',
             $this->mockDefaultImage,
-            null,
             1,
             2,
             true,
@@ -234,6 +233,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
+            null,
             new PartialDate(2015, 01, 02),
             102,
             new DateTimeImmutable('2015-01-03'),
@@ -301,7 +301,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'Short Synopsis',
             'Longest Synopsis',
             $this->mockDefaultImage,
-            null,
             1,
             2,
             true,
@@ -320,7 +319,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'Short Synopsis',
                 'Longest Synopsis',
                 $this->mockDefaultImage,
-                null,
                 1,
                 2,
                 true,
@@ -336,12 +334,14 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 null,
                 [],
                 [],
+                null,
                 1001
             ),
             101,
             null,
             [],
             [],
+            null,
             1001
         );
 

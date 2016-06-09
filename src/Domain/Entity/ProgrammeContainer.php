@@ -50,7 +50,6 @@ abstract class ProgrammeContainer extends Programme
         string $shortSynopsis,
         string $longestSynopsis,
         Image $image,
-        Image $alternativeImage = null,
         int $promotionsCount,
         int $relatedLinksCount,
         bool $hasSupportingContent,
@@ -66,6 +65,7 @@ abstract class ProgrammeContainer extends Programme
         MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
+        Image $alternativeImage = null,
         int $expectedChildCount = null
     ) {
         parent::__construct(
@@ -76,7 +76,6 @@ abstract class ProgrammeContainer extends Programme
             $shortSynopsis,
             $longestSynopsis,
             $image,
-            $alternativeImage,
             $promotionsCount,
             $relatedLinksCount,
             $hasSupportingContent,
@@ -85,7 +84,8 @@ abstract class ProgrammeContainer extends Programme
             $position,
             $masterBrand,
             $genres,
-            $formats
+            $formats,
+            $alternativeImage
         );
 
         $this->aggregatedBroadcastsCount = $aggregatedBroadcastsCount;

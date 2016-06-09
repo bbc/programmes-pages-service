@@ -17,23 +17,17 @@ class NetworkMapperTest extends BaseMapperTestCase
 
     public function setUp()
     {
-        $this->mockImageMapper = $this->getMockBuilder(
+        $this->mockImageMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->mockServiceMapper = $this->getMockBuilder(
+        $this->mockServiceMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->mockDefaultImage = $this->getMockBuilder(
+        $this->mockDefaultImage = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
