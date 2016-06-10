@@ -51,6 +51,7 @@ class MongrelsFixture extends AbstractFixture
     {
         $entity = new Brand($pid, $title);
         $this->manager->persist($entity);
+        $this->addReference($pid, $entity);
         return $entity;
     }
 
@@ -60,6 +61,7 @@ class MongrelsFixture extends AbstractFixture
         $entity->setPosition($position);
         $entity->setParent($parent);
         $this->manager->persist($entity);
+        $this->addReference($pid, $entity);
         return $entity;
     }
 
@@ -69,6 +71,7 @@ class MongrelsFixture extends AbstractFixture
         $entity->setPosition($position);
         $entity->setParent($parent);
         $this->manager->persist($entity);
+        $this->addReference($pid, $entity);
         return $entity;
     }
 
@@ -78,6 +81,7 @@ class MongrelsFixture extends AbstractFixture
         $entity->setPosition($position);
         $entity->setParent($parent);
         $this->manager->persist($entity);
+        $this->addReference($pid, $entity);
         return $entity;
     }
 }

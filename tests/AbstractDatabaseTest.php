@@ -31,6 +31,11 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
         $this->resetDbQueryLogger();
     }
 
+    protected function getRepository($name)
+    {
+        return $this->getEntityManager()->getRepository($name);
+    }
+
     protected function getDbQueries()
     {
         return $this->getEntityManager()->getConfiguration()->getSQLLogger()->queries;
