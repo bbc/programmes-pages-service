@@ -26,6 +26,7 @@ class CategoryMapper implements MapperInterface
     private function getFormatDomainModel(array $dbCategory): Format
     {
         return new Format(
+            $dbCategory['pipId'],
             $dbCategory['title'],
             $dbCategory['urlKey']
         );
@@ -34,6 +35,7 @@ class CategoryMapper implements MapperInterface
     private function getGenreDomainModel(array $dbCategory): Genre
     {
         return new Genre(
+            $dbCategory['pipId'],
             $dbCategory['title'],
             $dbCategory['urlKey'],
             $this->getGenreParentModel($dbCategory, 'parent')

@@ -20,6 +20,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
         ];
 
         $expectedEntity = new Format(
+            'PT001',
             'Title',
             'url_key'
         );
@@ -39,6 +40,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
         ];
 
         $expectedEntity = new Genre(
+            'C00126',
             'Title',
             'url_key'
         );
@@ -58,16 +60,18 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
             'parent' => [
                 'id' => '2',
                 'type' => 'genre',
-                'pipId' => 'C00126',
+                'pipId' => 'C00127',
                 'title' => 'Parent Title',
                 'urlKey' => 'parent_url_key',
             ],
         ];
 
         $expectedEntity = new Genre(
+            'C00126',
             'Title',
             'url_key',
             new Genre(
+                'C00127',
                 'Parent Title',
                 'parent_url_key'
             )

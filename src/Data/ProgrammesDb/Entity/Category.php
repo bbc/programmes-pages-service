@@ -13,7 +13,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *      @ORM\Index(name="category_ancestry_idx", columns={"ancestry"}),
  *      @ORM\Index(name="category_type_idx", columns={"type"}),
  * })
- * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\MaterializedPathRepository")
+ * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository")
  * @Gedmo\Tree(type="materializedPath", cascadeDeletes=false)
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\MappedSuperclass()

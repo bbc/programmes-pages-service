@@ -9,17 +9,19 @@ class GenreTest extends PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
-        $genre = new Genre('Title', 'url_key');
+        $genre = new Genre('id', 'Title', 'url_key');
 
+        $this->assertEquals('id', $genre->getId());
         $this->assertEquals('Title', $genre->getTitle());
         $this->assertEquals('url_key', $genre->getUrlKey());
     }
 
     public function testConstructorWithParent()
     {
-        $parentGenre = new Genre('Parent Title', 'parent_url_key');
-        $genre = new Genre('Title', 'url_key', $parentGenre);
+        $parentGenre = new Genre('parent_id', 'Parent Title', 'parent_url_key');
+        $genre = new Genre('id', 'Title', 'url_key', $parentGenre);
 
+        $this->assertEquals('id', $genre->getId());
         $this->assertEquals('Title', $genre->getTitle());
         $this->assertEquals('url_key', $genre->getUrlKey());
         $this->assertEquals($parentGenre, $genre->getParent());

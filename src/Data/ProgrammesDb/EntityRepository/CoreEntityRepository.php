@@ -10,6 +10,8 @@ use InvalidArgumentException;
 
 class CoreEntityRepository extends MaterializedPathRepository
 {
+    use Traits\ParentTreeWalkerTrait;
+
     /**
      * Get an entity's ID, based upon its PID
      * Used when a page wants to find out about data related to an entity, but
@@ -65,17 +67,29 @@ QUERY;
             ));
         }
 
+        // YIKES! categories is a many-to-many join, that could result in
+        // an increase of rows returned by the DB and the potential for slow DB
+        // queries as per https://ocramius.github.io/blog/doctrine-orm-optimization-hydration/.
+        // Except it doesn't - the majority of Programmes have less than 3
+        // categories. At time of writing this comment (June 2016) only 9% of
+        // the Programmes in PIPS have 3 or more Categories and the most
+        // Categories a Programme has is 12. Creating an few extra rows in
+        // rare-ish cases is way more efficient that having to do a two-step
+        // hydration process.
+
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select(['entity', 'image', 'masterBrand', 'network'])
+            ->select(['entity', 'image', 'masterBrand', 'network', 'category'])
             ->from('ProgrammesPagesService:' . $entityType, 'entity') // For filtering on type
             ->leftJoin('entity.image', 'image')
             ->leftJoin('entity.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('entity.categories', 'category')
             ->where('entity.pid = :pid')
             ->setParameter('pid', $pid);
 
         $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
-        return $result ? $this->resolveParents([$result])[0] : $result;
+        $withHydratedParents = $result ? $this->resolveParents([$result], true)[0] : $result;
+        return $withHydratedParents ? $this->resolveCategories([$withHydratedParents])[0] : $withHydratedParents;
     }
 
     public function findAllWithParents($limit, $offset)
@@ -203,91 +217,39 @@ QUERY;
         return $this->resolveParents($result);
     }
 
-    /**
-     * Takes an array of Programme array representations, finds all the
-     * ancestors for all the programmes and attaches the full entities onto the
-     * programmes.
-     *
-     * @param  array  $programmes
-     * @return array
-     */
     private function resolveParents(array $programmes)
     {
-        // Build a list of all unique parentIds found in all of the programmes
-        $listOfAllParentIds = [];
-        foreach ($programmes as $programme) {
-            foreach ($this->getParentIdsFromAncestry($programme['ancestry']) as $parentId) {
-                $listOfAllParentIds[$parentId] = true;
-            }
-        }
-        $listOfAllParentIds = array_keys($listOfAllParentIds);
+        return $this->abstractResolveAncestry(
+            $programmes,
+            [$this, 'programmeAncestryGetter']
+        );
+    }
 
-        // No parents so do nothing
-        if (empty($listOfAllParentIds)) {
-            return $programmes;
-        }
-
-        // Get all said programmes from the DB.
-        $parentProgrammes = $this->createQueryBuilder('programme')
+    private function programmeAncestryGetter(array $ids)
+    {
+        return $this->createQueryBuilder('programme')
             ->addSelect(['image', 'masterBrand', 'network'])
             ->leftJoin('programme.image', 'image')
             ->leftJoin('programme.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
             ->where("programme.id IN(:ids)")
-            ->setParameter('ids', $listOfAllParentIds)
+            ->setParameter('ids', $ids)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
-        // Process the programmes into an array (functionally), with their ancestry combined
-        $processedProgrammes = [];
-        foreach ($programmes as $programme) {
-            $processedProgrammes[] = $this->combineAncestry($programme, $parentProgrammes);
-        }
-
-        return $processedProgrammes;
     }
 
-    /**
-     * Using the potential ancestors as a source, recursively set the parents into place
-     * @param array $programme
-     * @param array $potentialAncestors
-     * @return array
-     */
-    private function combineAncestry(
-        $programme,
-        array $potentialAncestors = []
-    ) {
-        // an embargoed ancestor will come through as null
-        if (is_null($programme)) {
-            return null;
-        }
-        $parentIds = $this->getParentIdsFromAncestry($programme['ancestry']);
-        if ($parentIds) {
-            $resolvedParent = $this->searchSetForProgrammeWithId($potentialAncestors, end($parentIds));
-            $programme['parent'] = $this->combineAncestry($resolvedParent, $potentialAncestors);
-        }
-        return $programme;
-    }
-
-    private function searchSetForProgrammeWithId(array $resultSet, int $id)
+    private function resolveCategories(array $programmes)
     {
-        // TODO we should come up with a way of storing all programmes using
-        // their ID as a key, so we can lookup a programme from it's ID in
-        // O(1) time, instead of O(n)
-        foreach ($resultSet as $programme) {
-            if ($programme['id'] == $id) {
-                return $programme;
-            }
-        }
-        return null;
+        return $this->abstractResolveNestedAncestry(
+            $programmes,
+            'categories',
+            [$this, 'categoryAncestryGetter']
+        );
     }
 
-    private function getParentIdsFromAncestry(string $ancestry): array
+    private function categoryAncestryGetter(array $ids)
     {
-        // $ancestry contains a string of all IDs including the current one
-        // Thus for parent ids we want an array of all but the last item (which
-        // is the current id)
-        $ancestors = explode(',', $ancestry, -2);
-        return $ancestors ?? [];
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
+        return $repo->findByIds($ids);
     }
 
     /**
