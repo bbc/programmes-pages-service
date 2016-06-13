@@ -31,9 +31,7 @@ class ServiceTest extends PHPUnit_Framework_TestCase
     public function testConstructorOptionalArgs()
     {
         $sid = new Sid('bbc_1xtra');
-        $network = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Domain\Entity\Network'
-        );
+        $network = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Network');
         $startDate = new DateTimeImmutable('2015-01-01');
         $endDate = new DateTimeImmutable('2016-01-01');
 

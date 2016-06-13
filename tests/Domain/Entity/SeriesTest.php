@@ -64,12 +64,9 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Domain\Entity\Series'
-        );
-        $masterBrand = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
-        );
+
+        $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Series');
+        $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
 
         $genre = new Genre('id', 'Title', 'url_key');
         $format = new Format('id2', 'Title', 'url_key');

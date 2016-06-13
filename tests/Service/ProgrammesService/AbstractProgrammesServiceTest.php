@@ -21,9 +21,7 @@ abstract class AbstractProgrammesServiceTest extends AbstractServiceTest
 
     protected function programmeFromDbData(array $entity)
     {
-        $mockProgramme = $this->getMockWithoutInvokingTheOriginalConstructor(
-            self::ENTITY_NS . 'Programme'
-        );
+        $mockProgramme = $this->createMock(self::ENTITY_NS . 'Programme');
 
         $mockProgramme->method('getPid')->willReturn(new Pid($entity['pid']));
         return $mockProgramme;

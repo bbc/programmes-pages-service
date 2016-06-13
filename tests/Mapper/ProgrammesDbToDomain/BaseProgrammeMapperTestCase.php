@@ -21,19 +21,19 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
     public function setUp()
     {
-        $this->mockImageMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockImageMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper'
         );
 
-        $this->mockMasterBrandMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockMasterBrandMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MasterBrandMapper'
         );
 
-        $this->mockCategoryMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockCategoryMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper'
         );
 
-        $this->mockDefaultImage = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockDefaultImage = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
         );
 

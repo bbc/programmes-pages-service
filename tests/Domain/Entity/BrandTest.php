@@ -56,7 +56,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(13, $programme->getAvailableClipsCount());
         $this->assertEquals(14, $programme->getAvailableEpisodesCount());
         $this->assertEquals(15, $programme->getAvailableGalleriesCount());
-        $this->assertEquals(false, $programme->IsPodcastable());
+        $this->assertEquals(false, $programme->isPodcastable());
 
     }
 
@@ -65,12 +65,9 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Domain\Entity\Brand'
-        );
-        $masterBrand = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
-        );
+
+        $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Brand');
+        $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
 
         $genre = new Genre('id', 'Title', 'url_key');
         $format = new Format('id2', 'Title', 'url_key');

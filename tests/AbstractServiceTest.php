@@ -14,19 +14,15 @@ abstract class AbstractServiceTest extends PHPUnit_Framework_TestCase
 
     protected function setUpRepo($repositoryName)
     {
-        $this->mockRepository = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\\' . $repositoryName
-        );
+        $this->mockRepository = $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\\' . $repositoryName);
     }
 
     protected function setUpMapper($mapperName, $entityBuilderMethod)
     {
-        $this->mockMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\\' . $mapperName
-        );
+        $this->mockMapper = $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\\' . $mapperName);
 
-        // A mapper that shall return a mock entity
-        $this->mockMapper->method('getDomainModel')
+        $this->mockMapper->expects($this->any())
+            ->method('getDomainModel')
             ->will($this->returnCallback(function ($entity) use ($entityBuilderMethod) {
                 return call_user_func([$this, $entityBuilderMethod], $entity);
             }));
@@ -34,8 +30,6 @@ abstract class AbstractServiceTest extends PHPUnit_Framework_TestCase
 
     protected function mockEntity($name)
     {
-        return $this->getMockWithoutInvokingTheOriginalConstructor(
-            self::ENTITY_NS . $name
-        );
+        return $this->createMock(self::ENTITY_NS . $name);
     }
 }
