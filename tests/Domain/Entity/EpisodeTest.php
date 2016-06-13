@@ -19,7 +19,6 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $alternativeImage = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Episode(
             0,
@@ -60,7 +59,6 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $alternativeImage = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Series');
         $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
         $releaseDate = new PartialDate(2015, 01, 02);
@@ -92,7 +90,6 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
-            $alternativeImage,
             $releaseDate,
             1001,
             $streamableFrom,

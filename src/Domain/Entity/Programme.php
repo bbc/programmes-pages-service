@@ -43,11 +43,6 @@ abstract class Programme
     private $image;
 
     /**
-     * @var Image
-     */
-    private $alternativeImage;
-
-    /**
      * @var int
      */
     private $promotionsCount;
@@ -83,12 +78,12 @@ abstract class Programme
     private $masterBrand;
 
     /**
-     * @var Genres[]
+     * @var Genre[]
      */
     private $genres;
 
     /**
-     * @var Formats[]
+     * @var Format[]
      */
     private $formats;
 
@@ -108,8 +103,7 @@ abstract class Programme
         int $position = null,
         MasterBrand $masterBrand = null,
         array $genres = [],
-        array $formats = [],
-        Image $alternativeImage = null
+        array $formats = []
     ) {
         $this->assertArrayOfType('genres', $genres, Genre::CLASS);
         $this->assertArrayOfType('formats', $formats, Format::CLASS);
@@ -130,7 +124,6 @@ abstract class Programme
         $this->masterBrand = $masterBrand;
         $this->genres = $genres;
         $this->formats = $formats;
-        $this->alternativeImage = $alternativeImage;
     }
 
     /**
@@ -177,14 +170,6 @@ abstract class Programme
     public function getImage(): Image
     {
         return $this->image;
-    }
-
-    /**
-     * @return Image|null
-     */
-    public function getAlternativeImage()
-    {
-        return $this->alternativeImage;
     }
 
     public function getPromotionsCount(): int

@@ -42,7 +42,6 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Short Synopsis', $programme->getShortSynopsis());
         $this->assertEquals('Longest Synopsis', $programme->getLongestSynopsis());
         $this->assertEquals($image, $programme->getImage());
-        $this->assertEmpty($programme->getAlternativeImage());
         $this->assertEquals(1, $programme->getPromotionsCount());
         $this->assertEquals(2, $programme->getRelatedLinksCount());
         $this->assertEquals(true, $programme->hasSupportingContent());
@@ -82,7 +81,6 @@ class ClipTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
-            null,
             $releaseDate,
             1001,
             $streamableFrom,
@@ -92,7 +90,6 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($parent, $programme->getParent());
         $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals(101, $programme->getPosition());
-        $this->assertEmpty($programme->getAlternativeImage());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());

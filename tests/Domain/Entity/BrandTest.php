@@ -46,7 +46,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Short Synopsis', $programme->getShortSynopsis());
         $this->assertEquals('Longest Synopsis', $programme->getLongestSynopsis());
         $this->assertEquals($image, $programme->getImage());
-        $this->assertEmpty($programme->getAlternativeImage());
         $this->assertEquals(1, $programme->getPromotionsCount());
         $this->assertEquals(2, $programme->getRelatedLinksCount());
         $this->assertEquals(true, $programme->hasSupportingContent());
@@ -64,7 +63,6 @@ class BrandTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $alternativeImage = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Brand');
         $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
 
@@ -94,14 +92,12 @@ class BrandTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
-            $alternativeImage,
             1001
         );
 
         $this->assertEquals($parent, $programme->getParent());
         $this->assertEquals(101, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
-        $this->assertEquals($alternativeImage, $programme->getAlternativeImage());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());
         $this->assertEquals(1001, $programme->getExpectedChildCount());

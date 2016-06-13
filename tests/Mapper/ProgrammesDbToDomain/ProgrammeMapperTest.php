@@ -26,7 +26,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'mediumSynopsis' => 'Mediumest Synopsis',
             'longSynopsis' => 'Longest Synopsis',
             'image' => null,
-            'alternativeImage' => null,
             'promotionsCount' => 1,
             'relatedLinksCount' => 2,
             'hasSupportingContent' => true,
@@ -65,7 +64,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            null,
             1001
         );
 
@@ -84,7 +82,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'mediumSynopsis' => 'Mediumest Synopsis',
             'longSynopsis' => 'Longest Synopsis',
             'image' => null,
-            'alternativeImage' => null,
             'promotionsCount' => 1,
             'relatedLinksCount' => 2,
             'hasSupportingContent' => true,
@@ -123,7 +120,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            null,
             1001
         );
 
@@ -142,7 +138,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'mediumSynopsis' => 'Mediumest Synopsis',
             'longSynopsis' => 'Longest Synopsis',
             'image' => null,
-            'alternativeImage' => null,
             'promotionsCount' => 1,
             'relatedLinksCount' => 2,
             'hasSupportingContent' => true,
@@ -180,7 +175,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            null,
             new PartialDate(2015, 01, 02),
             102,
             new DateTimeImmutable('2015-01-03'),
@@ -201,7 +195,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'shortSynopsis' => 'Short Synopsis',
             'longSynopsis' => 'Longest Synopsis',
             'image' => null,
-            'alternativeImage' => null,
             'promotionsCount' => 1,
             'relatedLinksCount' => 2,
             'hasSupportingContent' => true,
@@ -233,7 +226,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            null,
             new PartialDate(2015, 01, 02),
             102,
             new DateTimeImmutable('2015-01-03'),
@@ -254,7 +246,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'shortSynopsis' => 'Short Synopsis',
             'longSynopsis' => 'Longest Synopsis',
             'image' => null,
-            'alternativeImage' => null,
             'promotionsCount' => 1,
             'relatedLinksCount' => 2,
             'hasSupportingContent' => true,
@@ -276,7 +267,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'shortSynopsis' => 'Short Synopsis',
                 'longSynopsis' => 'Longest Synopsis',
                 'image' => null,
-                'alternativeImage' => null,
                 'promotionsCount' => 1,
                 'relatedLinksCount' => 2,
                 'hasSupportingContent' => true,
@@ -334,14 +324,12 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 null,
                 [],
                 [],
-                null,
                 1001
             ),
             101,
             null,
             [],
             [],
-            null,
             1001
         );
 

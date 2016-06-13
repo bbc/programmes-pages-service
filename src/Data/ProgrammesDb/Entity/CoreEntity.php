@@ -91,14 +91,6 @@ abstract class CoreEntity
     private $image;
 
     /**
-     * @var Image|null
-     *
-     * @ORM\ManyToOne(targetEntity="Image")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
-    private $alternativeImage;
-
-    /**
      * @var MasterBrand|null
      *
      * @ORM\ManyToOne(targetEntity="MasterBrand")
@@ -219,19 +211,6 @@ abstract class CoreEntity
     public function setImage(Image $image = null)
     {
         $this->image = $image;
-    }
-
-    /**
-     * @return Image|null
-     */
-    public function getAlternativeImage()
-    {
-        return $this->alternativeImage;
-    }
-
-    public function setAlternativeImage(Image $alternativeImage = null)
-    {
-        $this->alternativeImage = $alternativeImage;
     }
 
     /**

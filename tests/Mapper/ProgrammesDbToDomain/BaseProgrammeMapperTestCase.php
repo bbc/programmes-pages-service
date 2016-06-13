@@ -74,7 +74,6 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'mediumSynopsis' => 'Mediumest Synopsis',
             'longSynopsis' => 'Longest Synopsis',
             'image' => $image,
-            'alternativeImage' => null,
             'promotionsCount' => 1,
             'relatedLinksCount' => 2,
             'hasSupportingContent' => true,
@@ -128,7 +127,6 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             $masterBrand,
             $genres,
             $formats,
-            null,
             1001
         );
     }
