@@ -62,6 +62,14 @@ class RefRelationship
      */
     private $relationshipType;
 
+    /**
+     * @var CoreEntityImage
+     *
+     * @ORM\OneToOne(targetEntity="CoreEntityImage")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     */
+    private $coreEntityImage = null;
+
     public function __construct(
         string $pid,
         string $subjectId,
@@ -144,5 +152,18 @@ class RefRelationship
     public function setRelationshipType(RefRelationshipType $relationshipType)
     {
         $this->relationshipType = $relationshipType;
+    }
+
+    /**
+     * @return CoreEntityImage
+     */
+    public function getCoreEntityImage()
+    {
+        return $this->coreEntityImage;
+    }
+
+    public function setCoreEntityImage(CoreEntityImage $coreEntityImage)
+    {
+        $this->coreEntityImage = $coreEntityImage;
     }
 }
