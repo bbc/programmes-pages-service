@@ -21,7 +21,6 @@ class VersionsServiceFindByProgrammeItemDbIdTest extends AbstractVersionsService
         $this->assertEquals($this->versionsFromDbData($dbData), $result);
     }
 
-
     public function testFindByProgrammeItemDbIdWithNonExistantPid()
     {
         $dbId = 999;

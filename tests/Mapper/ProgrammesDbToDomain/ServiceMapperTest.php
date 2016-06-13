@@ -15,7 +15,7 @@ class ServiceMapperTest extends BaseMapperTestCase
 
     public function setUp()
     {
-        $this->mockNetworkMapper = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $this->mockNetworkMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper'
         );
     }
@@ -53,7 +53,7 @@ class ServiceMapperTest extends BaseMapperTestCase
     {
         $networkDbEntity = ['nid' => 'radio_four'];
 
-        $expectedNetworkDomainEntity = $this->getMockWithoutInvokingTheOriginalConstructor(
+        $expectedNetworkDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Network'
         );
 

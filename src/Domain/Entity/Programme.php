@@ -78,12 +78,12 @@ abstract class Programme
     private $masterBrand;
 
     /**
-     * @var Genres[]
+     * @var Genre[]
      */
     private $genres;
 
     /**
-     * @var Formats[]
+     * @var Format[]
      */
     private $formats;
 

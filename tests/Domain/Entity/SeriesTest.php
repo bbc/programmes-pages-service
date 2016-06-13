@@ -7,7 +7,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use PHPUnit_Framework_TestCase;
 
 class SeriesTest extends PHPUnit_Framework_TestCase
@@ -61,12 +60,8 @@ class SeriesTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Domain\Entity\Series'
-        );
-        $masterBrand = $this->getMockWithoutInvokingTheOriginalConstructor(
-            'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
-        );
+        $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Series');
+        $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
 
         $genre = new Genre('id', 'Title', 'url_key');
         $format = new Format('id2', 'Title', 'url_key');
