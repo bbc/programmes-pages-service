@@ -10,7 +10,7 @@ class RefRelationshipTest extends PHPUnit_Framework_TestCase
 {
     public function testDefaults()
     {
-        $relationshipType = new RefRelationshipType('pid', 'name');
+        $relationshipType = new RefRelationshipType('pid123', 'name');
 
         $entity = new RefRelationship(
             'pid',
