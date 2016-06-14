@@ -16,6 +16,7 @@ class ImageMapperTest extends PHPUnit_Framework_TestCase
             'pid' => 'p01m5mss',
             'title' => 'Title',
             'shortSynopsis' => 'ShortSynopsis',
+            'mediumSynopsis' => 'MediumSynopsis',
             'longSynopsis' => 'LongestSynopsis',
             'type' => 'standard',
             'extension' => 'jpg',

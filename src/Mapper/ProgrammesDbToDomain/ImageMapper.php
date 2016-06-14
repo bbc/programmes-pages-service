@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class ImageMapper implements MapperInterface
 {
@@ -14,7 +15,7 @@ class ImageMapper implements MapperInterface
             new Pid($dbImage['pid']),
             $dbImage['title'],
             $dbImage['shortSynopsis'],
-            $this->getLongestSynopsis($dbImage),
+            $this->getSynopses($dbImage)->getLongestSynopsis(),
             $dbImage['type'],
             $dbImage['extension']
         );
@@ -32,14 +33,12 @@ class ImageMapper implements MapperInterface
         );
     }
 
-    private function getLongestSynopsis($dbImage): string
+    private function getSynopses($dbImage): Synopses
     {
-        if (!empty($dbImage['longSynopsis'])) {
-            return $dbImage['longSynopsis'];
-        }
-        if (!empty($dbImage['mediumSynopsis'])) {
-            return $dbImage['mediumSynopsis'];
-        }
-        return $dbImage['shortSynopsis'];
+        return new Synopses(
+            $dbImage['shortSynopsis'],
+            $dbImage['mediumSynopsis'],
+            $dbImage['longSynopsis']
+        );
     }
 }

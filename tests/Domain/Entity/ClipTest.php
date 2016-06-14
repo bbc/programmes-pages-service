@@ -9,6 +9,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use PHPUnit_Framework_TestCase;
 use DateTimeImmutable;
@@ -18,6 +19,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
     public function testConstructorRequiredArgs()
     {
         $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Clip(
@@ -25,8 +27,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
             $pid,
             'Title',
             'Search Title',
-            'Short Synopsis',
-            'Longest Synopsis',
+            $synopses,
             $image,
             1,
             2,
@@ -39,6 +40,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($pid, $programme->getPid());
         $this->assertEquals('Title', $programme->getTitle());
         $this->assertEquals('Search Title', $programme->getSearchTitle());
+        $this->assertEquals($synopses, $programme->getSynopses());
         $this->assertEquals('Short Synopsis', $programme->getShortSynopsis());
         $this->assertEquals('Longest Synopsis', $programme->getLongestSynopsis());
         $this->assertEquals($image, $programme->getImage());
@@ -52,6 +54,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
     public function testConstructorOptionalArgs()
     {
         $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Series'
@@ -72,8 +75,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
             $pid,
             'Title',
             'Search Title',
-            'Short Synopsis',
-            'Longest Synopsis',
+            $synopses,
             $image,
             1,
             2,

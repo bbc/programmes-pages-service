@@ -9,6 +9,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
@@ -41,8 +42,7 @@ class ProgrammeMapper extends AbstractMapper
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
-            $dbProgramme['shortSynopsis'],
-            $this->getLongestSynopsis($dbProgramme),
+            $this->getSynopses($dbProgramme),
             $this->getImageModel($dbProgramme),
             $dbProgramme['promotionsCount'],
             $dbProgramme['relatedLinksCount'],
@@ -70,8 +70,7 @@ class ProgrammeMapper extends AbstractMapper
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
-            $dbProgramme['shortSynopsis'],
-            $this->getLongestSynopsis($dbProgramme),
+            $this->getSynopses($dbProgramme),
             $this->getImageModel($dbProgramme),
             $dbProgramme['promotionsCount'],
             $dbProgramme['relatedLinksCount'],
@@ -99,8 +98,7 @@ class ProgrammeMapper extends AbstractMapper
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
-            $dbProgramme['shortSynopsis'],
-            $this->getLongestSynopsis($dbProgramme),
+            $this->getSynopses($dbProgramme),
             $this->getImageModel($dbProgramme),
             $dbProgramme['promotionsCount'],
             $dbProgramme['relatedLinksCount'],
@@ -129,8 +127,7 @@ class ProgrammeMapper extends AbstractMapper
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
-            $dbProgramme['shortSynopsis'],
-            $this->getLongestSynopsis($dbProgramme),
+            $this->getSynopses($dbProgramme),
             $this->getImageModel($dbProgramme),
             $dbProgramme['promotionsCount'],
             $dbProgramme['relatedLinksCount'],
@@ -209,14 +206,12 @@ class ProgrammeMapper extends AbstractMapper
         return $categories;
     }
 
-    private function getLongestSynopsis($dbProgramme): string
+    private function getSynopses($dbProgramme): Synopses
     {
-        if (!empty($dbProgramme['longSynopsis'])) {
-            return $dbProgramme['longSynopsis'];
-        }
-        if (!empty($dbProgramme['mediumSynopsis'])) {
-            return $dbProgramme['mediumSynopsis'];
-        }
-        return $dbProgramme['shortSynopsis'];
+        return new Synopses(
+            $dbProgramme['shortSynopsis'],
+            $dbProgramme['mediumSynopsis'],
+            $dbProgramme['longSynopsis']
+        );
     }
 }

@@ -16,6 +16,7 @@ class RelatedLinkMapperTest extends PHPUnit_Framework_TestCase
             'title' => 'Title',
             'uri' => 'http://example.com/',
             'shortSynopsis' => 'ShortSynopsis',
+            'mediumSynopsis' => 'MediumSynopsis',
             'longSynopsis' => 'LongestSynopsis',
             'type' => 'standard',
             'isExternal' => true,

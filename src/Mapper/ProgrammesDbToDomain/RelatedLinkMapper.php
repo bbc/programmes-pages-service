@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class RelatedLinkMapper implements MapperInterface
 {
@@ -13,20 +14,18 @@ class RelatedLinkMapper implements MapperInterface
             $dbRelatedLink['title'],
             $dbRelatedLink['uri'],
             $dbRelatedLink['shortSynopsis'],
-            $this->getLongestSynopsis($dbRelatedLink),
+            $this->getSynopses($dbRelatedLink)->getLongestSynopsis(),
             $dbRelatedLink['type'],
             $dbRelatedLink['isExternal']
         );
     }
 
-    private function getLongestSynopsis($dbRelatedLink): string
+    private function getSynopses($dbRelatedLink): Synopses
     {
-        if (!empty($dbRelatedLink['longSynopsis'])) {
-            return $dbRelatedLink['longSynopsis'];
-        }
-        if (!empty($dbRelatedLink['mediumSynopsis'])) {
-            return $dbRelatedLink['mediumSynopsis'];
-        }
-        return $dbRelatedLink['shortSynopsis'];
+        return new Synopses(
+            $dbRelatedLink['shortSynopsis'],
+            $dbRelatedLink['mediumSynopsis'],
+            $dbRelatedLink['longSynopsis']
+        );
     }
 }

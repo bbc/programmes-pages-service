@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use DateTimeImmutable;
 
 class Episode extends ProgrammeItem
@@ -29,8 +30,7 @@ class Episode extends ProgrammeItem
         Pid $pid,
         string $title,
         string $searchTitle,
-        string $shortSynopsis,
-        string $longestSynopsis,
+        Synopses $synopses,
         Image $image,
         int $promotionsCount,
         int $relatedLinksCount,
@@ -55,8 +55,7 @@ class Episode extends ProgrammeItem
             $pid,
             $title,
             $searchTitle,
-            $shortSynopsis,
-            $longestSynopsis,
+            $synopses,
             $image,
             $promotionsCount,
             $relatedLinksCount,

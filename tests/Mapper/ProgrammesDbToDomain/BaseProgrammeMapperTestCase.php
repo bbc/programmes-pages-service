@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 {
@@ -109,8 +110,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             new Pid($pid),
             'Title',
             'Search Title',
-            'Short Synopsis',
-            'Longest Synopsis',
+            new Synopses('Short Synopsis', 'Mediumest Synopsis', 'Longest Synopsis'),
             $image,
             1,
             2,

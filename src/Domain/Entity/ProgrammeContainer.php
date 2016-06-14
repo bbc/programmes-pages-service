@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 abstract class ProgrammeContainer extends Programme
 {
@@ -47,8 +48,7 @@ abstract class ProgrammeContainer extends Programme
         Pid $pid,
         string $title,
         string $searchTitle,
-        string $shortSynopsis,
-        string $longestSynopsis,
+        Synopses $synopses,
         Image $image,
         int $promotionsCount,
         int $relatedLinksCount,
@@ -72,8 +72,7 @@ abstract class ProgrammeContainer extends Programme
             $pid,
             $title,
             $searchTitle,
-            $shortSynopsis,
-            $longestSynopsis,
+            $synopses,
             $image,
             $promotionsCount,
             $relatedLinksCount,

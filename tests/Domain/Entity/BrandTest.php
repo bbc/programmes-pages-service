@@ -8,6 +8,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 
@@ -16,6 +17,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
     public function testConstructorRequiredArgs()
     {
         $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Brand(
@@ -23,8 +25,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             $pid,
             'Title',
             'Search Title',
-            'Short Synopsis',
-            'Longest Synopsis',
+            $synopses,
             $image,
             1,
             2,
@@ -42,6 +43,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($pid, $programme->getPid());
         $this->assertEquals('Title', $programme->getTitle());
         $this->assertEquals('Search Title', $programme->getSearchTitle());
+        $this->assertEquals($synopses, $programme->getSynopses());
         $this->assertEquals('Short Synopsis', $programme->getShortSynopsis());
         $this->assertEquals('Longest Synopsis', $programme->getLongestSynopsis());
         $this->assertEquals($image, $programme->getImage());
@@ -61,6 +63,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
     public function testConstructorOptionalArgs()
     {
         $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $parent = $this->getMockWithoutInvokingTheOriginalConstructor(
             'BBC\ProgrammesPagesService\Domain\Entity\Brand'
@@ -77,8 +80,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             $pid,
             'Title',
             'Search Title',
-            'Short Synopsis',
-            'Longest Synopsis',
+            $synopses,
             $image,
             1,
             2,
@@ -114,14 +116,14 @@ class BrandTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
 
         $programme = new Brand(
             0,
             $pid,
             'Title',
             'Search Title',
-            'Short Synopsis',
-            'Longest Synopsis',
+            $synopses,
             $image,
             1,
             2,
@@ -148,6 +150,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
     public function testInvalidFormats()
     {
         $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Brand(
@@ -155,8 +158,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             $pid,
             'Title',
             'Search Title',
-            'Short Synopsis',
-            'Longest Synopsis',
+            $synopses,
             $image,
             1,
             2,

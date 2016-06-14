@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
@@ -40,8 +41,7 @@ abstract class ProgrammeItem extends Programme
         Pid $pid,
         string $title,
         string $searchTitle,
-        string $shortSynopsis,
-        string $longestSynopsis,
+        Synopses $synopses,
         Image $image,
         int $promotionsCount,
         int $relatedLinksCount,
@@ -73,8 +73,7 @@ abstract class ProgrammeItem extends Programme
             $pid,
             $title,
             $searchTitle,
-            $shortSynopsis,
-            $longestSynopsis,
+            $synopses,
             $image,
             $promotionsCount,
             $relatedLinksCount,

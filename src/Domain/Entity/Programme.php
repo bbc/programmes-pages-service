@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use InvalidArgumentException;
 
 abstract class Programme
@@ -28,14 +29,9 @@ abstract class Programme
     private $searchTitle;
 
     /**
-     * @var string
+     * @var Synopses
      */
-    private $shortSynopsis;
-
-    /**
-     * @var string
-     */
-    private $longestSynopsis;
+    private $synopses;
 
     /**
      * @var Image
@@ -92,8 +88,7 @@ abstract class Programme
         Pid $pid,
         string $title,
         string $searchTitle,
-        string $shortSynopsis,
-        string $longestSynopsis,
+        Synopses $synopses,
         Image $image,
         int $promotionsCount,
         int $relatedLinksCount,
@@ -112,8 +107,7 @@ abstract class Programme
         $this->pid = $pid;
         $this->title = $title;
         $this->searchTitle = $searchTitle;
-        $this->shortSynopsis = $shortSynopsis;
-        $this->longestSynopsis = $longestSynopsis;
+        $this->synopses = $synopses;
         $this->image = $image;
         $this->promotionsCount = $promotionsCount;
         $this->relatedLinksCount = $relatedLinksCount;
@@ -157,14 +151,19 @@ abstract class Programme
         return $this->searchTitle;
     }
 
+    public function getSynopses(): Synopses
+    {
+        return $this->synopses;
+    }
+
     public function getShortSynopsis(): string
     {
-        return $this->shortSynopsis;
+        return $this->synopses->getShortSynopsis();
     }
 
     public function getLongestSynopsis(): string
     {
-        return $this->longestSynopsis;
+        return $this->synopses->getLongestSynopsis();
     }
 
     public function getImage(): Image
