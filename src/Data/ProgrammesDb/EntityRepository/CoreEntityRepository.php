@@ -2,8 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Domain\Entity\Programme;
-use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
+use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use InvalidArgumentException;
@@ -145,65 +144,87 @@ QUERY;
         return $q->getSingleScalarResult();
     }
 
-    public function findImmediateSibling(Programme $programme, string $direction)
-    {
+    public function findAdjacentProgrammeByPosition(
+        int $parentDbId,
+        int $position,
+        string $entityType,
+        string $direction
+    ) {
+        if (!in_array($entityType, ['Series', 'Episode', 'Clip'])) {
+            throw new InvalidArgumentException(sprintf(
+                'Called findAdjacentProgrammeByPosition with an invalid type. Expected one of "%s", "%s" or "%s" but got "%s"',
+                'Series',
+                'Episode',
+                'Clip',
+                $entityType
+            ));
+        }
+
         if (!in_array($direction, ['next', 'previous'])) {
             throw new InvalidArgumentException(sprintf(
-                'Called findImmediateSibling with an invalid direction type. Expected one of "%s" or "%s" but got "%s"',
+                'Called findAdjacentProgrammeByPosition with an invalid direction type. Expected one of "%s" or "%s" but got "%s"',
                 'next',
                 'previous',
                 $direction
             ));
         }
 
-        // Programmes that don't have a parent, can't have any siblings
-        if (!$programme->getParent()) {
-            return null;
+        $isNext = $direction == 'next';
+        $orderDirection = $isNext ? 'ASC' : 'DESC';
+        $filterOperation = $isNext ? '>' : '<' ;
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['programme'])
+            ->from('ProgrammesPagesService:' . $entityType, 'programme')
+            ->andWhere('programme.parent = :parentDbId')
+            ->andWhere('programme.position ' . $filterOperation . ' :originalPosition')
+            ->orderBy('programme.position', $orderDirection)
+            ->setMaxResults(1)
+            ->setParameter('parentDbId', $parentDbId)
+            ->setParameter('originalPosition', $position);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
+
+    public function findAdjacentProgrammeByReleaseDate(
+        int $parentDbId,
+        PartialDate $releaseDate,
+        string $entityType,
+        string $direction
+    ) {
+        if (!in_array($entityType, ['Episode', 'Clip'])) {
+            throw new InvalidArgumentException(sprintf(
+                'Called findAdjacentProgrammeByReleaseDate with an invalid type. Expected one of "%s" or "%s" but got "%s"',
+                'Episode',
+                'Clip',
+                $entityType
+            ));
+        }
+
+        if (!in_array($direction, ['next', 'previous'])) {
+            throw new InvalidArgumentException(sprintf(
+                'Called findAdjacentProgrammeByReleaseDate with an invalid direction type. Expected one of "%s" or "%s" but got "%s"',
+                'next',
+                'previous',
+                $direction
+            ));
         }
 
         $isNext = $direction == 'next';
         $orderDirection = $isNext ? 'ASC' : 'DESC';
         $filterOperation = $isNext ? '>' : '<' ;
 
-        // First try and look up based on position
-        if (!is_null($programme->getPosition())) {
-            $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select(['programme'])
-                ->from('ProgrammesPagesService:' . $this->dbType($programme), 'programme')
-                ->andWhere('programme.parent = :parentDbId')
-                ->andWhere('programme.position ' . $filterOperation . ' :originalPosition')
-                ->orderBy('programme.position', $orderDirection)
-                ->setMaxResults(1)
-                ->setParameter('parentDbId', $programme->getParent()->getDbId())
-                ->setParameter('originalPosition', $programme->getPosition());
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['programme'])
+            ->from('ProgrammesPagesService:' . $entityType, 'programme')
+            ->andWhere('programme.parent = :parentDbId')
+            ->andWhere('programme.releaseDate ' . $filterOperation . ' :originalReleaseDate')
+            ->orderBy('programme.releaseDate', $orderDirection)
+            ->setMaxResults(1)
+            ->setParameter('parentDbId', $parentDbId)
+            ->setParameter('originalReleaseDate', $releaseDate);
 
-            $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
-
-            if ($result) {
-                return $result;
-            }
-        }
-
-        // Else attempt to look up based on ReleaseDate (which only exists for ProgrammeItems)
-        if ($programme instanceof ProgrammeItem && !is_null($programme->getReleaseDate())) {
-            $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select(['programme'])
-                ->from('ProgrammesPagesService:' . $this->dbType($programme), 'programme')
-                ->andWhere('programme.parent = :parentDbId')
-                ->andWhere('programme.releaseDate ' . $filterOperation . ' :originalReleaseDate')
-                ->orderBy('programme.releaseDate', $orderDirection)
-                ->setMaxResults(1)
-                ->setParameter('parentDbId', $programme->getParent()->getDbId())
-                ->setParameter('originalReleaseDate', $programme->getReleaseDate());
-
-            $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
-
-            if ($result) {
-                return $result;
-            }
-        }
-
-        return null;
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
     public function findDescendants($programme, $limit, $offset)
@@ -250,15 +271,5 @@ QUERY;
     {
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
         return $repo->findByIds($ids);
-    }
-
-    /**
-     * A utility for returning the db type for a given Domain object
-     * This works as we have symmetry between out Domain Entity and DB Entity
-     * names for Programmes
-     */
-    private function dbType(Programme $entity)
-    {
-        return substr(strrchr(get_class($entity), '\\'), 1);
     }
 }
