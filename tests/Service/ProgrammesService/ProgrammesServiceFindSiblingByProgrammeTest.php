@@ -110,9 +110,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
         $this->assertNull($result);
     }
 
-// ---
-
-       public function testFindPreviousSiblingByProgrammeSearchesByPosition()
+    public function testFindPreviousSiblingByProgrammeSearchesByPosition()
     {
         $programme = $this->getMockEpisode(1, 3, null);
         $dbData = ['pid' => 'b010t19z'];
