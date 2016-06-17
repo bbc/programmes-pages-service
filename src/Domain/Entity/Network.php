@@ -74,7 +74,7 @@ class Network
         Image $image,
         string $urlKey = null,
         string $type = null,
-        string $medium = null,
+        string $medium = NetworkMediumEnum::UNKNOWN,
         Service $defaultService = null,
         bool $isPublicOutlet = false,
         bool $isChildrens = false,
@@ -82,7 +82,7 @@ class Network
         bool $isInternational = false,
         bool $isAllowedAdverts = false
     ) {
-        if (!in_array($medium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV, NetworkMediumEnum::UNKNOWN])) {
+        if (!in_array($medium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV, NetworkMediumEnum::UNKNOWN], true)) {
             throw new InvalidArgumentException(sprintf(
                 '$medium has an invalid value. Expected one of "%s", "%s" or "%s" but got "%s"',
                 NetworkMediumEnum::RADIO,

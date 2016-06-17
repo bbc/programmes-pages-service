@@ -24,9 +24,18 @@ class NetworkTest extends PHPUnit_Framework_TestCase
             $image
         );
 
-        $this->assertEquals($nid, $network->getNid());
-        $this->assertEquals('Name', $network->getName());
-        $this->assertEquals($image, $network->getImage());
+        $this->assertSame($nid, $network->getNid());
+        $this->assertSame('Name', $network->getName());
+        $this->assertSame($image, $network->getImage());
+        $this->assertNull($network->getUrlKey());
+        $this->assertNull($network->getType());
+        $this->assertSame(NetworkMediumEnum::UNKNOWN, $network->getMedium());
+        $this->assertNull($network->getDefaultService());
+        $this->assertSame(false, $network->isPublicOutlet());
+        $this->assertSame(false, $network->isChildrens());
+        $this->assertSame(false, $network->isWorldServiceInternational());
+        $this->assertSame(false, $network->isInternational());
+        $this->assertSame(false, $network->isAllowedAdverts());
 
     }
 
@@ -51,15 +60,15 @@ class NetworkTest extends PHPUnit_Framework_TestCase
             true
         );
 
-        $this->assertEquals('url_key', $network->getUrlKey());
-        $this->assertEquals('Local Radio', $network->getType());
-        $this->assertEquals(NetworkMediumEnum::RADIO, $network->getMedium());
-        $this->assertEquals($service, $network->getDefaultService());
-        $this->assertEquals(true, $network->isPublicOutlet());
-        $this->assertEquals(true, $network->isChildrens());
-        $this->assertEquals(true, $network->isWorldServiceInternational());
-        $this->assertEquals(true, $network->isInternational());
-        $this->assertEquals(true, $network->isAllowedAdverts());
+        $this->assertSame('url_key', $network->getUrlKey());
+        $this->assertSame('Local Radio', $network->getType());
+        $this->assertSame(NetworkMediumEnum::RADIO, $network->getMedium());
+        $this->assertSame($service, $network->getDefaultService());
+        $this->assertSame(true, $network->isPublicOutlet());
+        $this->assertSame(true, $network->isChildrens());
+        $this->assertSame(true, $network->isWorldServiceInternational());
+        $this->assertSame(true, $network->isInternational());
+        $this->assertSame(true, $network->isAllowedAdverts());
     }
 
     /**
