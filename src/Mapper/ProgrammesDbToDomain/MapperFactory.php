@@ -15,6 +15,24 @@ class MapperFactory
         return $this->instances['CategoryMapper'];
     }
 
+    public function getContributionMapper(): ContributionMapper
+    {
+        if (!array_key_exists('ContributionMapper', $this->instances)) {
+            $this->instances['ContributionMapper'] = new ContributionMapper($this);
+        }
+
+        return $this->instances['ContributionMapper'];
+    }
+
+    public function getContributorMapper(): ContributorMapper
+    {
+        if (!array_key_exists('ContributorMapper', $this->instances)) {
+            $this->instances['ContributorMapper'] = new ContributorMapper();
+        }
+
+        return $this->instances['ContributorMapper'];
+    }
+
     public function getImageMapper(): ImageMapper
     {
         if (!array_key_exists('ImageMapper', $this->instances)) {
