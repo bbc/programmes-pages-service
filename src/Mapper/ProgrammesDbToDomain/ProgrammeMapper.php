@@ -174,7 +174,12 @@ class ProgrammeMapper extends AbstractMapper
             $currentItem = $currentItem['parent'] ?? null;
         }
 
-        // Couldn't find anything in the hierarchy, so use the default Image
+        // Couldn't find anything in the hierarchy, try the MasterBrand image
+        if (isset($dbProgramme['masterBrand']['image'])) {
+            return $imageMapper->getDomainModel($dbProgramme['masterBrand']['image']);
+        }
+
+        // Couldn't find anything in the masterbrand, so use the default Image
         return $imageMapper->getDefaultImage();
     }
 

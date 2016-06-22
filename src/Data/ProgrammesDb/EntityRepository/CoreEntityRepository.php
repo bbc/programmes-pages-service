@@ -75,13 +75,17 @@ QUERY;
         // Categories a Programme has is 12. Creating an few extra rows in
         // rare-ish cases is way more efficient that having to do a two-step
         // hydration process.
+        // We need to JOIN to masterBrand's image as the image hierarchy can
+        // fall back to the masterbrand's image if no masterbrand exists in the
+        // existing image hierarchy
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select(['entity', 'image', 'masterBrand', 'network', 'category'])
+            ->select(['entity', 'image', 'masterBrand', 'network', 'mbImage', 'category'])
             ->from('ProgrammesPagesService:' . $entityType, 'entity') // For filtering on type
             ->leftJoin('entity.image', 'image')
             ->leftJoin('entity.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('masterBrand.image', 'mbImage')
             ->leftJoin('entity.categories', 'category')
             ->where('entity.pid = :pid')
             ->setParameter('pid', $pid);
@@ -111,9 +115,12 @@ QUERY;
     public function findEpisodeGuideChildren($dbId, $limit, $offset)
     {
         $qText = <<<QUERY
-SELECT programme, image
+SELECT programme, image, masterBrand, network, mbImage
 FROM ProgrammesPagesService:Programme programme
 LEFT JOIN programme.image image
+LEFT JOIN programme.masterBrand masterBrand
+LEFT JOIN masterBrand.network network
+LEFT JOIN masterBrand.image mbImage
 LEFT JOIN ProgrammesPagesService:ProgrammeItem pi WITH programme.id = pi.id
 WHERE programme.parent = :dbId
 AND programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode)
@@ -249,10 +256,11 @@ QUERY;
     private function programmeAncestryGetter(array $ids)
     {
         return $this->createQueryBuilder('programme')
-            ->addSelect(['image', 'masterBrand', 'network'])
+            ->addSelect(['image', 'masterBrand', 'network', 'mbImage'])
             ->leftJoin('programme.image', 'image')
             ->leftJoin('programme.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('masterBrand.image', 'mbImage')
             ->where("programme.id IN(:ids)")
             ->setParameter('ids', $ids)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);

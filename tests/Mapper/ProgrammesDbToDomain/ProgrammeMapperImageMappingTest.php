@@ -63,7 +63,7 @@ class ProgrammeMapperImageMappingTest extends BaseProgrammeMapperTestCase
         $dbEntityArray = $this->getSampleProgrammeDbEntity(
             'b00swyx1',
             null,
-            null,
+            ['mid' => 'bbc_one', 'image' => ['pid' => 'zzzzzzzz']],
             [],
             $this->getSampleProgrammeDbEntity(
                 'b010t19z',
@@ -74,5 +74,32 @@ class ProgrammeMapperImageMappingTest extends BaseProgrammeMapperTestCase
         $domainModel = $this->getMapper()->getDomainModel($dbEntityArray);
         $this->assertEquals('InheritedImage', $domainModel->getImage()->getTitle());
         $this->assertEquals('InheritedImage', $domainModel->getParent()->getImage()->getTitle());
+    }
+
+    public function testWhenImageOnMasterBrandIsSetThenTheMasterBrandImageIsUsed()
+    {
+        $imageDbEntity = ['pid' => 'p01m5mss'];
+
+        $expectedImageDomainEntity = $this->createMock(
+            'BBC\ProgrammesPagesService\Domain\Entity\Image'
+        );
+
+        $expectedImageDomainEntity->method('getTitle')->willReturn('MasterBrandImage');
+
+        $this->mockImageMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($imageDbEntity)
+            ->willReturn($expectedImageDomainEntity);
+
+        $dbEntityArray = $this->getSampleProgrammeDbEntity(
+            'b00swyx1',
+            null,
+            ['mid' => 'bbc_one', 'image' => $imageDbEntity],
+            [],
+            null
+        );
+
+        $domainModel = $this->getMapper()->getDomainModel($dbEntityArray);
+        $this->assertEquals('MasterBrandImage', $domainModel->getImage()->getTitle());
     }
 }
