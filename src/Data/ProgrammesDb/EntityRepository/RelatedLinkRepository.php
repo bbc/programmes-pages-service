@@ -18,6 +18,7 @@ class RelatedLinkRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('relatedLink')
             ->andWhere('relatedLink.' . $columnName . ' IN (:dbIds)')
+            ->orderBy('relatedLink.position')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
