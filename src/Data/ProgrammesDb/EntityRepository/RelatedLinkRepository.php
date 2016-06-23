@@ -25,4 +25,12 @@ class RelatedLinkRepository extends EntityRepository
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
+
+    public function createQueryBuilder($alias, $indexBy = null)
+    {
+        // We never want related links of any other type
+        return parent::createQueryBuilder($alias)
+            ->andWhere('relatedLink.type = :type')
+            ->setParameter('type', 'related_site');
+    }
 }
