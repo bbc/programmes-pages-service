@@ -11,13 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class Programme extends CoreEntity
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    private $promotionsCount = 0;
-
-    /**
      * @var bool
      *
      * @ORM\Column(type="boolean", nullable=false)

@@ -12,10 +12,10 @@ class GroupProgrammeContainerTest extends PHPUnit_Framework_TestCase
     {
         $reflection = new ReflectionClass(GroupProgrammeContainer::CLASS);
         $this->assertEquals([
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedEpisodesCountTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableEpisodesCountTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableGalleriesCountTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedEpisodesCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableEpisodesCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableGalleriesCountMethodsTrait',
         ], $reflection->getTraitNames());
     }
 
@@ -30,5 +30,9 @@ class GroupProgrammeContainerTest extends PHPUnit_Framework_TestCase
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity',
             $entity
         );
+        $this->assertEquals(0, $entity->getAggregatedEpisodesCount());
+        $this->assertEquals(0, $entity->getAvailableClipsCount());
+        $this->assertEquals(0, $entity->getAvailableEpisodesCount());
+        $this->assertEquals(0, $entity->getAvailableGalleriesCount());
     }
 }

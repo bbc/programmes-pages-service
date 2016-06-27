@@ -13,12 +13,12 @@ class ProgrammeContainerTest extends PHPUnit_Framework_TestCase
     {
         $reflection = new ReflectionClass(ProgrammeContainer::CLASS);
         $this->assertEquals([
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedEpisodesCountTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableEpisodesCountTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableGalleriesCountTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsPodcastableTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedEpisodesCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableEpisodesCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableGalleriesCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsPodcastableMethodsTrait',
         ], $reflection->getTraitNames());
     }
 
@@ -35,6 +35,13 @@ class ProgrammeContainerTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertSame(null, $entity->getExpectedChildCount());
+        // Test defaults on properties pulled down from traits
+        $this->assertEquals(0, $entity->getAggregatedBroadcastsCount());
+        $this->assertEquals(0, $entity->getAvailableEpisodesCount());
+        $this->assertEquals(0, $entity->getAvailableClipsCount());
+        $this->assertEquals(0, $entity->getAggregatedEpisodesCount());
+        $this->assertEquals(0, $entity->getAvailableGalleriesCount());
+        $this->assertEquals(false, $entity->getIsPodcastable());
     }
 
     /**

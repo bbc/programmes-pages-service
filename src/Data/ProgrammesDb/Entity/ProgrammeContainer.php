@@ -9,12 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class ProgrammeContainer extends Programme
 {
-    use Traits\AggregatedBroadcastsCountTrait;
-    use Traits\AggregatedEpisodesCountTrait;
-    use Traits\AvailableClipsCountTrait;
-    use Traits\AvailableEpisodesCountTrait;
-    use Traits\AvailableGalleriesCountTrait;
-    use Traits\IsPodcastableTrait;
+    use Traits\AggregatedBroadcastsCountMethodsTrait;
+    use Traits\AggregatedEpisodesCountMethodsTrait;
+    use Traits\AvailableClipsCountMethodsTrait;
+    use Traits\AvailableEpisodesCountMethodsTrait;
+    use Traits\AvailableGalleriesCountMethodsTrait;
+    use Traits\IsPodcastableMethodsTrait;
 
     /**
      * @var int|null

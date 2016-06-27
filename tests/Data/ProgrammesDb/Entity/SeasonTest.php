@@ -13,7 +13,7 @@ class SeasonTest extends PHPUnit_Framework_TestCase
     {
         $reflection = new ReflectionClass(Season::CLASS);
         $this->assertEquals([
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountMethodsTrait',
         ], $reflection->getTraitNames());
     }
 
@@ -26,6 +26,7 @@ class SeasonTest extends PHPUnit_Framework_TestCase
             $entity
         );
 
+        $this->assertEquals(0, $entity->getAggregatedBroadcastsCount());
         $this->assertSame(null, $entity->getStartDate());
         $this->assertSame(null, $entity->getEndDate());
     }

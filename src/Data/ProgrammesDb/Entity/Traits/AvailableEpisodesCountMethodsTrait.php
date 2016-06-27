@@ -4,15 +4,8 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
 
-trait AvailableEpisodesCountTrait
+trait AvailableEpisodesCountMethodsTrait
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    protected $availableEpisodesCount = 0;
-
     public function getAvailableEpisodesCount(): int
     {
         return $this->availableEpisodesCount;

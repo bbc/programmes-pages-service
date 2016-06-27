@@ -12,7 +12,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     {
         $reflection = new ReflectionClass(Collection::CLASS);
         $this->assertEquals([
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsPodcastableTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsPodcastableMethodsTrait',
         ], $reflection->getTraitNames());
     }
 
@@ -24,5 +24,6 @@ class CollectionTest extends PHPUnit_Framework_TestCase
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\GroupProgrammeContainer',
             $entity
         );
+        $this->assertEquals(false, $entity->getIsPodcastable());
     }
 }

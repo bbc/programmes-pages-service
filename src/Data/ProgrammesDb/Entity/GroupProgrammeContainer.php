@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class GroupProgrammeContainer extends Group
 {
-    use Traits\AggregatedEpisodesCountTrait;
-    use Traits\AvailableClipsCountTrait;
-    use Traits\AvailableEpisodesCountTrait;
-    use Traits\AvailableGalleriesCountTrait;
+    use Traits\AggregatedEpisodesCountMethodsTrait;
+    use Traits\AvailableClipsCountMethodsTrait;
+    use Traits\AvailableEpisodesCountMethodsTrait;
+    use Traits\AvailableGalleriesCountMethodsTrait;
 }

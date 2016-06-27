@@ -10,7 +10,7 @@ use DateTime;
  */
 class Season extends GroupProgrammeContainer
 {
-    use Traits\AggregatedBroadcastsCountTrait;
+    use Traits\AggregatedBroadcastsCountMethodsTrait;
 
     /**
      * @var DateTime|null

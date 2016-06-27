@@ -4,15 +4,8 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
 
-trait IsPodcastableTrait
+trait IsPodcastableMethodsTrait
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="boolean", nullable=false)
-     */
-    protected $isPodcastable = false;
-
     public function getIsPodcastable(): bool
     {
         return $this->isPodcastable;

@@ -131,6 +131,83 @@ abstract class CoreEntity
      */
     private $relatedLinksCount = 0;
 
+    /**
+     * ANNOYING EXPLANATORY COMMENT
+     *
+     * Fields marked TRAIT_PULLDOWN are defined on CoreEntity rather than
+     * in the trait that defines the field's getters and setters. This is because
+     * doctrine generates incorrect SQL (specifying a single field multiple
+     * times in a select) for fields that are defined in more than one
+     * place in a class heirarchy. Getters and setters are defined in the
+     * trait and the trait is only added to entities where they are relevant.
+     *
+     * Fields marked COUNT_PULLDOWN are defined on CoreEntity rather than
+     * on the entities that actually use them because doctrine does not
+     * allow us to set a non-nullable column on a subclass of a discriminator
+     * mapped table. See https://github.com/doctrine/doctrine2/issues/5555
+     */
+
+    /**
+     * @var int
+     * TRAIT_PULLDOWN for AggregatedBroadcastsCountMethodsTrait
+     * COUNT_PULLDOWN for classes importing AggregatedBroadcastsCountMethodsTrait
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    protected $aggregatedBroadcastsCount = 0;
+
+    /**
+     * @var int
+     * TRAIT_PULLDOWN for AggregatedEpisodesCountMethodsTrait
+     * COUNT_PULLDOWN for classes importing AggregatedEpisodesCountMethodsTrait
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    protected $aggregatedEpisodesCount = 0;
+
+    /**
+     * @var int
+     * TRAIT_PULLDOWN for AvailableClipsCountMethodsTrait
+     * COUNT_PULLDOWN for classes importing AvailableClipsCountMethodsTrait
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    protected $availableClipsCount = 0;
+
+    /**
+     * @var int
+     * TRAIT_PULLDOWN for AvailableEpisodesCountMethodsTrait
+     * COUNT_PULLDOWN for classes implementing AvailableEpisodesCountMethodsTrait
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    protected $availableEpisodesCount = 0;
+
+    /**
+     * @var int
+     * TRAIT_PULLDOWN for AvailableGalleriesCountMethodsTrait
+     * COUNT_PULLDOWN for classes implementing AvailableGalleriesCountMethodsTrait
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    protected $availableGalleriesCount = 0;
+
+    /**
+     * @var string
+     * TRAIT_PULLDOWN for IsPodcastableMethodsTrait
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    protected $isPodcastable = false;
+
+    /**
+     * @var int
+     * COUNT_PULLDOWN for Programme
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    protected $promotionsCount = 0;
+
     public function __construct(string $pid, string $title)
     {
         $this->pid = $pid;

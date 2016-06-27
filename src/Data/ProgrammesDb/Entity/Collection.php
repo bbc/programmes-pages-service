@@ -9,5 +9,5 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Collection extends GroupProgrammeContainer
 {
-    use Traits\IsPodcastableTrait;
+    use Traits\IsPodcastableMethodsTrait;
 }

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Episode extends ProgrammeItem
 {
-    use Traits\AggregatedBroadcastsCountTrait;
-    use Traits\AvailableClipsCountTrait;
-    use Traits\AvailableGalleriesCountTrait;
+    use Traits\AggregatedBroadcastsCountMethodsTrait;
+    use Traits\AvailableClipsCountMethodsTrait;
+    use Traits\AvailableGalleriesCountMethodsTrait;
 }

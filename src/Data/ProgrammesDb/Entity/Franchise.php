@@ -9,5 +9,5 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Franchise extends GroupProgrammeContainer
 {
-    use Traits\AggregatedBroadcastsCountTrait;
+    use Traits\AggregatedBroadcastsCountMethodsTrait;
 }
