@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -62,13 +63,20 @@ class RefRelationship
      */
     private $relationshipType;
 
+    /**
+     * @var DateTime
+     * @ORM\Column(type="datetime")
+     */
+    protected $pipsLastModified;
+
     public function __construct(
         string $pid,
         string $subjectId,
         string $subjectType,
         string $objectId,
         string $objectType,
-        RefRelationshipType $relationshipType
+        RefRelationshipType $relationshipType,
+        DateTime $pipsLastModified
     ) {
         $this->pid = $pid;
         $this->subjectId = $subjectId;
@@ -76,6 +84,7 @@ class RefRelationship
         $this->objectId = $objectId;
         $this->objectType = $objectType;
         $this->relationshipType = $relationshipType;
+        $this->pipsLastModified = $pipsLastModified;
     }
 
     /**
@@ -144,5 +153,15 @@ class RefRelationship
     public function setRelationshipType(RefRelationshipType $relationshipType)
     {
         $this->relationshipType = $relationshipType;
+    }
+
+    public function getPipsLastModified(): DateTime
+    {
+        return $this->pipsLastModified;
+    }
+
+    public function setPipsLastModified(DateTime $pipsLastModified)
+    {
+        $this->pipsLastModified = $pipsLastModified;
     }
 }
