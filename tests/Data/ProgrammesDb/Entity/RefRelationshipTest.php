@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationship;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationshipType;
+use DateTime;
 use PHPUnit_Framework_TestCase;
 
 class RefRelationshipTest extends PHPUnit_Framework_TestCase
@@ -18,7 +19,8 @@ class RefRelationshipTest extends PHPUnit_Framework_TestCase
             'subjectType',
             'objectId',
             'objectType',
-            $relationshipType
+            $relationshipType,
+            new DateTime('2015-06-13T11:06:03Z')
         );
 
         $this->assertSame(null, $entity->getId());
@@ -41,7 +43,8 @@ class RefRelationshipTest extends PHPUnit_Framework_TestCase
             'subjectType',
             'objectId',
             'objectType',
-            new RefRelationshipType('pid', 'name')
+            new RefRelationshipType('pid', 'name'),
+            new DateTime('2015-06-13T11:06:03Z')
         );
 
         $entity->{'set' . $name}($validValue);
