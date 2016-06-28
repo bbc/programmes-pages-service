@@ -12,7 +12,7 @@ class FranchiseTest extends PHPUnit_Framework_TestCase
     {
         $reflection = new ReflectionClass(Franchise::CLASS);
         $this->assertEquals([
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountMethodsTrait',
         ], $reflection->getTraitNames());
     }
 
@@ -24,5 +24,7 @@ class FranchiseTest extends PHPUnit_Framework_TestCase
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\GroupProgrammeContainer',
             $entity
         );
+
+        $this->assertEquals(0, $entity->getAggregatedBroadcastsCount());
     }
 }

@@ -12,9 +12,9 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
     {
         $reflection = new ReflectionClass(Episode::CLASS);
         $this->assertEquals([
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableGalleriesCountTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableGalleriesCountMethodsTrait',
         ], $reflection->getTraitNames());
     }
 
@@ -26,5 +26,8 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem',
             $entity
         );
+        $this->assertEquals(0, $entity->getAggregatedBroadcastsCount());
+        $this->assertEquals(0, $entity->getAvailableClipsCount());
+        $this->assertEquals(0, $entity->getAvailableGalleriesCount());
     }
 }
