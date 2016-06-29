@@ -206,4 +206,14 @@ abstract class ProgrammeItem extends Programme
     {
         $this->duration = $duration;
     }
+
+    public function getSegmentEventCount(): int
+    {
+        return $this->segmentEventCount;
+    }
+
+    public function setSegmentEventCount(int $segmentEventCount)
+    {
+        $this->segmentEventCount = $segmentEventCount;
+    }
 }

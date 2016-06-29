@@ -59,6 +59,13 @@ class Version
      */
     private $versionTypes;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    protected $segmentEventCount = 0;
+
     public function __construct(string $pid, ProgrammeItem $programmeItem)
     {
         $this->pid = $pid;
@@ -141,5 +148,15 @@ class Version
     public function setVersionTypes(DoctrineCollection $versionTypes)
     {
         $this->versionTypes = $versionTypes;
+    }
+
+    public function getSegmentEventCount(): int
+    {
+        return $this->segmentEventCount;
+    }
+
+    public function setSegmentEventCount(int $segmentEventCount)
+    {
+        $this->segmentEventCount = $segmentEventCount;
     }
 }

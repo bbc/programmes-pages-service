@@ -208,6 +208,14 @@ abstract class CoreEntity
      */
     protected $promotionsCount = 0;
 
+    /**
+     * @var int
+     * COUNT_PULLDOWN for ProgrammeItem
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    protected $segmentEventCount = 0;
+
     public function __construct(string $pid, string $title)
     {
         $this->pid = $pid;
