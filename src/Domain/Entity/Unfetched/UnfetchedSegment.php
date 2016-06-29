@@ -1,0 +1,20 @@
+<?php
+
+namespace BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
+
+use BBC\ProgrammesPagesService\Domain\Entity\Segment;
+use BBC\ProgrammesPagesService\Domain\ValueObject\NullPid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
+
+class UnfetchedSegment extends Segment
+{
+    public function __construct()
+    {
+        parent::__construct(
+            new NullPid(),
+            '',
+            '',
+            new Synopses('', '', '')
+        );
+    }
+}

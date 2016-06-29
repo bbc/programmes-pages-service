@@ -78,6 +78,24 @@ class MapperFactory
         return $this->instances['RelatedLinkMapper'];
     }
 
+    public function getSegmentMapper(): SegmentMapper
+    {
+        if (!array_key_exists('SegmentMapper', $this->instances)) {
+            $this->instances['SegmentMapper'] = new SegmentMapper();
+        }
+
+        return $this->instances['SegmentMapper'];
+    }
+
+    public function getSegmentEventMapper(): SegmentEventMapper
+    {
+        if (!array_key_exists('SegmentEventMapper', $this->instances)) {
+            $this->instances['SegmentEventMapper'] = new SegmentEventMapper($this);
+        }
+
+        return $this->instances['SegmentEventMapper'];
+    }
+
     public function getServiceMapper(): ServiceMapper
     {
         if (!array_key_exists('ServiceMapper', $this->instances)) {
