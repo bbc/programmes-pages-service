@@ -2,12 +2,22 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\BroadcastCountableInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\EpisodeCountableInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\GalleriesCountableInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\StreamableClipCountableInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\StreamableEpisodeCountableInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\MappedSuperclass()
  */
-abstract class ProgrammeContainer extends Programme
+abstract class ProgrammeContainer extends Programme implements
+    BroadcastCountableInterface,
+    StreamableEpisodeCountableInterface,
+    EpisodeCountableInterface,
+    StreamableClipCountableInterface,
+    GalleriesCountableInterface
 {
     use Traits\AggregatedBroadcastsCountMethodsTrait;
     use Traits\AggregatedEpisodesCountMethodsTrait;

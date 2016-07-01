@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChange;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChangeBase;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
