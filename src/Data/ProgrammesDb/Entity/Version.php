@@ -66,7 +66,7 @@ class Version
      * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
      */
     protected $segmentEventCount = 0;
-    
+
     /**
      * @var DateTime
      *
@@ -176,10 +176,7 @@ class Version
         return $this->firstBroadcastDate;
     }
 
-    /**
-     * @param DateTime $firstBroadcastDate
-     */
-    public function setFirstBroadcastDate($firstBroadcastDate)
+    public function setFirstBroadcastDate(DateTime $firstBroadcastDate = null)
     {
         $this->firstBroadcastDate = $firstBroadcastDate;
     }
