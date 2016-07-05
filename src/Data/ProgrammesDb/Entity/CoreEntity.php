@@ -217,13 +217,6 @@ abstract class CoreEntity
      */
     protected $segmentEventCount = 0;
 
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $firstBroadcastDate;
-
     public function __construct(string $pid, string $title)
     {
         $this->pid = $pid;
@@ -327,21 +320,5 @@ abstract class CoreEntity
     public function setRelatedLinksCount(int $relatedLinksCount)
     {
         $this->relatedLinksCount = $relatedLinksCount;
-    }
-
-    /**
-     * @return DateTime|null
-     */
-    public function getFirstBroadcastDate()
-    {
-        return $this->firstBroadcastDate;
-    }
-
-    /**
-     * @param DateTime $firstBroadcastDate
-     */
-    public function setFirstBroadcastDate($firstBroadcastDate)
-    {
-        $this->firstBroadcastDate = $firstBroadcastDate;
     }
 }

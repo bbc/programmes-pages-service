@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +32,12 @@ abstract class Programme extends CoreEntity
      */
     private $streamable = false;
 
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $firstBroadcastDate;
 
     public function getPromotionsCount(): int
     {
@@ -110,5 +117,18 @@ abstract class Programme extends CoreEntity
     public function setCategories(DoctrineCollection $categories)
     {
         $this->categories = $categories;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getFirstBroadcastDate()
+    {
+        return $this->firstBroadcastDate;
+    }
+    
+    public function setFirstBroadcastDate(DateTime $firstBroadcastDate = null)
+    {
+        $this->firstBroadcastDate = $firstBroadcastDate;
     }
 }
