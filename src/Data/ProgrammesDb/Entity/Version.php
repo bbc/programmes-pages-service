@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -65,6 +66,13 @@ class Version
      * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
      */
     protected $segmentEventCount = 0;
+    
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $firstBroadcastDate;
 
     public function __construct(string $pid, ProgrammeItem $programmeItem)
     {
@@ -158,5 +166,21 @@ class Version
     public function setSegmentEventCount(int $segmentEventCount)
     {
         $this->segmentEventCount = $segmentEventCount;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getFirstBroadcastDate()
+    {
+        return $this->firstBroadcastDate;
+    }
+
+    /**
+     * @param DateTime $firstBroadcastDate
+     */
+    public function setFirstBroadcastDate($firstBroadcastDate)
+    {
+        $this->firstBroadcastDate = $firstBroadcastDate;
     }
 }
