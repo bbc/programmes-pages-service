@@ -37,7 +37,7 @@ abstract class Programme extends CoreEntity
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $firstBroadcastDate;
+    private $firstBroadcastDate;
 
     public function getPromotionsCount(): int
     {
@@ -126,7 +126,7 @@ abstract class Programme extends CoreEntity
     {
         return $this->firstBroadcastDate;
     }
-    
+
     public function setFirstBroadcastDate(DateTime $firstBroadcastDate = null)
     {
         $this->firstBroadcastDate = $firstBroadcastDate;
