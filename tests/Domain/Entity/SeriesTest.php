@@ -71,6 +71,8 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $genre = new Genre('id', 'Title', 'url_key');
         $format = new Format('id2', 'Title', 'url_key');
 
+        $firstBroadcastDate = new \DateTimeImmutable();
+
         $programme = new Series(
             0,
             $pid,
@@ -93,6 +95,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
+            $firstBroadcastDate,
             1001
         );
 
@@ -101,6 +104,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());
+        $this->assertEquals($firstBroadcastDate, $programme->getFirstBroadcastDate());
         $this->assertEquals(1001, $programme->getExpectedChildCount());
     }
 }
