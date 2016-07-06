@@ -234,6 +234,47 @@ QUERY;
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findAdjacentProgrammeByFirstBroadcastDate(
+        int $parentDbId,
+        \DateTimeInterface $firstBroadcastDate,
+        string $entityType,
+        string $direction
+    ) {
+        if (!in_array($entityType, ['Episode', 'Clip'])) {
+            throw new InvalidArgumentException(sprintf(
+                'Called findAdjacentProgrammeByReleaseDate with an invalid type. Expected one of "%s" or "%s" but got "%s"',
+                'Episode',
+                'Clip',
+                $entityType
+            ));
+        }
+
+        if (!in_array($direction, ['next', 'previous'])) {
+            throw new InvalidArgumentException(sprintf(
+                'Called findAdjacentProgrammeByReleaseDate with an invalid direction type. Expected one of "%s" or "%s" but got "%s"',
+                'next',
+                'previous',
+                $direction
+            ));
+        }
+
+        $isNext = $direction == 'next';
+        $orderDirection = $isNext ? 'ASC' : 'DESC';
+        $filterOperation = $isNext ? '>' : '<' ;
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['programme'])
+            ->from('ProgrammesPagesService:' . $entityType, 'programme')
+            ->andWhere('programme.parent = :parentDbId')
+            ->andWhere('programme.firstBroadcastDate ' . $filterOperation . ' :firstBroadcastDate')
+            ->orderBy('programme.firstBroadcastDate', $orderDirection)
+            ->setMaxResults(1)
+            ->setParameter('parentDbId', $parentDbId)
+            ->setParameter('firstBroadcastDate', $firstBroadcastDate);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
+
     public function findDescendants($programme, $limit, $offset)
     {
         $qb = $this->getChildrenQueryBuilder($programme)

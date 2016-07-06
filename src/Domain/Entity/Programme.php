@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
+use DateTimeImmutable;
 use InvalidArgumentException;
 
 abstract class Programme
@@ -83,6 +84,11 @@ abstract class Programme
      */
     private $formats;
 
+    /**
+     * @var DateTimeImmutable
+     */
+    private $firstBroadcastDate;
+
     public function __construct(
         int $dbId,
         Pid $pid,
@@ -98,7 +104,8 @@ abstract class Programme
         int $position = null,
         MasterBrand $masterBrand = null,
         array $genres = [],
-        array $formats = []
+        array $formats = [],
+        DateTimeImmutable $firstBroadcastDate = null
     ) {
         $this->assertArrayOfType('genres', $genres, Genre::CLASS);
         $this->assertArrayOfType('formats', $formats, Format::CLASS);
@@ -118,6 +125,7 @@ abstract class Programme
         $this->masterBrand = $masterBrand;
         $this->genres = $genres;
         $this->formats = $formats;
+        $this->firstBroadcastDate = $firstBroadcastDate;
     }
 
     /**
@@ -237,6 +245,14 @@ abstract class Programme
     public function getNetwork()
     {
         return $this->masterBrand ? $this->masterBrand->getNetwork() : null;
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getFirstBroadcastDate()
+    {
+        return $this->firstBroadcastDate;
     }
 
     private function assertArrayOfType($property, $array, $expectedType)
