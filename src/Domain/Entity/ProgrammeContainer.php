@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
+use DateTimeImmutable;
 
 abstract class ProgrammeContainer extends Programme
 {
@@ -65,6 +66,7 @@ abstract class ProgrammeContainer extends Programme
         MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
+        DateTimeImmutable $firstBroadcastDate = null,
         int $expectedChildCount = null
     ) {
         parent::__construct(
@@ -82,7 +84,8 @@ abstract class ProgrammeContainer extends Programme
             $position,
             $masterBrand,
             $genres,
-            $formats
+            $formats,
+            $firstBroadcastDate
         );
 
         $this->aggregatedBroadcastsCount = $aggregatedBroadcastsCount;
