@@ -137,7 +137,7 @@ abstract class Programme
      * CoreEntity table. This join can be avoided if we already know the Foreign
      * Key value on the Related Links table (i.e. the Programme ID field).
      * Removing these joins shall result in faster DB queries which is more
-     * important that keeping a pure Domain model.
+     * important than keeping a pure Domain model.
      */
     public function getDbId(): int
     {

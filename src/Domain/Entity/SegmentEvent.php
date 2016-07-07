@@ -54,8 +54,8 @@ class SegmentEvent
         Pid $pid,
         Version $version,
         Segment $segment,
-        string $title,
         Synopses $synopses,
+        string $title = null,
         bool $isChapter = false,
         int $offset = null,
         int $position = null
