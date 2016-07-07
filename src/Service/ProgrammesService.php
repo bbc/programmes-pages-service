@@ -104,6 +104,26 @@ class ProgrammesService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
+    public function findProgrammesByKeywords(
+        string $keywords,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+
+        $dbEntities = $this->repository->findByKeywords(
+            $keywords,
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        return $this->mapManyEntities($dbEntities);
+    }
+
+    public function countProgrammesByKeywords(string $keywords): int
+    {
+        return $this->repository->countByKeywords($keywords);
+    }
+
     private function findSiblingByProgramme(Programme $programme, string $direction)
     {
         // Programmes that don't have a parent can't have any siblings
