@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
+use DateTimeImmutable;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 /**
@@ -39,35 +40,35 @@ class CoreEntityRepositoryFindAdjacentProgrammeByFirstBroadcastDateTest extends 
         return [
             //Episodes
             //Ordering by position next
-            ['Episode', $episodeParentDbId, new \DateTimeImmutable('2013-01-01 00:00:00'), 'next', 'b00swgkn'],
-            ['Episode', $episodeParentDbId, new \DateTimeImmutable('2014-01-01 00:00:00'), 'next', 'b00syxx6'],
-            ['Episode', $episodeParentDbId, new \DateTimeImmutable('2015-01-01 00:00:00'), 'next', 'b00syxx7'],
+            ['Episode', $episodeParentDbId, new DateTimeImmutable('2013-01-01 00:00:00'), 'next', 'b00swgkn'],
+            ['Episode', $episodeParentDbId, new DateTimeImmutable('2014-01-01 00:00:00'), 'next', 'b00syxx6'],
+            ['Episode', $episodeParentDbId, new DateTimeImmutable('2015-01-01 00:00:00'), 'next', 'b00syxx7'],
 
             //Ensuring items at the end don't have a next
-            ['Episode', $episodeParentDbId, new \DateTimeImmutable('2016-01-01 00:00:00'), 'next', null],
+            ['Episode', $episodeParentDbId, new DateTimeImmutable('2016-01-01 00:00:00'), 'next', null],
 
             //Ensuring items at the start don't have a previous
-            ['Episode', $episodeParentDbId, new \DateTimeImmutable('2014-01-01 00:00:00'), 'previous', null],
+            ['Episode', $episodeParentDbId, new DateTimeImmutable('2014-01-01 00:00:00'), 'previous', null],
 
             //Ordering by position previous
-            ['Episode', $episodeParentDbId, new \DateTimeImmutable('2015-01-01 00:00:00'), 'previous', 'b00swgkn'],
-            ['Episode', $episodeParentDbId, new \DateTimeImmutable('2016-01-01 00:00:00'), 'previous', 'b00syxx6'],
-            ['Episode', $episodeParentDbId, new \DateTimeImmutable('2017-01-01 00:00:00'), 'previous', 'b00syxx7'],
+            ['Episode', $episodeParentDbId, new DateTimeImmutable('2015-01-01 00:00:00'), 'previous', 'b00swgkn'],
+            ['Episode', $episodeParentDbId, new DateTimeImmutable('2016-01-01 00:00:00'), 'previous', 'b00syxx6'],
+            ['Episode', $episodeParentDbId, new DateTimeImmutable('2017-01-01 00:00:00'), 'previous', 'b00syxx7'],
 
             //Clips
             //Ordering by position next
-            ['Clip', $episodeParentDbId, new \DateTimeImmutable('2013-01-01 00:00:00'), 'next', null],
-            ['Clip', $episodeParentDbId, new \DateTimeImmutable('2014-01-01 00:00:00'), 'next', null],
+            ['Clip', $episodeParentDbId, new DateTimeImmutable('2013-01-01 00:00:00'), 'next', null],
+            ['Clip', $episodeParentDbId, new DateTimeImmutable('2014-01-01 00:00:00'), 'next', null],
 
             //Ensuring items at the end don't have a next
-            ['Clip', $episodeParentDbId, new \DateTimeImmutable('2015-01-01 00:00:00'), 'next', null],
+            ['Clip', $episodeParentDbId, new DateTimeImmutable('2015-01-01 00:00:00'), 'next', null],
 
             //Ensuring items at the start don't have a previous
-            ['Clip', $episodeParentDbId, new \DateTimeImmutable('2014-01-01 00:00:00'), 'previous', null],
+            ['Clip', $episodeParentDbId, new DateTimeImmutable('2014-01-01 00:00:00'), 'previous', null],
 
             //Ordering by position previous
-            ['Clip', $episodeParentDbId, new \DateTimeImmutable('2015-01-01 00:00:00'), 'previous', null],
-            ['Clip', $episodeParentDbId, new \DateTimeImmutable('2016-01-01 00:00:00'), 'previous', null],
+            ['Clip', $episodeParentDbId, new DateTimeImmutable('2015-01-01 00:00:00'), 'previous', null],
+            ['Clip', $episodeParentDbId, new DateTimeImmutable('2016-01-01 00:00:00'), 'previous', null],
         ];
     }
 
@@ -79,7 +80,7 @@ class CoreEntityRepositoryFindAdjacentProgrammeByFirstBroadcastDateTest extends 
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
         $repo->findAdjacentProgrammeByFirstBroadcastDate(
             999,
-            new \DateTimeImmutable('2000-01-01 00:00:00'),
+            new DateTimeImmutable('2000-01-01 00:00:00'),
             'Series',
             'previous'
         );
@@ -93,7 +94,7 @@ class CoreEntityRepositoryFindAdjacentProgrammeByFirstBroadcastDateTest extends 
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
         $repo->findAdjacentProgrammeByFirstBroadcastDate(
             999,
-            new \DateTimeImmutable('2000-01-01 00:00:00'),
+            new DateTimeImmutable('2000-01-01 00:00:00'),
             'Episode',
             'UP'
         );

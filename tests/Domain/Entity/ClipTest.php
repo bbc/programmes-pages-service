@@ -85,8 +85,8 @@ class ClipTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
-            $releaseDate,
             $firstBroadcastDate,
+            $releaseDate,
             1001,
             $streamableFrom,
             $streamableUntil

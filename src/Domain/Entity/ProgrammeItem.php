@@ -53,8 +53,8 @@ abstract class ProgrammeItem extends Programme
         MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
-        PartialDate $releaseDate = null,
         DateTimeImmutable $firstBroadcastDate = null,
+        PartialDate $releaseDate = null,
         int $duration = null,
         DateTimeImmutable $streamableFrom = null,
         DateTimeImmutable $streamableUntil = null

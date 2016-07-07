@@ -115,8 +115,8 @@ class ProgrammeMapper extends AbstractMapper
             $this->getMasterBrandModel($dbProgramme),
             $this->getCategoriesModels('genre', $dbProgramme, 'categories'),
             $this->getCategoriesModels('format', $dbProgramme, 'categories'),
-            $dbProgramme['releaseDate'],
             ($dbProgramme['firstBroadcastDate'] ? DateTimeImmutable::createFromMutable($dbProgramme['firstBroadcastDate']) : null),
+            $dbProgramme['releaseDate'],
             $dbProgramme['duration'] ?? null,
             ($dbProgramme['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableFrom']) : null),
             ($dbProgramme['streamableUntil'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableUntil']) : null)
@@ -142,8 +142,8 @@ class ProgrammeMapper extends AbstractMapper
             $this->getMasterBrandModel($dbProgramme),
             $this->getCategoriesModels('genre', $dbProgramme, 'categories'),
             $this->getCategoriesModels('format', $dbProgramme, 'categories'),
-            $dbProgramme['releaseDate'],
             ($dbProgramme['firstBroadcastDate'] ? DateTimeImmutable::createFromMutable($dbProgramme['firstBroadcastDate']) : null),
+            $dbProgramme['releaseDate'],
             $dbProgramme['duration'] ?? null,
             ($dbProgramme['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableFrom']) : null),
             ($dbProgramme['streamableUntil'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableUntil']) : null)
