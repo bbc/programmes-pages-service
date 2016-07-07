@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
+use InvalidArgumentException;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 /**

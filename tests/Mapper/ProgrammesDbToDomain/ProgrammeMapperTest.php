@@ -39,6 +39,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'isPodcastable' => false,
             'parent' => null,
             'position' => 101,
+            'firstBroadcastDate' => new \DateTime(),
             'expectedChildCount' => 1001,
         ];
 
@@ -64,6 +65,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
+            new DateTimeImmutable(),
             1001
         );
 
@@ -94,6 +96,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'isPodcastable' => false,
             'parent' => null,
             'position' => 101,
+            'firstBroadcastDate' => new DateTime(),
             'expectedChildCount' => 1001,
         ];
 
@@ -119,6 +122,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
+            new DateTimeImmutable(),
             1001
         );
 
@@ -146,6 +150,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'availableClipsCount' => 12,
             'availableGalleriesCount' => 13,
             'parent' => null,
+            'firstBroadcastDate' => new DateTime(),
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'duration' => 102,
@@ -173,6 +178,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
+            new DateTimeImmutable(),
             new PartialDate(2015, 01, 02),
             102,
             new DateTimeImmutable('2015-01-03'),
@@ -200,6 +206,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'streamable' => true,
             'mediaType' => MediaTypeEnum::UNKNOWN,
             'parent' => null,
+            'firstBroadcastDate' => new DateTime(),
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 101,
             'duration' => 102,
@@ -224,6 +231,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
+            new DateTimeImmutable(),
             new PartialDate(2015, 01, 02),
             102,
             new DateTimeImmutable('2015-01-03'),
@@ -256,6 +264,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'availableGalleriesCount' => 15,
             'isPodcastable' => false,
             'position' => 101,
+            'firstBroadcastDate' => new DateTime(),
             'expectedChildCount' => 1001,
             'parent' => [
                 'type' => 'brand',
@@ -279,6 +288,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'isPodcastable' => false,
                 'parent' => null,
                 'position' => 101,
+                'firstBroadcastDate' => new DateTime(),
                 'expectedChildCount' => 1001,
             ],
         ];
@@ -322,12 +332,14 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 null,
                 [],
                 [],
+                new DateTimeImmutable(),
                 1001
             ),
             101,
             null,
             [],
             [],
+            new DateTimeImmutable(),
             1001
         );
 

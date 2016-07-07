@@ -126,16 +126,30 @@ class ProgrammesService extends AbstractService
         }
 
         // Then try based on ReleaseDate if we're dealing with a ProgrammeItem
-        if ($programme instanceof ProgrammeItem && !is_null($programme->getReleaseDate())) {
-            $dbEntity = $this->repository->findAdjacentProgrammeByReleaseDate(
-                $programme->getParent()->getDbId(),
-                $programme->getReleaseDate(),
-                $this->dbType($programme),
-                $direction
-            );
+        if ($programme instanceof ProgrammeItem) {
+            if (!is_null($programme->getReleaseDate())) {
+                $dbEntity = $this->repository->findAdjacentProgrammeByReleaseDate(
+                    $programme->getParent()->getDbId(),
+                    $programme->getReleaseDate(),
+                    $this->dbType($programme),
+                    $direction
+                );
 
-            if ($dbEntity) {
-                return $this->mapSingleEntity($dbEntity);
+                if ($dbEntity) {
+                    return $this->mapSingleEntity($dbEntity);
+                }
+            }
+            if (!is_null($programme->getFirstBroadcastDate())) {
+                $dbEntity = $this->repository->findAdjacentProgrammeByFirstBroadcastDate(
+                    $programme->getParent()->getDbId(),
+                    $programme->getFirstBroadcastDate(),
+                    $this->dbType($programme),
+                    $direction
+                );
+
+                if ($dbEntity) {
+                    return $this->mapSingleEntity($dbEntity);
+                }
             }
         }
 

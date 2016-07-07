@@ -66,6 +66,8 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $streamableFrom = new DateTimeImmutable();
         $streamableUntil = new DateTimeImmutable();
 
+        $firstBroadcastDate = new \DateTimeImmutable();
+
         $programme = new Clip(
             0,
             $pid,
@@ -83,6 +85,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
+            $firstBroadcastDate,
             $releaseDate,
             1001,
             $streamableFrom,
@@ -95,6 +98,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());
+        $this->assertEquals($firstBroadcastDate, $programme->getFirstBroadcastDate());
         $this->assertEquals(1001, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());

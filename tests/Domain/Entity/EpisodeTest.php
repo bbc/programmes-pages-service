@@ -72,6 +72,8 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $streamableFrom = new DateTimeImmutable();
         $streamableUntil = new DateTimeImmutable();
 
+        $firstBroadcastDate = new \DateTimeImmutable();
+
         $programme = new Episode(
             0,
             $pid,
@@ -92,6 +94,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             $masterBrand,
             [$genre],
             [$format],
+            $firstBroadcastDate,
             $releaseDate,
             1001,
             $streamableFrom,
@@ -104,6 +107,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());
         $this->assertEquals($releaseDate, $programme->getReleaseDate());
+        $this->assertEquals($firstBroadcastDate, $programme->getFirstBroadcastDate());
         $this->assertEquals(1001, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());

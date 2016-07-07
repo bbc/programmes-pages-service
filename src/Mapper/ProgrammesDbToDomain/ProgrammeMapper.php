@@ -59,6 +59,7 @@ class ProgrammeMapper extends AbstractMapper
             $this->getMasterBrandModel($dbProgramme),
             $this->getCategoriesModels('genre', $dbProgramme, 'categories'),
             $this->getCategoriesModels('format', $dbProgramme, 'categories'),
+            ($dbProgramme['firstBroadcastDate'] ? DateTimeImmutable::createFromMutable($dbProgramme['firstBroadcastDate']) : null),
             $dbProgramme['expectedChildCount']
         );
     }
@@ -87,6 +88,7 @@ class ProgrammeMapper extends AbstractMapper
             $this->getMasterBrandModel($dbProgramme),
             $this->getCategoriesModels('genre', $dbProgramme, 'categories'),
             $this->getCategoriesModels('format', $dbProgramme, 'categories'),
+            ($dbProgramme['firstBroadcastDate'] ? DateTimeImmutable::createFromMutable($dbProgramme['firstBroadcastDate']) : null),
             $dbProgramme['expectedChildCount']
         );
     }
@@ -113,6 +115,7 @@ class ProgrammeMapper extends AbstractMapper
             $this->getMasterBrandModel($dbProgramme),
             $this->getCategoriesModels('genre', $dbProgramme, 'categories'),
             $this->getCategoriesModels('format', $dbProgramme, 'categories'),
+            ($dbProgramme['firstBroadcastDate'] ? DateTimeImmutable::createFromMutable($dbProgramme['firstBroadcastDate']) : null),
             $dbProgramme['releaseDate'],
             $dbProgramme['duration'] ?? null,
             ($dbProgramme['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableFrom']) : null),
@@ -139,6 +142,7 @@ class ProgrammeMapper extends AbstractMapper
             $this->getMasterBrandModel($dbProgramme),
             $this->getCategoriesModels('genre', $dbProgramme, 'categories'),
             $this->getCategoriesModels('format', $dbProgramme, 'categories'),
+            ($dbProgramme['firstBroadcastDate'] ? DateTimeImmutable::createFromMutable($dbProgramme['firstBroadcastDate']) : null),
             $dbProgramme['releaseDate'],
             $dbProgramme['duration'] ?? null,
             ($dbProgramme['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableFrom']) : null),
