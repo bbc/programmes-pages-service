@@ -197,7 +197,6 @@ class DenormBackfillRepository extends EntityRepository
             $query = $this->createQueryBuilder('denormBackfill')
                 ->where('denormBackfill.processedTime IS NULL')
                 ->setMaxResults($limit)
-                ->addOrderBy('denormBackfill.id', 'Asc')
                 ->getQuery();
 
             return $query->getResult();
