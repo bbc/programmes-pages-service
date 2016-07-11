@@ -35,8 +35,9 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             MediaTypeEnum::UNKNOWN,
             11,
-            12,
-            13
+            101,
+            102,
+            103
         );
 
         $this->assertEquals(0, $programme->getDbId());
@@ -52,9 +53,10 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
-        $this->assertEquals(11, $programme->getAggregatedBroadcastsCount());
-        $this->assertEquals(12, $programme->getAvailableClipsCount());
-        $this->assertEquals(13, $programme->getAvailableGalleriesCount());
+        $this->assertEquals(11, $programme->getSegmentEventCount());
+        $this->assertEquals(101, $programme->getAggregatedBroadcastsCount());
+        $this->assertEquals(102, $programme->getAvailableClipsCount());
+        $this->assertEquals(103, $programme->getAvailableGalleriesCount());
     }
 
     public function testConstructorOptionalArgs()
@@ -72,7 +74,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $streamableFrom = new DateTimeImmutable();
         $streamableUntil = new DateTimeImmutable();
 
-        $firstBroadcastDate = new \DateTimeImmutable();
+        $firstBroadcastDate = new DateTimeImmutable();
 
         $programme = new Episode(
             0,
@@ -87,28 +89,29 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             MediaTypeEnum::UNKNOWN,
             11,
-            12,
-            13,
-            $parent,
             101,
+            102,
+            103,
+            $parent,
+            1001,
             $masterBrand,
             [$genre],
             [$format],
             $firstBroadcastDate,
             $releaseDate,
-            1001,
+            10001,
             $streamableFrom,
             $streamableUntil
         );
 
         $this->assertEquals($parent, $programme->getParent());
-        $this->assertEquals(101, $programme->getPosition());
+        $this->assertEquals(1001, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());
         $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals($firstBroadcastDate, $programme->getFirstBroadcastDate());
-        $this->assertEquals(1001, $programme->getDuration());
+        $this->assertEquals(10001, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());
     }
@@ -135,8 +138,9 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             'wrongwrongwrong',
             11,
-            12,
-            13
+            101,
+            102,
+            103
         );
     }
 }

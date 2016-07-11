@@ -33,7 +33,8 @@ class ClipTest extends PHPUnit_Framework_TestCase
             2,
             true,
             true,
-            MediaTypeEnum::UNKNOWN
+            MediaTypeEnum::UNKNOWN,
+            11
         );
 
         $this->assertEquals(0, $programme->getDbId());
@@ -49,6 +50,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
+        $this->assertEquals(11, $programme->getSegmentEventCount());
     }
 
     public function testConstructorOptionalArgs()
@@ -80,6 +82,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
             true,
             true,
             MediaTypeEnum::UNKNOWN,
+            11,
             $parent,
             101,
             $masterBrand,

@@ -48,6 +48,7 @@ abstract class ProgrammeItem extends Programme
         bool $hasSupportingContent,
         bool $isStreamable,
         string $mediaType,
+        int $segmentEventCount = 0,
         Programme $parent = null,
         int $position = null,
         MasterBrand $masterBrand = null,
@@ -89,6 +90,7 @@ abstract class ProgrammeItem extends Programme
         );
 
         $this->mediaType = $mediaType;
+        $this->segmentEventCount = $segmentEventCount;
         $this->releaseDate = $releaseDate;
         $this->duration = $duration;
         $this->streamableFrom = $streamableFrom;
@@ -98,6 +100,11 @@ abstract class ProgrammeItem extends Programme
     public function getMediaType(): string
     {
         return $this->mediaType;
+    }
+
+    public function getSegmentEventCount(): int
+    {
+        return $this->segmentEventCount;
     }
 
     /**
