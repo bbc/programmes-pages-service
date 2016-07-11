@@ -121,10 +121,9 @@ LEFT JOIN programme.image image
 LEFT JOIN programme.masterBrand masterBrand
 LEFT JOIN masterBrand.network network
 LEFT JOIN masterBrand.image mbImage
-LEFT JOIN ProgrammesPagesService:ProgrammeItem pi WITH programme.id = pi.id
 WHERE programme.parent = :dbId
 AND programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode)
-ORDER BY programme.position DESC, pi.releaseDate DESC, programme.firstBroadcastDate DESC, programme.title DESC
+ORDER BY programme.position DESC, programme.firstBroadcastDate DESC, programme.title DESC
 QUERY;
 
         $q = $this->getEntityManager()->createQuery($qText)
