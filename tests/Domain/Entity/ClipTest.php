@@ -29,12 +29,12 @@ class ClipTest extends PHPUnit_Framework_TestCase
             'Search Title',
             $synopses,
             $image,
-            1,
-            2,
+            1101,
+            1102,
             true,
             true,
             MediaTypeEnum::UNKNOWN,
-            11
+            1201
         );
 
         $this->assertEquals(0, $programme->getDbId());
@@ -45,12 +45,12 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Short Synopsis', $programme->getShortSynopsis());
         $this->assertEquals('Longest Synopsis', $programme->getLongestSynopsis());
         $this->assertEquals($image, $programme->getImage());
-        $this->assertEquals(1, $programme->getPromotionsCount());
-        $this->assertEquals(2, $programme->getRelatedLinksCount());
+        $this->assertEquals(1101, $programme->getPromotionsCount());
+        $this->assertEquals(1102, $programme->getRelatedLinksCount());
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
-        $this->assertEquals(11, $programme->getSegmentEventCount());
+        $this->assertEquals(1201, $programme->getSegmentEventCount());
     }
 
     public function testConstructorOptionalArgs()
@@ -77,32 +77,32 @@ class ClipTest extends PHPUnit_Framework_TestCase
             'Search Title',
             $synopses,
             $image,
-            1,
-            2,
+            1101,
+            1102,
             true,
             true,
             MediaTypeEnum::UNKNOWN,
-            11,
+            1201,
             $parent,
-            101,
+            2101,
             $masterBrand,
             [$genre],
             [$format],
             $firstBroadcastDate,
             $releaseDate,
-            1001,
+            2201,
             $streamableFrom,
             $streamableUntil
         );
 
         $this->assertEquals($parent, $programme->getParent());
         $this->assertEquals($releaseDate, $programme->getReleaseDate());
-        $this->assertEquals(101, $programme->getPosition());
+        $this->assertEquals(2101, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());
         $this->assertEquals($firstBroadcastDate, $programme->getFirstBroadcastDate());
-        $this->assertEquals(1001, $programme->getDuration());
+        $this->assertEquals(2201, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());
     }

@@ -48,7 +48,7 @@ abstract class ProgrammeItem extends Programme
         bool $hasSupportingContent,
         bool $isStreamable,
         string $mediaType,
-        int $segmentEventCount = 0,
+        int $segmentEventCount,
         Programme $parent = null,
         int $position = null,
         MasterBrand $masterBrand = null,

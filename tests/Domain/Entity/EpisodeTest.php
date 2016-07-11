@@ -29,15 +29,15 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             'Search Title',
             $synopses,
             $image,
-            1,
-            2,
+            1101,
+            1102,
             true,
             true,
             MediaTypeEnum::UNKNOWN,
-            11,
-            101,
-            102,
-            103
+            1201,
+            1301,
+            1302,
+            1303
         );
 
         $this->assertEquals(0, $programme->getDbId());
@@ -48,15 +48,15 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Short Synopsis', $programme->getShortSynopsis());
         $this->assertEquals('Longest Synopsis', $programme->getLongestSynopsis());
         $this->assertEquals($image, $programme->getImage());
-        $this->assertEquals(1, $programme->getPromotionsCount());
-        $this->assertEquals(2, $programme->getRelatedLinksCount());
+        $this->assertEquals(1101, $programme->getPromotionsCount());
+        $this->assertEquals(1102, $programme->getRelatedLinksCount());
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
-        $this->assertEquals(11, $programme->getSegmentEventCount());
-        $this->assertEquals(101, $programme->getAggregatedBroadcastsCount());
-        $this->assertEquals(102, $programme->getAvailableClipsCount());
-        $this->assertEquals(103, $programme->getAvailableGalleriesCount());
+        $this->assertEquals(1201, $programme->getSegmentEventCount());
+        $this->assertEquals(1301, $programme->getAggregatedBroadcastsCount());
+        $this->assertEquals(1302, $programme->getAvailableClipsCount());
+        $this->assertEquals(1303, $programme->getAvailableGalleriesCount());
     }
 
     public function testConstructorOptionalArgs()
@@ -83,35 +83,35 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             'Search Title',
             $synopses,
             $image,
-            1,
-            2,
+            1101,
+            1102,
             true,
             true,
             MediaTypeEnum::UNKNOWN,
-            11,
-            101,
-            102,
-            103,
+            1201,
+            1301,
+            1302,
+            1303,
             $parent,
-            1001,
+            2101,
             $masterBrand,
             [$genre],
             [$format],
             $firstBroadcastDate,
             $releaseDate,
-            10001,
+            2201,
             $streamableFrom,
             $streamableUntil
         );
 
         $this->assertEquals($parent, $programme->getParent());
-        $this->assertEquals(1001, $programme->getPosition());
+        $this->assertEquals(2101, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());
         $this->assertEquals($releaseDate, $programme->getReleaseDate());
         $this->assertEquals($firstBroadcastDate, $programme->getFirstBroadcastDate());
-        $this->assertEquals(10001, $programme->getDuration());
+        $this->assertEquals(2201, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());
     }
@@ -132,15 +132,15 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             'Search Title',
             $synopses,
             $image,
-            1,
-            2,
+            1101,
+            1102,
             true,
             true,
             'wrongwrongwrong',
-            11,
-            101,
-            102,
-            103
+            1201,
+            1301,
+            1302,
+            1303
         );
     }
 }

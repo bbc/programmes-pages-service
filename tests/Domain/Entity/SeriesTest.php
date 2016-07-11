@@ -26,15 +26,15 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             'Search Title',
             $synopses,
             $image,
-            1,
-            2,
+            1101,
+            1102,
             true,
             true,
-            11,
-            12,
-            13,
-            14,
-            15,
+            1201,
+            1202,
+            1203,
+            1204,
+            1205,
             false
         );
 
@@ -46,15 +46,15 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Short Synopsis', $programme->getShortSynopsis());
         $this->assertEquals('Longest Synopsis', $programme->getLongestSynopsis());
         $this->assertEquals($image, $programme->getImage());
-        $this->assertEquals(1, $programme->getPromotionsCount());
-        $this->assertEquals(2, $programme->getRelatedLinksCount());
+        $this->assertEquals(1101, $programme->getPromotionsCount());
+        $this->assertEquals(1102, $programme->getRelatedLinksCount());
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
-        $this->assertEquals(11, $programme->getAggregatedBroadcastsCount());
-        $this->assertEquals(12, $programme->getAggregatedEpisodesCount());
-        $this->assertEquals(13, $programme->getAvailableClipsCount());
-        $this->assertEquals(14, $programme->getAvailableEpisodesCount());
-        $this->assertEquals(15, $programme->getAvailableGalleriesCount());
+        $this->assertEquals(1201, $programme->getAggregatedBroadcastsCount());
+        $this->assertEquals(1202, $programme->getAggregatedEpisodesCount());
+        $this->assertEquals(1203, $programme->getAvailableClipsCount());
+        $this->assertEquals(1204, $programme->getAvailableEpisodesCount());
+        $this->assertEquals(1205, $programme->getAvailableGalleriesCount());
         $this->assertEquals(false, $programme->IsPodcastable());
 
     }
@@ -80,31 +80,31 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             'Search Title',
             $synopses,
             $image,
-            1,
-            2,
+            1101,
+            1102,
             true,
             true,
-            11,
-            12,
-            13,
-            14,
-            15,
+            1201,
+            1202,
+            1203,
+            1204,
+            1205,
             false,
             $parent,
-            101,
+            2101,
             $masterBrand,
             [$genre],
             [$format],
             $firstBroadcastDate,
-            1001
+            2201
         );
 
         $this->assertEquals($parent, $programme->getParent());
-        $this->assertEquals(101, $programme->getPosition());
+        $this->assertEquals(2101, $programme->getPosition());
         $this->assertEquals($masterBrand, $programme->getMasterBrand());
         $this->assertEquals([$genre], $programme->getGenres());
         $this->assertEquals([$format], $programme->getFormats());
         $this->assertEquals($firstBroadcastDate, $programme->getFirstBroadcastDate());
-        $this->assertEquals(1001, $programme->getExpectedChildCount());
+        $this->assertEquals(2201, $programme->getExpectedChildCount());
     }
 }
