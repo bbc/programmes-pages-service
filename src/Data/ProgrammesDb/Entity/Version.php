@@ -67,13 +67,6 @@ class Version
      */
     protected $segmentEventCount = 0;
 
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $firstBroadcastDate;
-
     public function __construct(string $pid, ProgrammeItem $programmeItem)
     {
         $this->pid = $pid;
@@ -166,18 +159,5 @@ class Version
     public function setSegmentEventCount(int $segmentEventCount)
     {
         $this->segmentEventCount = $segmentEventCount;
-    }
-
-    /**
-     * @return DateTime|null
-     */
-    public function getFirstBroadcastDate()
-    {
-        return $this->firstBroadcastDate;
-    }
-
-    public function setFirstBroadcastDate(DateTime $firstBroadcastDate = null)
-    {
-        $this->firstBroadcastDate = $firstBroadcastDate;
     }
 }
