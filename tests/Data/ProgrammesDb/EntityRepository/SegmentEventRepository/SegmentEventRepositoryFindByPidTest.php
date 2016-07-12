@@ -9,6 +9,16 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class SegmentEventRepositoryFindByPidTest extends AbstractDatabaseTest
 {
+    public function setUp()
+    {
+        $this->enableEmbargoedFilter();
+    }
+
+    public function tearDown()
+    {
+        $this->disableEmbargoedFilter();
+    }
+
     public function testFindByPid()
     {
         $this->loadFixtures(['SegmentEventFixture']);
@@ -44,6 +54,21 @@ class SegmentEventRepositoryFindByPidTest extends AbstractDatabaseTest
 
         $entity = $repo->findByPid('se000002');
         $this->assertNull($entity);
+
+        // findByPid query only
+        $this->assertCount(1, $this->getDbQueries());
+    }
+
+    public function testFindByPidWhenParentIsEmbargoedAndFilterIsDisabled()
+    {
+        $this->disableEmbargoedFilter();
+
+        $this->loadFixtures(['SegmentEventFixture']);
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
+        $entity = $repo->findByPid('se000002');
+
+        $this->assertInternalType('array', $entity);
+        $this->assertEquals('se000002', $entity['pid']);
 
         // findByPid query only
         $this->assertCount(1, $this->getDbQueries());

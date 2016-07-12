@@ -11,6 +11,7 @@ use PHPUnit_Framework_TestCase;
 abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
 {
     const FIXTURES_PATH = 'Tests\BBC\ProgrammesPagesService\DataFixtures\ORM\\';
+    const EMBARGOED_FILTER = 'embargoed_filter';
 
     private $ormExecutor;
     static private $entityManager;
@@ -64,15 +65,47 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
         return self::$entityManager;
     }
 
+    protected function enableEmbargoedFilter(): bool
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $previouslyEnabled = $filters->isEnabled(self::EMBARGOED_FILTER);
+
+        if (!$previouslyEnabled) {
+            $filters->enable(self::EMBARGOED_FILTER);
+        }
+
+        return $previouslyEnabled;
+    }
+
+    protected function disableEmbargoedFilter()
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $previouslyEnabled = $filters->isEnabled(self::EMBARGOED_FILTER);
+
+        if ($previouslyEnabled) {
+            $filters->disable(self::EMBARGOED_FILTER);
+        }
+
+        return $previouslyEnabled;
+    }
+
     protected function getCoreEntityDbId($coreEntityPid)
     {
         // Disable the logger for this call as we don't want to count it
         $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = false;
 
+        // Disable the embargo filter for this call
+        $embargoFilterWasEnabled = $this->disableEmbargoedFilter();
+
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
         $id = $repo->findOneByPid($coreEntityPid)->getId();
 
-        // Re enable the SQL logger
+        // Return the embargo filter to it's prior state
+        if ($embargoFilterWasEnabled) {
+            $this->enableEmbargoedFilter();
+        }
+
+        // Re-enable the SQL logger
         $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = true;
 
         return $id;

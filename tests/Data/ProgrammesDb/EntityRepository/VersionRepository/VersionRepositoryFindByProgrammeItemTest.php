@@ -9,6 +9,16 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class VersionRepositoryFindByProgrammeItemTest extends AbstractDatabaseTest
 {
+    public function setUp()
+    {
+        $this->enableEmbargoedFilter();
+    }
+
+    public function tearDown()
+    {
+        $this->disableEmbargoedFilter();
+    }
+
     public function testFindByProgrammeItem()
     {
         $this->loadFixtures(['VersionFixture']);
@@ -44,11 +54,26 @@ class VersionRepositoryFindByProgrammeItemTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
         $programmeDbId = $this->getCoreEntityDbId('p0000002');
 
-
         $list = $repo->findByProgrammeItem($programmeDbId);
         $this->assertSame([], $list);
 
         // findByProgrammeItem query only
+        $this->assertCount(1, $this->getDbQueries());
+    }
+
+    public function testFindByProgrammeItemWhenParentIsEmbargoedAndFilterIsDisabled()
+    {
+        $this->disableEmbargoedFilter();
+
+        $this->loadFixtures(['VersionFixture']);
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
+        $programmeDbId = $this->getCoreEntityDbId('p0000002');
+
+        $list = $repo->findByProgrammeItem($programmeDbId);
+        $this->assertCount(1, $list);
+        $this->assertEquals('v0000002', $list[0]['pid']);
+
+        // findByPid query only
         $this->assertCount(1, $this->getDbQueries());
     }
 }

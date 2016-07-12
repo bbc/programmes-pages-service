@@ -40,12 +40,12 @@ class VersionRepository extends EntityRepository
 
     public function createQueryBuilder($alias, $indexBy = null)
     {
-        // Any time versions are fetched here they must be joined to their
-        // programme entity and checked for embargo.
-        // This ensures that SegmentEvents that belong to an embargoed programme
+        // Any time versions are fetched here they must be inner joined to
+        // their programme entity, this allows the embargoed filter to trigger
+        // and exclude unwanted items.
+        // This ensures that Versions that belong to an embargoed programme
         // are never returned
         return parent::createQueryBuilder($alias)
-            ->join($alias . '.programmeItem', 'p')
-            ->andWhere('p.isEmbargoed = false');
+            ->join($alias . '.programmeItem', 'p');
     }
 }

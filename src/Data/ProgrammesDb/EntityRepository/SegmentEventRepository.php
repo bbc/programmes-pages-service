@@ -20,13 +20,13 @@ class SegmentEventRepository extends EntityRepository
 
     public function createQueryBuilder($alias, $indexBy = null)
     {
-        // Any time segmentEvents are fetched here they must be joined to their
-        // version, and then the version' programme entity and checked for embargo.
-        // This ensures that SegmentEvents that belong to an embargoed programme
-        // are never returned
+        // Any time SegmentEvents are fetched here they must be inner joined to
+        // their programme entity, this allows the embargoed filter to trigger
+        // and exclude unwanted items.
+        // This ensures that SegmentEvents that belong to a version that belongs
+        // to an embargoed programme are never returned
         return parent::createQueryBuilder($alias)
             ->join($alias . '.version', 'version')
-            ->join('version.programmeItem', 'programmeItem')
-            ->andWhere('programmeItem.isEmbargoed = false');
+            ->join('version.programmeItem', 'programmeItem');
     }
 }

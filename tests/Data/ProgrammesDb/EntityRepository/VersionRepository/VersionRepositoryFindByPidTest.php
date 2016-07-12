@@ -9,6 +9,16 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class VersionRepositoryFindByPidTest extends AbstractDatabaseTest
 {
+    public function setUp()
+    {
+        $this->enableEmbargoedFilter();
+    }
+
+    public function tearDown()
+    {
+        $this->disableEmbargoedFilter();
+    }
+
     public function testFindByPid()
     {
         $this->loadFixtures(['VersionFixture']);
@@ -41,6 +51,21 @@ class VersionRepositoryFindByPidTest extends AbstractDatabaseTest
 
         $entity = $repo->findByPid('v0000002');
         $this->assertNull($entity);
+
+        // findByPid query only
+        $this->assertCount(1, $this->getDbQueries());
+    }
+
+    public function testFindByPidWhenParentIsEmbargoedAndFilterIsDisabled()
+    {
+        $this->disableEmbargoedFilter();
+
+        $this->loadFixtures(['VersionFixture']);
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
+        $entity = $repo->findByPid('v0000002');
+
+        $this->assertInternalType('array', $entity);
+        $this->assertEquals('v0000002', $entity['pid']);
 
         // findByPid query only
         $this->assertCount(1, $this->getDbQueries());

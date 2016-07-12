@@ -12,12 +12,12 @@ class EmbargoableEntitiesTest extends AbstractDatabaseTest
 {
     public function setUp()
     {
-        $this->getEntityManager()->getFilters()->enable("embargoed_filter");
+        $this->enableEmbargoedFilter();
     }
 
     public function tearDown()
     {
-        $this->getEntityManager()->getFilters()->disable("embargoed_filter");
+        $this->disableEmbargoedFilter();
     }
 
     public function testEmbargoedCoreEntitiesAreFilteredOut()
