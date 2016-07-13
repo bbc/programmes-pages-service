@@ -20,7 +20,7 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
         $this->assertSame('pid', $entity->getPid());
         $this->assertSame(false, $entity->getIsEmbargoed());
         $this->assertSame('title', $entity->getTitle());
-        $this->assertSame('', $entity->getSearchTitle());
+        $this->assertSame('title', $entity->getSearchTitle());
         $this->assertSame(null, $entity->getParent());
         $this->assertSame('', $entity->getAncestry());
         $this->assertSame('', $entity->getShortSynopsis());

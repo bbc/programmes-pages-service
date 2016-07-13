@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +13,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * @ORM\Table(indexes={
  *   @ORM\Index(name="core_entity_ancestry_idx", columns={"ancestry"}),
  *   @ORM\Index(name="core_entity_type_idx", columns={"type"}),
+ *   @ORM\Index(name="core_entity_ft_all", columns={"search_title","short_synopsis"}, flags={"fulltext"}),
+ *   @ORM\Index(name="core_entity_ft_search_title", columns={"search_title"}, flags={"fulltext"}),
+ *   @ORM\Index(name="core_entity_ft_short_synopsis", columns={"short_synopsis"}, flags={"fulltext"}),
  *  })
  * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
@@ -34,6 +38,7 @@ abstract class CoreEntity
     use TimestampableEntity;
     use Traits\IsEmbargoedTrait;
     use Traits\SynopsesTrait;
+    use StripPunctuationTrait;
 
     /**
      * @var int|null
@@ -220,7 +225,7 @@ abstract class CoreEntity
     public function __construct(string $pid, string $title)
     {
         $this->pid = $pid;
-        $this->title = $title;
+        $this->setTitle($title);
         $this->directCategories = new ArrayCollection();
         $this->categories = new ArrayCollection();
     }
@@ -253,6 +258,7 @@ abstract class CoreEntity
     public function setTitle(string $title)
     {
         $this->title = $title;
+        $this->setSearchTitle($this->stripPunctuation($title));
     }
 
     public function getSearchTitle(): string
@@ -264,7 +270,6 @@ abstract class CoreEntity
     {
         $this->searchTitle = $searchTitle;
     }
-
     /**
      * @return CoreEntity|null
      */

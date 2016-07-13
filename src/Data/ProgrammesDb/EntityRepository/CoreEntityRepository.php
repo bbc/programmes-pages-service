@@ -2,6 +2,12 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Series;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
@@ -10,6 +16,7 @@ use InvalidArgumentException;
 class CoreEntityRepository extends MaterializedPathRepository
 {
     use Traits\ParentTreeWalkerTrait;
+    use StripPunctuationTrait;
 
     /**
      * Get an entity's ID, based upon its PID
@@ -284,6 +291,59 @@ QUERY;
 
         return $this->resolveParents($result);
     }
+
+    public function countByKeywords(string $keywords): int
+    {
+        $keywords = $this->stripPunctuation($keywords);
+        $booleanKeywords = join(' +', explode(' ', $keywords));
+        $booleanKeywords = '+' . $booleanKeywords;
+
+        $qText = <<<QUERY
+SELECT COUNT(programme.id)
+FROM ProgrammesPagesService:Programme programme
+WHERE MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
+QUERY;
+        $q = $this->getEntityManager()->createQuery($qText)
+            ->setParameter('booleanKeywords', $booleanKeywords);
+
+        $count = $q->getSingleScalarResult();
+        return $count ? $count : 0;
+    }
+
+    public function findByKeywords(string $keywords, int $limit, int $offset)
+    {
+        $keywords = $this->stripPunctuation($keywords);
+        $booleanKeywords = join(' +', explode(' ', $keywords));
+        $booleanKeywords = '+' . $booleanKeywords;
+
+        $qText = <<<QUERY
+SELECT programme, 
+( 
+    (  (MATCH_AGAINST (programme.searchTitle, :keywords ) * 3)
+      + (MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :keywords ) * 1)
+      + (MATCH_AGAINST (programme.searchTitle, :quotedKeywords ) * 7)
+      + ( CASE WHEN (programme.searchTitle=:keywords) THEN 100 ELSE 1 END )
+    )
+    * ( CASE WHEN ((programme INSTANCE OF (ProgrammesPagesService:Brand, ProgrammesPagesService:Series)) AND programme.parent IS NULL) THEN 5 ELSE 1 END)
+) AS HIDDEN rel
+FROM ProgrammesPagesService:Programme programme
+LEFT JOIN programme.image image
+LEFT JOIN programme.masterBrand masterBrand
+LEFT JOIN masterBrand.network network
+LEFT JOIN masterBrand.image mbImage
+WHERE MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
+ORDER BY rel DESC
+QUERY;
+        $q = $this->getEntityManager()->createQuery($qText)
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->setParameter('keywords', $keywords)
+            ->setParameter('booleanKeywords', $booleanKeywords)
+            ->setParameter('quotedKeywords', '"' + $keywords + '"');
+
+        return $q->getResult(Query::HYDRATE_ARRAY);
+    }
+
 
     private function resolveParents(array $programmes)
     {
