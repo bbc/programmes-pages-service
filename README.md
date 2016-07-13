@@ -56,6 +56,9 @@ doctrine:
             embargoed_filter:
                 class: BBC\ProgrammesPagesService\Data\ProgrammesDb\Filter\EmbargoedFilter
                 enabled: true
+        dql:
+            string_functions:
+                MATCH_AGAINST: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\MatchAgainst
 ```
 
 Add the doctrine extensions configuration (in config.yml), under the
