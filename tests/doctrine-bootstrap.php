@@ -31,6 +31,7 @@ $config->setNamingStrategy(new \Doctrine\ORM\Mapping\UnderscoreNamingStrategy())
 $config->addEntityNamespace('ProgrammesPagesService', 'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity');
 $config->setSQLLogger(new Doctrine\DBAL\Logging\DebugStack());
 $config->addFilter("embargoed_filter", "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Filter\EmbargoedFilter");
+$config->addCustomStringFunction('match_against', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\MatchAgainst");
 
 // obtaining the entity manager
 return \Doctrine\ORM\EntityManager::create($conn, $config, $evm);
