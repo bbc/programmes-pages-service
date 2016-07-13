@@ -65,12 +65,26 @@ class Version
      *
      * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
      */
-    protected $segmentEventCount = 0;
+    private $segmentEventCount = 0;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $firstBroadcastDate;
+
+    /**
+     * Used for joins. Cannot be queried, so there is no getter/setter.
+     * @ORM\OneToMany(targetEntity="Broadcast", mappedBy="version")
+     */
+    private $broadcasts;
 
     public function __construct(string $pid, ProgrammeItem $programmeItem)
     {
         $this->pid = $pid;
         $this->versionTypes = new ArrayCollection();
+        $this->broadcasts = new ArrayCollection();
         $this->setProgrammeItem($programmeItem);
     }
 

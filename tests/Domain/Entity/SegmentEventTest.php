@@ -20,8 +20,8 @@ class SegmentEventTest extends PHPUnit_Framework_TestCase
             $pid,
             $version,
             $segment,
-            'Title',
-            $synopses
+            $synopses,
+            'Title'
         );
 
         $this->assertSame($pid, $segmentEvent->getPid());
@@ -45,8 +45,8 @@ class SegmentEventTest extends PHPUnit_Framework_TestCase
             $pid,
             $version,
             $segment,
-            'Title',
             $synopses,
+            'Title',
             true,
             1,
             2
@@ -67,8 +67,8 @@ class SegmentEventTest extends PHPUnit_Framework_TestCase
             new Pid('p01m5mss'),
             $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion'),
             $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Segment'),
-            'Title',
-            new Synopses('Short Synopsis', 'Longest Synopsis', '')
+            new Synopses('Short Synopsis', 'Longest Synopsis', ''),
+            'Title'
         );
 
         $segmentEvent->getVersion();
@@ -84,8 +84,8 @@ class SegmentEventTest extends PHPUnit_Framework_TestCase
             new Pid('p01m5mss'),
             $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version'),
             $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedSegment'),
-            'Title',
-            new Synopses('Short Synopsis', 'Longest Synopsis', '')
+            new Synopses('Short Synopsis', 'Longest Synopsis', ''),
+            'Title'
         );
 
         $segmentEvent->getSegment();

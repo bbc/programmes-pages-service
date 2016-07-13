@@ -204,6 +204,7 @@ abstract class Programme
      */
     public function getParent()
     {
+        // todo - handle UnfetchedProgramme
         return $this->parent;
     }
 
@@ -253,6 +254,15 @@ abstract class Programme
     public function getFirstBroadcastDate()
     {
         return $this->firstBroadcastDate;
+    }
+
+    public function getTleo()
+    {
+        $parent = $this->getParent();
+        if ($parent) {
+            return $parent->getTleo();
+        }
+        return $this;
     }
 
     private function assertArrayOfType($property, $array, $expectedType)

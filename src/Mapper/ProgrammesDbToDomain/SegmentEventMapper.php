@@ -14,10 +14,6 @@ class SegmentEventMapper extends AbstractMapper
 {
     public function getDomainModel(array $dbSegmentEvent): SegmentEvent
     {
-        if (!isset($dbSegmentEvent['isChapter'])) {
-            var_dump($dbSegmentEvent);
-            die;
-        }
         return new SegmentEvent(
             new Pid($dbSegmentEvent['pid']),
             $this->getVersionModel($dbSegmentEvent),

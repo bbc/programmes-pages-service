@@ -13,11 +13,13 @@ class ContributorTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('b0000001');
 
         $contributor = new Contributor(
+            0,
             $pid,
             'Type',
             'Name'
         );
 
+        $this->assertSame(0, $contributor->getDbId());
         $this->assertSame($pid, $contributor->getPid());
         $this->assertSame('Type', $contributor->getType());
         $this->assertSame('Name', $contributor->getName());
@@ -29,6 +31,7 @@ class ContributorTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('b0000001');
 
         $contributor = new Contributor(
+            0,
             $pid,
             'Type',
             'Name',

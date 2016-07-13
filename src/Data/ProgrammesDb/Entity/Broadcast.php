@@ -36,7 +36,7 @@ class Broadcast
     private $pid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Version")
+     * @ORM\ManyToOne(targetEntity="Version", inversedBy="versions")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $version;

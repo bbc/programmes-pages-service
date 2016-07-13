@@ -61,7 +61,7 @@ class Contribution
      * want deleting a Segment to cascade to delete the contributions
      * attached to the Segment
      *
-     * @ORM\ManyToOne(targetEntity="Segment")
+     * @ORM\ManyToOne(targetEntity="Segment", inversedBy="contributions")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $contributionToSegment;

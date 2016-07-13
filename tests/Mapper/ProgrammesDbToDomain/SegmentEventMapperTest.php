@@ -48,6 +48,7 @@ class SegmentEventMapperTest extends BaseMapperTestCase
             ->willReturn($expectedSegmentDomainEntity);
 
         $dbEntityArray = [
+            'id' => 1,
             'pid' => 'p01r8fvz',
             'title' => 'Title',
             'offset' => 1,
@@ -64,8 +65,8 @@ class SegmentEventMapperTest extends BaseMapperTestCase
             new Pid('p01r8fvz'),
             $expectedVersionDomainEntity,
             $expectedSegmentDomainEntity,
-            'Title',
             new Synopses('ShortSynopsis', 'MediumSynopsis', 'LongSynopsis'),
+            'Title',
             true,
             1,
             2
@@ -80,6 +81,7 @@ class SegmentEventMapperTest extends BaseMapperTestCase
     public function testGetDomainModelWithNoVersion()
     {
         $dbEntityArray = [
+            'id' => 1,
             'pid' => 'p01r8fvz',
             'title' => 'Title',
             'offset' => 1,
@@ -100,6 +102,7 @@ class SegmentEventMapperTest extends BaseMapperTestCase
     public function testGetDomainModelWithNoSegment()
     {
         $dbEntityArray = [
+            'id' => 1,
             'pid' => 'p01r8fvz',
             'title' => 'Title',
             'offset' => 1,

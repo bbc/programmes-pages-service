@@ -102,6 +102,19 @@ QUERY;
         return $withHydratedParents ? $this->resolveCategories([$withHydratedParents])[0] : $withHydratedParents;
     }
 
+    public function findByIds(array $ids)
+    {
+        return $this->createQueryBuilder('programme')
+            ->addSelect(['image', 'masterBrand', 'network', 'mbImage'])
+            ->leftJoin('programme.image', 'image')
+            ->leftJoin('programme.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->where("programme.id IN(:ids)")
+            ->setParameter('ids', $ids)
+            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
     public function findAllWithParents($limit, $offset)
     {
         $qb = $this->createQueryBuilder('programme')
@@ -346,15 +359,7 @@ QUERY;
 
     private function programmeAncestryGetter(array $ids)
     {
-        return $this->createQueryBuilder('programme')
-            ->addSelect(['image', 'masterBrand', 'network', 'mbImage'])
-            ->leftJoin('programme.image', 'image')
-            ->leftJoin('programme.masterBrand', 'masterBrand')
-            ->leftJoin('masterBrand.network', 'network')
-            ->leftJoin('masterBrand.image', 'mbImage')
-            ->where("programme.id IN(:ids)")
-            ->setParameter('ids', $ids)
-            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->findByIds($ids);
     }
 
     private function resolveCategories(array $programmes)
@@ -368,6 +373,7 @@ QUERY;
 
     private function categoryAncestryGetter(array $ids)
     {
+        /** @var CategoryRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
         return $repo->findByIds($ids);
     }
