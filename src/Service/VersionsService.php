@@ -16,6 +16,16 @@ class VersionsService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
+    /**
+     * @return Version|null
+     */
+    public function findByPidFull(Pid $pid)
+    {
+        $dbEntity = $this->repository->findByPidFull($pid);
+
+        return $this->mapSingleEntity($dbEntity);
+    }
+
     public function findByProgrammeItemDbId(int $dbid): array
     {
         $dbEntities = $this->repository->findByProgrammeItem($dbid);

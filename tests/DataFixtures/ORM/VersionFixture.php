@@ -25,7 +25,7 @@ class VersionFixture extends AbstractFixture
         $episode3 = $this->buildEpisode('p0000003', 'Ep3');
 
         $this->buildVersion('v0000001', $episode, [$originalType, $otherType]);
-        $this->buildVersion('v0000002', $embargoedEpisode);
+        $this->buildVersion('v0000002', $embargoedEpisode, [$originalType, $otherType]);
         $this->buildVersion('v0000003', $episode, [$originalType, $otherType]);
         $this->buildVersion('v0000004', $episode);
         $this->buildVersion('v0000005', $episode3);
