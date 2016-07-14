@@ -18,52 +18,7 @@ class VersionMapperTest extends BaseMapperTestCase
         );
     }
 
-    /**
-     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
-     * @expectedExceptionMessage All versions must be joined to a ProgrammeItem
-     */
-    public function testGetDomainModelWithNoProgramme()
-    {
-        $dbEntityArray = [
-            'id' => 1,
-            'pid' => 'b0007c3v',
-            'duration' => '360',
-            'guidanceWarningCodes' => 'warnings',
-            'competitionWarning' => true,
-        ];
-
-        $this->getMapper()->getDomainModel($dbEntityArray);
-    }
-
-    public function testGetDomainModelWithSetProgrammeItem()
-    {
-        $programmeDbEntity = ['pid' => 'p01m5mss'];
-
-        $expectedProgrammeDomainEntity = $this->createMock(
-            'BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem'
-        );
-
-        $this->mockProgrammeMapper->expects($this->once())
-            ->method('getDomainModel')
-            ->with($programmeDbEntity)
-            ->willReturn($expectedProgrammeDomainEntity);
-
-        $dbEntityArray = [
-            'id' => 1,
-            'pid' => 'b0007c3v',
-            'duration' => '360',
-            'guidanceWarningCodes' => 'warnings',
-            'competitionWarning' => true,
-            'programmeItem' => $programmeDbEntity,
-        ];
-
-        $pid = new Pid('b0007c3v');
-        $expectedEntity = new Version($pid, $expectedProgrammeDomainEntity, 360, 'warnings', true);
-
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
-    }
-
-    public function testGetDomainModelWithSetVersionTypes()
+    public function testGetDomainModel()
     {
         $programmeDbEntity = ['pid' => 'p01m5mss'];
 
@@ -96,6 +51,7 @@ class VersionMapperTest extends BaseMapperTestCase
 
         $pid = new Pid('b0007c3v');
         $expectedEntity = new Version(
+            1,
             $pid,
             $expectedProgrammeDomainEntity,
             360,
@@ -105,6 +61,52 @@ class VersionMapperTest extends BaseMapperTestCase
         );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage All versions must be joined to a ProgrammeItem
+     */
+    public function testGetDomainModelWithNoProgramme()
+    {
+        $dbEntityArray = [
+            'id' => 1,
+            'pid' => 'b0007c3v',
+            'duration' => '360',
+            'guidanceWarningCodes' => 'warnings',
+            'competitionWarning' => true,
+            'versionTypes' => [],
+        ];
+
+        $this->getMapper()->getDomainModel($dbEntityArray);
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     */
+    public function testGetDomainModelWithNoVersionTypes()
+    {
+        $programmeDbEntity = ['pid' => 'p01m5mss'];
+
+        $expectedProgrammeDomainEntity = $this->createMock(
+            'BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem'
+        );
+
+        $this->mockProgrammeMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($programmeDbEntity)
+            ->willReturn($expectedProgrammeDomainEntity);
+
+        $dbEntityArray = [
+            'id' => 1,
+            'pid' => 'b0007c3v',
+            'duration' => '360',
+            'guidanceWarningCodes' => 'warnings',
+            'competitionWarning' => true,
+            'programmeItem' => $programmeDbEntity,
+        ];
+
+        $this->getMapper()->getDomainModel($dbEntityArray)->getVersionTypes();
     }
 
     private function getMapper(): VersionMapper

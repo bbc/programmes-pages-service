@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
-use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -14,13 +13,11 @@ class VersionTest extends PHPUnit_Framework_TestCase
     public function testConstructorRequiredArgs()
     {
         $pid = new Pid('p01m5mss');
-
-        $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-
         $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
 
-        $version = new Version($pid, $episode);
+        $version = new Version(0, $pid, $episode);
 
+        $this->assertEquals(0, $version->getDbId());
         $this->assertEquals($pid, $version->getPid());
         $this->assertEquals($episode, $version->getProgrammeItem());
         $this->assertEquals(false, $version->hasCompetitionWarning());
@@ -29,13 +26,14 @@ class VersionTest extends PHPUnit_Framework_TestCase
     public function testConstructorOptionalArgs()
     {
         $pid = new Pid('p01m5mss');
+        $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
         $versionType = new VersionType('original', 'Original version');
 
-        $programmeItem = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
 
         $version = new Version(
+            0,
             $pid,
-            $programmeItem,
+            $episode,
             101,
             'GuidanceWarnings',
             true,
@@ -45,8 +43,21 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(101, $version->getDuration());
         $this->assertEquals('GuidanceWarnings', $version->getGuidanceWarningCodes());
         $this->assertEquals(true, $version->hasCompetitionWarning());
-        $this->assertEquals($programmeItem, $version->getProgrammeItem());
         $this->assertEquals([$versionType], $version->getVersionTypes());
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage Could not get VersionTypes of Version "p01m5mss" as they were not fetched
+     */
+    public function testRequestingUnfetchedVersionThrowsException()
+    {
+        $pid = new Pid('p01m5mss');
+        $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
+
+        $version = new Version(0, $pid, $episode);
+
+        $version->getVersionTypes();
     }
 
     /**
@@ -60,6 +71,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $programmeItem = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
 
         new Version(
+            0,
             $pid,
             $programmeItem,
             101,
@@ -80,6 +92,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $programmeItem = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
 
         new Version(
+            0,
             $pid,
             $programmeItem,
             101,

@@ -10,6 +10,7 @@ class UnfetchedVersion extends Version
     public function __construct()
     {
         parent::__construct(
+            0,
             new NullPid(),
             new UnfetchedProgrammeItem()
         );

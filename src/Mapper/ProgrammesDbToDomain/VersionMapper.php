@@ -13,6 +13,7 @@ class VersionMapper extends AbstractMapper
     public function getDomainModel(array $dbVersion): Version
     {
         return new Version(
+            $dbVersion['id'],
             new Pid($dbVersion['pid']),
             $this->getProgrammeItemModel($dbVersion),
             $dbVersion['duration'],
@@ -31,10 +32,10 @@ class VersionMapper extends AbstractMapper
         return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbVersion[$key]);
     }
 
-    private function getVersionTypes($dbVersion, $key = 'versionTypes'): array
+    private function getVersionTypes($dbVersion, $key = 'versionTypes')
     {
-        if (!array_key_exists($key, $dbVersion) || is_null($dbVersion[$key])) {
-            return [];
+        if (!array_key_exists($key, $dbVersion) || !is_array($dbVersion[$key])) {
+            return null;
         }
 
         return array_map([$this, 'getVersionTypeModel'], $dbVersion[$key]);
