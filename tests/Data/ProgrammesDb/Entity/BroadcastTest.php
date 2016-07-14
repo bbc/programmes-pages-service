@@ -60,6 +60,7 @@ class BroadcastTest extends PHPUnit_Framework_TestCase
             ['IsLive', true],
             ['IsRepeat', true],
             ['IsCritical', true],
+            ['ProgrammeItem', new Episode('b0000000', 'An Episode')],
             ['IsAudioDescribed', true],
             ['IsWebcast', true],
             ['Pid', 'b0012345'],

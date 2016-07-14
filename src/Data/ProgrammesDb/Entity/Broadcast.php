@@ -42,6 +42,12 @@ class Broadcast
     private $version;
 
     /**
+     * @ORM\ManyToOne(targetEntity="ProgrammeItem")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $programmeItem;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Service")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
@@ -148,6 +154,19 @@ class Broadcast
     public function setVersion(Version $version)
     {
         $this->version = $version;
+    }
+
+    /**
+     * @return ProgrammeItem|null
+     */
+    public function getProgrammeItem()
+    {
+        return $this->programmeItem;
+    }
+
+    public function setProgrammeItem(ProgrammeItem $programmeItem)
+    {
+        $this->programmeItem = $programmeItem;
     }
 
     /**
