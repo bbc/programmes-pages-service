@@ -9,7 +9,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class CoreEntityRepositoryFindAdjacentProgrammeByFirstBroadcastDateTest extends AbstractDatabaseTest
+class FindAdjacentProgrammeByFirstBroadcastDateTest extends AbstractDatabaseTest
 {
     public function testFindAdjacentProgrammeByFirstBroadcastDate()
     {
@@ -70,20 +70,6 @@ class CoreEntityRepositoryFindAdjacentProgrammeByFirstBroadcastDateTest extends 
             ['Clip', $episodeParentDbId, new DateTimeImmutable('2015-01-01 00:00:00'), 'previous', null],
             ['Clip', $episodeParentDbId, new DateTimeImmutable('2016-01-01 00:00:00'), 'previous', null],
         ];
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidTypeForFindAdjacentProgrammeByFirstBroadcastDate()
-    {
-        $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
-        $repo->findAdjacentProgrammeByFirstBroadcastDate(
-            999,
-            new DateTimeImmutable('2000-01-01 00:00:00'),
-            'Series',
-            'previous'
-        );
     }
 
     /**

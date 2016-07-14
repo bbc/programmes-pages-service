@@ -4,7 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
-class ProgrammesServiceFindIdByPidTest extends AbstractProgrammesServiceTest
+class FindIdByPidTest extends AbstractProgrammesServiceTest
 {
     public function testFindIdByPid()
     {

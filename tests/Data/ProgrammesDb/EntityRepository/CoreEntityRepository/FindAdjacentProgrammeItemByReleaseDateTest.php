@@ -8,9 +8,9 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class CoreEntityRepositoryFindAdjacentProgrammeByReleaseDateTest extends AbstractDatabaseTest
+class FindAdjacentProgrammeItemByReleaseDateTest extends AbstractDatabaseTest
 {
-    public function testFindAdjacentProgrammeByReleaseDate()
+    public function testfindAdjacentProgrammeItemByReleaseDate()
     {
         $this->loadFixtures(['SiblingsFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
@@ -20,7 +20,7 @@ class CoreEntityRepositoryFindAdjacentProgrammeByReleaseDateTest extends Abstrac
         foreach ($this->siblingsReleaseDateData() as $data) {
             list($entityType, $parentDbId, $releaseYear, $direction, $expectedPid) = $data;
 
-            $entity = $repo->findAdjacentProgrammeByReleaseDate(
+            $entity = $repo->findAdjacentProgrammeItemByReleaseDate(
                 $parentDbId,
                 new PartialDate($releaseYear),
                 $entityType,
@@ -73,10 +73,10 @@ class CoreEntityRepositoryFindAdjacentProgrammeByReleaseDateTest extends Abstrac
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testInvalidTypeForFindAdjacentProgrammeByReleaseDate()
+    public function testInvalidTypeForfindAdjacentProgrammeItemByReleaseDate()
     {
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
-        $repo->findAdjacentProgrammeByReleaseDate(
+        $repo->findAdjacentProgrammeItemByReleaseDate(
             999,
             new PartialDate(2016),
             'Series',
@@ -87,10 +87,10 @@ class CoreEntityRepositoryFindAdjacentProgrammeByReleaseDateTest extends Abstrac
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testInvalidDirectionForFindAdjacentProgrammeByReleaseDate()
+    public function testInvalidDirectionForfindAdjacentProgrammeItemByReleaseDate()
     {
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
-        $repo->findAdjacentProgrammeByReleaseDate(
+        $repo->findAdjacentProgrammeItemByReleaseDate(
             999,
             new PartialDate(2016),
             'Episode',

@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
-class ProgrammesServiceFindAllTest extends AbstractProgrammesServiceTest
+class FindAllTest extends AbstractProgrammesServiceTest
 {
     public function testFindAllDefaultPagination()
     {

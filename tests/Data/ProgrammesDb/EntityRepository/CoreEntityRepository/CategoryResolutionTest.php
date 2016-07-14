@@ -8,7 +8,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepo
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<!public>
  */
-class CoreEntityRepositoryCategoryResolutionTest extends AbstractDatabaseTest
+class CategoryResolutionTest extends AbstractDatabaseTest
 {
     public function testNoAdditionalQueriesWhenNoCategoriesAreFound()
     {

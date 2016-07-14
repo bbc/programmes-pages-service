@@ -2,9 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\RelatedLinksService;
 
-use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-
-class RelatedLinksServiceFindByRelatedToProgrammeDbIdTest extends AbstractRelatedLinksServiceTest
+class FindByRelatedToProgrammeDbIdTest extends AbstractRelatedLinksServiceTest
 {
     public function testFindByRelatedToProgrammeDbIdDefaultPagination()
     {

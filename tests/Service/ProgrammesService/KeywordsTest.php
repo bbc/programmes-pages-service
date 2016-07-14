@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
-class ProgrammesServicKeywordsTest extends AbstractProgrammesServiceTest
+class KeywordsTest extends AbstractProgrammesServiceTest
 {
     public function testFindProgrammesByKeywords()
     {

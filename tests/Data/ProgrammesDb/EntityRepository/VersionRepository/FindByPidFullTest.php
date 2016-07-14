@@ -7,7 +7,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository::<public>
  */
-class VersionRepositoryFindByProgrammeItemTest extends AbstractDatabaseTest
+class FindByPidFullTest extends AbstractDatabaseTest
 {
     public function setUp()
     {
@@ -19,61 +19,59 @@ class VersionRepositoryFindByProgrammeItemTest extends AbstractDatabaseTest
         $this->disableEmbargoedFilter();
     }
 
-    public function testFindByProgrammeItem()
+    public function testFindByPidFull()
     {
         $this->loadFixtures(['VersionFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
 
-        $programmeDbId = $this->getCoreEntityDbId('p0000001');
-
-        $list = $repo->findByProgrammeItem($programmeDbId);
-        $this->assertCount(3, $list);
-        $this->assertEquals('v0000001', $list[0]['pid']);
-        $this->assertEquals('v0000003', $list[1]['pid']);
-        $this->assertEquals('v0000004', $list[2]['pid']);
+        $entity = $repo->findByPidFull('v0000001');
+        $this->assertInternalType('array', $entity);
+        $this->assertEquals('v0000001', $entity['pid']);
+        $this->assertEquals('p0000001', $entity['programmeItem']['pid']);
+        $this->assertEquals(['Original', 'Other'], array_column($entity['versionTypes'], 'name'));
 
         // must have only been one query (including the join)
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindByProgrammeItemWhenEmptyResult()
+    public function testFindByPidFullWhenEmptyResult()
     {
         $this->loadFixtures(['VersionFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
 
-        $list = $repo->findByProgrammeItem(999);
-        $this->assertSame([], $list);
+        $entity = $repo->findByPidFull('qqqqqqq');
+        $this->assertNull($entity);
 
-        // findByProgrammeItem query only
+        // findByPidFull query only
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindByProgrammeItemWhenParentIsEmbargoed()
+    public function testFindByPidFullWhenParentIsEmbargoed()
     {
         $this->loadFixtures(['VersionFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
-        $programmeDbId = $this->getCoreEntityDbId('p0000002');
 
-        $list = $repo->findByProgrammeItem($programmeDbId);
-        $this->assertSame([], $list);
+        $entity = $repo->findByPidFull('v0000002');
+        $this->assertNull($entity);
 
-        // findByProgrammeItem query only
+        // findByPidFull query only
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindByProgrammeItemWhenParentIsEmbargoedAndFilterIsDisabled()
+    public function testFindByPidFullWhenParentIsEmbargoedAndFilterIsDisabled()
     {
         $this->disableEmbargoedFilter();
 
         $this->loadFixtures(['VersionFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
-        $programmeDbId = $this->getCoreEntityDbId('p0000002');
+        $entity = $repo->findByPidFull('v0000002');
 
-        $list = $repo->findByProgrammeItem($programmeDbId);
-        $this->assertCount(1, $list);
-        $this->assertEquals('v0000002', $list[0]['pid']);
+        $this->assertInternalType('array', $entity);
+        $this->assertEquals('v0000002', $entity['pid']);
+        $this->assertEquals('p0000002', $entity['programmeItem']['pid']);
+        $this->assertEquals(['Original', 'Other'], array_column($entity['versionTypes'], 'name'));
 
-        // findByPid query only
+        // findByPidFull query only
         $this->assertCount(1, $this->getDbQueries());
     }
 }

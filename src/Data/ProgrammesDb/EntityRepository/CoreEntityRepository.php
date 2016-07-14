@@ -207,7 +207,7 @@ QUERY;
     ) {
         if (!in_array($entityType, ['Episode', 'Clip'])) {
             throw new InvalidArgumentException(sprintf(
-                'Called findAdjacentProgrammeByReleaseDate with an invalid type. Expected one of "%s" or "%s" but got "%s"',
+                'Called findAdjacentProgrammeItemByReleaseDate with an invalid type. Expected one of "%s" or "%s" but got "%s"',
                 'Episode',
                 'Clip',
                 $entityType
@@ -216,7 +216,7 @@ QUERY;
 
         if (!in_array($direction, ['next', 'previous'])) {
             throw new InvalidArgumentException(sprintf(
-                'Called findAdjacentProgrammeByReleaseDate with an invalid direction type. Expected one of "%s" or "%s" but got "%s"',
+                'Called findAdjacentProgrammeItemByReleaseDate with an invalid direction type. Expected one of "%s" or "%s" but got "%s"',
                 'next',
                 'previous',
                 $direction
@@ -248,7 +248,7 @@ QUERY;
     ) {
         if (!in_array($direction, ['next', 'previous'])) {
             throw new InvalidArgumentException(sprintf(
-                'Called findAdjacentProgrammeByReleaseDate with an invalid direction type. Expected one of "%s" or "%s" but got "%s"',
+                'Called findAdjacentProgrammeItemByReleaseDate with an invalid direction type. Expected one of "%s" or "%s" but got "%s"',
                 'next',
                 'previous',
                 $direction

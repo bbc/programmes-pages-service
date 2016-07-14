@@ -7,7 +7,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentEventRepository::<public>
  */
-class SegmentEventRepositoryFindByPidTest extends AbstractDatabaseTest
+class FindByPidTest extends AbstractDatabaseTest
 {
     public function setUp()
     {

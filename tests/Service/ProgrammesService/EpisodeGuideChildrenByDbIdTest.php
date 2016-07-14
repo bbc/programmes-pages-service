@@ -2,9 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
-use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-
-class ProgrammesServiceFindEpisodeGuideChildrenByDbIdTest extends AbstractProgrammesServiceTest
+class FindEpisodeGuideChildrenByDbIdTest extends AbstractProgrammesServiceTest
 {
     public function testFindEpisodeGuideChildrenByDbIdDefaultPagination()
     {

@@ -4,7 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 
-class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
+class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 {
     public function testFindNextSiblingByProgrammeSearchesByPosition()
     {
@@ -17,7 +17,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->willReturn($dbData);
 
         $this->mockRepository->expects($this->never())
-            ->method('findAdjacentProgrammeByReleaseDate');
+            ->method('findAdjacentProgrammeItemByReleaseDate');
 
         $result = $this->service()->findNextSiblingByProgramme($programme);
         $this->assertEquals($this->programmeFromDbData($dbData), $result);
@@ -32,7 +32,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->method('findAdjacentProgrammeByPosition');
 
         $this->mockRepository->expects($this->once())
-            ->method('findAdjacentProgrammeByReleaseDate')
+            ->method('findAdjacentProgrammeItemByReleaseDate')
             ->with(1, new PartialDate('2016'), 'Episode', 'next')
             ->willReturn($dbData);
 
@@ -49,7 +49,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->method('findAdjacentProgrammeByPosition');
 
         $this->mockRepository->expects($this->never())
-            ->method('findAdjacentProgrammeByReleaseDate');
+            ->method('findAdjacentProgrammeItemByReleaseDate');
 
         $this->mockRepository->expects($this->once())
             ->method('findAdjacentProgrammeByFirstBroadcastDate')
@@ -71,7 +71,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->willReturn($dbData);
 
         $this->mockRepository->expects($this->never())
-            ->method('findAdjacentProgrammeByReleaseDate');
+            ->method('findAdjacentProgrammeItemByReleaseDate');
 
         $result = $this->service()->findNextSiblingByProgramme($programme);
         $this->assertEquals($this->programmeFromDbData($dbData), $result);
@@ -88,7 +88,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->willReturn(null);
 
         $this->mockRepository->expects($this->once())
-            ->method('findAdjacentProgrammeByReleaseDate')
+            ->method('findAdjacentProgrammeItemByReleaseDate')
             ->with(1, new PartialDate('2016'), 'Episode', 'next')
             ->willReturn($dbData);
 
@@ -126,7 +126,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->willReturn(null);
 
         $this->mockRepository->expects($this->once())
-            ->method('findAdjacentProgrammeByReleaseDate')
+            ->method('findAdjacentProgrammeItemByReleaseDate')
             ->with(1, new PartialDate('2016'), 'Episode', 'next')
             ->willReturn(null);
 
@@ -143,7 +143,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->method('findAdjacentProgrammeByPosition');
 
         $this->mockRepository->expects($this->never())
-            ->method('findAdjacentProgrammeByReleaseDate');
+            ->method('findAdjacentProgrammeItemByReleaseDate');
 
         $result = $this->service()->findNextSiblingByProgramme($programme);
         $this->assertNull($result);
@@ -160,7 +160,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->willReturn($dbData);
 
         $this->mockRepository->expects($this->never())
-            ->method('findAdjacentProgrammeByReleaseDate');
+            ->method('findAdjacentProgrammeItemByReleaseDate');
 
         $result = $this->service()->findPreviousSiblingByProgramme($programme);
         $this->assertEquals($this->programmeFromDbData($dbData), $result);
@@ -175,7 +175,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->method('findAdjacentProgrammeByPosition');
 
         $this->mockRepository->expects($this->once())
-            ->method('findAdjacentProgrammeByReleaseDate')
+            ->method('findAdjacentProgrammeItemByReleaseDate')
             ->with(1, new PartialDate('2016'), 'Episode', 'previous')
             ->willReturn($dbData);
 
@@ -194,7 +194,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->willReturn($dbData);
 
         $this->mockRepository->expects($this->never())
-            ->method('findAdjacentProgrammeByReleaseDate');
+            ->method('findAdjacentProgrammeItemByReleaseDate');
 
         $result = $this->service()->findPreviousSiblingByProgramme($programme);
         $this->assertEquals($this->programmeFromDbData($dbData), $result);
@@ -211,7 +211,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->willReturn(null);
 
         $this->mockRepository->expects($this->once())
-            ->method('findAdjacentProgrammeByReleaseDate')
+            ->method('findAdjacentProgrammeItemByReleaseDate')
             ->with(1, new PartialDate('2016'), 'Episode', 'previous')
             ->willReturn($dbData);
 
@@ -230,7 +230,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->willReturn(null);
 
         $this->mockRepository->expects($this->once())
-            ->method('findAdjacentProgrammeByReleaseDate')
+            ->method('findAdjacentProgrammeItemByReleaseDate')
             ->with(1, new PartialDate('2016'), 'Episode', 'previous')
             ->willReturn(null);
 
@@ -247,7 +247,7 @@ class ProgrammesServiceFindSiblingByProgrammeTest extends AbstractProgrammesServ
             ->method('findAdjacentProgrammeByPosition');
 
         $this->mockRepository->expects($this->never())
-            ->method('findAdjacentProgrammeByReleaseDate');
+            ->method('findAdjacentProgrammeItemByReleaseDate');
 
         $result = $this->service()->findPreviousSiblingByProgramme($programme);
         $this->assertNull($result);

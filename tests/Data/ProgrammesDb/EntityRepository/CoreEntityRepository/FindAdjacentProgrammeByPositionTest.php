@@ -9,7 +9,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class CoreEntityRepositoryFindAdjacentProgrammeByPositionTest extends AbstractDatabaseTest
+class FindAdjacentProgrammeByPositionTest extends AbstractDatabaseTest
 {
     public function testFindAdjacentProgrammeByPosition()
     {

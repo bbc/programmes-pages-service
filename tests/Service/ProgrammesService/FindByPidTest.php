@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Service\VersionsService;
+namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
-class VersionsServiceFindByPidFullTest extends AbstractVersionsServiceTest
+class FindByPidTest extends AbstractProgrammesServiceTest
 {
-    public function testFindByPidFull()
+    public function testFindByPid()
     {
-        $pid = new Pid('b06tl314');
-        $dbData = ['pid' => 'b06tl314'];
+        $pid = new Pid('b010t19z');
+        $dbData = ['pid' => 'b010t19z'];
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
@@ -17,12 +17,12 @@ class VersionsServiceFindByPidFullTest extends AbstractVersionsServiceTest
             ->willReturn($dbData);
 
         $result = $this->service()->findByPidFull($pid);
-        $this->assertEquals($this->versionFromDbData($dbData), $result);
+        $this->assertEquals($this->programmeFromDbData($dbData), $result);
     }
 
-    public function testFindByPidFullEmptyData()
+    public function testFindByPidEmptyData()
     {
-        $pid = new Pid('b06tl314');
+        $pid = new Pid('b010t19z');
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')

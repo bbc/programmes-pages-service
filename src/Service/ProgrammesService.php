@@ -13,7 +13,7 @@ class ProgrammesService extends AbstractService
 {
     /** @var CoreEntityRepository */
     protected $repository;
-    
+
     public function __construct(
         CoreEntityRepository $repository,
         ProgrammeMapper $mapper

@@ -8,53 +8,49 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepo
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class CoreEntityRepositoryFindEpisodeGuideChildrenTest extends AbstractDatabaseTest
+class FindAllTest extends AbstractDatabaseTest
 {
     /**
-     * @dataProvider findEpisodeGuideChildrenDataProvider
+     * @dataProvider findAllWithParentsDataProvider
      */
-    public function testFindEpisodeGuideChildren($pid, $limit, $offset, $expectedPids)
+    public function testFindAllWithParents($limit, $offset, $expectedPids)
     {
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        $id = $this->getCoreEntityDbId($pid);
 
-        $entities = $repo->findEpisodeGuideChildren($id, $limit, $offset);
+        $entities = $repo->findAllWithParents($limit, $offset);
         $this->assertEquals($expectedPids, array_column($entities, 'pid'));
 
-        // findEpisodeGuideChildren query and the parent lookup query
+        // findAll query and the parent lookup query
         $this->assertCount(2, $this->getDbQueries());
     }
 
-    public function findEpisodeGuideChildrenDataProvider()
+    public function findAllWithParentsDataProvider()
     {
-
         return [
-            ['b010t19z', 50, 0, ['b00tf1zy', 'b010t150', 'b00swyx1']],
-            ['b010t19z', 2, 1, ['b010t150', 'b00swyx1']],
+            [50, 0, ['b010t19z', 'p00h64pq', 'p00hv9yz', 'p008k0l5', 'p008k0jy', 'p008nhl4', 'b00tf1zy', 'b00swgkn', 'b00syxx6', 'b00t0ycf', 'b0175lqm', 'b0176rgj', 'b0177ffr', 'b00swyx1', 'b010t150']],
+            [2, 3, ['p008k0l5', 'p008k0jy']],
         ];
     }
 
-    public function testFindEpisodeGuideChildrenWhenEmptyResultSet()
+    public function testFindAllWithParentsWhenEmptyResultSet()
     {
         $this->loadFixtures([]);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $entities = $repo->findEpisodeGuideChildren(1, 50, 0);
+        $entities = $repo->findAllWithParents(50, 0);
         $this->assertEquals([], $entities);
 
-        // findEpisodeGuideChildren query only
+        // findAll query only
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testCountEpisodeGuideChildren()
+    public function testCountAll()
     {
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $id = $this->getCoreEntityDbId('b010t19z');
-
-        $this->assertEquals(3, $repo->countEpisodeGuideChildren($id));
+        $this->assertEquals(15, $repo->countAll());
 
         // count query only
         $this->assertCount(1, $this->getDbQueries());

@@ -2,9 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\VersionsService;
 
-use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-
-class VersionsServiceFindByProgrammeItemDbIdTest extends AbstractVersionsServiceTest
+class FindByProgrammeItemDbIdTest extends AbstractVersionsServiceTest
 {
     public function testFindByProgrammeItemDbId()
     {
