@@ -11,6 +11,9 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
 
 class ProgrammesService extends AbstractService
 {
+    /** @var CoreEntityRepository */
+    protected $repository;
+    
     public function __construct(
         CoreEntityRepository $repository,
         ProgrammeMapper $mapper
@@ -148,7 +151,7 @@ class ProgrammesService extends AbstractService
         // Then try based on ReleaseDate if we're dealing with a ProgrammeItem
         if ($programme instanceof ProgrammeItem) {
             if (!is_null($programme->getReleaseDate())) {
-                $dbEntity = $this->repository->findAdjacentProgrammeByReleaseDate(
+                $dbEntity = $this->repository->findAdjacentProgrammeItemByReleaseDate(
                     $programme->getParent()->getDbId(),
                     $programme->getReleaseDate(),
                     $this->dbType($programme),
@@ -159,17 +162,18 @@ class ProgrammesService extends AbstractService
                     return $this->mapSingleEntity($dbEntity);
                 }
             }
-            if (!is_null($programme->getFirstBroadcastDate())) {
-                $dbEntity = $this->repository->findAdjacentProgrammeByFirstBroadcastDate(
-                    $programme->getParent()->getDbId(),
-                    $programme->getFirstBroadcastDate(),
-                    $this->dbType($programme),
-                    $direction
-                );
+        }
 
-                if ($dbEntity) {
-                    return $this->mapSingleEntity($dbEntity);
-                }
+        if (!is_null($programme->getFirstBroadcastDate())) {
+            $dbEntity = $this->repository->findAdjacentProgrammeByFirstBroadcastDate(
+                $programme->getParent()->getDbId(),
+                $programme->getFirstBroadcastDate(),
+                $this->dbType($programme),
+                $direction
+            );
+
+            if ($dbEntity) {
+                return $this->mapSingleEntity($dbEntity);
             }
         }
 

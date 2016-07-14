@@ -199,7 +199,7 @@ QUERY;
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findAdjacentProgrammeByReleaseDate(
+    public function findAdjacentProgrammeItemByReleaseDate(
         int $parentDbId,
         PartialDate $releaseDate,
         string $entityType,
@@ -246,15 +246,6 @@ QUERY;
         string $entityType,
         string $direction
     ) {
-        if (!in_array($entityType, ['Episode', 'Clip'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Called findAdjacentProgrammeByReleaseDate with an invalid type. Expected one of "%s" or "%s" but got "%s"',
-                'Episode',
-                'Clip',
-                $entityType
-            ));
-        }
-
         if (!in_array($direction, ['next', 'previous'])) {
             throw new InvalidArgumentException(sprintf(
                 'Called findAdjacentProgrammeByReleaseDate with an invalid direction type. Expected one of "%s" or "%s" but got "%s"',
