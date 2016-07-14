@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(
  * name="atoz_title",
+ * uniqueConstraints={@ORM\UniqueConstraint(name="atoz_unique", columns={"programme_id", "title"})},
  * indexes={
  *   @ORM\Index(name="atoz_title_title", columns={"title"}),
  *   @ORM\Index(name="atoz_title_first_letter", columns={"first_letter"}),
