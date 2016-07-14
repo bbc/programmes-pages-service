@@ -28,7 +28,6 @@ trait ParentTreeWalkerTrait
         // Build a list of all unique parentIds found in all of the entities
         $listOfAllParentIds = [];
         foreach ($entities as $entity) {
-
             $ancestry = $this->getFieldFromDepth($entity, $keyPath);
 
             foreach ($this->getParentIdsFromAncestry($ancestry) as $parentId) {

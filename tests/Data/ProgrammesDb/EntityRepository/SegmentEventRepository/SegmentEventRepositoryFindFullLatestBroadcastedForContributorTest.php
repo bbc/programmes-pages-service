@@ -27,7 +27,6 @@ class SegmentEventRepositoryFindFullLatestBroadcastedForContributorTest extends 
             50,
             0
         );
-        
         $this->assertEquals(2, count($segmentEvents));
 
         // check that the items are in the right order
@@ -63,5 +62,4 @@ class SegmentEventRepositoryFindFullLatestBroadcastedForContributorTest extends 
         // One with all the joins, and one for ancestry
         $this->assertCount(2, $this->getDbQueries());
     }
-
 }

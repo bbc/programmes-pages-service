@@ -1,27 +1,23 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
+namespace Tests\BBC\ProgrammesPagesService\Service\ContributorsService;
 
-use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
+use BBC\ProgrammesPagesService\Service\ContributorsService;
 
-class ContributorsServiceFindByMusicBrainzIdTest extends AbstractServiceTest
+class ContributorsServiceFindByMusicBrainzIdTest extends AbstractContributorsServiceTest
 {
     public function testFindByMusicBrainzId()
     {
         $mbid = '7746d775-9550-4360-b8d5-c37bd448ce01';
-        $dbData = ['id' => $mbid];
+        $dbData = ['musicBrainzId' => $mbid];
 
         $this->mockRepository->expects($this->once())
             ->method('findByMusicBrainzId')
             ->with($mbid)
             ->willReturn($dbData);
 
-        $mockContributor = $this->createMock(self::ENTITY_NS . 'Contributor');
-
-        $mockContributor->method('getMusicBrainzId')->willReturn($mbid);
-
         $result = $this->service()->findByMusicBrainzId($mbid);
-        $this->assertEquals($mockContributor, $result);
+        $this->assertEquals($this->contributorFromDbData($dbData), $result);
     }
 
     public function testFindByMusicBrainzIdEmptyData()
@@ -29,11 +25,16 @@ class ContributorsServiceFindByMusicBrainzIdTest extends AbstractServiceTest
         $mbid = '7746d775-9550-4360-b8d5-c37bd448ce01';
 
         $this->mockRepository->expects($this->once())
-            ->method('findByPidFull')
+            ->method('findByMusicBrainzId')
             ->with($mbid)
             ->willReturn(null);
 
         $result = $this->service()->findByMusicBrainzId($mbid);
         $this->assertNull($result);
+    }
+
+    protected function service()
+    {
+        return new ContributorsService($this->mockRepository, $this->mockMapper);
     }
 }

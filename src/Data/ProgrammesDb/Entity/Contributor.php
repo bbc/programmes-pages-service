@@ -5,7 +5,6 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-
 /**
  * @ORM\Table(indexes={
  *     @ORM\Index(name="contributor_music_brainz_id_idx", columns={"music_brainz_id"}),

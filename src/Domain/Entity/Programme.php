@@ -256,7 +256,7 @@ abstract class Programme
         return $this->firstBroadcastDate;
     }
 
-    public function getTleo()
+    public function getTleo(): Programme
     {
         $parent = $this->getParent();
         if ($parent) {

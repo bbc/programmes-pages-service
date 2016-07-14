@@ -68,13 +68,6 @@ class Version
     private $segmentEventCount = 0;
 
     /**
-     * @var DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $firstBroadcastDate;
-
-    /**
      * Used for joins. Cannot be queried, so there is no getter/setter.
      * @ORM\OneToMany(targetEntity="Broadcast", mappedBy="version")
      */

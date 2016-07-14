@@ -45,7 +45,7 @@ class Contributor
         $this->name = $name;
         $this->musicBrainzId = $musicBrainzId;
     }
-    
+
     /**
      * Used to make foreign key queries without having to make a join
      * with the user-facing ID.
