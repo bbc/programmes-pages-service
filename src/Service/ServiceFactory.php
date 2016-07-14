@@ -21,6 +21,18 @@ class ServiceFactory
         $this->mapperFactory = $mapperFactory;
     }
 
+    public function getContributionsService(): ContributionsService
+    {
+        if (!array_key_exists('ContributionsService', $this->instances)) {
+            $this->instances['ContributionsService'] = new ContributionsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Contribution'),
+                $this->mapperFactory->getContributionMapper()
+            );
+        }
+
+        return $this->instances['ContributionsService'];
+    }
+
     public function getContributorsService(): ContributorsService
     {
         if (!array_key_exists('ContributorsService', $this->instances)) {
