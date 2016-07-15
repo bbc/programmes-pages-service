@@ -27,7 +27,12 @@ trait ParentTreeWalkerTrait
     ) {
         // Build a list of all unique parentIds found in all of the entities
         $listOfAllParentIds = [];
-        foreach ($entities as $entity) {
+        foreach ($entities as $i => $entity) {
+            // We need to create the parent field, as we know
+            // we're making the request for parents, but we may
+            // end up bailing out early if there aren't any
+            $entities[$i]['parent'] =  null;
+
             $ancestry = $this->getFieldFromDepth($entity, $keyPath);
 
             foreach ($this->getParentIdsFromAncestry($ancestry) as $parentId) {
@@ -127,13 +132,20 @@ trait ParentTreeWalkerTrait
 
             // overwrite the entity with the new one where the parent has
             // been set
-            $entity = $this->setDeepKey(
+            return $this->setDeepKey(
                 $entity,
                 $this->combineAncestry($resolvedParent, $potentialAncestors),
                 $setterPath
             );
         }
-        return $entity;
+        
+        // if there were no parent IDs we still need to set the parent
+        // field to its fetched-but-empty state.
+        return $this->setDeepKey(
+            $entity,
+            null, // fetched-but-empty
+            $setterPath
+        );
     }
 
     private function searchSetForEntityWithId(array $resultSet, int $id)
