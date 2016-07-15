@@ -138,7 +138,7 @@ trait ParentTreeWalkerTrait
                 $setterPath
             );
         }
-        
+
         // if there were no parent IDs we still need to set the parent
         // field to its fetched-but-empty state.
         return $this->setDeepKey(
