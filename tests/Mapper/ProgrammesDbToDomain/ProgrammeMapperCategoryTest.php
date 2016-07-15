@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 
 class ProgrammeMapperCategoryTest extends BaseProgrammeMapperTestCase
 {

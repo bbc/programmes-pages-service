@@ -89,7 +89,21 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
         return $previouslyEnabled;
     }
 
-    protected function getCoreEntityDbId($coreEntityPid)
+    /**
+     * In order to do some tests sometimes you need to know exactly
+     * what the database ID of the fixtures are. This can usually be
+     * controlled with fixtures, but new fixtures may cause updates
+     * to be needed. However, finding the ID from the database would
+     * result in an additional SQL query, adding to the total query count.
+     * The tests count queries to ensure they are kept under control.
+     * This method therefore excludes the ID fetch in the test itself
+     * from the overall query count. This method will also bypass the
+     * embargo filter, so will always fetch what was requested.
+     * @param $pid
+     * @param $entityType
+     * @return int
+     */
+    protected function getDbIdFromPid(string $pid, string $entityType): int
     {
         // Disable the logger for this call as we don't want to count it
         $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = false;
@@ -97,8 +111,12 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
         // Disable the embargo filter for this call
         $embargoFilterWasEnabled = $this->disableEmbargoedFilter();
 
-        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        $id = $repo->findOneByPid($coreEntityPid)->getId();
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:' . $entityType);
+
+        // findOneByX is a magic bit of Doctrine to access property X.
+        // Therefore all Entities with a 'pid' property will have the
+        // findOneByPid method.
+        $id = $repo->findOneByPid($pid)->getId();
 
         // Return the embargo filter to it's prior state
         if ($embargoFilterWasEnabled) {
@@ -109,5 +127,15 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
         $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = true;
 
         return $id;
+    }
+
+    /**
+     * Shortcut method for getDbIdFromPid (as many tests based on CoreEntity)
+     * @param string $coreEntityPid
+     * @return int
+     */
+    protected function getCoreEntityDbId(string $coreEntityPid): int
+    {
+        return $this->getDbIdFromPid($coreEntityPid, 'CoreEntity');
     }
 }

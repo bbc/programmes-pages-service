@@ -12,7 +12,7 @@ class SegmentEventRepository extends EntityRepository
     public function findByPid(string $pid)
     {
         $qb = $this->createQueryBuilder('segmentEvent')
-            ->addSelect(['segment, version'])
+            ->addSelect(['segment', 'version'])
             ->join('segmentEvent.segment', 'segment')
             ->andWhere('segmentEvent.pid = :pid')
             ->setParameter('pid', $pid);
@@ -27,12 +27,12 @@ class SegmentEventRepository extends EntityRepository
     ) {
         $qb = $this->createQueryBuilder('segmentEvent')
             // fetching full, so we need a big select to return details
-            ->select('DISTINCT segmentEvent')
-            ->addSelect(
+            ->select([
+                'DISTINCT segmentEvent',
                 'segment',
                 'version',
-                'programmeItem'
-            )
+                'programmeItem',
+            ])
             ->join('segmentEvent.segment', 'segment')
             ->join('version.broadcasts', 'broadcast')
             // this is a left join, as there can be many contributions

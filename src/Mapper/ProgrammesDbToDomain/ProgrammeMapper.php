@@ -8,6 +8,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use DateTimeImmutable;
@@ -154,11 +155,18 @@ class ProgrammeMapper extends AbstractMapper
 
     private function getParentModel($dbProgramme, $key = 'parent')
     {
-        if (!array_key_exists($key, $dbProgramme) || is_null($dbProgramme[$key])) {
+        // It is possible to have no parent, where the key does
+        // exist but is set to null. We'll only say it's Unfetched
+        // if the key doesn't exist at all.
+        if (!array_key_exists($key, $dbProgramme)) {
+            return new UnfetchedProgramme();
+        }
+
+        if (is_null($dbProgramme[$key])) {
             return null;
         }
 
-        return $this->getDomainModel($dbProgramme['parent']);
+        return $this->getDomainModel($dbProgramme[$key]);
     }
 
     private function getImageModel($dbProgramme, $key = 'image')

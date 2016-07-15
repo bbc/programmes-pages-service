@@ -2,6 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use DateTimeImmutable;
@@ -201,10 +203,16 @@ abstract class Programme
 
     /**
      * @return Programme|null
+     * @throws DataNotFetchedException
      */
     public function getParent()
     {
-        // todo - handle UnfetchedProgramme
+        if ($this->parent instanceof UnfetchedProgramme) {
+            throw new DataNotFetchedException(
+                'Could not get Parent of Programme "' . $this->pid . '" as it was not fetched'
+            );
+        }
+
         return $this->parent;
     }
 
