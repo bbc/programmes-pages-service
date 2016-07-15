@@ -8,7 +8,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributorRepository::<public>
  */
-class ContributorRepositoryFindByMusicBrainzIdTest extends AbstractDatabaseTest
+class FindByMusicBrainzIdTest extends AbstractDatabaseTest
 {
     public function testFindByMusicBrainzId()
     {

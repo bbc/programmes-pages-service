@@ -8,7 +8,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentEventRepository::<public>
  */
-class SegmentEventRepositoryFindFullLatestBroadcastedForContributorTest extends AbstractDatabaseTest
+class FindFullLatestBroadcastedForContributorTest extends AbstractDatabaseTest
 {
     public function testFindFullLatestBroadcastedForContributor()
     {
