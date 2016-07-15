@@ -130,7 +130,7 @@ LEFT JOIN masterBrand.network network
 LEFT JOIN masterBrand.image mbImage
 WHERE programme.parent = :dbId
 AND programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode)
-ORDER BY programme.position DESC, programme.firstBroadcastDate DESC, programme.title DESC
+ORDER BY programme.position DESC, programme.firstBroadcastDate DESC, programme.title ASC, programme.pid ASC
 QUERY;
 
         $q = $this->getEntityManager()->createQuery($qText)
@@ -308,8 +308,8 @@ QUERY;
         $booleanKeywords = '+' . $booleanKeywords;
 
         $qText = <<<QUERY
-SELECT programme, 
-( 
+SELECT programme,
+(
     (  (MATCH_AGAINST (programme.searchTitle, :keywords ) * 3)
       + (MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :keywords ) * 1)
       + (MATCH_AGAINST (programme.searchTitle, :quotedKeywords ) * 7)
