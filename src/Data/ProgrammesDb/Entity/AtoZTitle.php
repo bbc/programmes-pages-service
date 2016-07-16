@@ -2,7 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

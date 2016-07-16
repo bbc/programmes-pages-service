@@ -2,11 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Series;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use Doctrine\ORM\Query;
@@ -98,7 +93,7 @@ QUERY;
             ->setParameter('pid', $pid);
 
         $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
-        $withHydratedParents = $result ? $this->resolveParents([$result], true)[0] : $result;
+        $withHydratedParents = $result ? $this->resolveParents([$result])[0] : $result;
         return $withHydratedParents ? $this->resolveCategories([$withHydratedParents])[0] : $withHydratedParents;
     }
 
@@ -192,6 +187,7 @@ QUERY;
             ->andWhere('programme.parent = :parentDbId')
             ->andWhere('programme.position ' . $filterOperation . ' :originalPosition')
             ->orderBy('programme.position', $orderDirection)
+            ->orderBy('programme.pid', $orderDirection)
             ->setMaxResults(1)
             ->setParameter('parentDbId', $parentDbId)
             ->setParameter('originalPosition', $position);
@@ -330,7 +326,7 @@ QUERY;
             ->setFirstResult($offset)
             ->setParameter('keywords', $keywords)
             ->setParameter('booleanKeywords', $booleanKeywords)
-            ->setParameter('quotedKeywords', '"' + $keywords + '"');
+            ->setParameter('quotedKeywords', '"' . $keywords . '"');
 
         return $q->getResult(Query::HYDRATE_ARRAY);
     }
@@ -368,6 +364,7 @@ QUERY;
 
     private function categoryAncestryGetter(array $ids)
     {
+        /** @var CategoryRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
         return $repo->findByIds($ids);
     }

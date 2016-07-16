@@ -2,7 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
-use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class Contribution

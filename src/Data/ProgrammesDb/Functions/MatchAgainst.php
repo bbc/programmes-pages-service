@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions;
 
+use Doctrine\ORM\Query\AST\InputParameter;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\AST\Literal;
@@ -13,7 +14,10 @@ class MatchAgainst extends FunctionNode
 {
 
     public $columns = array();
+
+    /** @var InputParameter */
     public $needle;
+
     /** @var Literal */
     public $mode;
 

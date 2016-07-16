@@ -46,8 +46,6 @@ abstract class Category
     private $ancestry;
 
     /**
-     * @var int|null
-     *
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      * @ORM\JoinColumn(referencedColumnName="id", nullable=true, onDelete="SET NULL")

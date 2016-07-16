@@ -2,7 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Domain\ValueObject;
 
-use DateTime;
 use InvalidArgumentException;
 use JsonSerializable;
 

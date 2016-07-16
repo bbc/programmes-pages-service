@@ -3,9 +3,11 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\Brand;
+use BBC\ProgrammesPagesService\Domain\Entity\Clip;
+use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
-use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
-use BBC\ProgrammesPagesService\Domain\Entity\Group;
+use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
 
@@ -148,22 +150,6 @@ class ProgrammesService extends AbstractService
             }
         }
 
-        // Then try based on ReleaseDate if we're dealing with a ProgrammeItem
-        if ($programme instanceof ProgrammeItem) {
-            if (!is_null($programme->getReleaseDate())) {
-                $dbEntity = $this->repository->findAdjacentProgrammeItemByReleaseDate(
-                    $programme->getParent()->getDbId(),
-                    $programme->getReleaseDate(),
-                    $this->dbType($programme),
-                    $direction
-                );
-
-                if ($dbEntity) {
-                    return $this->mapSingleEntity($dbEntity);
-                }
-            }
-        }
-
         if (!is_null($programme->getFirstBroadcastDate())) {
             $dbEntity = $this->repository->findAdjacentProgrammeByFirstBroadcastDate(
                 $programme->getParent()->getDbId(),
@@ -182,17 +168,21 @@ class ProgrammesService extends AbstractService
 
     /**
      * A utility for returning the db type for a given Domain object
+     *
+     * @param Programme $entity
+     * @return null|string
      */
     private function dbType(Programme $entity)
     {
-        if ($entity instanceof \BBC\ProgrammesPagesService\Domain\Entity\Brand) {
+        if ($entity instanceof Brand) {
             return 'Brand';
-        } elseif ($entity instanceof \BBC\ProgrammesPagesService\Domain\Entity\Series) {
+        } elseif ($entity instanceof Series) {
             return 'Series';
-        } elseif ($entity instanceof \BBC\ProgrammesPagesService\Domain\Entity\Episode) {
+        } elseif ($entity instanceof Episode) {
             return 'Episode';
-        } elseif ($entity instanceof \BBC\ProgrammesPagesService\Domain\Entity\Clip) {
+        } elseif ($entity instanceof Clip) {
             return 'Clip';
         }
+        return 'Unknown';
     }
 }

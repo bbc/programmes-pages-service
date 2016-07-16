@@ -2,10 +2,9 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsBackfill;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChange;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChangeBase;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker\ForceIndexWalker;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
 class PipsBackfillRepository extends PipsChangeRepository
@@ -42,6 +41,7 @@ class PipsBackfillRepository extends PipsChangeRepository
             // Extremely nasty hack to force doctrine to include FORCE INDEX in query
             $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, '\BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker\ForceIndexWalker');
             $query->setHint(ForceIndexWalker::HINT_USE_INDEX, 'pips_backfill_locking_idx');
+            /** @var PipsBackfill[] $result */
             $result = $query->getResult();
             $now = new \DateTime();
             foreach ($result as $item) {
@@ -61,7 +61,7 @@ class PipsBackfillRepository extends PipsChangeRepository
         }
     }
 
-    public function setAsProcessed(PipsChangeBase $change)
+    public function setAsProcessed(PipsBackfill $change)
     {
         $change->setProcessedTime(new \DateTime());
         $change->setLockedAt(null);
@@ -72,7 +72,7 @@ class PipsBackfillRepository extends PipsChangeRepository
         $this->addChange($change);
     }
 
-    public function unlock(PipsChangeBase $change)
+    public function unlock(PipsBackfill $change)
     {
         $change->setLockedAt(null);
         $change->setLocked(false);
@@ -100,7 +100,9 @@ class PipsBackfillRepository extends PipsChangeRepository
                 ->setParameter('cids', $cids)
                 ->getQuery();
             $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
-            foreach ($query->getResult() as $changeEvent) {
+            /** @var PipsBackfill[] $results */
+            $results = $query->getResult();
+            foreach ($results as $changeEvent) {
                 $changeEvent->setLockedAt(null);
                 $changeEvent->setLocked(false);
                 $em->persist($changeEvent);

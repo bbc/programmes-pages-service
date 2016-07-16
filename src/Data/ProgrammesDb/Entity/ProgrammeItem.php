@@ -63,7 +63,7 @@ abstract class ProgrammeItem extends Programme
     private $downloadableVersion;
 
     /**
-     * @var DateTime
+     * @var array
      *
      * @ORM\Column(type="simple_array", nullable=true)
      */

@@ -24,6 +24,7 @@ class DatePartialType extends DateType
      * @param mixed $value
      * @param AbstractPlatform $platform
      * @return string
+     * @throws ConversionException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
@@ -41,7 +42,8 @@ class DatePartialType extends DateType
     /**
      * @param mixed $value
      * @param AbstractPlatform $platform
-     * @return mixed
+     * @return PartialDate|mixed
+     * @throws ConversionException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {

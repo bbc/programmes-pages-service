@@ -3,8 +3,6 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\RelatedLinkRepository;
-use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
 
 class RelatedLinksService extends AbstractService

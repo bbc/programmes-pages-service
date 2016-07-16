@@ -17,6 +17,11 @@ abstract class ProgrammeItem extends Programme
     private $mediaType;
 
     /**
+     * @var int|null
+     */
+    private $segmentEventCount;
+
+    /**
      * @var PartialDate|null
      */
     private $releaseDate;
