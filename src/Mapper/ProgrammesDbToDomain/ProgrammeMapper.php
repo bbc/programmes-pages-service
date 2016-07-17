@@ -167,8 +167,7 @@ class ProgrammeMapper extends AbstractMapper
 
         // Image inheritance. If the current programme does not have an image
         // attached to it, look to see if its parent has an image, and use that.
-        // Keep going up the ancestry chain till an image is found, otherwise
-        // fall back to a default image.
+        // Keep going up the ancestry chain till an image is found
         $currentItem = $dbProgramme;
         while ($currentItem) {
             // If the current Programme has an image then use that!
@@ -180,9 +179,20 @@ class ProgrammeMapper extends AbstractMapper
             $currentItem = $currentItem['parent'] ?? null;
         }
 
-        // Couldn't find anything in the hierarchy, try the MasterBrand image
-        if (isset($dbProgramme['masterBrand']['image'])) {
-            return $imageMapper->getDomainModel($dbProgramme['masterBrand']['image']);
+        // Could not find any Programme Images in the hierarchy, try the
+        // MasterBrand image.
+        // This should also attempt inheritance where if the current programme
+        // has no MasterBrand image then it should work up the ancestry chain
+        // till an image is found.
+        $currentItem = $dbProgramme;
+        while ($currentItem) {
+            // If the current Programme's MasterBrand has an image then use that!
+            if (isset($currentItem['masterBrand']['image'])) {
+                return $imageMapper->getDomainModel($currentItem['masterBrand']['image']);
+            }
+
+            // Otherwise set the current Programme to the parent
+            $currentItem = $currentItem['parent'] ?? null;
         }
 
         // Couldn't find anything in the masterbrand, so use the default Image

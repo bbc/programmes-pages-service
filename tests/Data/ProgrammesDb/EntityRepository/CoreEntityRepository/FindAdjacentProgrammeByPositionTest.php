@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use InvalidArgumentException;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
@@ -14,6 +15,8 @@ class FindAdjacentProgrammeByPositionTest extends AbstractDatabaseTest
     public function testFindAdjacentProgrammeByPosition()
     {
         $this->loadFixtures(['SiblingsFixture']);
+
+        /** @var CoreEntityRepository $repo */
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
 
         // Use a loop rather than a dataProvider so we avoid recreating the
