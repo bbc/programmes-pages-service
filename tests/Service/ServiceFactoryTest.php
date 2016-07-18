@@ -39,8 +39,10 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
     public function serviceNamesDataProvider()
     {
         return [
+            ['ContributorsService', 'Contributor', 'ContributorMapper'],
             ['ProgrammesService', 'CoreEntity', 'ProgrammeMapper'],
             ['RelatedLinksService', 'RelatedLink', 'RelatedLinkMapper'],
+            ['SegmentEventsService', 'SegmentEvent', 'SegmentEventMapper'],
             ['VersionsService', 'Version', 'VersionMapper'],
         ];
     }

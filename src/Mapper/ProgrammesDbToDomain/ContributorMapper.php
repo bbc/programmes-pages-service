@@ -12,6 +12,7 @@ class ContributorMapper implements MapperInterface
     public function getDomainModel(array $dbContributor): Contributor
     {
         return new Contributor(
+            $dbContributor['id'],
             new Pid($dbContributor['pid']),
             $dbContributor['type'],
             $dbContributor['name'],

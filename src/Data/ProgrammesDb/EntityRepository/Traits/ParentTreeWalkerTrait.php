@@ -8,18 +8,34 @@ trait ParentTreeWalkerTrait
      * Takes an array of entity array representations that have a id, parent and
      * ancestry fields and finds all the ancestors for all the entities and
      * attaches the parents onto the entities.
+     * It is also possible to support entities where the 'ancestry' field is several
+     * levels deep ($entity['version']['programmeItem']['ancestry']). A 'parent'
+     * field will be populated at the same level as that field. To do this set
+     * the $keyPath to point to the 'ancestry' field:
+     * $keyPath = [''version', 'programmeItem', 'ancestry']testConstructorRequiredArgs
      *
-     * @param  array    $entities
-     * @param  callable A callable that accepts an array of ids and returns a
+     * @param  array $entities
+     * @param callable $ancestryGetter A callable that accepts an array of ids and returns a
      *                  list of entities with those ids
+     * @param array $keyPath an array of keys to follow to reach the ancestry source field
      * @return array
      */
-    protected function abstractResolveAncestry(array $entities, callable $ancestryGetter)
-    {
+    protected function abstractResolveAncestry(
+        array $entities,
+        callable $ancestryGetter,
+        array $keyPath = ['ancestry']
+    ) {
         // Build a list of all unique parentIds found in all of the entities
         $listOfAllParentIds = [];
-        foreach ($entities as $entity) {
-            foreach ($this->getParentIdsFromAncestry($entity['ancestry']) as $parentId) {
+        foreach ($entities as $i => $entity) {
+            // We need to create the parent field, as we know
+            // we're making the request for parents, but we may
+            // end up bailing out early if there aren't any
+            $entities[$i]['parent'] =  null;
+
+            $ancestry = $this->getFieldFromDepth($entity, $keyPath);
+
+            foreach ($this->getParentIdsFromAncestry($ancestry) as $parentId) {
                 $listOfAllParentIds[$parentId] = true;
             }
         }
@@ -34,9 +50,8 @@ trait ParentTreeWalkerTrait
 
         // Update the entities so that their ancestry is hydrated
         foreach ($entities as $i => $entity) {
-            $entities[$i] = $this->combineAncestry($entity, $parentEntities);
+            $entities[$i] = $this->combineAncestry($entity, $parentEntities, $keyPath);
         }
-
         return $entities;
     }
 
@@ -51,8 +66,9 @@ trait ParentTreeWalkerTrait
      * shall populate the category ancestry for all categories that belong to
      * all programmes
      *
-     * @param  array    $entities
-     * @param  callable A callable that accepts an array of ids and returns a
+     * @param  array $entities
+     * @param string $key
+     * @param callable $ancestryGetter A callable that accepts an array of ids and returns a
      *                  list of entities with those ids
      * @return array
      */
@@ -91,21 +107,45 @@ trait ParentTreeWalkerTrait
     /**
      * Using the potential ancestors as a source, recursively set the parents into place
      *
+     * @param $entity
+     * @param array $potentialAncestors
+     * @param array $keyPath
      * @return array|null
      */
-    private function combineAncestry($entity, array $potentialAncestors = [])
+    private function combineAncestry($entity, array $potentialAncestors = [], $keyPath = ['ancestry'])
     {
         // an embargoed ancestor will come through as null
         if (is_null($entity)) {
             return null;
         }
 
-        $parentIds = $this->getParentIdsFromAncestry($entity['ancestry']);
+        // The keyPath is the pointer to find the 'ancestry' field.
+        // In order to set the results of the ancestry, we'll be setting
+        // the 'parent' field, so here we update the pointer to be a 'parent'
+        // field at the same level.
+        $setterPath = array_slice($keyPath, 0, -1);
+        $setterPath[] = 'parent';
+
+        $parentIds = $this->getParentIdsFromAncestry($this->getFieldFromDepth($entity, $keyPath));
         if ($parentIds) {
             $resolvedParent = $this->searchSetForEntityWithId($potentialAncestors, end($parentIds));
-            $entity['parent'] = $this->combineAncestry($resolvedParent, $potentialAncestors);
+
+            // overwrite the entity with the new one where the parent has
+            // been set
+            return $this->setDeepKey(
+                $entity,
+                $this->combineAncestry($resolvedParent, $potentialAncestors),
+                $setterPath
+            );
         }
-        return $entity;
+
+        // if there were no parent IDs we still need to set the parent
+        // field to its fetched-but-empty state.
+        return $this->setDeepKey(
+            $entity,
+            null, // fetched-but-empty
+            $setterPath
+        );
     }
 
     private function searchSetForEntityWithId(array $resultSet, int $id)
@@ -119,6 +159,52 @@ trait ParentTreeWalkerTrait
             }
         }
         return null;
+    }
+
+    /**
+     * Gets the values of a key deep in a nested array. This allows
+     * the key to be fetched where the depth is dynamic. Equivalent to
+     * $value = $array['level1']['level2']
+     * but where we can't hard code how many levels to travel
+     * $value = $this->getFieldFromDepth($array, ['level1','level2']);
+     *
+     * @param $entity
+     * @param array $keyPath
+     * @return mixed
+     */
+    private function getFieldFromDepth($entity, array $keyPath)
+    {
+        $key = array_shift($keyPath);
+        if (empty($keyPath)) {
+            return $entity[$key];
+        }
+        return $this->getFieldFromDepth($entity[$key], $keyPath);
+    }
+
+    /**
+     * Sets the value of a key deep in a nested array. This allows
+     * the key to be set where the depth is dynamic, so we can't code
+     * the setter. Using
+     * $array = $this->setDeepKey($array, 'hello', ['level1', 'level2']);
+     * is equivalent to using:
+     * $array['level1']['level2] = 'hello';
+     *
+     * @param $entity
+     * @param $valueToSet
+     * @param array $keyPath
+     * @return mixed
+     */
+    private function setDeepKey($entity, $valueToSet, array $keyPath = [])
+    {
+        if (empty($keyPath)) {
+            return $valueToSet;
+        }
+        $key = array_shift($keyPath);
+        if (!isset($entity[$key])) {
+            $entity[$key] = null;
+        }
+        $entity[$key] = $this->setDeepKey($entity[$key], $valueToSet, $keyPath);
+        return $entity;
     }
 
     private function getParentIdsFromAncestry(string $ancestry): array

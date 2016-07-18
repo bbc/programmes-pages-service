@@ -7,6 +7,11 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 class Contributor
 {
     /**
+     * @var int
+     */
+    private $dbId;
+
+    /**
      * @var Pid
      */
     private $pid;
@@ -28,15 +33,28 @@ class Contributor
 
 
     public function __construct(
+        int $dbId,
         Pid $pid,
         string $type,
         string $name,
         string $musicBrainzId = null
     ) {
+        $this->dbId = $dbId;
         $this->pid = $pid;
         $this->type = $type;
         $this->name = $name;
         $this->musicBrainzId = $musicBrainzId;
+    }
+
+    /**
+     * Used to make foreign key queries without having to make a join
+     * with the user-facing ID.
+     * Removing these joins shall result in faster DB queries which is more
+     * important than keeping a pure Domain model.
+     */
+    public function getDbId(): int
+    {
+        return $this->dbId;
     }
 
     public function getPid(): Pid

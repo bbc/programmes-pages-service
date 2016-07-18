@@ -33,8 +33,8 @@ class ParentResolutionTest extends AbstractDatabaseTest
 
         $entity = $repo->findByPidFull('b010t19z');
 
-        // Assert current entity has no parent (it is top of the hierarchy)
-        $this->assertArrayNotHasKey('parent', $entity);
+        // Assert current entity has a null parent (it is top of the hierarchy)
+        $this->assertNull($entity['parent']);
 
         // Ensure only one query - the original findByPid - is made
         $this->assertCount(1, $this->getDbQueries());
@@ -53,8 +53,8 @@ class ParentResolutionTest extends AbstractDatabaseTest
 
         // Assert parent is the brand
         $this->assertEquals('b010t19z', $entity['parent']['pid']);
-        // Assert parent has no parent (it is top of the hierarchy)
-        $this->assertArrayNotHasKey('parent', $entity['parent']);
+        // Assert parent has null parent (it is top of the hierarchy)
+        $this->assertNull($entity['parent']['parent']);
 
         // Ensure only two queries - the original findByPid and the parent lookup
         $this->assertCount(2, $this->getDbQueries());
@@ -75,8 +75,8 @@ class ParentResolutionTest extends AbstractDatabaseTest
         $this->assertEquals('b00swyx1', $entity['parent']['pid']);
         // Assert grandparent is the brand
         $this->assertEquals('b010t19z', $entity['parent']['parent']['pid']);
-        // Assert grandparent has no parent (it is top of the hierarchy)
-        $this->assertArrayNotHasKey('parent', $entity['parent']['parent']);
+        // Assert grandparent has null parent (it is top of the hierarchy)
+        $this->assertNull($entity['parent']['parent']['parent']);
 
         // Ensure only two queries - the original findByPid and the parent lookup
         $this->assertCount(2, $this->getDbQueries());
@@ -95,22 +95,21 @@ class ParentResolutionTest extends AbstractDatabaseTest
         $episode = $this->findEntityByPid($entities, 'b00swgkn');
 
         // Assert hierarchy for Brand
-        $this->assertArrayNotHasKey('parent', $brand);
+        $this->assertNull($brand['parent']);
 
         // Assert hierarchy for Series
         // Assert parent is the brand
         $this->assertEquals('b010t19z', $series['parent']['pid']);
-        // Assert parent has no parent (it is top of the hierarchy)
-        $this->assertArrayNotHasKey('parent', $series['parent']);
+        // Assert parent has null parent (it is top of the hierarchy)
+        $this->assertNull($series['parent']['parent']);
 
         // Assert hierarchy for Episode
         // Assert parent is the series
         $this->assertEquals('b00swyx1', $episode['parent']['pid']);
         // Assert grandparent is the brand
         $this->assertEquals('b010t19z', $episode['parent']['parent']['pid']);
-        // Assert grandparent has no parent (it is top of the hierarchy)
-        $this->assertArrayNotHasKey('parent', $episode['parent']['parent']);
-
+        // Assert grandparent has null parent (it is top of the hierarchy)
+        $this->assertNull($series['parent']['parent']['parent']);
 
 
         // Ensure only two queries - the original findAll and the parent lookup

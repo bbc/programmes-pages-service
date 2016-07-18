@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -121,10 +122,17 @@ class Segment
      */
     private $recordingDate;
 
+    /**
+     * Used for joins. Cannot be queried, so there is no getter/setter.
+     * @ORM\OneToMany(targetEntity="Contribution", mappedBy="contributionToSegment")
+     */
+    private $contributions;
+
     public function __construct(string $pid, string $type)
     {
         $this->pid = $pid;
         $this->type = $type;
+        $this->contributions = new ArrayCollection();
     }
 
     /**

@@ -41,8 +41,8 @@ class CategoryResolutionTest extends AbstractDatabaseTest
         $this->assertEquals('C00196', $entity['categories'][1]['parent']['pipId']);
         $this->assertEquals('C00193', $entity['categories'][1]['parent']['parent']['pipId']);
 
-        $this->assertArrayNotHasKey('parent', $entity['categories'][0]['parent']);
-        $this->assertArrayNotHasKey('parent', $entity['categories'][1]['parent']['parent']);
+        $this->assertNull($entity['categories'][0]['parent']['parent']);
+        $this->assertNull($entity['categories'][1]['parent']['parent']['parent']);
 
         // Ensure two queries - the original request and one for all categories
         $this->assertCount(2, $this->getDbQueries());

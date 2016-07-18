@@ -21,6 +21,18 @@ class ServiceFactory
         $this->mapperFactory = $mapperFactory;
     }
 
+    public function getContributorsService(): ContributorsService
+    {
+        if (!array_key_exists('ContributorsService', $this->instances)) {
+            $this->instances['ContributorsService'] = new ContributorsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Contributor'),
+                $this->mapperFactory->getContributorMapper()
+            );
+        }
+
+        return $this->instances['ContributorsService'];
+    }
+
     public function getProgrammesService(): ProgrammesService
     {
         if (!array_key_exists('ProgrammesService', $this->instances)) {
@@ -43,6 +55,18 @@ class ServiceFactory
         }
 
         return $this->instances['RelatedLinksService'];
+    }
+
+    public function getSegmentEventsService(): SegmentEventsService
+    {
+        if (!array_key_exists('SegmentEventsService', $this->instances)) {
+            $this->instances['SegmentEventsService'] = new SegmentEventsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:SegmentEvent'),
+                $this->mapperFactory->getSegmentEventMapper()
+            );
+        }
+
+        return $this->instances['SegmentEventsService'];
     }
 
     public function getVersionsService(): VersionsService
