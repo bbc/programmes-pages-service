@@ -86,9 +86,9 @@ class SegmentEventsForArtistsFixture extends AbstractFixture implements Dependen
         );
 
         // build the segment events
-        $this->buildSegmentEvent('se000001', $version1, $segment1);
-        $this->buildSegmentEvent('se000002', $version1, $segment2);
-        $this->buildSegmentEvent('se000003', $version2, $segment3);
+        $this->buildSegmentEvent('sv000001', $version1, $segment1);
+        $this->buildSegmentEvent('sv000002', $version1, $segment2);
+        $this->buildSegmentEvent('sv000003', $version2, $segment3);
 
         $manager->flush();
     }

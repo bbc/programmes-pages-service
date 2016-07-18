@@ -34,8 +34,8 @@ class FindFullLatestBroadcastedForContributorTest extends AbstractDatabaseTest
         $se1 = $segmentEvents[0];
         $se2 = $segmentEvents[1];
 
-        $this->assertEquals('se000003', $se1['pid']);
-        $this->assertEquals('se000002', $se2['pid']);
+        $this->assertEquals('sv000003', $se1['pid']);
+        $this->assertEquals('sv000002', $se2['pid']);
 
         $this->assertEquals('sgmntms3', $se1['segment']['pid']);
         $this->assertEquals('sgmntms2', $se2['segment']['pid']);

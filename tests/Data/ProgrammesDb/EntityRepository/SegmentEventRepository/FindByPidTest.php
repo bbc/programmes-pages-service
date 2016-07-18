@@ -24,10 +24,10 @@ class FindByPidTest extends AbstractDatabaseTest
         $this->loadFixtures(['SegmentEventFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
 
-        $entity = $repo->findByPid('se000001');
+        $entity = $repo->findByPid('sv000001');
         $this->assertInternalType('array', $entity);
 
-        $this->assertEquals('se000001', $entity['pid']);
+        $this->assertEquals('sv000001', $entity['pid']);
         $this->assertEquals('v0000001', $entity['version']['pid']);
         $this->assertEquals('s0000001', $entity['segment']['pid']);
 
@@ -52,7 +52,7 @@ class FindByPidTest extends AbstractDatabaseTest
         $this->loadFixtures(['SegmentEventFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
 
-        $entity = $repo->findByPid('se000002');
+        $entity = $repo->findByPid('sv000002');
         $this->assertNull($entity);
 
         // findByPid query only
@@ -65,10 +65,10 @@ class FindByPidTest extends AbstractDatabaseTest
 
         $this->loadFixtures(['SegmentEventFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
-        $entity = $repo->findByPid('se000002');
+        $entity = $repo->findByPid('sv000002');
 
         $this->assertInternalType('array', $entity);
-        $this->assertEquals('se000002', $entity['pid']);
+        $this->assertEquals('sv000002', $entity['pid']);
 
         // findByPid query only
         $this->assertCount(1, $this->getDbQueries());

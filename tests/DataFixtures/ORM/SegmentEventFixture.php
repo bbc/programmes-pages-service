@@ -27,8 +27,8 @@ class SegmentEventFixture extends AbstractFixture implements DependentFixtureInt
         $version = $this->getReference('v0000001');
         $embargoedVersion = $this->getReference('v0000002');
 
-        $this->buildSegmentEvent('se000001', $version, $segment);
-        $this->buildSegmentEvent('se000002', $embargoedVersion, $segment);
+        $this->buildSegmentEvent('sv000001', $version, $segment);
+        $this->buildSegmentEvent('sv000002', $embargoedVersion, $segment);
 
         $manager->flush();
     }
