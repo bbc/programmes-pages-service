@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(
  * name="atoz_title",
- * uniqueConstraints={@ORM\UniqueConstraint(name="atoz_unique", columns={"programme_id", "title"})},
+ * uniqueConstraints={@ORM\UniqueConstraint(name="atoz_unique", columns={"core_entity_id", "title"})},
  * indexes={
  *   @ORM\Index(name="atoz_title_title", columns={"title"}),
  *   @ORM\Index(name="atoz_title_first_letter", columns={"first_letter"}),
@@ -26,11 +26,11 @@ class AtoZTitle
     private $id;
 
     /**
-     * @var Programme
-     * @ORM\ManyToOne(targetEntity="Programme")
+     * @var CoreEntity
+     * @ORM\ManyToOne(targetEntity="CoreEntity")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $programme;
+    private $coreEntity;
 
     /**
      * @var string
@@ -46,20 +46,20 @@ class AtoZTitle
      */
     private $firstLetter;
 
-    public function __construct(string $title, Programme $programme)
+    public function __construct(string $title, CoreEntity $coreEntity)
     {
-        $this->programme = $programme;
+        $this->coreEntity = $coreEntity;
         $this->setTitle($title);
     }
 
-    public function getProgramme(): Programme
+    public function getEntity(): CoreEntity
     {
         return $this->programme;
     }
 
-    public function setProgramme(Programme $programme)
+    public function setEntity(CoreEntity $coreEntity)
     {
-        $this->programme = $programme;
+        $this->coreEntity = $coreEntity;
     }
 
     public function getTitle(): string
