@@ -45,6 +45,18 @@ class ServiceFactory
         return $this->instances['ContributorsService'];
     }
 
+    public function getNetworksService(): NetworksService
+    {
+        if (!array_key_exists('NetworksService', $this->instances)) {
+            $this->instances['NetworksService'] = new NetworksService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Network'),
+                $this->mapperFactory->getNetworkMapper()
+            );
+        }
+
+        return $this->instances['NetworksService'];
+    }
+
     public function getProgrammesService(): ProgrammesService
     {
         if (!array_key_exists('ProgrammesService', $this->instances)) {

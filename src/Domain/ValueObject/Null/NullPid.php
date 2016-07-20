@@ -1,6 +1,8 @@
 <?php
 
-namespace BBC\ProgrammesPagesService\Domain\ValueObject;
+namespace BBC\ProgrammesPagesService\Domain\ValueObject\Null;
+
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class NullPid extends Pid
 {

@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 
 class NetworkMapper extends AbstractMapper
@@ -37,7 +38,11 @@ class NetworkMapper extends AbstractMapper
 
     private function getServiceModel($dbNetwork, $key = 'defaultService')
     {
-        if (!array_key_exists($key, $dbNetwork) || is_null($dbNetwork[$key])) {
+        if (!array_key_exists($key, $dbNetwork)) {
+            return new UnfetchedService();
+        }
+
+        if (is_null($dbNetwork[$key])) {
             return null;
         }
 

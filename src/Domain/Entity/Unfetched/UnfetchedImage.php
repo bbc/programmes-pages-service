@@ -3,7 +3,7 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
-use BBC\ProgrammesPagesService\Domain\ValueObject\NullPid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullPid;
 
 class UnfetchedImage extends Image
 {

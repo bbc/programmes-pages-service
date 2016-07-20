@@ -3,7 +3,9 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributorRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributorMapper;
+use DateTimeImmutable;
 
 class ContributorsService extends AbstractService
 {
@@ -19,5 +21,33 @@ class ContributorsService extends AbstractService
     ) {
         $dbEntity = $this->repository->findByMusicBrainzId($musicBrainzId);
         return $this->mapSingleEntity($dbEntity);
+    }
+
+    public function findAllMostPlayed(
+        DateTimeImmutable $start,
+        DateTimeImmutable $end,
+        Service $service = null
+    ): array {
+        $serviceId = $service ? $service->getDbId() : null;
+
+        $results = $this->repository->findAllMostPlayed(
+            $start,
+            $end,
+            $serviceId
+        );
+
+        $data = [];
+
+        // loop through the results, mapping the objects
+        foreach ($results as $result) {
+            $contributor = $this->mapSingleEntity($result);
+            $data[] = (object) [
+                'contributor' => $contributor,
+                'plays' => $result['plays'],
+                'previous_plays' => $result['previous_plays'],
+            ];
+        }
+
+        return $data;
     }
 }

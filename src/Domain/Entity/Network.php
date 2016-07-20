@@ -2,6 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use InvalidArgumentException;
@@ -144,9 +146,17 @@ class Network
 
     /**
      * @return Service|null
+     * @throws DataNotFetchedException
      */
     public function getDefaultService()
     {
+        if ($this->defaultService instanceof UnfetchedService) {
+            throw new DataNotFetchedException(
+                'Could not get Default Service of Network "'
+                    . $this->nid . '" as it was not fetched'
+            );
+        }
+
         return $this->defaultService;
     }
 
