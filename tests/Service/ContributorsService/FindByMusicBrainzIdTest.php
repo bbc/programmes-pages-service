@@ -2,9 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributorsService;
 
-use BBC\ProgrammesPagesService\Service\ContributorsService;
-
-class ContributorsServiceFindByMusicBrainzIdTest extends AbstractContributorsServiceTest
+class FindByMusicBrainzIdTest extends AbstractContributorsServiceTest
 {
     public function testFindByMusicBrainzId()
     {
@@ -31,10 +29,5 @@ class ContributorsServiceFindByMusicBrainzIdTest extends AbstractContributorsSer
 
         $result = $this->service()->findByMusicBrainzId($mbid);
         $this->assertNull($result);
-    }
-
-    protected function service()
-    {
-        return new ContributorsService($this->mockRepository, $this->mockMapper);
     }
 }
