@@ -24,28 +24,42 @@ class ContributorsService extends AbstractService
     }
 
     public function findAllMostPlayed(
-        DateTimeImmutable $start,
-        DateTimeImmutable $end,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to,
         Service $service = null
     ): array {
         $serviceId = $service ? $service->getDbId() : null;
 
-        $results = $this->repository->findAllMostPlayed(
-            $start,
-            $end,
+        $results = $this->repository->findAllMostPlayedWithPlays(
+            $from,
+            $to,
             $serviceId
         );
 
         $data = [];
-
         // loop through the results, mapping the objects
         foreach ($results as $result) {
             $contributor = $this->mapSingleEntity($result);
             $data[] = (object) [
                 'contributor' => $contributor,
-                'plays' => $result['plays'],
-                'previous_plays' => $result['previous_plays'],
+                'plays' => (int) $result['contributionPlays']
             ];
+        }
+
+        return $data;
+    }
+
+    public function getPlayCountsByContributorPidsForTime(
+        array $contributors,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to,
+        Service $service = null
+    ) {
+        $results = [];
+
+        $data = [];
+        foreach($results as $result) {
+            $data[$result['pid']] = $result['contributionPlays'];
         }
 
         return $data;
