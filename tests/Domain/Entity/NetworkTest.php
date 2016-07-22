@@ -43,7 +43,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
     {
         $nid = new Nid('bbc_1xtra');
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $service = new Service(new Sid('bbc_1xtra'), '1xtra');
+        $service = new Service(0, new Sid('bbc_1xtra'), '1xtra');
 
         $network = new Network(
             $nid,

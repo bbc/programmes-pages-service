@@ -10,6 +10,7 @@ class UnfetchedService extends Service
     public function __construct()
     {
         parent::__construct(
+            0,
             new NullSid(),
             ''
         );

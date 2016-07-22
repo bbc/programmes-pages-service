@@ -70,7 +70,7 @@ class ContributorRepository extends EntityRepository
         $qb = $this->createQueryBuilder('contributor')
             ->select([
                 'contributor',
-                'COUNT(DISTINCT(se.id)) as contributionPlays'
+                'COUNT(DISTINCT(se.id)) as contributionPlays',
             ])
             ->join('contributor.contributions', 'cb')
             ->join('cb.contributionToSegment', 's')
@@ -81,7 +81,7 @@ class ContributorRepository extends EntityRepository
             ->where('b.endAt BETWEEN :from AND :to')
             ->andWhere('cr.creditRoleId = \'PERFORMER\'')
             ->groupBy('contributor')
-            ->orderBy('contributionPlays','DESC')
+            ->orderBy('contributionPlays', 'DESC')
             ->addOrderBy('contributor.name')
             ->setMaxResults(200)
             ->setParameter('from', $from)
