@@ -41,11 +41,13 @@ class ProgrammesService extends AbstractService
     }
 
     /**
-     * @return int|null
+     * @return Programme|null
      */
-    public function findIdByPid(Pid $pid)
+    public function findByPid(Pid $pid)
     {
-        return $this->repository->findIdByPid($pid, 'Programme');
+        $dbEntity = $this->repository->findByPid($pid, 'Programme');
+
+        return $this->mapSingleEntity($dbEntity);
     }
 
     /**

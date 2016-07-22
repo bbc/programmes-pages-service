@@ -4,7 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
-class FindByPidTest extends AbstractProgrammesServiceTest
+class FindByPidFullTest extends AbstractProgrammesServiceTest
 {
     public function testFindByPid()
     {
@@ -12,11 +12,11 @@ class FindByPidTest extends AbstractProgrammesServiceTest
         $dbData = ['pid' => 'b010t19z'];
 
         $this->mockRepository->expects($this->once())
-            ->method('findByPid')
+            ->method('findByPidFull')
             ->with($pid)
             ->willReturn($dbData);
 
-        $result = $this->service()->findByPid($pid);
+        $result = $this->service()->findByPidFull($pid);
         $this->assertEquals($this->programmeFromDbData($dbData), $result);
     }
 
@@ -25,11 +25,11 @@ class FindByPidTest extends AbstractProgrammesServiceTest
         $pid = new Pid('b010t19z');
 
         $this->mockRepository->expects($this->once())
-            ->method('findByPid')
+            ->method('findByPidFull')
             ->with($pid)
             ->willReturn(null);
 
-        $result = $this->service()->findByPid($pid);
+        $result = $this->service()->findByPidFull($pid);
         $this->assertNull($result);
     }
 }

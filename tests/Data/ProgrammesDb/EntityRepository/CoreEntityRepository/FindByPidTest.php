@@ -7,30 +7,30 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class FindIdByPidTest extends AbstractDatabaseTest
+class FindByPidTest extends AbstractDatabaseTest
 {
-    public function testFindIdByPid()
+    public function testFindByPid()
     {
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        $expectedId = $this->getCoreEntityDbId('b00swyx1');
 
-        $id = $repo->findIdByPid('b00swyx1');
-        $this->assertSame($expectedId, $id);
+        $entity = $repo->findByPid('b00swyx1');
+        $this->assertInternalType('array', $entity);
+        $this->assertSame('b00swyx1', $entity['pid']);
 
-        // findIdByPid query only
+        // findByPid query only
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindIdByPidFullWhenEmptyResult()
+    public function testFindByPidWhenEmptyResult()
     {
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $entity = $repo->findIdByPid('qqqqqqq');
+        $entity = $repo->findByPid('qqqqqqq');
         $this->assertNull($entity);
 
-        // findIdByPid query only
+        // findByPid query only
         $this->assertCount(1, $this->getDbQueries());
     }
 }

@@ -14,19 +14,19 @@ class CoreEntityRepository extends MaterializedPathRepository
     use StripPunctuationTrait;
 
     /**
-     * Get an entity's ID, based upon its PID
+     * Get an entity, based upon its PID
      * Used when a page wants to find out about data related to an entity, but
-     * doesn't need the entity itself.
+     * doesn't need the fully hydrated entity itself.
      *
      * @param string $pid        The pid to lookup
      * @param string $entityType Filter results by "Programme", "Group" or "CoreEntity"
-     * @return int|null
+     * @return Programme|Group|null
      */
-    public function findIdByPid(string $pid, string $entityType = 'CoreEntity')
+    public function findByPid(string $pid, string $entityType = 'CoreEntity')
     {
         if (!in_array($entityType, ['Programme', 'Group', 'CoreEntity'])) {
             throw new InvalidArgumentException(sprintf(
-                'Called findByPidFull with an invalid type. Expected one of "%s", "%s" or "%s" but got "%s"',
+                'Called findByPid with an invalid type. Expected one of "%s", "%s" or "%s" but got "%s"',
                 'Programme',
                 'Group',
                 'CoreEntity',
@@ -35,7 +35,7 @@ class CoreEntityRepository extends MaterializedPathRepository
         }
 
         $qText = <<<QUERY
-SELECT entity.id
+SELECT entity
 FROM ProgrammesPagesService:$entityType entity
 WHERE entity.pid = :pid
 QUERY;
@@ -43,8 +43,7 @@ QUERY;
         $q = $this->getEntityManager()->createQuery($qText)
             ->setParameter('pid', $pid);
 
-        $result = $q->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
-        return !is_null($result) ? (int) $result : null;
+        return $q->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
     /**
