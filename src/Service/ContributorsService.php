@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributorRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributorMapper;
 use DateTimeImmutable;
@@ -49,19 +50,35 @@ class ContributorsService extends AbstractService
         return $data;
     }
 
-    public function getPlayCountsByContributorPidsForTime(
+    /**
+     * @param Contributor[] $contributors
+     * @param DateTimeImmutable $from
+     * @param DateTimeImmutable $to
+     * @param Service|null $service
+     * @return array
+     */
+    public function countPlaysForTimeByPid(
         array $contributors,
         DateTimeImmutable $from,
         DateTimeImmutable $to,
         Service $service = null
     ) {
-        $results = [];
+        $databaseIds = array_map(function($contributor) {
+           return $contributor->getDbId();
+        }, $contributors);
+        $serviceId = $service ? $service->getDbId() : null;
+
+        $results = $results = $this->repository->countPlaysForContributorIds(
+            $databaseIds,
+            $from,
+            $to,
+            $serviceId
+        );
 
         $data = [];
         foreach($results as $result) {
-            $data[$result['pid']] = $result['contributionPlays'];
+            $data[$result['pid']] = (int) $result['contributionPlays'];
         }
-
         return $data;
     }
 }
