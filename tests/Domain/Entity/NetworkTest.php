@@ -5,7 +5,10 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedImage;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
@@ -87,5 +90,32 @@ class NetworkTest extends PHPUnit_Framework_TestCase
             'Local Radio',
             'wrongwrongwrong'
         );
+    }
+
+    /**
+     * @dataProvider unfetchedProvider
+     * @expectedException DataNotFetchedException
+     */
+    public function testTryingToFetchUnfetchedException($getter)
+    {
+        $entity = new Network(
+            new Nid('bbc_1xtra'),
+            'Name',
+            new UnfetchedImage(),
+            'url_key',
+            'Local Radio',
+            NetworkMediumEnum::UNKNOWN,
+            new UnfetchedService()
+        );
+
+        $entity->$getter();
+    }
+
+    private function unfetchedProvider()
+    {
+        return [
+            'getImage',
+            'getDefaultService',
+        ];
     }
 }
