@@ -2,11 +2,12 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributionsService;
 
-class FindByContributionToVersionDbIdTest extends AbstractContributionsServiceTest
+class FindByContributionToVersionTest extends AbstractContributionsServiceTest
 {
-    public function testFindByContributionToVersionDbIdDefaultPagination()
+    public function testFindByContributionToVersionDefaultPagination()
     {
         $dbId = 1;
+        $version = $this->mockEntity('Version', $dbId);
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
         $this->mockRepository->expects($this->once())
@@ -14,13 +15,14 @@ class FindByContributionToVersionDbIdTest extends AbstractContributionsServiceTe
             ->with([$dbId], 'version', 300, 0)
             ->willReturn($dbData);
 
-        $result = $this->service()->findByContributionToVersionDbId($dbId);
+        $result = $this->service()->findByContributionToVersion($version);
         $this->assertEquals($this->contributionsFromDbData($dbData), $result);
     }
 
-    public function testFindByContributionToVersionDbIdCustomPagination()
+    public function testFindByContributionToVersionCustomPagination()
     {
         $dbId = 1;
+        $version = $this->mockEntity('Version', $dbId);
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
         $this->mockRepository->expects($this->once())
@@ -28,20 +30,21 @@ class FindByContributionToVersionDbIdTest extends AbstractContributionsServiceTe
             ->with([$dbId], 'version', 5, 10)
             ->willReturn($dbData);
 
-        $result = $this->service()->findByContributionToVersionDbId($dbId, 5, 3);
+        $result = $this->service()->findByContributionToVersion($version, 5, 3);
         $this->assertEquals($this->contributionsFromDbData($dbData), $result);
     }
 
-    public function testFindByContributionToVersionDbIdWithNonExistantDbId()
+    public function testFindByContributionToVersionWithNonExistantDbId()
     {
         $dbId = 999;
+        $version = $this->mockEntity('Version', $dbId);
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
             ->with([$dbId], 'version', 5, 10)
             ->willReturn([]);
 
-        $result = $this->service()->findByContributionToVersionDbId($dbId, 5, 3);
+        $result = $this->service()->findByContributionToVersion($version, 5, 3);
         $this->assertEquals([], $result);
     }
 }

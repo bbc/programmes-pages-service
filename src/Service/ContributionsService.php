@@ -3,7 +3,7 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributionRepository;
-use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
+use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributionMapper;
 
 class ContributionsService extends AbstractService
@@ -15,13 +15,13 @@ class ContributionsService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findByContributionToVersionDbId(
-        int $dbid,
+    public function findByContributionToVersion(
+        Version $version,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByContributionTo(
-            [$dbid],
+            [$version->getDbId()],
             'version',
             $limit,
             $this->getOffset($limit, $page)

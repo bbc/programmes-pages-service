@@ -28,8 +28,14 @@ abstract class AbstractServiceTest extends PHPUnit_Framework_TestCase
             }));
     }
 
-    protected function mockEntity($name)
+    protected function mockEntity($name, $dbId = null)
     {
-        return $this->createMock(self::ENTITY_NS . $name);
+        $entity = $this->createMock(self::ENTITY_NS . $name);
+
+        if ($dbId) {
+            $entity->method('getDbId')->willReturn($dbId);
+        }
+
+        return $entity;
     }
 }

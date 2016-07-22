@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\RelatedLinkRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
 
 class RelatedLinksService extends AbstractService
@@ -14,13 +15,13 @@ class RelatedLinksService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findByRelatedToProgrammeDbId(
-        int $dbid,
+    public function findByRelatedToProgramme(
+        Programme $programme,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByRelatedTo(
-            [$dbid],
+            [$programme->getDbId()],
             'programme',
             $limit,
             $this->getOffset($limit, $page)
