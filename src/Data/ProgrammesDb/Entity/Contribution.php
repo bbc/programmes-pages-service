@@ -30,7 +30,7 @@ class Contribution
     private $pid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Contributor")
+     * @ORM\ManyToOne(targetEntity="Contributor", inversedBy="contributions")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $contributor;
@@ -72,7 +72,7 @@ class Contribution
      * want deleting a Version to cascade to delete the contributions
      * attached to the Version
      *
-     * @ORM\ManyToOne(targetEntity="Version")
+     * @ORM\ManyToOne(targetEntity="Version", inversedBy="contributions")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $contributionToVersion;

@@ -36,7 +36,7 @@ class SegmentEvent
     private $version;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Segment")
+     * @ORM\ManyToOne(targetEntity="Segment", inversedBy="segmentEvents")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $segment;

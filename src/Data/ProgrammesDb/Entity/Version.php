@@ -73,11 +73,18 @@ class Version
      */
     private $broadcasts;
 
+    /**
+     * Used for joins. Cannot be queried, so there is no getter/setter.
+     * @ORM\OneToMany(targetEntity="Contribution", mappedBy="contributionToVersion")
+     */
+    private $contributions;
+
     public function __construct(string $pid, ProgrammeItem $programmeItem)
     {
         $this->pid = $pid;
         $this->versionTypes = new ArrayCollection();
         $this->broadcasts = new ArrayCollection();
+        $this->contributions = new ArrayCollection();
         $this->setProgrammeItem($programmeItem);
     }
 

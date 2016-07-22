@@ -40,7 +40,7 @@ class ContributorsService extends AbstractService
         $data = [];
         // loop through the results, mapping the objects
         foreach ($results as $result) {
-            $contributor = $this->mapSingleEntity($result);
+            $contributor = $this->mapSingleEntity($result[0]);
             $data[] = (object) [
                 'contributor' => $contributor,
                 'plays' => (int) $result['contributionPlays']
@@ -62,7 +62,7 @@ class ContributorsService extends AbstractService
         DateTimeImmutable $from,
         DateTimeImmutable $to,
         Service $service = null
-    ) {
+    ): array {
         $databaseIds = array_map(function($contributor) {
            return $contributor->getDbId();
         }, $contributors);
@@ -77,7 +77,11 @@ class ContributorsService extends AbstractService
 
         $data = [];
         foreach($results as $result) {
-            $data[$result['pid']] = (int) $result['contributionPlays'];
+            $contributor = $this->mapSingleEntity($result[0]);
+            // To make the counts easier to find we'll index them by
+            // pid. This removes the need for nested loops.
+            $pid = (string) $contributor->getPid();
+            $data[$pid] = (int) $result['contributionPlays'];
         }
         return $data;
     }
