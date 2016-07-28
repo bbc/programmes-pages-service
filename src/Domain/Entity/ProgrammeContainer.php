@@ -34,7 +34,7 @@ abstract class ProgrammeContainer extends Programme
     private $availableGalleriesCount;
 
     /**
-     * @var string
+     * @var bool
      */
     private $isPodcastable;
 
@@ -121,7 +121,7 @@ abstract class ProgrammeContainer extends Programme
         return $this->availableGalleriesCount;
     }
 
-    public function isPodcastable(): string
+    public function isPodcastable(): bool
     {
         return $this->isPodcastable;
     }
