@@ -71,6 +71,13 @@ class ContributionsFixture extends AbstractFixture implements DependentFixtureIn
             $version2
         );
 
+        $contribution5 = $this->buildContribution(
+            'cntrbtn5',
+            $contributor2,
+            $role,
+            $episode1
+        );
+
         $manager->flush();
     }
 
