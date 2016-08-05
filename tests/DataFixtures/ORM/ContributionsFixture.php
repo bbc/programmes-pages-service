@@ -84,6 +84,7 @@ class ContributionsFixture extends AbstractFixture implements DependentFixtureIn
     private function buildContribution($pid, $contributor, $role, $segment)
     {
         $entity = new Contribution($pid, $contributor, $role, $segment);
+        $this->addReference($pid, $entity);
         $this->manager->persist($entity);
         return $entity;
     }
@@ -91,6 +92,7 @@ class ContributionsFixture extends AbstractFixture implements DependentFixtureIn
     private function buildVersion($pid, $episode)
     {
         $entity = new Version($pid, $episode);
+        $this->addReference($pid, $entity);
         $this->manager->persist($entity);
         return $entity;
     }

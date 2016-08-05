@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
@@ -48,6 +49,7 @@ class NetworkMapperTest extends BaseMapperTestCase
             'isWorldServiceInternational' => true,
             'isInternational' => true,
             'isAllowedAdverts' => true,
+            'defaultService' => null,
         ];
 
         $expectedEntity = new Network(
@@ -96,6 +98,7 @@ class NetworkMapperTest extends BaseMapperTestCase
             'isWorldServiceInternational' => true,
             'isInternational' => true,
             'isAllowedAdverts' => true,
+            'defaultService' => null,
         ];
 
         $expectedEntity = new Network(
@@ -139,6 +142,42 @@ class NetworkMapperTest extends BaseMapperTestCase
             'type' => 'National Radio',
             'medium' => 'radio',
             'defaultService' => $serviceDbEntity,
+            'isPublicOutlet' => true,
+            'isChildrens' => true,
+            'isWorldServiceInternational' => true,
+            'isInternational' => true,
+            'isAllowedAdverts' => true,
+        ];
+
+        $expectedEntity = new Network(
+            new Nid('1_xtra'),
+            '1 Xtra',
+            $this->mockDefaultImage,
+            '1xtra',
+            'National Radio',
+            'radio',
+            $expectedServiceDomainEntity,
+            true,
+            true,
+            true,
+            true,
+            true
+        );
+
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+    }
+
+    public function testGetDomainModelWithoutFetchingDefaultService()
+    {
+        $expectedServiceDomainEntity = new UnfetchedService();
+
+        $dbEntityArray = [
+            'id' => 1,
+            'nid' => '1_xtra',
+            'name' => '1 Xtra',
+            'urlKey' => '1xtra',
+            'type' => 'National Radio',
+            'medium' => 'radio',
             'isPublicOutlet' => true,
             'isChildrens' => true,
             'isWorldServiceInternational' => true,

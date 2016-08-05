@@ -128,11 +128,18 @@ class Segment
      */
     private $contributions;
 
+    /**
+     * Used for joins. Cannot be queried, so there is no getter/setter.
+     * @ORM\OneToMany(targetEntity="SegmentEvent", mappedBy="segment")
+     */
+    private $segmentEvents;
+
     public function __construct(string $pid, string $type)
     {
         $this->pid = $pid;
         $this->type = $type;
         $this->contributions = new ArrayCollection();
+        $this->segmentEvents = new ArrayCollection();
     }
 
     /**
