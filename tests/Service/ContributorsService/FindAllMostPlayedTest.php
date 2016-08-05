@@ -17,11 +17,11 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
         $dbData = [
             [
                 0 => ['musicBrainzId' => $mbid],
-                'contributionPlays' => 10,
+                'contributorPlayCount' => 10,
             ],
             [
                 0 => ['musicBrainzId' => $mbid2],
-                'contributionPlays' => 5,
+                'contributorPlayCount' => 5,
             ],
         ];
 
@@ -61,10 +61,12 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
         $service = new Service(1, new Sid('sid'), 'name');
 
         $mbid = '6746d775-9550-4360-b8d5-c37bd448ce01';
-        $dbData = [[
-            0 => ['musicBrainzId' => $mbid],
-            'contributionPlays' => 10,
-        ]];
+        $dbData = [
+            [
+                0 => ['musicBrainzId' => $mbid],
+                'contributorPlayCount' => 10,
+            ],
+        ];
 
         $this->mockRepository->expects($this->once())
             ->method('findAllMostPlayedWithPlays')

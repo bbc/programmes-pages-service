@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedImage;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
@@ -120,6 +121,12 @@ class Network
 
     public function getImage(): Image
     {
+        if ($this->image instanceof UnfetchedImage) {
+            throw new DataNotFetchedException(
+                'Could not get Image of Network "'
+                . $this->nid . '" as it was not fetched'
+            );
+        }
         return $this->image;
     }
 

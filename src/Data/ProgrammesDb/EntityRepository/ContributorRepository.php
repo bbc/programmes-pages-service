@@ -37,27 +37,6 @@ class ContributorRepository extends EntityRepository
         return $results;
     }
 
-    public function countPlaysForContributorIds(
-        array $dbIds,
-        DateTimeImmutable $from,
-        DateTimeImmutable $to,
-        int $serviceId = null
-    ): array {
-        $qb = $this->getPlaysQuery(
-            $from,
-            $to,
-            $serviceId
-        );
-
-        // here we only want the artists we were looking for
-        $qb->andWhere('contributor.id IN(:ids)')
-            ->setParameter('ids', $dbIds);
-
-        $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
-        return $results;
-    }
-
     private function getPlaysQuery(
         DateTimeImmutable $from,
         DateTimeImmutable $to,
@@ -70,7 +49,7 @@ class ContributorRepository extends EntityRepository
         $qb = $this->createQueryBuilder('contributor')
             ->select([
                 'contributor',
-                'COUNT(DISTINCT(se.id)) as contributionPlays',
+                'COUNT(DISTINCT(se.id)) as contributorPlayCount',
             ])
             ->join('contributor.contributions', 'cb')
             ->join('cb.contributionToSegment', 's')
@@ -80,9 +59,9 @@ class ContributorRepository extends EntityRepository
             ->join('cb.creditRole', 'cr')
             ->where('b.endAt BETWEEN :from AND :to')
             ->andWhere('cr.creditRoleId = \'PERFORMER\'')
-            ->groupBy('contributor')
-            ->orderBy('contributionPlays', 'DESC')
-            ->addOrderBy('contributor.name')
+            ->groupBy('contributor.id')
+            ->orderBy('contributorPlayCount', 'DESC')
+            ->addOrderBy('contributor.sortName', 'ASC')
             ->setMaxResults(200)
             ->setParameter('from', $from)
             ->setParameter('to', $to);
