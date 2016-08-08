@@ -32,9 +32,7 @@ class ContributorRepository extends EntityRepository
         // here we want all artists
         $qb->andWhere('contributor.musicBrainzId IS NOT NULL');
 
-        $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
-        return $results;
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     private function getPlaysQuery(
@@ -49,16 +47,16 @@ class ContributorRepository extends EntityRepository
         $qb = $this->createQueryBuilder('contributor')
             ->select([
                 'contributor',
-                'COUNT(DISTINCT(se.id)) as contributorPlayCount',
+                'COUNT(DISTINCT(segmentEvent.id)) as contributorPlayCount',
             ])
-            ->join('contributor.contributions', 'cb')
-            ->join('cb.contributionToSegment', 's')
-            ->join('s.segmentEvents', 'se')
-            ->join('se.version', 'v')
-            ->join('v.broadcasts', 'b')
-            ->join('cb.creditRole', 'cr')
-            ->where('b.endAt BETWEEN :from AND :to')
-            ->andWhere('cr.creditRoleId = \'PERFORMER\'')
+            ->join('contributor.contributions', 'contribution')
+            ->join('contribution.contributionToSegment', 'segment')
+            ->join('segment.segmentEvents', 'segmentEvent')
+            ->join('segmentEvent.version', 'version')
+            ->join('version.broadcasts', 'broadcast')
+            ->join('contribution.creditRole', 'creditRole')
+            ->where('broadcast.endAt BETWEEN :from AND :to')
+            ->andWhere('creditRole.creditRoleId = \'PERFORMER\'')
             ->groupBy('contributor.id')
             ->orderBy('contributorPlayCount', 'DESC')
             ->addOrderBy('contributor.sortName', 'ASC')
@@ -67,8 +65,8 @@ class ContributorRepository extends EntityRepository
             ->setParameter('to', $to);
 
         if ($serviceId) {
-            $qb->join('b.service', 'sv')
-                ->andWhere('sv.id = :serviceId')
+            $qb->join('broadcast.service', 'service')
+                ->andWhere('service.id = :serviceId')
                 ->setParameter('serviceId', $serviceId);
         }
 

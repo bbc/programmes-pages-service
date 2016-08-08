@@ -25,7 +25,9 @@ abstract class AbstractContributorsServiceTest extends AbstractServiceTest
         if (isset($entity['pid'])) {
             $mockContributor->method('getPid')->willReturn(new Pid($entity['pid']));
         }
-        $mockContributor->method('getMusicBrainzId')->willReturn($entity['musicBrainzId']);
+        if (isset($entity['musicBrainzId'])) {
+            $mockContributor->method('getMusicBrainzId')->willReturn($entity['musicBrainzId']);
+        }
         return $mockContributor;
     }
 

@@ -37,16 +37,17 @@ class ContributorsService extends AbstractService
             $serviceId
         );
 
-        $data = [];
-        // loop through the results, mapping the objects
-        foreach ($results as $result) {
-            $contributor = $this->mapSingleEntity($result[0]);
-            $data[] = (object) [
-                'contributor' => $contributor,
+        return array_map(function ($result) {
+            // The doctrine result array that is returned will have
+            // the entity at index 0, and the scalar by its name. i.e
+            // [
+            //     0 => [],
+            //     'contributorPlayCount' => 2
+            // ]
+            return (object) [
+                'contributor' => $this->mapSingleEntity($result[0]),
                 'plays' => (int) $result['contributorPlayCount'],
             ];
-        }
-
-        return $data;
+        }, $results);
     }
 }
