@@ -8,6 +8,11 @@ use DateTimeImmutable;
 class Service
 {
     /**
+     * @var int
+     */
+    private $dbId;
+
+    /**
      * @var Sid
      */
     private $sid;
@@ -48,6 +53,7 @@ class Service
     private $liveStreamUrl;
 
     public function __construct(
+        int $dbId,
         Sid $sid,
         string $name,
         string $shortName = null,
@@ -57,6 +63,7 @@ class Service
         DateTimeImmutable $endDate = null,
         string $liveStreamUrl = null
     ) {
+        $this->dbId = $dbId;
         $this->sid = $sid;
         $this->name = $name;
         $this->shortName = (!is_null($shortName) ? $shortName : $name);
@@ -65,6 +72,17 @@ class Service
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->liveStreamUrl = $liveStreamUrl;
+    }
+
+    /**
+     * Used to make foreign key queries without having to make a join
+     * with the user-facing ID.
+     * Removing these joins shall result in faster DB queries which is more
+     * important than keeping a pure Domain model.
+     */
+    public function getDbId(): int
+    {
+        return $this->dbId;
     }
 
     public function getSid(): string

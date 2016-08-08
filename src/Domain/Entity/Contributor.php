@@ -27,6 +27,11 @@ class Contributor
     private $name;
 
     /**
+     * @var string
+     */
+    private $sortName;
+
+    /**
      * @var string|null
      */
     private $musicBrainzId;
@@ -37,12 +42,14 @@ class Contributor
         Pid $pid,
         string $type,
         string $name,
+        string $sortName = null,
         string $musicBrainzId = null
     ) {
         $this->dbId = $dbId;
         $this->pid = $pid;
         $this->type = $type;
         $this->name = $name;
+        $this->sortName = $sortName;
         $this->musicBrainzId = $musicBrainzId;
     }
 
@@ -70,6 +77,11 @@ class Contributor
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getSortName()
+    {
+        return $this->sortName;
     }
 
     /**

@@ -12,7 +12,7 @@ use InvalidArgumentException;
  * @ORM\Table(indexes={
  *     @ORM\Index(name="network_url_key_idx", columns={"url_key"}),
  * })
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\NetworkRepository")
  */
 class Network
 {
