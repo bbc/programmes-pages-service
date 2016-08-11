@@ -105,6 +105,18 @@ class ServiceFactory
         return $this->instances['SegmentEventsService'];
     }
 
+    public function getSegmentsService(): SegmentsService
+    {
+        if (!array_key_exists('SegmentsService', $this->instances)) {
+            $this->instances['SegmentsService'] = new SegmentsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Segment'),
+                $this->mapperFactory->getSegmentMapper()
+            );
+        }
+
+        return $this->instances['SegmentsService'];
+    }
+
     public function getVersionsService(): VersionsService
     {
         if (!array_key_exists('VersionsService', $this->instances)) {
