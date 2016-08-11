@@ -74,6 +74,26 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
+    public function findBySegment(array $dbIds, int $limit, int $offset) : array
+    {
+        $qb = $this->createQueryBuilder('segmentEvent')
+            ->addSelect(['version', 'programmeItem'])
+            ->andWhere('segmentEvent.segment IN (:dbIds)')
+            ->addOrderBy('segmentEvent.offset', 'DESC')
+            ->addOrderBy('segmentEvent.position', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->setParameter('dbIds', $dbIds);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['version', 'programmeItem', 'ancestry']
+        );
+    }
+
     public function createQueryBuilder($alias, $indexBy = null)
     {
         // Any time SegmentEvents are fetched here they must be inner joined to
