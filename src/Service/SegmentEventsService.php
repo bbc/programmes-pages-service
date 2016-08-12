@@ -17,6 +17,21 @@ class SegmentEventsService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
+    public function findLatestBroadcastedForContributor(
+        Contributor $contributor,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array
+    {
+        $dbEntities = $this->repository->findFullLatestBroadcastedForContributor(
+            $contributor->getDbId(),
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        return $this->mapManyEntities($dbEntities);
+    }
+
     /**
      * @param Version $version
      * @return SegmentEvent[]

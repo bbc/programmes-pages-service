@@ -51,7 +51,7 @@ class Contributor
         Pid $pid,
         string $type,
         string $name,
-        string $sortName,
+        string $sortName = null,
         string $givenName = null,
         string $familyName = null,
         string $musicBrainzId = null
