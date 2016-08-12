@@ -26,7 +26,7 @@ class SegmentEventsService extends AbstractService
         $events = $this->repository->findSegmentEventsOfVersionId($version->getDbId());
         /** @var SegmentEvent[] $mappedEvents */
         $mappedEvents = [];
-        foreach($events as $event){
+        foreach ($events as $event) {
             $mappedEvents[] = $this->mapper->getDomainModel($event);
         }
         return $mappedEvents;

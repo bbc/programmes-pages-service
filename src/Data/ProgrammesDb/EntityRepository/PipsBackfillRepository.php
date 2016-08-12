@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsBackfill;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChange;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChangeBase;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker\ForceIndexWalker;
 use Doctrine\ORM\Query;
 
@@ -61,7 +62,7 @@ class PipsBackfillRepository extends PipsChangeRepository
         }
     }
 
-    public function setAsProcessed(PipsBackfill $change)
+    public function setAsProcessed(PipsChangeBase $change)
     {
         $change->setProcessedTime(new \DateTime());
         $change->setLockedAt(null);
@@ -72,7 +73,7 @@ class PipsBackfillRepository extends PipsChangeRepository
         $this->addChange($change);
     }
 
-    public function unlock(PipsBackfill $change)
+    public function unlock(PipsChangeBase $change)
     {
         $change->setLockedAt(null);
         $change->setLocked(false);
@@ -125,7 +126,7 @@ class PipsBackfillRepository extends PipsChangeRepository
     {
         // Unlock all rows on shutdown (if we can)
         $em = $this->getEntityManager();
-        if ($em->isOpen()) {
+        if ($em->isOpen() && $em->getConnection()->ping()) {
             $this->unlockAll();
         }
     }

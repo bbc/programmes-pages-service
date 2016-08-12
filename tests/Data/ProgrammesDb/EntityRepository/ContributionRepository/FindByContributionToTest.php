@@ -16,13 +16,13 @@ class FindByContributionToTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Contribution');
 
         foreach ($this->findByContributionToData() as $data) {
-            list($pids, $version, $limit, $offset, $repoToQuery, $expectedPids) = $data;
+            list($pids, $type, $limit, $offset, $repoToQuery, $expectedPids) = $data;
 
             $ids = array_map(function ($dbId) use ($repoToQuery) {
                 return $this->getDbIdFromPid($dbId, $repoToQuery);
             }, $pids);
 
-            $entities = $repo->findByContributionTo($ids, $version, $limit, $offset);
+            $entities = $repo->findByContributionTo($ids, $type, $limit, $offset);
             $this->assertEquals($expectedPids, array_column($entities, 'pid'));
 
             // findByContributionTo query only
@@ -37,6 +37,7 @@ class FindByContributionToTest extends AbstractDatabaseTest
         return [
             [['v0000001'], 'version', 50, 0, 'Version', ['cntrbtn1', 'cntrbtn2']],
             [['v0000002'], 'version', 2, 1, 'Version', ['cntrbtn4']],
+            [['b00swgkn'], 'programme', 50, 0, 'Programme', ['cntrbtn5']],
         ];
     }
 

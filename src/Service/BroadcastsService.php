@@ -19,7 +19,7 @@ class BroadcastsService extends AbstractService
     {
         $broadcasts = $this->repository->findBroadcastsOfVersionId($version->getDbId());
         $mappedBroadcasts = [];
-        foreach($broadcasts as $broadcast){
+        foreach ($broadcasts as $broadcast) {
             $mappedBroadcasts[] = $this->mapper->getDomainModel($broadcast);
         }
         return $mappedBroadcasts;

@@ -130,7 +130,7 @@ class DenormBackfillRepository extends EntityRepository
     {
         // Unlock all rows on shutdown (if we can)
         $em = $this->getEntityManager();
-        if ($em->isOpen()) {
+        if ($em->isOpen() && $em->getConnection()->ping()) {
             $this->unlockAll();
         }
     }

@@ -15,6 +15,7 @@ class SegmentTest extends PHPUnit_Framework_TestCase
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
 
         $segment = new Segment(
+            null,
             $pid,
             'Type',
             'Title',
@@ -34,6 +35,7 @@ class SegmentTest extends PHPUnit_Framework_TestCase
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
 
         $segment = new Segment(
+            null,
             $pid,
             'Type',
             'Title',

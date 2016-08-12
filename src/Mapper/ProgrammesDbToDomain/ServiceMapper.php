@@ -11,6 +11,7 @@ class ServiceMapper extends AbstractMapper
     public function getDomainModel(array $dbService): Service
     {
         return new Service(
+            $dbService['id'],
             new Sid($dbService['sid']),
             $dbService['name'],
             $dbService['shortName'],

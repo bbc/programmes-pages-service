@@ -3,7 +3,7 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributionRepository;
-use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributionMapper;
@@ -17,12 +17,26 @@ class ContributionsService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
+    public function findByContributionToProgramme(
+        Programme $programme,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $dbEntities = $this->repository->findByContributionTo(
+            [$programme->getDbId()],
+            'programme',
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        return $this->mapManyEntities($dbEntities);
+    }
+
     public function findByContributionToVersion(
         Version $version,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ): array
-    {
+    ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$version->getDbId()],
             'version',
@@ -37,27 +51,10 @@ class ContributionsService extends AbstractService
         Segment $segment,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ): array
-    {
+    ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$segment->getDbId()],
             'segment',
-            $limit,
-            $this->getOffset($limit, $page)
-        );
-
-        return $this->mapManyEntities($dbEntities);
-    }
-
-    public function findByContributionToProgramme(
-        ProgrammeItem $programmeItem,
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
-    ): array
-    {
-        $dbEntities = $this->repository->findByContributionTo(
-            [$programmeItem->getDbId()],
-            'programme',
             $limit,
             $this->getOffset($limit, $page)
         );

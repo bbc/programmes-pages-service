@@ -25,6 +25,7 @@ class SegmentMapperTest extends PHPUnit_Framework_TestCase
         ];
 
         $expectedEntity = new Segment(
+            1,
             new Pid('p01r8fvg'),
             'speech',
             'Title',
@@ -60,6 +61,7 @@ class SegmentMapperTest extends PHPUnit_Framework_TestCase
         ];
 
         $expectedEntity = new MusicSegment(
+            1,
             new Pid('p01r8fvg'),
             'music',
             'Title',

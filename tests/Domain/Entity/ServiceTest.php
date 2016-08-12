@@ -18,10 +18,12 @@ class ServiceTest extends PHPUnit_Framework_TestCase
         $sid = new Sid('bbc_1xtra');
 
         $service = new Service(
+            0,
             $sid,
             'Name'
         );
 
+        $this->assertEquals(0, $service->getDbId());
         $this->assertEquals($sid, $service->getSid());
         $this->assertEquals('Name', $service->getName());
         $this->assertEquals('Name', $service->getShortName());
@@ -36,6 +38,7 @@ class ServiceTest extends PHPUnit_Framework_TestCase
         $endDate = new DateTimeImmutable('2016-01-01');
 
         $service = new Service(
+            0,
             $sid,
             'Name',
             'shortName',

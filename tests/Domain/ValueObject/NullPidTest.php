@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Domain\ValueObject;
 
-use BBC\ProgrammesPagesService\Domain\ValueObject\NullPid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullPid;
 use PHPUnit_Framework_TestCase;
 
 class NullPidTest extends PHPUnit_Framework_TestCase

@@ -16,6 +16,7 @@ class ContributorMapper implements MapperInterface
             new Pid($dbContributor['pid']),
             $dbContributor['type'],
             $dbContributor['name'],
+            $dbContributor['sortName'],
             $dbContributor['givenName'],
             $dbContributor['familyName'],
             $dbContributor['musicBrainzId']

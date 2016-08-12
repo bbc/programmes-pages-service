@@ -3,7 +3,7 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
-use BBC\ProgrammesPagesService\Domain\ValueObject\NullPid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullPid;
 
 class UnfetchedVersion extends Version
 {

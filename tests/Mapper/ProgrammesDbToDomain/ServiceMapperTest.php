@@ -36,6 +36,7 @@ class ServiceMapperTest extends BaseMapperTestCase
         ];
 
         $expectedEntity = new Service(
+            1,
             new Sid('radio_four_fm'),
             'Radio Four',
             'FM',
@@ -77,6 +78,7 @@ class ServiceMapperTest extends BaseMapperTestCase
         ];
 
         $expectedEntity = new Service(
+            1,
             new Sid('radio_four_fm'),
             'Radio Four',
             'FM',

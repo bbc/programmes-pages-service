@@ -34,6 +34,12 @@ class SegmentsFixture extends AbstractFixture
         );
 
         $this->buildSegment(
+            'sgmntms4',
+            'music',
+            'Song 4'
+        );
+
+        $this->buildSegment(
             'sgmntss1',
             'speech',
             'A Speech Segment'

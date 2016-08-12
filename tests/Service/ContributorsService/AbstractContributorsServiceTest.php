@@ -22,8 +22,12 @@ abstract class AbstractContributorsServiceTest extends AbstractServiceTest
     protected function contributorFromDbData(array $entity)
     {
         $mockContributor = $this->createMock(self::ENTITY_NS . 'Contributor');
-
-        $mockContributor->method('getMusicBrainzId')->willReturn($entity['musicBrainzId']);
+        if (isset($entity['pid'])) {
+            $mockContributor->method('getPid')->willReturn(new Pid($entity['pid']));
+        }
+        if (isset($entity['musicBrainzId'])) {
+            $mockContributor->method('getMusicBrainzId')->willReturn($entity['musicBrainzId']);
+        }
         return $mockContributor;
     }
 

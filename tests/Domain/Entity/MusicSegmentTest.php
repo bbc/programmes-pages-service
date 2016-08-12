@@ -15,6 +15,7 @@ class MusicSegmentTest extends PHPUnit_Framework_TestCase
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
 
         $segment = new MusicSegment(
+            null,
             $pid,
             'Type',
             'Title',
@@ -45,6 +46,7 @@ class MusicSegmentTest extends PHPUnit_Framework_TestCase
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
 
         $segment = new MusicSegment(
+            null,
             $pid,
             'Type',
             'Title',

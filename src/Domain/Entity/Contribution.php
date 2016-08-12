@@ -25,7 +25,7 @@ class Contribution
      * @var int|null
      */
     private $position;
-    
+
     /**
      * @var string|null
      */
