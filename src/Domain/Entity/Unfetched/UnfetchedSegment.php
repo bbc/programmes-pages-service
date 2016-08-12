@@ -11,7 +11,7 @@ class UnfetchedSegment extends Segment
     public function __construct()
     {
         parent::__construct(
-            null,
+            0,
             new NullPid(),
             '',
             '',

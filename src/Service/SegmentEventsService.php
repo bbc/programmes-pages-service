@@ -21,8 +21,7 @@ class SegmentEventsService extends AbstractService
         Contributor $contributor,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ): array
-    {
+    ): array {
         $dbEntities = $this->repository->findFullLatestBroadcastedForContributor(
             $contributor->getDbId(),
             $limit,

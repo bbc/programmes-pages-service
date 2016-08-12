@@ -6,6 +6,15 @@ class MapperFactory
 {
     protected $instances = [];
 
+    public function getBroadcastMapper(): BroadcastMapper
+    {
+        if (!array_key_exists('BroadcastMapper', $this->instances)) {
+            $this->instances['BroadcastMapper'] = new BroadcastMapper($this);
+        }
+
+        return $this->instances['BroadcastMapper'];
+    }
+
     public function getCategoryMapper(): CategoryMapper
     {
         if (!array_key_exists('CategoryMapper', $this->instances)) {
@@ -112,14 +121,5 @@ class MapperFactory
         }
 
         return $this->instances['VersionMapper'];
-    }
-
-    public function getBroadcastMapper(): BroadcastMapper
-    {
-        if (!array_key_exists('BroadcastMapper', $this->instances)) {
-            $this->instances['BroadcastMapper'] = new BroadcastMapper($this);
-        }
-
-        return $this->instances['BroadcastMapper'];
     }
 }

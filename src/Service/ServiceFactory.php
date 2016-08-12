@@ -21,6 +21,18 @@ class ServiceFactory
         $this->mapperFactory = $mapperFactory;
     }
 
+    public function getBroadcastsService(): BroadcastsService
+    {
+        if (!array_key_exists('BroadcastsService', $this->instances)) {
+            $this->instances['BroadcastsService'] = new BroadcastsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Broadcast'),
+                $this->mapperFactory->getBroadcastMapper()
+            );
+        }
+
+        return $this->instances['BroadcastsService'];
+    }
+
     public function getContributionsService(): ContributionsService
     {
         if (!array_key_exists('ContributionsService', $this->instances)) {
@@ -103,17 +115,5 @@ class ServiceFactory
         }
 
         return $this->instances['VersionsService'];
-    }
-
-    public function getBroadcastsService(): BroadcastsService
-    {
-        if (!array_key_exists('BroadcastsService', $this->instances)) {
-            $this->instances['BroadcastsService'] = new BroadcastsService(
-                $this->entityManager->getRepository('ProgrammesPagesService:Broadcast'),
-                $this->mapperFactory->getBroadcastMapper()
-            );
-        }
-
-        return $this->instances['BroadcastsService'];
     }
 }

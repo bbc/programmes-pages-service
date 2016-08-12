@@ -6,7 +6,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributionRepository;
 
 /**
- * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\Contributionpository::<public>
+ * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributionRepository::<public>
  */
 class FindByContributionToTest extends AbstractDatabaseTest
 {

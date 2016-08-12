@@ -58,7 +58,7 @@ class MusicSegment extends Segment
     private $recordingDate;
 
     public function __construct(
-        $dbId,
+        int $dbId,
         Pid $pid,
         string $type,
         string $title,

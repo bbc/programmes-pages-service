@@ -16,15 +16,13 @@ class ContributorTest extends PHPUnit_Framework_TestCase
             0,
             $pid,
             'Type',
-            'Name',
-            'Sort Name'
+            'Name'
         );
 
         $this->assertSame(0, $contributor->getDbId());
         $this->assertSame($pid, $contributor->getPid());
         $this->assertSame('Type', $contributor->getType());
         $this->assertSame('Name', $contributor->getName());
-        $this->assertSame('Sort Name', $contributor->getSortName());
         $this->assertNull($contributor->getMusicBrainzId());
     }
 
@@ -43,6 +41,7 @@ class ContributorTest extends PHPUnit_Framework_TestCase
             'musicBrainzGuid'
         );
 
+        $this->assertSame('Sort Name', $contributor->getSortName());
         $this->assertSame('GivenName', $contributor->getGivenName());
         $this->assertSame('FamilyName', $contributor->getFamilyName());
         $this->assertSame('musicBrainzGuid', $contributor->getMusicBrainzId());

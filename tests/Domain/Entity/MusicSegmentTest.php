@@ -15,13 +15,14 @@ class MusicSegmentTest extends PHPUnit_Framework_TestCase
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
 
         $segment = new MusicSegment(
-            null,
+            0,
             $pid,
             'Type',
             'Title',
             $synopses
         );
 
+        $this->assertSame(0, $segment->getDbId());
         $this->assertSame($pid, $segment->getPid());
         $this->assertSame('Type', $segment->getType());
         $this->assertSame('Title', $segment->getTitle());
@@ -46,7 +47,7 @@ class MusicSegmentTest extends PHPUnit_Framework_TestCase
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
 
         $segment = new MusicSegment(
-            null,
+            0,
             $pid,
             'Type',
             'Title',

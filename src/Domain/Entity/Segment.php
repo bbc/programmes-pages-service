@@ -38,7 +38,7 @@ class Segment
     private $duration;
 
     public function __construct(
-        $dbId,
+        int $dbId,
         Pid $pid,
         string $type,
         string $title,
@@ -54,9 +54,17 @@ class Segment
     }
 
     /**
-     * @return int|null
+     * Database ID. Yes, this is a leaky abstraction as Database Ids are
+     * implementation details of how we're storing data, rather than anything
+     * intrinsic to a PIPS entity. However if we keep it pure then when we look
+     * up things like "All segment events that belong to a Segment" then we
+     * have to use the Segment PID as the key, which requires a join to the
+     * Segment table. This join can be avoided if we already know the Foreign
+     * Key value on the SegmentEvent table (i.e. the Segment ID field).
+     * Removing these joins shall result in faster DB queries which is more
+     * important than keeping a pure Domain model.
      */
-    public function getDbId()
+    public function getDbId(): int
     {
         return $this->dbId;
     }
