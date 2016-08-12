@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\SegmentEvent;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
@@ -18,6 +19,19 @@ class SegmentEventRepository extends EntityRepository
             ->setParameter('pid', $pid);
 
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
+
+    /**
+     * @return SegmentEvent[]
+     */
+    public function findSegmentEventsOfVersionId(int $versionId)
+    {
+        return $this->createQueryBuilder('segment_event')
+            ->addSelect(['segment'])
+            ->join('segment_event.segment', 'segment')
+            ->where("segment_event.version = :versionDbId")
+            ->setParameter('versionDbId', $versionId)
+            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function findFullLatestBroadcastedForContributor(

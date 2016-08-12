@@ -35,9 +35,13 @@ class ContributorTest extends PHPUnit_Framework_TestCase
             $pid,
             'Type',
             'Name',
+            'GivenName',
+            'FamilyName',
             'musicBrainzGuid'
         );
 
+        $this->assertSame('GivenName', $contributor->getGivenName());
+        $this->assertSame('FamilyName', $contributor->getFamilyName());
         $this->assertSame('musicBrainzGuid', $contributor->getMusicBrainzId());
     }
 }

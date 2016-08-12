@@ -13,7 +13,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *     @ORM\Index(name="broadcast_end_at_idx", columns={"end_at"}),
  *   }
  * )
- * @ORM\Entity()
+ *
+ * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository")
  */
 class Broadcast
 {

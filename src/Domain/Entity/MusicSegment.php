@@ -58,6 +58,7 @@ class MusicSegment extends Segment
     private $recordingDate;
 
     public function __construct(
+        $dbId,
         Pid $pid,
         string $type,
         string $title,
@@ -74,7 +75,7 @@ class MusicSegment extends Segment
         string $musicCode = null,
         string $recordingDate = null
     ) {
-        parent::__construct($pid, $type, $title, $synopses, $duration);
+        parent::__construct($dbId, $pid, $type, $title, $synopses, $duration);
 
         $this->musicRecordId = $musicRecordId;
         $this->releaseTitle = $releaseTitle;

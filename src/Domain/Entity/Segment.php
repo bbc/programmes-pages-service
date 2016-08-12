@@ -8,6 +8,11 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 class Segment
 {
     /**
+     * @var int
+     */
+    private $dbId;
+
+    /**
      * @var Pid
      */
     private $pid;
@@ -33,17 +38,27 @@ class Segment
     private $duration;
 
     public function __construct(
+        $dbId,
         Pid $pid,
         string $type,
         string $title,
         Synopses $synopses,
         int $duration = null
     ) {
+        $this->dbId = $dbId;
         $this->pid = $pid;
         $this->type = $type;
         $this->title = $title;
         $this->synopses = $synopses;
         $this->duration = $duration;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDbId()
+    {
+        return $this->dbId;
     }
 
     public function getPid(): Pid

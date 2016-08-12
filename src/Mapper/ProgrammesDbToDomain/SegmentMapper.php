@@ -24,6 +24,7 @@ class SegmentMapper implements MapperInterface
     private function getSegmentModel(array $dbSegment): Segment
     {
         return new Segment(
+            $dbSegment['id'],
             new Pid($dbSegment['pid']),
             $dbSegment['type'],
             $dbSegment['title'],
@@ -35,6 +36,7 @@ class SegmentMapper implements MapperInterface
     private function getMusicSegmentModel(array $dbSegment): MusicSegment
     {
         return new MusicSegment(
+            $dbSegment['id'],
             new Pid($dbSegment['pid']),
             $dbSegment['type'],
             $dbSegment['title'],

@@ -27,22 +27,35 @@ class Contributor
     private $name;
 
     /**
+     * @var string
+     */
+    private $givenName;
+
+    /**
+     * @var string
+     */
+    private $familyName;
+
+    /**
      * @var string|null
      */
     private $musicBrainzId;
-
 
     public function __construct(
         int $dbId,
         Pid $pid,
         string $type,
         string $name,
+        string $givenName = null,
+        string $familyName = null,
         string $musicBrainzId = null
     ) {
         $this->dbId = $dbId;
         $this->pid = $pid;
         $this->type = $type;
         $this->name = $name;
+        $this->givenName = $givenName;
+        $this->familyName = $familyName;
         $this->musicBrainzId = $musicBrainzId;
     }
 
@@ -70,6 +83,22 @@ class Contributor
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGivenName()
+    {
+        return $this->givenName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFamilyName()
+    {
+        return $this->familyName;
     }
 
     /**

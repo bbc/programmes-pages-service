@@ -113,4 +113,13 @@ class MapperFactory
 
         return $this->instances['VersionMapper'];
     }
+
+    public function getBroadcastMapper(): BroadcastMapper
+    {
+        if (!array_key_exists('BroadcastMapper', $this->instances)) {
+            $this->instances['BroadcastMapper'] = new BroadcastMapper($this);
+        }
+
+        return $this->instances['BroadcastMapper'];
+    }
 }
