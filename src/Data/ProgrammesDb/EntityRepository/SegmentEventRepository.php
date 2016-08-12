@@ -78,9 +78,13 @@ class SegmentEventRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem'])
+            ->join('version.broadcasts', 'broadcast')
             ->andWhere('segmentEvent.segment IN (:dbIds)')
-            ->addOrderBy('segmentEvent.offset', 'DESC')
-            ->addOrderBy('segmentEvent.position', 'DESC')
+            ->addGroupBy('version.id')
+            ->addSelect('CASE WHEN broadcast.startAt IS NULL THEN 1 ELSE 0 AS HIDDEN hasBroadcast')
+            ->addOrderBy('hasBroadcast', 'ASC')
+            ->addOrderBy('broadcast.startAt', 'ASC')
+            ->addOrderBy('programmeItem.title', 'ASC')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
