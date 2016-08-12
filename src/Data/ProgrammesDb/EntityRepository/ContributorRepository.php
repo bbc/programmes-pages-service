@@ -55,7 +55,7 @@ class ContributorRepository extends EntityRepository
             ->join('segmentEvent.version', 'version')
             ->join('version.broadcasts', 'broadcast')
             ->join('contribution.creditRole', 'creditRole')
-            ->where('broadcast.endAt BETWEEN :from AND :to')
+            ->where('broadcast.startAt BETWEEN :from AND :to')
             ->andWhere('creditRole.creditRoleId = \'PERFORMER\'')
             ->groupBy('contributor.id')
             ->orderBy('contributorPlayCount', 'DESC')
