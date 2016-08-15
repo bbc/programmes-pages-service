@@ -16,11 +16,7 @@ class FindFullLatestBroadcastedForContributorTest extends AbstractDatabaseTest
         /** @var SegmentEventRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
 
-        // due to my fixture I know that my contributor ID is 2.
-        // If the fixtures get more complicated this will need to
-        // be updated with a better way of fetching the ID by using
-        // either pid: cntrbtr2 or MusicBrainz: 7746d775-9550-4360-b8d5-c37bd448ce01
-        $contributorId = 2;
+        $contributorId = $this->getDbIdFromPid('cntrbtr2', 'Contributor');
 
         $segmentEvents = $repo->findFullLatestBroadcastedForContributor(
             $contributorId,
@@ -29,28 +25,40 @@ class FindFullLatestBroadcastedForContributorTest extends AbstractDatabaseTest
         );
         $this->assertEquals(2, count($segmentEvents));
 
+        $pdo = new \PDO('sqlite::memory:');
+        $version = (float) $pdo->getAttribute(\PDO::ATTR_CLIENT_VERSION);
+
+        if ($version < 3.8) {
+            $this->markTestSkipped(
+                'The SQLLITE PDO Driver < 3.8 returns this data in the wrong ' .
+                'order. 3.6 is installed on the sandbox and Jenkins so this test ' .
+                'must remain skipped until the version of PHP has an updated ' .
+                'SQLLITE driver.'
+            );
+        }
+
         // check that the items are in the right order
         // and that they have the full nesting and hierarchy
         $se1 = $segmentEvents[0];
         $se2 = $segmentEvents[1];
 
-        $this->assertEquals('sv000002', $se1['pid']);
-        $this->assertEquals('sv000003', $se2['pid']);
+        $this->assertEquals('sv000003', $se1['pid']);
+        $this->assertEquals('sv000002', $se2['pid']);
 
-        $this->assertEquals('sgmntms2', $se1['segment']['pid']);
-        $this->assertEquals('sgmntms3', $se2['segment']['pid']);
+        $this->assertEquals('sgmntms3', $se1['segment']['pid']);
+        $this->assertEquals('sgmntms2', $se2['segment']['pid']);
 
         $v1 = $se1['version'];
         $v2 = $se2['version'];
 
-        $this->assertEquals('v0000001', $v1['pid']);
-        $this->assertEquals('v0000002', $v2['pid']);
+        $this->assertEquals('v0000002', $v1['pid']);
+        $this->assertEquals('v0000001', $v2['pid']);
 
         $ep1 = $v1['programmeItem'];
         $ep2 = $v2['programmeItem'];
 
-        $this->assertEquals('b00swgkn', $ep1['pid']);
-        $this->assertEquals('b00syxx6', $ep2['pid']);
+        $this->assertEquals('b00syxx6', $ep1['pid']);
+        $this->assertEquals('b00swgkn', $ep2['pid']);
 
         // this next bit tests that the ancestry was fetched correctly
         $this->assertEquals('b00swyx1', $ep1['parent']['pid']);
