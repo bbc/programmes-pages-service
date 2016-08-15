@@ -25,6 +25,18 @@ class FindFullLatestBroadcastedForContributorTest extends AbstractDatabaseTest
         );
         $this->assertEquals(2, count($segmentEvents));
 
+        $pdo = new \PDO('sqlite::memory:');
+        $version = (float) $pdo->getAttribute(\PDO::ATTR_CLIENT_VERSION);
+
+        if ($version < 3.8) {
+            $this->markTestSkipped(
+                'The SQLLITE PDO Driver < 3.8 returns this data in the wrong ' .
+                'order. 3.6 is installed on the sandbox and Jenkins so this test ' .
+                'must remain skipped until the version of PHP from IUS has an updated ' .
+                'SQLLITE driver.'
+            );
+        }
+
         // check that the items are in the right order
         // and that they have the full nesting and hierarchy
         $se1 = $segmentEvents[0];
