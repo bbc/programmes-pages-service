@@ -32,7 +32,7 @@ class FindFullLatestBroadcastedForContributorTest extends AbstractDatabaseTest
             $this->markTestSkipped(
                 'The SQLLITE PDO Driver < 3.8 returns this data in the wrong ' .
                 'order. 3.6 is installed on the sandbox and Jenkins so this test ' .
-                'must remain skipped until the version of PHP from IUS has an updated ' .
+                'must remain skipped until the version of PHP has an updated ' .
                 'SQLLITE driver.'
             );
         }
