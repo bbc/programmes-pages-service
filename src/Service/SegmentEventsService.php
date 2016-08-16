@@ -4,8 +4,8 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentEventRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
-use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
+use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentEventMapper;
 
 class SegmentEventsService extends AbstractService
@@ -38,6 +38,20 @@ class SegmentEventsService extends AbstractService
     ): array {
         $dbEntities = $this->repository->findByVersion(
             [$version->getDbId()],
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        return $this->mapManyEntities($dbEntities);
+    }
+
+    public function findBySegment(
+        Segment $segment,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $dbEntities = $this->repository->findBySegment(
+            [$segment->getDbId()],
             $limit,
             $this->getOffset($limit, $page)
         );

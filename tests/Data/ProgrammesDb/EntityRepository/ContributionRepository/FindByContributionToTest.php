@@ -38,6 +38,8 @@ class FindByContributionToTest extends AbstractDatabaseTest
             [['v0000001'], 'version', 50, 0, 'Version', ['cntrbtn1', 'cntrbtn2']],
             [['v0000002'], 'version', 2, 1, 'Version', ['cntrbtn4']],
             [['b00swgkn'], 'programme', 50, 0, 'Programme', ['cntrbtn5']],
+            [['sgmntms1'], 'segment', 50, 0, 'Segment', ['cntrbtn6']],
+            [['sgmntms2'], 'segment', 50, 0, 'Segment', ['cntrbtn7']],
         ];
     }
 

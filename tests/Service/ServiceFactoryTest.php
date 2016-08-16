@@ -45,6 +45,7 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
             ['NetworksService', 'Network', 'NetworkMapper'],
             ['ProgrammesService', 'CoreEntity', 'ProgrammeMapper'],
             ['RelatedLinksService', 'RelatedLink', 'RelatedLinkMapper'],
+            ['SegmentsService', 'Segment', 'SegmentMapper'],
             ['SegmentEventsService', 'SegmentEvent', 'SegmentEventMapper'],
             ['VersionsService', 'Version', 'VersionMapper'],
         ];

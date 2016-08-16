@@ -93,7 +93,10 @@ class SegmentEvent
         return $this->segment;
     }
 
-    public function getTitle(): string
+    /**
+     * @return null|string
+     */
+    public function getTitle()
     {
         return $this->title;
     }

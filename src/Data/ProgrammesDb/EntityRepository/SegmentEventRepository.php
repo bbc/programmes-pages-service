@@ -74,6 +74,39 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
+    public function findBySegment(array $dbIds, int $limit, int $offset) : array
+    {
+        $qb = $this->createQueryBuilder('segmentEvent')
+            ->addSelect(['version', 'programmeItem', 'image', 'masterBrand', 'network'])
+            // masterBrand needs to be fetched to get ownership details
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            // fetching image pid
+            ->leftJoin('programmeItem.image', 'image')
+            // network needs to be fetched in order to create masterBrand
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('version.broadcasts', 'broadcast')
+            ->andWhere('segmentEvent.segment IN (:dbIds)')
+            ->addGroupBy('version.id')
+            // versions that have been broadcast come first
+            ->addSelect('CASE WHEN broadcast.startAt IS NULL THEN 1 ELSE 0 AS HIDDEN hasBroadcast')
+            ->addOrderBy('hasBroadcast', 'ASC')
+            // oldests broadcasts come first
+            ->addOrderBy('broadcast.startAt', 'ASC')
+            // alphabetical ordering by title
+            ->addOrderBy('programmeItem.title', 'ASC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->setParameter('dbIds', $dbIds);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['version', 'programmeItem', 'ancestry']
+        );
+    }
+
     public function createQueryBuilder($alias, $indexBy = null)
     {
         // Any time SegmentEvents are fetched here they must be inner joined to
