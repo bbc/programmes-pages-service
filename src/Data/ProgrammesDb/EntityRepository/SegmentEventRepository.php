@@ -83,8 +83,8 @@ class SegmentEventRepository extends EntityRepository
             // fetching image pid
             ->leftJoin('programmeItem.image', 'image')
             // network needs to be fetched in order to create masterBrand
-            ->join('masterBrand.network', 'network')
-            ->join('version.broadcasts', 'broadcast')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('version.broadcasts', 'broadcast')
             ->andWhere('segmentEvent.segment IN (:dbIds)')
             ->addGroupBy('version.id')
             // versions that have been broadcast come first

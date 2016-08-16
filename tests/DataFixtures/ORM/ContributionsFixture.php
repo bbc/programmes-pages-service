@@ -2,10 +2,9 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Contribution;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CreditRole;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\SegmentEvent;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -34,6 +33,18 @@ class ContributionsFixture extends AbstractFixture implements DependentFixtureIn
         // build versions
         $version1 = $this->buildVersion('v0000001', $episode1);
         $version2 = $this->buildVersion('v0000002', $episode2);
+
+        // build segments
+        $segment1 = $this->buildSegment(
+            'sgmntms1',
+            'music',
+            'Song 1'
+        );
+        $segment2 = $this->buildSegment(
+            'sgmntms2',
+            'speech',
+            'Speech 2'
+        );
 
         // build contributors
         $contributor1 = $this->getReference('cntrbtr1');
@@ -78,6 +89,20 @@ class ContributionsFixture extends AbstractFixture implements DependentFixtureIn
             $episode1
         );
 
+        $contribution6 = $this->buildContribution(
+            'cntrbtn6',
+            $contributor1,
+            $role,
+            $segment1
+        );
+
+        $contribution7 = $this->buildContribution(
+            'cntrbtn7',
+            $contributor2,
+            $role,
+            $segment2
+        );
+
         $manager->flush();
     }
 
@@ -94,6 +119,15 @@ class ContributionsFixture extends AbstractFixture implements DependentFixtureIn
         $entity = new Version($pid, $episode);
         $this->addReference($pid, $entity);
         $this->manager->persist($entity);
+        return $entity;
+    }
+
+    private function buildSegment($pid, $type, $title)
+    {
+        $entity = new Segment($pid, $type);
+        $entity->setTitle($title);
+        $this->manager->persist($entity);
+        $this->addReference($pid, $entity);
         return $entity;
     }
 }
