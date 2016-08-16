@@ -31,18 +31,17 @@ class SegmentEventsService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    /**
-     * @param Version $version
-     * @return SegmentEvent[]
-     */
-    public function findSegmentEventsOfVersion(Version $version)
-    {
-        $events = $this->repository->findSegmentEventsOfVersionId($version->getDbId());
-        /** @var SegmentEvent[] $mappedEvents */
-        $mappedEvents = [];
-        foreach ($events as $event) {
-            $mappedEvents[] = $this->mapper->getDomainModel($event);
-        }
-        return $mappedEvents;
+    public function findByVersion(
+        Version $version,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $dbEntities = $this->repository->findByVersion(
+            [$version->getDbId()],
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        return $this->mapManyEntities($dbEntities);
     }
 }

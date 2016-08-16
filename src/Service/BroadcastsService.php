@@ -15,13 +15,18 @@ class BroadcastsService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findBroadcastsOfVersion(Version $version)
-    {
-        $broadcasts = $this->repository->findBroadcastsOfVersionId($version->getDbId());
-        $mappedBroadcasts = [];
-        foreach ($broadcasts as $broadcast) {
-            $mappedBroadcasts[] = $this->mapper->getDomainModel($broadcast);
-        }
-        return $mappedBroadcasts;
+    public function findByVersion(
+        Version $version,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $dbEntities = $this->repository->findByVersion(
+            [$version->getDbId()],
+            'Broadcast',
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        return $this->mapManyEntities($dbEntities);
     }
 }

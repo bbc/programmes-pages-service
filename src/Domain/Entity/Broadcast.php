@@ -2,74 +2,104 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgrammeItem;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use DateTimeImmutable;
+
 class Broadcast
 {
-    /** @var string */
+    /** @var Pid */
     private $pid;
+
+    /** @var Version $version */
+    private $version;
+
+    /** @var ProgrammeItem $programmeItem */
+    private $programmeItem;
 
     /** @var Service $service */
     private $service;
 
     /** @var string */
-    private $startDate;
+    private $startAt;
 
     /** @var string */
-    private $start;
-
-    /** @var string */
-    private $end;
+    private $endAt;
 
     /** @var int */
-    private $duration = 0;
+    private $duration;
 
     /** @var bool */
-    private $isBlanked = false;
+    private $isBlanked;
 
     /** @var bool */
-    private $isRepeat = false;
+    private $isRepeat;
 
     public function __construct(
-        string $pid,
+        Pid $pid,
+        Version $version,
+        ProgrammeItem $programmeItem,
         Service $service,
-        \DateTime $start,
-        \DateTime $end,
+        DateTimeImmutable $startAt,
+        DateTimeImmutable $endAt,
         int $duration,
-        bool $isBlanked,
-        bool $isRepeat
+        bool $isBlanked = false,
+        bool $isRepeat = false
     ) {
         $this->pid = $pid;
+        $this->version = $version;
+        $this->programmeItem = $programmeItem;
         $this->service = $service;
-        $this->startDate = $start->format("Y-m-d");
-        $this->start = $start->format(DATE_ISO8601);
-        $this->end = $end->format(DATE_ISO8601);
+        $this->startAt = $startAt;
+        $this->endAt = $endAt;
         $this->duration = $duration;
         $this->isBlanked = $isBlanked;
         $this->isRepeat = $isRepeat;
     }
 
-    public function getPid()
+    public function getPid(): Pid
     {
-        return 'pid';
+        return $this->pid;
+    }
+
+    public function getVersion(): Version
+    {
+        if ($this->version instanceof UnfetchedVersion) {
+            throw new DataNotFetchedException('Could not get Version of Broadcast "' . $this->pid . '" as it was not fetched');
+        }
+
+        return $this->version;
+    }
+
+    public function getProgrammeItem(): ProgrammeItem
+    {
+        if ($this->programmeItem instanceof UnfetchedProgrammeItem) {
+            throw new DataNotFetchedException('Could not get ProgrammeItem of Broadcast "' . $this->pid . '" as it was not fetched');
+        }
+
+        return $this->programmeItem;
     }
 
     public function getService(): Service
     {
+        if ($this->service instanceof UnfetchedService) {
+            throw new DataNotFetchedException('Could not get Service of Broadcast "' . $this->pid . '" as it was not fetched');
+        }
+
         return $this->service;
     }
 
-    public function getStartDate(): string
+    public function getStartAt(): DateTimeImmutable
     {
-        return $this->startDate;
+        return $this->startAt;
     }
 
-    public function getStart(): string
+    public function getEndAt(): DateTimeImmutable
     {
-        return $this->start;
-    }
-
-    public function getEnd(): string
-    {
-        return $this->end;
+        return $this->endAt;
     }
 
     public function getDuration(): int
