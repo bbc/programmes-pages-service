@@ -77,13 +77,22 @@ class SegmentEventRepository extends EntityRepository
     public function findBySegment(array $dbIds, int $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
-            ->addSelect(['version', 'programmeItem'])
+            ->addSelect(['version', 'programmeItem', 'image', 'masterBrand', 'network'])
+            // masterBrand needs to be fetched to get ownership details
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            // fetching image pid
+            ->leftJoin('programmeItem.image', 'image')
+            // network needs to be fetched in order to create masterBrand
+            ->join('masterBrand.network', 'network')
             ->join('version.broadcasts', 'broadcast')
             ->andWhere('segmentEvent.segment IN (:dbIds)')
             ->addGroupBy('version.id')
+            // versions that have been broadcast come first
             ->addSelect('CASE WHEN broadcast.startAt IS NULL THEN 1 ELSE 0 AS HIDDEN hasBroadcast')
             ->addOrderBy('hasBroadcast', 'ASC')
+            // oldests broadcasts come first
             ->addOrderBy('broadcast.startAt', 'ASC')
+            // alphabetical ordering by title
             ->addOrderBy('programmeItem.title', 'ASC')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
