@@ -13,7 +13,7 @@ abstract class AbstractSegmentsServiceTest extends AbstractServiceTest
         $this->setUpMapper('SegmentMapper', 'segmentFromDbData');
     }
 
-    protected function versionsFromDbData(array $entities)
+    protected function segmentsFromDbData(array $entities)
     {
         return array_map([$this, 'segmentFromDbData'], $entities);
     }

@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 
 class SegmentRepository extends EntityRepository
 {
-    public function findByPidFull(string $pid)
+    public function findByPid(string $pid)
     {
         $qb = $this->createQueryBuilder('segment')
             ->andWhere('segment.pid = :pid')

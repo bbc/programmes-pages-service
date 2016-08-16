@@ -23,38 +23,33 @@ class SegmentEventsBroadcastsOrderFixture extends AbstractFixture implements Dep
     {
         $this->manager = $manager;
 
-        // Segment for testing broadcast hasBroadcast ASC
         $segment = $this->buildSegment('s0000001', 'chapter');
 
         $version = $this->getReference('v0000001');
+        $embargoedVersion = $this->getReference('v0000002');
+        $version2 = $this->getReference('v0000004');
+        $version3 = $this->getReference('v0000005');
+        $version4 = $this->getReference('v0000006');
+        $version5 = $this->getReference('v0000007');
+
         $this->buildBroadcast(
             'b0000001',
             $version,
             new DateTime('2016-07-06 06:00:00'),
             new DateTime('2016-07-06 09:25:00')
         );
-
-        $embargoedVersion = $this->getReference('v0000002');
-
-        $version2 = $this->getReference('v0000004');
-
-        $version3 = $this->getReference('v0000005');
         $this->buildBroadcast(
-            'b0000003',
+            'b0000002',
             $version3,
             new DateTime('2011-07-05 15:00:00'),
             new DateTime('2011-07-05 16:00:01')
         );
-
-        $version4 = $this->getReference('v0000006');
         $this->buildBroadcast(
-            'b0000004',
+            'b0000003',
             $version4,
             new DateTime('2011-07-05 15:00:00'),
             new DateTime('2011-07-05 15:25:00')
         );
-
-        $version5 = $this->getReference('v0000007');
 
         $this->buildSegmentEvent('sv000001', $version, $segment);
         $this->buildSegmentEvent('sv000002', $embargoedVersion, $segment);

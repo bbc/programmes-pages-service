@@ -19,9 +19,9 @@ class SegmentsService extends AbstractService
     /**
      * @return Segment|null
      */
-    public function findByPidFull(Pid $pid)
+    public function findByPid(Pid $pid)
     {
-        $dbEntity = $this->repository->findByPidFull($pid);
+        $dbEntity = $this->repository->findByPid($pid);
 
         return $this->mapSingleEntity($dbEntity);
     }

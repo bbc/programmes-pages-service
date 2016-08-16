@@ -8,14 +8,14 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentReposit
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentRepository::<public>
  */
-class FindByPidFullTest extends AbstractDatabaseTest
+class FindByPidTest extends AbstractDatabaseTest
 {
-    public function testFindByPidFull()
+    public function testFindByPid()
     {
         $this->loadFixtures(['SegmentsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Segment');
 
-        $entity = $repo->findByPidFull('sgmntms1');
+        $entity = $repo->findByPid('sgmntms1');
         $this->assertInternalType('array', $entity);
         $this->assertEquals('sgmntms1', $entity['pid']);
         $this->assertEquals('music', $entity['type']);
@@ -25,15 +25,15 @@ class FindByPidFullTest extends AbstractDatabaseTest
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindByPidFullWhenEmptyResult()
+    public function testFindByPidWhenEmptyResult()
     {
         $this->loadFixtures(['SegmentsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Segment');
 
-        $entity = $repo->findByPidFull('qqqqqqq');
+        $entity = $repo->findByPid('qqqqqqq');
         $this->assertNull($entity);
 
-        // findByPidFull query only
+        // findByPid query only
         $this->assertCount(1, $this->getDbQueries());
     }
 }
