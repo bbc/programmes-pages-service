@@ -77,6 +77,21 @@ class DenormBackfillRepository extends EntityRepository
         $this->addChange($change);
     }
 
+    public function setMultipleAsProcessed(array $changes)
+    {
+        $em = $this->getEntityManager();
+        foreach ($changes as $change) {
+            $change->setProcessedTime(new \DateTime());
+            $change->setLockedAt(null);
+            $change->setLocked(false);
+            if (isset($this->lockedChanges[$change->getId()])) {
+                unset($this->lockedChanges[$change->getId()]);
+            }
+            $em->persist($change);
+        }
+        $em->flush();
+    }
+
     public function unlock(DenormBackfill $change)
     {
         $change->setLockedAt(null);
@@ -88,6 +103,15 @@ class DenormBackfillRepository extends EntityRepository
         if ($em->isOpen()) {
             $this->addChange($change);
         }
+    }
+
+    public function findByIds(array $ids)
+    {
+        $query = $this->createQueryBuilder('denormBackfill')
+            ->where('denormBackfill.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery();
+        return $query->getResult();
     }
 
     public function unlockAll()
