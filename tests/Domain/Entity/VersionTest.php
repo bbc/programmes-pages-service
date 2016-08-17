@@ -15,11 +15,13 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
 
-        $version = new Version(0, $pid, $episode);
+        $version = new Version(0, $pid, $episode, true, false);
 
         $this->assertEquals(0, $version->getDbId());
         $this->assertEquals($pid, $version->getPid());
         $this->assertEquals($episode, $version->getProgrammeItem());
+        $this->assertEquals(true, $version->isStreamable());
+        $this->assertEquals(false, $version->isDownloadable());
         $this->assertEquals(false, $version->hasCompetitionWarning());
     }
 
@@ -29,14 +31,20 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
         $versionType = new VersionType('original', 'Original version');
 
+        $streamableFrom = new \DateTimeImmutable();
+        $streamableUntil = new \DateTimeImmutable('00:00:00 01/01/1970');
 
         $version = new Version(
             0,
             $pid,
             $episode,
+            true,
+            false,
             101,
             'GuidanceWarnings',
             true,
+            $streamableFrom,
+            $streamableUntil,
             [$versionType]
         );
 
@@ -44,6 +52,8 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('GuidanceWarnings', $version->getGuidanceWarningCodes());
         $this->assertEquals(true, $version->hasCompetitionWarning());
         $this->assertEquals([$versionType], $version->getVersionTypes());
+        $this->assertEquals($streamableFrom, $version->getStreamableFrom());
+        $this->assertEquals($streamableUntil, $version->getStreamableUntil());
     }
 
     /**
@@ -55,7 +65,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
 
-        $version = new Version(0, $pid, $episode);
+        $version = new Version(0, $pid, $episode, true, false);
 
         $version->getVersionTypes();
     }
@@ -74,9 +84,13 @@ class VersionTest extends PHPUnit_Framework_TestCase
             0,
             $pid,
             $programmeItem,
+            true,
+            true,
             101,
             'GuidanceWarnings',
             true,
+            null,
+            null,
             ['I am not a VersionType']
         );
     }
@@ -95,9 +109,13 @@ class VersionTest extends PHPUnit_Framework_TestCase
             0,
             $pid,
             $programmeItem,
+            true,
+            true,
             101,
             'GuidanceWarnings',
             true,
+            null,
+            null,
             [$pid]
         );
     }

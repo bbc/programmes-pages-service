@@ -12,6 +12,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * @ORM\Table(indexes={
  *   @ORM\Index(name="core_entity_ancestry_idx", columns={"ancestry"}),
  *   @ORM\Index(name="core_entity_type_idx", columns={"type"}),
+ *   @ORM\Index(name="core_entity_streamable_idx", columns={"streamable"}),
+ *   @ORM\Index(name="core_entity_streamable_alternate_idx", columns={"streamable_alternate"}),
  *   @ORM\Index(name="core_entity_ft_all", columns={"search_title","short_synopsis"}, flags={"fulltext"}),
  *   @ORM\Index(name="core_entity_ft_search_title", columns={"search_title"}, flags={"fulltext"}),
  *   @ORM\Index(name="core_entity_ft_short_synopsis", columns={"short_synopsis"}, flags={"fulltext"}),
@@ -212,6 +214,22 @@ abstract class CoreEntity
      * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
      */
     protected $promotionsCount = 0;
+
+    /**
+     * @var bool
+     * COUNT_PULLDOWN for Programme
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    protected $streamable = false;
+
+    /**
+     * @var bool
+     * COUNT_PULLDOWN for Programme
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    protected $streamableAlternate = false;
 
     /**
      * @var int

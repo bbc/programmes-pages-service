@@ -30,6 +30,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             1102,
             true,
             true,
+            true,
             1201,
             1202,
             1203,
@@ -50,6 +51,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1102, $programme->getRelatedLinksCount());
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
+        $this->assertEquals(true, $programme->isStreamableAlternatate());
         $this->assertEquals(1201, $programme->getAggregatedBroadcastsCount());
         $this->assertEquals(1202, $programme->getAggregatedEpisodesCount());
         $this->assertEquals(1203, $programme->getAvailableClipsCount());
@@ -82,6 +84,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             $image,
             1101,
             1102,
+            true,
             true,
             true,
             1201,

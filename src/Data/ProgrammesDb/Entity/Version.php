@@ -10,6 +10,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository")
+ * @ORM\Table(indexes={
+ *   @ORM\Index(name="version_streamable_idx", columns={"streamable"})
+ * })
  */
 class Version
 {
@@ -68,6 +71,40 @@ class Version
     private $segmentEventCount = 0;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $streamable = false;
+
+    /**
+     * @var DateTime|null
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $streamableFrom;
+
+    /**
+     * @var DateTime|null
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $streamableUntil;
+
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $downloadable = false;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
+    private $downloadableMediaSets;
+
+    /**
      * Used for joins. Cannot be queried, so there is no getter/setter.
      * @ORM\OneToMany(targetEntity="Broadcast", mappedBy="version")
      */
@@ -104,6 +141,65 @@ class Version
     public function setPid(string $pid)
     {
         $this->pid = $pid;
+    }
+
+    public function getStreamable(): bool
+    {
+        return $this->streamable;
+    }
+
+    public function setStreamable(bool $streamable)
+    {
+        $this->streamable = $streamable;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getStreamableFrom()
+    {
+        return $this->streamableFrom;
+    }
+
+    public function setStreamableFrom(DateTime $streamableFrom = null)
+    {
+        $this->streamableFrom = $streamableFrom;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getStreamableUntil()
+    {
+        return $this->streamableUntil;
+    }
+
+    public function setStreamableUntil(DateTime $streamableUntil = null)
+    {
+        $this->streamableUntil = $streamableUntil;
+    }
+
+    public function getDownloadable(): bool
+    {
+        return $this->downloadable;
+    }
+
+    public function setDownloadable(bool $downloadable)
+    {
+        $this->downloadable = $downloadable;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getDownloadableMediaSets()
+    {
+        return $this->downloadableMediaSets;
+    }
+
+    public function setDownloadableMediaSets(array $downloadableMediaSets = null)
+    {
+        $this->downloadableMediaSets = $downloadableMediaSets;
     }
 
     /**

@@ -62,6 +62,11 @@ abstract class Programme
     private $isStreamable;
 
     /**
+     * @var bool
+     */
+    private $isStreamableAlternatate;
+
+    /**
      * @var Programme|null
      */
     private $parent;
@@ -102,6 +107,7 @@ abstract class Programme
         int $relatedLinksCount,
         bool $hasSupportingContent,
         bool $isStreamable,
+        bool $isStreamableAlternate,
         Programme $parent = null,
         int $position = null,
         MasterBrand $masterBrand = null,
@@ -122,6 +128,7 @@ abstract class Programme
         $this->relatedLinksCount = $relatedLinksCount;
         $this->hasSupportingContent = $hasSupportingContent;
         $this->isStreamable = $isStreamable;
+        $this->isStreamableAlternatate = $isStreamableAlternate;
         $this->parent = $parent;
         $this->position = $position;
         $this->masterBrand = $masterBrand;
@@ -199,6 +206,11 @@ abstract class Programme
     public function isStreamable(): bool
     {
         return $this->isStreamable;
+    }
+
+    public function isStreamableAlternatate(): bool
+    {
+        return $this->isStreamableAlternatate;
     }
 
     /**
