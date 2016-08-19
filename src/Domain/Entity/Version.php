@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
+use \DateTimeImmutable;
 use InvalidArgumentException;
 
 class Version
@@ -39,6 +40,26 @@ class Version
     private $programmeItem;
 
     /**
+     * @var bool
+     */
+    private $isDownloadable;
+
+    /**
+     * @var bool
+     */
+    private $isStreamable;
+
+    /**
+     * @var DateTimeImmutable|null
+     */
+    private $streamableFrom;
+
+    /**
+     * @var DateTimeImmutable|null
+     */
+    private $streamableUntil;
+
+    /**
      * @var VersionType[]|null
      */
     private $versionTypes;
@@ -47,9 +68,13 @@ class Version
         int $dbId,
         Pid $pid,
         ProgrammeItem $programmeItem,
+        bool $isStreamable,
+        bool $isDownloadable,
         int $duration = null,
         string $guidanceWarningCodes = null,
         bool $hasCompetitionWarning = false,
+        DateTimeImmutable $streamableFrom = null,
+        DateTimeImmutable $streamableUntil = null,
         array $versionTypes = null
     ) {
         if (is_array($versionTypes)) {
@@ -65,10 +90,14 @@ class Version
 
         $this->dbId = $dbId;
         $this->pid = $pid;
+        $this->isStreamable = $isStreamable;
+        $this->isDownloadable = $isDownloadable;
         $this->duration = $duration;
         $this->guidanceWarningCodes = $guidanceWarningCodes;
         $this->hasCompetitionWarning = $hasCompetitionWarning;
         $this->programmeItem = $programmeItem;
+        $this->streamableFrom = $streamableFrom;
+        $this->streamableUntil = $streamableUntil;
         $this->versionTypes = $versionTypes;
     }
 
@@ -120,6 +149,32 @@ class Version
     public function getProgrammeItem()
     {
         return $this->programmeItem;
+    }
+
+    public function isDownloadable(): bool
+    {
+        return $this->isDownloadable;
+    }
+
+    public function isStreamable(): bool
+    {
+        return $this->isStreamable;
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getStreamableFrom()
+    {
+        return $this->streamableFrom;
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getStreamableUntil()
+    {
+        return $this->streamableUntil;
     }
 
     /**

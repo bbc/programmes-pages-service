@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use \DateTime;
 
 class VersionMapperTest extends BaseMapperTestCase
 {
@@ -31,11 +32,19 @@ class VersionMapperTest extends BaseMapperTestCase
             ->with($programmeDbEntity)
             ->willReturn($expectedProgrammeDomainEntity);
 
+
+        $streamableFrom = new DateTime();
+        $streamableUntil = new DateTime('00:00:00 01/01/1970');
+
         $dbEntityArray = [
             'id' => 1,
             'pid' => 'b0007c3v',
             'duration' => '360',
             'guidanceWarningCodes' => 'warnings',
+            'streamable' => true,
+            'downloadable' => false,
+            'streamableFrom' => $streamableFrom,
+            'streamableUntil' => $streamableUntil,
             'competitionWarning' => true,
             'programmeItem' => $programmeDbEntity,
             'versionTypes' => [
@@ -54,9 +63,13 @@ class VersionMapperTest extends BaseMapperTestCase
             1,
             $pid,
             $expectedProgrammeDomainEntity,
+            true,
+            false,
             360,
             'warnings',
             true,
+            \DateTimeImmutable::createFromMutable($streamableFrom),
+            \DateTimeImmutable::createFromMutable($streamableUntil),
             $expectedVersionTypes
         );
 
@@ -75,6 +88,10 @@ class VersionMapperTest extends BaseMapperTestCase
             'duration' => '360',
             'guidanceWarningCodes' => 'warnings',
             'competitionWarning' => true,
+            'streamable' => true,
+            'streamableFrom' => null,
+            'streamableUntil' => null,
+            'downloadable' => false,
             'versionTypes' => [],
         ];
 
@@ -103,6 +120,10 @@ class VersionMapperTest extends BaseMapperTestCase
             'duration' => '360',
             'guidanceWarningCodes' => 'warnings',
             'competitionWarning' => true,
+            'streamable' => true,
+            'streamableFrom' => null,
+            'streamableUntil' => null,
+            'downloadable' => false,
             'programmeItem' => $programmeDbEntity,
         ];
 

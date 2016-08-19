@@ -26,13 +26,6 @@ abstract class Programme extends CoreEntity
     private $position;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(type="boolean", nullable=false)
-     */
-    private $streamable = false;
-
-    /**
      * @var DateTime
      *
      * @ORM\Column(type="datetime", nullable=true)
@@ -60,6 +53,16 @@ abstract class Programme extends CoreEntity
     public function setStreamable(bool $streamable)
     {
         $this->streamable = $streamable;
+    }
+
+    public function getStreamableAlternate(): bool
+    {
+        return $this->streamableAlternate;
+    }
+
+    public function setStreamableAlternate(bool $streamableAlternate)
+    {
+        $this->streamableAlternate = $streamableAlternate;
     }
 
     public function getHasSupportingContent(): bool

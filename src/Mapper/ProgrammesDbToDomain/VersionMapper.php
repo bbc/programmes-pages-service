@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use \DateTimeImmutable;
 
 class VersionMapper extends AbstractMapper
 {
@@ -16,9 +17,13 @@ class VersionMapper extends AbstractMapper
             $dbVersion['id'],
             new Pid($dbVersion['pid']),
             $this->getProgrammeItemModel($dbVersion),
+            $dbVersion['streamable'],
+            $dbVersion['downloadable'],
             $dbVersion['duration'],
             $dbVersion['guidanceWarningCodes'],
             $dbVersion['competitionWarning'],
+            ($dbVersion['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbVersion['streamableFrom']) : null),
+            ($dbVersion['streamableUntil'] ? DateTimeImmutable::createFromMutable($dbVersion['streamableUntil']) : null),
             $this->getVersionTypes($dbVersion)
         );
     }

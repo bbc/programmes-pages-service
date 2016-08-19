@@ -12,7 +12,9 @@ class UnfetchedVersion extends Version
         parent::__construct(
             0,
             new NullPid(),
-            new UnfetchedProgrammeItem()
+            new UnfetchedProgrammeItem(),
+            false,
+            false
         );
     }
 }

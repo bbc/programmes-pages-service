@@ -33,6 +33,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
             1102,
             true,
             true,
+            true,
             MediaTypeEnum::UNKNOWN,
             1201
         );
@@ -49,6 +50,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1102, $programme->getRelatedLinksCount());
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
+        $this->assertEquals(true, $programme->isStreamableAlternatate());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
         $this->assertEquals(1201, $programme->getSegmentEventCount());
     }
@@ -79,6 +81,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
             $image,
             1101,
             1102,
+            true,
             true,
             true,
             MediaTypeEnum::UNKNOWN,
