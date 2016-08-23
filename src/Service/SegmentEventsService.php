@@ -47,13 +47,15 @@ class SegmentEventsService extends AbstractService
 
     public function findBySegment(
         Segment $segment,
+        bool $groupByVersionId = false,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findBySegment(
             [$segment->getDbId()],
             $limit,
-            $this->getOffset($limit, $page)
+            $this->getOffset($limit, $page),
+            $groupByVersionId
         );
 
         return $this->mapManyEntities($dbEntities);
