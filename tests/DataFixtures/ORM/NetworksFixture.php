@@ -23,7 +23,7 @@ class NetworksFixture extends AbstractFixture
             'audio'
         );
 
-        $this->buildNetwork(
+        $network1 = $this->buildNetwork(
             'bbc_radio_four',
             'BBC Radio Four',
             $service,
@@ -38,12 +38,15 @@ class NetworksFixture extends AbstractFixture
             'audio'
         );
 
-        $this->buildNetwork(
+        $network2 = $this->buildNetwork(
             'bbc_radio_two',
             'BBC Radio 2',
             $service2,
             'radio2'
         );
+
+        $service->setNetwork($network1);
+        $service2->setNetwork($network2);
 
         $this->manager->flush();
     }

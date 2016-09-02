@@ -14,6 +14,7 @@ class ContributionMapper extends AbstractMapper
         return new Contribution(
             new Pid($dbContribution['pid']),
             $this->getContributorModel($dbContribution),
+            $this->getContributedTo($dbContribution),
             $this->getCreditRoleName($dbContribution),
             $dbContribution['position'],
             $dbContribution['characterName']
@@ -27,6 +28,19 @@ class ContributionMapper extends AbstractMapper
         }
 
         return $this->mapperFactory->getContributorMapper()->getDomainModel($dbContribution[$key]);
+    }
+
+    private function getContributedTo($dbContribution)
+    {
+        if (array_key_exists('contributionToSegment', $dbContribution) && !is_null($dbContribution['contributionToSegment'])) {
+            return $this->mapperFactory->getSegmentMapper()->getDomainModel($dbContribution['contributionToSegment']);
+        } elseif (array_key_exists('contributionToCoreEntity', $dbContribution) && !is_null($dbContribution['contributionToCoreEntity'])) {
+            return $this->mapperFactory->getSegmentMapper()->getDomainModel($dbContribution['contributionToCoreEntity']);
+        } elseif (array_key_exists('contributionToVersion', $dbContribution) && !is_null($dbContribution['contributionToVersion'])) {
+            return $this->mapperFactory->getSegmentMapper()->getDomainModel($dbContribution['contributionToVersion']);
+        }
+
+        throw new DataNotFetchedException('Contribution must be to a Segment, Core Entity or to a Version');
     }
 
     private function getCreditRoleName($dbContribution, $key = 'creditRole'): string

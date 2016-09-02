@@ -53,9 +53,9 @@ class SegmentEventsService extends AbstractService
     ): array {
         $dbEntities = $this->repository->findBySegment(
             [$segment->getDbId()],
+            $groupByVersionId,
             $limit,
-            $this->getOffset($limit, $page),
-            $groupByVersionId
+            $this->getOffset($limit, $page)
         );
 
         return $this->mapManyEntities($dbEntities);

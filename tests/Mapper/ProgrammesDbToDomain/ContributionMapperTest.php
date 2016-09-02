@@ -20,12 +20,13 @@ class ContributionMapperTest extends BaseMapperTestCase
     public function testGetDomainModel()
     {
         $contributorDbEntity = ['pid' => 'p01v0q3w'];
+        $segmentDbEntity = ['pid' => 'b0000000'];
 
         $expectedContributorDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Contributor'
         );
 
-        $this->mockContributorMapper->expects($this->once())
+        $this->mockContributorMapper->expects($this->exactly(2))
             ->method('getDomainModel')
             ->with($contributorDbEntity)
             ->willReturn($expectedContributorDomainEntity);
@@ -35,6 +36,7 @@ class ContributionMapperTest extends BaseMapperTestCase
             'pid' => 'p0258652',
             'position' => '1',
             'characterName' => 'Malcolm Tucker',
+            'contributionToSegment' => $segmentDbEntity,
             'contributor' => $contributorDbEntity,
             'creditRole' => [
                 'id' => 1,
@@ -42,8 +44,11 @@ class ContributionMapperTest extends BaseMapperTestCase
             ],
         ];
 
+        // Get the mocked Segment, yes we are matching from the result but this is not the test
+        $segment = $this->getMapper()->getDomainModel($dbEntityArray)->getContributedTo();
+
         $pid = new Pid('p0258652');
-        $expectedEntity = new Contribution($pid, $expectedContributorDomainEntity, 'Actor', 1, 'Malcolm Tucker');
+        $expectedEntity = new Contribution($pid, $expectedContributorDomainEntity, $segment, 'Actor', 1, 'Malcolm Tucker');
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
@@ -75,9 +80,9 @@ class ContributionMapperTest extends BaseMapperTestCase
     public function testGetDomainModelWithNoCreditRole()
     {
         $contributorDbEntity = ['pid' => 'p01v0q3w'];
+        $segmentDbEntity = ['pid' => 'b0000000'];
 
         $expectedContributorDomainEntity = $this->createMock(
-
             'BBC\ProgrammesPagesService\Domain\Entity\Contributor'
         );
 
@@ -90,6 +95,7 @@ class ContributionMapperTest extends BaseMapperTestCase
             'id' => 1,
             'pid' => 'p0258652',
             'position' => '1',
+            'contributionToSegment' => $segmentDbEntity,
             'characterName' => 'Malcolm Tucker',
             'contributor' => $contributorDbEntity,
         ];

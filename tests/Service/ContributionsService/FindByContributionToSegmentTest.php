@@ -12,10 +12,10 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'segment', 300, 0)
+            ->with([$dbId], 'segment', false, 300, 0)
             ->willReturn($dbData);
 
-        $result = $this->service()->findByContributionToSegment($segment);
+        $result = $this->service()->findByContributionToSegment($segment, false);
         $this->assertEquals($this->contributionsFromDbData($dbData), $result);
     }
 
@@ -27,10 +27,25 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'segment', 5, 10)
+            ->with([$dbId], 'segment', false, 5, 10)
             ->willReturn($dbData);
 
-        $result = $this->service()->findByContributionToSegment($segment, 5, 3);
+        $result = $this->service()->findByContributionToSegment($segment, false, 5, 3);
+        $this->assertEquals($this->contributionsFromDbData($dbData), $result);
+    }
+
+    public function testFindByContributionToSegmentFlagTrue()
+    {
+        $dbId = 1;
+        $segment = $this->mockEntity('Segment', $dbId);
+        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
+
+        $this->mockRepository->expects($this->once())
+            ->method('findByContributionTo')
+            ->with([$dbId], 'segment', true, 300, 0)
+            ->willReturn($dbData);
+
+        $result = $this->service()->findByContributionToSegment($segment, true);
         $this->assertEquals($this->contributionsFromDbData($dbData), $result);
     }
 
@@ -41,10 +56,10 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'segment', 5, 10)
+            ->with([$dbId], 'segment', false, 5, 10)
             ->willReturn([]);
 
-        $result = $this->service()->findByContributionToSegment($segment, 5, 3);
+        $result = $this->service()->findByContributionToSegment($segment, false, 5, 3);
         $this->assertEquals([], $result);
     }
 }

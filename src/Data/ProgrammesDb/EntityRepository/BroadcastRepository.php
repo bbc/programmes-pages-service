@@ -3,8 +3,8 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use Doctrine\ORM\EntityRepository;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Broadcast;
 use Doctrine\ORM\Query;
+use InvalidArgumentException;
 
 class BroadcastRepository extends EntityRepository
 {
@@ -28,15 +28,18 @@ class BroadcastRepository extends EntityRepository
         $isWebcast = $typeLookup[$type] ?? null;
 
         $qb = $this->createQueryBuilder('broadcast')
-            ->addSelect(['service'])
+            ->addSelect(['service', 'network'])
             ->join('broadcast.service', 'service')
-            ->addWhere("broadcast.version IN (:dbIds)")
+            ->join('service.network', 'network')
+            ->andWhere("broadcast.version IN (:dbIds)")
+            ->addOrderBy('broadcast.startAt', 'DESC')
+            ->addOrderBy('service.sid', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
 
         if (!is_null($isWebcast)) {
-            $qb->addWhere('broadcast.isWebcast = :isWebcast')
+            $qb->andWhere('broadcast.isWebcast = :isWebcast')
                 ->setParameter('isWebcast', $isWebcast);
         }
 

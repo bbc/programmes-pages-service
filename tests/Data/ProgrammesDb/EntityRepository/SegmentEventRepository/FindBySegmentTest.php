@@ -26,13 +26,13 @@ class FindBySegmentTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
 
         foreach ($this->findBySegmentData() as $data) {
-            list($pids, $limit, $offset, $expectedPids) = $data;
+            list($pids, $limit, $offset, $groupByVersionId, $expectedPids) = $data;
 
             $ids = array_map(function ($dbId) {
                 return $this->getDbIdFromPid($dbId, 'Segment');
             }, $pids);
 
-            $entities = $repo->findBySegment($ids, $limit, $offset);
+            $entities = $repo->findBySegment($ids, $groupByVersionId, $limit, $offset);
             $this->assertEquals($expectedPids, array_column($entities, 'pid'));
 
             // findBySegment query only
@@ -45,9 +45,10 @@ class FindBySegmentTest extends AbstractDatabaseTest
     public function findBySegmentData()
     {
         return [
-            [['s0000001'], 50, 0, ['sv000001', 'sv000003', 'sv000004', 'sv000005']], // Implicitly testing enabled embargoed filter
-            [['s0000001'], 2, 1, ['sv000003', 'sv000004']],
-            [['s0000002'], 50, 0, ['sv000007', 'sv000008']], // Test Distinct Version
+            [['s0000001'], 50, 0, true, ['sv000001', 'sv000003', 'sv000004', 'sv000005']], // Implicitly testing enabled embargoed filter
+            [['s0000001'], 2, 1, true, ['sv000003', 'sv000004']],
+            [['s0000002'], 50, 0, true, ['sv000007', 'sv000008']], // Test Distinct Version
+            [['s0000002'], 50, 0, false, ['sv000006', 'sv000007', 'sv000008']], // Test not group by version_id
         ];
     }
 
@@ -57,7 +58,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
         /** @var SegmentEventRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
 
-        $entities = $repo->findBySegment([1], 50, 0);
+        $entities = $repo->findBySegment([1], true, 50, 0);
         $this->assertEquals([], $entities);
 
         // findByContributionTo query only
@@ -73,7 +74,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
         $expectedPids = ['sv00009', 'sv000011', 'sv000010'];
 
         $dbId = $this->getDbIdFromPid('s0000003', 'Segment');
-        $entities = $repo->findBySegment([$dbId], 50, 0);
+        $entities = $repo->findBySegment([$dbId], true, 50, 0);
 
         // Expect embargoed version to be last (ORDER BY hasBroadcast ASC)
         $this->assertEquals($expectedPids, array_column($entities, 'pid'));
@@ -99,7 +100,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
                 return $this->getDbIdFromPid($dbId, 'Segment');
             }, $pids);
 
-            $entities = $repo->findBySegment($ids, $limit, $offset);
+            $entities = $repo->findBySegment($ids, true, $limit, $offset);
 
             // Expect embargoed version to be last (ORDER BY hasBroadcast ASC)
             $this->assertEquals($expectedPids, array_column($entities, 'pid'));
