@@ -15,7 +15,7 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
             ->with([$dbId], 'segment', false, 300, 0)
             ->willReturn($dbData);
 
-        $result = $this->service()->findByContributionToSegment($segment, false);
+        $result = $this->service()->findByContributionToSegment($segment);
         $this->assertEquals($this->contributionsFromDbData($dbData), $result);
     }
 
@@ -30,22 +30,7 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
             ->with([$dbId], 'segment', false, 5, 10)
             ->willReturn($dbData);
 
-        $result = $this->service()->findByContributionToSegment($segment, false, 5, 3);
-        $this->assertEquals($this->contributionsFromDbData($dbData), $result);
-    }
-
-    public function testFindByContributionToSegmentFlagTrue()
-    {
-        $dbId = 1;
-        $segment = $this->mockEntity('Segment', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findByContributionTo')
-            ->with([$dbId], 'segment', true, 300, 0)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findByContributionToSegment($segment, true);
+        $result = $this->service()->findByContributionToSegment($segment, 5, 3);
         $this->assertEquals($this->contributionsFromDbData($dbData), $result);
     }
 
@@ -59,7 +44,7 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
             ->with([$dbId], 'segment', false, 5, 10)
             ->willReturn([]);
 
-        $result = $this->service()->findByContributionToSegment($segment, false, 5, 3);
+        $result = $this->service()->findByContributionToSegment($segment, 5, 3);
         $this->assertEquals([], $result);
     }
 }
