@@ -19,13 +19,14 @@ class ContributionsService extends AbstractService
 
     public function findByContributionToProgramme(
         Programme $programme,
+        bool $getContributedTo = false,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$programme->getDbId()],
             'programme',
-            false,
+            $getContributedTo,
             $limit,
             $this->getOffset($limit, $page)
         );
@@ -35,13 +36,14 @@ class ContributionsService extends AbstractService
 
     public function findByContributionToVersion(
         Version $version,
+        bool $getContributedTo = false,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$version->getDbId()],
             'version',
-            false,
+            $getContributedTo,
             $limit,
             $this->getOffset($limit, $page)
         );
@@ -51,13 +53,14 @@ class ContributionsService extends AbstractService
 
     public function findByContributionToSegment(
         Segment $segment,
+        bool $getContributedTo = false,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$segment->getDbId()],
             'segment',
-            false,
+            $getContributedTo,
             $limit,
             $this->getOffset($limit, $page)
         );
@@ -67,6 +70,7 @@ class ContributionsService extends AbstractService
 
     public function findByContributionToSegments(
         array $segments,
+        bool $getContributedTo = false,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
@@ -77,7 +81,7 @@ class ContributionsService extends AbstractService
         $dbEntities = $this->repository->findByContributionTo(
             $segmentIds,
             'segment',
-            true,
+            $getContributedTo,
             $limit,
             $this->getOffset($limit, $page)
         );
