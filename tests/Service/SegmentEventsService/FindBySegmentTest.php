@@ -12,7 +12,7 @@ class FindBySegmentTest extends AbstractSegmentEventsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findBySegment')
-            ->with([$dbId])
+            ->with([$dbId], true, 1, 300)
             ->willReturn($dbData);
 
         $result = $this->service()->findBySegment($segment);
@@ -27,10 +27,10 @@ class FindBySegmentTest extends AbstractSegmentEventsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findBySegment')
-            ->with([$dbId], 5, 10)
+            ->with([$dbId], true, 5, 10)
             ->willReturn($dbData);
 
-        $result = $this->service()->findBySegment($segment, 5, 10);
+        $result = $this->service()->findBySegment($segment, true, 5, 3);
         $this->assertEquals($this->segmentEventsFromDbData($dbData), $result);
     }
 
@@ -41,7 +41,7 @@ class FindBySegmentTest extends AbstractSegmentEventsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findBySegment')
-            ->with([$dbId])
+            ->with([$dbId], true, 1, 300)
             ->willReturn([]);
 
         $result = $this->service()->findBySegment($segment);
