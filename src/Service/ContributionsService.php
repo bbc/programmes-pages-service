@@ -67,7 +67,6 @@ class ContributionsService extends AbstractService
 
     public function findByContributionToSegments(
         array $segments,
-        bool $getContributedTo = false,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
@@ -78,7 +77,7 @@ class ContributionsService extends AbstractService
         $dbEntities = $this->repository->findByContributionTo(
             $segmentIds,
             'segment',
-            $getContributedTo,
+            true,
             $limit,
             $this->getOffset($limit, $page)
         );
