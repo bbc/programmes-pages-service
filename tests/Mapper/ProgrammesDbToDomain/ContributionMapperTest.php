@@ -183,7 +183,6 @@ class ContributionMapperTest extends BaseMapperTestCase
     public function testGetDomainModelWithNoContributedTo()
     {
         $contributorDbEntity = ['pid' => 'p01v0q3w'];
-        $programmeDbEntity = ['pid' => 'b0000000'];
 
         $expectedContributorDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Contributor'
@@ -196,17 +195,11 @@ class ContributionMapperTest extends BaseMapperTestCase
             ->with($contributorDbEntity)
             ->willReturn($expectedContributorDomainEntity);
 
-        $this->mockProgrammeMapper->expects($this->once())
-            ->method('getDomainModel')
-            ->with($programmeDbEntity)
-            ->willReturn($expectedUnfetchedProgrammeDomainEntity);
-
         $dbEntityArray = [
             'id' => 1,
             'pid' => 'p0258652',
             'position' => '1',
             'characterName' => 'Malcolm Tucker',
-            'contributionToCoreEntity' => $programmeDbEntity,
             'contributor' => $contributorDbEntity,
             'creditRole' => [
                 'id' => 1,
