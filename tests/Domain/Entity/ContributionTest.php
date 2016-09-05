@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
-use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use PHPUnit_Framework_TestCase;
+use InvalidArgumentException;
 
 class ContributionTest extends PHPUnit_Framework_TestCase
 {
@@ -13,10 +13,28 @@ class ContributionTest extends PHPUnit_Framework_TestCase
     {
         $pid = new Pid('b0000001');
         $contributor = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Contributor');
+        $segment = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Segment');
+        $version = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version');
+        $coreEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Programme');
 
         $contribution = new Contribution(
             $pid,
             $contributor,
+            $segment,
+            'CreditRole'
+        );
+
+        $contribution2 = new Contribution(
+            $pid,
+            $contributor,
+            $version,
+            'CreditRole'
+        );
+
+        $contribution3 = new Contribution(
+            $pid,
+            $contributor,
+            $coreEntity,
             'CreditRole'
         );
 
@@ -25,16 +43,22 @@ class ContributionTest extends PHPUnit_Framework_TestCase
         $this->assertSame('CreditRole', $contribution->getCreditRole());
         $this->assertNull($contribution->getPosition());
         $this->assertNull($contribution->getCharacterName());
+
+        $this->assertSame($segment, $contribution->getContributedTo());
+        $this->assertSame($version, $contribution2->getContributedTo());
+        $this->assertSame($coreEntity, $contribution3->getContributedTo());
     }
 
     public function testConstructorOptionalArgs()
     {
         $pid = new Pid('b0000001');
         $contributor = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Contributor');
+        $segment = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Segment');
 
         $contribution = new Contribution(
             $pid,
             $contributor,
+            $segment,
             'CreditRole',
             1,
             'CharacterName'
@@ -42,5 +66,84 @@ class ContributionTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(1, $contribution->getPosition());
         $this->assertSame('CharacterName', $contribution->getCharacterName());
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testConstructorInvalidContributedTo()
+    {
+        $pid = new Pid('b0000001');
+        $contributor = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Contributor');
+
+        // ContributedTo cannot of type array
+        $contributedTo = ['pid' => 's0000001'];
+
+        $contribution = new Contribution(
+            $pid,
+            $contributor,
+            $contributedTo,
+            'CreditRole'
+        );
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     */
+    public function testGetContributedToUnfetchedSegment()
+    {
+        $pid = new Pid('b0000001');
+        $contributor = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Contributor');
+        $unfetchedSegment = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedSegment');
+
+        $contribution = new Contribution(
+            $pid,
+            $contributor,
+            $unfetchedSegment,
+            'CreditRole'
+        );
+
+        // Get the contributedTo
+        $segment = $contribution->getContributedTo();
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     */
+    public function testGetContributedToUnfetchedVersion()
+    {
+        $pid = new Pid('b0000001');
+        $contributor = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Contributor');
+        $unfetchedVersion = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion');
+
+        $contribution = new Contribution(
+            $pid,
+            $contributor,
+            $unfetchedVersion,
+            'CreditRole'
+        );
+
+        // Get the contributedTo
+        $version = $contribution->getContributedTo();
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     */
+    public function testGetContributedToUnfetchedCoreEntity()
+    {
+        $pid = new Pid('b0000001');
+        $contributor = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Contributor');
+        $unfetchedCoreEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme');
+
+        $contribution = new Contribution(
+            $pid,
+            $contributor,
+            $unfetchedCoreEntity,
+            'CreditRole'
+        );
+
+        // Get the contributedTo
+        $coreEntity = $contribution->getContributedTo();
     }
 }

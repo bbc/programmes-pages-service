@@ -30,6 +30,7 @@ class SegmentEventRepository extends EntityRepository
             ->addSelect(['segment'])
             ->join('segment_event.segment', 'segment')
             ->where("segment_event.version IN (:dbIds)")
+            ->addOrderBy('segment_event.position', 'ASC')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds)
@@ -74,7 +75,7 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
-    public function findBySegment(array $dbIds, int $limit, int $offset, bool $groupByVersionId = false) : array
+    public function findBySegment(array $dbIds, bool $groupByVersionId, int $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem', 'image', 'masterBrand', 'network'])
@@ -97,7 +98,7 @@ class SegmentEventRepository extends EntityRepository
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
 
-        if($groupByVersionId) {
+        if ($groupByVersionId) {
             $qb->addGroupBy('version.id');
         }
 

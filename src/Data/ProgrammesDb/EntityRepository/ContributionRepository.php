@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 
 class ContributionRepository extends EntityRepository
 {
-    public function findByContributionTo(array $dbIds, string $type, int $limit, int $offset)
+    public function findByContributionTo(array $dbIds, string $type, bool $getContributionTo, int $limit, int $offset)
     {
         $columnNameLookup = [
             'programme' => 'contributionToCoreEntity',
@@ -26,6 +26,11 @@ class ContributionRepository extends EntityRepository
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
+
+        if ($getContributionTo) {
+            $qb->addSelect('contributionTo')
+            ->join('contribution.' . $columnName, 'contributionTo');
+        }
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

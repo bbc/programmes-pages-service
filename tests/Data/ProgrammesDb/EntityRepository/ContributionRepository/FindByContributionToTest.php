@@ -16,14 +16,18 @@ class FindByContributionToTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Contribution');
 
         foreach ($this->findByContributionToData() as $data) {
-            list($pids, $type, $limit, $offset, $repoToQuery, $expectedPids) = $data;
+            list($pids, $type, $contributionTo, $limit, $offset, $repoToQuery, $expectedPids, $expectedColumn) = $data;
 
             $ids = array_map(function ($dbId) use ($repoToQuery) {
                 return $this->getDbIdFromPid($dbId, $repoToQuery);
             }, $pids);
 
-            $entities = $repo->findByContributionTo($ids, $type, $limit, $offset);
+            $entities = $repo->findByContributionTo($ids, $type, $contributionTo, $limit, $offset);
             $this->assertEquals($expectedPids, array_column($entities, 'pid'));
+
+            if ($contributionTo) {
+                $this->assertNotNull(array_column($entities, $expectedColumn));
+            }
 
             // findByContributionTo query only
             $this->assertCount(1, $this->getDbQueries());
@@ -35,11 +39,14 @@ class FindByContributionToTest extends AbstractDatabaseTest
     public function findByContributionToData()
     {
         return [
-            [['v0000001'], 'version', 50, 0, 'Version', ['cntrbtn1', 'cntrbtn2']],
-            [['v0000002'], 'version', 2, 1, 'Version', ['cntrbtn4']],
-            [['b00swgkn'], 'programme', 50, 0, 'Programme', ['cntrbtn5']],
-            [['sgmntms1'], 'segment', 50, 0, 'Segment', ['cntrbtn6']],
-            [['sgmntms2'], 'segment', 50, 0, 'Segment', ['cntrbtn7']],
+            [['v0000001'], 'version', false, 50, 0, 'Version', ['cntrbtn1', 'cntrbtn2'], null],
+            [['v0000002'], 'version', false, 2, 1, 'Version', ['cntrbtn4'], null],
+            [['b00swgkn'], 'programme', false, 50, 0, 'Programme', ['cntrbtn5'], null],
+            [['sgmntms1'], 'segment', false, 50, 0, 'Segment', ['cntrbtn6'], null],
+            [['sgmntms2'], 'segment', false, 50, 0, 'Segment', ['cntrbtn7'], null],
+            [['v0000001'], 'version', true, 50, 0, 'Version', ['cntrbtn1', 'cntrbtn2'], 'contributionToVersion'], // flag is true
+            [['b00swgkn'], 'programme', true, 50, 0, 'Programme', ['cntrbtn5'], 'contributionToCoreEntity'], // flag is true
+            [['sgmntms1'], 'segment', true, 50, 0, 'Segment', ['cntrbtn6'], 'contributionToSegment'], // flag is true
         ];
     }
 
@@ -48,7 +55,7 @@ class FindByContributionToTest extends AbstractDatabaseTest
         $this->loadFixtures([]);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Contribution');
 
-        $entities = $repo->findByContributionTo([1], 'version', 50, 0);
+        $entities = $repo->findByContributionTo([1], 'version', false, 50, 0);
         $this->assertEquals([], $entities);
 
         // findByContributionTo query only

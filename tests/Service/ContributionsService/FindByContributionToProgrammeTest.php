@@ -12,7 +12,7 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'programme', 300, 0)
+            ->with([$dbId], 'programme', false, 300, 0)
             ->willReturn($dbData);
 
         $result = $this->service()->findByContributionToProgramme($programme);
@@ -27,7 +27,7 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'programme', 5, 10)
+            ->with([$dbId], 'programme', false, 5, 10)
             ->willReturn($dbData);
 
         $result = $this->service()->findByContributionToProgramme($programme, 5, 3);
@@ -41,7 +41,7 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'programme', 5, 10)
+            ->with([$dbId], 'programme', false, 5, 10)
             ->willReturn([]);
 
         $result = $this->service()->findByContributionToProgramme($programme, 5, 3);

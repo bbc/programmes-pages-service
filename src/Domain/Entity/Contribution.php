@@ -2,7 +2,12 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedSegment;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use InvalidArgumentException;
 
 class Contribution
 {
@@ -15,6 +20,11 @@ class Contribution
      * @var Contributor
      */
     private $contributor;
+
+    /**
+     * @var Programme|Segment|Version
+     */
+    private $contributedTo;
 
     /**
      * @var string
@@ -35,12 +45,24 @@ class Contribution
     public function __construct(
         Pid $pid,
         Contributor $contributor,
+        $contributedTo,
         string $creditRole,
         int $position = null,
         string $characterName = null
     ) {
+        if (!($contributedTo instanceof Programme || $contributedTo instanceof Segment || $contributedTo instanceof Version)) {
+            throw new InvalidArgumentException(sprintf(
+                'Expected $contributedTo to be an instance of "%s", "%s" or "%s". Found instance of "%s"',
+                Programme::CLASS,
+                Segment::CLASS,
+                Version::CLASS,
+                (is_object($contributedTo) ? get_class($contributedTo) : gettype($contributedTo))
+            ));
+        }
+
         $this->pid = $pid;
         $this->contributor = $contributor;
+        $this->contributedTo = $contributedTo;
         $this->creditRole = $creditRole;
         $this->position = $position;
         $this->characterName = $characterName;
@@ -54,6 +76,21 @@ class Contribution
     public function getContributor(): Contributor
     {
         return $this->contributor;
+    }
+
+    /**
+     * @return Programme|Segment|Version
+     * @throws DataNotFetchedException
+     */
+    public function getContributedTo()
+    {
+        if ($this->contributedTo instanceof UnfetchedProgramme || $this->contributedTo instanceof UnfetchedSegment || $this->contributedTo instanceof UnfetchedVersion) {
+            throw new DataNotFetchedException(
+                'Could not get ContributedTo of Contribution "' . $this->pid . '" as it was not fetched'
+            );
+        }
+
+        return $this->contributedTo;
     }
 
     public function getCreditRole(): string

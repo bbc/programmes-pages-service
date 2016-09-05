@@ -12,7 +12,7 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'segment', 300, 0)
+            ->with([$dbId], 'segment', false, 300, 0)
             ->willReturn($dbData);
 
         $result = $this->service()->findByContributionToSegment($segment);
@@ -27,7 +27,7 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'segment', 5, 10)
+            ->with([$dbId], 'segment', false, 5, 10)
             ->willReturn($dbData);
 
         $result = $this->service()->findByContributionToSegment($segment, 5, 3);
@@ -41,7 +41,7 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'segment', 5, 10)
+            ->with([$dbId], 'segment', false, 5, 10)
             ->willReturn([]);
 
         $result = $this->service()->findByContributionToSegment($segment, 5, 3);

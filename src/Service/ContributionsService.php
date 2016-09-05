@@ -25,6 +25,7 @@ class ContributionsService extends AbstractService
         $dbEntities = $this->repository->findByContributionTo(
             [$programme->getDbId()],
             'programme',
+            false,
             $limit,
             $this->getOffset($limit, $page)
         );
@@ -40,6 +41,7 @@ class ContributionsService extends AbstractService
         $dbEntities = $this->repository->findByContributionTo(
             [$version->getDbId()],
             'version',
+            false,
             $limit,
             $this->getOffset($limit, $page)
         );
@@ -55,6 +57,27 @@ class ContributionsService extends AbstractService
         $dbEntities = $this->repository->findByContributionTo(
             [$segment->getDbId()],
             'segment',
+            false,
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        return $this->mapManyEntities($dbEntities);
+    }
+
+    public function findByContributionToSegments(
+        array $segments,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $segmentIds = array_map(function ($s) {
+            return $s->getDbId();
+        }, $segments);
+
+        $dbEntities = $this->repository->findByContributionTo(
+            $segmentIds,
+            'segment',
+            true,
             $limit,
             $this->getOffset($limit, $page)
         );

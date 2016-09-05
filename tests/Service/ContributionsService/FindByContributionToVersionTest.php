@@ -12,7 +12,7 @@ class FindByContributionToVersionTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'version', 300, 0)
+            ->with([$dbId], 'version', false, 300, 0)
             ->willReturn($dbData);
 
         $result = $this->service()->findByContributionToVersion($version);
@@ -27,7 +27,7 @@ class FindByContributionToVersionTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'version', 5, 10)
+            ->with([$dbId], 'version', false, 5, 10)
             ->willReturn($dbData);
 
         $result = $this->service()->findByContributionToVersion($version, 5, 3);
@@ -41,7 +41,7 @@ class FindByContributionToVersionTest extends AbstractContributionsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'version', 5, 10)
+            ->with([$dbId], 'version', false, 5, 10)
             ->willReturn([]);
 
         $result = $this->service()->findByContributionToVersion($version, 5, 3);
