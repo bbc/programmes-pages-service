@@ -16,7 +16,6 @@ class ContributionTest extends PHPUnit_Framework_TestCase
         $segment = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Segment');
         $version = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version');
         $coreEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Programme');
-        $unfetchedCoreEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme');
 
         $contribution = new Contribution(
             $pid,
