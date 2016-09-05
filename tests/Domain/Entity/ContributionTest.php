@@ -16,6 +16,7 @@ class ContributionTest extends PHPUnit_Framework_TestCase
         $segment = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Segment');
         $version = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version');
         $coreEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Programme');
+        $unfetchedCoreEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme');
 
         $contribution = new Contribution(
             $pid,
@@ -88,8 +89,8 @@ class ContributionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
- * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
- */
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     */
     public function testGetContributedToUnfetchedSegment()
     {
         $pid = new Pid('b0000001');
