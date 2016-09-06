@@ -53,7 +53,10 @@ abstract class BackfillBase extends PipsChangeBase
      */
     protected $lockedAt;
 
-    public function getAction(): string
+    /**
+     * @return string|null
+     */
+    public function getAction()
     {
         return $this->action;
     }
