@@ -2,16 +2,17 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\DenormBackfill;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\BackfillBase;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker\ForceIndexWalker;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\NoResultException;
 
-class DenormBackfillRepository extends EntityRepository
+class BackfillRepository extends EntityRepository
 {
     /**
-     * @var DenormBackfill[]
+     * @var BackfillBase[]
      */
     private $lockedChanges = array();
 
@@ -27,7 +28,7 @@ class DenormBackfillRepository extends EntityRepository
      * MySQL does not support nested transactions.
      *
      * @param int $limit
-     * @return \BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\DenormBackfill[]
+     * @return \BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\BackfillBase[]
      * @throws \Exception
      */
     public function findAndLockOldestUnprocessedItems(int $limit = 10)
@@ -35,25 +36,25 @@ class DenormBackfillRepository extends EntityRepository
         $em = $this->getEntityManager();
         try {
             $em->getConnection()->beginTransaction();
-            $query = $this->createQueryBuilder('denormBackfill')
-                ->where('denormBackfill.processedTime IS NULL')
-                ->andWhere('denormBackfill.locked = 0')
+            $query = $this->createQueryBuilder('backfill')
+                ->where('backfill.processedTime IS NULL')
+                ->andWhere('backfill.locked = 0')
                 ->setMaxResults($limit)
-                ->addOrderBy('denormBackfill.id', 'Asc')
+                ->addOrderBy('backfill.cid', 'Asc')
                 ->getQuery();
 
             $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
             // Extremely nasty hack to force doctrine to include FORCE INDEX in query
             $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, '\BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker\ForceIndexWalker');
-            $query->setHint(ForceIndexWalker::HINT_USE_INDEX, 'denorm_backfill_locking_idx');
-            /** @var DenormBackfill[] $result */
+            $query->setHint(ForceIndexWalker::HINT_USE_INDEX, $this->getCompoundIndexName());
+            /** @var BackfillBase[] $result */
             $result = $query->getResult();
-            $now = new \DateTime();
+            $now = new DateTime();
             foreach ($result as $item) {
                 $item->setLockedAt($now);
                 $item->setLocked(true);
                 $em->persist($item);
-                $this->lockedChanges[$item->getId()] = $item;
+                $this->lockedChanges[$item->getCid()] = $item;
             }
             $em->flush();
             $em->getConnection()->commit();
@@ -66,13 +67,13 @@ class DenormBackfillRepository extends EntityRepository
         }
     }
 
-    public function setAsProcessed(DenormBackfill $change)
+    public function setAsProcessed(BackfillBase $change)
     {
-        $change->setProcessedTime(new \DateTime());
+        $change->setProcessedTime(new DateTime());
         $change->setLockedAt(null);
         $change->setLocked(false);
-        if (isset($this->lockedChanges[$change->getId()])) {
-            unset($this->lockedChanges[$change->getId()]);
+        if (isset($this->lockedChanges[$change->getCid()])) {
+            unset($this->lockedChanges[$change->getCid()]);
         }
         $this->addChange($change);
     }
@@ -81,23 +82,23 @@ class DenormBackfillRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         foreach ($changes as $change) {
-            $change->setProcessedTime(new \DateTime());
+            $change->setProcessedTime(new DateTime());
             $change->setLockedAt(null);
             $change->setLocked(false);
-            if (isset($this->lockedChanges[$change->getId()])) {
-                unset($this->lockedChanges[$change->getId()]);
+            if (isset($this->lockedChanges[$change->getCid()])) {
+                unset($this->lockedChanges[$change->getCid()]);
             }
             $em->persist($change);
         }
         $em->flush();
     }
 
-    public function unlock(DenormBackfill $change)
+    public function unlock(BackfillBase $change)
     {
         $change->setLockedAt(null);
         $change->setLocked(false);
-        if (isset($this->lockedChanges[$change->getId()])) {
-            unset($this->lockedChanges[$change->getId()]);
+        if (isset($this->lockedChanges[$change->getCid()])) {
+            unset($this->lockedChanges[$change->getCid()]);
         }
         $em = $this->getEntityManager();
         if ($em->isOpen()) {
@@ -107,8 +108,8 @@ class DenormBackfillRepository extends EntityRepository
 
     public function findByIds(array $ids)
     {
-        $query = $this->createQueryBuilder('denormBackfill')
-            ->where('denormBackfill.id IN (:ids)')
+        $query = $this->createQueryBuilder('backfill')
+            ->where('backfill.cid IN (:ids)')
             ->setParameter('ids', $ids)
             ->getQuery();
         return $query->getResult();
@@ -119,17 +120,17 @@ class DenormBackfillRepository extends EntityRepository
         $em = $this->getEntityManager();
         $ids = [];
         foreach ($this->lockedChanges as $change) {
-            $ids[] = $change->getId();
+            $ids[] = $change->getCid();
         }
         try {
             $em->getConnection()->beginTransaction();
-            $query = $this->createQueryBuilder('denormBackfill')
-                ->where('denormBackfill.id IN (:ids)')
-                ->andWhere('denormBackfill.locked = 1')
+            $query = $this->createQueryBuilder('backfill')
+                ->where('backfill.cid IN (:ids)')
+                ->andWhere('backfill.locked = 1')
                 ->setParameter('ids', $ids)
                 ->getQuery();
             $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
-            /** @var DenormBackfill[] $changes */
+            /** @var BackfillBase[] $changes */
             $changes = $query->getResult();
             foreach ($changes as $changeEvent) {
                 $changeEvent->setLockedAt(null);
@@ -159,7 +160,7 @@ class DenormBackfillRepository extends EntityRepository
         }
     }
 
-    public function addChange(DenormBackfill $change)
+    public function addChange(BackfillBase $change)
     {
         $em = $this->getEntityManager();
         $em->persist($change);
@@ -167,26 +168,26 @@ class DenormBackfillRepository extends EntityRepository
     }
 
     /**
-     * @return DenormBackfill
+     * @return BackfillBase
      */
     public function findLatest()
     {
         try {
-            return $this->findOneBy([], ['id' => 'Desc']);
+            return $this->findOneBy([], ['cid' => 'Desc']);
         } catch (NoResultException $e) {
             return null;
         }
     }
 
     /**
-     * @return DenormBackfill
+     * @return BackfillBase
      */
     public function findLatestProcessed()
     {
         try {
-            $qb = $this->createQueryBuilder('denormBackfill')
-                ->where('denormBackfill.processedTime IS NOT NULL')
-                ->addOrderBy('denormBackfill.processedTime', 'Desc')
+            $qb = $this->createQueryBuilder('backfill')
+                ->where('backfill.processedTime IS NOT NULL')
+                ->addOrderBy('backfill.processedTime', 'Desc')
                 ->setMaxResults(1);
 
             return $qb->getQuery()->getSingleResult();
@@ -198,13 +199,13 @@ class DenormBackfillRepository extends EntityRepository
     public function findLatestResults(int $limit = 10, $startId = null)
     {
         try {
-            $qb = $this->createQueryBuilder('denormBackfill')
-                ->where('denormBackfill.processedTime IS NULL')
+            $qb = $this->createQueryBuilder('backfill')
+                ->where('backfill.processedTime IS NULL')
                 ->setMaxResults($limit)
-                ->addOrderBy('denormBackfill.id', 'Desc');
+                ->addOrderBy('backfill.cid', 'Desc');
 
             if ($startId) {
-                $qb->andWhere('denormBackfill.id >= :id')
+                $qb->andWhere('backfill.cid >= :id')
                     ->setParameter(':id', $startId);
             }
             $query = $qb->getQuery();
@@ -218,8 +219,8 @@ class DenormBackfillRepository extends EntityRepository
     public function findOldestUnprocessedItems(int $limit = 10)
     {
         try {
-            $query = $this->createQueryBuilder('denormBackfill')
-                ->where('denormBackfill.processedTime IS NULL')
+            $query = $this->createQueryBuilder('backfill')
+                ->where('backfill.processedTime IS NULL')
                 ->setMaxResults($limit)
                 ->getQuery();
 
@@ -231,9 +232,9 @@ class DenormBackfillRepository extends EntityRepository
 
     public function getUnprocessedCount(): int
     {
-        $query = $this->createQueryBuilder('denormBackfill')
-            ->select('count(denormBackfill.id)')
-            ->where('denormBackfill.processedTime IS NULL')
+        $query = $this->createQueryBuilder('backfill')
+            ->select('count(backfill.cid)')
+            ->where('backfill.processedTime IS NULL')
             ->getQuery();
 
         return $query->getSingleScalarResult();
@@ -241,10 +242,22 @@ class DenormBackfillRepository extends EntityRepository
 
     /**
      * @param mixed $id
-     * @return null|DenormBackfill
+     * @return null|BackfillBase
      */
     public function findById($id)
     {
         return $this->find($id);
+    }
+
+    protected function getCompoundIndexName(): string
+    {
+        $classMetaData = $this->_class;
+        $indexes = $classMetaData->table['indexes'];
+        foreach ($indexes as $indexName => $index) {
+            if (strpos($indexName, 'locking_idx') !== false) {
+                return $indexName;
+            }
+        }
+        throw new \RuntimeException('Cannot find locking index for table ' . $this->_class->getTableName());
     }
 }

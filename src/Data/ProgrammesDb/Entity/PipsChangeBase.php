@@ -4,7 +4,9 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\MappedSuperclass */
+/**
+ * @ORM\MappedSuperclass
+ */
 abstract class PipsChangeBase
 {
     /**
