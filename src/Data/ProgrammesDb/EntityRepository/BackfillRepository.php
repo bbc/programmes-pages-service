@@ -168,6 +168,18 @@ class BackfillRepository extends EntityRepository
     }
 
     /**
+     * @param BackfillBase[] $changes
+     */
+    public function addChanges(array $changes)
+    {
+        $em = $this->getEntityManager();
+        foreach ($changes as $change) {
+            $em->persist($change);
+        }
+        $em->flush();
+    }
+
+    /**
      * @return BackfillBase
      */
     public function findLatest()
