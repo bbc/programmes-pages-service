@@ -21,6 +21,20 @@ class SegmentEventRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findByPidFull(string $pid)
+    {
+        $qb = $this->createQueryBuilder('segmentEvent')
+            ->addSelect(['segment', 'version', 'programmeItem', 'image', 'masterBrand', 'network'])
+            ->join('segmentEvent.segment', 'segment')
+            ->leftJoin('programmeItem.image', 'image')
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->andWhere('segmentEvent.pid = :pid')
+            ->setParameter('pid', $pid);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
+
     /**
      * @return SegmentEvent[]
      */
