@@ -124,7 +124,10 @@ abstract class PipsChangeBase
         $this->entityId = $entityId;
     }
 
-    public function getEntityType(): string
+    /**
+     * @return string
+     */
+    public function getEntityType()
     {
         return $this->entityType;
     }
