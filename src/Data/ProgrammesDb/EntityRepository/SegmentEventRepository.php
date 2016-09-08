@@ -24,22 +24,6 @@ class SegmentEventRepository extends EntityRepository
     /**
      * @return SegmentEvent[]
      */
-    public function findByVersion(array $dbIds, int $limit, int $offset)
-    {
-        return $this->createQueryBuilder('segment_event')
-            ->addSelect(['segment'])
-            ->join('segment_event.segment', 'segment')
-            ->where("segment_event.version IN (:dbIds)")
-            ->addOrderBy('segment_event.position', 'ASC')
-            ->setMaxResults($limit)
-            ->setFirstResult($offset)
-            ->setParameter('dbIds', $dbIds)
-            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
-    }
-
-    /**
-     * @return SegmentEvent[]
-     */
     public function findByVersionWithContributions(array $dbIds, int $limit, int $offset)
     {
         return $this->createQueryBuilder('segment_event')
