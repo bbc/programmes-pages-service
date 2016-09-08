@@ -90,7 +90,7 @@ class MapperFactory
     public function getSegmentMapper(): SegmentMapper
     {
         if (!array_key_exists('SegmentMapper', $this->instances)) {
-            $this->instances['SegmentMapper'] = new SegmentMapper();
+            $this->instances['SegmentMapper'] = new SegmentMapper($this);
         }
 
         return $this->instances['SegmentMapper'];

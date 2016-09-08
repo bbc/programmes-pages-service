@@ -41,9 +41,32 @@ class SegmentTest extends PHPUnit_Framework_TestCase
             'Type',
             'Title',
             $synopses,
-            1
+            1,
+            []
         );
 
         $this->assertSame(1, $segment->getDuration());
+        $this->assertSame([], $segment->getContributions());
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     */
+    public function testGetContributionsNoContributions()
+    {
+        $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
+
+        $segment = new Segment(
+            0,
+            $pid,
+            'Type',
+            'Title',
+            $synopses,
+            1,
+            null
+        );
+
+        $segment->getContributions();
     }
 }

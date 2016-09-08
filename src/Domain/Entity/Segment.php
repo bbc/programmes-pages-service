@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
@@ -37,13 +38,19 @@ class Segment
      */
     private $duration;
 
+    /**
+     * @var array|null
+     */
+    private $contributions;
+
     public function __construct(
         int $dbId,
         Pid $pid,
         string $type,
         string $title,
         Synopses $synopses,
-        int $duration = null
+        int $duration = null,
+        $contributions = null
     ) {
         $this->dbId = $dbId;
         $this->pid = $pid;
@@ -51,6 +58,7 @@ class Segment
         $this->title = $title;
         $this->synopses = $synopses;
         $this->duration = $duration;
+        $this->contributions = $contributions;
     }
 
     /**
@@ -95,5 +103,24 @@ class Segment
     public function getDuration()
     {
         return $this->duration;
+    }
+
+    /**
+     * This will return an array of contributions which will mean that
+     * it might be called like $segmentEvent->getSegment()->getContributions()
+     * which is a couple of layers of nested getters however as all of our known use cases require
+     * us to fetch contributions with segment events this is something we will probably always need,
+     * so it's more preferable to have the getter than to have the client match the contributions
+     * and the segment events. Throws an exception if the contributions were not fetched
+     */
+    public function getContributions(): array
+    {
+        if (is_null($this->contributions)) {
+            throw new DataNotFetchedException(
+                'Could not get Contributions of Segment "' . $this->pid . '" as it was not fetched'
+            );
+        }
+
+        return $this->contributions;
     }
 }

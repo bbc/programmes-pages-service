@@ -113,6 +113,11 @@ class SegmentEvent
         $this->segment = $segment;
     }
 
+    public function getContributions(): array
+    {
+        return $this->contributions;
+    }
+
     /**
      * @return string|null
      */

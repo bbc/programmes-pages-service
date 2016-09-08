@@ -3,13 +3,15 @@
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentMapper;
+use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
+use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
 use BBC\ProgrammesPagesService\Domain\Entity\MusicSegment;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use PHPUnit_Framework_TestCase;
 
-class SegmentMapperTest extends PHPUnit_Framework_TestCase
+class SegmentMapperTest extends BaseMapperTestCase
 {
     public function testGetDomainModelForSegment()
     {
@@ -22,6 +24,7 @@ class SegmentMapperTest extends PHPUnit_Framework_TestCase
             'shortSynopsis' => 'ShortSynopsis',
             'mediumSynopsis' => 'MediumSynopsis',
             'longSynopsis' => 'LongSynopsis',
+            'contributions' => [],
         ];
 
         $expectedEntity = new Segment(
@@ -30,11 +33,11 @@ class SegmentMapperTest extends PHPUnit_Framework_TestCase
             'speech',
             'Title',
             new Synopses('ShortSynopsis', 'MediumSynopsis', 'LongSynopsis'),
-            1
+            1,
+            []
         );
 
-        $mapper = new SegmentMapper();
-        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
     public function testGetDomainModelForMusicSegment()
@@ -45,6 +48,7 @@ class SegmentMapperTest extends PHPUnit_Framework_TestCase
             'type' => 'music',
             'title' => 'Title',
             'duration' => 1,
+            'contributions' => [],
             'musicRecordId' => 'musicRecordId',
             'releaseTitle' => 'releaseTitle',
             'catalogueNumber' => 'catalogueNumber',
@@ -67,6 +71,7 @@ class SegmentMapperTest extends PHPUnit_Framework_TestCase
             'Title',
             new Synopses('ShortSynopsis', 'MediumSynopsis', 'LongSynopsis'),
             1,
+            [],
             'musicRecordId',
             'releaseTitle',
             'catalogueNumber',
@@ -79,8 +84,7 @@ class SegmentMapperTest extends PHPUnit_Framework_TestCase
             'recordingDate'
         );
 
-        $mapper = new SegmentMapper();
-        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
     /**
@@ -94,6 +98,7 @@ class SegmentMapperTest extends PHPUnit_Framework_TestCase
             'type' => $type,
             'title' => 'Title',
             'duration' => 1,
+            'contributions' => [],
             'musicRecordId' => 'musicRecordId',
             'releaseTitle' => 'releaseTitle',
             'catalogueNumber' => 'catalogueNumber',
@@ -109,8 +114,7 @@ class SegmentMapperTest extends PHPUnit_Framework_TestCase
             'longSynopsis' => 'LongSynopsis',
         ];
 
-        $mapper = new SegmentMapper();
-        $this->assertInstanceOf($expectedClass, $mapper->getDomainModel($dbEntityArray));
+        $this->assertInstanceOf($expectedClass, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
     public function domainModelTypeDataProvider()
@@ -123,5 +127,10 @@ class SegmentMapperTest extends PHPUnit_Framework_TestCase
             ['music', MusicSegment::CLASS],
             ['classical', MusicSegment::CLASS],
         ];
+    }
+
+    private function getMapper(): SegmentMapper
+    {
+        return new SegmentMapper($this->getMapperFactory([]));
     }
 }

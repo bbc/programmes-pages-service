@@ -123,7 +123,6 @@ class Segment
     private $recordingDate;
 
     /**
-     * Used for joins. Cannot be queried, so there is no getter/setter.
      * @ORM\OneToMany(targetEntity="Contribution", mappedBy="contributionToSegment")
      */
     private $contributions;
@@ -324,5 +323,18 @@ class Segment
     public function setRecordingDate(string $recordingDate = null)
     {
         $this->recordingDate = $recordingDate;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getContributions()
+    {
+        return $this->contributions;
+    }
+
+    public function setContributions(ArrayCollection $contributions)
+    {
+        $this->contributions = $contributions;
     }
 }

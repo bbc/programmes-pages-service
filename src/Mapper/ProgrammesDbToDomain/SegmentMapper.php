@@ -8,7 +8,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
-class SegmentMapper implements MapperInterface
+class SegmentMapper extends AbstractMapper implements MapperInterface
 {
     const MUSIC_TYPES = ['music', 'classical'];
 
@@ -29,7 +29,8 @@ class SegmentMapper implements MapperInterface
             $dbSegment['type'],
             $dbSegment['title'],
             $this->getSynopses($dbSegment),
-            $dbSegment['duration']
+            $dbSegment['duration'],
+            $this->getContributions($dbSegment)
         );
     }
 
@@ -42,6 +43,7 @@ class SegmentMapper implements MapperInterface
             $dbSegment['title'],
             $this->getSynopses($dbSegment),
             $dbSegment['duration'],
+            $this->getContributions($dbSegment),
             $dbSegment['musicRecordId'],
             $dbSegment['releaseTitle'],
             $dbSegment['catalogueNumber'],
@@ -63,5 +65,24 @@ class SegmentMapper implements MapperInterface
             $dbSegment['mediumSynopsis'],
             $dbSegment['longSynopsis']
         );
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getContributions($dbSegment)
+    {
+        $contributors = [];
+
+        if (!isset($dbSegment['contributions'])) {
+            return null;
+        }
+
+        foreach ($dbSegment['contributions'] as $contribution) {
+            $contributors[] =
+                $this->mapperFactory->getContributionMapper()->getDomainModel($contribution);
+        }
+
+        return $contributors;
     }
 }
