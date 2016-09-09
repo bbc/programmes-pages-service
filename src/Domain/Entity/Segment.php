@@ -87,7 +87,10 @@ class Segment
         return $this->type;
     }
 
-    public function getTitle(): string
+    /**
+     * @return string|null
+     */
+    public function getTitle()
     {
         return $this->title;
     }
