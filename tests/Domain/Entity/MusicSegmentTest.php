@@ -53,6 +53,7 @@ class MusicSegmentTest extends PHPUnit_Framework_TestCase
             'Title',
             $synopses,
             1,
+            [],
             'MusicRecordId',
             'ReleaseTitle',
             'CatalogueNumber',
@@ -66,6 +67,7 @@ class MusicSegmentTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertSame(1, $segment->getDuration());
+        $this->assertSame([], $segment->getContributions());
         $this->assertSame('MusicRecordId', $segment->getMusicRecordId());
         $this->assertSame('ReleaseTitle', $segment->getReleaseTitle());
         $this->assertSame('CatalogueNumber', $segment->getCatalogueNumber());

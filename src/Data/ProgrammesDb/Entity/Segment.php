@@ -123,7 +123,6 @@ class Segment
     private $recordingDate;
 
     /**
-     * Used for joins. Cannot be queried, so there is no getter/setter.
      * @ORM\OneToMany(targetEntity="Contribution", mappedBy="contributionToSegment")
      */
     private $contributions;
