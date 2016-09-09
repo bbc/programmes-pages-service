@@ -3,13 +3,10 @@
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentMapper;
-use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
-use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
 use BBC\ProgrammesPagesService\Domain\Entity\MusicSegment;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
-use PHPUnit_Framework_TestCase;
 
 class SegmentMapperTest extends BaseMapperTestCase
 {
@@ -31,8 +28,8 @@ class SegmentMapperTest extends BaseMapperTestCase
             1,
             new Pid('p01r8fvg'),
             'speech',
-            'Title',
             new Synopses('ShortSynopsis', 'MediumSynopsis', 'LongSynopsis'),
+            'Title',
             1,
             []
         );
@@ -68,8 +65,8 @@ class SegmentMapperTest extends BaseMapperTestCase
             1,
             new Pid('p01r8fvg'),
             'music',
-            'Title',
             new Synopses('ShortSynopsis', 'MediumSynopsis', 'LongSynopsis'),
+            'Title',
             1,
             [],
             'musicRecordId',

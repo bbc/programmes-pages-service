@@ -47,8 +47,8 @@ class Segment
         int $dbId,
         Pid $pid,
         string $type,
-        string $title,
         Synopses $synopses,
+        string $title = null,
         int $duration = null,
         $contributions = null
     ) {

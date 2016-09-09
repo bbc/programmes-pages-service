@@ -18,8 +18,8 @@ class SegmentTest extends PHPUnit_Framework_TestCase
             0,
             $pid,
             'Type',
-            'Title',
-            $synopses
+            $synopses,
+            'Title'
         );
 
         $this->assertSame(0, $segment->getDbId());
@@ -39,8 +39,8 @@ class SegmentTest extends PHPUnit_Framework_TestCase
             0,
             $pid,
             'Type',
-            'Title',
             $synopses,
+            'Title',
             1,
             []
         );
@@ -61,8 +61,8 @@ class SegmentTest extends PHPUnit_Framework_TestCase
             0,
             $pid,
             'Type',
-            'Title',
             $synopses,
+            'Title',
             1,
             null
         );
