@@ -324,17 +324,4 @@ class Segment
     {
         $this->recordingDate = $recordingDate;
     }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getContributions()
-    {
-        return $this->contributions;
-    }
-
-    public function setContributions(ArrayCollection $contributions)
-    {
-        $this->contributions = $contributions;
-    }
 }
