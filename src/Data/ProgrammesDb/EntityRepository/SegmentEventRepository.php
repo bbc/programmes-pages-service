@@ -34,9 +34,9 @@ class SegmentEventRepository extends EntityRepository
                 'creditRole',
             ])
             ->join('segment_event.segment', 'segment')
-            ->join('segment.contributions', 'contributions')
-            ->join('contributions.contributor', 'contributor')
-            ->join('contributions.creditRole', 'creditRole')
+            ->leftJoin('segment.contributions', 'contributions')
+            ->leftJoin('contributions.contributor', 'contributor')
+            ->leftJoin('contributions.creditRole', 'creditRole')
             ->where("segment_event.version IN (:dbIds)")
             ->addOrderBy('segment_event.position', 'ASC')
             ->setMaxResults($limit)
