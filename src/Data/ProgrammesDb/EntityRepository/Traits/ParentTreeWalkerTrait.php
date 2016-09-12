@@ -27,11 +27,14 @@ trait ParentTreeWalkerTrait
     ) {
         // Build a list of all unique parentIds found in all of the entities
         $listOfAllParentIds = [];
+        $keyPathToParent = array_slice($keyPath, 0, -1);
+        $keyPathToParent[] = 'parent';
         foreach ($entities as $i => $entity) {
             // We need to create the parent field, as we know
             // we're making the request for parents, but we may
             // end up bailing out early if there aren't any
-            $entities[$i]['parent'] =  null;
+
+            $entities[$i] = $this->setDeepKey($entity, null, $keyPathToParent);
 
             $ancestry = $this->getFieldFromDepth($entity, $keyPath);
 

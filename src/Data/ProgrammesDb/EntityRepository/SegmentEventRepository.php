@@ -94,7 +94,7 @@ class SegmentEventRepository extends EntityRepository
             // network needs to be fetched in order to create masterBrand
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('version.broadcasts', 'broadcast')
-            ->andWhere('segmentEvent.segment IN (:dbIds)')
+            ->where('segmentEvent.segment IN (:dbIds)')
             // versions that have been broadcast come first
             ->addSelect('CASE WHEN broadcast.startAt IS NULL THEN 1 ELSE 0 AS HIDDEN hasBroadcast')
             ->addOrderBy('hasBroadcast', 'ASC')
