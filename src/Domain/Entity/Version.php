@@ -178,7 +178,8 @@ class Version
     }
 
     /**
-     * @return VersionType[]
+     * @return array|VersionType[]
+     * @throws DataNotFetchedException
      */
     public function getVersionTypes(): array
     {

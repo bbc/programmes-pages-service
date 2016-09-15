@@ -8,6 +8,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 class MasterBrandMapper extends AbstractMapper
 {
     /**
+     * @param array $dbMasterBrand
      * @return MasterBrand|null
      */
     public function getDomainModel(array $dbMasterBrand)

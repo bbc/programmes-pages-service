@@ -9,6 +9,7 @@ abstract class AbstractService
 {
     const DEFAULT_PAGE = 1;
     const DEFAULT_LIMIT = 300;
+    const NO_LIMIT = 0;
 
     /**
      * @var MapperInterface

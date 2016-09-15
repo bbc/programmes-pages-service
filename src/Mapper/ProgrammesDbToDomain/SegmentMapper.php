@@ -68,6 +68,7 @@ class SegmentMapper extends AbstractMapper implements MapperInterface
     }
 
     /**
+     * @param $dbSegment
      * @return array|null
      */
     private function getContributions($dbSegment)

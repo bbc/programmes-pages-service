@@ -18,6 +18,7 @@ class VersionsService extends AbstractService
     }
 
     /**
+     * @param Pid $pid
      * @return Version|null
      */
     public function findByPidFull(Pid $pid)

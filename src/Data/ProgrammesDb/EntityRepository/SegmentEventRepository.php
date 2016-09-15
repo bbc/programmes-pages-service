@@ -9,6 +9,7 @@ use Doctrine\ORM\Query;
 class SegmentEventRepository extends EntityRepository
 {
     use Traits\ParentTreeWalkerTrait;
+    use Traits\SetLimitAndOffsetTrait;
 
     public function findByPid(string $pid)
     {
@@ -22,11 +23,14 @@ class SegmentEventRepository extends EntityRepository
     }
 
     /**
+     * @param array $dbIds
+     * @param int $limit
+     * @param int $offset
      * @return SegmentEvent[]
      */
     public function findByVersionWithContributions(array $dbIds, int $limit, int $offset)
     {
-        return $this->createQueryBuilder('segment_event')
+        $qb = $this->createQueryBuilder('segment_event')
             ->addSelect([
                 'segment',
                 'contributions',
@@ -39,16 +43,19 @@ class SegmentEventRepository extends EntityRepository
             ->leftJoin('contributions.creditRole', 'creditRole')
             ->where("segment_event.version IN (:dbIds)")
             ->addOrderBy('segment_event.position', 'ASC')
-            ->setMaxResults($limit)
-            ->setFirstResult($offset)
-            ->setParameter('dbIds', $dbIds)
-            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+            ->setParameter('dbIds', $dbIds);
+
+        $qb = $this->setLimit($qb, $limit);
+        $qb = $this->setOffset($qb, $offset);
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
     }
 
     public function findFullLatestBroadcastedForContributor(
         int $contributorId,
-        int $limit,
-        int $offset
+        int $limit = 0,
+        int $offset = 0
     ) {
         $qb = $this->createQueryBuilder('segmentEvent')
             // fetching full, so we need a big select to return details
@@ -70,9 +77,10 @@ class SegmentEventRepository extends EntityRepository
             ->addOrderBy('broadcast.startAt', 'DESC')
             ->addOrderBy('segmentEvent.offset', 'DESC')
             ->addOrderBy('segmentEvent.position', 'DESC')
-            ->setMaxResults($limit)
-            ->setFirstResult($offset)
             ->setParameter('id', $contributorId);
+
+        $qb = $this->setLimit($qb, $limit);
+        $qb = $this->setOffset($qb, $offset);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
@@ -102,9 +110,10 @@ class SegmentEventRepository extends EntityRepository
             ->addOrderBy('broadcast.startAt', 'ASC')
             // alphabetical ordering by title
             ->addOrderBy('programmeItem.title', 'ASC')
-            ->setMaxResults($limit)
-            ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
+
+        $qb = $this->setLimit($qb, $limit);
+        $qb = $this->setOffset($qb, $offset);
 
         if ($groupByVersionId) {
             $qb->addGroupBy('version.id');

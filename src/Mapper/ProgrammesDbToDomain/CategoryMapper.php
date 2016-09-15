@@ -10,6 +10,7 @@ use InvalidArgumentException;
 class CategoryMapper implements MapperInterface
 {
     /**
+     * @param array $dbCategory
      * @return Format|Genre
      */
     public function getDomainModel(array $dbCategory)

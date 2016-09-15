@@ -41,6 +41,7 @@ class ProgrammesService extends AbstractService
     }
 
     /**
+     * @param Pid $pid
      * @return Programme|null
      */
     public function findByPid(Pid $pid)
@@ -51,6 +52,7 @@ class ProgrammesService extends AbstractService
     }
 
     /**
+     * @param Pid $pid
      * @return Programme|null
      */
     public function findByPidFull(Pid $pid)

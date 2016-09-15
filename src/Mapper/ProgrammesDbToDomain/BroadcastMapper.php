@@ -16,6 +16,7 @@ use DateTimeImmutable;
 class BroadcastMapper extends AbstractMapper
 {
     /**
+     * @param array $dbBroadcast
      * @return Broadcast|null
      */
     public function getDomainModel(array $dbBroadcast): Broadcast

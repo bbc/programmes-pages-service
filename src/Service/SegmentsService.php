@@ -17,6 +17,7 @@ class SegmentsService extends AbstractService
     }
 
     /**
+     * @param Pid $pid
      * @return Segment|null
      */
     public function findByPid(Pid $pid)
