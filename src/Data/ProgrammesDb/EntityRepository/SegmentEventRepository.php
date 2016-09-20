@@ -132,7 +132,7 @@ class SegmentEventRepository extends EntityRepository
             ->andWhere('segmentEvent.segment IN (:dbIds)')
             ->setParameter('dbIds', $dbIds);
 
-        if($groupByVersionId) {
+        if ($groupByVersionId) {
             $qb->addGroupBy('version.id');
         }
 
