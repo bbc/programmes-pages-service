@@ -59,7 +59,7 @@ class SegmentEventsService extends AbstractService
     public function findBySegmentFull(
         Segment $segment,
         bool $groupByVersionId = false,
-        int $limit = self::NO_LIMIT,
+        int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findBySegmentFull(
@@ -75,7 +75,7 @@ class SegmentEventsService extends AbstractService
     public function findBySegment(
         Segment $segment,
         bool $groupByVersionId = false,
-        int $limit = self::NO_LIMIT,
+        int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findBySegment(
