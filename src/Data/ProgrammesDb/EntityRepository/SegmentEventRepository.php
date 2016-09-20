@@ -66,11 +66,8 @@ class SegmentEventRepository extends EntityRepository
 
     }
 
-    public function findFullLatestBroadcastedForContributor(
-        int $contributorId,
-        int $limit = 0,
-        int $offset = 0
-    ) {
+    public function findFullLatestBroadcastedForContributor(int $contributorId, int $limit, int $offset)
+    {
         $qb = $this->createQueryBuilder('segmentEvent')
             // fetching full, so we need a big select to return details
             ->select([
@@ -116,7 +113,7 @@ class SegmentEventRepository extends EntityRepository
             // network needs to be fetched in order to create masterBrand
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('version.broadcasts', 'broadcast')
-            ->where('segmentEvent.segment IN (:dbIds)')
+            ->andWhere('segmentEvent.segment IN (:dbIds)')
             // versions that have been broadcast come first
             ->addSelect('CASE WHEN broadcast.startAt IS NULL THEN 1 ELSE 0 AS HIDDEN hasBroadcast')
             ->addOrderBy('hasBroadcast', 'ASC')
@@ -153,8 +150,10 @@ class SegmentEventRepository extends EntityRepository
             $qb->addGroupBy('version.id');
         }
 
+        $qb = $this->setLimit($qb, $limit);
+        $qb = $this->setOffset($qb, $offset);
+
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        //TODO add limit and offset
     }
 
     public function createQueryBuilder($alias, $indexBy = null)

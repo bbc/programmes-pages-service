@@ -50,7 +50,7 @@ class Segment
         Synopses $synopses,
         string $title = null,
         int $duration = null,
-        $contributions = null
+        array $contributions = null
     ) {
         $this->dbId = $dbId;
         $this->pid = $pid;
