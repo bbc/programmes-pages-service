@@ -155,8 +155,12 @@ class BackfillRepository extends EntityRepository
     {
         // Unlock all rows on shutdown (if we can)
         $em = $this->getEntityManager();
-        if ($em->isOpen() && $em->getConnection()->ping()) {
-            $this->unlockAll();
+        try {
+            if ($em->isOpen() && $em->getConnection()->ping()) {
+                $this->unlockAll();
+            }
+        } catch (\Exception $e) {
+            return;
         }
     }
 
