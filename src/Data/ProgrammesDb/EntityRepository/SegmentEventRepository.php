@@ -22,6 +22,20 @@ class SegmentEventRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findByPidFull(string $pid)
+    {
+        $qb = $this->createQueryBuilder('segmentEvent')
+            ->addSelect(['segment', 'version', 'programmeItem', 'image', 'masterBrand', 'network'])
+            ->join('segmentEvent.segment', 'segment')
+            ->leftJoin('programmeItem.image', 'image')
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->andWhere('segmentEvent.pid = :pid')
+            ->setParameter('pid', $pid);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
+
     /**
      * @param array $dbIds
      * @param int $limit
@@ -91,7 +105,7 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
-    public function findBySegment(array $dbIds, bool $groupByVersionId, int $limit, int $offset) : array
+    public function findBySegmentFull(array $dbIds, bool $groupByVersionId, int $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem', 'image', 'masterBrand', 'network'])
@@ -126,6 +140,21 @@ class SegmentEventRepository extends EntityRepository
             [$this, 'programmeAncestryGetter'],
             ['version', 'programmeItem', 'ancestry']
         );
+    }
+
+    public function findBySegment(array $dbIds, bool $groupByVersionId, int $limit, int $offset) : array
+    {
+        $qb = $this->createQueryBuilder('segmentEvent')
+            ->addSelect(['version', 'programmeItem'])
+            ->andWhere('segmentEvent.segment IN (:dbIds)')
+            ->setParameter('dbIds', $dbIds);
+
+        if ($groupByVersionId) {
+            $qb->addGroupBy('version.id');
+        }
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        //TODO add limit and offset
     }
 
     public function createQueryBuilder($alias, $indexBy = null)

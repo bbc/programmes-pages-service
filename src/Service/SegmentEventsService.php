@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentEventRe
 use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentEventMapper;
 
 class SegmentEventsService extends AbstractService
@@ -15,6 +16,16 @@ class SegmentEventsService extends AbstractService
         SegmentEventMapper $mapper
     ) {
         parent::__construct($repository, $mapper);
+    }
+
+    /**
+     * @return SegmentEvent|null
+     */
+    public function findByPidFull(Pid $pid)
+    {
+        $dbEntity = $this->repository->findByPidFull($pid);
+
+        return $this->mapSingleEntity($dbEntity);
     }
 
     public function findLatestBroadcastedForContributor(
@@ -38,6 +49,22 @@ class SegmentEventsService extends AbstractService
     ): array {
         $dbEntities = $this->repository->findByVersionWithContributions(
             [$version->getDbId()],
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        return $this->mapManyEntities($dbEntities);
+    }
+
+    public function findBySegmentFull(
+        Segment $segment,
+        bool $groupByVersionId = false,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $dbEntities = $this->repository->findBySegmentFull(
+            [$segment->getDbId()],
+            $groupByVersionId,
             $limit,
             $this->getOffset($limit, $page)
         );
