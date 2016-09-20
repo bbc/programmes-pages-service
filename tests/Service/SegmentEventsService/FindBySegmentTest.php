@@ -15,7 +15,7 @@ class FindBySegmentTest extends AbstractSegmentEventsServiceTest
             ->with([$dbId], true, 300, 0)
             ->willReturn($dbData);
 
-        $result = $this->service()->findBySegment($segment, true);
+        $result = $this->service()->findBySegmentFull($segment, true);
         $this->assertEquals($this->segmentEventsFromDbData($dbData), $result);
     }
 
@@ -44,7 +44,7 @@ class FindBySegmentTest extends AbstractSegmentEventsServiceTest
             ->with([$dbId], true, 300, 0)
             ->willReturn([]);
 
-        $result = $this->service()->findBySegment($segment, true);
+        $result = $this->service()->findBySegmentFull($segment, true);
         $this->assertEquals([], $result);
     }
 }
