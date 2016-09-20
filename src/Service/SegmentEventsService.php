@@ -56,6 +56,22 @@ class SegmentEventsService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
+    public function findBySegmentFull(
+        Segment $segment,
+        bool $groupByVersionId = false,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $dbEntities = $this->repository->findBySegmentFull(
+            [$segment->getDbId()],
+            $groupByVersionId,
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        return $this->mapManyEntities($dbEntities);
+    }
+
     public function findBySegment(
         Segment $segment,
         bool $groupByVersionId = false,

@@ -89,7 +89,7 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
-    public function findBySegment(array $dbIds, bool $groupByVersionId, int $limit, int $offset) : array
+    public function findBySegmentFull(array $dbIds, bool $groupByVersionId, int $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem', 'image', 'masterBrand', 'network'])
@@ -123,6 +123,21 @@ class SegmentEventRepository extends EntityRepository
             [$this, 'programmeAncestryGetter'],
             ['version', 'programmeItem', 'ancestry']
         );
+    }
+
+    public function findBySegment(array $dbIds, bool $groupByVersionId, int $limit, int $offset) : array
+    {
+        $qb = $this->createQueryBuilder('segmentEvent')
+            ->addSelect(['version', 'programmeItem'])
+            ->andWhere('segmentEvent.segment IN (:dbIds)')
+            ->setParameter('dbIds', $dbIds);
+
+        if($groupByVersionId) {
+            $qb->addGroupBy('version.id');
+        }
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        //TODO add limit and offset
     }
 
     public function createQueryBuilder($alias, $indexBy = null)
