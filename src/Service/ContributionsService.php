@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributionMapper;
+use BBC\ProgrammesPagesService\Service\Util\ServiceConstants;
 
 class ContributionsService extends AbstractService
 {
@@ -19,8 +20,8 @@ class ContributionsService extends AbstractService
 
     public function findByContributionToProgramme(
         Programme $programme,
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        $limit = ServiceConstants::DEFAULT_LIMIT,
+        $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$programme->getDbId()],
@@ -35,8 +36,8 @@ class ContributionsService extends AbstractService
 
     public function findByContributionToVersion(
         Version $version,
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        $limit = ServiceConstants::DEFAULT_LIMIT,
+        $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$version->getDbId()],
@@ -51,8 +52,8 @@ class ContributionsService extends AbstractService
 
     public function findByContributionToSegment(
         Segment $segment,
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        $limit = ServiceConstants::DEFAULT_LIMIT,
+        $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$segment->getDbId()],
@@ -67,8 +68,8 @@ class ContributionsService extends AbstractService
 
     public function findByContributionToSegments(
         array $segments,
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        $limit = ServiceConstants::DEFAULT_LIMIT,
+        $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $segmentIds = array_map(function ($s) {
             return $s->getDbId();

@@ -38,11 +38,11 @@ class SegmentEventRepository extends EntityRepository
 
     /**
      * @param array $dbIds
-     * @param int $limit
-     * @param int $offset
+     * @param $limit
+     * @param $offset
      * @return SegmentEvent[]
      */
-    public function findByVersionWithContributions(array $dbIds, int $limit, int $offset)
+    public function findByVersionWithContributions(array $dbIds, $limit, $offset)
     {
         $qb = $this->createQueryBuilder('segment_event')
             ->addSelect([
@@ -66,7 +66,7 @@ class SegmentEventRepository extends EntityRepository
 
     }
 
-    public function findFullLatestBroadcastedForContributor(int $contributorId, int $limit, int $offset)
+    public function findFullLatestBroadcastedForContributor(int $contributorId, $limit, $offset)
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             // fetching full, so we need a big select to return details
@@ -102,7 +102,7 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
-    public function findBySegmentFull(array $dbIds, bool $groupByVersionId, int $limit, int $offset) : array
+    public function findBySegmentFull(array $dbIds, bool $groupByVersionId, $limit, $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem', 'image', 'masterBrand', 'network'])
@@ -139,7 +139,7 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
-    public function findBySegment(array $dbIds, bool $groupByVersionId, int $limit, int $offset) : array
+    public function findBySegment(array $dbIds, bool $groupByVersionId, $limit, $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem'])

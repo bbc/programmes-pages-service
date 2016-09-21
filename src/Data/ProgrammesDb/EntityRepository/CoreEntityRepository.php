@@ -309,7 +309,7 @@ QUERY;
         return $count ? $count : 0;
     }
 
-    public function findByKeywords(string $keywords, int $limit, int $offset)
+    public function findByKeywords(string $keywords, $limit, $offset)
     {
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));

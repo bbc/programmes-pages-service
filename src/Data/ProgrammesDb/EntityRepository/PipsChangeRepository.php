@@ -46,7 +46,7 @@ class PipsChangeRepository extends EntityRepository
         }
     }
 
-    public function findLatestResults(int $limit = 10, $startCid = null)
+    public function findLatestResults($limit = 10, $startCid = null)
     {
         try {
             $qb = $this->createQueryBuilder('pipsChange')
@@ -66,7 +66,7 @@ class PipsChangeRepository extends EntityRepository
         }
     }
 
-    public function findOldestUnprocessedItems(int $limit = 10)
+    public function findOldestUnprocessedItems($limit = 10)
     {
         try {
             $query = $this->createQueryBuilder('pipsChange')
