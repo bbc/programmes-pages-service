@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 class BroadcastRepository extends EntityRepository
 {
-    public function findByVersion(array $dbIds, string $type, $limit, $offset)
+    public function findByVersion(array $dbIds, string $type, $limit, int $offset)
     {
         if (!in_array($type, ['Broadcast', 'Webcast', 'Any'])) {
             throw new InvalidArgumentException(sprintf(

@@ -21,7 +21,7 @@ class ContributionsService extends AbstractService
     public function findByContributionToProgramme(
         Programme $programme,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$programme->getDbId()],
@@ -37,7 +37,7 @@ class ContributionsService extends AbstractService
     public function findByContributionToVersion(
         Version $version,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$version->getDbId()],
@@ -53,7 +53,7 @@ class ContributionsService extends AbstractService
     public function findByContributionToSegment(
         Segment $segment,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByContributionTo(
             [$segment->getDbId()],
@@ -69,7 +69,7 @@ class ContributionsService extends AbstractService
     public function findByContributionToSegments(
         array $segments,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $segmentIds = array_map(function ($s) {
             return $s->getDbId();

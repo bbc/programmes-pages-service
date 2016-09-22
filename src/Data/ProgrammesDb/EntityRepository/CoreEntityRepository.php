@@ -109,7 +109,7 @@ QUERY;
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findAllWithParents($limit, $offset)
+    public function findAllWithParents($limit, int $offset)
     {
         $qb = $this->createQueryBuilder('programme')
             ->setMaxResults($limit)
@@ -126,7 +126,7 @@ QUERY;
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function findEpisodeGuideChildren($dbId, $limit, $offset)
+    public function findEpisodeGuideChildren($dbId, $limit, int $offset)
     {
         $qText = <<<QUERY
 SELECT programme, image, masterBrand, network, mbImage
@@ -280,7 +280,7 @@ QUERY;
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findDescendants($programme, $limit, $offset)
+    public function findDescendants($programme, $limit, int $offset)
     {
         $qb = $this->getChildrenQueryBuilder($programme)
             ->setMaxResults($limit)
@@ -309,7 +309,7 @@ QUERY;
         return $count ? $count : 0;
     }
 
-    public function findByKeywords(string $keywords, $limit, $offset)
+    public function findByKeywords(string $keywords, $limit, int $offset)
     {
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));

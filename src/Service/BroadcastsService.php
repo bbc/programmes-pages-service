@@ -19,7 +19,7 @@ class BroadcastsService extends AbstractService
     public function findByVersion(
         Version $version,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByVersion(
             [$version->getDbId()],

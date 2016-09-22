@@ -33,7 +33,7 @@ class SegmentEventsService extends AbstractService
     public function findLatestBroadcastedForContributor(
         Contributor $contributor,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findFullLatestBroadcastedForContributor(
             $contributor->getDbId(),
@@ -47,7 +47,7 @@ class SegmentEventsService extends AbstractService
     public function findByVersionWithContributions(
         Version $version,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByVersionWithContributions(
             [$version->getDbId()],
@@ -62,7 +62,7 @@ class SegmentEventsService extends AbstractService
         Segment $segment,
         bool $groupByVersionId = false,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findBySegmentFull(
             [$segment->getDbId()],
@@ -79,7 +79,7 @@ class SegmentEventsService extends AbstractService
         Segment $segment,
         bool $groupByVersionId = false,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findBySegment(
             [$segment->getDbId()],

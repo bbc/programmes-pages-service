@@ -26,7 +26,7 @@ class ProgrammesService extends AbstractService
 
     public function findAll(
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findAllWithParents(
             $limit,
@@ -66,7 +66,7 @@ class ProgrammesService extends AbstractService
     public function findEpisodeGuideChildren(
         Programme $programme,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findEpisodeGuideChildren(
             $programme->getDbId(),
@@ -95,7 +95,7 @@ class ProgrammesService extends AbstractService
     public function findDescendantsByPid(
         Pid $pid,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         // in order for this to be efficient, we need to know the original programme database ID.
         // @todo - investigate another way to do this so we don't need this effectively redundant query
@@ -117,7 +117,7 @@ class ProgrammesService extends AbstractService
     public function findProgrammesByKeywords(
         string $keywords,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
 
         $dbEntities = $this->repository->findByKeywords(

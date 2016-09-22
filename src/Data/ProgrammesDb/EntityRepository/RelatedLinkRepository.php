@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 
 class RelatedLinkRepository extends EntityRepository
 {
-    public function findByRelatedTo(array $dbIds, string $type, $limit, $offset)
+    public function findByRelatedTo(array $dbIds, string $type, $limit, int $offset)
     {
         $columnNameLookup = [
             'programme' => 'relatedToCoreEntity',

@@ -9,7 +9,7 @@ use Doctrine\ORM\Query;
 class SegmentEventRepository extends EntityRepository
 {
     use Traits\ParentTreeWalkerTrait;
-    use Traits\SetLimitAndOffsetTrait;
+    use Traits\SetLimitTrait;
 
     public function findByPid(string $pid)
     {
@@ -42,7 +42,7 @@ class SegmentEventRepository extends EntityRepository
      * @param $offset
      * @return SegmentEvent[]
      */
-    public function findByVersionWithContributions(array $dbIds, $limit, $offset)
+    public function findByVersionWithContributions(array $dbIds, $limit, int $offset)
     {
         $qb = $this->createQueryBuilder('segment_event')
             ->addSelect([
@@ -66,7 +66,7 @@ class SegmentEventRepository extends EntityRepository
 
     }
 
-    public function findFullLatestBroadcastedForContributor(int $contributorId, $limit, $offset)
+    public function findFullLatestBroadcastedForContributor(int $contributorId, $limit, int $offset)
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             // fetching full, so we need a big select to return details
@@ -102,7 +102,7 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
-    public function findBySegmentFull(array $dbIds, bool $groupByVersionId, $limit, $offset) : array
+    public function findBySegmentFull(array $dbIds, bool $groupByVersionId, $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem', 'image', 'masterBrand', 'network'])
@@ -139,7 +139,7 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
-    public function findBySegment(array $dbIds, bool $groupByVersionId, $limit, $offset) : array
+    public function findBySegment(array $dbIds, bool $groupByVersionId, $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem'])

@@ -19,7 +19,7 @@ class RelatedLinksService extends AbstractService
     public function findByRelatedToProgramme(
         Programme $programme,
         $limit = ServiceConstants::DEFAULT_LIMIT,
-        $page = ServiceConstants::DEFAULT_PAGE
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByRelatedTo(
             [$programme->getDbId()],
