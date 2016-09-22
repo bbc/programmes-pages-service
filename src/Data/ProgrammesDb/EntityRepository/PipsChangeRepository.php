@@ -9,6 +9,7 @@ use Doctrine\ORM\NoResultException;
 
 class PipsChangeRepository extends EntityRepository
 {
+    use Traits\SetLimitTrait;
 
     public function addChange(PipsChangeBase $pipsChange)
     {
@@ -46,13 +47,19 @@ class PipsChangeRepository extends EntityRepository
         }
     }
 
+    /**
+     * @param int|null $limit
+     * @param null $startCid
+     * @return array
+     */
     public function findLatestResults($limit = 10, $startCid = null)
     {
         try {
             $qb = $this->createQueryBuilder('pipsChange')
                 ->where('pipsChange.processedTime IS NULL')
-                ->setMaxResults($limit)
                 ->addOrderBy('pipsChange.cid', 'Desc');
+
+            $qb = $this->setLimit($qb, $limit);
 
             if ($startCid) {
                 $qb->andWhere('pipsChange.cid >= :cid')
@@ -66,14 +73,19 @@ class PipsChangeRepository extends EntityRepository
         }
     }
 
+    /**
+     * @param int|null $limit
+     * @return array
+     */
     public function findOldestUnprocessedItems($limit = 10)
     {
         try {
             $query = $this->createQueryBuilder('pipsChange')
                 ->where('pipsChange.processedTime IS NULL')
-                ->setMaxResults($limit)
                 ->addOrderBy('pipsChange.cid', 'Asc')
                 ->getQuery();
+
+            $query = $this->setLimit($query, $limit);
 
             return $query->getResult();
         } catch (NoResultException $e) {

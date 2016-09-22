@@ -8,6 +8,15 @@ use InvalidArgumentException;
 
 class BroadcastRepository extends EntityRepository
 {
+    use Traits\SetLimitTrait;
+
+    /**
+     * @param array $dbIds
+     * @param string $type
+     * @param int|null $limit
+     * @param int $offset
+     * @return mixed
+     */
     public function findByVersion(array $dbIds, string $type, $limit, int $offset)
     {
         if (!in_array($type, ['Broadcast', 'Webcast', 'Any'])) {
@@ -34,9 +43,10 @@ class BroadcastRepository extends EntityRepository
             ->andWhere("broadcast.version IN (:dbIds)")
             ->addOrderBy('broadcast.startAt', 'DESC')
             ->addOrderBy('service.sid', 'DESC')
-            ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
+
+        $qb = $this->setLimit($qb, $limit);
 
         if (!is_null($isWebcast)) {
             $qb->andWhere('broadcast.isWebcast = :isWebcast')

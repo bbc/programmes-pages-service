@@ -38,7 +38,7 @@ class SegmentEventRepository extends EntityRepository
 
     /**
      * @param array $dbIds
-     * @param $limit
+     * @param int|null $limit
      * @param $offset
      * @return SegmentEvent[]
      */
@@ -57,15 +57,21 @@ class SegmentEventRepository extends EntityRepository
             ->leftJoin('contributions.creditRole', 'creditRole')
             ->where("segment_event.version IN (:dbIds)")
             ->addOrderBy('segment_event.position', 'ASC')
+            ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
 
         $qb = $this->setLimit($qb, $limit);
-        $qb = $this->setOffset($qb, $offset);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
     }
 
+    /**
+     * @param int $contributorId
+     * @param int|null $limit
+     * @param int $offset
+     * @return array
+     */
     public function findFullLatestBroadcastedForContributor(int $contributorId, $limit, int $offset)
     {
         $qb = $this->createQueryBuilder('segmentEvent')
@@ -81,6 +87,7 @@ class SegmentEventRepository extends EntityRepository
             // this is a left join, as there can be many contributions
             ->leftJoin('segment.contributions', 'contribution')
             ->andWhere('contribution.contributor = :id')
+            ->setFirstResult($offset)
             // now we're going to order using the broadcast
             // first by the most recent broadcast date
             // then by the segmentEvent offset/position in case
@@ -91,7 +98,6 @@ class SegmentEventRepository extends EntityRepository
             ->setParameter('id', $contributorId);
 
         $qb = $this->setLimit($qb, $limit);
-        $qb = $this->setOffset($qb, $offset);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
@@ -102,6 +108,13 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
+    /**
+     * @param array $dbIds
+     * @param bool $groupByVersionId
+     * @param int|null $limit
+     * @param int $offset
+     * @return array
+     */
     public function findBySegmentFull(array $dbIds, bool $groupByVersionId, $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
@@ -116,6 +129,7 @@ class SegmentEventRepository extends EntityRepository
             ->andWhere('segmentEvent.segment IN (:dbIds)')
             // versions that have been broadcast come first
             ->addSelect('CASE WHEN broadcast.startAt IS NULL THEN 1 ELSE 0 AS HIDDEN hasBroadcast')
+            ->setFirstResult($offset)
             ->addOrderBy('hasBroadcast', 'ASC')
             // oldests broadcasts come first
             ->addOrderBy('broadcast.startAt', 'ASC')
@@ -124,7 +138,6 @@ class SegmentEventRepository extends EntityRepository
             ->setParameter('dbIds', $dbIds);
 
         $qb = $this->setLimit($qb, $limit);
-        $qb = $this->setOffset($qb, $offset);
 
         if ($groupByVersionId) {
             $qb->addGroupBy('version.id');
@@ -139,11 +152,19 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
+    /**
+     * @param array $dbIds
+     * @param bool $groupByVersionId
+     * @param int|null $limit
+     * @param int $offset
+     * @return array
+     */
     public function findBySegment(array $dbIds, bool $groupByVersionId, $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem'])
             ->andWhere('segmentEvent.segment IN (:dbIds)')
+            ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
 
         if ($groupByVersionId) {
@@ -151,7 +172,6 @@ class SegmentEventRepository extends EntityRepository
         }
 
         $qb = $this->setLimit($qb, $limit);
-        $qb = $this->setOffset($qb, $offset);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

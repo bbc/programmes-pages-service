@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\Traits;
 
 use BBC\ProgrammesPagesService\Service\Util\ServiceConstants;
 use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -11,7 +12,12 @@ use Doctrine\ORM\QueryBuilder;
  **/
 trait SetLimitTrait
 {
-    protected function setLimit(QueryBuilder $qb, $limit) : QueryBuilder
+    /**
+     * @param Query|QueryBuilder $qb
+     * @param $limit
+     * @return mixed
+     */
+    protected function setLimit($qb, $limit)
     {
         if($limit !== ServiceConstants::NO_LIMIT && !is_integer($limit)) {
             throw new InvalidArgumentException(

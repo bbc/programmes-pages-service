@@ -7,6 +7,15 @@ use Doctrine\ORM\Query;
 
 class RelatedLinkRepository extends EntityRepository
 {
+    use Traits\SetLimitTrait;
+
+    /**
+     * @param array $dbIds
+     * @param string $type
+     * @param int|null $limit
+     * @param int $offset
+     * @return mixed
+     */
     public function findByRelatedTo(array $dbIds, string $type, $limit, int $offset)
     {
         $columnNameLookup = [
@@ -20,9 +29,10 @@ class RelatedLinkRepository extends EntityRepository
             ->andWhere('relatedLink.' . $columnName . ' IN (:dbIds)')
             ->orderBy('relatedLink.position')
             ->addOrderBy('relatedLink.title')
-            ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
+
+        $qb = $this->setLimit($qb, $limit);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
