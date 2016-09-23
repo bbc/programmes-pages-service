@@ -11,6 +11,7 @@ use InvalidArgumentException;
 class CoreEntityRepository extends MaterializedPathRepository
 {
     use Traits\ParentTreeWalkerTrait;
+    use Traits\SetLimitTrait;
     use StripPunctuationTrait;
 
     /**
@@ -109,11 +110,17 @@ QUERY;
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findAllWithParents($limit, $offset)
+    /**
+     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int $offset
+     * @return array
+     */
+    public function findAllWithParents($limit, int $offset)
     {
         $qb = $this->createQueryBuilder('programme')
-            ->setMaxResults($limit)
             ->setFirstResult($offset);
+
+        $qb = $this->setLimit($qb, $limit);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         return $this->resolveParents($result);
@@ -126,7 +133,13 @@ QUERY;
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function findEpisodeGuideChildren($dbId, $limit, $offset)
+    /**
+     * @param int $dbId
+     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int $offset
+     * @return array
+     */
+    public function findEpisodeGuideChildren($dbId, $limit, int $offset)
     {
         $qText = <<<QUERY
 SELECT programme, image, masterBrand, network, mbImage
@@ -141,9 +154,10 @@ ORDER BY programme.position DESC, programme.firstBroadcastDate DESC, programme.t
 QUERY;
 
         $q = $this->getEntityManager()->createQuery($qText)
-            ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->setParameter('dbId', $dbId);
+
+        $q = $this->setLimit($q, $limit);
 
         $result = $q->getResult(Query::HYDRATE_ARRAY);
         return $this->resolveParents($result);
@@ -280,11 +294,18 @@ QUERY;
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findDescendants($programme, $limit, $offset)
+    /**
+     * @param Programme $programme
+     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int $offset
+     * @return array
+     */
+    public function findDescendants($programme, $limit, int $offset)
     {
         $qb = $this->getChildrenQueryBuilder($programme)
-            ->setMaxResults($limit)
             ->setFirstResult($offset);
+
+        $qb = $this->setLimit($qb, $limit);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
@@ -309,7 +330,13 @@ QUERY;
         return $count ? $count : 0;
     }
 
-    public function findByKeywords(string $keywords, int $limit, int $offset)
+    /**
+     * @param string $keywords
+     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int $offset
+     * @return mixed
+     */
+    public function findByKeywords(string $keywords, $limit, int $offset)
     {
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));
@@ -334,11 +361,12 @@ WHERE MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :booleanKey
 ORDER BY rel DESC
 QUERY;
         $q = $this->getEntityManager()->createQuery($qText)
-            ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->setParameter('keywords', $keywords)
             ->setParameter('booleanKeywords', $booleanKeywords)
             ->setParameter('quotedKeywords', '"' . $keywords . '"');
+
+        $q = $this->setLimit($q, $limit);
 
         return $q->getResult(Query::HYDRATE_ARRAY);
     }

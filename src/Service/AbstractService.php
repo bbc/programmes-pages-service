@@ -3,14 +3,12 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
+use BBC\ProgrammesPagesService\Service\Util\ServiceConstants;
+use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
 use Doctrine\ORM\EntityRepository;
 
 abstract class AbstractService
 {
-    const DEFAULT_PAGE = 1;
-    const DEFAULT_LIMIT = 300;
-    const NO_LIMIT = 0;
-
     /**
      * @var MapperInterface
      */
@@ -29,8 +27,22 @@ abstract class AbstractService
         $this->mapper = $mapper;
     }
 
-    protected function getOffset($limit, $page): int
+    protected function getOffset($limit, int $page): int
     {
+        if ($limit !== ServiceConstants::NO_LIMIT && !is_integer($limit)) {
+            throw new InvalidArgumentException(
+                'Limit should either be ServiceConstants::NO_LIMIT or an integer but got ' . $limit
+            );
+        }
+
+        if ($page < 1) {
+            throw new InvalidArgumentException('Page should be greater than 0 but got ' . $page);
+        }
+
+        if ($limit === ServiceConstants::NO_LIMIT && $page !== 1) {
+            throw new InvalidArgumentException('Page greater than 1 with no limit? Are you sure?');
+        }
+
         return $limit * ($page - 1);
     }
 

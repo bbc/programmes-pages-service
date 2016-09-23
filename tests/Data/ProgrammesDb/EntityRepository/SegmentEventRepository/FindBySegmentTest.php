@@ -20,7 +20,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
         $this->disableEmbargoedFilter();
     }
 
-    public function testFindBySegment()
+    public function testFindBySegmentFull()
     {
         $this->loadFixtures(['SegmentEventFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
@@ -32,7 +32,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
                 return $this->getDbIdFromPid($dbId, 'Segment');
             }, $pids);
 
-            $entities = $repo->findBySegment($ids, $groupByVersionId, $limit, $offset);
+            $entities = $repo->findBySegmentFull($ids, $groupByVersionId, $limit, $offset);
             $this->assertEquals($expectedPids, array_column($entities, 'pid'));
 
             // findBySegment query only
@@ -74,7 +74,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
         $expectedPids = ['sv00009', 'sv000011', 'sv000010'];
 
         $dbId = $this->getDbIdFromPid('s0000003', 'Segment');
-        $entities = $repo->findBySegment([$dbId], true, 50, 0);
+        $entities = $repo->findBySegmentFull([$dbId], true, 50, 0);
 
         // Expect embargoed version to be last (ORDER BY hasBroadcast ASC)
         $this->assertEquals($expectedPids, array_column($entities, 'pid'));
@@ -100,7 +100,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
                 return $this->getDbIdFromPid($dbId, 'Segment');
             }, $pids);
 
-            $entities = $repo->findBySegment($ids, true, $limit, $offset);
+            $entities = $repo->findBySegmentFull($ids, true, $limit, $offset);
 
             // Expect embargoed version to be last (ORDER BY hasBroadcast ASC)
             $this->assertEquals($expectedPids, array_column($entities, 'pid'));

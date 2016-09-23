@@ -10,6 +10,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
+use BBC\ProgrammesPagesService\Service\Util\ServiceConstants;
 
 class ProgrammesService extends AbstractService
 {
@@ -24,8 +25,8 @@ class ProgrammesService extends AbstractService
     }
 
     public function findAll(
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        $limit = ServiceConstants::DEFAULT_LIMIT,
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findAllWithParents(
             $limit,
@@ -64,8 +65,8 @@ class ProgrammesService extends AbstractService
 
     public function findEpisodeGuideChildren(
         Programme $programme,
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        $limit = ServiceConstants::DEFAULT_LIMIT,
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findEpisodeGuideChildren(
             $programme->getDbId(),
@@ -93,8 +94,8 @@ class ProgrammesService extends AbstractService
 
     public function findDescendantsByPid(
         Pid $pid,
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        $limit = ServiceConstants::DEFAULT_LIMIT,
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
         // in order for this to be efficient, we need to know the original programme database ID.
         // @todo - investigate another way to do this so we don't need this effectively redundant query
@@ -115,8 +116,8 @@ class ProgrammesService extends AbstractService
 
     public function findProgrammesByKeywords(
         string $keywords,
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        $limit = ServiceConstants::DEFAULT_LIMIT,
+        int $page = ServiceConstants::DEFAULT_PAGE
     ): array {
 
         $dbEntities = $this->repository->findByKeywords(

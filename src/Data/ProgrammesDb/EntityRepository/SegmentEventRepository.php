@@ -9,7 +9,7 @@ use Doctrine\ORM\Query;
 class SegmentEventRepository extends EntityRepository
 {
     use Traits\ParentTreeWalkerTrait;
-    use Traits\SetLimitAndOffsetTrait;
+    use Traits\SetLimitTrait;
 
     public function findByPid(string $pid)
     {
@@ -22,13 +22,27 @@ class SegmentEventRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findByPidFull(string $pid)
+    {
+        $qb = $this->createQueryBuilder('segmentEvent')
+            ->addSelect(['segment', 'version', 'programmeItem', 'image', 'masterBrand', 'network'])
+            ->join('segmentEvent.segment', 'segment')
+            ->leftJoin('programmeItem.image', 'image')
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->andWhere('segmentEvent.pid = :pid')
+            ->setParameter('pid', $pid);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
+
     /**
      * @param array $dbIds
-     * @param int $limit
+     * @param int|ServiceConstants::NO_LIMIT $limit
      * @param int $offset
      * @return SegmentEvent[]
      */
-    public function findByVersionWithContributions(array $dbIds, int $limit, int $offset)
+    public function findByVersionWithContributions(array $dbIds, $limit, int $offset)
     {
         $qb = $this->createQueryBuilder('segment_event')
             ->addSelect([
@@ -43,20 +57,23 @@ class SegmentEventRepository extends EntityRepository
             ->leftJoin('contributions.creditRole', 'creditRole')
             ->where("segment_event.version IN (:dbIds)")
             ->addOrderBy('segment_event.position', 'ASC')
+            ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
 
         $qb = $this->setLimit($qb, $limit);
-        $qb = $this->setOffset($qb, $offset);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
     }
 
-    public function findFullLatestBroadcastedForContributor(
-        int $contributorId,
-        int $limit = 0,
-        int $offset = 0
-    ) {
+    /**
+     * @param int $contributorId
+     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int $offset
+     * @return array
+     */
+    public function findFullLatestBroadcastedForContributor(int $contributorId, $limit, int $offset)
+    {
         $qb = $this->createQueryBuilder('segmentEvent')
             // fetching full, so we need a big select to return details
             ->select([
@@ -70,6 +87,7 @@ class SegmentEventRepository extends EntityRepository
             // this is a left join, as there can be many contributions
             ->leftJoin('segment.contributions', 'contribution')
             ->andWhere('contribution.contributor = :id')
+            ->setFirstResult($offset)
             // now we're going to order using the broadcast
             // first by the most recent broadcast date
             // then by the segmentEvent offset/position in case
@@ -80,7 +98,6 @@ class SegmentEventRepository extends EntityRepository
             ->setParameter('id', $contributorId);
 
         $qb = $this->setLimit($qb, $limit);
-        $qb = $this->setOffset($qb, $offset);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
@@ -91,7 +108,14 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
-    public function findBySegment(array $dbIds, bool $groupByVersionId, int $limit, int $offset) : array
+    /**
+     * @param array $dbIds
+     * @param bool $groupByVersionId
+     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int $offset
+     * @return array
+     */
+    public function findBySegmentFull(array $dbIds, bool $groupByVersionId, $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem', 'image', 'masterBrand', 'network'])
@@ -102,9 +126,10 @@ class SegmentEventRepository extends EntityRepository
             // network needs to be fetched in order to create masterBrand
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('version.broadcasts', 'broadcast')
-            ->where('segmentEvent.segment IN (:dbIds)')
+            ->andWhere('segmentEvent.segment IN (:dbIds)')
             // versions that have been broadcast come first
             ->addSelect('CASE WHEN broadcast.startAt IS NULL THEN 1 ELSE 0 AS HIDDEN hasBroadcast')
+            ->setFirstResult($offset)
             ->addOrderBy('hasBroadcast', 'ASC')
             // oldests broadcasts come first
             ->addOrderBy('broadcast.startAt', 'ASC')
@@ -113,7 +138,6 @@ class SegmentEventRepository extends EntityRepository
             ->setParameter('dbIds', $dbIds);
 
         $qb = $this->setLimit($qb, $limit);
-        $qb = $this->setOffset($qb, $offset);
 
         if ($groupByVersionId) {
             $qb->addGroupBy('version.id');
@@ -126,6 +150,30 @@ class SegmentEventRepository extends EntityRepository
             [$this, 'programmeAncestryGetter'],
             ['version', 'programmeItem', 'ancestry']
         );
+    }
+
+    /**
+     * @param array $dbIds
+     * @param bool $groupByVersionId
+     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int $offset
+     * @return array
+     */
+    public function findBySegment(array $dbIds, bool $groupByVersionId, $limit, int $offset) : array
+    {
+        $qb = $this->createQueryBuilder('segmentEvent')
+            ->addSelect(['version', 'programmeItem'])
+            ->andWhere('segmentEvent.segment IN (:dbIds)')
+            ->setFirstResult($offset)
+            ->setParameter('dbIds', $dbIds);
+
+        if ($groupByVersionId) {
+            $qb->addGroupBy('version.id');
+        }
+
+        $qb = $this->setLimit($qb, $limit);
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function createQueryBuilder($alias, $indexBy = null)
