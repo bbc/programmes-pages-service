@@ -111,7 +111,7 @@ QUERY;
     }
 
     /**
-     * @param int|null $limit
+     * @param int|ServiceConstants::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
@@ -134,8 +134,8 @@ QUERY;
     }
 
     /**
-     * @param $dbId
-     * @param int|null $limit
+     * @param int $dbId
+     * @param int|ServiceConstants::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
@@ -295,8 +295,8 @@ QUERY;
     }
 
     /**
-     * @param $programme
-     * @param int|null $limit
+     * @param Programme $programme
+     * @param int|ServiceConstants::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
@@ -332,7 +332,7 @@ QUERY;
 
     /**
      * @param string $keywords
-     * @param int|null $limit
+     * @param int|ServiceConstants::NO_LIMIT $limit
      * @param int $offset
      * @return mixed
      */

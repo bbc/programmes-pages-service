@@ -19,15 +19,13 @@ trait SetLimitTrait
      */
     protected function setLimit($qb, $limit)
     {
-        if($limit !== ServiceConstants::NO_LIMIT && !is_integer($limit)) {
+        if ($limit !== ServiceConstants::NO_LIMIT && !is_integer($limit)) {
             throw new InvalidArgumentException(
-                'Limit should either be ServiceConstants::NO_LIMIT or an integer, but got ' . $limit);
+                'Limit should either be ServiceConstants::NO_LIMIT or an integer, but got ' . $limit
+            );
         }
 
-        if ($limit !== ServiceConstants::NO_LIMIT) {
-            $qb->setMaxResults($limit);
-        }
-
+        $qb->setMaxResults($limit);
         return $qb;
     }
 }

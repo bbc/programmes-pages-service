@@ -27,7 +27,7 @@ class BackfillRepository extends EntityRepository
      * that has already started, so NEVER call this with an open transaction.
      * MySQL does not support nested transactions.
      *
-     * @param $limit
+     * @param int|ServiceConstants::NO_LIMIT $limit
      * @return \BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\BackfillBase[]
      * @throws \Exception
      */

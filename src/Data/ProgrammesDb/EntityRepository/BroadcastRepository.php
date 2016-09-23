@@ -13,7 +13,7 @@ class BroadcastRepository extends EntityRepository
     /**
      * @param array $dbIds
      * @param string $type
-     * @param int|null $limit
+     * @param int|ServiceConstants::NO_LIMIT $limit
      * @param int $offset
      * @return mixed
      */

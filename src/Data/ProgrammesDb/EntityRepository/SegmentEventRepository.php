@@ -38,8 +38,8 @@ class SegmentEventRepository extends EntityRepository
 
     /**
      * @param array $dbIds
-     * @param int|null $limit
-     * @param $offset
+     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int $offset
      * @return SegmentEvent[]
      */
     public function findByVersionWithContributions(array $dbIds, $limit, int $offset)
@@ -68,7 +68,7 @@ class SegmentEventRepository extends EntityRepository
 
     /**
      * @param int $contributorId
-     * @param int|null $limit
+     * @param int|ServiceConstants::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
@@ -111,7 +111,7 @@ class SegmentEventRepository extends EntityRepository
     /**
      * @param array $dbIds
      * @param bool $groupByVersionId
-     * @param int|null $limit
+     * @param int|ServiceConstants::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
@@ -155,7 +155,7 @@ class SegmentEventRepository extends EntityRepository
     /**
      * @param array $dbIds
      * @param bool $groupByVersionId
-     * @param int|null $limit
+     * @param int|ServiceConstants::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
