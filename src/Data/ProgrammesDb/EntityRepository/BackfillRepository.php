@@ -27,11 +27,11 @@ class BackfillRepository extends EntityRepository
      * that has already started, so NEVER call this with an open transaction.
      * MySQL does not support nested transactions.
      *
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int $limit
      * @return \BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\BackfillBase[]
      * @throws \Exception
      */
-    public function findAndLockOldestUnprocessedItems($limit = 10)
+    public function findAndLockOldestUnprocessedItems(int $limit = 10)
     {
         $em = $this->getEntityManager();
         try {
@@ -212,7 +212,7 @@ class BackfillRepository extends EntityRepository
         }
     }
 
-    public function findLatestResults($limit = 10, $startId = null)
+    public function findLatestResults(int $limit = 10, $startId = null)
     {
         try {
             $qb = $this->createQueryBuilder('backfill')
@@ -232,7 +232,7 @@ class BackfillRepository extends EntityRepository
         }
     }
 
-    public function findOldestUnprocessedItems($limit = 10)
+    public function findOldestUnprocessedItems(int $limit = 10)
     {
         try {
             $query = $this->createQueryBuilder('backfill')
