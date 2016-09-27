@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use InvalidArgumentException;
+use DateTimeInterface;
 
 class CoreEntityRepository extends MaterializedPathRepository
 {
@@ -111,7 +112,7 @@ QUERY;
     }
 
     /**
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
@@ -135,7 +136,7 @@ QUERY;
 
     /**
      * @param int $dbId
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
@@ -264,7 +265,7 @@ QUERY;
 
     public function findAdjacentProgrammeByFirstBroadcastDate(
         int $parentDbId,
-        \DateTimeInterface $firstBroadcastDate,
+        DateTimeInterface $firstBroadcastDate,
         string $entityType,
         string $direction
     ) {
@@ -296,7 +297,7 @@ QUERY;
 
     /**
      * @param Programme $programme
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
@@ -332,7 +333,7 @@ QUERY;
 
     /**
      * @param string $keywords
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @return mixed
      */

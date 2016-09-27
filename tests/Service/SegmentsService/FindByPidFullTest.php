@@ -4,32 +4,32 @@ namespace Tests\BBC\ProgrammesPagesService\Service\SegmentsService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
-class FindByPidTest extends AbstractSegmentsServiceTest
+class FindByPidFullTest extends AbstractSegmentsServiceTest
 {
-    public function testFindByPid()
+    public function testFindByPidFull()
     {
         $pid = new Pid('s1234567');
         $dbData = ['pid' => 's1234567'];
 
         $this->mockRepository->expects($this->once())
-            ->method('findByPid')
+            ->method('findByPidFull')
             ->with($pid)
             ->willReturn($dbData);
 
-        $result = $this->service()->findByPid($pid);
+        $result = $this->service()->findByPidFull($pid);
         $this->assertEquals($this->segmentFromDbData($dbData), $result);
     }
 
-    public function testFindByPidEmptyData()
+    public function testFindByPidFullEmptyData()
     {
         $pid = new Pid('s1234567');
 
         $this->mockRepository->expects($this->once())
-            ->method('findByPid')
+            ->method('findByPidFull')
             ->with($pid)
             ->willReturn(null);
 
-        $result = $this->service()->findByPid($pid);
+        $result = $this->service()->findByPidFull($pid);
         $this->assertEquals(null, $result);
     }
 }

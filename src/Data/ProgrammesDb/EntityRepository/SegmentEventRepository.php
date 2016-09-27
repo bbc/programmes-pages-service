@@ -25,11 +25,24 @@ class SegmentEventRepository extends EntityRepository
     public function findByPidFull(string $pid)
     {
         $qb = $this->createQueryBuilder('segmentEvent')
-            ->addSelect(['segment', 'version', 'programmeItem', 'image', 'masterBrand', 'network'])
+            ->addSelect([
+                'segment',
+                'version',
+                'programmeItem',
+                'image',
+                'masterBrand',
+                'network',
+                'contribution',
+                'contributor',
+                'creditRole',
+            ])
             ->join('segmentEvent.segment', 'segment')
             ->leftJoin('programmeItem.image', 'image')
             ->leftJoin('programmeItem.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('segment.contributions', 'contribution')
+            ->leftJoin('contribution.contributor', 'contributor')
+            ->leftJoin('contribution.creditRole', 'creditRole')
             ->andWhere('segmentEvent.pid = :pid')
             ->setParameter('pid', $pid);
 
@@ -38,7 +51,7 @@ class SegmentEventRepository extends EntityRepository
 
     /**
      * @param array $dbIds
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @return SegmentEvent[]
      */
@@ -68,7 +81,7 @@ class SegmentEventRepository extends EntityRepository
 
     /**
      * @param int $contributorId
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
@@ -111,7 +124,7 @@ class SegmentEventRepository extends EntityRepository
     /**
      * @param array $dbIds
      * @param bool $groupByVersionId
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */
@@ -155,7 +168,7 @@ class SegmentEventRepository extends EntityRepository
     /**
      * @param array $dbIds
      * @param bool $groupByVersionId
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @return array
      */

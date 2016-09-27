@@ -2,7 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\Traits;
 
-use BBC\ProgrammesPagesService\Service\Util\ServiceConstants;
+use BBC\ProgrammesPagesService\Service\AbstractService;
 use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -19,13 +19,16 @@ trait SetLimitTrait
      */
     protected function setLimit($qb, $limit)
     {
-        if ($limit !== ServiceConstants::NO_LIMIT && !is_integer($limit)) {
+        if ($limit !== AbstractService::NO_LIMIT && !is_integer($limit)) {
             throw new InvalidArgumentException(
-                'Limit should either be ServiceConstants::NO_LIMIT or an integer, but got ' . $limit
+                'Limit should either be AbstractService::NO_LIMIT or an integer, but got ' . $limit
             );
         }
 
-        $qb->setMaxResults($limit);
+        if ($limit !== AbstractService::NO_LIMIT) {
+            $qb->setMaxResults($limit);
+        }
+
         return $qb;
     }
 }

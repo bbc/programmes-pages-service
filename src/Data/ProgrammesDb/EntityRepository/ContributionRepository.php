@@ -13,7 +13,7 @@ class ContributionRepository extends EntityRepository
      * @param array $dbIds
      * @param string $type
      * @param bool $getContributionTo
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @return mixed
      */

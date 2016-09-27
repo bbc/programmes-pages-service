@@ -34,4 +34,11 @@ class VersionsService extends AbstractService
 
         return $this->mapManyEntities($dbEntities);
     }
+
+    public function findCanonicalByProgrammeItem(ProgrammeItem $programmeItem)
+    {
+        $dbEntity = $this->repository->findCanonicalByProgrammeItem($programmeItem->getDbId());
+
+        return $this->mapSingleEntity($dbEntity);
+    }
 }

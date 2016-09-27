@@ -48,7 +48,7 @@ class PipsChangeRepository extends EntityRepository
     }
 
     /**
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @param null $startCid
      * @return array
      */
@@ -74,7 +74,7 @@ class PipsChangeRepository extends EntityRepository
     }
 
     /**
-     * @param int|ServiceConstants::NO_LIMIT $limit
+     * @param int|AbstractService::NO_LIMIT $limit
      * @return array
      */
     public function findOldestUnprocessedItems($limit = 10)

@@ -9,7 +9,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentEventMapper;
-use BBC\ProgrammesPagesService\Service\Util\ServiceConstants;
 
 class SegmentEventsService extends AbstractService
 {
@@ -32,8 +31,8 @@ class SegmentEventsService extends AbstractService
 
     public function findLatestBroadcastedForContributor(
         Contributor $contributor,
-        $limit = ServiceConstants::DEFAULT_LIMIT,
-        int $page = ServiceConstants::DEFAULT_PAGE
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findFullLatestBroadcastedForContributor(
             $contributor->getDbId(),
@@ -46,8 +45,8 @@ class SegmentEventsService extends AbstractService
 
     public function findByVersionWithContributions(
         Version $version,
-        $limit = ServiceConstants::DEFAULT_LIMIT,
-        int $page = ServiceConstants::DEFAULT_PAGE
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByVersionWithContributions(
             [$version->getDbId()],
@@ -61,8 +60,8 @@ class SegmentEventsService extends AbstractService
     public function findBySegmentFull(
         Segment $segment,
         bool $groupByVersionId = false,
-        $limit = ServiceConstants::DEFAULT_LIMIT,
-        int $page = ServiceConstants::DEFAULT_PAGE
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findBySegmentFull(
             [$segment->getDbId()],
@@ -78,8 +77,8 @@ class SegmentEventsService extends AbstractService
     public function findBySegment(
         Segment $segment,
         bool $groupByVersionId = false,
-        $limit = ServiceConstants::DEFAULT_LIMIT,
-        int $page = ServiceConstants::DEFAULT_PAGE
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findBySegment(
             [$segment->getDbId()],
