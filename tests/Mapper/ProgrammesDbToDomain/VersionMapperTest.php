@@ -41,11 +41,12 @@ class VersionMapperTest extends BaseMapperTestCase
             'pid' => 'b0007c3v',
             'duration' => '360',
             'guidanceWarningCodes' => 'warnings',
+            'competitionWarning' => true,
+            'segmentEventCount' => 2,
             'streamable' => true,
             'downloadable' => false,
             'streamableFrom' => $streamableFrom,
             'streamableUntil' => $streamableUntil,
-            'competitionWarning' => true,
             'programmeItem' => $programmeDbEntity,
             'versionTypes' => [
                 ['type' => 'original', 'name' => 'Original Version'],
@@ -65,6 +66,7 @@ class VersionMapperTest extends BaseMapperTestCase
             $expectedProgrammeDomainEntity,
             true,
             false,
+            2,
             360,
             'warnings',
             true,
@@ -88,10 +90,11 @@ class VersionMapperTest extends BaseMapperTestCase
             'duration' => '360',
             'guidanceWarningCodes' => 'warnings',
             'competitionWarning' => true,
+            'segmentEventCount' => 2,
             'streamable' => true,
+            'downloadable' => false,
             'streamableFrom' => null,
             'streamableUntil' => null,
-            'downloadable' => false,
             'versionTypes' => [],
         ];
 
@@ -120,10 +123,11 @@ class VersionMapperTest extends BaseMapperTestCase
             'duration' => '360',
             'guidanceWarningCodes' => 'warnings',
             'competitionWarning' => true,
+            'segmentEventCount' => 2,
             'streamable' => true,
+            'downloadable' => false,
             'streamableFrom' => null,
             'streamableUntil' => null,
-            'downloadable' => false,
             'programmeItem' => $programmeDbEntity,
         ];
 

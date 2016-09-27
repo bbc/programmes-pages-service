@@ -35,6 +35,11 @@ class Version
     private $isDownloadable;
 
     /**
+     * @var int
+     */
+    private $segmentEventCount;
+
+    /**
      * @var int|null
      */
     private $duration;
@@ -70,6 +75,7 @@ class Version
         ProgrammeItem $programmeItem,
         bool $isStreamable,
         bool $isDownloadable,
+        int $segmentEventCount,
         int $duration = null,
         string $guidanceWarningCodes = null,
         bool $hasCompetitionWarning = false,
@@ -93,6 +99,7 @@ class Version
         $this->programmeItem = $programmeItem;
         $this->isStreamable = $isStreamable;
         $this->isDownloadable = $isDownloadable;
+        $this->segmentEventCount = $segmentEventCount;
         $this->duration = $duration;
         $this->guidanceWarningCodes = $guidanceWarningCodes;
         $this->hasCompetitionWarning = $hasCompetitionWarning;
@@ -135,6 +142,11 @@ class Version
     public function isDownloadable(): bool
     {
         return $this->isDownloadable;
+    }
+
+    public function getSegmentEventCount(): int
+    {
+        return $this->segmentEventCount;
     }
 
     /**

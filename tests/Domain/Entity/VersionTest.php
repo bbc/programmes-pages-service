@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use DateTimeImmutable;
 use PHPUnit_Framework_TestCase;
 
 class VersionTest extends PHPUnit_Framework_TestCase
@@ -15,13 +16,14 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
 
-        $version = new Version(0, $pid, $episode, true, false);
+        $version = new Version(0, $pid, $episode, true, false, 1);
 
         $this->assertEquals(0, $version->getDbId());
         $this->assertEquals($pid, $version->getPid());
         $this->assertEquals($episode, $version->getProgrammeItem());
         $this->assertEquals(true, $version->isStreamable());
         $this->assertEquals(false, $version->isDownloadable());
+        $this->assertEquals(1, $version->getSegmentEventCount());
         $this->assertEquals(false, $version->hasCompetitionWarning());
     }
 
@@ -31,8 +33,8 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
         $versionType = new VersionType('original', 'Original version');
 
-        $streamableFrom = new \DateTimeImmutable();
-        $streamableUntil = new \DateTimeImmutable('00:00:00 01/01/1970');
+        $streamableFrom = new DateTimeImmutable();
+        $streamableUntil = new DateTimeImmutable('00:00:00 01/01/1970');
 
         $version = new Version(
             0,
@@ -40,6 +42,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
             $episode,
             true,
             false,
+            1,
             101,
             'GuidanceWarnings',
             true,
@@ -65,7 +68,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
 
-        $version = new Version(0, $pid, $episode, true, false);
+        $version = new Version(0, $pid, $episode, true, false, 1);
 
         $version->getVersionTypes();
     }
@@ -86,6 +89,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
             $programmeItem,
             true,
             true,
+            1,
             101,
             'GuidanceWarnings',
             true,
@@ -111,6 +115,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
             $programmeItem,
             true,
             true,
+            1,
             101,
             'GuidanceWarnings',
             true,

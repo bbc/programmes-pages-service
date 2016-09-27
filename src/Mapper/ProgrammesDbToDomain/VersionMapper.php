@@ -19,6 +19,7 @@ class VersionMapper extends AbstractMapper
             $this->getProgrammeItemModel($dbVersion),
             $dbVersion['streamable'],
             $dbVersion['downloadable'],
+            $dbVersion['segmentEventCount'],
             $dbVersion['duration'],
             $dbVersion['guidanceWarningCodes'],
             $dbVersion['competitionWarning'],
