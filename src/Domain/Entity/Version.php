@@ -4,7 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
-use \DateTimeImmutable;
+use DateTimeImmutable;
 use InvalidArgumentException;
 
 class Version
@@ -20,6 +20,21 @@ class Version
     private $pid;
 
     /**
+     * @var ProgrammeItem
+     */
+    private $programmeItem;
+
+    /**
+     * @var bool
+     */
+    private $isStreamable;
+
+    /**
+     * @var bool
+     */
+    private $isDownloadable;
+
+    /**
      * @var int|null
      */
     private $duration;
@@ -33,21 +48,6 @@ class Version
      * @var bool
      */
     private $hasCompetitionWarning;
-
-    /**
-     * @var ProgrammeItem
-     */
-    private $programmeItem;
-
-    /**
-     * @var bool
-     */
-    private $isDownloadable;
-
-    /**
-     * @var bool
-     */
-    private $isStreamable;
 
     /**
      * @var DateTimeImmutable|null
@@ -90,12 +90,12 @@ class Version
 
         $this->dbId = $dbId;
         $this->pid = $pid;
+        $this->programmeItem = $programmeItem;
         $this->isStreamable = $isStreamable;
         $this->isDownloadable = $isDownloadable;
         $this->duration = $duration;
         $this->guidanceWarningCodes = $guidanceWarningCodes;
         $this->hasCompetitionWarning = $hasCompetitionWarning;
-        $this->programmeItem = $programmeItem;
         $this->streamableFrom = $streamableFrom;
         $this->streamableUntil = $streamableUntil;
         $this->versionTypes = $versionTypes;
@@ -117,9 +117,24 @@ class Version
         return $this->dbId;
     }
 
-    public function getPid(): string
+    public function getPid(): Pid
     {
         return $this->pid;
+    }
+
+    public function getProgrammeItem(): ProgrammeItem
+    {
+        return $this->programmeItem;
+    }
+
+    public function isStreamable(): bool
+    {
+        return $this->isStreamable;
+    }
+
+    public function isDownloadable(): bool
+    {
+        return $this->isDownloadable;
     }
 
     /**
@@ -144,24 +159,6 @@ class Version
     }
 
     /**
-     * @return ProgrammeItem|null
-     */
-    public function getProgrammeItem()
-    {
-        return $this->programmeItem;
-    }
-
-    public function isDownloadable(): bool
-    {
-        return $this->isDownloadable;
-    }
-
-    public function isStreamable(): bool
-    {
-        return $this->isStreamable;
-    }
-
-    /**
      * @return DateTimeImmutable|null
      */
     public function getStreamableFrom()
@@ -178,7 +175,7 @@ class Version
     }
 
     /**
-     * @return array|VersionType[]
+     * @return VersionType[]
      * @throws DataNotFetchedException
      */
     public function getVersionTypes(): array
