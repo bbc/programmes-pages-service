@@ -44,7 +44,7 @@ abstract class ProgrammeContainer extends Programme
     private $expectedChildCount;
 
     public function __construct(
-        int $dbId,
+        array $dbAncestryIds,
         Pid $pid,
         string $title,
         string $searchTitle,
@@ -70,7 +70,7 @@ abstract class ProgrammeContainer extends Programme
         int $expectedChildCount = null
     ) {
         parent::__construct(
-            $dbId,
+            $dbAncestryIds,
             $pid,
             $title,
             $searchTitle,

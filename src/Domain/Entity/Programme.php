@@ -12,9 +12,9 @@ use InvalidArgumentException;
 abstract class Programme
 {
     /**
-     * @var int
+     * @var int[]
      */
-    private $dbId;
+    private $dbAncestryIds;
 
     /**
      * @var Pid
@@ -97,7 +97,7 @@ abstract class Programme
     private $firstBroadcastDate;
 
     public function __construct(
-        int $dbId,
+        array $dbAncestryIds,
         Pid $pid,
         string $title,
         string $searchTitle,
@@ -115,10 +115,11 @@ abstract class Programme
         array $formats = [],
         DateTimeImmutable $firstBroadcastDate = null
     ) {
+        $this->assertAncestry($dbAncestryIds);
         $this->assertArrayOfType('genres', $genres, Genre::CLASS);
         $this->assertArrayOfType('formats', $formats, Format::CLASS);
 
-        $this->dbId = $dbId;
+        $this->dbAncestryIds = $dbAncestryIds;
         $this->pid = $pid;
         $this->title = $title;
         $this->searchTitle = $searchTitle;
@@ -150,7 +151,21 @@ abstract class Programme
      */
     public function getDbId(): int
     {
-        return $this->dbId;
+        return end($this->dbAncestryIds);
+    }
+
+    /**
+     * Database Ancestry IDs. Yes, this is a leaky abstraction (see above).
+     * However it is useful to know the full ancestry if we want to make queries
+     * searching through all descendants like "All Clips underneath a Brand at
+     * any level, not just immediate children". This saves joining the
+     * CoreEntity table to itself which is expensive.
+     *
+     * @return int[]
+     */
+    public function getDbAncestryIds(): array
+    {
+        return $this->dbAncestryIds;
     }
 
     public function getPid(): Pid
@@ -293,6 +308,24 @@ abstract class Programme
                     'Tried to create a Programme with invalid %s. Expected an array of %s but the array contained an instance of "%s"',
                     $property,
                     $expectedType,
+                    (is_object($item) ? get_class($item) : gettype($item))
+                ));
+            }
+        }
+
+        return true;
+    }
+
+    private function assertAncestry($array)
+    {
+        if (empty($array)) {
+            throw new InvalidArgumentException('Tried to create a Programme with invalid ancestry. Expected a non-empty array of integers but the array was empty');
+        }
+
+        foreach ($array as $item) {
+            if (!is_int($item)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Tried to create a Programme with invalid ancestry. Expected a non-empty array of integers but the array contained an instance of "%s"',
                     (is_object($item) ? get_class($item) : gettype($item))
                 ));
             }

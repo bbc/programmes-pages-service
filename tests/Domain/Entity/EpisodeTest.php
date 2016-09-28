@@ -23,7 +23,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Episode(
-            0,
+            [0, 1, 2],
             $pid,
             'Title',
             'Search Title',
@@ -41,7 +41,8 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             1303
         );
 
-        $this->assertEquals(0, $programme->getDbId());
+        $this->assertEquals(2, $programme->getDbId());
+        $this->assertEquals([0, 1, 2], $programme->getDbAncestryIds());
         $this->assertEquals($pid, $programme->getPid());
         $this->assertEquals('Title', $programme->getTitle());
         $this->assertEquals('Search Title', $programme->getSearchTitle());
@@ -79,7 +80,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $firstBroadcastDate = new DateTimeImmutable();
 
         $programme = new Episode(
-            0,
+            [0],
             $pid,
             'Title',
             'Search Title',
@@ -129,7 +130,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Episode(
-            0,
+            [0],
             $pid,
             'Title',
             'Search Title',
@@ -158,7 +159,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Episode(
-            0,
+            [0],
             $pid,
             'Title',
             'Search Title',

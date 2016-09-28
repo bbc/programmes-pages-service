@@ -19,7 +19,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
     {
         $dbEntityArray = [
             'type' => 'brand',
-            'id' => '1',
+            'ancestry' => '1,',
             'pid' => 'b010t19z',
             'title' => 'Title',
             'searchTitle' => 'Search Title',
@@ -45,7 +45,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         ];
 
         $expectedEntity = new Brand(
-            1,
+            [1],
             new Pid('b010t19z'),
             'Title',
             'Search Title',
@@ -78,7 +78,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
     {
         $dbEntityArray = [
             'type' => 'series',
-            'id' => '1',
+            'ancestry' => '1,',
             'pid' => 'b010t19z',
             'title' => 'Title',
             'searchTitle' => 'Search Title',
@@ -104,7 +104,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         ];
 
         $expectedEntity = new Series(
-            1,
+            [1],
             new Pid('b010t19z'),
             'Title',
             'Search Title',
@@ -137,7 +137,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
     {
         $dbEntityArray = [
             'type' => 'episode',
-            'id' => '1',
+            'ancestry' => '1,',
             'pid' => 'b010t19z',
             'title' => 'Title',
             'searchTitle' => 'Search Title',
@@ -165,7 +165,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         ];
 
         $expectedEntity = new Episode(
-            1,
+            [1],
             new Pid('b010t19z'),
             'Title',
             'Search Title',
@@ -200,7 +200,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
     {
         $dbEntityArray = [
             'type' => 'clip',
-            'id' => '1',
+            'ancestry' => '1,2,3,',
             'pid' => 'b010t19z',
             'title' => 'Title',
             'searchTitle' => 'Search Title',
@@ -225,7 +225,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         ];
 
         $expectedEntity = new Clip(
-            1,
+            [1, 2, 3],
             new Pid('b010t19z'),
             'Title',
             'Search Title',
@@ -257,7 +257,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
     {
         $dbEntityArray = [
             'type' => 'series',
-            'id' => '2',
+            'ancestry' => '1,2,',
             'pid' => 'b010t19z',
             'title' => 'Title',
             'searchTitle' => 'Search Title',
@@ -281,7 +281,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'expectedChildCount' => 1001,
             'parent' => [
                 'type' => 'brand',
-                'id' => '1',
+                'ancestry' => '1,',
                 'pid' => 'b010t19z',
                 'title' => 'Title',
                 'searchTitle' => 'Search Title',
@@ -308,7 +308,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         ];
 
         $expectedEntity = new Series(
-            2,
+            [1, 2],
             new Pid('b010t19z'),
             'Title',
             'Search Title',
@@ -326,7 +326,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             15,
             false,
             new Brand(
-                1,
+                [1],
                 new Pid('b010t19z'),
                 'Title',
                 'Search Title',

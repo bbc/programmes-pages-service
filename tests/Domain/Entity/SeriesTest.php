@@ -20,7 +20,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Series(
-            0,
+            [0, 1, 2],
             $pid,
             'Title',
             'Search Title',
@@ -39,7 +39,8 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             false
         );
 
-        $this->assertEquals(0, $programme->getDbId());
+        $this->assertEquals(2, $programme->getDbId());
+        $this->assertEquals([0, 1, 2], $programme->getDbAncestryIds());
         $this->assertEquals($pid, $programme->getPid());
         $this->assertEquals('Title', $programme->getTitle());
         $this->assertEquals('Search Title', $programme->getSearchTitle());
@@ -76,7 +77,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $firstBroadcastDate = new \DateTimeImmutable();
 
         $programme = new Series(
-            0,
+            [0],
             $pid,
             'Title',
             'Search Title',

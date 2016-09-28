@@ -42,7 +42,7 @@ abstract class ProgrammeItem extends Programme
     private $streamableUntil;
 
     public function __construct(
-        int $dbId,
+        array $dbAncestryIds,
         Pid $pid,
         string $title,
         string $searchTitle,
@@ -77,7 +77,7 @@ abstract class ProgrammeItem extends Programme
         }
 
         parent::__construct(
-            $dbId,
+            $dbAncestryIds,
             $pid,
             $title,
             $searchTitle,

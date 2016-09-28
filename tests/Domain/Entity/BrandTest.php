@@ -21,7 +21,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Brand(
-            0,
+            [0, 1, 2],
             $pid,
             'Title',
             'Search Title',
@@ -40,7 +40,8 @@ class BrandTest extends PHPUnit_Framework_TestCase
             false
         );
 
-        $this->assertEquals(0, $programme->getDbId());
+        $this->assertEquals(2, $programme->getDbId());
+        $this->assertEquals([0, 1, 2], $programme->getDbAncestryIds());
         $this->assertEquals($pid, $programme->getPid());
         $this->assertEquals('Title', $programme->getTitle());
         $this->assertEquals('Search Title', $programme->getSearchTitle());
@@ -77,7 +78,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $firstBroadcastDate = new \DateTimeImmutable();
 
         $programme = new Brand(
-            0,
+            [0],
             $pid,
             'Title',
             'Search Title',
@@ -123,7 +124,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
 
         $programme = new Brand(
-            0,
+            [0],
             $pid,
             'Title',
             'Search Title',
@@ -159,7 +160,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Brand(
-            0,
+            [0],
             $pid,
             'Title',
             'Search Title',

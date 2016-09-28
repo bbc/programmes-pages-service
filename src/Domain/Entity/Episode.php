@@ -26,7 +26,7 @@ class Episode extends ProgrammeItem
 
 
     public function __construct(
-        int $dbId,
+        array $dbAncestryIds,
         Pid $pid,
         string $title,
         string $searchTitle,
@@ -54,7 +54,7 @@ class Episode extends ProgrammeItem
         DateTimeImmutable $streamableUntil = null
     ) {
         parent::__construct(
-            $dbId,
+            $dbAncestryIds,
             $pid,
             $title,
             $searchTitle,

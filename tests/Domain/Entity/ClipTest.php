@@ -23,7 +23,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
         $programme = new Clip(
-            0,
+            [0, 1, 2],
             $pid,
             'Title',
             'Search Title',
@@ -38,7 +38,8 @@ class ClipTest extends PHPUnit_Framework_TestCase
             1201
         );
 
-        $this->assertEquals(0, $programme->getDbId());
+        $this->assertEquals(2, $programme->getDbId());
+        $this->assertEquals([0, 1, 2], $programme->getDbAncestryIds());
         $this->assertEquals($pid, $programme->getPid());
         $this->assertEquals('Title', $programme->getTitle());
         $this->assertEquals('Search Title', $programme->getSearchTitle());
@@ -73,7 +74,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $firstBroadcastDate = new \DateTimeImmutable();
 
         $programme = new Clip(
-            0,
+            [0],
             $pid,
             'Title',
             'Search Title',

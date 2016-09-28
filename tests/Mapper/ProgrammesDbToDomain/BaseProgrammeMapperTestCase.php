@@ -67,7 +67,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
     ) {
         return [
             'type' => 'series',
-            'id' => '1',
+            'ancestry' => '1,',
             'pid' => $pid,
             'title' => 'Title',
             'searchTitle' => 'Search Title',
@@ -108,7 +108,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         Programme $parent = null
     ) {
         return new Series(
-            1,
+            [1],
             new Pid($pid),
             'Title',
             'Search Title',

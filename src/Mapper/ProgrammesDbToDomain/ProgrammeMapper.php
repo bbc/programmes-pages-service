@@ -39,7 +39,7 @@ class ProgrammeMapper extends AbstractMapper
     private function getBrandModel(array $dbProgramme): Brand
     {
         return new Brand(
-            $dbProgramme['id'],
+            $this->getAncestryArray($dbProgramme),
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
@@ -69,7 +69,7 @@ class ProgrammeMapper extends AbstractMapper
     private function getSeriesModel(array $dbProgramme): Series
     {
         return new Series(
-            $dbProgramme['id'],
+            $this->getAncestryArray($dbProgramme),
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
@@ -99,7 +99,7 @@ class ProgrammeMapper extends AbstractMapper
     private function getEpisodeModel(array $dbProgramme): Episode
     {
         return new Episode(
-            $dbProgramme['id'],
+            $this->getAncestryArray($dbProgramme),
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
@@ -131,7 +131,7 @@ class ProgrammeMapper extends AbstractMapper
     private function getClipModel(array $dbProgramme): Clip
     {
         return new Clip(
-            $dbProgramme['id'],
+            $this->getAncestryArray($dbProgramme),
             new Pid($dbProgramme['pid']),
             $dbProgramme['title'],
             $dbProgramme['searchTitle'],
@@ -155,6 +155,17 @@ class ProgrammeMapper extends AbstractMapper
             ($dbProgramme['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableFrom']) : null),
             ($dbProgramme['streamableUntil'] ? DateTimeImmutable::createFromMutable($dbProgramme['streamableUntil']) : null)
         );
+    }
+
+    private function getAncestryArray($dbProgramme, $key = 'ancestry')
+    {
+        // ancestry contains a string of all IDs including the current one with
+        // a trailing comma at the end (which makes it an empty item when exploding)
+        // Thus we want an array of all but the final item (which is null)
+        $ancestors = explode(',', $dbProgramme[$key], -1) ?? [];
+        return array_map(function ($a) {
+            return (int) $a;
+        }, $ancestors);
     }
 
     private function getParentModel($dbProgramme, $key = 'parent')

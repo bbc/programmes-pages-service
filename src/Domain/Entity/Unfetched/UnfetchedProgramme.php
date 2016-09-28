@@ -11,7 +11,7 @@ class UnfetchedProgramme extends Programme
     public function __construct()
     {
         parent::__construct(
-            0,
+            [0],
             new NullPid(),
             '',
             '',
