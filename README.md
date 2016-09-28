@@ -59,6 +59,9 @@ doctrine:
         dql:
             string_functions:
                 MATCH_AGAINST: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\MatchAgainst
+            datetime_functions:
+                YEAR: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Year
+                MONTH: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Month
 ```
 
 Add the doctrine extensions configuration (in config.yml), under the

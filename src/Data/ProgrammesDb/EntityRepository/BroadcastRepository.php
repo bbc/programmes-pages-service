@@ -56,6 +56,19 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findAllYearsAndMonthsByProgramme(array $ancestry)
+    {
+        $qb = $this->createQueryBuilder('broadcast')
+            ->select(['DISTINCT YEAR(broadcast.startAt) as year', 'MONTH(broadcast.startAt) as month'])
+            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
+            ->andWhere("programmeItem.ancestry LIKE :ancestryClause")
+            ->addOrderBy('year', 'DESC')
+            ->addOrderBy('month', 'DESC')
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
+    }
+
     public function createQueryBuilder($alias, $joinViaVersion = true, $indexBy = null)
     {
         // Any time Broadcasts are fetched here they must be inner joined to
@@ -71,5 +84,10 @@ class BroadcastRepository extends EntityRepository
 
         return parent::createQueryBuilder($alias)
             ->join($alias . '.programmeItem', 'programmeItem');
+    }
+
+    private function ancestryIdsToString(array $ancestry)
+    {
+        return implode(',', $ancestry) . ',';
     }
 }

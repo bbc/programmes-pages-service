@@ -105,6 +105,34 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
      */
     protected function getDbIdFromPid(string $pid, string $entityType): int
     {
+        return $this->getColumnValueFromPid($pid, $entityType, 'Id');
+    }
+
+    /**
+     * Shortcut method for getDbIdFromPid (as many tests based on CoreEntity)
+     * @param string $pid
+     * @return int
+     */
+    protected function getCoreEntityDbId(string $pid): int
+    {
+        return $this->getColumnValueFromPid($pid, 'CoreEntity', 'Id');
+    }
+
+    protected function getCoreEntityAncestry(string $pid): array
+    {
+        $ancestryString = $this->getColumnValueFromPid($pid, 'CoreEntity', 'Ancestry');
+
+        // $ancestryString contains a string of all IDs including the current
+        // one with a trailing comma at the end (which is an empty item when exploding).
+        // Thus we want an array of all but the final item (which is null)
+        $ancestry = explode(',', $ancestryString, -1) ?? [];
+        return array_map(function ($a) {
+            return (int) $a;
+        }, $ancestry);
+    }
+
+    private function getColumnValueFromPid(string $pid, string $entityType, string $columnName)
+    {
         // Disable the logger for this call as we don't want to count it
         $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = false;
 
@@ -116,7 +144,7 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
         // findOneByX is a magic bit of Doctrine to access property X.
         // Therefore all Entities with a 'pid' property will have the
         // findOneByPid method.
-        $id = $repo->findOneByPid($pid)->getId();
+        $id = $repo->findOneByPid($pid)->{'get' . $columnName}();
 
         // Return the embargo filter to it's prior state
         if ($embargoFilterWasEnabled) {
@@ -127,15 +155,5 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
         $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = true;
 
         return $id;
-    }
-
-    /**
-     * Shortcut method for getDbIdFromPid (as many tests based on CoreEntity)
-     * @param string $coreEntityPid
-     * @return int
-     */
-    protected function getCoreEntityDbId(string $coreEntityPid): int
-    {
-        return $this->getDbIdFromPid($coreEntityPid, 'CoreEntity');
     }
 }
