@@ -35,9 +35,9 @@ class VersionsService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function findCanonicalByProgrammeItem(ProgrammeItem $programmeItem)
+    public function findByProgrammeItemCanonicalVersion(ProgrammeItem $programmeItem)
     {
-        $dbEntity = $this->repository->findCanonicalByProgrammeItem($programmeItem->getDbId());
+        $dbEntity = $this->repository->findByProgrammeItemCanonicalVersion($programmeItem->getDbId());
 
         return $this->mapSingleEntity($dbEntity);
     }
