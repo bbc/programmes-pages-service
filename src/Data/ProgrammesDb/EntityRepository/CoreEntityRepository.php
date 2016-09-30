@@ -15,6 +15,22 @@ class CoreEntityRepository extends MaterializedPathRepository
     use Traits\SetLimitTrait;
     use StripPunctuationTrait;
 
+    const ALL_VALID_ENTITY_TYPES = [
+        'Programme',
+        'ProgrammeContainer',
+        'ProgrammeItem',
+        'Brand',
+        'Series',
+        'Episode',
+        'Clip',
+        'Group',
+        'Collection',
+        'Gallery',
+        'Season',
+        'Franchise',
+        'CoreEntity',
+    ];
+
     /**
      * Get an entity, based upon its PID
      * Used when a page wants to find out about data related to an entity, but
@@ -26,15 +42,7 @@ class CoreEntityRepository extends MaterializedPathRepository
      */
     public function findByPid(string $pid, string $entityType = 'CoreEntity')
     {
-        if (!in_array($entityType, ['Programme', 'Group', 'CoreEntity'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Called findByPid with an invalid type. Expected one of "%s", "%s" or "%s" but got "%s"',
-                'Programme',
-                'Group',
-                'CoreEntity',
-                $entityType
-            ));
-        }
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
         $qText = <<<QUERY
 SELECT entity
@@ -59,15 +67,7 @@ QUERY;
      */
     public function findByPidFull(string $pid, string $entityType = 'CoreEntity')
     {
-        if (!in_array($entityType, ['Programme', 'Group', 'CoreEntity'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Called findByPidFull with an invalid type. Expected one of "%s", "%s" or "%s" but got "%s"',
-                'Programme',
-                'Group',
-                'CoreEntity',
-                $entityType
-            ));
-        }
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
         // YIKES! categories is a many-to-many join, that could result in
         // an increase of rows returned by the DB and the potential for slow DB
@@ -185,15 +185,7 @@ QUERY;
         string $entityType,
         string $direction
     ) {
-        if (!in_array($entityType, ['Series', 'Episode', 'Clip'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Called findAdjacentProgrammeByPosition with an invalid type. Expected one of "%s", "%s" or "%s" but got "%s"',
-                'Series',
-                'Episode',
-                'Clip',
-                $entityType
-            ));
-        }
+        $this->assertEntityType($entityType, ['Series', 'Episode', 'Clip']);
 
         if (!in_array($direction, ['next', 'previous'])) {
             throw new InvalidArgumentException(sprintf(
@@ -228,14 +220,7 @@ QUERY;
         string $entityType,
         string $direction
     ) {
-        if (!in_array($entityType, ['Episode', 'Clip'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Called findAdjacentProgrammeItemByReleaseDate with an invalid type. Expected one of "%s" or "%s" but got "%s"',
-                'Episode',
-                'Clip',
-                $entityType
-            ));
-        }
+        $this->assertEntityType($entityType, ['Episode', 'Clip']);
 
         if (!in_array($direction, ['next', 'previous'])) {
             throw new InvalidArgumentException(sprintf(
@@ -400,5 +385,17 @@ QUERY;
         /** @var CategoryRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
         return $repo->findByIds($ids);
+    }
+
+    private function assertEntityType($entityType, $validEntityTypes)
+    {
+        if (!in_array($entityType, $validEntityTypes)) {
+            throw new InvalidArgumentException(sprintf(
+                'Called %s with an invalid type. Expected one of %s but got "%s"',
+                debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'],
+                '"' . implode('", "', $validEntityTypes) . '"',
+                $entityType
+            ));
+        }
     }
 }

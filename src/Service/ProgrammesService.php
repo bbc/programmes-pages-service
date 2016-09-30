@@ -10,9 +10,20 @@ use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
+use InvalidArgumentException;
 
 class ProgrammesService extends AbstractService
 {
+    const ALL_VALID_ENTITY_TYPES = [
+        'Programme',
+        'ProgrammeContainer',
+        'ProgrammeItem',
+        'Brand',
+        'Series',
+        'Episode',
+        'Clip',
+    ];
+
     /** @var CoreEntityRepository */
     protected $repository;
 
@@ -42,11 +53,14 @@ class ProgrammesService extends AbstractService
 
     /**
      * @param Pid $pid
+     * @param string $entityType
      * @return Programme|null
      */
-    public function findByPid(Pid $pid)
+    public function findByPid(Pid $pid, string $entityType = 'Programme')
     {
-        $dbEntity = $this->repository->findByPid($pid, 'Programme');
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+
+        $dbEntity = $this->repository->findByPid($pid, $entityType);
 
         return $this->mapSingleEntity($dbEntity);
     }
@@ -55,9 +69,11 @@ class ProgrammesService extends AbstractService
      * @param Pid $pid
      * @return Programme|null
      */
-    public function findByPidFull(Pid $pid)
+    public function findByPidFull(Pid $pid, string $entityType = 'Programme')
     {
-        $dbEntity = $this->repository->findByPidFull($pid, 'Programme');
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+
+        $dbEntity = $this->repository->findByPidFull($pid, $entityType);
 
         return $this->mapSingleEntity($dbEntity);
     }
@@ -188,5 +204,17 @@ class ProgrammesService extends AbstractService
             return 'Clip';
         }
         return 'Unknown';
+    }
+
+    private function assertEntityType($entityType, $validEntityTypes)
+    {
+        if (!in_array($entityType, $validEntityTypes)) {
+            throw new InvalidArgumentException(sprintf(
+                'Called %s with an invalid type. Expected one of %s but got "%s"',
+                debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'],
+                '"' . implode('", "', $validEntityTypes) . '"',
+                $entityType
+            ));
+        }
     }
 }
