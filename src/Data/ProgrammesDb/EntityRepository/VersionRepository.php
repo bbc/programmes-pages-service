@@ -59,7 +59,7 @@ class VersionRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findByProgrammeItemCanonicalVersion(string $programmeDbId)
+    public function findOriginalVersionForProgrammeItem(string $programmeDbId)
     {
         // YIKES! versionTypes is a many-to-many join, that could result in
         // an increase of rows returned by the DB and the potential for slow DB
@@ -74,7 +74,7 @@ class VersionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('version')
             ->addSelect(['versionTypes'])
             ->leftJoin('version.versionTypes', 'versionTypes')
-            ->andWhere('versionTypes.type = \'Original\'')
+            ->andWhere("versionTypes.type = 'Original'")
             ->andWhere('version.programmeItem = :dbId')
             ->setParameter('dbId', $programmeDbId);
 
