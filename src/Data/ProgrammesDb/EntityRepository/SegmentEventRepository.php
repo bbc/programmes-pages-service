@@ -57,19 +57,19 @@ class SegmentEventRepository extends EntityRepository
      */
     public function findByVersionWithContributions(array $dbIds, $limit, int $offset)
     {
-        $qb = $this->createQueryBuilder('segment_event')
+        $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect([
                 'segment',
                 'contributions',
                 'contributor',
                 'creditRole',
             ])
-            ->join('segment_event.segment', 'segment')
+            ->join('segmentEvent.segment', 'segment')
             ->leftJoin('segment.contributions', 'contributions')
             ->leftJoin('contributions.contributor', 'contributor')
             ->leftJoin('contributions.creditRole', 'creditRole')
-            ->where("segment_event.version IN (:dbIds)")
-            ->addOrderBy('segment_event.position', 'ASC')
+            ->where("segmentEvent.version IN (:dbIds)")
+            ->addOrderBy('segmentEvent.position', 'ASC')
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
 
