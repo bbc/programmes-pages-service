@@ -70,6 +70,8 @@ class SegmentEventRepository extends EntityRepository
             ->leftJoin('contributions.creditRole', 'creditRole')
             ->where("segmentEvent.version IN (:dbIds)")
             ->addOrderBy('segmentEvent.position', 'ASC')
+            ->addOrderBy('contributions.position', 'ASC')
+            ->addOrderBy('contributor.sortName', 'ASC')
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
 
