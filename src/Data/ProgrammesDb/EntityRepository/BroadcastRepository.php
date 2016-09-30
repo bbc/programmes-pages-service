@@ -58,7 +58,7 @@ class BroadcastRepository extends EntityRepository
 
     public function findAllYearsAndMonthsByProgramme(array $ancestry)
     {
-        $qb = $this->createQueryBuilder('broadcast')
+        $qb = $this->createQueryBuilder('broadcast', false)
             ->select(['DISTINCT YEAR(broadcast.startAt) as year', 'MONTH(broadcast.startAt) as month'])
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->andWhere("programmeItem.ancestry LIKE :ancestryClause")

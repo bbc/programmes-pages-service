@@ -92,6 +92,7 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
     {
         $entity = new Broadcast($pid, $version, $start, $end);
         $entity->setService($service);
+        $entity->setProgrammeItem($version->getProgrammeItem());
         $entity->setIsWebcast($isWebcast);
         $this->manager->persist($entity);
         $this->addReference($pid, $entity);
