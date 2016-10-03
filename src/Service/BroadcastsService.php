@@ -31,10 +31,11 @@ class BroadcastsService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function findAllYearsAndMonthsByProgramme(Programme $programme): array
+    public function findBroadcastYearsAndMonthsByProgramme(Programme $programme): array
     {
         $dbYearsAndMonths = $this->repository->findAllYearsAndMonthsByProgramme(
-            $programme->getDbAncestryIds()
+            $programme->getDbAncestryIds(),
+            'Broadcast'
         );
 
         return array_reduce($dbYearsAndMonths, function ($memo, $period) {

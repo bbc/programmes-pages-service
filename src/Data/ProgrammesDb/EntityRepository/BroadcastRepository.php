@@ -19,23 +19,6 @@ class BroadcastRepository extends EntityRepository
      */
     public function findByVersion(array $dbIds, string $type, $limit, int $offset)
     {
-        if (!in_array($type, ['Broadcast', 'Webcast', 'Any'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Called findByVersion with an invalid type. Expected one of "%s", "%s" or "%s" but got "%s"',
-                'Broadcast',
-                'Webcast',
-                'Any',
-                $type
-            ));
-        }
-
-        $typeLookup = [
-            'Broadcast' => false,
-            'Webcast' => true,
-            'Any' => null,
-        ];
-        $isWebcast = $typeLookup[$type] ?? null;
-
         $qb = $this->createQueryBuilder('broadcast')
             ->addSelect(['service', 'network'])
             // Left join as Webcasts are not attached to services
@@ -49,23 +32,22 @@ class BroadcastRepository extends EntityRepository
 
         $qb = $this->setLimit($qb, $limit);
 
-        if (!is_null($isWebcast)) {
-            $qb->andWhere('broadcast.isWebcast = :isWebcast')
-                ->setParameter('isWebcast', $isWebcast);
-        }
+        $this->setEntityTypeFilter($qb, $type);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findAllYearsAndMonthsByProgramme(array $ancestry)
+    public function findAllYearsAndMonthsByProgramme(array $ancestry, string $type)
     {
-        $qb = $this->createQueryBuilder('broadcast', false)
+        $qb = $this->createQueryBuilder('broadcast', true)
             ->select(['DISTINCT YEAR(broadcast.startAt) as year', 'MONTH(broadcast.startAt) as month'])
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
-            ->andWhere("programmeItem.ancestry LIKE :ancestryClause")
+            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
             ->addOrderBy('year', 'DESC')
             ->addOrderBy('month', 'DESC')
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+
+        $qb = $this->setEntityTypeFilter($qb, $type);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }
@@ -85,6 +67,35 @@ class BroadcastRepository extends EntityRepository
 
         return parent::createQueryBuilder($alias)
             ->join($alias . '.programmeItem', 'programmeItem');
+    }
+
+    private function setEntityTypeFilter($qb, $type, $broadcastAlias = 'broadcast')
+    {
+        $typesLookup = [
+            'Broadcast' => false,
+            'Webcast' => true,
+            'Any' => null,
+        ];
+
+        $typeNames = array_keys($typesLookup);
+
+        if (!in_array($type, $typeNames)) {
+            throw new InvalidArgumentException(sprintf(
+                'Called %s with an invalid type. Expected one of %s but got "%s"',
+                debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'],
+                '"' . implode('", "', $typeNames) . '"',
+                $type
+            ));
+        }
+
+        $isWebcast = $typesLookup[$type] ?? null;
+
+        if (!is_null($isWebcast)) {
+            $qb->andWhere($broadcastAlias . '.isWebcast = :isWebcast')
+                ->setParameter('isWebcast', $isWebcast);
+        }
+
+        return $qb;
     }
 
     private function ancestryIdsToString(array $ancestry)
