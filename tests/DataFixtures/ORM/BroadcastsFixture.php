@@ -63,8 +63,7 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             $version4,
             new DateTime('2011-07-05 15:00:00'),
             new DateTime('2011-07-05 15:25:00'),
-            null,
-            true
+            null
         );
 
         // Webcast
@@ -73,19 +72,18 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             $version4,
             new DateTime('2011-07-05 15:00:00'),
             new DateTime('2011-07-05 15:25:00'),
-            null,
-            true
+            null
         );
 
         $manager->flush();
     }
 
-    private function buildBroadcast($pid, $version, $start, $end, $service, $isWebcast = false)
+    private function buildBroadcast($pid, $version, $start, $end, $service)
     {
         $entity = new Broadcast($pid, $version, $start, $end);
         $entity->setService($service);
         $entity->setProgrammeItem($version->getProgrammeItem());
-        $entity->setIsWebcast($isWebcast);
+        $entity->setIsWebcast(is_null($service));
         $this->manager->persist($entity);
         $this->addReference($pid, $entity);
         return $entity;

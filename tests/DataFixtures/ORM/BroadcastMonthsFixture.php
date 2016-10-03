@@ -69,8 +69,7 @@ class BroadcastMonthsFixture extends AbstractFixture implements DependentFixture
             $version,
             new DateTime('2014-06-05 15:00:00'),
             new DateTime('2014-06-05 16:00:01'),
-            null,
-            true
+            null
         );
 
         // Embargoed
@@ -85,12 +84,12 @@ class BroadcastMonthsFixture extends AbstractFixture implements DependentFixture
         $manager->flush();
     }
 
-    private function buildBroadcast($pid, $version, $start, $end, $service, $isWebcast = false)
+    private function buildBroadcast($pid, $version, $start, $end, $service)
     {
         $entity = new Broadcast($pid, $version, $start, $end);
         $entity->setService($service);
         $entity->setProgrammeItem($version->getProgrammeItem());
-        $entity->setIsWebcast($isWebcast);
+        $entity->setIsWebcast(is_null($service));
         $this->manager->persist($entity);
         $this->addReference($pid, $entity);
         return $entity;
