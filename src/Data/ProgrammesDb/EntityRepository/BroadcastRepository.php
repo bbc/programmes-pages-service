@@ -38,8 +38,9 @@ class BroadcastRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('broadcast')
             ->addSelect(['service', 'network'])
-            ->join('broadcast.service', 'service')
-            ->join('service.network', 'network')
+            // Left join as Webcasts are not attached to services
+            ->leftJoin('broadcast.service', 'service')
+            ->leftJoin('service.network', 'network')
             ->andWhere("broadcast.version IN (:dbIds)")
             ->addOrderBy('broadcast.startAt', 'DESC')
             ->addOrderBy('service.sid', 'DESC')

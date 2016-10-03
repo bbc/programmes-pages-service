@@ -57,31 +57,23 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             $service2
         );
 
+        // Webcast
         $broadcast4 = $this->buildBroadcast(
             'b0000004',
             $version4,
             new DateTime('2011-07-05 15:00:00'),
             new DateTime('2011-07-05 15:25:00'),
-            $service2,
+            null,
             true
         );
 
+        // Webcast
         $broadcast5 = $this->buildBroadcast(
             'b0000005',
             $version4,
             new DateTime('2011-07-05 15:00:00'),
             new DateTime('2011-07-05 15:25:00'),
-            $service1,
-            true
-        );
-
-        // Embargoed
-        $broadcast6 = $this->buildBroadcast(
-            'b0000006',
-            $version2,
-            new DateTime('2011-07-05 15:00:00'),
-            new DateTime('2011-07-05 15:25:00'),
-            $service1,
+            null,
             true
         );
 
