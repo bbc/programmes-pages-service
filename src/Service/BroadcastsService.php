@@ -49,4 +49,20 @@ class BroadcastsService extends AbstractService
             return $memo;
         }, []);
     }
+
+    public function findBroadcastsByProgrammeAndMonth(
+        Programme $programme,
+        int $year,
+        int $month
+    ) : array
+    {
+        $broadcasts = $this->repository->findByProgrammeAndMonth(
+            $programme->getDbAncestryIds(),
+            'Any',
+            $year,
+            $month
+        );
+
+        return $this->mapManyEntities($broadcasts);
+    }
 }

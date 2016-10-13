@@ -9,12 +9,14 @@ use InvalidArgumentException;
 class BroadcastRepository extends EntityRepository
 {
     use Traits\SetLimitTrait;
+    use Traits\ParentTreeWalkerTrait;
 
     /**
      * @param array $dbIds
      * @param string $type
      * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
+     *
      * @return mixed
      */
     public function findByVersion(array $dbIds, string $type, $limit, int $offset)
@@ -50,6 +52,34 @@ class BroadcastRepository extends EntityRepository
         $qb = $this->setEntityTypeFilter($qb, $type);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
+    }
+
+    public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month)
+    {
+        $qb = $this->createQueryBuilder('broadcast', true)
+                   ->addSelect(['version', 'programmeItem', 'service', 'network'])
+                   ->join('broadcast.service', 'service')
+                   ->leftJoin('service.network', 'network')
+                   ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+                   ->andWhere('YEAR(broadcast.startAt) = :year')
+                   ->andWhere('MONTH(broadcast.startAt) = :month')
+                   ->addGroupBy('broadcast.startAt')
+                   ->addGroupBy('programmeItem.id')
+                   ->addOrderBy('broadcast.startAt', 'DESC')
+                   ->addOrderBy('service.urlKey')
+                   ->setParameter('year', $year)
+                   ->setParameter('month', $month)
+                   ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+
+        $qb = $this->setEntityTypeFilter($qb, $type);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['version', 'programmeItem', 'ancestry']
+        );
     }
 
     public function createQueryBuilder($alias, $joinViaVersion = true, $indexBy = null)
@@ -92,7 +122,7 @@ class BroadcastRepository extends EntityRepository
 
         if (!is_null($isWebcast)) {
             $qb->andWhere($broadcastAlias . '.isWebcast = :isWebcast')
-                ->setParameter('isWebcast', $isWebcast);
+               ->setParameter('isWebcast', $isWebcast);
         }
 
         return $qb;
@@ -101,5 +131,12 @@ class BroadcastRepository extends EntityRepository
     private function ancestryIdsToString(array $ancestry)
     {
         return implode(',', $ancestry) . ',';
+    }
+
+    private function programmeAncestryGetter(array $ids)
+    {
+        /** @var CoreEntityRepository $repo */
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+        return $repo->findByIds($ids);
     }
 }
