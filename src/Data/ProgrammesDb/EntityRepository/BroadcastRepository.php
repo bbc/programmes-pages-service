@@ -64,9 +64,10 @@ class BroadcastRepository extends EntityRepository
                    ->andWhere('YEAR(broadcast.startAt) = :year')
                    ->andWhere('MONTH(broadcast.startAt) = :month')
                    ->addGroupBy('broadcast.startAt')
+                   ->addGroupBy('network.id')
                    ->addGroupBy('programmeItem.id')
                    ->addOrderBy('broadcast.startAt', 'DESC')
-                   ->addOrderBy('service.urlKey')
+                   ->addOrderBy('network.urlKey', 'ASC')
                    ->setParameter('year', $year)
                    ->setParameter('month', $month)
                    ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');

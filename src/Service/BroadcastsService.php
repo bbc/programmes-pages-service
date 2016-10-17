@@ -58,7 +58,7 @@ class BroadcastsService extends AbstractService
     {
         $broadcasts = $this->repository->findByProgrammeAndMonth(
             $programme->getDbAncestryIds(),
-            'Any',
+            'Broadcast',
             $year,
             $month
         );
