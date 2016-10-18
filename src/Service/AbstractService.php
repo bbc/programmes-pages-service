@@ -49,13 +49,13 @@ abstract class AbstractService
         return $limit * ($page - 1);
     }
 
-    protected function mapSingleEntity($dbEntity)
+    protected function mapSingleEntity($dbEntity, ...$additionalArgs)
     {
         if (is_null($dbEntity)) {
             return null;
         }
 
-        return $this->mapper->getDomainModel($dbEntity);
+        return $this->mapper->getDomainModel($dbEntity, ...$additionalArgs);
     }
 
     protected function mapManyEntities(array $dbEntities): array

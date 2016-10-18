@@ -42,6 +42,15 @@ class MapperFactory
         return $this->instances['ContributorMapper'];
     }
 
+    public function getCollapsedBroadcastMapper(): CollapsedBroadcastMapper
+    {
+        if (!array_key_exists('CollapsedBroadcastMapper', $this->instances)) {
+            $this->instances['CollapsedBroadcastMapper'] = new CollapsedBroadcastMapper($this);
+        }
+
+        return $this->instances['CollapsedBroadcastMapper'];
+    }
+
     public function getImageMapper(): ImageMapper
     {
         if (!array_key_exists('ImageMapper', $this->instances)) {

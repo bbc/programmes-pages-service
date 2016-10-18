@@ -57,6 +57,19 @@ class ServiceFactory
         return $this->instances['ContributorsService'];
     }
 
+    public function getCollapsedBroadcastsService(): CollapsedBroadcastsService
+    {
+        if (!array_key_exists('CollapsedBroadcastsService', $this->instances)) {
+            $this->instances['CollapsedBroadcastsService'] = new CollapsedBroadcastsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Broadcast'),
+                $this->mapperFactory->getCollapsedBroadcastMapper(),
+                $this->entityManager->getRepository('ProgrammesPagesService:Service')
+            );
+        }
+
+        return $this->instances['CollapsedBroadcastsService'];
+    }
+
     public function getNetworksService(): NetworksService
     {
         if (!array_key_exists('NetworksService', $this->instances)) {

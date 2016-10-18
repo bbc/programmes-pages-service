@@ -10,7 +10,7 @@ use DateTime;
  * @ORM\Table(indexes={
  *     @ORM\Index(name="service_url_key_idx", columns={"url_key"}),
  * })
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository")
  */
 class Service
 {

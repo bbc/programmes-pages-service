@@ -57,17 +57,17 @@ class BroadcastRepository extends EntityRepository
     public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month)
     {
         $qb = $this->createQueryBuilder('broadcast', true)
-                   ->addSelect(['version', 'programmeItem', 'service', 'network'])
+                   ->addSelect(['version', 'programmeItem', 'masterBrand'])
+                   ->addSelect(['GROUP_CONCAT(service.sid) as serviceIds'])
                    ->join('broadcast.service', 'service')
-                   ->leftJoin('service.network', 'network')
+                   ->leftJoin('programmeItem.masterBrand', 'masterBrand')
                    ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
                    ->andWhere('YEAR(broadcast.startAt) = :year')
                    ->andWhere('MONTH(broadcast.startAt) = :month')
                    ->addGroupBy('broadcast.startAt')
-                   ->addGroupBy('network.id')
                    ->addGroupBy('programmeItem.id')
                    ->addOrderBy('broadcast.startAt', 'DESC')
-                   ->addOrderBy('network.urlKey', 'ASC')
+                   ->addOrderBy('service.sid', 'ASC')
                    ->setParameter('year', $year)
                    ->setParameter('month', $month)
                    ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
@@ -76,10 +76,18 @@ class BroadcastRepository extends EntityRepository
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
-        return $this->abstractResolveAncestry(
+        $result = $this->abstractResolveAncestry(
             $result,
             [$this, 'programmeAncestryGetter'],
-            ['version', 'programmeItem', 'ancestry']
+            [0, 'version', 'programmeItem', 'ancestry']
+        );
+
+        return array_map(
+            function ($res) {
+                $res['serviceIds'] = explode(',', $res['serviceIds']);
+                return $res;
+            },
+            $result
         );
     }
 
