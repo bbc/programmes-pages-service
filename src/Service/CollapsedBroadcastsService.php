@@ -57,8 +57,9 @@ class CollapsedBroadcastsService extends AbstractService
             )
         );
 
+        // Fetch all the used services
         $services = array_reduce(
-            $this->serviceRepository->getServicesByIds($serviceIds),
+            $this->serviceRepository->findByIds($serviceIds),
             function ($memo, $service) {
                 $memo[$service['sid']] = $service;
                 return $memo;
@@ -66,9 +67,11 @@ class CollapsedBroadcastsService extends AbstractService
             []
         );
 
+        // Map all the entities. As we need to pass a parameter to the mapper, we need to use mapSingleEntity
+        // instead of using mapManyEntities
         $domainModels = [];
-        foreach ($broadcasts as $b) {
-            $domainModels[] = $this->mapSingleEntity($b, $services);
+        foreach ($broadcasts as $broadcast) {
+            $domainModels[] = $this->mapSingleEntity($broadcast, $services);
         }
 
         return $domainModels;

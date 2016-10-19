@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 
 class ServiceRepository extends EntityRepository
 {
-    public function getServicesByIds(array $serviceIds)
+    public function findByIds(array $serviceIds)
     {
         $qb = $this->createQueryBuilder('service')
             ->addSelect(['network'])

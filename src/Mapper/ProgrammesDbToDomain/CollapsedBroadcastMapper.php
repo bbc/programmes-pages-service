@@ -31,17 +31,6 @@ class CollapsedBroadcastMapper extends AbstractMapper
         );
     }
 
-    private function getVersionModel($dbCollapsedBroadcast, $key = 'version'): Version
-    {
-        // It is not valid for a CollapsedBroadcast to have no version
-        // so it counts as Unfetched even if the key exists but is null
-        if (!array_key_exists($key, $dbCollapsedBroadcast) || is_null($dbCollapsedBroadcast[$key])) {
-            return new UnfetchedVersion();
-        }
-
-        return $this->mapperFactory->getVersionMapper()->getDomainModel($dbCollapsedBroadcast[$key]);
-    }
-
     private function getProgrammeItemModel($dbCollapsedBroadcast, $key = 'programmeItem'): Programme
     {
         // Inverted logic compared to other model getters as we have two choices
@@ -80,5 +69,16 @@ class CollapsedBroadcastMapper extends AbstractMapper
         }
 
         return $serviceModels;
+    }
+
+    private function getVersionModel($dbCollapsedBroadcast, $key = 'version'): Version
+    {
+        // It is not valid for a CollapsedBroadcast to have no version
+        // so it counts as Unfetched even if the key exists but is null
+        if (!array_key_exists($key, $dbCollapsedBroadcast) || is_null($dbCollapsedBroadcast[$key])) {
+            return new UnfetchedVersion();
+        }
+
+        return $this->mapperFactory->getVersionMapper()->getDomainModel($dbCollapsedBroadcast[$key]);
     }
 }

@@ -19,10 +19,10 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider serviceNamesDataProvider
      */
-    public function testGetters($serviceName, $expectedRepository, $expectedMapper)
+    public function testGetters($serviceName, $expectedRepositories, $expectedMapper)
     {
         $serviceFactory = new ServiceFactory(
-            $this->entityManager($expectedRepository),
+            $this->entityManager($expectedRepositories),
             $this->mapperFactory($expectedMapper)
         );
 
@@ -39,28 +39,37 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
     public function serviceNamesDataProvider()
     {
         return [
-            ['BroadcastsService', 'Broadcast', 'BroadcastMapper'],
-            ['ContributionsService', 'Contribution', 'ContributionMapper'],
-            ['ContributorsService', 'Contributor', 'ContributorMapper'],
-            ['NetworksService', 'Network', 'NetworkMapper'],
-            ['ProgrammesService', 'CoreEntity', 'ProgrammeMapper'],
-            ['RelatedLinksService', 'RelatedLink', 'RelatedLinkMapper'],
-            ['SegmentsService', 'Segment', 'SegmentMapper'],
-            ['SegmentEventsService', 'SegmentEvent', 'SegmentEventMapper'],
-            ['VersionsService', 'Version', 'VersionMapper'],
+            ['BroadcastsService', ['Broadcast'], 'BroadcastMapper'],
+            ['CollapsedBroadcastsService', ['Broadcast', 'Service'], 'CollapsedBroadcastMapper'],
+            ['ContributionsService', ['Contribution'], 'ContributionMapper'],
+            ['ContributorsService', ['Contributor'], 'ContributorMapper'],
+            ['NetworksService', ['Network'], 'NetworkMapper'],
+            ['ProgrammesService', ['CoreEntity'], 'ProgrammeMapper'],
+            ['RelatedLinksService', ['RelatedLink'], 'RelatedLinkMapper'],
+            ['SegmentsService', ['Segment'], 'SegmentMapper'],
+            ['SegmentEventsService', ['SegmentEvent'], 'SegmentEventMapper'],
+            ['VersionsService', ['Version'], 'VersionMapper'],
         ];
     }
 
-    private function entityManager($repoName)
+    private function entityManager(array $repoNames)
     {
         $mockEntityManager = $this->createMock('Doctrine\ORM\EntityManager');
 
-        $mockRepo = $this->createMock(self::ENTITY_REPOSITORY_NS . $repoName . 'Repository');
+        $argMap = [];
+        $valueMap = [];
+        foreach ($repoNames as $repoName) {
+            $arg = 'ProgrammesPagesService:' . $repoName;
+            $mockRepo = $this->createMock(self::ENTITY_REPOSITORY_NS . $repoName . 'Repository');
 
-        $mockEntityManager->expects($this->atLeastOnce())
+            $argMap[] = [$arg];
+            $valueMap[] = [$arg, $mockRepo];
+        }
+
+        $mockEntityManager->expects($this->exactly(count($repoNames)))
             ->method('getRepository')
-            ->with('ProgrammesPagesService:' . $repoName)
-            ->willReturn($mockRepo);
+            ->withConsecutive(...$argMap)
+            ->will($this->returnValueMap($valueMap));
 
         return $mockEntityManager;
     }

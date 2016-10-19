@@ -59,7 +59,7 @@ class CollapsedBroadcast
     public function getVersion(): Version
     {
         if ($this->version instanceof UnfetchedVersion) {
-            throw new DataNotFetchedException('Could not get Version of Broadcast as it was not fetched');
+            throw new DataNotFetchedException('Could not get Version of CollapsedBroadcast as it was not fetched');
         }
 
         return $this->version;
@@ -68,7 +68,7 @@ class CollapsedBroadcast
     public function getProgrammeItem(): ProgrammeItem
     {
         if ($this->programmeItem instanceof UnfetchedProgrammeItem) {
-            throw new DataNotFetchedException('Could not get ProgrammeItem of Broadcast as it was not fetched');
+            throw new DataNotFetchedException('Could not get ProgrammeItem of CollapsedBroadcast as it was not fetched');
         }
 
         return $this->programmeItem;
