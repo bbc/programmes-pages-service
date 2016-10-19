@@ -56,18 +56,19 @@ class BroadcastRepository extends EntityRepository
 
     public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month)
     {
-        $qb = $this->createQueryBuilder('broadcast', true)
-                   ->addSelect(['version', 'programmeItem', 'masterBrand'])
-                   ->addSelect(['GROUP_CONCAT(service.sid) as serviceIds'])
+        $qb = $this->createQueryBuilder('broadcast', false)
+                   ->addSelect(['programmeItem', 'masterBrand', 'network'])
+                   ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
                    ->join('broadcast.service', 'service')
                    ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+                   ->leftJoin('masterBrand.network', 'network')
                    ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
                    ->andWhere('YEAR(broadcast.startAt) = :year')
                    ->andWhere('MONTH(broadcast.startAt) = :month')
                    ->addGroupBy('broadcast.startAt')
                    ->addGroupBy('programmeItem.id')
                    ->addOrderBy('broadcast.startAt', 'DESC')
-                   ->addOrderBy('service.sid', 'ASC')
+                   ->addOrderBy('service.urlKey', 'ASC')
                    ->setParameter('year', $year)
                    ->setParameter('month', $month)
                    ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
@@ -76,18 +77,19 @@ class BroadcastRepository extends EntityRepository
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
-        $result = $this->abstractResolveAncestry(
-            $result,
-            [$this, 'programmeAncestryGetter'],
-            [0, 'version', 'programmeItem', 'ancestry']
-        );
-
-        return array_map(
+        $result = array_map(
             function ($res) {
-                $res['serviceIds'] = explode(',', $res['serviceIds']);
-                return $res;
+                $rtn = $res[0];
+                $rtn['serviceIds'] = explode(',', $res['serviceIds']);
+                return $rtn;
             },
             $result
+        );
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['programmeItem', 'ancestry']
         );
     }
 

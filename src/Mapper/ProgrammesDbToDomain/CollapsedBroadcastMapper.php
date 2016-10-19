@@ -21,13 +21,13 @@ class CollapsedBroadcastMapper extends AbstractMapper
     {
         return new CollapsedBroadcast(
             $this->getVersionModel($dbCollapsedBroadcast),
-            $this->getProgrammeItemModel($dbCollapsedBroadcast[0]['version']),
+            $this->getProgrammeItemModel($dbCollapsedBroadcast),
             $this->getServiceModels($dbCollapsedBroadcast['serviceIds'], $services),
-            DateTimeImmutable::createFromMutable($dbCollapsedBroadcast[0]['startAt']),
-            DateTimeImmutable::createFromMutable($dbCollapsedBroadcast[0]['endAt']),
-            $dbCollapsedBroadcast[0]['duration'],
-            $dbCollapsedBroadcast[0]['isBlanked'],
-            $dbCollapsedBroadcast[0]['isRepeat']
+            DateTimeImmutable::createFromMutable($dbCollapsedBroadcast['startAt']),
+            DateTimeImmutable::createFromMutable($dbCollapsedBroadcast['endAt']),
+            $dbCollapsedBroadcast['duration'],
+            $dbCollapsedBroadcast['isBlanked'],
+            $dbCollapsedBroadcast['isRepeat']
         );
     }
 
@@ -54,10 +54,10 @@ class CollapsedBroadcastMapper extends AbstractMapper
         // It is not valid for a Version to have no programmeItem
         // so it counts as Unfetched even if the key exists but is null
         $hasVersion = array_key_exists('version', $dbCollapsedBroadcast);
-        if ($hasVersion && array_key_exists(
-            $key,
-            $dbCollapsedBroadcast['version']
-        ) && !is_null($dbCollapsedBroadcast['version'][$key])) {
+        if ($hasVersion &&
+            array_key_exists($key, $dbCollapsedBroadcast['version']) &&
+            !is_null($dbCollapsedBroadcast['version'][$key])
+        ) {
             return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbCollapsedBroadcast['version'][$key]);
         }
 
