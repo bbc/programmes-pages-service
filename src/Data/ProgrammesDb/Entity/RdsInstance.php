@@ -88,11 +88,11 @@ class RdsInstance
      */
     private $draining = false;
 
-    public function __construct(string $cluster, string $databaseIdentifier, string $endpoint, string $port)
+    public function __construct(string $cluster, string $databaseIdentifier, string $endpoint, string $port, \DateTime $firstSeenAt)
     {
         $this->cluster = $cluster;
         $this->databaseIdentifier = $databaseIdentifier;
-        $this->firstSeenAt = new \DateTime();
+        $this->firstSeenAt = $firstSeenAt;
         $this->endpoint = $endpoint;
         $this->port = $port;
     }
@@ -110,12 +110,14 @@ class RdsInstance
         return $this->databaseIdentifier;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getFirstSeenAt(): \DateTime
     {
         return $this->firstSeenAt;
+    }
+
+    public function setFirstSeenAt(\DateTime $firstSeenAt)
+    {
+        $this->firstSeenAt = $firstSeenAt;
     }
 
     /**
