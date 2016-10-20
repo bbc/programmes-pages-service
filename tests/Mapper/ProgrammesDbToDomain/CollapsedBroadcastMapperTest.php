@@ -39,7 +39,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
         $programmeItemDbEntity = ['pid' => 'b007b5xt'];
 
         $serviceDbEntity = ['mid' => 'bbc_one', 'sid' => 'a'];
-        $services['a'] = $serviceDbEntity;
+        $services = ['a' => $serviceDbEntity];
 
         $expectedVersionDomainEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version');
 
@@ -99,7 +99,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
         $programmeItemDbEntity = ['pid' => 'b007b5xt'];
         $versionDbEntity = ['pid' => 'b03szzzz', 'programmeItem' => $programmeItemDbEntity];
         $serviceDbEntity = ['mid' => 'bbc_one'];
-        $services['a'] = $serviceDbEntity;
+        $services = ['a' => $serviceDbEntity];
 
         $expectedVersionDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Version'
@@ -163,7 +163,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
     public function testGetDomainModelWithNoVersion()
     {
         $serviceDbEntity = ['mid' => 'bbc_one'];
-        $services['a'] = $serviceDbEntity;
+        $services = ['a' => $serviceDbEntity];
 
         $dbEntityArray = [
             'id'               => 1,
@@ -189,7 +189,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
     public function testGetDomainModelWithNoProgrammeItem()
     {
         $serviceDbEntity = ['mid' => 'bbc_one'];
-        $services['a'] = $serviceDbEntity;
+        $services = ['a' => $serviceDbEntity];
 
         $dbEntityArray = [
             'id'               => 1,
@@ -212,7 +212,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testGetDomainModelWithNoService()
+    public function testGetDomainModelWithNonExistantService()
     {
         $dbEntityArray = [
             'id'               => 1,

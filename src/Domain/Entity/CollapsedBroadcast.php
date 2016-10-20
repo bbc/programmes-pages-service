@@ -44,7 +44,7 @@ class CollapsedBroadcast
         bool $isBlanked = false,
         bool $isRepeat = false
     ) {
-        $this->assertArrayOfType('services', $services, Service::CLASS);
+        $this->assertArrayOfServices($services);
 
         $this->version = $version;
         $this->programmeItem = $programmeItem;
@@ -104,7 +104,7 @@ class CollapsedBroadcast
         return $this->isRepeat;
     }
 
-    private function assertArrayOfType($property, $array, $expectedType)
+    private function assertArrayOfServices($array)
     {
         if (empty($array)) {
             throw new InvalidArgumentException(
@@ -113,11 +113,11 @@ class CollapsedBroadcast
         }
 
         foreach ($array as $item) {
-            if (!$item instanceof $expectedType) {
+            if (!$item instanceof Service) {
                 throw new InvalidArgumentException(sprintf(
                     'Tried to create a CollapsedBroadcast with invalid %s. Expected an array of %s but the array contained an instance of "%s"',
-                    $property,
-                    $expectedType,
+                    'services',
+                    Service::CLASS,
                     (is_object($item) ? get_class($item) : gettype($item))
                 ));
             }

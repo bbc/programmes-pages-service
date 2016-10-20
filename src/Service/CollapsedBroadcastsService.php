@@ -6,7 +6,6 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepos
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper;
 
 class CollapsedBroadcastsService extends AbstractService
 {
@@ -14,11 +13,6 @@ class CollapsedBroadcastsService extends AbstractService
      * @var ServiceRepository
      */
     protected $serviceRepository;
-
-    /**
-     * @var ServiceMapper
-     */
-    protected $serviceMapper;
 
     public function __construct(
         BroadcastRepository $repository,
@@ -59,7 +53,7 @@ class CollapsedBroadcastsService extends AbstractService
 
         // Fetch all the used services
         $services = array_reduce(
-            $this->serviceRepository->findByIds($serviceIds),
+            $this->serviceRepository->findBySids($serviceIds),
             function ($memo, $service) {
                 $memo[$service['sid']] = $service;
                 return $memo;
@@ -69,11 +63,10 @@ class CollapsedBroadcastsService extends AbstractService
 
         // Map all the entities. As we need to pass a parameter to the mapper, we need to use mapSingleEntity
         // instead of using mapManyEntities
-        $domainModels = [];
-        foreach ($broadcasts as $broadcast) {
-            $domainModels[] = $this->mapSingleEntity($broadcast, $services);
-        }
+        $a = array_map(function ($broadcast) use ($services) {
+            return $this->mapSingleEntity($broadcast, $services);
+        }, $broadcasts);
 
-        return $domainModels;
+        return $a;
     }
 }

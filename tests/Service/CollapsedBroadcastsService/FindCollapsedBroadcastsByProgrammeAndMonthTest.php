@@ -17,14 +17,14 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
         ];
 
         $this->mockRepository->expects($this->once())
-                             ->method('findByProgrammeAndMonth')
-                             ->with($dbAncestry, 'Broadcast', 2007, 12)
-                             ->willReturn($broadcastData);
+             ->method('findByProgrammeAndMonth')
+             ->with($dbAncestry, 'Broadcast', 2007, 12)
+             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
-                             ->method('findByIds')
-                             ->with(['a', 'b'])
-                             ->willReturn($serviceData);
+             ->method('findBySids')
+             ->with(['a', 'b'])
+             ->willReturn($serviceData);
 
         $result = $this->service()->findCollapsedBroadcastsByProgrammeAndMonth($programme, 2007, 12);
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData)[0], $result[0]);

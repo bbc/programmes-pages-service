@@ -23,8 +23,7 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
 
     protected function collapsedBroadcastFromDbData(array $entity)
     {
-        $mockBroadcast = $this->createMock(self::ENTITY_NS . 'CollapsedBroadcast');
-        return $mockBroadcast;
+        return $this->createMock(self::ENTITY_NS . 'CollapsedBroadcast');
     }
 
     protected function service(): CollapsedBroadcastsService
