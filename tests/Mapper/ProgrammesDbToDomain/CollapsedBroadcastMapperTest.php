@@ -226,7 +226,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
             'isAudioDescribed' => false,
             'isWebcast'        => false,
             'version'          => ['pid' => 'b03szzzz'],
-            'serviceIds'       => ['a']
+            'serviceIds'       => ['a'],
         ];
 
         $this->getMapper()->getDomainModel($dbEntityArray)->getServices();
