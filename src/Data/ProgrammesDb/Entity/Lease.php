@@ -11,14 +11,13 @@ use DateTime;
  */
 class Lease
 {
-
     /**
-     * @var int
+     * @var string
      *
+     * @ORM\Column(type="string", length=255, nullable=false)
      * @ORM\Id()
-     * @ORM\Column(type="integer", nullable=false)
      */
-    private $id;
+    private $jobName;
 
     /**
      * @var string
@@ -34,19 +33,16 @@ class Lease
      */
     private $leaseExpiration;
 
-    public function __construct()
+    public function __construct(string $jobName)
     {
-        $this->id = 1;
+        $this->jobName = $jobName;
         $this->leaseExpiration = new DateTime('now');
         $this->workerId = 'Unassigned';
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getJobName(): string
     {
-        return $this->id;
+        return $this->jobName;
     }
 
     public function getWorkerId(): string
