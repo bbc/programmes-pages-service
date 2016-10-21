@@ -59,6 +59,7 @@ doctrine:
         dql:
             string_functions:
                 MATCH_AGAINST: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\MatchAgainst
+                GROUP_CONCAT: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\GroupConcat
             datetime_functions:
                 YEAR: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Year
                 MONTH: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Month

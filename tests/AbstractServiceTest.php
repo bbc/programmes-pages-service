@@ -7,6 +7,8 @@ use PHPUnit_Framework_TestCase;
 abstract class AbstractServiceTest extends PHPUnit_Framework_TestCase
 {
     const ENTITY_NS = 'BBC\ProgrammesPagesService\Domain\Entity\\';
+    const REPOSITORY_NS = 'BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\\';
+    const MAPPER_NS = 'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\\';
 
     protected $mockRepository;
 
@@ -14,12 +16,17 @@ abstract class AbstractServiceTest extends PHPUnit_Framework_TestCase
 
     protected function setUpRepo($repositoryName)
     {
-        $this->mockRepository = $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\\' . $repositoryName);
+        $this->mockRepository = $this->getRepo($repositoryName);
+    }
+
+    protected function getRepo($repositoryName)
+    {
+        return $this->createMock($this::REPOSITORY_NS . $repositoryName);
     }
 
     protected function setUpMapper($mapperName, $entityBuilderMethod)
     {
-        $this->mockMapper = $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\\' . $mapperName);
+        $this->mockMapper = $this->createMock($this::MAPPER_NS . $mapperName);
 
         $this->mockMapper->expects($this->any())
             ->method('getDomainModel')
