@@ -2,49 +2,49 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\SegmentEventsService;
 
-class FindBySegmentTest extends AbstractSegmentEventsServiceTest
+class FindBySegmentFullTest extends AbstractSegmentEventsServiceTest
 {
-    public function testFindBySegmentDefaultPagination()
+    public function testFindBySegmentFullDefaultPagination()
     {
         $dbId = 1;
         $dbData = [['pid' => 'sg000001']];
         $segment = $this->mockEntity('Segment', $dbId);
 
         $this->mockRepository->expects($this->once())
-            ->method('findBySegment')
+            ->method('findBySegmentFull')
             ->with([$dbId], true, 300, 0)
             ->willReturn($dbData);
 
-        $result = $this->service()->findBySegment($segment, true);
+        $result = $this->service()->findBySegmentFull($segment, true);
         $this->assertEquals($this->segmentEventsFromDbData($dbData), $result);
     }
 
-    public function testFindBySegmentCustomPagination()
+    public function testFindBySegmentFullCustomPagination()
     {
         $dbId = 1;
         $dbData = [['pid' => 'sg000001'], ['pid' => 'sg000002'], ['pid' => 'sg000003']];
         $segment = $this->mockEntity('Segment', $dbId);
 
         $this->mockRepository->expects($this->once())
-            ->method('findBySegment')
+            ->method('findBySegmentFull')
             ->with([$dbId], true, 5, 10)
             ->willReturn($dbData);
 
-        $result = $this->service()->findBySegment($segment, true, 5, 3);
+        $result = $this->service()->findBySegmentFull($segment, true, 5, 3);
         $this->assertEquals($this->segmentEventsFromDbData($dbData), $result);
     }
 
-    public function testFindBySegmentWithNonExistentDbId()
+    public function testFindBySegmentFullWithNonExistentDbId()
     {
         $dbId = 999;
         $segment = $this->mockEntity('Segment', $dbId);
 
         $this->mockRepository->expects($this->once())
-            ->method('findBySegment')
+            ->method('findBySegmentFull')
             ->with([$dbId], true, 300, 0)
             ->willReturn([]);
 
-        $result = $this->service()->findBySegment($segment, true);
+        $result = $this->service()->findBySegmentFull($segment, true);
         $this->assertEquals([], $result);
     }
 }
