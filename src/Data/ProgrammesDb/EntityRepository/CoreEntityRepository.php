@@ -111,6 +111,17 @@ QUERY;
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findAllImmediateSeriesByParent(int $id)
+    {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->addSelect(['programme', 'image'])
+            ->from('ProgrammesPagesService:Series', 'programme')
+            ->leftJoin('programme.image', 'image')
+            ->andWhere('programme.parent = :parentDbId')
+            ->setParameter('parentDbId', $id)
+            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
     /**
      * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset

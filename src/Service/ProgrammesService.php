@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeContainer;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
@@ -43,6 +44,12 @@ class ProgrammesService extends AbstractService
             $this->getOffset($limit, $page)
         );
 
+        return $this->mapManyEntities($dbEntities);
+    }
+
+    public function findAllImmediateSeriesByParent(ProgrammeContainer $container)
+    {
+        $dbEntities = $this->repository->findAllImmediateSeriesByParent($container->getDbId());
         return $this->mapManyEntities($dbEntities);
     }
 
