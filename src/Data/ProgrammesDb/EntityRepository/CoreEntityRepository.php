@@ -125,7 +125,7 @@ QUERY;
 
         //TODO talk to ben and ask why aren't images denormalized already, so we can avoid fetching parents when we
         // only want the image
-        if(!empty($result)) {
+        if (!empty($result)) {
             $resolvedParent = $this->resolveParents([$result[0]]);
 
             for ($i = 0; $i < count($result); $i++) {
