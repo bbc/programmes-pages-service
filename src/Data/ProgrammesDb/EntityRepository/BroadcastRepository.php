@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use DateTimeImmutable;
 use InvalidArgumentException;
 
 class BroadcastRepository extends EntityRepository
@@ -107,13 +108,14 @@ class BroadcastRepository extends EntityRepository
             ->leftJoin('programmeItem.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
             ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-            ->andWhere('broadcast.endAt <= NOW()')
+            ->andWhere('broadcast.endAt <= :now')
             ->addGroupBy('broadcast.startAt')
             ->addGroupBy('programmeItem.id')
             ->addOrderBy('broadcast.endAt', 'DESC')
             ->addOrderBy('serviceIds')
             ->setFirstResult($offset)
-            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
+            ->setParameter('now', new DateTimeImmutable());
 
         $qb = $this->setLimit($qb, $limit);
 
