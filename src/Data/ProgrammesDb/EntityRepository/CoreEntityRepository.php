@@ -128,8 +128,8 @@ QUERY;
         if (!empty($result)) {
             $resolvedParent = $this->resolveParents([$result[0]]);
 
-            for ($i = 0; $i < count($result); $i++) {
-                $result[$i]['parent'] = $resolvedParent[0]['parent'];
+            foreach ($result as &$res) {
+                $res['parent'] = $resolvedParent[0]['parent'];
             }
         }
 
