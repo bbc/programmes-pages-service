@@ -54,7 +54,7 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }
 
-    public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month)
+    public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month, $limit, int $offset)
     {
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['programmeItem', 'masterBrand', 'network'])
@@ -69,9 +69,53 @@ class BroadcastRepository extends EntityRepository
             ->addGroupBy('programmeItem.id')
             ->addOrderBy('broadcast.startAt', 'DESC')
             ->addOrderBy('service.urlKey', 'ASC')
+            ->setFirstResult($offset)
             ->setParameter('year', $year)
             ->setParameter('month', $month)
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+
+        $qb = $this->setLimit($qb, $limit);
+        $qb = $this->setEntityTypeFilter($qb, $type);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $result = array_map(
+            function ($res) {
+                $rtn = $res[0];
+                $rtn['serviceIds'] = explode(',', $res['serviceIds']);
+
+                return $rtn;
+            },
+            $result
+        );
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['programmeItem', 'ancestry']
+        );
+    }
+
+    public function findPastCollapsedBroadcastsForProgramme(array $ancestry, string $type, $limit, int $offset)
+    {
+        //TODO: I only need episodes, not clips. should use episode instead of programmeItem?
+        //TODO I need to order by parent_service_id, but I'm using serviceIds. Is that wrong?
+        $qb = $this->createQueryBuilder('broadcast', false)
+            ->addSelect(['programmeItem', 'masterBrand', 'network'])
+            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
+            ->join('broadcast.service', 'service')
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+            ->andWhere('broadcast.endAt <= NOW()')
+            ->addGroupBy('broadcast.startAt')
+            ->addGroupBy('programmeItem.id')
+            ->addOrderBy('broadcast.endAt', 'DESC')
+            ->addOrderBy('serviceIds')
+            ->setFirstResult($offset)
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+
+        $qb = $this->setLimit($qb, $limit);
 
         $qb = $this->setEntityTypeFilter($qb, $type);
 
