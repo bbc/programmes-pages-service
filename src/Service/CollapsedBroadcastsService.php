@@ -63,10 +63,8 @@ class CollapsedBroadcastsService extends AbstractService
 
         // Map all the entities. As we need to pass a parameter to the mapper, we need to use mapSingleEntity
         // instead of using mapManyEntities
-        $a = array_map(function ($broadcast) use ($services) {
+        return array_map(function ($broadcast) use ($services) {
             return $this->mapSingleEntity($broadcast, $services);
         }, $broadcasts);
-
-        return $a;
     }
 }
