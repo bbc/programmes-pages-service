@@ -111,20 +111,22 @@ QUERY;
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findAllImmediateSeriesByParent(int $id)
+    public function findChildrenSeriesByParent(int $id, $limit, int $offset)
     {
-        $result = $this->getEntityManager()->createQueryBuilder()
+        $qb = $this->getEntityManager()->createQueryBuilder()
             ->addSelect(['programme', 'image'])
             ->from('ProgrammesPagesService:Series', 'programme')
             ->leftJoin('programme.image', 'image')
             ->andWhere('programme.parent = :parentDbId')
             ->addOrderBy('programme.position', 'ASC')
             ->addOrderBy('programme.title', 'ASC')
-            ->setParameter('parentDbId', $id)
-            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+            ->setFirstResult($offset)
+            ->setParameter('parentDbId', $id);
 
-        //TODO talk to ben and ask why aren't images denormalized already, so we can avoid fetching parents when we
-        // only want the image
+        $qb = $this->setLimit($qb, $limit);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
         if (!empty($result)) {
             $resolvedParent = $this->resolveParents([$result[0]]);
 

@@ -4,9 +4,9 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeContainer;
 
-class FindAllImmediateSeriesByParentTest extends AbstractProgrammesServiceTest
+class FindChildrenSeriesByParentTest extends AbstractProgrammesServiceTest
 {
-    public function testFindAllImmediateSeriesByParent()
+    public function testFindAllSeriesByParent()
     {
         $container = $this->createMock(ProgrammeContainer::class);
         $container->method('getDbId')->willReturn(0);
@@ -14,11 +14,11 @@ class FindAllImmediateSeriesByParentTest extends AbstractProgrammesServiceTest
         $dbData = [['pid' => 'b010t19z'], ['pid' => 'b00swyx1']];
 
         $this->mockRepository->expects($this->once())
-            ->method('findAllImmediateSeriesByParent')
+            ->method('findChildrenSeriesByParent')
             ->with(0)
             ->willReturn($dbData);
 
-        $result = $this->service()->findAllImmediateSeriesByParent($container);
+        $result = $this->service()->findChildrenSeriesByParent($container);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 }

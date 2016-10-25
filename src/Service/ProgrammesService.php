@@ -47,9 +47,12 @@ class ProgrammesService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function findAllImmediateSeriesByParent(ProgrammeContainer $container)
-    {
-        $dbEntities = $this->repository->findAllImmediateSeriesByParent($container->getDbId());
+    public function findChildrenSeriesByParent(
+        ProgrammeContainer $container,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $dbEntities = $this->repository->findChildrenSeriesByParent($container->getDbId(), $limit, $page);
         return $this->mapManyEntities($dbEntities);
     }
 

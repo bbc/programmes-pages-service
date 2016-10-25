@@ -7,16 +7,16 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class FindAllImmediateSeriesByParentTest extends AbstractDatabaseTest
+class FindChildrenSeriesByParentTest extends AbstractDatabaseTest
 {
-    public function testAllImmediateSeriesByParent()
+    public function testChildrenSeriesByParent()
     {
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
         $dbid = $this->getDbIdFromPid('b010t19z', 'Brand');
 
-        $entities = $repo->findAllImmediateSeriesByParent($dbid);
+        $entities = $repo->findChildrenSeriesByParent($dbid, 50, 0);
 
         $expectedPids = ['b00swyx1', 'b010t150'];
         $this->assertEquals($expectedPids, array_column($entities, 'pid'));
