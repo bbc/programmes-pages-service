@@ -52,7 +52,11 @@ class ProgrammesService extends AbstractService
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
-        $dbEntities = $this->repository->findChildrenSeriesByParent($container->getDbId(), $limit, $page);
+        $dbEntities = $this->repository->findChildrenSeriesByParent(
+            $container->getDbId(),
+            $limit,
+            $this->getOffset($limit, $page)
+        );
         return $this->mapManyEntities($dbEntities);
     }
 
