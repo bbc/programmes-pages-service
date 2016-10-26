@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
+use DateTimeImmutable;
+
 class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
     public function testFindPastCollapsedBroadcastsForProgramme()
@@ -18,7 +20,7 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
 
         $this->mockRepository->expects($this->once())
             ->method('findPastCollapsedBroadcastsForProgramme')
-            ->with($dbAncestry, 'Broadcast', 1, 0)
+            ->with($dbAncestry, 'Broadcast', new DateTimeImmutable(), 1, 0)
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
