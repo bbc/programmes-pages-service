@@ -4,7 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
 class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
-    public function testFindCollapsedBroadcastsByProgrammeAndMonth()
+    public function testFindPastCollapsedBroadcastsForProgramme()
     {
         $dbAncestry = [1, 2, 3];
         $programme = $this->mockEntity('Programme', 3);
