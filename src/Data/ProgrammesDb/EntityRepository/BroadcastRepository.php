@@ -99,24 +99,23 @@ class BroadcastRepository extends EntityRepository
 
     public function findPastCollapsedBroadcastsForProgramme(array $ancestry, string $type, $limit, int $offset)
     {
-        //TODO: I only need episodes, not clips. should use episode instead of programmeItem?
-        //TODO I need to order by parent_service_id, but I'm using serviceIds. Is that wrong?
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['programmeItem', 'masterBrand', 'network'])
             ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
             ->join('broadcast.service', 'service')
             ->leftJoin('programmeItem.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
+            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
             ->andWhere('broadcast.endAt <= :now')
             ->addGroupBy('broadcast.startAt')
             ->addGroupBy('programmeItem.id')
             ->addOrderBy('broadcast.endAt', 'DESC')
-            ->addOrderBy('serviceIds')
+            ->addOrderBy('network.nid')
             ->setFirstResult($offset)
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
             ->setParameter('now', new DateTimeImmutable());
-
+        print($qb->getQuery()->getSQL()); die();
         $qb = $this->setLimit($qb, $limit);
 
         $qb = $this->setEntityTypeFilter($qb, $type);
