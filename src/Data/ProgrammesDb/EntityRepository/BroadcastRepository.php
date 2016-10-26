@@ -115,7 +115,7 @@ class BroadcastRepository extends EntityRepository
             ->setFirstResult($offset)
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
             ->setParameter('now', new DateTimeImmutable());
-        print($qb->getQuery()->getSQL()); die();
+
         $qb = $this->setLimit($qb, $limit);
 
         $qb = $this->setEntityTypeFilter($qb, $type);
