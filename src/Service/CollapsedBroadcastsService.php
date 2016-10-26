@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepos
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
+use DateTimeImmutable;
 
 class CollapsedBroadcastsService extends AbstractService
 {
@@ -29,8 +30,7 @@ class CollapsedBroadcastsService extends AbstractService
         int $month,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ) : array {
-
+    ): array {
         $broadcasts = $this->repository->findByProgrammeAndMonth(
             $programme->getDbAncestryIds(),
             'Broadcast',
@@ -41,7 +41,7 @@ class CollapsedBroadcastsService extends AbstractService
         );
 
         $services = $this->fetchUsedServices($broadcasts);
-        return $this->setBroadcastsServices($broadcasts, $services);
+        return $this->mapManyEntities($broadcasts, $services);
     }
 
     public function findPastCollapsedBroadcastsForProgramme(
@@ -52,12 +52,13 @@ class CollapsedBroadcastsService extends AbstractService
         $broadcasts = $this->repository->findPastCollapsedBroadcastsForProgramme(
             $programme->getDbAncestryIds(),
             'Broadcast',
+            new DateTimeImmutable(),
             $limit,
             $this->getOffset($limit, $page)
         );
 
         $services = $this->fetchUsedServices($broadcasts);
-        return $this->setBroadcastsServices($broadcasts, $services);
+        return $this->mapManyEntities($broadcasts, $services);
     }
 
     private function fetchUsedServices(array $broadcasts): array
@@ -86,14 +87,5 @@ class CollapsedBroadcastsService extends AbstractService
             },
             []
         );
-    }
-
-    private function setBroadcastsServices(array $broadcasts, array $services): array
-    {
-        // Map all the entities. As we need to pass a parameter to the mapper, we need to use mapSingleEntity
-        // instead of using mapManyEntities
-        return array_map(function ($broadcast) use ($services) {
-            return $this->mapSingleEntity($broadcast, $services);
-        }, $broadcasts);
     }
 }

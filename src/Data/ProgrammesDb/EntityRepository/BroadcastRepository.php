@@ -79,16 +79,7 @@ class BroadcastRepository extends EntityRepository
         $qb = $this->setEntityTypeFilter($qb, $type);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
-        $result = array_map(
-            function ($res) {
-                $rtn = $res[0];
-                $rtn['serviceIds'] = explode(',', $res['serviceIds']);
-
-                return $rtn;
-            },
-            $result
-        );
+        $result = $this->explodeServiceIds($result);
 
         return $this->abstractResolveAncestry(
             $result,
@@ -97,8 +88,13 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
-    public function findPastCollapsedBroadcastsForProgramme(array $ancestry, string $type, $limit, int $offset)
-    {
+    public function findPastCollapsedBroadcastsForProgramme(
+        array $ancestry,
+        string $type,
+        DateTimeImmutable $cutoffTime,
+        $limit,
+        int $offset
+    ) {
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['programmeItem', 'masterBrand', 'network'])
             ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
@@ -107,29 +103,20 @@ class BroadcastRepository extends EntityRepository
             ->leftJoin('masterBrand.network', 'network')
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-            ->andWhere('broadcast.endAt <= :now')
+            ->andWhere('broadcast.endAt <= :cutoffTime')
             ->addGroupBy('broadcast.startAt')
             ->addGroupBy('programmeItem.id')
             ->addOrderBy('broadcast.endAt', 'DESC')
             ->addOrderBy('network.nid')
             ->setFirstResult($offset)
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
-            ->setParameter('now', new DateTimeImmutable());
+            ->setParameter('cutoffTime', $cutoffTime);
 
         $qb = $this->setLimit($qb, $limit);
-
         $qb = $this->setEntityTypeFilter($qb, $type);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
-        $result = array_map(
-            function ($res) {
-                $rtn = $res[0];
-                $rtn['serviceIds'] = explode(',', $res['serviceIds']);
-                return $rtn;
-            },
-            $result
-        );
+        $result = $this->explodeServiceIds($result);
 
         return $this->abstractResolveAncestry(
             $result,
@@ -187,6 +174,19 @@ class BroadcastRepository extends EntityRepository
     private function ancestryIdsToString(array $ancestry)
     {
         return implode(',', $ancestry) . ',';
+    }
+
+    private function explodeServiceIds($collapsedBroadcasts)
+    {
+        return array_map(
+            function ($collapsedBroadcast) {
+                $rtn = $collapsedBroadcast[0];
+                $rtn['serviceIds'] = explode(',', $collapsedBroadcast['serviceIds']);
+
+                return $rtn;
+            },
+            $collapsedBroadcasts
+        );
     }
 
     private function programmeAncestryGetter(array $ids)
