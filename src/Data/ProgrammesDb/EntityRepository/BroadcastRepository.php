@@ -140,7 +140,7 @@ class BroadcastRepository extends EntityRepository
             ->leftJoin('masterBrand.network', 'network')
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-            ->andWhere('broadcast.endAt > :cutoffTime')
+            ->andWhere('broadcast.endAt > :startTime')
             ->addGroupBy('broadcast.startAt')
             ->addGroupBy('programmeItem.id')
             ->addOrderBy('broadcast.startAt', 'DESC')
@@ -149,7 +149,7 @@ class BroadcastRepository extends EntityRepository
             ->addOrderBy('network.position')
             ->setFirstResult($offset)
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
-            ->setParameter('cutoffTime', $startTime);
+            ->setParameter('startTime', $startTime);
 
         $qb = $this->setLimit($qb, $limit);
         $qb = $this->setEntityTypeFilter($qb, $type);
@@ -162,6 +162,20 @@ class BroadcastRepository extends EntityRepository
             [$this, 'programmeAncestryGetter'],
             ['programmeItem', 'ancestry']
         );
+    }
+
+    public function countUpcomingByProgramme(array $ancestry, DateTimeImmutable $startTime)
+    {
+        return $this->createQueryBuilder('broadcast', false)
+            ->select('COUNT(broadcast)')
+            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
+            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+            ->andWhere('broadcast.endAt > :startTime')
+            ->addGroupBy('broadcast.startAt')
+            ->addGroupBy('programmeItem.id')
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
+            ->setParameter('startTime', $startTime)
+            ->getQuery()->getScalarResult();
     }
 
     public function createQueryBuilder($alias, $joinViaVersion = true, $indexBy = null)
