@@ -166,16 +166,18 @@ class BroadcastRepository extends EntityRepository
 
     public function countUpcomingByProgramme(array $ancestry, DateTimeImmutable $startTime)
     {
-        return $this->createQueryBuilder('broadcast', false)
-            ->select('COUNT(broadcast)')
-            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
-            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-            ->andWhere('broadcast.endAt > :startTime')
-            ->addGroupBy('broadcast.startAt')
-            ->addGroupBy('programmeItem.id')
-            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
-            ->setParameter('startTime', $startTime)
-            ->getQuery()->getScalarResult();
+        return count(
+                $this->createQueryBuilder('broadcast', false)
+                ->select('broadcast.id')
+                ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
+                ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+                ->andWhere('broadcast.endAt > :startTime')
+                ->addGroupBy('broadcast.startAt')
+                ->addGroupBy('programmeItem.id')
+                ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
+                ->setParameter('startTime', $startTime)
+                ->getQuery()->getScalarResult()
+        );
     }
 
     public function createQueryBuilder($alias, $joinViaVersion = true, $indexBy = null)
