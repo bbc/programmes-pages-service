@@ -167,7 +167,7 @@ class BroadcastRepository extends EntityRepository
     public function countUpcomingByProgramme(array $ancestry, DateTimeImmutable $startTime)
     {
         return count(
-                $this->createQueryBuilder('broadcast', false)
+            $this->createQueryBuilder('broadcast', false)
                 ->select('broadcast.id')
                 ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
                 ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
