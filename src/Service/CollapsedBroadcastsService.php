@@ -24,7 +24,7 @@ class CollapsedBroadcastsService extends AbstractService
         $this->serviceRepository = $serviceRepository;
     }
 
-    public function findCollapsedBroadcastsByProgrammeAndMonth(
+    public function findByProgrammeAndMonth(
         Programme $programme,
         int $year,
         int $month,
@@ -44,12 +44,12 @@ class CollapsedBroadcastsService extends AbstractService
         return $this->mapManyEntities($broadcasts, $services);
     }
 
-    public function findPastCollapsedBroadcastsForProgramme(
+    public function findPastByProgramme(
         Programme $programme,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
-        $broadcasts = $this->repository->findPastCollapsedBroadcastsForProgramme(
+        $broadcasts = $this->repository->findPastByProgramme(
             $programme->getDbAncestryIds(),
             'Broadcast',
             new DateTimeImmutable(),

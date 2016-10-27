@@ -88,7 +88,7 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
-    public function findPastCollapsedBroadcastsForProgramme(
+    public function findPastByProgramme(
         array $ancestry,
         string $type,
         DateTimeImmutable $cutoffTime,

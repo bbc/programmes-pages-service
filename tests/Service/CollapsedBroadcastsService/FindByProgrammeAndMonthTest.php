@@ -4,7 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
 class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
 {
-    public function testFindCollapsedBroadcastsByProgrammeAndMonth()
+    public function testFindByProgrammeAndMonth()
     {
         $dbAncestry = [1, 2, 3];
         $programme = $this->mockEntity('Programme', 3);
@@ -26,7 +26,7 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
              ->with(['a', 'b'])
              ->willReturn($serviceData);
 
-        $result = $this->service()->findCollapsedBroadcastsByProgrammeAndMonth($programme, 2007, 12);
+        $result = $this->service()->findByProgrammeAndMonth($programme, 2007, 12);
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData)[0], $result[0]);
     }
 
@@ -52,7 +52,7 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
-        $result = $this->service()->findCollapsedBroadcastsByProgrammeAndMonth($programme, 2007, 12, 5, 3);
+        $result = $this->service()->findByProgrammeAndMonth($programme, 2007, 12, 5, 3);
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData)[0], $result[0]);
 
     }

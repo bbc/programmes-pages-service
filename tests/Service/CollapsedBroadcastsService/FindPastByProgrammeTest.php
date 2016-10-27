@@ -2,12 +2,11 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
-use BBC\ProgrammesPagesService\Service\AbstractService;
 use DateTimeImmutable;
 
 class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
-    public function testFindPastCollapsedBroadcastsForProgramme()
+    public function testFindPastByProgramme()
     {
         $dbAncestry = [1, 2, 3];
         $programme = $this->mockEntity('Programme', 3);
@@ -20,7 +19,7 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
         ];
 
         $this->mockRepository->expects($this->once())
-            ->method('findPastCollapsedBroadcastsForProgramme')
+            ->method('findPastByProgramme')
             ->with($dbAncestry, 'Broadcast', new DateTimeImmutable(), 300, 0)
             ->willReturn($broadcastData);
 
@@ -29,12 +28,12 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
-        $result = $this->service()->findPastCollapsedBroadcastsForProgramme($programme);
+        $result = $this->service()->findPastByProgramme($programme);
         $this->assertEquals(count($result), 1);
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
     }
 
-    public function testFindPastCollapsedBroadcastsForProgrammeCustomPaginationAndLimit()
+    public function testFindPastByProgrammeCustomPaginationAndLimit()
     {
         $dbAncestry = [1, 2, 3];
         $programme = $this->mockEntity('Programme', 3);
@@ -47,7 +46,7 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
         ];
 
         $this->mockRepository->expects($this->once())
-            ->method('findPastCollapsedBroadcastsForProgramme')
+            ->method('findPastByProgramme')
             ->with($dbAncestry, 'Broadcast', new DateTimeImmutable(), 1, 2)
             ->willReturn($broadcastData);
 
@@ -56,7 +55,7 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
-        $result = $this->service()->findPastCollapsedBroadcastsForProgramme($programme, 1, 3);
+        $result = $this->service()->findPastByProgramme($programme, 1, 3);
         $this->assertEquals(count($result), 1);
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
     }
