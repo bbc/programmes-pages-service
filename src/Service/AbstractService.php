@@ -58,8 +58,12 @@ abstract class AbstractService
         return $this->mapper->getDomainModel($dbEntity, ...$additionalArgs);
     }
 
-    protected function mapManyEntities(array $dbEntities): array
+    protected function mapManyEntities(array $dbEntities, ...$additionalArgs): array
     {
-        return array_map([$this, 'mapSingleEntity'], $dbEntities);
+        $mappedEntities = [];
+        foreach ($dbEntities as $dbEntity) {
+            $mappedEntities[] = $this->mapSingleEntity($dbEntity, ...$additionalArgs);
+        }
+        return $mappedEntities;
     }
 }

@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepos
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
+use DateTimeImmutable;
 
 class CollapsedBroadcastsService extends AbstractService
 {
@@ -23,19 +24,45 @@ class CollapsedBroadcastsService extends AbstractService
         $this->serviceRepository = $serviceRepository;
     }
 
-    public function findCollapsedBroadcastsByProgrammeAndMonth(
+    public function findByProgrammeAndMonth(
         Programme $programme,
         int $year,
-        int $month
-    ) : array {
-
+        int $month,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
         $broadcasts = $this->repository->findByProgrammeAndMonth(
             $programme->getDbAncestryIds(),
             'Broadcast',
             $year,
-            $month
+            $month,
+            $limit,
+            $this->getOffset($limit, $page)
         );
 
+        $services = $this->fetchUsedServices($broadcasts);
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    public function findPastByProgramme(
+        Programme $programme,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $broadcasts = $this->repository->findPastByProgramme(
+            $programme->getDbAncestryIds(),
+            'Broadcast',
+            new DateTimeImmutable(),
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        $services = $this->fetchUsedServices($broadcasts);
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    private function fetchUsedServices(array $broadcasts): array
+    {
         // Build list of all serviceIds used across all broadcasts
         $serviceIds = array_keys(
             array_reduce(
@@ -52,7 +79,7 @@ class CollapsedBroadcastsService extends AbstractService
         );
 
         // Fetch all the used services
-        $services = array_reduce(
+        return array_reduce(
             $this->serviceRepository->findBySids($serviceIds),
             function ($memo, $service) {
                 $memo[$service['sid']] = $service;
@@ -60,13 +87,5 @@ class CollapsedBroadcastsService extends AbstractService
             },
             []
         );
-
-        // Map all the entities. As we need to pass a parameter to the mapper, we need to use mapSingleEntity
-        // instead of using mapManyEntities
-        $a = array_map(function ($broadcast) use ($services) {
-            return $this->mapSingleEntity($broadcast, $services);
-        }, $broadcasts);
-
-        return $a;
     }
 }
