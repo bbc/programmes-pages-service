@@ -61,6 +61,23 @@ class CollapsedBroadcastsService extends AbstractService
         return $this->mapManyEntities($broadcasts, $services);
     }
 
+    public function findUpcomingByProgramme(
+        Programme $programme,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $broadcasts = $this->repository->findUpcomingByProgramme(
+            $programme->getDbAncestryIds(),
+            'Broadcast',
+            new DateTimeImmutable(),
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        $services = $this->fetchUsedServices($broadcasts);
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
     private function fetchUsedServices(array $broadcasts): array
     {
         // Build list of all serviceIds used across all broadcasts

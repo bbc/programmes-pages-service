@@ -125,6 +125,45 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
+    public function findUpcomingByProgramme(
+        array $ancestry,
+        string $type,
+        DateTimeImmutable $startTime,
+        $limit,
+        int $offset
+    ) {
+        $qb = $this->createQueryBuilder('broadcast', false)
+            ->addSelect(['programmeItem', 'masterBrand', 'network'])
+            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
+            ->join('broadcast.service', 'service')
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
+            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+            ->andWhere('broadcast.endAt > :cutoffTime')
+            ->addGroupBy('broadcast.startAt')
+            ->addGroupBy('programmeItem.id')
+            ->addOrderBy('broadcast.startAt', 'DESC')
+            // APS orders things in different ways for each query, so we have to do this. We should standardize this in
+            // the future
+            ->addOrderBy('network.position')
+            ->setFirstResult($offset)
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
+            ->setParameter('cutoffTime', $startTime);
+
+        $qb = $this->setLimit($qb, $limit);
+        $qb = $this->setEntityTypeFilter($qb, $type);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $this->explodeServiceIds($result);
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['programmeItem', 'ancestry']
+        );
+    }
+
     public function createQueryBuilder($alias, $joinViaVersion = true, $indexBy = null)
     {
         // Any time Broadcasts are fetched here they must be inner joined to
