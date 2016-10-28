@@ -6,7 +6,7 @@ use DateTimeImmutable;
 
 class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
-    public function testFindPastByProgramme()
+    public function testFindPastByProgrammeDefaultPagination()
     {
         $dbAncestry = [1, 2, 3];
         $programme = $this->mockEntity('Programme', 3);
@@ -20,7 +20,7 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
 
         $this->mockRepository->expects($this->once())
             ->method('findPastByProgramme')
-            ->with($dbAncestry, 'Broadcast', new DateTimeImmutable(), 300, 0)
+            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()), 300, 0)
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
@@ -33,7 +33,7 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
     }
 
-    public function testFindPastByProgrammeCustomPaginationAndLimit()
+    public function testFindPastByProgrammeCustomPagination()
     {
         $dbAncestry = [1, 2, 3];
         $programme = $this->mockEntity('Programme', 3);
@@ -47,7 +47,7 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
 
         $this->mockRepository->expects($this->once())
             ->method('findPastByProgramme')
-            ->with($dbAncestry, 'Broadcast', new DateTimeImmutable(), 1, 2)
+            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
@@ -55,8 +55,26 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
-        $result = $this->service()->findPastByProgramme($programme, 1, 3);
+        $result = $this->service()->findPastByProgramme($programme, 5, 3);
         $this->assertEquals(count($result), 1);
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
+    }
+
+    public function testFindPastByProgrammeWithNonExistantPid()
+    {
+        $dbAncestry = [997, 998, 999];
+        $programme = $this->mockEntity('Programme');
+        $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
+
+        $this->mockRepository->expects($this->once())
+            ->method('findPastByProgramme')
+            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
+            ->willReturn([]);
+
+        $this->mockServiceRepository->expects($this->never())
+            ->method('findBySids');
+
+        $result = $this->service()->findPastByProgramme($programme, 5, 3);
+        $this->assertEquals([], $result);
     }
 }
