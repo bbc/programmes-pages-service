@@ -78,14 +78,16 @@ class CollapsedBroadcastsService extends AbstractService
             )
         );
 
-        // Fetch all the used services
-        return array_reduce(
-            $this->serviceRepository->findBySids($serviceIds),
-            function ($memo, $service) {
-                $memo[$service['sid']] = $service;
-                return $memo;
-            },
-            []
-        );
+        // If there are no serviceIds to fetch, skip requesting them
+        $services = [];
+        if ($serviceIds) {
+            $services = $this->serviceRepository->findBySids($serviceIds);
+        }
+
+        // Fetch all the used services, keyed by their sid
+        return array_reduce($services, function ($memo, $service) {
+            $memo[$service['sid']] = $service;
+            return $memo;
+        }, []);
     }
 }
