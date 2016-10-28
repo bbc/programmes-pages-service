@@ -57,26 +57,20 @@ class BroadcastRepository extends EntityRepository
 
     public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month, $limit, int $offset)
     {
-        $qb = $this->createQueryBuilder('broadcast', false)
-            ->addSelect(['programmeItem', 'masterBrand', 'network'])
-            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
-            ->join('broadcast.service', 'service')
-            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
-            ->leftJoin('masterBrand.network', 'network')
-            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-            ->andWhere('YEAR(broadcast.startAt) = :year')
+        $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder(
+            $ancestry,
+            $type
+        );
+
+        $qb->andWhere('YEAR(broadcast.startAt) = :year')
             ->andWhere('MONTH(broadcast.startAt) = :month')
-            ->addGroupBy('broadcast.startAt')
-            ->addGroupBy('programmeItem.id')
             ->addOrderBy('broadcast.startAt', 'DESC')
             ->addOrderBy('service.urlKey', 'ASC')
             ->setFirstResult($offset)
             ->setParameter('year', $year)
-            ->setParameter('month', $month)
-            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+            ->setParameter('month', $month);
 
         $qb = $this->setLimit($qb, $limit);
-        $qb = $this->setEntityTypeFilter($qb, $type);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         $result = $this->explodeServiceIds($result);
@@ -88,6 +82,14 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
+    /**
+     * Past Broadcasts are different from Broadcasts within a date range.
+     * Within a date range we look for programmes that /started/ no later than
+     * the end date parameter.
+     * However for past programmes we don't want to count broadcasts that are in
+     * progress at the cutoffTime, so thus we need to look for programmes that
+     * /ended/ earlier than the cutoffTime parameter.
+     */
     public function findPastByProgramme(
         array $ancestry,
         string $type,
@@ -95,25 +97,18 @@ class BroadcastRepository extends EntityRepository
         $limit,
         int $offset
     ) {
-        $qb = $this->createQueryBuilder('broadcast', false)
-            ->addSelect(['programmeItem', 'masterBrand', 'network'])
-            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
-            ->join('broadcast.service', 'service')
-            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
-            ->leftJoin('masterBrand.network', 'network')
-            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
-            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-            ->andWhere('broadcast.endAt <= :cutoffTime')
-            ->addGroupBy('broadcast.startAt')
-            ->addGroupBy('programmeItem.id')
+        $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder(
+            $ancestry,
+            $type
+        );
+
+        $qb->andWhere('broadcast.endAt <= :endTime')
             ->addOrderBy('broadcast.endAt', 'DESC')
             ->addOrderBy('network.nid')
             ->setFirstResult($offset)
-            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
-            ->setParameter('cutoffTime', $cutoffTime);
+            ->setParameter('endTime', $cutoffTime);
 
         $qb = $this->setLimit($qb, $limit);
-        $qb = $this->setEntityTypeFilter($qb, $type);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         $result = $this->explodeServiceIds($result);
@@ -125,59 +120,62 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
+    /**
+     * Upcoming Broadcasts are different from Broadcasts within a date range.
+     * Within a date range we look for programmes that /started/ no earlier than
+     * the start date parameter.
+     * However for upcoming programmes we want to include programmes that are
+     * on-air at the cutoffTime, so thus we need to look for programmes that
+     * /ended/ after the cutoffTime parameter.
+     */
     public function findUpcomingByProgramme(
         array $ancestry,
         string $type,
-        DateTimeImmutable $startTime,
+        DateTimeImmutable $cutoffTime,
         $limit,
         int $offset
     ) {
-        $qb = $this->createQueryBuilder('broadcast', false)
-            ->addSelect(['programmeItem', 'masterBrand', 'network'])
-            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
-            ->join('broadcast.service', 'service')
-            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
-            ->leftJoin('masterBrand.network', 'network')
+        $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder(
+            $ancestry,
+            $type
+        );
+
+        $qb->andWhere('broadcast.endAt > :cutoffTime')
+            ->addOrderBy('broadcast.startAt', 'DESC')
+            // Secondary sort in APS differs between upcoming and past by
+            // programme. We should standardise this at some point.
+            ->addOrderBy('network.position')
+            ->setFirstResult($offset)
+            ->setParameter('cutoffTime', $cutoffTime);
+
+        $qb = $this->setLimit($qb, $limit);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $this->explodeServiceIds($result);
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['programmeItem', 'ancestry']
+        );
+    }
+
+    public function countUpcomingByProgramme(
+        array $ancestry,
+        string $type,
+        DateTimeImmutable $startTime
+    ) {
+         $qb = $this->createQueryBuilder('broadcast', false)
+            ->select('COUNT(broadcast.id)')
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
             ->andWhere('broadcast.endAt > :startTime')
             ->addGroupBy('broadcast.startAt')
-            ->addGroupBy('programmeItem.id')
-            ->addOrderBy('broadcast.startAt', 'DESC')
-            // APS orders things in different ways for each query, so we have to do this. We should standardize this in
-            // the future
-            ->addOrderBy('network.position')
-            ->setFirstResult($offset)
-            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
-            ->setParameter('startTime', $startTime);
+            ->addGroupBy('programmeItem.id');
 
-        $qb = $this->setLimit($qb, $limit);
         $qb = $this->setEntityTypeFilter($qb, $type);
 
-        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        $result = $this->explodeServiceIds($result);
-
-        return $this->abstractResolveAncestry(
-            $result,
-            [$this, 'programmeAncestryGetter'],
-            ['programmeItem', 'ancestry']
-        );
-    }
-
-    public function countUpcomingByProgramme(array $ancestry, DateTimeImmutable $startTime)
-    {
-        return count(
-            $this->createQueryBuilder('broadcast', false)
-                ->select('broadcast.id')
-                ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
-                ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-                ->andWhere('broadcast.endAt > :startTime')
-                ->addGroupBy('broadcast.startAt')
-                ->addGroupBy('programmeItem.id')
-                ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
-                ->setParameter('startTime', $startTime)
-                ->getQuery()->getScalarResult()
-        );
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     public function createQueryBuilder($alias, $joinViaVersion = true, $indexBy = null)
@@ -195,6 +193,24 @@ class BroadcastRepository extends EntityRepository
 
         return parent::createQueryBuilder($alias)
             ->join($alias . '.programmeItem', 'programmeItem');
+    }
+
+    private function createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $type)
+    {
+        $qb = $this->createQueryBuilder('broadcast', false)
+            ->addSelect(['programmeItem', 'masterBrand', 'network'])
+            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
+            ->join('broadcast.service', 'service')
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
+            ->addGroupBy('broadcast.startAt')
+            ->addGroupBy('programmeItem.id')
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+
+        $qb = $this->setEntityTypeFilter($qb, $type);
+        return $qb;
     }
 
     private function setEntityTypeFilter($qb, $type, $broadcastAlias = 'broadcast')

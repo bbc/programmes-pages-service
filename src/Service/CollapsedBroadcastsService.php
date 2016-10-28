@@ -80,7 +80,11 @@ class CollapsedBroadcastsService extends AbstractService
 
     public function countUpcomingByProgramme(Programme $programme): int
     {
-        return $this->repository->countUpcomingByProgramme($programme->getDbAncestryIds(), new DateTimeImmutable());
+        return $this->repository->countUpcomingByProgramme(
+            $programme->getDbAncestryIds(),
+            'Broadcast',
+            new DateTimeImmutable()
+        );
     }
 
     private function fetchUsedServices(array $broadcasts): array

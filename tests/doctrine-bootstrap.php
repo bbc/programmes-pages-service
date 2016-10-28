@@ -32,6 +32,7 @@ $config->addEntityNamespace('ProgrammesPagesService', 'BBC\ProgrammesPagesServic
 $config->setSQLLogger(new Doctrine\DBAL\Logging\DebugStack());
 $config->addFilter("embargoed_filter", "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Filter\EmbargoedFilter");
 $config->addCustomStringFunction('match_against', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\MatchAgainst");
+$config->addCustomStringFunction('group_concat', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\GroupConcat");
 $config->addCustomDateTimeFunction('year', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Year");
 $config->addCustomDateTimeFunction('month', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Month");
 
