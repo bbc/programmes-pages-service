@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\ResultSetMapping;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
@@ -163,19 +164,37 @@ class BroadcastRepository extends EntityRepository
     public function countUpcomingByProgramme(
         array $ancestry,
         string $type,
-        DateTimeImmutable $startTime
-    ) {
-         $qb = $this->createQueryBuilder('broadcast', false)
-            ->select('COUNT(broadcast.id)')
-            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
-            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-            ->andWhere('broadcast.endAt > :startTime')
-            ->addGroupBy('broadcast.startAt')
-            ->addGroupBy('programmeItem.id');
+        DateTimeImmutable $cutoffTime
+    ): int {
+        $isWebcastValue = $this->entityTypeFilterValue($type);
+        $isWebcastClause = !is_null($isWebcastValue) ? 'AND b.is_webcast = :isWebcast' : '';
 
-        $qb = $this->setEntityTypeFilter($qb, $type);
+        $qText = <<<QUERY
+SELECT COUNT(t.id) as cnt
+FROM (
+    SELECT b.start_at, c.id
+    FROM broadcast b
+    INNER JOIN core_entity c ON b.programme_item_id = c.id AND (c.is_embargoed = 0)
+    WHERE c.type = 'episode'
+    AND c.ancestry LIKE :ancestryClause
+    AND b.end_at > :cutoffTime
+    $isWebcastClause
+    GROUP BY b.start_at, c.id
+) t
+QUERY;
 
-        return $qb->getQuery()->getSingleScalarResult();
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('cnt', 'cnt');
+
+        $q = $this->getEntityManager()->createNativeQuery($qText, $rsm)
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
+            ->setParameter('cutoffTime', $cutoffTime);
+
+        if (!is_null($isWebcastValue)) {
+            $q->setParameter('isWebcast', $isWebcastValue);
+        }
+
+        return $q->getSingleScalarResult();
     }
 
     public function createQueryBuilder($alias, $joinViaVersion = true, $indexBy = null)
@@ -213,7 +232,7 @@ class BroadcastRepository extends EntityRepository
         return $qb;
     }
 
-    private function setEntityTypeFilter($qb, $type, $broadcastAlias = 'broadcast')
+    private function entityTypeFilterValue($type)
     {
         $typesLookup = [
             'Broadcast' => false,
@@ -232,7 +251,13 @@ class BroadcastRepository extends EntityRepository
             ));
         }
 
-        $isWebcast = $typesLookup[$type] ?? null;
+        return $typesLookup[$type] ?? null;
+    }
+
+
+    private function setEntityTypeFilter($qb, $type, $broadcastAlias = 'broadcast')
+    {
+        $isWebcast = $this->entityTypeFilterValue($type);
 
         if (!is_null($isWebcast)) {
             $qb->andWhere($broadcastAlias . '.isWebcast = :isWebcast')
