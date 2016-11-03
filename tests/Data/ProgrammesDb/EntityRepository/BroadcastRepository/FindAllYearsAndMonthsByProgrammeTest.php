@@ -8,7 +8,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepos
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository::<public>
  */
-class FindAllYearsAndMonthByProgrammeTest extends AbstractDatabaseTest
+class FindAllYearsAndMonthsByProgrammeTest extends AbstractDatabaseTest
 {
     public function tearDown()
     {
