@@ -142,7 +142,7 @@ class BroadcastRepository extends EntityRepository
         );
 
         $qb->andWhere('broadcast.endAt > :cutoffTime')
-            ->addOrderBy('broadcast.startAt', 'DESC')
+            ->addOrderBy('broadcast.startAt', 'ASC')
             // Secondary sort in APS differs between upcoming and past by
             // programme. We should standardise this at some point.
             ->addOrderBy('network.position')
