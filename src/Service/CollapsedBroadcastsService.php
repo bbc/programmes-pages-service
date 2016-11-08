@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
+use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use DateTimeImmutable;
@@ -52,7 +53,7 @@ class CollapsedBroadcastsService extends AbstractService
         $broadcasts = $this->repository->findPastByProgramme(
             $programme->getDbAncestryIds(),
             'Broadcast',
-            new DateTimeImmutable(),
+            ApplicationTime::getTime(),
             $limit,
             $this->getOffset($limit, $page)
         );
@@ -69,7 +70,7 @@ class CollapsedBroadcastsService extends AbstractService
         $broadcasts = $this->repository->findUpcomingByProgramme(
             $programme->getDbAncestryIds(),
             'Broadcast',
-            new DateTimeImmutable(),
+            ApplicationTime::getTime(),
             $limit,
             $this->getOffset($limit, $page)
         );
@@ -83,7 +84,7 @@ class CollapsedBroadcastsService extends AbstractService
         return $this->repository->countUpcomingByProgramme(
             $programme->getDbAncestryIds(),
             'Broadcast',
-            new DateTimeImmutable()
+            ApplicationTime::getTime()
         );
     }
 
