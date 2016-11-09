@@ -217,7 +217,7 @@ QUERY;
     private function createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $type)
     {
         $qb = $this->createQueryBuilder('broadcast', false)
-            ->addSelect(['programmeItem', 'masterBrand', 'network'])
+            ->addSelect(['programmeItem', 'image', 'masterBrand', 'network'])
             ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
             ->join('broadcast.service', 'service')
             ->leftJoin('programmeItem.image', 'image')
