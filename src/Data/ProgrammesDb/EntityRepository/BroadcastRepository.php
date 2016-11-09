@@ -105,7 +105,7 @@ class BroadcastRepository extends EntityRepository
 
         $qb->andWhere('broadcast.endAt <= :endTime')
             ->addOrderBy('broadcast.endAt', 'DESC')
-            ->addOrderBy('network.nid')
+            ->addOrderBy('networkOfService.nid', 'ASC')
             ->setFirstResult($offset)
             ->setParameter('endTime', $cutoffTime);
 
@@ -145,7 +145,7 @@ class BroadcastRepository extends EntityRepository
             ->addOrderBy('broadcast.startAt', 'ASC')
             // Secondary sort in APS differs between upcoming and past by
             // programme. We should standardise this at some point.
-            ->addOrderBy('network.position')
+            ->addOrderBy('networkOfService.position', 'ASC')
             ->setFirstResult($offset)
             ->setParameter('cutoffTime', $cutoffTime);
 
@@ -169,17 +169,29 @@ class BroadcastRepository extends EntityRepository
         $isWebcastValue = $this->entityTypeFilterValue($type);
         $isWebcastClause = !is_null($isWebcastValue) ? 'AND b.is_webcast = :isWebcast' : '';
 
+        // Join to CoreEntity to ensure the programme is not embargoed
+        // Join to network (via broadcast service) so that we get a count of
+        // items grouped by network.
+        //  For instance consider a programme broadcast on bbc_one_london and
+        // bbc_one_yorkshire at the same time. This would result in a count of
+        // one as those two services both belong to the same network - bbc_one.
+        // However consider a programme broadcast on bbc_radio_ulster and
+        // bbc_radio_foyle at the same time. This would result in a count of two
+        // as these two services do not belong to the same network.
+
         $qText = <<<QUERY
 SELECT COUNT(t.id) as cnt
 FROM (
     SELECT b.start_at, c.id
     FROM broadcast b
     INNER JOIN core_entity c ON b.programme_item_id = c.id AND (c.is_embargoed = 0)
+    LEFT JOIN service s ON b.service_id = s.id
+    LEFT JOIN network n ON s.network_id = n.id
     WHERE c.type = 'episode'
     AND c.ancestry LIKE :ancestryClause
     AND b.end_at > :cutoffTime
     $isWebcastClause
-    GROUP BY b.start_at, c.id
+    GROUP BY b.start_at, c.id, n.id
 ) t
 QUERY;
 
@@ -216,10 +228,21 @@ QUERY;
 
     private function createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $type)
     {
+        // networkOfService is needed so that each row is contains the services
+        // within a given network, rather than all services across multiple
+        // networks.
+        // For instance consider a programme broadcast on bbc_one_london and
+        // bbc_one_yorkshire at the same time. This would result in one row
+        // where the the servicesIds are "bbc_one_london,bbc_one_yorkshire" as
+        // those two services both belong to the same network - bbc_one.
+        // However consider a programme broadcast on bbc_radio_ulster and
+        // bbc_radio_foyle at the same time. This would result in two rows as
+        // these two services do not belong to the same network.
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['programmeItem', 'image', 'masterBrand', 'network'])
             ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
             ->join('broadcast.service', 'service')
+            ->leftJoin('service.network', 'networkOfService')
             ->leftJoin('programmeItem.image', 'image')
             ->leftJoin('programmeItem.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
@@ -227,6 +250,7 @@ QUERY;
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->addGroupBy('broadcast.startAt')
             ->addGroupBy('programmeItem.id')
+            ->addGroupBy('networkOfService.id')
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
 
         $qb = $this->setEntityTypeFilter($qb, $type);
