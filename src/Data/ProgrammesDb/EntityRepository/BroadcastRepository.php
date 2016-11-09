@@ -220,6 +220,7 @@ QUERY;
             ->addSelect(['programmeItem', 'masterBrand', 'network'])
             ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
             ->join('broadcast.service', 'service')
+            ->leftJoin('programmeItem.image', 'image')
             ->leftJoin('programmeItem.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
             ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
