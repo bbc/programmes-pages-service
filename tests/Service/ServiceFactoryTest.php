@@ -40,6 +40,7 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['BroadcastsService', ['Broadcast'], 'BroadcastMapper'],
+            ['CategoriesService', ['Category'], 'CategoryMapper'],
             ['CollapsedBroadcastsService', ['Broadcast', 'Service'], 'CollapsedBroadcastMapper'],
             ['ContributionsService', ['Contribution'], 'ContributionMapper'],
             ['ContributorsService', ['Contributor'], 'ContributorMapper'],

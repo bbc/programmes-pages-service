@@ -84,7 +84,7 @@ abstract class Category
      * @Gedmo\TreeLevel()
      * @ORM\Column(type="integer", nullable=false, options={"default" = 1})
      */
-    protected $depth;
+    protected $depth = 1;
 
     //// Denormalisations
 

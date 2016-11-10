@@ -25,11 +25,10 @@ class CategoryRepository extends MaterializedPathRepository
             // When INSTANCE OF receives the type as a parameter, we have to use the actual value that's stored in
             // the db instead of the ProgrammesPagesService:(type) form.
             ->andWhere('category INSTANCE OF :type')
-            ->andWhere('category.depth < 2')
+            ->andWhere('category.depth <= 2')
             ->addOrderBy('category.urlKey')
-            ->setParameter('type', $type);
-
-        $result = $result->getQuery()->getResult(Query::HYDRATE_ARRAY);
+            ->setParameter('type', $type)
+            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
         return $this->resolveParents($result);
     }

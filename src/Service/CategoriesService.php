@@ -31,9 +31,9 @@ class CategoriesService extends AbstractService
                 return CategoryTypeEnum::GENRE;
             default:
                 throw new InvalidArgumentException(
-                    "'" . $type . "' is not a valid category type. Valid types are : " .
-                    CategoryTypeEnum::FORMAT . " or " .
-                    CategoryTypeEnum::GENRE
+                    "'" . $type . "' is not a valid category type. Valid types are " .
+                    CategoryTypeEnum::FORMAT . "s or " .
+                    CategoryTypeEnum::GENRE . "s"
                 );
         }
     }
