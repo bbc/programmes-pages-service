@@ -14,6 +14,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *   @ORM\Index(name="core_entity_type_idx", columns={"type"}),
  *   @ORM\Index(name="core_entity_streamable_idx", columns={"streamable"}),
  *   @ORM\Index(name="core_entity_streamable_alternate_idx", columns={"streamable_alternate"}),
+ *   @ORM\Index(name="core_entity_is_embargoed_idx", columns={"is_embargoed"}),
  *   @ORM\Index(name="core_entity_ft_all", columns={"search_title","short_synopsis"}, flags={"fulltext"}),
  *   @ORM\Index(name="core_entity_ft_search_title", columns={"search_title"}, flags={"fulltext"}),
  *   @ORM\Index(name="core_entity_ft_short_synopsis", columns={"short_synopsis"}, flags={"fulltext"}),
@@ -123,7 +124,7 @@ abstract class CoreEntity
     /**
      * This field is denormalised and is what's actually used for genre/format display
      *
-     * @ORM\ManyToMany(targetEntity="Category")
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="programmes")
      * @ORM\JoinTable(name="programme_category",
      *   joinColumns={@ORM\JoinColumn(name="programme_id", referencedColumnName="id", onDelete="CASCADE")},
      *   inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")}

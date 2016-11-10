@@ -79,6 +79,21 @@ abstract class Category
     private $pipId;
 
     /**
+     * A list of the programmes that have this category.
+     *
+     * @ORM\ManyToMany(targetEntity="CoreEntity", mappedBy="categories")
+     */
+    protected $programmes;
+
+    /**
+     * @var int
+     *
+     * @Gedmo\TreeLevel()
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 1})
+     */
+    protected $depth;
+
+    /**
      * Category constructor.
      *
      * @param string $pipId
