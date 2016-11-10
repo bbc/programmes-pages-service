@@ -31,7 +31,7 @@ class Contribution
 
     /**
      * @ORM\ManyToOne(targetEntity="Contributor", inversedBy="contributions")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="RESTRICT")
      */
     private $contributor;
 

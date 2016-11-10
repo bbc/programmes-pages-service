@@ -132,6 +132,13 @@ class Segment
      * @ORM\OneToMany(targetEntity="SegmentEvent", mappedBy="segment")
      */
     private $segmentEvents;
+    
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    private $contributionCount = 0;
 
     public function __construct(string $pid, string $type)
     {
@@ -323,5 +330,15 @@ class Segment
     public function setRecordingDate(string $recordingDate = null)
     {
         $this->recordingDate = $recordingDate;
+    }
+
+    public function getContributionCount(): int
+    {
+        return $this->contributionCount;
+    }
+
+    public function setContributionCount(int $contributionCount)
+    {
+        $this->contributionCount = $contributionCount;
     }
 }
