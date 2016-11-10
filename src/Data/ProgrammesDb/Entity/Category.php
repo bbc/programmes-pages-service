@@ -79,19 +79,21 @@ abstract class Category
     private $pipId;
 
     /**
-     * A list of the programmes that have this category.
-     *
-     * @ORM\ManyToMany(targetEntity="CoreEntity", mappedBy="categories")
-     */
-    protected $programmes;
-
-    /**
      * @var int
      *
      * @Gedmo\TreeLevel()
      * @ORM\Column(type="integer", nullable=false, options={"default" = 1})
      */
     protected $depth;
+
+    //// Denormalisations
+
+    /**
+     * A list of the programmes that have this category.
+     *
+     * @ORM\ManyToMany(targetEntity="CoreEntity", mappedBy="categories")
+     */
+    protected $programmes;
 
     /**
      * Category constructor.
@@ -122,6 +124,16 @@ abstract class Category
     public function getAncestry()
     {
         return $this->ancestry;
+    }
+
+    public function getDepth(): int
+    {
+        return $this->depth;
+    }
+
+    public function setDepth(string $depth)
+    {
+        $this->depth = $depth;
     }
 
     public function getTitle(): string
