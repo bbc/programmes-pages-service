@@ -25,6 +25,7 @@ class CategoryRepository extends MaterializedPathRepository
             // When INSTANCE OF receives the type as a parameter, we have to use the actual value that's stored in
             // the db instead of the ProgrammesPagesService:(type) form.
             ->andWhere('category INSTANCE OF :type')
+            // We limit the depth because for the pan-bbc feed we don't show more than subcategories
             ->andWhere('category.depth <= 2')
             ->addOrderBy('category.urlKey')
             ->setParameter('type', $type)
