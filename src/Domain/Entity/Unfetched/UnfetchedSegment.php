@@ -15,6 +15,7 @@ class UnfetchedSegment extends Segment
             new NullPid(),
             '',
             new Synopses('', '', ''),
+            0,
             ''
         );
     }

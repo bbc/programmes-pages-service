@@ -20,6 +20,7 @@ class VersionMapper extends AbstractMapper
             $dbVersion['streamable'],
             $dbVersion['downloadable'],
             $dbVersion['segmentEventCount'],
+            $dbVersion['contributionCount'],
             $dbVersion['duration'],
             $dbVersion['guidanceWarningCodes'],
             $dbVersion['competitionWarning'],

@@ -43,11 +43,17 @@ class Segment
      */
     private $contributions;
 
+    /**
+     * @var int
+     */
+    private $contributionCount;
+
     public function __construct(
         int $dbId,
         Pid $pid,
         string $type,
         Synopses $synopses,
+        int $contributionCount,
         string $title = null,
         int $duration = null,
         array $contributions = null
@@ -106,6 +112,14 @@ class Segment
     public function getDuration()
     {
         return $this->duration;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContributionCount()
+    {
+        return $this->contributionCount;
     }
 
     /**
