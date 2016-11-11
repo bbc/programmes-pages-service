@@ -131,7 +131,7 @@ abstract class Category
         return $this->depth;
     }
 
-    public function setDepth(string $depth)
+    public function setDepth(int $depth)
     {
         $this->depth = $depth;
     }
