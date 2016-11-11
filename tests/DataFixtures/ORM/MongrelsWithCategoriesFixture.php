@@ -24,6 +24,10 @@ class MongrelsWithCategoriesFixture extends AbstractFixture implements Dependent
         $brand->setCategories(new ArrayCollection([$category2, $category3]));
         $manager->persist($brand);
 
+        $brand = $this->getReference('b00swgkn');
+        $brand->setCategories(new ArrayCollection([$category1, $category2]));
+        $manager->persist($brand);
+
         $manager->flush();
     }
 
