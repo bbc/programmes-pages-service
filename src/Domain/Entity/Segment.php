@@ -63,6 +63,7 @@ class Segment
         $this->type = $type;
         $this->title = $title;
         $this->synopses = $synopses;
+        $this->contributionCount = $contributionCount;
         $this->duration = $duration;
         $this->contributions = $contributions;
     }
@@ -117,7 +118,7 @@ class Segment
     /**
      * @return int
      */
-    public function getContributionCount()
+    public function getContributionCount(): int
     {
         return $this->contributionCount;
     }

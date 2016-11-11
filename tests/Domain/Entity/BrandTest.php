@@ -37,7 +37,8 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1203,
             1204,
             1205,
-            false
+            false,
+            22
         );
 
         $this->assertEquals(2, $programme->getDbId());
@@ -60,7 +61,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1204, $programme->getAvailableEpisodesCount());
         $this->assertEquals(1205, $programme->getAvailableGalleriesCount());
         $this->assertEquals(false, $programme->isPodcastable());
-
+        $this->assertEquals(22, $programme->getContributionCount());
     }
 
     public function testConstructorOptionalArgs()
@@ -95,6 +96,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            22,
             $parent,
             2101,
             $masterBrand,
@@ -141,6 +143,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            22,
             null,
             2101,
             null,
@@ -177,6 +180,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            22,
             null,
             2101,
             null,

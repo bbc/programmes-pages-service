@@ -132,7 +132,7 @@ class Segment
      * @ORM\OneToMany(targetEntity="SegmentEvent", mappedBy="segment")
      */
     private $segmentEvents;
-    
+
     /**
      * @var int
      *

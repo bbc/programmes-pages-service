@@ -36,7 +36,8 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             1203,
             1204,
             1205,
-            false
+            false,
+            22
         );
 
         $this->assertEquals(2, $programme->getDbId());
@@ -59,6 +60,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1204, $programme->getAvailableEpisodesCount());
         $this->assertEquals(1205, $programme->getAvailableGalleriesCount());
         $this->assertEquals(false, $programme->IsPodcastable());
+        $this->assertEquals(22, $programme->getContributionCount());
 
     }
 
@@ -94,6 +96,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            22,
             $parent,
             2101,
             $masterBrand,

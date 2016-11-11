@@ -220,9 +220,9 @@ abstract class Programme
         return $this->relatedLinksCount;
     }
 
-    public function getContributionsCount(): int
+    public function getContributionCount(): int
     {
-        return $this->contributionsCount;
+        return $this->contributionCount;
     }
 
     public function hasSupportingContent(): bool
