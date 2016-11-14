@@ -2,7 +2,6 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository;
 
-use BBC\ProgrammesPagesService\Domain\Enumeration\CategoryTypeEnum;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 /**
@@ -10,19 +9,19 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindUsedByTypeTest extends AbstractDatabaseTest
 {
-    public function testFindByIds()
+    public function testFindUsedByType()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');
 
-        $entities = $repo->findUsedByType(CategoryTypeEnum::GENRE);
+        $entities = $repo->findUsedByType('genre');
         $this->assertSame(['C00193', 'C00196'], array_column($entities, 'pipId'));
 
         // findUsedByType query only
         $this->assertCount(2, $this->getDbQueries());
     }
 
-    public function testFindByIdsFullWhenEmptyResult()
+    public function testFindUsedByTypeWhenEmptyResult()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');

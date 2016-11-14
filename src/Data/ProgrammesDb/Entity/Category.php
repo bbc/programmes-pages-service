@@ -131,11 +131,6 @@ abstract class Category
         return $this->depth;
     }
 
-    public function setDepth(int $depth)
-    {
-        $this->depth = $depth;
-    }
-
     public function getTitle(): string
     {
         return $this->title;

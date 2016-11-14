@@ -3,9 +3,7 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository;
-use BBC\ProgrammesPagesService\Domain\Enumeration\CategoryTypeEnum;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
-use InvalidArgumentException;
 
 class CategoriesService extends AbstractService
 {
@@ -16,25 +14,15 @@ class CategoriesService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findUsedByType(string $type): array
+    public function findUsedFormats(): array
     {
-        $usedByType = $this->repository->findUsedByType($this->getCategoryType($type));
+        $usedByType = $this->repository->findUsedByType('format');
         return $this->mapManyEntities($usedByType);
     }
 
-    private function getCategoryType($type): string
+    public function findUsedGenres(): array
     {
-        switch ($type) {
-            case 'formats':
-                return CategoryTypeEnum::FORMAT;
-            case 'genres':
-                return CategoryTypeEnum::GENRE;
-            default:
-                throw new InvalidArgumentException(
-                    "'" . $type . "' is not a valid category type. Valid types are " .
-                    CategoryTypeEnum::FORMAT . "s or " .
-                    CategoryTypeEnum::GENRE . "s"
-                );
-        }
+        $usedByType = $this->repository->findUsedByType('genre');
+        return $this->mapManyEntities($usedByType);
     }
 }
