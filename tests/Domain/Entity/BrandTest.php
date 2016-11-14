@@ -61,7 +61,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1204, $programme->getAvailableEpisodesCount());
         $this->assertEquals(1205, $programme->getAvailableGalleriesCount());
         $this->assertEquals(false, $programme->isPodcastable());
-        $this->assertEquals(22, $programme->getContributionCount());
+        $this->assertEquals(22, $programme->getContributionsCount());
     }
 
     public function testConstructorOptionalArgs()

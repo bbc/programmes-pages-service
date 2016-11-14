@@ -26,7 +26,7 @@ class SegmentTest extends PHPUnit_Framework_TestCase
         $this->assertSame(0, $segment->getDbId());
         $this->assertSame($pid, $segment->getPid());
         $this->assertSame('Type', $segment->getType());
-        $this->assertSame(22, $segment->getContributionCount());
+        $this->assertSame(22, $segment->getContributionsCount());
         $this->assertSame('Title', $segment->getTitle());
         $this->assertSame($synopses, $segment->getSynopses());
         $this->assertNull($segment->getDuration());

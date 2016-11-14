@@ -55,7 +55,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $programme->isStreamableAlternatate());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
         $this->assertEquals(1201, $programme->getSegmentEventCount());
-        $this->assertEquals(22, $programme->getContributionCount());
+        $this->assertEquals(22, $programme->getContributionsCount());
     }
 
     public function testConstructorOptionalArgs()

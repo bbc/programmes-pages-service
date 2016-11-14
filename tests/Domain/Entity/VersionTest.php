@@ -25,7 +25,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $version->isDownloadable());
         $this->assertEquals(1, $version->getSegmentEventCount());
         $this->assertEquals(false, $version->hasCompetitionWarning());
-        $this->assertEquals(22, $version->getContributionCount());
+        $this->assertEquals(22, $version->getContributionsCount());
     }
 
     public function testConstructorOptionalArgs()

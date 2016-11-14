@@ -86,7 +86,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'availableEpisodesCount' => 14,
             'availableGalleriesCount' => 15,
             'isPodcastable' => false,
-            'contributionCount' => 22,
+            'contributionsCount' => 22,
             'parent' => $parent,
             'position' => 101,
             'masterBrand' => $masterBrand,

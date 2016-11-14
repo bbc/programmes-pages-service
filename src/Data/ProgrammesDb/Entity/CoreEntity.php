@@ -245,7 +245,7 @@ abstract class CoreEntity
      *
      * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
      */
-    private $contributionCount = 0;
+    private $contributionsCount = 0;
 
     public function __construct(string $pid, string $title)
     {
@@ -352,13 +352,13 @@ abstract class CoreEntity
         $this->relatedLinksCount = $relatedLinksCount;
     }
 
-    public function getContributionCount(): int
+    public function getContributionsCount(): int
     {
-        return $this->contributionCount;
+        return $this->contributionsCount;
     }
 
-    public function setContributionCount(int $contributionCount)
+    public function setContributionsCount(int $contributionsCount)
     {
-        $this->contributionCount = $contributionCount;
+        $this->contributionsCount = $contributionsCount;
     }
 }

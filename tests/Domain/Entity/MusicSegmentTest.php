@@ -28,7 +28,7 @@ class MusicSegmentTest extends PHPUnit_Framework_TestCase
         $this->assertSame('Type', $segment->getType());
         $this->assertSame('Title', $segment->getTitle());
         $this->assertSame($synopses, $segment->getSynopses());
-        $this->assertSame(22, $segment->getContributionCount());
+        $this->assertSame(22, $segment->getContributionsCount());
         $this->assertNull($segment->getDuration());
 
         $this->assertNull($segment->getMusicRecordId());

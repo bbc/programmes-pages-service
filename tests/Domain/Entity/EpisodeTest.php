@@ -61,7 +61,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1301, $programme->getAggregatedBroadcastsCount());
         $this->assertEquals(1302, $programme->getAvailableClipsCount());
         $this->assertEquals(1303, $programme->getAvailableGalleriesCount());
-        $this->assertEquals(22, $programme->getContributionCount());
+        $this->assertEquals(22, $programme->getContributionsCount());
     }
 
     public function testConstructorOptionalArgs()

@@ -76,7 +76,7 @@ class Version
         bool $isStreamable,
         bool $isDownloadable,
         int $segmentEventCount,
-        int $contributionCount,
+        int $contributionsCount,
         int $duration = null,
         string $guidanceWarningCodes = null,
         bool $hasCompetitionWarning = false,
@@ -101,7 +101,7 @@ class Version
         $this->isStreamable = $isStreamable;
         $this->isDownloadable = $isDownloadable;
         $this->segmentEventCount = $segmentEventCount;
-        $this->contributionCount = $contributionCount;
+        $this->contributionsCount = $contributionsCount;
         $this->duration = $duration;
         $this->guidanceWarningCodes = $guidanceWarningCodes;
         $this->hasCompetitionWarning = $hasCompetitionWarning;
@@ -172,9 +172,9 @@ class Version
         return $this->hasCompetitionWarning;
     }
 
-    public function getContributionCount(): int
+    public function getContributionsCount(): int
     {
-        return $this->contributionCount;
+        return $this->contributionsCount;
     }
 
     /**

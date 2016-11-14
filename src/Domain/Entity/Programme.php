@@ -54,7 +54,7 @@ abstract class Programme
     /**
      * @var int
      */
-    private $contributionCount;
+    private $contributionsCount;
 
     /**
      * @var bool
@@ -113,7 +113,7 @@ abstract class Programme
         bool $hasSupportingContent,
         bool $isStreamable,
         bool $isStreamableAlternate,
-        int $contributionCount,
+        int $contributionsCount,
         Programme $parent = null,
         int $position = null,
         MasterBrand $masterBrand = null,
@@ -142,7 +142,7 @@ abstract class Programme
         $this->genres = $genres;
         $this->formats = $formats;
         $this->firstBroadcastDate = $firstBroadcastDate;
-        $this->contributionCount = $contributionCount;
+        $this->contributionsCount = $contributionsCount;
     }
 
     /**
@@ -220,9 +220,9 @@ abstract class Programme
         return $this->relatedLinksCount;
     }
 
-    public function getContributionCount(): int
+    public function getContributionsCount(): int
     {
-        return $this->contributionCount;
+        return $this->contributionsCount;
     }
 
     public function hasSupportingContent(): bool
