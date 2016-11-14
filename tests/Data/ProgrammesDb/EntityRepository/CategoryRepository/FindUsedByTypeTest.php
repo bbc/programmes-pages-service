@@ -9,7 +9,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindUsedByTypeTest extends AbstractDatabaseTest
 {
-    public function testFindByIds()
+    public function testFindUsedByType()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');
@@ -21,7 +21,7 @@ class FindUsedByTypeTest extends AbstractDatabaseTest
         $this->assertCount(2, $this->getDbQueries());
     }
 
-    public function testFindByIdsFullWhenEmptyResult()
+    public function testFindUsedByTypeWhenEmptyResult()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');
