@@ -32,13 +32,13 @@ class BrandTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             1201,
             1202,
             1203,
             1204,
             1205,
-            false,
-            22
+            false
         );
 
         $this->assertEquals(2, $programme->getDbId());
@@ -55,13 +55,13 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
         $this->assertEquals(true, $programme->isStreamableAlternatate());
+        $this->assertEquals(1103, $programme->getContributionsCount());
         $this->assertEquals(1201, $programme->getAggregatedBroadcastsCount());
         $this->assertEquals(1202, $programme->getAggregatedEpisodesCount());
         $this->assertEquals(1203, $programme->getAvailableClipsCount());
         $this->assertEquals(1204, $programme->getAvailableEpisodesCount());
         $this->assertEquals(1205, $programme->getAvailableGalleriesCount());
         $this->assertEquals(false, $programme->isPodcastable());
-        $this->assertEquals(22, $programme->getContributionsCount());
     }
 
     public function testConstructorOptionalArgs()
@@ -90,13 +90,13 @@ class BrandTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             1201,
             1202,
             1203,
             1204,
             1205,
             false,
-            22,
             $parent,
             2101,
             $masterBrand,
@@ -137,13 +137,13 @@ class BrandTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             1201,
             1202,
             1203,
             1204,
             1205,
             false,
-            22,
             null,
             2101,
             null,
@@ -174,13 +174,13 @@ class BrandTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             1201,
             1202,
             1203,
             1204,
             1205,
             false,
-            22,
             null,
             2101,
             null,

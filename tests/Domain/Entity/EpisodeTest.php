@@ -34,12 +34,12 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             MediaTypeEnum::UNKNOWN,
             1201,
             1301,
             1302,
-            1303,
-            22
+            1303
         );
 
         $this->assertEquals(2, $programme->getDbId());
@@ -56,12 +56,12 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
         $this->assertEquals(true, $programme->isStreamableAlternatate());
+        $this->assertEquals(1103, $programme->getContributionsCount());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
         $this->assertEquals(1201, $programme->getSegmentEventCount());
         $this->assertEquals(1301, $programme->getAggregatedBroadcastsCount());
         $this->assertEquals(1302, $programme->getAvailableClipsCount());
         $this->assertEquals(1303, $programme->getAvailableGalleriesCount());
-        $this->assertEquals(22, $programme->getContributionsCount());
     }
 
     public function testConstructorOptionalArgs()
@@ -93,12 +93,12 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             MediaTypeEnum::UNKNOWN,
             1201,
             1301,
             1302,
             1303,
-            22,
             $parent,
             2101,
             $masterBrand,
@@ -144,12 +144,12 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             'wrongwrongwrong',
             1201,
             1301,
             1302,
-            1303,
-            22
+            1303
         );
     }
 
@@ -174,12 +174,12 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             MediaTypeEnum::UNKNOWN,
             1201,
             1301,
             1302,
             1303,
-            22,
             new UnfetchedProgramme()
         );
 
