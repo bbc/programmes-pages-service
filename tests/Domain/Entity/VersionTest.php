@@ -16,7 +16,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
 
-        $version = new Version(0, $pid, $episode, true, false, 1);
+        $version = new Version(0, $pid, $episode, true, false, 1, 22);
 
         $this->assertEquals(0, $version->getDbId());
         $this->assertEquals($pid, $version->getPid());
@@ -25,6 +25,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $version->isDownloadable());
         $this->assertEquals(1, $version->getSegmentEventCount());
         $this->assertEquals(false, $version->hasCompetitionWarning());
+        $this->assertEquals(22, $version->getContributionsCount());
     }
 
     public function testConstructorOptionalArgs()
@@ -43,6 +44,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
             true,
             false,
             1,
+            22,
             101,
             'GuidanceWarnings',
             true,
@@ -68,7 +70,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
 
-        $version = new Version(0, $pid, $episode, true, false, 1);
+        $version = new Version(0, $pid, $episode, true, false, 1, 22);
 
         $version->getVersionTypes();
     }
@@ -90,6 +92,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
             true,
             true,
             1,
+            22,
             101,
             'GuidanceWarnings',
             true,
@@ -116,6 +119,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
             true,
             true,
             1,
+            22,
             101,
             'GuidanceWarnings',
             true,

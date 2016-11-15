@@ -28,6 +28,7 @@ class SegmentMapper extends AbstractMapper implements MapperInterface
             new Pid($dbSegment['pid']),
             $dbSegment['type'],
             $this->getSynopses($dbSegment),
+            $dbSegment['contributionsCount'],
             $dbSegment['title'],
             $dbSegment['duration'],
             $this->getContributions($dbSegment)
@@ -41,6 +42,7 @@ class SegmentMapper extends AbstractMapper implements MapperInterface
             new Pid($dbSegment['pid']),
             $dbSegment['type'],
             $this->getSynopses($dbSegment),
+            $dbSegment['contributionsCount'],
             $dbSegment['title'],
             $dbSegment['duration'],
             $this->getContributions($dbSegment),

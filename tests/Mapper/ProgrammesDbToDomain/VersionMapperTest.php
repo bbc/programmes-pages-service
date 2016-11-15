@@ -45,6 +45,7 @@ class VersionMapperTest extends BaseMapperTestCase
             'segmentEventCount' => 2,
             'streamable' => true,
             'downloadable' => false,
+            'contributionsCount' => 22,
             'streamableFrom' => $streamableFrom,
             'streamableUntil' => $streamableUntil,
             'programmeItem' => $programmeDbEntity,
@@ -67,6 +68,7 @@ class VersionMapperTest extends BaseMapperTestCase
             true,
             false,
             2,
+            22,
             360,
             'warnings',
             true,
@@ -95,6 +97,7 @@ class VersionMapperTest extends BaseMapperTestCase
             'downloadable' => false,
             'streamableFrom' => null,
             'streamableUntil' => null,
+            'contributionsCount' => 22,
             'versionTypes' => [],
         ];
 
@@ -128,6 +131,7 @@ class VersionMapperTest extends BaseMapperTestCase
             'downloadable' => false,
             'streamableFrom' => null,
             'streamableUntil' => null,
+            'contributionsCount' => 22,
             'programmeItem' => $programmeDbEntity,
         ];
 

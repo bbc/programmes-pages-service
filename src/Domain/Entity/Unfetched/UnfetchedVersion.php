@@ -15,6 +15,7 @@ class UnfetchedVersion extends Version
             new UnfetchedProgrammeItem(),
             false,
             false,
+            0,
             0
         );
     }

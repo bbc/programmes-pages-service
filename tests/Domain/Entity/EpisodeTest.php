@@ -34,6 +34,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             MediaTypeEnum::UNKNOWN,
             1201,
             1301,
@@ -55,6 +56,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
         $this->assertEquals(true, $programme->isStreamableAlternatate());
+        $this->assertEquals(1103, $programme->getContributionsCount());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
         $this->assertEquals(1201, $programme->getSegmentEventCount());
         $this->assertEquals(1301, $programme->getAggregatedBroadcastsCount());
@@ -91,6 +93,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             MediaTypeEnum::UNKNOWN,
             1201,
             1301,
@@ -141,6 +144,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             'wrongwrongwrong',
             1201,
             1301,
@@ -170,6 +174,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             true,
             true,
             true,
+            1103,
             MediaTypeEnum::UNKNOWN,
             1201,
             1301,

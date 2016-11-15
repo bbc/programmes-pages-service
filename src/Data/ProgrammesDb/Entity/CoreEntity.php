@@ -239,6 +239,13 @@ abstract class CoreEntity
      */
     protected $segmentEventCount = 0;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    private $contributionsCount = 0;
+
     public function __construct(string $pid, string $title)
     {
         $this->pid = $pid;
@@ -342,5 +349,15 @@ abstract class CoreEntity
     public function setRelatedLinksCount(int $relatedLinksCount)
     {
         $this->relatedLinksCount = $relatedLinksCount;
+    }
+
+    public function getContributionsCount(): int
+    {
+        return $this->contributionsCount;
+    }
+
+    public function setContributionsCount(int $contributionsCount)
+    {
+        $this->contributionsCount = $contributionsCount;
     }
 }

@@ -133,6 +133,13 @@ class Segment
      */
     private $segmentEvents;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    private $contributionsCount = 0;
+
     public function __construct(string $pid, string $type)
     {
         $this->pid = $pid;
@@ -323,5 +330,15 @@ class Segment
     public function setRecordingDate(string $recordingDate = null)
     {
         $this->recordingDate = $recordingDate;
+    }
+
+    public function getContributionsCount(): int
+    {
+        return $this->contributionsCount;
+    }
+
+    public function setContributionsCount(int $contributionsCount)
+    {
+        $this->contributionsCount = $contributionsCount;
     }
 }

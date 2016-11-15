@@ -23,6 +23,7 @@ class UnfetchedProgrammeItem extends ProgrammeItem
             false,
             false,
             false,
+            0,
             MediaTypeEnum::UNKNOWN,
             0
         );

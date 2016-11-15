@@ -71,6 +71,13 @@ class Version
     private $segmentEventCount = 0;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     */
+    private $contributionsCount = 0;
+
+    /**
      * @var bool
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
@@ -236,6 +243,16 @@ class Version
     public function setCompetitionWarning(bool $competitionWarning)
     {
         $this->competitionWarning = $competitionWarning;
+    }
+
+    public function getContributionsCount(): int
+    {
+        return $this->contributionsCount;
+    }
+
+    public function setContributionsCount(int $contributionsCount)
+    {
+        $this->contributionsCount = $contributionsCount;
     }
 
     /**
