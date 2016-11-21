@@ -70,9 +70,13 @@ class AtoZTitle
     public function setTitle(string $title)
     {
         $this->title = $title;
-        $firstLetter = substr($title, 0, 1);
-        if (!preg_match('/^[A-Za-z]/', $firstLetter)) {
-            $firstLetter = '@';
+        $firstLetter = '@';
+        $possibleAlphas = preg_replace('/[^A-Za-z0-9]/', '', $title);
+        if ($possibleAlphas) {
+            $firstLetter = substr($possibleAlphas, 0, 1);
+            if (preg_match('/^[0-9]/', $firstLetter)) {
+                $firstLetter = '@';
+            }
         }
         $this->firstLetter = strtolower($firstLetter);
     }
