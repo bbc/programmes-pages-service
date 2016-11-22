@@ -6,6 +6,15 @@ class MapperFactory
 {
     protected $instances = [];
 
+    public function getAtoZTitleMapper(): AtoZTitleMapper
+    {
+        if (!array_key_exists('AtoZTitleMapper', $this->instances)) {
+            $this->instances['AtoZTitleMapper'] = new AtoZTitleMapper($this);
+        }
+
+        return $this->instances['AtoZTitleMapper'];
+    }
+
     public function getBroadcastMapper(): BroadcastMapper
     {
         if (!array_key_exists('BroadcastMapper', $this->instances)) {

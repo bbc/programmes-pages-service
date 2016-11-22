@@ -325,19 +325,43 @@ QUERY;
         return $this->resolveParents($result);
     }
 
-    public function countByKeywords(string $keywords): int
+    public function countByKeywords(
+        string $keywords,
+        string $entityType = 'CoreEntity',
+        string $networkUrlKey = null,
+        bool $filterClips = true,
+        bool $filterAvailable = false
+    ): int
     {
         $keywords = $this->stripPunctuation($keywords);
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
         $booleanKeywords = join(' +', explode(' ', $keywords));
         $booleanKeywords = '+' . $booleanKeywords;
 
         $qText = <<<QUERY
 SELECT COUNT(programme.id)
-FROM ProgrammesPagesService:Programme programme
+FROM ProgrammesPagesService:$entityType programme
 WHERE MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
 QUERY;
+        if ($filterAvailable) {
+            $qText .= ' AND programme.streamable = 1';
+        }
+        if ($filterClips) {
+            $qText .= ' AND programme NOT INSTANCE OF ProgrammesPagesService:Clip';
+        }
+        if ($networkUrlKey) {
+            if (in_array($networkUrlKey, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
+                $qText .= ' AND network.medium = :service';
+            } else {
+                $qText .= ' AND network.urlKey = :service';
+            }
+        }
         $q = $this->getEntityManager()->createQuery($qText)
             ->setParameter('booleanKeywords', $booleanKeywords);
+
+        if ($networkUrlKey) {
+            $q->setParameter('service', $networkUrlKey);
+        }
 
         $count = $q->getSingleScalarResult();
         return $count ? $count : 0;
@@ -345,18 +369,30 @@ QUERY;
 
     /**
      * @param string $keywords
+     * @param string $entityType
      * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
-     * @return mixed
+     * @param string $networkUrlKey
+     * @param bool $filterClips
+     * @param bool $filterAvailable
+     * @return array
      */
-    public function findByKeywords(string $keywords, $limit, int $offset)
-    {
+    public function findByKeywords(
+        string $keywords,
+        string $entityType = 'CoreEntity',
+        $limit,
+        int $offset,
+        string $networkUrlKey = null,
+        bool $filterClips = true,
+        bool $filterAvailable = false
+    ): array {
         $keywords = $this->stripPunctuation($keywords);
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
         $booleanKeywords = join(' +', explode(' ', $keywords));
         $booleanKeywords = '+' . $booleanKeywords;
 
         $qText = <<<QUERY
-SELECT programme,
+SELECT programme, image, masterBrand, network, mbImage, 
 (
     (  (MATCH_AGAINST (programme.searchTitle, :keywords ) * 3)
       + (MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :keywords ) * 1)
@@ -365,25 +401,41 @@ SELECT programme,
     )
     * ( CASE WHEN ((programme INSTANCE OF (ProgrammesPagesService:Brand, ProgrammesPagesService:Series)) AND programme.parent IS NULL) THEN 5 ELSE 1 END)
 ) AS HIDDEN rel
-FROM ProgrammesPagesService:Programme programme
+FROM ProgrammesPagesService:$entityType programme
 LEFT JOIN programme.image image
 LEFT JOIN programme.masterBrand masterBrand
 LEFT JOIN masterBrand.network network
 LEFT JOIN masterBrand.image mbImage
 WHERE MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
-ORDER BY rel DESC
 QUERY;
+        if ($filterAvailable) {
+            $qText .= ' AND programme.streamable = 1';
+        }
+        if ($filterClips) {
+            $qText .= ' AND programme NOT INSTANCE OF ProgrammesPagesService:Clip';
+        }
+        if ($networkUrlKey) {
+            if (in_array($networkUrlKey, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
+                $qText .= ' AND network.medium = :service';
+            } else {
+                $qText .= ' AND network.urlKey = :service';
+            }
+        }
+        $qText .= ' ORDER BY rel DESC';
+
         $q = $this->getEntityManager()->createQuery($qText)
             ->setFirstResult($offset)
             ->setParameter('keywords', $keywords)
             ->setParameter('booleanKeywords', $booleanKeywords)
             ->setParameter('quotedKeywords', '"' . $keywords . '"');
 
+        if ($networkUrlKey) {
+            $q->setParameter('service', $networkUrlKey);
+        }
         $q = $this->setLimit($q, $limit);
 
         return $q->getResult(Query::HYDRATE_ARRAY);
     }
-
 
     private function resolveParents(array $programmes)
     {

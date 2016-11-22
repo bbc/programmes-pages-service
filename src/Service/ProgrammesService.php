@@ -143,24 +143,52 @@ class ProgrammesService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function findProgrammesByKeywords(
+    public function searchByKeywords(
         string $keywords,
+        string $networkUrlKey = null,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
 
         $dbEntities = $this->repository->findByKeywords(
             $keywords,
+            'Programme',
             $limit,
-            $this->getOffset($limit, $page)
+            $this->getOffset($limit, $page),
+            $networkUrlKey
         );
 
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function countProgrammesByKeywords(string $keywords): int
+    public function countByKeywords(string $keywords, string $networkUrlKey = null): int
     {
-        return $this->repository->countByKeywords($keywords);
+        return $this->repository->countByKeywords($keywords, 'Programme', $networkUrlKey);
+    }
+
+    public function searchAvailableByKeywords(
+        string $keywords,
+        string $networkUrlKey = null,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+
+        $dbEntities = $this->repository->findByKeywords(
+            $keywords,
+            'Programme',
+            $limit,
+            $this->getOffset($limit, $page),
+            $networkUrlKey,
+            true,
+            true
+        );
+
+        return $this->mapManyEntities($dbEntities);
+    }
+
+    public function countAvailableByKeywords(string $keywords, string $networkUrlKey = null): int
+    {
+        return $this->repository->countByKeywords($keywords, 'Programme', $networkUrlKey, true, true);
     }
 
     private function findSiblingByProgramme(Programme $programme, string $direction)
