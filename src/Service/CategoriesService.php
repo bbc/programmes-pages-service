@@ -46,7 +46,7 @@ class CategoriesService extends AbstractService
 
     public function findChildGenresUsedByTleosByParent(Genre $genre)
     {
-        $subcategories = $this->repository->findChildCategoriesUsedByTleosByParentPipIdAndType(
+        $subcategories = $this->repository->findChildCategoriesUsedByTleosByParentIdAndType(
             $genre->getDbId(),
             'genre'
         );

@@ -54,7 +54,6 @@ class CategoryRepository extends MaterializedPathRepository
 
     public function findChildCategoriesUsedByTleosByParentIdAndType(string $categoryId, string $categoryType)
     {
-        var_dump($categoryId);
         $r = $this->createQueryBuilder('category')
             ->select(['DISTINCT category'])
             ->join('category.programmes', 'programmes')
