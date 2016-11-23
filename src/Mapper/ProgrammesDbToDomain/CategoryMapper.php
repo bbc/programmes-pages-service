@@ -36,6 +36,7 @@ class CategoryMapper implements MapperInterface
     private function getGenreDomainModel(array $dbCategory): Genre
     {
         return new Genre(
+            $this->getAncestryArray($dbCategory),
             $dbCategory['pipId'],
             $dbCategory['title'],
             $dbCategory['urlKey'],
@@ -50,5 +51,16 @@ class CategoryMapper implements MapperInterface
         }
 
         return $this->getDomainModel($dbCategory[$key]);
+    }
+
+    private function getAncestryArray($dbCategory, $key = 'ancestry')
+    {
+        // ancestry contains a string of all IDs including the current one with
+        // a trailing comma at the end (which makes it an empty item when exploding)
+        // Thus we want an array of all but the final item (which is null)
+        $ancestors = explode(',', $dbCategory[$key], -1) ?? [];
+        return array_map(function ($a) {
+            return (int) $a;
+        }, $ancestors);
     }
 }

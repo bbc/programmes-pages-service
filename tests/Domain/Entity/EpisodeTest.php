@@ -73,7 +73,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
         $releaseDate = new PartialDate(2015, 01, 02);
 
-        $genre = new Genre('id', 'Title', 'url_key');
+        $genre = new Genre([0], 'id', 'Title', 'url_key');
         $format = new Format('id2', 'Title', 'url_key');
 
         $streamableFrom = new DateTimeImmutable();

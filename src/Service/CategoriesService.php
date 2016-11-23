@@ -2,7 +2,9 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Category;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
 
 class CategoriesService extends AbstractService
@@ -24,5 +26,45 @@ class CategoriesService extends AbstractService
     {
         $usedByType = $this->repository->findUsedByType('genre');
         return $this->mapManyEntities($usedByType);
+    }
+
+    public function findGenreByUrlKeyAncestry(
+        string $category1,
+        string $category2 = null,
+        string $category3 = null
+    ) {
+        /** @var Category $categoryWithAncestry */
+        $categoryWithAncestry = $this->repository->findByUrlKeyAncestryAndType(
+            'genre',
+            $category1,
+            $category2,
+            $category3
+        );
+
+        return $this->mapSingleEntity($categoryWithAncestry);
+    }
+
+    public function findChildGenresUsedByTleosByParent(Genre $genre)
+    {
+        $subcategories = $this->repository->findChildCategoriesUsedByTleosByParentPipIdAndType(
+            $genre->getDbId(),
+            'genre'
+        );
+        return $this->mapManyEntities($subcategories);
+    }
+
+    public function findFormatByUrlKeyAncestry(
+        string $category1,
+        string $category2 = null,
+        string $category3 = null
+    ) {
+        /** @var Category $categoryWithAncestry */
+        $categoryWithAncestry = $this->repository->findByUrlKeyAncestryAndType(
+            'format',
+            $category1,
+            $category2,
+            $category3
+        );
+        return $this->mapManyEntities($categoryWithAncestry);
     }
 }
