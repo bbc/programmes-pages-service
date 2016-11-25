@@ -152,9 +152,9 @@ class ProgrammesService extends AbstractService
 
         $dbEntities = $this->repository->findByKeywords(
             $keywords,
-            'Programme',
             $limit,
             $this->getOffset($limit, $page),
+            ['Brand', 'Series', 'Episode'],
             $networkUrlKey
         );
 
@@ -163,7 +163,7 @@ class ProgrammesService extends AbstractService
 
     public function countByKeywords(string $keywords, string $networkUrlKey = null): int
     {
-        return $this->repository->countByKeywords($keywords, 'Programme', $networkUrlKey);
+        return $this->repository->countByKeywords($keywords, ['Brand', 'Series', 'Episode'], $networkUrlKey);
     }
 
     public function searchAvailableByKeywords(
@@ -175,11 +175,10 @@ class ProgrammesService extends AbstractService
 
         $dbEntities = $this->repository->findByKeywords(
             $keywords,
-            'Programme',
             $limit,
             $this->getOffset($limit, $page),
+            ['Brand', 'Series', 'Episode'],
             $networkUrlKey,
-            true,
             true
         );
 
@@ -188,7 +187,7 @@ class ProgrammesService extends AbstractService
 
     public function countAvailableByKeywords(string $keywords, string $networkUrlKey = null): int
     {
-        return $this->repository->countByKeywords($keywords, 'Programme', $networkUrlKey, true, true);
+        return $this->repository->countByKeywords($keywords, ['Brand', 'Series', 'Episode'], $networkUrlKey, true);
     }
 
     private function findSiblingByProgramme(Programme $programme, string $direction)

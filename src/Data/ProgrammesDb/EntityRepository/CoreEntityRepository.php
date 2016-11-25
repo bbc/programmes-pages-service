@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
+use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
@@ -327,28 +328,27 @@ QUERY;
 
     public function countByKeywords(
         string $keywords,
-        string $entityType = 'CoreEntity',
+        array $entityTypes = ['CoreEntity'],
         string $networkUrlKey = null,
-        bool $filterClips = true,
         bool $filterAvailable = false
-    ): int
-    {
+    ): int {
         $keywords = $this->stripPunctuation($keywords);
-        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
         $booleanKeywords = join(' +', explode(' ', $keywords));
         $booleanKeywords = '+' . $booleanKeywords;
 
         $qText = <<<QUERY
-SELECT COUNT(programme.id)
-FROM ProgrammesPagesService:$entityType programme
-WHERE MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
+SELECT COUNT(coreEntity.id)
+FROM ProgrammesPagesService:CoreEntity coreEntity
+WHERE MATCH_AGAINST (coreEntity.searchTitle, coreEntity.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
 QUERY;
         if ($filterAvailable) {
-            $qText .= ' AND programme.streamable = 1';
+            $qText .= ' AND coreEntity.streamable = 1';
         }
-        if ($filterClips) {
-            $qText .= ' AND programme NOT INSTANCE OF ProgrammesPagesService:Clip';
+
+        if ($entityTypes) {
+            $qText .= ' AND (' . $this->makeEntityTypesDQL($entityTypes, 'coreEntity') . ')';
         }
+
         if ($networkUrlKey) {
             if (in_array($networkUrlKey, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
                 $qText .= ' AND network.medium = :service';
@@ -369,50 +369,47 @@ QUERY;
 
     /**
      * @param string $keywords
-     * @param string $entityType
      * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
+     * @param array $entityTypes
      * @param string $networkUrlKey
-     * @param bool $filterClips
      * @param bool $filterAvailable
      * @return array
      */
     public function findByKeywords(
         string $keywords,
-        string $entityType = 'CoreEntity',
         $limit,
         int $offset,
+        array $entityTypes = null,
         string $networkUrlKey = null,
-        bool $filterClips = true,
         bool $filterAvailable = false
     ): array {
         $keywords = $this->stripPunctuation($keywords);
-        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
         $booleanKeywords = join(' +', explode(' ', $keywords));
         $booleanKeywords = '+' . $booleanKeywords;
 
         $qText = <<<QUERY
-SELECT programme, image, masterBrand, network, mbImage, 
+SELECT coreEntity, image, masterBrand, network, mbImage, 
 (
-    (  (MATCH_AGAINST (programme.searchTitle, :keywords ) * 3)
-      + (MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :keywords ) * 1)
-      + (MATCH_AGAINST (programme.searchTitle, :quotedKeywords ) * 7)
-      + ( CASE WHEN (programme.searchTitle=:keywords) THEN 100 ELSE 1 END )
+    (  (MATCH_AGAINST (coreEntity.searchTitle, :keywords ) * 3)
+      + (MATCH_AGAINST (coreEntity.searchTitle, coreEntity.shortSynopsis, :keywords ) * 1)
+      + (MATCH_AGAINST (coreEntity.searchTitle, :quotedKeywords ) * 7)
+      + ( CASE WHEN (coreEntity.searchTitle=:keywords) THEN 100 ELSE 1 END )
     )
-    * ( CASE WHEN ((programme INSTANCE OF (ProgrammesPagesService:Brand, ProgrammesPagesService:Series)) AND programme.parent IS NULL) THEN 5 ELSE 1 END)
+    * ( CASE WHEN ((coreEntity INSTANCE OF (ProgrammesPagesService:Brand, ProgrammesPagesService:Series)) AND coreEntity.parent IS NULL) THEN 5 ELSE 1 END)
 ) AS HIDDEN rel
-FROM ProgrammesPagesService:$entityType programme
-LEFT JOIN programme.image image
-LEFT JOIN programme.masterBrand masterBrand
+FROM ProgrammesPagesService:CoreEntity coreEntity
+LEFT JOIN coreEntity.image image
+LEFT JOIN coreEntity.masterBrand masterBrand
 LEFT JOIN masterBrand.network network
 LEFT JOIN masterBrand.image mbImage
-WHERE MATCH_AGAINST (programme.searchTitle, programme.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
+WHERE MATCH_AGAINST (coreEntity.searchTitle, coreEntity.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
 QUERY;
         if ($filterAvailable) {
-            $qText .= ' AND programme.streamable = 1';
+            $qText .= ' AND coreEntity.streamable = 1';
         }
-        if ($filterClips) {
-            $qText .= ' AND programme NOT INSTANCE OF ProgrammesPagesService:Clip';
+        if ($entityTypes) {
+            $qText .= ' AND (' . $this->makeEntityTypesDQL($entityTypes, 'coreEntity') . ')';
         }
         if ($networkUrlKey) {
             if (in_array($networkUrlKey, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
@@ -476,5 +473,20 @@ QUERY;
                 $entityType
             ));
         }
+    }
+
+    private function makeEntityTypesDQL(array $entityTypes, string $alias)
+    {
+        foreach ($entityTypes as $entityType) {
+            $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+        }
+        $qText = ' (';
+        $or = '';
+        foreach ($entityTypes as $entityType) {
+            $qText .= "$or $alias INSTANCE OF ProgrammesPagesService:$entityType";
+            $or = ' OR';
+        }
+        $qText .= ')';
+        return $qText;
     }
 }
