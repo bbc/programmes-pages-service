@@ -83,11 +83,7 @@ class CoreEntityRepository extends MaterializedPathRepository
 
         $qb = $this->setLimit($qb, $limit);
 
-        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
-        var_dump($result);
-        die();
-        return $result;
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     /**
