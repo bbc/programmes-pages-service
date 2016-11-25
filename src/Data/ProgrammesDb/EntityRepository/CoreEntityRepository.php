@@ -40,7 +40,9 @@ class CoreEntityRepository extends MaterializedPathRepository
         $limit,
         $offset
     ) {
-        $qb = $this->createQueryBuilder('episode')
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('episode')
+            ->from('ProgrammesPagesService:Episode', 'episode')
             ->innerJoin('episode.categories', 'category')
             ->andWhere('category.parent IS NULL')
             ->andWhere('category.urlKey = :urlKey1')
@@ -49,7 +51,9 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->setParameter('urlKey1', $urlKey1);
 
         if ($urlKey2) {
-            $qb = $this->createQueryBuilder('episode')
+            $qb = $this->getEntityManager()->createQueryBuilder()
+                ->select('episode')
+                ->from('ProgrammesPagesService:Episode', 'episode')
                 ->innerJoin('episode.categories', 'category')
                 ->innerJoin('category.parent', 'parentCategory')
                 ->andWhere('category.urlKey = :urlKey2') // Match episode to second key e.g. jazzandblues
@@ -61,7 +65,9 @@ class CoreEntityRepository extends MaterializedPathRepository
         }
 
         if ($urlKey3) {
-            $qb = $this->createQueryBuilder('episode')
+            $qb = $this->getEntityManager()->createQueryBuilder()
+                ->select('episode')
+                ->from('ProgrammesPagesService:Episode', 'episode')
                 ->innerJoin('episode.categories', 'category')
                 ->innerJoin('category.parent', 'parentCategory1')
                 ->innerJoin('parentCategory1.parent', 'parentCategory2')
@@ -77,13 +83,11 @@ class CoreEntityRepository extends MaterializedPathRepository
 
         $qb = $this->setLimit($qb, $limit);
 
-        $result = $qb->getQuery()->getScalarResult(Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
         var_dump($result);
         die();
-        $resolvedParentage = $this->resolveParents([$result]);
-
-        return reset($resolvedParentage);
+        return $result;
     }
 
     /**

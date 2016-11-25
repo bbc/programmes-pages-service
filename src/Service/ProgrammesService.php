@@ -177,6 +177,8 @@ class ProgrammesService extends AbstractService
             $limit,
             $this->getOffset($limit, $page)
         );
+        
+        return $this->mapManyEntities($dbEntities);
     }
 
     public function findProgrammesByKeywords(
