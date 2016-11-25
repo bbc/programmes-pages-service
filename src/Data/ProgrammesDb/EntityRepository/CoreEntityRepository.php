@@ -8,6 +8,7 @@ use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use InvalidArgumentException;
 use DateTimeInterface;
+use Doctrine\ORM\Query\Expr\Join;
 
 class CoreEntityRepository extends MaterializedPathRepository
 {
@@ -30,6 +31,60 @@ class CoreEntityRepository extends MaterializedPathRepository
         'Franchise',
         'CoreEntity',
     ];
+
+    public function findAvailableEpisodesByUrlKeyAndType(
+        string $type,
+        string $urlKey1,
+        string $urlKey2 = null,
+        string $urlKey3 = null,
+        $limit,
+        $offset
+    ) {
+        $qb = $this->createQueryBuilder('episode')
+            ->innerJoin('episode.categories', 'category')
+            ->andWhere('category.parent IS NULL')
+            ->andWhere('category.urlKey = :urlKey1')
+            ->andWhere('category INSTANCE OF :type')
+            ->setParameter('type', $type)
+            ->setParameter('urlKey1', $urlKey1);
+
+        if ($urlKey2) {
+            $qb = $this->createQueryBuilder('episode')
+                ->innerJoin('episode.categories', 'category')
+                ->innerJoin('category.parent', 'parentCategory')
+                ->andWhere('category.urlKey = :urlKey2') // Match episode to second key e.g. jazzandblues
+                ->andWhere('parentCategory.urlKey = :urlKey1') // Match parent as original key e.g music
+                ->andWhere('category INSTANCE OF :type')
+                ->setParameter('type', $type)
+                ->setParameter('urlKey1', $urlKey1)
+                ->setParameter('urlKey2', $urlKey2);
+        }
+
+        if ($urlKey3) {
+            $qb = $this->createQueryBuilder('episode')
+                ->innerJoin('episode.categories', 'category')
+                ->innerJoin('category.parent', 'parentCategory1')
+                ->innerJoin('parentCategory1.parent', 'parentCategory2')
+                ->andWhere('category.urlKey = :urlKey3') // Match episode to third key e.g. jazz
+                ->andWhere('parentCategory1.urlKey = :urlKey2') // Match parent1 as second key e.g. jazzandblues
+                ->andWhere('parentCategory2.urlKey = :urlKey1') // Match parent2 as original key e.g music
+                ->andWhere('category INSTANCE OF :type')
+                ->setParameter('type', $type)
+                ->setParameter('urlKey1', $urlKey1)
+                ->setParameter('urlKey2', $urlKey2)
+                ->setParameter('urlKey3', $urlKey3);
+        }
+
+        $qb = $this->setLimit($qb, $limit);
+
+        $result = $qb->getQuery()->getScalarResult(Query::HYDRATE_ARRAY);
+
+        var_dump($result);
+        die();
+        $resolvedParentage = $this->resolveParents([$result]);
+
+        return reset($resolvedParentage);
+    }
 
     /**
      * Get an entity, based upon its PID

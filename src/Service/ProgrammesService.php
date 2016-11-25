@@ -143,6 +143,42 @@ class ProgrammesService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
+    public function findFormatAvailableEpisodesByCategory(
+        string $category1,
+        string $category2,
+        string $category3,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    )
+    {
+        $dbEntities = $this->repository->findAvailableEpisodesByUrlKeyAndType(
+            'format',
+            $category1,
+            $category2,
+            $category3,
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+    }
+
+    public function findGenreAvailableEpisodesByCategory(
+        string $category1,
+        string $category2,
+        string $category3,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    )
+    {
+        $dbEntities = $this->repository->findAvailableEpisodesByUrlKeyAndType(
+            'genre',
+            $category1,
+            $category2,
+            $category3,
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+    }
+
     public function findProgrammesByKeywords(
         string $keywords,
         $limit = self::DEFAULT_LIMIT,
