@@ -12,13 +12,21 @@ class AtoZTitleRepository extends EntityRepository
     use Traits\SetLimitTrait;
     use Traits\ParentTreeWalkerTrait;
 
-    public function findAllLetters()
+    public function findAllLetters(string $networkMedium = null)
     {
         $query = $this->createQueryBuilder('AtoZTitle')
-            ->select(['DISTINCT AtoZTitle.firstLetter'])
-            ->orderBy('AtoZTitle.firstLetter')
-            ->getQuery();
+            ->select(['DISTINCT AtoZTitle.firstLetter']);
 
+        if ($networkMedium) {
+            $this->assertNetworkMedium($networkMedium);
+            $query = $query->join('c.masterBrand', 'masterBrand')
+                ->join('masterBrand.network', 'network')
+                ->andWhere('network.medium = :medium')
+                ->setParameter('medium', $networkMedium);
+        }
+
+        $query = $query->orderBy('AtoZTitle.firstLetter')
+            ->getQuery();
         $results = $query->getResult(Query::HYDRATE_ARRAY);
         $letters = [];
         foreach ($results as $result) {
@@ -31,12 +39,13 @@ class AtoZTitleRepository extends EntityRepository
         string $letter,
         $limit,
         int $offset,
-        string $networkUrlKey = null,
+        string $networkMedium = null,
         bool $filterToAvailable = false
     ) {
         if (strlen($letter) !== 1) {
             throw new InvalidArgumentException("$letter is not a single letter");
         }
+        $letter = strtolower($letter);
         $qb = $this->createQueryBuilder('AtoZTitle')
             ->select(['AtoZTitle', 'c', 'image', 'masterBrand', 'network', 'mbImage'])
             ->leftJoin('c.image', 'image')
@@ -44,7 +53,7 @@ class AtoZTitleRepository extends EntityRepository
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('masterBrand.image', 'mbImage')
             ->where('AtoZTitle.firstLetter = :firstLetter')
-            ->andWhere('c INSTANCE OF ProgrammesPagesService:Brand OR c INSTANCE OF ProgrammesPagesService:Series OR c INSTANCE OF ProgrammesPagesService:Episode')
+            ->andWhere('c INSTANCE OF (ProgrammesPagesService:Brand, ProgrammesPagesService:Series, ProgrammesPagesService:Episode)')
             ->orderBy('AtoZTitle.title')
             ->addOrderBy('c.pid')
             ->setFirstResult($offset)
@@ -53,14 +62,10 @@ class AtoZTitleRepository extends EntityRepository
         if ($filterToAvailable) {
             $qb->andWhere('c.streamable = 1');
         }
-        if ($networkUrlKey) {
-            if (in_array($networkUrlKey, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
-                $qb->andWhere('network.medium = :medium');
-                $qb->setParameter('medium', $networkUrlKey);
-            } else {
-                $qb->andWhere('network.urlKey = :urlKey');
-                $qb->setParameter('urlKey', $networkUrlKey);
-            }
+        if ($networkMedium) {
+            $this->assertNetworkMedium($networkMedium);
+            $qb->andWhere('network.medium = :medium');
+            $qb->setParameter('medium', $networkMedium);
         }
         $qb = $this->setLimit($qb, $limit);
         $query = $qb->getQuery();
@@ -69,31 +74,43 @@ class AtoZTitleRepository extends EntityRepository
         return $this->resolveParents($result);
     }
 
-    public function countTLEOsByFirstLetter(string $letter, string $networkUrlKey = null, bool $filterToAvailable = false)
-    {
+    public function countTLEOsByFirstLetter(
+        string $letter,
+        string $networkMedium = null,
+        bool $filterToAvailable = false
+    ) {
         if (strlen($letter) !== 1) {
             throw new InvalidArgumentException("$letter is not a single letter");
         }
+        $letter = strtolower($letter);
         $qb = $this->createQueryBuilder('AtoZTitle')
             ->select('count(AtoZTitle.id)')
             ->where('AtoZTitle.firstLetter = :firstLetter')
-            ->andWhere('c INSTANCE OF ProgrammesPagesService:Brand OR c INSTANCE OF ProgrammesPagesService:Series OR c INSTANCE OF ProgrammesPagesService:Episode')
+            ->andWhere('c INSTANCE OF (ProgrammesPagesService:Brand, ProgrammesPagesService:Series, ProgrammesPagesService:Episode)')
             ->setParameter('firstLetter', $letter);
 
         if ($filterToAvailable) {
             $qb->andWhere('c.streamable = 1');
         }
-        if ($networkUrlKey) {
-            if (in_array($networkUrlKey, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
-                $qb->andWhere('network.medium = :medium');
-                $qb->setParameter('medium', $networkUrlKey);
-            } else {
-                $qb->andWhere('network.urlKey = :urlKey');
-                $qb->setParameter('urlKey', $networkUrlKey);
-            }
+        if ($networkMedium) {
+            $this->assertNetworkMedium($networkMedium);
+            $qb = $qb->join('c.masterBrand', 'masterBrand')
+                ->join('masterBrand.network', 'network')
+                ->andWhere('network.medium = :medium');
+            $qb->setParameter('medium', $networkMedium);
         }
         $query = $qb->getQuery();
         return $query->getSingleScalarResult();
+    }
+
+    public function createQueryBuilder($alias, $indexBy = null)
+    {
+        // Any time titles are fetched here they must be inner joined to
+        // their programme entity, this allows the embargoed filter to trigger
+        // and exclude unwanted items.
+        return parent::createQueryBuilder($alias)
+            ->addSelect('c')
+            ->join($alias . '.coreEntity', 'c');
     }
 
     private function resolveParents(array $programmes)
@@ -106,13 +123,10 @@ class AtoZTitleRepository extends EntityRepository
         );
     }
 
-    public function createQueryBuilder($alias, $indexBy = null)
+    private function assertNetworkMedium(string $medium)
     {
-        // Any time titles are fetched here they must be inner joined to
-        // their programme entity, this allows the embargoed filter to trigger
-        // and exclude unwanted items.
-        return parent::createQueryBuilder($alias)
-            ->addSelect('c')
-            ->join($alias . '.coreEntity', 'c');
+        if (!in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO])) {
+            throw new \InvalidArgumentException('Network medium must be tv or radio');
+        }
     }
 }

@@ -145,7 +145,7 @@ class ProgrammesService extends AbstractService
 
     public function searchByKeywords(
         string $keywords,
-        string $networkUrlKey = null,
+        string $networkMedium = null,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
@@ -155,20 +155,20 @@ class ProgrammesService extends AbstractService
             $limit,
             $this->getOffset($limit, $page),
             ['Brand', 'Series', 'Episode'],
-            $networkUrlKey
+            $networkMedium
         );
 
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function countByKeywords(string $keywords, string $networkUrlKey = null): int
+    public function countByKeywords(string $keywords, string $networkMedium = null): int
     {
-        return $this->repository->countByKeywords($keywords, ['Brand', 'Series', 'Episode'], $networkUrlKey);
+        return $this->repository->countByKeywords($keywords, ['Brand', 'Series', 'Episode'], $networkMedium);
     }
 
     public function searchAvailableByKeywords(
         string $keywords,
-        string $networkUrlKey = null,
+        string $networkMedium = null,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
@@ -178,16 +178,16 @@ class ProgrammesService extends AbstractService
             $limit,
             $this->getOffset($limit, $page),
             ['Brand', 'Series', 'Episode'],
-            $networkUrlKey,
+            $networkMedium,
             true
         );
 
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function countAvailableByKeywords(string $keywords, string $networkUrlKey = null): int
+    public function countAvailableByKeywords(string $keywords, string $networkMedium = null): int
     {
-        return $this->repository->countByKeywords($keywords, ['Brand', 'Series', 'Episode'], $networkUrlKey, true);
+        return $this->repository->countByKeywords($keywords, ['Brand', 'Series', 'Episode'], $networkMedium, true);
     }
 
     private function findSiblingByProgramme(Programme $programme, string $direction)

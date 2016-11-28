@@ -14,51 +14,49 @@ class AtoZService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findAllLetters()
+    public function findAllLetters(string $networkMedium = null)
     {
-        return $this->repository->findAllLetters();
+        return $this->repository->findAllLetters($networkMedium);
     }
 
     public function findTLEOsByFirstLetter(
         string $letter,
-        string $networkUrlKey = null,
+        string $networkMedium = null,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ): array
-    {
+    ): array {
         $entities = $this->repository->findTLEOsByFirstLetter(
             $letter,
             $limit,
             $this->getOffset($limit, $page),
-            $networkUrlKey
+            $networkMedium
         );
         return $this->mapManyEntities($entities);
     }
 
-    public function countTLEOsByFirstLetter(string $letter, string $networkUrlKey = null)
+    public function countTLEOsByFirstLetter(string $letter, string $networkMedium = null)
     {
-        return $this->repository->countTLEOsByFirstLetter($letter, $networkUrlKey);
+        return $this->repository->countTLEOsByFirstLetter($letter, $networkMedium);
     }
 
     public function findAvailableTLEOsByFirstLetter(
         string $letter,
-        string $networkUrlKey = null,
+        string $networkMedium = null,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ): array
-    {
+    ): array {
         $entities = $this->repository->findTLEOsByFirstLetter(
             $letter,
             $limit,
             $this->getOffset($limit, $page),
-            $networkUrlKey,
+            $networkMedium,
             true
         );
         return $this->mapManyEntities($entities);
     }
 
-    public function countAvailableTLEOsByFirstLetter(string $letter, string $networkUrlKey = null)
+    public function countAvailableTLEOsByFirstLetter(string $letter, string $networkMedium = null)
     {
-        return $this->repository->countTLEOsByFirstLetter($letter, $networkUrlKey, true);
+        return $this->repository->countTLEOsByFirstLetter($letter, $networkMedium, true);
     }
 }

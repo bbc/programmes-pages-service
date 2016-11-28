@@ -329,7 +329,7 @@ QUERY;
     public function countByKeywords(
         string $keywords,
         array $entityTypes = ['CoreEntity'],
-        string $networkUrlKey = null,
+        string $networkMedium = null,
         bool $filterAvailable = false
     ): int {
         $keywords = $this->stripPunctuation($keywords);
@@ -339,7 +339,15 @@ QUERY;
         $qText = <<<QUERY
 SELECT COUNT(coreEntity.id)
 FROM ProgrammesPagesService:CoreEntity coreEntity
-WHERE MATCH_AGAINST (coreEntity.searchTitle, coreEntity.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
+QUERY;
+        if ($networkMedium) {
+            $qText .= <<<QUERY
+ JOIN coreEntity.masterBrand masterBrand
+JOIN masterBrand.network network
+QUERY;
+        }
+        $qText .= <<<QUERY
+ WHERE MATCH_AGAINST (coreEntity.searchTitle, coreEntity.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
 QUERY;
         if ($filterAvailable) {
             $qText .= ' AND coreEntity.streamable = 1';
@@ -349,18 +357,18 @@ QUERY;
             $qText .= ' AND (' . $this->makeEntityTypesDQL($entityTypes, 'coreEntity') . ')';
         }
 
-        if ($networkUrlKey) {
-            if (in_array($networkUrlKey, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
+        if ($networkMedium) {
+            if (in_array($networkMedium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
                 $qText .= ' AND network.medium = :service';
             } else {
-                $qText .= ' AND network.urlKey = :service';
+                throw new \InvalidArgumentException('Network medium must be tv or radio');
             }
         }
         $q = $this->getEntityManager()->createQuery($qText)
             ->setParameter('booleanKeywords', $booleanKeywords);
 
-        if ($networkUrlKey) {
-            $q->setParameter('service', $networkUrlKey);
+        if ($networkMedium) {
+            $q->setParameter('service', $networkMedium);
         }
 
         $count = $q->getSingleScalarResult();
@@ -372,7 +380,7 @@ QUERY;
      * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @param array $entityTypes
-     * @param string $networkUrlKey
+     * @param string $networkMedium
      * @param bool $filterAvailable
      * @return array
      */
@@ -381,7 +389,7 @@ QUERY;
         $limit,
         int $offset,
         array $entityTypes = null,
-        string $networkUrlKey = null,
+        string $networkMedium = null,
         bool $filterAvailable = false
     ): array {
         $keywords = $this->stripPunctuation($keywords);
@@ -411,11 +419,11 @@ QUERY;
         if ($entityTypes) {
             $qText .= ' AND (' . $this->makeEntityTypesDQL($entityTypes, 'coreEntity') . ')';
         }
-        if ($networkUrlKey) {
-            if (in_array($networkUrlKey, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
+        if ($networkMedium) {
+            if (in_array($networkMedium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
                 $qText .= ' AND network.medium = :service';
             } else {
-                $qText .= ' AND network.urlKey = :service';
+                throw new \InvalidArgumentException('Network medium must be tv or radio');
             }
         }
         $qText .= ' ORDER BY rel DESC';
@@ -426,8 +434,8 @@ QUERY;
             ->setParameter('booleanKeywords', $booleanKeywords)
             ->setParameter('quotedKeywords', '"' . $keywords . '"');
 
-        if ($networkUrlKey) {
-            $q->setParameter('service', $networkUrlKey);
+        if ($networkMedium) {
+            $q->setParameter('service', $networkMedium);
         }
         $q = $this->setLimit($q, $limit);
 
@@ -480,13 +488,12 @@ QUERY;
         foreach ($entityTypes as $entityType) {
             $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
         }
-        $qText = ' (';
-        $or = '';
-        foreach ($entityTypes as $entityType) {
-            $qText .= "$or $alias INSTANCE OF ProgrammesPagesService:$entityType";
-            $or = ' OR';
+        if (empty($entityTypes)) {
+            return '';
         }
-        $qText .= ')';
-        return $qText;
+        foreach ($entityTypes as &$entityType) {
+            $entityType = 'ProgrammesPagesService:' . $entityType;
+        }
+        return " ($alias INSTANCE OF (" . join(',', $entityTypes) . "))";
     }
 }

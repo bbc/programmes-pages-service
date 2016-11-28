@@ -15,7 +15,7 @@ class KeywordsTest extends AbstractProgrammesServiceTest
             ->with($keywords, 300, 0)
             ->willReturn($dbData);
 
-        $result = $this->service()->findProgrammesByKeywords($keywords);
+        $result = $this->service()->searchByKeywords($keywords);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 
@@ -28,6 +28,6 @@ class KeywordsTest extends AbstractProgrammesServiceTest
             ->with($keywords)
             ->willReturn(10);
 
-        $this->assertEquals(10, $this->service()->countProgrammesByKeywords($keywords));
+        $this->assertEquals(10, $this->service()->countByKeywords($keywords));
     }
 }
