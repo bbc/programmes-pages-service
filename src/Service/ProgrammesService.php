@@ -143,41 +143,27 @@ class ProgrammesService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function findFormatAvailableEpisodesByCategory(
-        string $category1,
-        string $category2,
-        string $category3,
-        $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+    public function countAvailableEpisodesByCategory(
+        array $ancestryDbIds
     )
     {
-        $dbEntities = $this->repository->findAvailableEpisodesByUrlKeyAndType(
-            'format',
-            $category1,
-            $category2,
-            $category3,
-            $limit,
-            $this->getOffset($limit, $page)
+        return $this->repository->countAvailableEpisodesByUrlKeyAndType(
+            $ancestryDbIds
         );
     }
 
-    public function findGenreAvailableEpisodesByCategory(
-        string $category1,
-        string $category2,
-        string $category3,
+    public function findAvailableEpisodesByCategory(
+        array $ancestryDbIds,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     )
     {
         $dbEntities = $this->repository->findAvailableEpisodesByUrlKeyAndType(
-            'genre',
-            $category1,
-            $category2,
-            $category3,
+            $ancestryDbIds,
             $limit,
             $this->getOffset($limit, $page)
         );
-        
+
         return $this->mapManyEntities($dbEntities);
     }
 

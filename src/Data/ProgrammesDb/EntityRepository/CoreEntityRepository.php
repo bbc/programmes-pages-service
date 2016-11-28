@@ -32,58 +32,56 @@ class CoreEntityRepository extends MaterializedPathRepository
         'CoreEntity',
     ];
 
-    public function findAvailableEpisodesByUrlKeyAndType(
-        string $type,
-        string $urlKey1,
-        string $urlKey2 = null,
-        string $urlKey3 = null,
-        $limit,
-        $offset
-    ) {
+    public function countAvailableEpisodesByUrlKeyAndType(
+        array $ancestryDbIds
+    )
+    {
+        $ancestry = '';
+        // Convert ancestry array into delimited string for the query
+        foreach ($ancestryDbIds as $ancestor) {
+            $ancestry .= $ancestor . ',';
+        }
+
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('episode')
+            ->select('COUNT(episode)')
             ->from('ProgrammesPagesService:Episode', 'episode')
             ->innerJoin('episode.categories', 'category')
-            ->andWhere('category.parent IS NULL')
-            ->andWhere('category.urlKey = :urlKey1')
-            ->andWhere('category INSTANCE OF :type')
-            ->setParameter('type', $type)
-            ->setParameter('urlKey1', $urlKey1);
+            ->andWhere('episode.streamable = 1')
+            ->andWhere('category.ancestry LIKE :ancestry')
+            ->setParameter('ancestry', $ancestry.'%')
+            ->addOrderBy('episode.streamableUntil', 'DESC'); // Availability DESC
 
-        if ($urlKey2) {
-            $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select('episode')
-                ->from('ProgrammesPagesService:Episode', 'episode')
-                ->innerJoin('episode.categories', 'category')
-                ->innerJoin('category.parent', 'parentCategory')
-                ->andWhere('category.urlKey = :urlKey2') // Match episode to second key e.g. jazzandblues
-                ->andWhere('parentCategory.urlKey = :urlKey1') // Match parent as original key e.g music
-                ->andWhere('category INSTANCE OF :type')
-                ->setParameter('type', $type)
-                ->setParameter('urlKey1', $urlKey1)
-                ->setParameter('urlKey2', $urlKey2);
+        $count = $qb->getQuery()->getSingleScalarResult();
+        return $count ? $count : 0;
+    }
+
+    public function findAvailableEpisodesByUrlKeyAndType(
+        array $ancestryDbIds,
+        $limit,
+        $offset
+    )
+    {
+        $ancestry = '';
+        // Convert ancestry array into delimited string for the query
+        foreach ($ancestryDbIds as $ancestor) {
+            $ancestry .= $ancestor . ',';
         }
 
-        if ($urlKey3) {
-            $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select('episode')
-                ->from('ProgrammesPagesService:Episode', 'episode')
-                ->innerJoin('episode.categories', 'category')
-                ->innerJoin('category.parent', 'parentCategory1')
-                ->innerJoin('parentCategory1.parent', 'parentCategory2')
-                ->andWhere('category.urlKey = :urlKey3') // Match episode to third key e.g. jazz
-                ->andWhere('parentCategory1.urlKey = :urlKey2') // Match parent1 as second key e.g. jazzandblues
-                ->andWhere('parentCategory2.urlKey = :urlKey1') // Match parent2 as original key e.g music
-                ->andWhere('category INSTANCE OF :type')
-                ->setParameter('type', $type)
-                ->setParameter('urlKey1', $urlKey1)
-                ->setParameter('urlKey2', $urlKey2)
-                ->setParameter('urlKey3', $urlKey3);
-        }
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('episode', 'masterBrand', 'network')
+            ->from('ProgrammesPagesService:Episode', 'episode')
+            ->innerJoin('episode.categories', 'category')
+            ->leftJoin('episode.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->andWhere('episode.streamable = 1')
+            ->andWhere('category.ancestry LIKE :ancestry')
+            ->setParameter('ancestry', $ancestry.'%')
+            ->addOrderBy('episode.streamableUntil', 'DESC'); // Availability DESC
 
         $qb = $this->setLimit($qb, $limit);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
     }
 
     /**
