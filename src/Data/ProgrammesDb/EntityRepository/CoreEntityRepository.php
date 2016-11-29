@@ -42,14 +42,15 @@ class CoreEntityRepository extends MaterializedPathRepository
             $ancestry .= $ancestor . ',';
         }
 
+        $ancestry = rtrim($ancestry, ',');
+
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('COUNT(episode)')
+            ->select('COUNT(DISTINCT(episode))')
             ->from('ProgrammesPagesService:Episode', 'episode')
             ->innerJoin('episode.categories', 'category')
             ->andWhere('episode.streamable = 1')
             ->andWhere('category.ancestry LIKE :ancestry')
-            ->setParameter('ancestry', $ancestry.'%')
-            ->addOrderBy('episode.streamableUntil', 'DESC'); // Availability DESC
+            ->setParameter('ancestry', $ancestry.'%'); // Availability DESC
 
         $count = $qb->getQuery()->getSingleScalarResult();
         return $count ? $count : 0;
@@ -67,6 +68,8 @@ class CoreEntityRepository extends MaterializedPathRepository
             $ancestry .= $ancestor . ',';
         }
 
+        $ancestry = rtrim($ancestry, ',');
+
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('episode', 'masterBrand', 'network')
             ->from('ProgrammesPagesService:Episode', 'episode')
@@ -76,7 +79,12 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->andWhere('episode.streamable = 1')
             ->andWhere('category.ancestry LIKE :ancestry')
             ->setParameter('ancestry', $ancestry.'%')
-            ->addOrderBy('episode.streamableUntil', 'DESC'); // Availability DESC
+            ->addGroupBy('episode.id')
+            ->addGroupBy('episode.pid')
+            ->addGroupBy('episode.shortSynopsis')
+            ->addGroupBy('episode.parent')
+            ->addOrderBy('episode.streamableUntil', 'DESC')
+            ->addOrderBy('episode.title', 'DESC');
 
         $qb = $this->setLimit($qb, $limit);
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
