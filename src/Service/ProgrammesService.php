@@ -145,8 +145,7 @@ class ProgrammesService extends AbstractService
 
     public function countAvailableEpisodesByCategory(
         array $ancestryDbIds
-    )
-    {
+    ) {
         return $this->repository->countAvailableEpisodesByUrlKeyAndType(
             $ancestryDbIds
         );
@@ -156,8 +155,7 @@ class ProgrammesService extends AbstractService
         array $ancestryDbIds,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    )
-    {
+    ) {
         $dbEntities = $this->repository->findAvailableEpisodesByUrlKeyAndType(
             $ancestryDbIds,
             $limit,

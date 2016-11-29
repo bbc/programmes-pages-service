@@ -34,8 +34,7 @@ class CoreEntityRepository extends MaterializedPathRepository
 
     public function countAvailableEpisodesByUrlKeyAndType(
         array $ancestryDbIds
-    )
-    {
+    ) {
         $ancestry = '';
         // Convert ancestry array into delimited string for the query
         foreach ($ancestryDbIds as $ancestor) {
@@ -50,7 +49,7 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->innerJoin('episode.categories', 'category')
             ->andWhere('episode.streamable = 1')
             ->andWhere('category.ancestry LIKE :ancestry')
-            ->setParameter('ancestry', $ancestry.'%'); // Availability DESC
+            ->setParameter('ancestry', $ancestry . '%'); // Availability DESC
 
         $count = $qb->getQuery()->getSingleScalarResult();
         return $count ? $count : 0;
@@ -60,8 +59,7 @@ class CoreEntityRepository extends MaterializedPathRepository
         array $ancestryDbIds,
         $limit,
         $offset
-    )
-    {
+    ) {
         $ancestry = '';
         // Convert ancestry array into delimited string for the query
         foreach ($ancestryDbIds as $ancestor) {
@@ -78,7 +76,7 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->leftJoin('masterBrand.network', 'network')
             ->andWhere('episode.streamable = 1')
             ->andWhere('category.ancestry LIKE :ancestry')
-            ->setParameter('ancestry', $ancestry.'%')
+            ->setParameter('ancestry', $ancestry . '%')
             ->addGroupBy('episode.id')
             ->addGroupBy('episode.pid')
             ->addGroupBy('episode.shortSynopsis')

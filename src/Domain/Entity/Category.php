@@ -2,7 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
-
 abstract class Category
 {
     /**
