@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\ApplicationTime;
+use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use DateTimeImmutable;
@@ -86,6 +87,26 @@ class CollapsedBroadcastsService extends AbstractService
             'Broadcast',
             ApplicationTime::getTime()
         );
+    }
+
+    public function findByCategoryWithEndingAfterDate(
+        Category $category,
+        DateTimeImmutable $endAt,
+        int $periodInDays = 31,
+        $limit = self::DEFAULT_LIMIT,
+        int $offset = self::DEFAULT_PAGE
+    ) {
+        $broadcasts = $this->repository->findByCategoryAncestryEndingAfter(
+            $category->getDbAncestryIds(),
+            'Broadcast',
+            $endAt,
+            $periodInDays,
+            $limit,
+            $offset
+        );
+
+        $services = $this->fetchUsedServices($broadcasts);
+        return $this->mapManyEntities($broadcasts, $services);
     }
 
     private function fetchUsedServices(array $broadcasts): array

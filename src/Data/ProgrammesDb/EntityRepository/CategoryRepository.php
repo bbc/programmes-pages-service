@@ -63,8 +63,8 @@ class CategoryRepository extends MaterializedPathRepository
             ->addOrderBy('category.title')
             ->setParameter('parentId', $categoryId)
             ->setParameter('type', $categoryType);
+
         $res = $r->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        var_dump($res);
 
         return $res;
     }

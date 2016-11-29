@@ -20,6 +20,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
         ];
 
         $expectedEntity = new Format(
+            [1],
             'PT001',
             'Title',
             'url_key'

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\ResultSetMapping;
 use DateTimeImmutable;
+use DateInterval;
 use InvalidArgumentException;
 
 class BroadcastRepository extends EntityRepository
@@ -54,6 +55,36 @@ class BroadcastRepository extends EntityRepository
         $qb = $this->setEntityTypeFilter($qb, $type);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
+    }
+
+    public function findByCategoryAncestryEndingAfter(
+        array $categoryAncestry,
+        string $type,
+        DateTimeImmutable $endDate,
+        int $periodInDays,
+        $limit,
+        int $offset
+    ) {
+        $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
+
+        $qb->andWhere('broadcast.endAt > :endDate')
+            ->andWhere('broadcast.endAt <= :limitDate')
+            ->addOrderBy('broadcast.startAt')
+            ->addOrderBy('networkOfService.urlKey')
+            ->setFirstResult($offset)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('limitDate', $endDate->add(new DateInterval('P' . $periodInDays . 'D')));
+
+        $qb = $this->setLimit($qb, $limit);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $this->explodeServiceIds($result);
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['programmeItem', 'ancestry']
+        );
     }
 
     public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month, $limit, int $offset)
@@ -247,6 +278,28 @@ QUERY;
             ->leftJoin('programmeItem.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
             ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
+            ->addGroupBy('broadcast.startAt')
+            ->addGroupBy('programmeItem.id')
+            ->addGroupBy('networkOfService.id')
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+
+        $qb = $this->setEntityTypeFilter($qb, $type);
+        return $qb;
+    }
+
+    private function createCollapsedBroadcastsOfCategoryQueryBuilder($ancestry, $type)
+    {
+        $qb = $this->createQueryBuilder('broadcast', false)
+            ->addSelect(['category', 'programmeItem', 'image', 'masterBrand', 'network'])
+            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
+            ->join('broadcast.service', 'service')
+            ->leftJoin('service.network', 'networkOfService')
+            ->leftJoin('programmeItem.image', 'image')
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('programmeItem.categories', 'category')
+            ->andWhere('category.ancestry LIKE :ancestryClause')
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->addGroupBy('broadcast.startAt')
             ->addGroupBy('programmeItem.id')

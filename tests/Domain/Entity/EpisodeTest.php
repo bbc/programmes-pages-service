@@ -74,7 +74,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $releaseDate = new PartialDate(2015, 01, 02);
 
         $genre = new Genre([0], 'id', 'Title', 'url_key');
-        $format = new Format('id2', 'Title', 'url_key');
+        $format = new Format([0], 'id2', 'Title', 'url_key');
 
         $streamableFrom = new DateTimeImmutable();
         $streamableUntil = new DateTimeImmutable();
