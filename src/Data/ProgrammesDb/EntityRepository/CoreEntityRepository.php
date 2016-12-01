@@ -69,7 +69,7 @@ class CoreEntityRepository extends MaterializedPathRepository
         $ancestry = rtrim($ancestry, ',');
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('episode', 'masterBrand', 'network')
+            ->select('DISTINCT episode', 'masterBrand', 'network')
             ->from('ProgrammesPagesService:Episode', 'episode')
             ->innerJoin('episode.categories', 'category')
             ->leftJoin('episode.masterBrand', 'masterBrand')
