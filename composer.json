@@ -18,6 +18,8 @@
     "require": {
         "php": ">=7.0.1",
         "doctrine/orm": "^2.5",
+        "psr/log": "^1.0",
+        "symfony/stopwatch": "^3.2",
         "bbc/doctrine-extensions": ">=2.4.135"
     },
     "require-dev": {
