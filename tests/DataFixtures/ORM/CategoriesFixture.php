@@ -16,7 +16,8 @@ class CategoriesFixture extends AbstractFixture
         $this->manager = $manager;
 
         $genre1 = $this->buildGenre('C00017', 'Drama', 'drama');
-        $genre1 = $this->buildGenre('C00018', 'Action & Adventure', 'actionandadventure', $genre1);
+        $genre2 = $this->buildGenre('C00018', 'Action & Adventure', 'actionandadventure', $genre1);
+        $genre3 = $this->buildGenre('C00019', 'Niche Drama & Action', 'dramaandaction', $genre2);
 
         $format = $this->buildFormat('PT001', 'Animation', 'animation');
 
@@ -33,7 +34,7 @@ class CategoriesFixture extends AbstractFixture
 
     private function buildFormat($pidId, $title, $urlKey)
     {
-        $entity = new Genre($pidId, $title, $urlKey);
+        $entity = new Format($pidId, $title, $urlKey);
         $this->manager->persist($entity);
         return $entity;
     }

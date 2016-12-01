@@ -43,7 +43,6 @@ class CategoryRepository extends MaterializedPathRepository
                 ->innerJoin($this->_entityName, 'subcategory2', Join::WITH, 'subcategory2.parent = subcategory1')
                 ->andWhere('subcategory2.urlKey = :urlKey3')
                 ->setParameter('urlKey3', $urlKey3);
-            ;
         }
 
         $result = $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
