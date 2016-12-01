@@ -32,6 +32,12 @@ class CoreEntityRepository extends MaterializedPathRepository
         'CoreEntity',
     ];
 
+    /**
+     * Return the count of available episodes given category ID's
+     *
+     * @param array $ancestryDbIds
+     * @return int|mixed
+     */
     public function countAvailableEpisodesByUrlKeyAndType(
         array $ancestryDbIds
     ) {
@@ -41,10 +47,8 @@ class CoreEntityRepository extends MaterializedPathRepository
             $ancestry .= $ancestor . ',';
         }
 
-        $ancestry = rtrim($ancestry, ',');
-
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('COUNT(DISTINCT(episode))')
+            ->select('COUNT(DISTINCT(episode.id))')
             ->from('ProgrammesPagesService:Episode', 'episode')
             ->innerJoin('episode.categories', 'category')
             ->andWhere('episode.streamable = 1')
@@ -55,10 +59,18 @@ class CoreEntityRepository extends MaterializedPathRepository
         return $count ? $count : 0;
     }
 
+    /**
+     * Return available episodes given category ID's
+     *
+     * @param array $ancestryDbIds
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     */
     public function findAvailableEpisodesByUrlKeyAndType(
         array $ancestryDbIds,
-        $limit,
-        $offset
+        int $limit,
+        int $offset
     ) {
         $ancestry = '';
         // Convert ancestry array into delimited string for the query
@@ -66,10 +78,8 @@ class CoreEntityRepository extends MaterializedPathRepository
             $ancestry .= $ancestor . ',';
         }
 
-        $ancestry = rtrim($ancestry, ',');
-
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('DISTINCT episode', 'masterBrand', 'network')
+            ->select('episode', 'masterBrand', 'network')
             ->from('ProgrammesPagesService:Episode', 'episode')
             ->innerJoin('episode.categories', 'category')
             ->leftJoin('episode.masterBrand', 'masterBrand')
@@ -77,6 +87,7 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->andWhere('episode.streamable = 1')
             ->andWhere('category.ancestry LIKE :ancestry')
             ->setParameter('ancestry', $ancestry . '%')
+            ->setFirstResult($offset)
             ->addGroupBy('episode.id')
             ->addGroupBy('episode.pid')
             ->addGroupBy('episode.shortSynopsis')
