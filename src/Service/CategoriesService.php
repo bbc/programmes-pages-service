@@ -2,8 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Category;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
 
@@ -32,8 +32,7 @@ class CategoriesService extends AbstractService
         string $category1,
         string $category2 = null,
         string $category3 = null
-    ) {
-        /** @var Category $categoryWithAncestry */
+    ): Genre {
         $categoryWithAncestry = $this->repository->findByUrlKeyAncestryAndType(
             'genre',
             $category1,
@@ -42,6 +41,12 @@ class CategoriesService extends AbstractService
         );
 
         return $this->mapSingleEntity($categoryWithAncestry);
+    }
+
+    public function findFormatByUrlKeyAncestry(string $formatUrlKey): Format
+    {
+        $format = $this->repository->findByUrlKeyAncestryAndType('format', $formatUrlKey);
+        return $this->mapSingleEntity($format);
     }
 
     public function findChildGenresUsedByTleosByParent(Genre $genre)
@@ -53,18 +58,13 @@ class CategoriesService extends AbstractService
         return $this->mapManyEntities($subcategories);
     }
 
-    public function findFormatByUrlKeyAncestry(
-        string $category1,
-        string $category2 = null,
-        string $category3 = null
-    ) {
-        /** @var Category $categoryWithAncestry */
-        $categoryWithAncestry = $this->repository->findByUrlKeyAncestryAndType(
-            'format',
-            $category1,
-            $category2,
-            $category3
+    public function findChildGenresUsedByTleosByParentAndNetworkUrlKey(Genre $genre, string $networkUrlKey)
+    {
+        $subcategories = $this->repository->findChildCategoriesUsedByTleosByParentIdAndTypeAndNetworkUrlKey(
+            $genre->getDbId(),
+            $networkUrlKey,
+            'genre'
         );
-        return $this->mapManyEntities($categoryWithAncestry);
+        return $this->mapManyEntities($subcategories);
     }
 }

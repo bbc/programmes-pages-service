@@ -60,8 +60,8 @@ class BroadcastRepository extends EntityRepository
     public function findByCategoryAncestryEndingAfter(
         array $categoryAncestry,
         string $type,
-        DateTimeImmutable $endDate,
-        int $periodInDays,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to,
         $limit,
         int $offset
     ) {
@@ -72,8 +72,8 @@ class BroadcastRepository extends EntityRepository
             ->addOrderBy('broadcast.startAt')
             ->addOrderBy('networkOfService.urlKey')
             ->setFirstResult($offset)
-            ->setParameter('endDate', $endDate)
-            ->setParameter('limitDate', $endDate->add(new DateInterval('P' . $periodInDays . 'D')));
+            ->setParameter('endDate', $from)
+            ->setParameter('limitDate', $to);
 
         $qb = $this->setLimit($qb, $limit);
 
@@ -85,6 +85,58 @@ class BroadcastRepository extends EntityRepository
             [$this, 'programmeAncestryGetter'],
             ['programmeItem', 'ancestry']
         );
+    }
+
+    public function countUpcomingByCategoryAncestry(
+        array $categoryAncestry,
+        string $type,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to
+    ) {
+        $isWebcastValue = $this->entityTypeFilterValue($type);
+        $isWebcastClause = !is_null($isWebcastValue) ? 'AND b.is_webcast = :isWebcast' : '';
+
+        // Join to CoreEntity to ensure the programme is not embargoed
+        // Join to network (via broadcast service) so that we get a count of
+        // items grouped by network.
+        //  For instance consider a programme broadcast on bbc_one_london and
+        // bbc_one_yorkshire at the same time. This would result in a count of
+        // one as those two services both belong to the same network - bbc_one.
+        // However consider a programme broadcast on bbc_radio_ulster and
+        // bbc_radio_foyle at the same time. This would result in a count of two
+        // as these two services do not belong to the same network.
+        $qText = <<<QUERY
+SELECT COUNT(t.id) as cnt
+FROM (
+    SELECT b.start_at, c.id
+    FROM broadcast b
+    INNER JOIN core_entity c ON b.programme_item_id = c.id AND (c.is_embargoed = 0)
+    INNER JOIN programme_category pc ON c.id = pc.programme_id
+    INNER JOIN category cat ON pc.category_id = cat.id
+    LEFT JOIN service s ON b.service_id = s.id
+    LEFT JOIN network n ON s.network_id = n.id
+    WHERE c.type = 'episode'
+    AND cat.ancestry LIKE :categoryAncestry
+    AND b.end_at > :cutoffTime
+    AND b.end_at <= :limitTime
+    $isWebcastClause
+    GROUP BY b.start_at, c.id, n.id
+) t
+QUERY;
+
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('cnt', 'cnt');
+
+        $q = $this->getEntityManager()->createNativeQuery($qText, $rsm)
+            ->setParameter('categoryAncestry', $this->ancestryIdsToString($categoryAncestry) . '%')
+            ->setParameter('cutoffTime', $from)
+            ->setParameter('limitTime', $to);
+
+        if (!is_null($isWebcastValue)) {
+            $q->setParameter('isWebcast', $isWebcastValue);
+        }
+
+        return $q->getSingleScalarResult();
     }
 
     public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month, $limit, int $offset)

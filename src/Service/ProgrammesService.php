@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
+use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
@@ -144,22 +145,26 @@ class ProgrammesService extends AbstractService
     }
 
     public function countAvailableEpisodesByCategory(
-        array $ancestryDbIds
+        Category $category,
+        string $medium = null
     ) {
         return $this->repository->countAvailableEpisodesByUrlKeyAndType(
-            $ancestryDbIds
+            $category->getDbAncestryIds(),
+            $medium
         );
     }
 
     public function findAvailableEpisodesByCategory(
-        array $ancestryDbIds,
+        Category $category,
+        string $medium = null,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ) {
         $dbEntities = $this->repository->findAvailableEpisodesByUrlKeyAndType(
-            $ancestryDbIds,
+            $category->getDbAncestryIds(),
             $limit,
-            $this->getOffset($limit, $page)
+            $this->getOffset($limit, $page),
+            $medium
         );
 
         return $this->mapManyEntities($dbEntities);

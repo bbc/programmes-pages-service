@@ -49,9 +49,12 @@ class CategoryRepository extends MaterializedPathRepository
         return $result ? $this->resolveParents([$result])[0] : $result;
     }
 
-    public function findChildCategoriesUsedByTleosByParentIdAndType(string $categoryId, string $categoryType)
-    {
-        return $this->createQueryBuilder('category')
+    public function findChildCategoriesUsedByTleosByParentIdAndType(
+        string $categoryId,
+        string $categoryType,
+        string $medium = null
+    ) {
+        $qb = $this->createQueryBuilder('category')
             ->select(['DISTINCT category'])
             ->join('category.programmes', 'programmes')
             ->andWhere('programmes.parent IS NULL')
@@ -59,8 +62,16 @@ class CategoryRepository extends MaterializedPathRepository
             ->andWhere('category INSTANCE OF :type')
             ->addOrderBy('category.title')
             ->setParameter('parentId', $categoryId)
-            ->setParameter('type', $categoryType)
-            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+            ->setParameter('type', $categoryType);
+
+        if ($medium) {
+            $qb->join('programmes.masterBrand', 'masterBrand')
+                ->join('masterBrand.network', 'network')
+                ->andWhere('network.medium = :medium')
+                ->setParameter('medium', $medium);
+        }
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function findUsedByType(string $type)
