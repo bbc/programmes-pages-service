@@ -29,16 +29,12 @@ class CategoriesService extends AbstractService
     }
 
     public function findGenreByUrlKeyAncestry(
-        string $category1,
-        string $category2 = null,
-        string $category3 = null
+        array $categories
     ) {
         /** @var Category $categoryWithAncestry */
         $categoryWithAncestry = $this->repository->findByUrlKeyAncestryAndType(
             'genre',
-            $category1,
-            $category2,
-            $category3
+            $categories
         );
 
         return $this->mapSingleEntity($categoryWithAncestry);
@@ -54,16 +50,12 @@ class CategoriesService extends AbstractService
     }
 
     public function findFormatByUrlKeyAncestry(
-        string $category1,
-        string $category2 = null,
-        string $category3 = null
+        array $categories
     ) {
         /** @var Category $categoryWithAncestry */
         $categoryWithAncestry = $this->repository->findByUrlKeyAncestryAndType(
             'format',
-            $category1,
-            $category2,
-            $category3
+            $categories
         );
         return $this->mapManyEntities($categoryWithAncestry);
     }

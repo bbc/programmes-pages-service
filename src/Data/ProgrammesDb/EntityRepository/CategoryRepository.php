@@ -20,33 +20,24 @@ class CategoryRepository extends MaterializedPathRepository
 
     public function findByUrlKeyAncestryAndType(
         string $type,
-        string $urlKey1,
-        string $urlKey2 = null,
-        string $urlKey3 = null
+        array $urlKeys
     ) {
-        $query = $this->createQueryBuilder('category')
-            ->andWhere('category.parent IS NULL')
-            ->andWhere('category.urlKey = :urlKey1')
-            ->andWhere('category INSTANCE OF :type')
+
+        $query = $this->createQueryBuilder('category0')
+            ->andWhere('category0 INSTANCE OF :type')
+            ->andWhere('category0.urlKey = :urlKey0')
             ->setParameter('type', $type)
-            ->setParameter('urlKey1', $urlKey1);
-
-        if ($urlKey2) {
-            $query->select('subcategory1')
-                ->innerJoin($this->_entityName, 'subcategory1', Join::WITH, 'subcategory1.parent = category')
-                ->andWhere('subcategory1.urlKey = :urlKey2')
-                ->setParameter('urlKey2', $urlKey2);
+            ->setParameter('urlKey0', $urlKeys[0]);
+        
+        // Loop through urlKeys, except the first one. Final true value preserves the keys
+        foreach (array_slice($urlKeys, 1, null, true) as $i => $urlKey) {
+            $query->addSelect('category' . $i)
+                ->innerJoin('category' . ($i - 1) . '.parent', 'category' . $i)
+                ->andWhere('category' . $i . '.urlKey = :urlKey' . $i)
+                ->setParameter('urlKey' . $i, $urlKey);
         }
 
-        if ($urlKey3) {
-            $query->select('subcategory2')
-                ->innerJoin($this->_entityName, 'subcategory2', Join::WITH, 'subcategory2.parent = subcategory1')
-                ->andWhere('subcategory2.urlKey = :urlKey3')
-                ->setParameter('urlKey3', $urlKey3);
-        }
-
-        $result = $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
-        return $result ? $this->resolveParents([$result])[0] : $result;
+        return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
     public function findChildCategoriesUsedByTleosByParentIdAndType(string $categoryId, string $categoryType)

@@ -38,14 +38,10 @@ class CoreEntityRepository extends MaterializedPathRepository
      * @param array $ancestryDbIds
      * @return int|mixed
      */
-    public function countAvailableEpisodesByUrlKeyAndType(
+    public function countAvailableEpisodesByAncestryCategoryIds(
         array $ancestryDbIds
     ) {
-        $ancestry = '';
-        // Convert ancestry array into delimited string for the query
-        foreach ($ancestryDbIds as $ancestor) {
-            $ancestry .= $ancestor . ',';
-        }
+        $ancestry = $this->ancestryIdsToString($ancestryDbIds);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('COUNT(DISTINCT(episode.id))')
@@ -67,31 +63,26 @@ class CoreEntityRepository extends MaterializedPathRepository
      * @param int $offset
      * @return array
      */
-    public function findAvailableEpisodesByUrlKeyAndType(
+    public function findAvailableEpisodesByAncestryCategoryIds(
         array $ancestryDbIds,
-        int $limit,
+        $limit,
         int $offset
     ) {
-        $ancestry = '';
-        // Convert ancestry array into delimited string for the query
-        foreach ($ancestryDbIds as $ancestor) {
-            $ancestry .= $ancestor . ',';
-        }
+        $ancestry = $this->ancestryIdsToString($ancestryDbIds);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('episode', 'masterBrand', 'network')
+            ->select('episode', 'image', 'masterBrand', 'network', 'mbImage')
             ->from('ProgrammesPagesService:Episode', 'episode')
             ->innerJoin('episode.categories', 'category')
+            ->leftJoin('episode.image', 'image')
             ->leftJoin('episode.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('masterBrand.image', 'mbImage')
             ->andWhere('episode.streamable = 1')
             ->andWhere('category.ancestry LIKE :ancestry')
             ->setParameter('ancestry', $ancestry . '%')
             ->setFirstResult($offset)
             ->addGroupBy('episode.id')
-            ->addGroupBy('episode.pid')
-            ->addGroupBy('episode.shortSynopsis')
-            ->addGroupBy('episode.parent')
             ->addOrderBy('episode.streamableUntil', 'DESC')
             ->addOrderBy('episode.title', 'DESC');
 
@@ -482,6 +473,11 @@ QUERY;
         /** @var CategoryRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
         return $repo->findByIds($ids);
+    }
+
+    private function ancestryIdsToString(array $ancestry)
+    {
+        return implode(',', $ancestry) . ',';
     }
 
     private function assertEntityType($entityType, $validEntityTypes)
