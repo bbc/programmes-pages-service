@@ -63,7 +63,8 @@ class BroadcastRepository extends EntityRepository
         DateTimeImmutable $from,
         DateTimeImmutable $to,
         $limit,
-        int $offset
+        int $offset,
+        string $medium = null
     ) {
         $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
 
@@ -77,6 +78,11 @@ class BroadcastRepository extends EntityRepository
 
         $qb = $this->setLimit($qb, $limit);
 
+        if ($medium) {
+            $qb->andWhere('networkOfService.medium = :medium')
+                ->setParameter('medium', $medium);
+        }
+
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         $result = $this->explodeServiceIds($result);
 
@@ -87,14 +93,17 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
-    public function countUpcomingByCategoryAncestry(
+    public function countByCategoryAncestryEndingAfter(
         array $categoryAncestry,
         string $type,
         DateTimeImmutable $from,
-        DateTimeImmutable $to
+        DateTimeImmutable $to,
+        string $medium = null
     ) {
         $isWebcastValue = $this->entityTypeFilterValue($type);
         $isWebcastClause = !is_null($isWebcastValue) ? 'AND b.is_webcast = :isWebcast' : '';
+
+        $filterByMediumClause = !is_null($medium) ? 'AND n.medium = :medium' : '';
 
         // Join to CoreEntity to ensure the programme is not embargoed
         // Join to network (via broadcast service) so that we get a count of
@@ -120,6 +129,7 @@ FROM (
     AND b.end_at > :cutoffTime
     AND b.end_at <= :limitTime
     $isWebcastClause
+    $filterByMediumClause
     GROUP BY b.start_at, c.id, n.id
 ) t
 QUERY;
@@ -134,6 +144,10 @@ QUERY;
 
         if (!is_null($isWebcastValue)) {
             $q->setParameter('isWebcast', $isWebcastValue);
+        }
+
+        if ($medium) {
+            $q->setParameter('medium', $medium);
         }
 
         return $q->getSingleScalarResult();
@@ -343,13 +357,11 @@ QUERY;
     private function createCollapsedBroadcastsOfCategoryQueryBuilder($ancestry, $type)
     {
         $qb = $this->createQueryBuilder('broadcast', false)
-            ->addSelect(['category', 'programmeItem', 'image', 'masterBrand', 'network'])
+            ->addSelect(['category', 'programmeItem', 'image'])
             ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
             ->join('broadcast.service', 'service')
             ->leftJoin('service.network', 'networkOfService')
             ->leftJoin('programmeItem.image', 'image')
-            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
-            ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('programmeItem.categories', 'category')
             ->andWhere('category.ancestry LIKE :ancestryClause')
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')

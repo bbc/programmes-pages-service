@@ -4,7 +4,6 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\Expr\Join;
 
 class CategoryRepository extends MaterializedPathRepository
 {
@@ -28,7 +27,7 @@ class CategoryRepository extends MaterializedPathRepository
             ->andWhere('category0.urlKey = :urlKey0')
             ->setParameter('type', $type)
             ->setParameter('urlKey0', $urlKeys[0]);
-        
+
         // Loop through urlKeys, except the first one. Final true value preserves the keys
         foreach (array_slice($urlKeys, 1, null, true) as $i => $urlKey) {
             $query->addSelect('category' . $i)

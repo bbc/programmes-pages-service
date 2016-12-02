@@ -148,7 +148,7 @@ class ProgrammesService extends AbstractService
         Category $category,
         string $medium = null
     ) {
-        return $this->repository->countAvailableEpisodesByUrlKeyAndType(
+        return $this->repository->countAvailableEpisodesByAncestryCategoryIds(
             $category->getDbAncestryIds(),
             $medium
         );
@@ -160,7 +160,7 @@ class ProgrammesService extends AbstractService
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ) {
-        $dbEntities = $this->repository->findAvailableEpisodesByUrlKeyAndType(
+        $dbEntities = $this->repository->findAvailableEpisodesByAncestryCategoryIds(
             $category->getDbAncestryIds(),
             $limit,
             $this->getOffset($limit, $page),
