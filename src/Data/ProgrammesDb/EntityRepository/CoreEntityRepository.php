@@ -4,11 +4,11 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
+use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use InvalidArgumentException;
 use DateTimeInterface;
-use Doctrine\ORM\Query\Expr\Join;
 
 class CoreEntityRepository extends MaterializedPathRepository
 {
@@ -39,7 +39,8 @@ class CoreEntityRepository extends MaterializedPathRepository
      * @return int|mixed
      */
     public function countAvailableEpisodesByAncestryCategoryIds(
-        array $ancestryDbIds
+        array $ancestryDbIds,
+        string $medium = null
     ) {
         $ancestry = $this->ancestryIdsToString($ancestryDbIds);
 
@@ -50,6 +51,15 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->andWhere('episode.streamable = 1')
             ->andWhere('category.ancestry LIKE :ancestry')
             ->setParameter('ancestry', $ancestry . '%'); // Availability DESC
+
+        if ($medium) {
+            $this->assertNetworkMedium($medium);
+
+            $qb->innerJoin('episode.masterBrand', 'masterBrand')
+                ->innerJoin('masterBrand.network', 'network')
+                ->andWhere('network.medium = :medium')
+                ->setParameter('medium', $medium);
+        }
 
         $count = $qb->getQuery()->getSingleScalarResult();
         return $count ? $count : 0;
@@ -66,7 +76,8 @@ class CoreEntityRepository extends MaterializedPathRepository
     public function findAvailableEpisodesByAncestryCategoryIds(
         array $ancestryDbIds,
         $limit,
-        int $offset
+        int $offset,
+        string $medium = null
     ) {
         $ancestry = $this->ancestryIdsToString($ancestryDbIds);
 
@@ -85,6 +96,13 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->addGroupBy('episode.id')
             ->addOrderBy('episode.streamableUntil', 'DESC')
             ->addOrderBy('episode.title', 'DESC');
+
+        if ($medium) {
+            $this->assertNetworkMedium($medium);
+
+            $qb->andWhere('network.medium = :medium')
+                ->setParameter('medium', $medium);
+        }
 
         $qb = $this->setLimit($qb, $limit);
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
@@ -489,6 +507,13 @@ QUERY;
                 '"' . implode('", "', $validEntityTypes) . '"',
                 $entityType
             ));
+        }
+    }
+
+    private function assertNetworkMedium(string $medium)
+    {
+        if (!in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO])) {
+            throw new \InvalidArgumentException('Network medium must be tv or radio');
         }
     }
 }
