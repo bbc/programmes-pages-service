@@ -36,6 +36,8 @@ class CategoryRepository extends MaterializedPathRepository
                 ->setParameter('urlKey' . $i, $urlKey);
         }
 
+        $query->andWhere('category' . (count($urlKeys) -1) . '.parent IS NULL');
+
         return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
