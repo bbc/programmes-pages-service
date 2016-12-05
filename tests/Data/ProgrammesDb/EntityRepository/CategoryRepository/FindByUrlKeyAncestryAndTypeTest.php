@@ -16,7 +16,7 @@ class FindByUrlKeyAncestryAndTypeTest extends AbstractDatabaseTest
 
         $entity = $repo->findByUrlKeyAncestryAndType(
             'genre',
-            'drama'
+            ['drama']
         );
 
         $this->assertEquals(1, $entity['id']);
@@ -35,7 +35,7 @@ class FindByUrlKeyAncestryAndTypeTest extends AbstractDatabaseTest
 
         $entity = $repo->findByUrlKeyAncestryAndType(
             'format',
-            'animation'
+            ['animation']
         );
 
         $this->assertEquals(4, $entity['id']);
@@ -54,17 +54,14 @@ class FindByUrlKeyAncestryAndTypeTest extends AbstractDatabaseTest
 
         $entity = $repo->findByUrlKeyAncestryAndType(
             'genre',
-            'drama',
-            'actionandadventure'
+            ['actionandadventure', 'drama']
         );
 
         $this->assertEquals(2, $entity['id']);
         $this->assertEquals('Action & Adventure', $entity['title']);
         $this->assertEquals('actionandadventure', $entity['urlKey']);
         $this->assertEquals('1,2,', $entity['ancestry']);
-
-        // findByUrlKeyAncestryAndType query only
-        $this->assertCount(2, $this->getDbQueries());
+        $this->assertCount(1, $this->getDbQueries());
     }
 
     public function testGenreFindByUrlKeyAncestryAndTypeTwoParents()
@@ -74,9 +71,7 @@ class FindByUrlKeyAncestryAndTypeTest extends AbstractDatabaseTest
 
         $entity = $repo->findByUrlKeyAncestryAndType(
             'genre',
-            'drama',
-            'actionandadventure',
-            'dramaandaction'
+            ['dramaandaction', 'actionandadventure', 'drama']
         );
 
         $this->assertEquals(3, $entity['id']);
@@ -84,8 +79,7 @@ class FindByUrlKeyAncestryAndTypeTest extends AbstractDatabaseTest
         $this->assertEquals('dramaandaction', $entity['urlKey']);
         $this->assertEquals('1,2,3,', $entity['ancestry']);
 
-        // findByUrlKeyAncestryAndType query only
-        $this->assertCount(2, $this->getDbQueries());
+        $this->assertCount(1, $this->getDbQueries());
     }
 
     public function testGenreFindByUrlKeyAncestryAndTypeNotFound()
@@ -95,9 +89,7 @@ class FindByUrlKeyAncestryAndTypeTest extends AbstractDatabaseTest
 
         $entity = $repo->findByUrlKeyAncestryAndType(
             'genre',
-            'notreal',
-            'notrealsub',
-            'notrealsubsub'
+            ['notrealsubsub', 'notrealsub', 'notreal']
         );
 
         $this->assertNull($entity);
@@ -113,7 +105,7 @@ class FindByUrlKeyAncestryAndTypeTest extends AbstractDatabaseTest
 
         $entity = $repo->findByUrlKeyAncestryAndType(
             'format',
-            'notreal'
+            ['notreal']
         );
 
         $this->assertNull($entity);

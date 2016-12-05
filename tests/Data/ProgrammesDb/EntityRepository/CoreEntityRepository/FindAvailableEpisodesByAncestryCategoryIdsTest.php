@@ -7,13 +7,13 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class FindAvailableEpisodesByUrlKeyAndTypeTest extends AbstractDatabaseTest
+class FindAvailableEpisodesByAncestryCategoryIdsTest extends AbstractDatabaseTest
 {
-    public function countAvailableEpisodesByUrlKeyAndType()
+    public function countAvailableEpisodesByAncestryCategoryIds()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
-        $count = $repo->countAvailableEpisodesByUrlKeyAndType(
+        $count = $repo->countAvailableEpisodesByAncestryCategoryIds(
             [1, 2, 3],
             30,
             0
@@ -23,11 +23,11 @@ class FindAvailableEpisodesByUrlKeyAndTypeTest extends AbstractDatabaseTest
         $this->assertEquals(1, $count);
     }
 
-    public function testFindAvailableEpisodesByUrlKeyAndType()
+    public function testByAvailableEpisodesByAncestryCategoryIds()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
-        $entities = $repo->findAvailableEpisodesByUrlKeyAndType(
+        $entities = $repo->findAvailableEpisodesByAncestryCategoryIds(
             [1, 2, 3],
             30,
             0
@@ -47,11 +47,11 @@ class FindAvailableEpisodesByUrlKeyAndTypeTest extends AbstractDatabaseTest
         $this->assertCount(2, $this->getDbQueries());
     }
 
-    public function testFindAvailableEpisodesByUrlKeyAndTypeNoMatch()
+    public function testByAvailableEpisodesByAncestryCategoryIdsNoMatch()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
-        $entities = $repo->findAvailableEpisodesByUrlKeyAndType(
+        $entities = $repo->findAvailableEpisodesByAncestryCategoryIds(
             [2, 3, 4], // Ancestry Ids won't match by fixture
             30,
             0
