@@ -97,7 +97,7 @@ class CollapsedBroadcastsService extends AbstractService
         int $offset = self::DEFAULT_PAGE
     ) {
         $now = ApplicationTime::getTime();
-        $broadcasts = $this->repository->findByCategoryAncestryEndingAfter(
+        $broadcasts = $this->repository->findByCategoryAncestryAndEndingAfter(
             $category->getDbAncestryIds(),
             'Broadcast',
             $now,
@@ -114,7 +114,7 @@ class CollapsedBroadcastsService extends AbstractService
     public function countUpcomingByCategory(Category $category, int $limitInDays, string $medium = null)
     {
         $now = ApplicationTime::getTime();
-        return $this->repository->countByCategoryAncestryEndingAfter(
+        return $this->repository->countByCategoryAncestryAndEndingAfter(
             $category->getDbAncestryIds(),
             'Broadcast',
             $now,

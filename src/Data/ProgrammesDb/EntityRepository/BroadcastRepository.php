@@ -57,7 +57,7 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }
 
-    public function findByCategoryAncestryEndingAfter(
+    public function findByCategoryAncestryAndEndingAfter(
         array $categoryAncestry,
         string $type,
         DateTimeImmutable $from,
@@ -93,13 +93,13 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
-    public function countByCategoryAncestryEndingAfter(
+    public function countByCategoryAncestryAndEndingAfter(
         array $categoryAncestry,
         string $type,
         DateTimeImmutable $from,
         DateTimeImmutable $to,
         string $medium = null
-    ) {
+    ): int {
         $isWebcastValue = $this->entityTypeFilterValue($type);
         $isWebcastClause = !is_null($isWebcastValue) ? 'AND b.is_webcast = :isWebcast' : '';
 
