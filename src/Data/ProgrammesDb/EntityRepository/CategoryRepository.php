@@ -37,7 +37,7 @@ class CategoryRepository extends MaterializedPathRepository
 
         $query->andWhere('category' . (count($urlKeys) - 1) . '.parent IS NULL');
 
-        $result = $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
     public function findPopulatedChildCategoriesByNetworkMedium(int $categoryId, string $categoryType, $medium): array
