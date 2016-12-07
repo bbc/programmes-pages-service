@@ -74,7 +74,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
 
         $genre = new Genre([0], 'id', 'Title', 'url_key');
-        $format = new Format('id2', 'Title', 'url_key');
+        $format = new Format([1], 'id2', 'Title', 'url_key');
 
         $firstBroadcastDate = new \DateTimeImmutable();
 

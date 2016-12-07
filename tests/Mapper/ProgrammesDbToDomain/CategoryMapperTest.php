@@ -12,6 +12,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
     public function testGetDomainModelWithFormat()
     {
         $dbEntityArray = [
+            'ancestry' => '1,',
             'id' => '1',
             'type' => 'format',
             'pipId' => 'PT001',
@@ -20,6 +21,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
         ];
 
         $expectedEntity = new Format(
+            [1],
             'PT001',
             'Title',
             'url_key'

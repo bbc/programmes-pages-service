@@ -27,6 +27,7 @@ class CategoryMapper implements MapperInterface
     private function getFormatDomainModel(array $dbCategory): Format
     {
         return new Format(
+            $this->getAncestryArray($dbCategory),
             $dbCategory['pipId'],
             $dbCategory['title'],
             $dbCategory['urlKey']

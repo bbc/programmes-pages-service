@@ -9,7 +9,7 @@ class FormatTest extends PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
-        $format = new Format('id', 'Title', 'url_key');
+        $format = new Format([1], 'id', 'Title', 'url_key');
 
         $this->assertEquals('id', $format->getId());
         $this->assertEquals('Title', $format->getTitle());

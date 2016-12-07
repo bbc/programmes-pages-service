@@ -50,7 +50,7 @@ class CountByCategoryAncestryAndEndingAfterTest extends AbstractDatabaseTest
             $this->assertSame($expectedOutput, $data);
 
             // countByCategoryAncestryAndEndingAfter query only
-            $this->assertCount(2, $this->getDbQueries());
+            $this->assertCount(1, $this->getDbQueries());
 
             $this->resetDbQueryLogger();
         }
