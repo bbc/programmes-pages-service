@@ -333,7 +333,15 @@ QUERY;
             ->setParameter('from', $from)
             ->setParameter('to', $to);
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $this->explodeServiceIds($result);
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['programmeItem', 'ancestry']
+        );
     }
 
     private function createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $type)

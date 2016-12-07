@@ -58,7 +58,9 @@ class CollapsedBroadcastsService extends AbstractService
     public function findByCategoryInRange(Category $genre, DateTimeImmutable $startDate, DateTimeImmutable $endDate)
     {
         $collapseBroadcast = $this->repository->findByCategoryIdInDateRange($genre->getDbId(), 'Broadcast', $startDate, $endDate);
-        return $this->mapManyEntities($collapseBroadcast);
+
+        $services = $this->fetchUsedServices($collapseBroadcast);
+        return $this->mapManyEntities($collapseBroadcast, $services);
     }
 
     public function findPastByProgramme(
