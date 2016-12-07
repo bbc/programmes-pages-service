@@ -26,6 +26,7 @@ class CategoryRepository extends MaterializedPathRepository
             ->andWhere('category0.urlKey = :urlKey0')
             ->setParameter('type', $type)
             ->setParameter('urlKey0', $urlKeys[0]);
+
         // Loop through urlKeys, except the first one. Final true value preserves the keys
         foreach (array_slice($urlKeys, 1, null, true) as $i => $urlKey) {
             $query->addSelect('category' . $i)
@@ -36,7 +37,7 @@ class CategoryRepository extends MaterializedPathRepository
 
         $query->andWhere('category' . (count($urlKeys) - 1) . '.parent IS NULL');
 
-        return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        $result = $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
     public function findPopulatedChildCategoriesByNetworkMedium(int $categoryId, string $categoryType, $medium): array

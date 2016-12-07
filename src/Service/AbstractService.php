@@ -55,6 +55,7 @@ abstract class AbstractService
             return null;
         }
 
+
         return $this->mapper->getDomainModel($dbEntity, ...$additionalArgs);
     }
 

@@ -6,9 +6,12 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepos
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Category;
+use BBC\ProgrammesPagesService\Domain\Entity\Format;
+use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use DateInterval;
+use DateTimeImmutable;
 
 class CollapsedBroadcastsService extends AbstractService
 {
@@ -44,6 +47,18 @@ class CollapsedBroadcastsService extends AbstractService
 
         $services = $this->fetchUsedServices($broadcasts);
         return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    /**
+     * @param Category          $genre
+     * @param DateTimeImmutable $startDate
+     * @param DateTimeImmutable $endDate
+     * @return array
+     */
+    public function findByCategoryInRange(Category $genre, DateTimeImmutable $startDate, DateTimeImmutable $endDate)
+    {
+        $collapseBroadcast = $this->repository->findByCategoryIdInDateRange($genre->getDbId(), 'Broadcast', $startDate, $endDate);
+        return $this->mapManyEntities($collapseBroadcast);
     }
 
     public function findPastByProgramme(
