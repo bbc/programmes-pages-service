@@ -323,6 +323,19 @@ QUERY;
             ->join($alias . '.programmeItem', 'programmeItem');
     }
 
+    public function findByCategoryIdInDateRange(string $categoryId, string $type, DateTimeImmutable $from, DateTimeImmutable $to)
+    {
+        $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder([$categoryId], $type);
+        $qb->andWhere('broadcast.startAt > :from')
+            ->andWhere('broadcast.startAt <= :to')
+            ->addOrderBy('broadcast.startAt')
+            ->addOrderBy('networkOfService.urlKey')
+            ->setParameter('from', $from)
+            ->setParameter('to', $to);
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
     private function createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $type)
     {
         // networkOfService is needed so that each row is contains the services
@@ -354,7 +367,7 @@ QUERY;
         return $qb;
     }
 
-    private function createCollapsedBroadcastsOfCategoryQueryBuilder($ancestry, $type)
+    private function createCollapsedBroadcastsOfCategoryQueryBuilder(array $ancestry, string $type)
     {
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['category', 'programmeItem', 'image'])
