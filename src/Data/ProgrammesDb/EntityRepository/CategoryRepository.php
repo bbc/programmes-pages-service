@@ -4,7 +4,6 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\Expr\Join;
 
 class CategoryRepository extends MaterializedPathRepository
 {
@@ -42,7 +41,7 @@ class CategoryRepository extends MaterializedPathRepository
     }
 
     public function findChildCategoriesUsedByTleosByParentIdAndType(
-        string $categoryId,
+        int $categoryId,
         string $categoryType,
         string $medium = null
     ) {

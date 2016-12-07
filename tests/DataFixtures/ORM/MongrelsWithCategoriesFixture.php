@@ -12,6 +12,11 @@ class MongrelsWithCategoriesFixture extends AbstractFixture implements Dependent
 {
     private $manager;
 
+    public function getDependencies()
+    {
+        return [MongrelsFixture::CLASS, NetworksFixture::CLASS];
+    }
+
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
@@ -22,6 +27,7 @@ class MongrelsWithCategoriesFixture extends AbstractFixture implements Dependent
 
         $brand = $this->getReference('b010t19z');
         $brand->setCategories(new ArrayCollection([$category2, $category3]));
+        $brand->setMasterBrand($this->getReference('mb_bbc_radio_four'));
         $manager->persist($brand);
 
         $brand = $this->getReference('b00swgkn');
@@ -34,11 +40,6 @@ class MongrelsWithCategoriesFixture extends AbstractFixture implements Dependent
         $manager->persist($s2e1);
 
         $manager->flush();
-    }
-
-    public function getDependencies()
-    {
-        return [MongrelsFixture::CLASS];
     }
 
     private function buildGenre($pidId, $title, $urlKey, $parent = null)
