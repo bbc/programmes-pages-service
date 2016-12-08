@@ -39,11 +39,8 @@ class CategoryRepository extends MaterializedPathRepository
         return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findPopulatedChildCategoriesByNetworkMedium(
-        int $categoryId,
-        string $categoryType,
-        string $medium = null
-    ) {
+    public function findPopulatedChildCategoriesByNetworkMedium(int $categoryId, string $categoryType, $medium): array
+    {
         $qb = $this->createQueryBuilder('category')
             ->select(['DISTINCT category'])
             ->join('category.programmes', 'programmes')

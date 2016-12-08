@@ -70,10 +70,10 @@ class CoreEntityRepository extends MaterializedPathRepository
     /**
      * Return available episodes given category ID's
      *
-     * @param array $ancestryDbIds
-     * @param       $medium
-     * @param       $limit
-     * @param int   $offset
+     * @param array       $ancestryDbIds
+     * @param string|null $medium
+     * @param int|null    $limit
+     * @param int         $offset
      *
      * @return array
      */
@@ -518,7 +518,8 @@ QUERY;
     {
         if (!in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO])) {
             throw new InvalidArgumentException(
-                sprintf('Network medium must be %s or %s, instead got %s',
+                sprintf(
+                    'Network medium must be %s or %s, instead got %s',
                     NetworkMediumEnum::TV,
                     NetworkMediumEnum::RADIO,
                     $medium

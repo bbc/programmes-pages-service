@@ -40,9 +40,13 @@ class CategoriesService extends AbstractService
         return $this->mapSingleEntity($format);
     }
 
-    public function findPopulatedChildGenres(Genre $genre)
+    public function findPopulatedChildGenres(Genre $genre, string $medium = null)
     {
-        $subcategories = $this->repository->findPopulatedChildCategoriesByNetworkMedium($genre->getDbId(), 'genre');
+        $subcategories = $this->repository->findPopulatedChildCategoriesByNetworkMedium(
+            $genre->getDbId(),
+            'genre',
+            $medium
+        );
         return $this->mapManyEntities($subcategories);
     }
 }
