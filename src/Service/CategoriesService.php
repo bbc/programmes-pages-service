@@ -2,7 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Category;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
@@ -29,30 +28,21 @@ class CategoriesService extends AbstractService
         return $this->mapManyEntities($usedByType);
     }
 
-    public function findGenreByUrlKeyAncestry(
-        array $categories
-    ) {
-        /** @var Category $categoryWithAncestry */
-        $categoryWithAncestry = $this->repository->findByUrlKeyAncestryAndType(
-            'genre',
-            $categories
-        );
-
-        return $this->mapSingleEntity($categoryWithAncestry);
+    public function findGenreByUrlKeyAncestry(array $urlHierarchy)
+    {
+        $genre = $this->repository->findByUrlKeyAncestryAndType($urlHierarchy, 'genre');
+        return $this->mapSingleEntity($genre);
     }
 
     public function findFormatByUrlKeyAncestry(string $formatUrlKey): Format
     {
-        $format = $this->repository->findByUrlKeyAncestryAndType('format', $formatUrlKey);
+        $format = $this->repository->findByUrlKeyAncestryAndType([$formatUrlKey], 'format');
         return $this->mapSingleEntity($format);
     }
 
-    public function findChildGenresUsedByTleosByParent(Genre $genre)
+    public function findPopulatedChildGenres(Genre $genre)
     {
-        $subcategories = $this->repository->findChildCategoriesUsedByTleosByParentIdAndType(
-            $genre->getDbId(),
-            'genre'
-        );
+        $subcategories = $this->repository->findPopulatedChildCategoriesByNetworkMedium($genre->getDbId(), 'genre');
         return $this->mapManyEntities($subcategories);
     }
 }

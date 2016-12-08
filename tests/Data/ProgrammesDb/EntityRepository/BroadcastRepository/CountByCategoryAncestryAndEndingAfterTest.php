@@ -19,17 +19,17 @@ class CountByCategoryAncestryAndEndingAfterTest extends AbstractDatabaseTest
             [
                 [1], // music
                 'Broadcast',
+                null,
                 new DateTimeImmutable('2016-07-01'),
                 new DateTimeImmutable('2016-07-31'),
-                null,
                 1,
             ],
             [
                 [1, 2], // jazzandblues, music
                 'Broadcast',
+                null,
                 new DateTimeImmutable('2011-07-01'),
                 new DateTimeImmutable('2011-07-31'),
-                null,
                 1,
             ],
         ];
@@ -44,9 +44,9 @@ class CountByCategoryAncestryAndEndingAfterTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
 
         foreach ($this->countByCategoryAncestryAndEndingAfter() as $data) {
-            list($categoryAncestry, $type, $from, $to, $medium, $expectedOutput) = $data;
+            list($categoryAncestry, $type, $medium, $from, $to, $expectedOutput) = $data;
 
-            $data = $repo->countByCategoryAncestryAndEndingAfter($categoryAncestry, $type, $from, $to, $medium);
+            $data = $repo->countByCategoryAncestryAndEndingAfter($categoryAncestry, $type, $medium, $from, $to);
             $this->assertSame($expectedOutput, $data);
 
             // countByCategoryAncestryAndEndingAfter query only

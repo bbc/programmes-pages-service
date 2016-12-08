@@ -7,7 +7,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class FindAvailableEpisodesByAncestryCategoryIdsTest extends AbstractDatabaseTest
+class FindAvailableEpisodesByCategoryAncestryTest extends AbstractDatabaseTest
 {
     public function countAvailableEpisodesByAncestryCategoryIds()
     {
@@ -27,8 +27,9 @@ class FindAvailableEpisodesByAncestryCategoryIdsTest extends AbstractDatabaseTes
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
-        $entities = $repo->findAvailableEpisodesByAncestryCategoryIds(
+        $entities = $repo->findAvailableEpisodesByCategoryAncestry(
             [1, 2, 3],
+            null,
             30,
             0
         );
@@ -51,8 +52,9 @@ class FindAvailableEpisodesByAncestryCategoryIdsTest extends AbstractDatabaseTes
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
-        $entities = $repo->findAvailableEpisodesByAncestryCategoryIds(
+        $entities = $repo->findAvailableEpisodesByCategoryAncestry(
             [2, 3, 4], // Ancestry Ids won't match by fixture
+            null,
             30,
             0
         );

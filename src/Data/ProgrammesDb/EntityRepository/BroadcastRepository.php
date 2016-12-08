@@ -2,11 +2,11 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\ResultSetMapping;
 use DateTimeImmutable;
-use DateInterval;
 use InvalidArgumentException;
 
 class BroadcastRepository extends EntityRepository
@@ -60,11 +60,11 @@ class BroadcastRepository extends EntityRepository
     public function findByCategoryAncestryAndEndingAfter(
         array $categoryAncestry,
         string $type,
+        $medium,
         DateTimeImmutable $from,
         DateTimeImmutable $to,
         $limit,
-        int $offset,
-        string $medium = null
+        int $offset
     ) {
         $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
 
@@ -78,7 +78,7 @@ class BroadcastRepository extends EntityRepository
 
         $qb = $this->setLimit($qb, $limit);
 
-        if ($medium) {
+        if ($this->isValidNetworkMedium($medium)) {
             $qb->andWhere('networkOfService.medium = :medium')
                 ->setParameter('medium', $medium);
         }
@@ -96,14 +96,14 @@ class BroadcastRepository extends EntityRepository
     public function countByCategoryAncestryAndEndingAfter(
         array $categoryAncestry,
         string $type,
+        $medium,
         DateTimeImmutable $from,
-        DateTimeImmutable $to,
-        string $medium = null
+        DateTimeImmutable $to
     ): int {
         $isWebcastValue = $this->entityTypeFilterValue($type);
         $isWebcastClause = !is_null($isWebcastValue) ? 'AND b.is_webcast = :isWebcast' : '';
 
-        $filterByMediumClause = !is_null($medium) ? 'AND n.medium = :medium' : '';
+        $filterByMediumClause = $this->isValidNetworkMedium($medium) ? 'AND n.medium = :medium' : '';
 
         // Join to CoreEntity to ensure the programme is not embargoed
         // Join to network (via broadcast service) so that we get a count of
@@ -146,7 +146,7 @@ QUERY;
             $q->setParameter('isWebcast', $isWebcastValue);
         }
 
-        if ($medium) {
+        if ($this->isValidNetworkMedium($medium)) {
             $q->setParameter('medium', $medium);
         }
 
@@ -432,5 +432,10 @@ QUERY;
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
         return $repo->findByIds($ids);
+    }
+
+    private function isValidNetworkMedium($medium)
+    {
+        return in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO]);
     }
 }

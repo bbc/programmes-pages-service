@@ -35,13 +35,15 @@ class CoreEntityRepository extends MaterializedPathRepository
     /**
      * Return the count of available episodes given category ID's
      *
-     * @param array $ancestryDbIds
-     * @return int|mixed
+     * @param array       $ancestryDbIds
+     * @param string|null $medium
+     *
+     * @return int
      */
-    public function countAvailableEpisodesByAncestryCategoryIds(
+    public function countAvailableEpisodesByCategoryAncestry(
         array $ancestryDbIds,
-        string $medium = null
-    ) {
+        $medium
+    ): int {
         $ancestry = $this->ancestryIdsToString($ancestryDbIds);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -62,23 +64,25 @@ class CoreEntityRepository extends MaterializedPathRepository
         }
 
         $count = $qb->getQuery()->getSingleScalarResult();
-        return $count ? $count : 0;
+        return $count;
     }
 
     /**
      * Return available episodes given category ID's
      *
      * @param array $ancestryDbIds
-     * @param int $limit
-     * @param int $offset
+     * @param       $medium
+     * @param       $limit
+     * @param int   $offset
+     *
      * @return array
      */
-    public function findAvailableEpisodesByAncestryCategoryIds(
+    public function findAvailableEpisodesByCategoryAncestry(
         array $ancestryDbIds,
+        $medium,
         $limit,
-        int $offset,
-        string $medium = null
-    ) {
+        int $offset
+    ): array {
         $ancestry = $this->ancestryIdsToString($ancestryDbIds);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -513,7 +517,13 @@ QUERY;
     private function assertNetworkMedium(string $medium)
     {
         if (!in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO])) {
-            throw new \InvalidArgumentException('Network medium must be tv or radio');
+            throw new InvalidArgumentException(
+                sprintf('Network medium must be %s or %s, instead got %s',
+                    NetworkMediumEnum::TV,
+                    NetworkMediumEnum::RADIO,
+                    $medium
+                )
+            );
         }
     }
 }

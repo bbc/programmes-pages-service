@@ -91,17 +91,18 @@ class CollapsedBroadcastsService extends AbstractService
 
     public function findUpcomingByCategory(
         Category $category,
-        int $limitInDays,
+        DateInterval $interval,
         string $medium = null,
         $limit = self::DEFAULT_LIMIT,
         int $offset = self::DEFAULT_PAGE
     ) {
         $now = ApplicationTime::getTime();
+
         $broadcasts = $this->repository->findByCategoryAncestryAndEndingAfter(
             $category->getDbAncestryIds(),
             'Broadcast',
             $now,
-            $now->add(new DateInterval('P' . $limitInDays . 'D')),
+            $now->add($interval),
             $limit,
             $offset,
             $medium
@@ -111,14 +112,14 @@ class CollapsedBroadcastsService extends AbstractService
         return $this->mapManyEntities($broadcasts, $services);
     }
 
-    public function countUpcomingByCategory(Category $category, int $limitInDays, string $medium = null)
+    public function countUpcomingByCategory(Category $category, DateInterval $interval, string $medium = null)
     {
         $now = ApplicationTime::getTime();
         return $this->repository->countByCategoryAncestryAndEndingAfter(
             $category->getDbAncestryIds(),
             'Broadcast',
             $now,
-            $now->add(new DateInterval('P' . $limitInDays . 'D')),
+            $now->add($interval),
             $medium
         );
     }

@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use Doctrine\ORM\Query;
 
@@ -17,10 +18,8 @@ class CategoryRepository extends MaterializedPathRepository
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findByUrlKeyAncestryAndType(
-        string $type,
-        array $urlKeys
-    ) {
+    public function findByUrlKeyAncestryAndType(array $urlKeys, string $type)
+    {
 
         $query = $this->createQueryBuilder('category0')
             ->andWhere('category0 INSTANCE OF :type')
@@ -35,12 +34,12 @@ class CategoryRepository extends MaterializedPathRepository
                 ->setParameter('urlKey' . $i, $urlKey);
         }
 
-        $query->andWhere('category' . (count($urlKeys) -1) . '.parent IS NULL');
+        $query->andWhere('category' . (count($urlKeys) - 1) . '.parent IS NULL');
 
         return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findChildCategoriesUsedByTleosByParentIdAndType(
+    public function findPopulatedChildCategoriesByNetworkMedium(
         int $categoryId,
         string $categoryType,
         string $medium = null
@@ -55,7 +54,7 @@ class CategoryRepository extends MaterializedPathRepository
             ->setParameter('parentId', $categoryId)
             ->setParameter('type', $categoryType);
 
-        if ($medium) {
+        if ($this->isValidNetworkMedium($medium)) {
             $qb->join('programmes.masterBrand', 'masterBrand')
                 ->join('masterBrand.network', 'network')
                 ->andWhere('network.medium = :medium')
@@ -85,5 +84,10 @@ class CategoryRepository extends MaterializedPathRepository
     protected function resolveParents(array $categories)
     {
         return $this->abstractResolveAncestry($categories, [$this, 'findByIds']);
+    }
+
+    private function isValidNetworkMedium($medium)
+    {
+        return in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO]);
     }
 }

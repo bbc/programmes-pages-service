@@ -7,14 +7,14 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository::<public>
  */
-class FindChildCategoriesUsedByTleosByParentIdAndTypeTest extends AbstractDatabaseTest
+class FindPopulatedChildCategoriesByNetworkMediumTest extends AbstractDatabaseTest
 {
-    public function testFindChildCategoriesUsedByTleosByParentIdAndType()
+    public function testFindPopulatedChildCategoriesByNetworkMediumWithoutMedium()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');
 
-        $entity = $repo->findChildCategoriesUsedByTleosByParentIdAndType(1, 'genre');
+        $entity = $repo->findPopulatedChildCategoriesByNetworkMedium(1, 'genre', null);
 
         $this->assertEquals(2, $entity[0]['id']);
         $this->assertEquals('Sitcoms', $entity[0]['title']);
@@ -25,12 +25,12 @@ class FindChildCategoriesUsedByTleosByParentIdAndTypeTest extends AbstractDataba
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindChildCategoriesUsedByTleosByParentIdAndTypeAndMedium()
+    public function testFindPopulatedChildCategoriesByNetworkMediumWithMedium()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');
 
-        $entity = $repo->findChildCategoriesUsedByTleosByParentIdAndType(1, 'genre', 'radio');
+        $entity = $repo->findPopulatedChildCategoriesByNetworkMedium(1, 'genre', 'radio');
 
         $this->assertEquals(2, $entity[0]['id']);
         $this->assertEquals('Sitcoms', $entity[0]['title']);
