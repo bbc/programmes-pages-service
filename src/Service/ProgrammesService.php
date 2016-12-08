@@ -143,8 +143,9 @@ class ProgrammesService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function findProgrammesByKeywords(
+    public function searchByKeywords(
         string $keywords,
+        string $networkMedium = null,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
@@ -152,15 +153,41 @@ class ProgrammesService extends AbstractService
         $dbEntities = $this->repository->findByKeywords(
             $keywords,
             $limit,
-            $this->getOffset($limit, $page)
+            $this->getOffset($limit, $page),
+            ['Brand', 'Series', 'Episode'],
+            $networkMedium
         );
 
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function countProgrammesByKeywords(string $keywords): int
+    public function countByKeywords(string $keywords, string $networkMedium = null): int
     {
-        return $this->repository->countByKeywords($keywords);
+        return $this->repository->countByKeywords($keywords, ['Brand', 'Series', 'Episode'], $networkMedium);
+    }
+
+    public function searchAvailableByKeywords(
+        string $keywords,
+        string $networkMedium = null,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+
+        $dbEntities = $this->repository->findByKeywords(
+            $keywords,
+            $limit,
+            $this->getOffset($limit, $page),
+            ['Brand', 'Series', 'Episode'],
+            $networkMedium,
+            true
+        );
+
+        return $this->mapManyEntities($dbEntities);
+    }
+
+    public function countAvailableByKeywords(string $keywords, string $networkMedium = null): int
+    {
+        return $this->repository->countByKeywords($keywords, ['Brand', 'Series', 'Episode'], $networkMedium, true);
     }
 
     private function findSiblingByProgramme(Programme $programme, string $direction)

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *   @ORM\Index(name="atoz_title_title", columns={"title"}),
  *   @ORM\Index(name="atoz_title_first_letter", columns={"first_letter"}),
  * })
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtoZTitleRepository")
  */
 class AtoZTitle
 {
