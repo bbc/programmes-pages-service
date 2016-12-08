@@ -57,7 +57,6 @@ class SegmentMapper extends AbstractMapper implements MapperInterface
             $dbSegment['musicCode'],
             $dbSegment['recordingDate']
         );
-
     }
 
     private function getSynopses($dbSegment): Synopses

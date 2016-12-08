@@ -59,7 +59,6 @@ class FindEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
 
         $result = $this->service()->findEpisodeGuideChildren($programme, 5, 3);
         $this->assertEquals([], $result);
-
     }
 
     public function testCountEpisodeGuideChildrenWithNonExistantPid()

@@ -31,7 +31,6 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Name', $masterBrand->getName());
         $this->assertEquals($image, $masterBrand->getImage());
         $this->assertEquals($network, $masterBrand->getNetwork());
-
     }
 
     public function testConstructorOptionalArgs()

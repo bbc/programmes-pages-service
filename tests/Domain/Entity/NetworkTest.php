@@ -38,7 +38,6 @@ class NetworkTest extends PHPUnit_Framework_TestCase
         $this->assertSame(false, $network->isWorldServiceInternational());
         $this->assertSame(false, $network->isInternational());
         $this->assertSame(false, $network->isAllowedAdverts());
-
     }
 
     public function testConstructorOptionalArgs()

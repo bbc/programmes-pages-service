@@ -61,7 +61,6 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1204, $programme->getAvailableEpisodesCount());
         $this->assertEquals(1205, $programme->getAvailableGalleriesCount());
         $this->assertEquals(false, $programme->IsPodcastable());
-
     }
 
     public function testConstructorOptionalArgs()
