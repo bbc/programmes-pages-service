@@ -39,6 +39,7 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
     public function serviceNamesDataProvider()
     {
         return [
+            ['AtoZTitlesService', ['AtoZTitle'], 'AtoZTitleMapper'],
             ['BroadcastsService', ['Broadcast'], 'BroadcastMapper'],
             ['CategoriesService', ['Category'], 'CategoryMapper'],
             ['CollapsedBroadcastsService', ['Broadcast', 'Service'], 'CollapsedBroadcastMapper'],

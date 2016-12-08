@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtoZTitleRepos
 use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
-class FindTLEOsByFirstLetterTest extends AbstractDatabaseTest
+class FindTleosByFirstLetterTest extends AbstractDatabaseTest
 {
     /** @var AtoZTitleRepository $repo */
     private $repo;
@@ -25,7 +25,7 @@ class FindTLEOsByFirstLetterTest extends AbstractDatabaseTest
 
     public function testFindAllLetters()
     {
-        $letters = $this->repo->findAllLetters();
+        $letters = $this->repo->findAllLetters(null);
         $expectedLetters = ['@', 'm', 't', 'w'];
         $this->assertEquals($expectedLetters, $letters);
     }
@@ -39,65 +39,65 @@ class FindTLEOsByFirstLetterTest extends AbstractDatabaseTest
 
     public function testFindByFirstLetterAt()
     {
-        $TLEOs = $this->repo->findTLEOsByFirstLetter('@', null, 0);
-        $this->assertCount(1, $TLEOs);
-        $this->assertEquals('b0000002', $TLEOs[0]['coreEntity']['pid']);
+        $tleos = $this->repo->findTleosByFirstLetter('@', null, false, null, 0);
+        $this->assertCount(1, $tleos);
+        $this->assertEquals('b0000002', $tleos[0]['coreEntity']['pid']);
     }
 
     public function testFindByFirstLetterW()
     {
-        $TLEOs = $this->repo->findTLEOsByFirstLetter('w', null, 0);
-        $this->assertCount(1, $TLEOs);
-        $this->assertEquals('b0000001', $TLEOs[0]['coreEntity']['pid']);
+        $tleos = $this->repo->findTleosByFirstLetter('w', null, false, null, 0);
+        $this->assertCount(1, $tleos);
+        $this->assertEquals('b0000001', $tleos[0]['coreEntity']['pid']);
     }
 
     public function testGetEmbargoed()
     {
-        $TLEOs = $this->repo->findTLEOsByFirstLetter('p', null, 0);
-        $this->assertEmpty($TLEOs);
+        $tleos = $this->repo->findTleosByFirstLetter('p', null, false, null, 0);
+        $this->assertEmpty($tleos);
     }
 
     public function testFilterAvailable()
     {
-        $TLEOs = $this->repo->findTLEOsByFirstLetter('w', null, 0, null, true);
-        $this->assertEmpty($TLEOs);
+        $tleos = $this->repo->findTleosByFirstLetter('w', null, true, null, 0);
+        $this->assertEmpty($tleos);
 
-        $TLEOs = $this->repo->findTLEOsByFirstLetter('@', null, 0, null, true);
-        $this->assertCount(1, $TLEOs);
-        $this->assertEquals('b0000002', $TLEOs[0]['coreEntity']['pid']);
+        $tleos = $this->repo->findTleosByFirstLetter('@', null, true, null, 0);
+        $this->assertCount(1, $tleos);
+        $this->assertEquals('b0000002', $tleos[0]['coreEntity']['pid']);
     }
 
     public function testFindWithNetworkMedium()
     {
-        $TLEOs = $this->repo->findTLEOsByFirstLetter('w', null, 0, NetworkMediumEnum::TV);
-        $this->assertEmpty($TLEOs);
+        $tleos = $this->repo->findTleosByFirstLetter('w', NetworkMediumEnum::TV, false, null, 0);
+        $this->assertEmpty($tleos);
 
-        $TLEOs = $this->repo->findTLEOsByFirstLetter('m', null, 0, NetworkMediumEnum::TV);
-        $this->assertCount(1, $TLEOs);
-        $this->assertEquals('b010t19z', $TLEOs[0]['coreEntity']['pid']);
+        $tleos = $this->repo->findTleosByFirstLetter('m', NetworkMediumEnum::TV, false, null, 0);
+        $this->assertCount(1, $tleos);
+        $this->assertEquals('b010t19z', $tleos[0]['coreEntity']['pid']);
     }
 
     public function testCountByFirstLetter()
     {
-        $count = $this->repo->countTLEOsByFirstLetter('@');
+        $count = $this->repo->countTleosByFirstLetter('@', null, false);
         $this->assertEquals(1, $count);
     }
 
     public function testCountByFirstLetterFilterAvailable()
     {
-        $count = $this->repo->countTLEOsByFirstLetter('w', null, true);
+        $count = $this->repo->countTleosByFirstLetter('w', null, true);
         $this->assertEquals(0, $count);
 
-        $count = $this->repo->countTLEOsByFirstLetter('@', null, true);
+        $count = $this->repo->countTleosByFirstLetter('@', null, true);
         $this->assertEquals(1, $count);
     }
 
     public function testCountByFirstLetterFilterNetwork()
     {
-        $count = $this->repo->countTLEOsByFirstLetter('m', NetworkMediumEnum::RADIO);
+        $count = $this->repo->countTleosByFirstLetter('m', NetworkMediumEnum::RADIO, false);
         $this->assertEquals(0, $count);
 
-        $count = $this->repo->countTLEOsByFirstLetter('m', NetworkMediumEnum::TV);
+        $count = $this->repo->countTleosByFirstLetter('m', NetworkMediumEnum::TV, false);
         $this->assertEquals(1, $count);
     }
 }

@@ -328,9 +328,9 @@ QUERY;
 
     public function countByKeywords(
         string $keywords,
-        array $entityTypes = ['CoreEntity'],
-        string $networkMedium = null,
-        bool $filterAvailable = false
+        $networkMedium,
+        bool $filterAvailable,
+        array $entityTypes = null
     ): int {
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));
@@ -377,27 +377,27 @@ QUERY;
 
     /**
      * @param string $keywords
+     * @param string $networkMedium
+     * @param bool $filterAvailable
      * @param int|AbstractService::NO_LIMIT $limit
      * @param int $offset
      * @param array $entityTypes
-     * @param string $networkMedium
-     * @param bool $filterAvailable
      * @return array
      */
     public function findByKeywords(
         string $keywords,
+        $networkMedium,
+        bool $filterAvailable,
         $limit,
         int $offset,
-        array $entityTypes = null,
-        string $networkMedium = null,
-        bool $filterAvailable = false
+        array $entityTypes = null
     ): array {
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));
         $booleanKeywords = '+' . $booleanKeywords;
 
         $qText = <<<QUERY
-SELECT coreEntity, image, masterBrand, network, mbImage, 
+SELECT coreEntity, image, masterBrand, network, mbImage,
 (
     (  (MATCH_AGAINST (coreEntity.searchTitle, :keywords ) * 3)
       + (MATCH_AGAINST (coreEntity.searchTitle, coreEntity.shortSynopsis, :keywords ) * 1)

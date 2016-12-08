@@ -4,7 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 class KeywordsTest extends AbstractProgrammesServiceTest
 {
-    public function testFindProgrammesByKeywords()
+    public function testfindByKeywords()
     {
         $dbData = [['pid' => 'b010t19z'], ['pid' => 'b00swyx1']];
 
@@ -12,20 +12,20 @@ class KeywordsTest extends AbstractProgrammesServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByKeywords')
-            ->with($keywords, 300, 0)
+            ->with($keywords, null, false, 300, 0)
             ->willReturn($dbData);
 
         $result = $this->service()->searchByKeywords($keywords);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 
-    public function testCountProgrammesByKeywords()
+    public function testCountByKeywords()
     {
         $keywords = 'KHAAAAAAAAAAN';
 
         $this->mockRepository->expects($this->once())
             ->method('countByKeywords')
-            ->with($keywords)
+            ->with($keywords, null, false)
             ->willReturn(10);
 
         $this->assertEquals(10, $this->service()->countByKeywords($keywords));

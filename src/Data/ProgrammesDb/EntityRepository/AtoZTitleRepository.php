@@ -12,42 +12,40 @@ class AtoZTitleRepository extends EntityRepository
     use Traits\SetLimitTrait;
     use Traits\ParentTreeWalkerTrait;
 
-    public function findAllLetters(string $networkMedium = null)
+    /**
+     * @param string|null $networkMedium
+     */
+    public function findAllLetters($networkMedium): array
     {
-        $query = $this->createQueryBuilder('AtoZTitle')
-            ->select(['DISTINCT AtoZTitle.firstLetter']);
+        $qb = $this->createQueryBuilder('AtoZTitle')
+            ->select(['DISTINCT AtoZTitle.firstLetter'])
+            ->orderBy('AtoZTitle.firstLetter');
 
         if ($networkMedium) {
             $this->assertNetworkMedium($networkMedium);
-            $query = $query->join('c.masterBrand', 'masterBrand')
+            $qb->join('c.masterBrand', 'masterBrand')
                 ->join('masterBrand.network', 'network')
                 ->andWhere('network.medium = :medium')
                 ->setParameter('medium', $networkMedium);
         }
 
-        $query = $query->orderBy('AtoZTitle.firstLetter')
-            ->getQuery();
-        $results = $query->getResult(Query::HYDRATE_ARRAY);
-        $letters = [];
-        foreach ($results as $result) {
-            $letters[] = $result['firstLetter'];
-        }
-        return $letters;
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return array_column($result, 'firstLetter');
     }
 
     public function findTleosByFirstLetter(
         string $letter,
+        $networkMedium,
+        bool $filterToAvailable,
         $limit,
-        int $offset,
-        string $networkMedium = null,
-        bool $filterToAvailable = false
+        int $offset
     ) {
         if (strlen($letter) !== 1) {
             throw new InvalidArgumentException("$letter is not a single letter");
         }
         $letter = strtolower($letter);
         $qb = $this->createQueryBuilder('AtoZTitle')
-            ->select(['AtoZTitle', 'c', 'image', 'masterBrand', 'network', 'mbImage'])
+            ->addSelect(['image', 'masterBrand', 'network', 'mbImage'])
             ->leftJoin('c.image', 'image')
             ->leftJoin('c.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
@@ -76,8 +74,8 @@ class AtoZTitleRepository extends EntityRepository
 
     public function countTleosByFirstLetter(
         string $letter,
-        string $networkMedium = null,
-        bool $filterToAvailable = false
+        $networkMedium,
+        bool $filterToAvailable
     ) {
         if (strlen($letter) !== 1) {
             throw new InvalidArgumentException("$letter is not a single letter");

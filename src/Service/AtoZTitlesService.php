@@ -5,7 +5,7 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtoZTitleRepository;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 
-class AToZService extends AbstractService
+class AtoZTitlesService extends AbstractService
 {
     public function __construct(
         AtoZTitleRepository $repository,
@@ -27,16 +27,17 @@ class AToZService extends AbstractService
     ): array {
         $entities = $this->repository->findTleosByFirstLetter(
             $letter,
+            $networkMedium,
+            false,
             $limit,
-            $this->getOffset($limit, $page),
-            $networkMedium
+            $this->getOffset($limit, $page)
         );
         return $this->mapManyEntities($entities);
     }
 
     public function countTleosByFirstLetter(string $letter, string $networkMedium = null)
     {
-        return $this->repository->countTleosByFirstLetter($letter, $networkMedium);
+        return $this->repository->countTleosByFirstLetter($letter, $networkMedium, false);
     }
 
     public function findAvailableTleosByFirstLetter(
@@ -47,10 +48,10 @@ class AToZService extends AbstractService
     ): array {
         $entities = $this->repository->findTleosByFirstLetter(
             $letter,
-            $limit,
-            $this->getOffset($limit, $page),
             $networkMedium,
-            true
+            true,
+            $limit,
+            $this->getOffset($limit, $page)
         );
         return $this->mapManyEntities($entities);
     }

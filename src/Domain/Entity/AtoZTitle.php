@@ -35,10 +35,7 @@ class AtoZTitle
         return $this->firstLetter;
     }
 
-    /**
-     * @return Programme
-     */
-    public function getCoreEntity()
+    public function getCoreEntity(): Programme
     {
         return $this->coreEntity;
     }
