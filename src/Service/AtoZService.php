@@ -5,7 +5,7 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtoZTitleRepository;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 
-class AtoZService extends AbstractService
+class AToZService extends AbstractService
 {
     public function __construct(
         AtoZTitleRepository $repository,
@@ -19,13 +19,13 @@ class AtoZService extends AbstractService
         return $this->repository->findAllLetters($networkMedium);
     }
 
-    public function findTLEOsByFirstLetter(
+    public function findTleosByFirstLetter(
         string $letter,
         string $networkMedium = null,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
-        $entities = $this->repository->findTLEOsByFirstLetter(
+        $entities = $this->repository->findTleosByFirstLetter(
             $letter,
             $limit,
             $this->getOffset($limit, $page),
@@ -34,18 +34,18 @@ class AtoZService extends AbstractService
         return $this->mapManyEntities($entities);
     }
 
-    public function countTLEOsByFirstLetter(string $letter, string $networkMedium = null)
+    public function countTleosByFirstLetter(string $letter, string $networkMedium = null)
     {
-        return $this->repository->countTLEOsByFirstLetter($letter, $networkMedium);
+        return $this->repository->countTleosByFirstLetter($letter, $networkMedium);
     }
 
-    public function findAvailableTLEOsByFirstLetter(
+    public function findAvailableTleosByFirstLetter(
         string $letter,
         string $networkMedium = null,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
-        $entities = $this->repository->findTLEOsByFirstLetter(
+        $entities = $this->repository->findTleosByFirstLetter(
             $letter,
             $limit,
             $this->getOffset($limit, $page),
@@ -55,8 +55,8 @@ class AtoZService extends AbstractService
         return $this->mapManyEntities($entities);
     }
 
-    public function countAvailableTLEOsByFirstLetter(string $letter, string $networkMedium = null)
+    public function countAvailableTleosByFirstLetter(string $letter, string $networkMedium = null)
     {
-        return $this->repository->countTLEOsByFirstLetter($letter, $networkMedium, true);
+        return $this->repository->countTleosByFirstLetter($letter, $networkMedium, true);
     }
 }

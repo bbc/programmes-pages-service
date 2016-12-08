@@ -35,7 +35,7 @@ class AtoZTitleRepository extends EntityRepository
         return $letters;
     }
 
-    public function findTLEOsByFirstLetter(
+    public function findTleosByFirstLetter(
         string $letter,
         $limit,
         int $offset,
@@ -74,7 +74,7 @@ class AtoZTitleRepository extends EntityRepository
         return $this->resolveParents($result);
     }
 
-    public function countTLEOsByFirstLetter(
+    public function countTleosByFirstLetter(
         string $letter,
         string $networkMedium = null,
         bool $filterToAvailable = false
