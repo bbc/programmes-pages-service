@@ -37,7 +37,7 @@ class Contribution
 
     /**
      * @ORM\ManyToOne(targetEntity="CreditRole")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="RESTRICT")
      */
     private $creditRole;
 

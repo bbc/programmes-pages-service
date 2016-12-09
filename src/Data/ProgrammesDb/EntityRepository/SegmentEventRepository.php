@@ -78,7 +78,6 @@ class SegmentEventRepository extends EntityRepository
         $qb = $this->setLimit($qb, $limit);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
     }
 
     /**

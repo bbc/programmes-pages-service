@@ -36,7 +36,7 @@ abstract class ProgrammeItem extends Programme
 
     /**
      * @var Version|null
-     * @ORM\OneToOne(targetEntity="Version")
+     * @ORM\OneToOne(targetEntity="Version", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $streamableVersion;
@@ -57,7 +57,7 @@ abstract class ProgrammeItem extends Programme
 
     /**
      * @var Version|null
-     * @ORM\OneToOne(targetEntity="Version")
+     * @ORM\OneToOne(targetEntity="Version", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $downloadableVersion;

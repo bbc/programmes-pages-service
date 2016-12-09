@@ -42,7 +42,6 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
             ->willReturn($this->mockDefaultImage);
-
     }
 
     protected function getMapper(): ProgrammeMapper
