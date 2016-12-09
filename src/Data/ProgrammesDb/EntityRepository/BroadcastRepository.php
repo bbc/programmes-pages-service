@@ -57,7 +57,7 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }
 
-    public function findByCategoryAncestryAndEndingAfter(
+    public function findByCategoryAncestryInDateRange(
         array $categoryAncestry,
         string $type,
         $medium,
@@ -93,7 +93,7 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
-    public function countByCategoryAncestryAndEndingAfter(
+    public function countByCategoryAncestryInDateRange(
         array $categoryAncestry,
         string $type,
         $medium,
@@ -321,26 +321,6 @@ QUERY;
 
         return parent::createQueryBuilder($alias)
             ->join($alias . '.programmeItem', 'programmeItem');
-    }
-
-    public function findByCategoryIdInDateRange(string $categoryId, string $type, DateTimeImmutable $from, DateTimeImmutable $to)
-    {
-        $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder([$categoryId], $type);
-        $qb->andWhere('broadcast.startAt > :from')
-            ->andWhere('broadcast.startAt <= :to')
-            ->addOrderBy('broadcast.startAt')
-            ->addOrderBy('networkOfService.urlKey')
-            ->setParameter('from', $from)
-            ->setParameter('to', $to);
-
-        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        $result = $this->explodeServiceIds($result);
-
-        return $this->abstractResolveAncestry(
-            $result,
-            [$this, 'programmeAncestryGetter'],
-            ['programmeItem', 'ancestry']
-        );
     }
 
     private function createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $type)
