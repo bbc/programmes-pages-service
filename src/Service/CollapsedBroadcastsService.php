@@ -47,25 +47,6 @@ class CollapsedBroadcastsService extends AbstractService
         return $this->mapManyEntities($broadcasts, $services);
     }
 
-    /**
-     * @param Category          $genre
-     * @param DateTimeImmutable $startDate
-     * @param DateTimeImmutable $endDate
-     * @return array
-     */
-    public function findByCategoryInDateRange(Category $genre, DateTimeImmutable $startDate, DateTimeImmutable $endDate)
-    {
-        $collapseBroadcast = $this->repository->findByCategoryIdInDateRange(
-            $genre->getDbId(),
-            'Broadcast',
-            $startDate,
-            $endDate
-        );
-        $services = $this->fetchUsedServices($collapseBroadcast);
-
-        return $this->mapManyEntities($collapseBroadcast, $services);
-    }
-
     public function findPastByProgramme(
         Programme $programme,
         $limit = self::DEFAULT_LIMIT,
@@ -109,20 +90,19 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
-    public function findUpcomingByCategory(
+    public function findByCategoryInDateRange(
         Category $category,
-        DateInterval $interval,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
         string $medium = null,
         $limit = self::DEFAULT_LIMIT,
         int $offset = self::DEFAULT_PAGE
     ) {
-        $now = ApplicationTime::getTime();
-
         $broadcasts = $this->repository->findByCategoryAncestryAndEndingAfter(
             $category->getDbAncestryIds(),
             'Broadcast',
-            $now,
-            $now->add($interval),
+            $startDate,
+            $endDate,
             $limit,
             $offset,
             $medium
@@ -132,14 +112,17 @@ class CollapsedBroadcastsService extends AbstractService
         return $this->mapManyEntities($broadcasts, $services);
     }
 
-    public function countUpcomingByCategory(Category $category, DateInterval $interval, string $medium = null)
-    {
-        $now = ApplicationTime::getTime();
+    public function countUpcomingByCategory(
+        Category $category,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+        string $medium = null
+    ) {
         return $this->repository->countByCategoryAncestryAndEndingAfter(
             $category->getDbAncestryIds(),
             'Broadcast',
-            $now,
-            $now->add($interval),
+            $startDate,
+            $endDate,
             $medium
         );
     }
