@@ -333,7 +333,6 @@ QUERY;
             ->setParameter('from', $from)
             ->setParameter('to', $to);
 
-
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         $result = $this->explodeServiceIds($result);
 
