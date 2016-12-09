@@ -98,32 +98,32 @@ class CollapsedBroadcastsService extends AbstractService
         $limit = self::DEFAULT_LIMIT,
         int $offset = self::DEFAULT_PAGE
     ) {
-        $broadcasts = $this->repository->findByCategoryAncestryAndEndingAfter(
+        $broadcasts = $this->repository->findByCategoryAncestryInDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
+            $medium,
             $startDate,
             $endDate,
             $limit,
-            $offset,
-            $medium
+            $offset
         );
 
         $services = $this->fetchUsedServices($broadcasts);
         return $this->mapManyEntities($broadcasts, $services);
     }
 
-    public function countUpcomingByCategory(
+    public function countByCategoryInDateRange(
         Category $category,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
         string $medium = null
     ) {
-        return $this->repository->countByCategoryAncestryAndEndingAfter(
+        return $this->repository->countByCategoryAncestryInDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
+            $medium,
             $startDate,
-            $endDate,
-            $medium
+            $endDate
         );
     }
 
