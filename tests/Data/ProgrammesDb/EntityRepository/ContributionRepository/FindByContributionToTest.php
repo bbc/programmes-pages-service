@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributionRepository;
 
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributionRepository;
 
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributionRepository::<public>
@@ -19,7 +18,7 @@ class FindByContributionToTest extends AbstractDatabaseTest
             list($pids, $type, $contributionTo, $limit, $offset, $repoToQuery, $expectedPids, $expectedColumn) = $data;
 
             $ids = array_map(function ($dbId) use ($repoToQuery) {
-                return $this->getDbIdFromPid($dbId, $repoToQuery);
+                return $this->getDbIdFromPersistentIdentifier($dbId, $repoToQuery);
             }, $pids);
 
             $entities = $repo->findByContributionTo($ids, $type, $contributionTo, $limit, $offset);

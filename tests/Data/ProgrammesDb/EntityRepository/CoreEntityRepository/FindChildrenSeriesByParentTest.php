@@ -14,7 +14,7 @@ class FindChildrenSeriesByParentTest extends AbstractDatabaseTest
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $dbid = $this->getDbIdFromPid('b010t19z', 'Brand');
+        $dbid = $this->getDbIdFromPersistentIdentifier('b010t19z', 'Brand');
 
         $entities = $repo->findChildrenSeriesByParent($dbid, 50, 0);
 
@@ -29,7 +29,7 @@ class FindChildrenSeriesByParentTest extends AbstractDatabaseTest
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $dbid = $this->getDbIdFromPid('b010t19z', 'Brand');
+        $dbid = $this->getDbIdFromPersistentIdentifier('b010t19z', 'Brand');
 
         $entities = $repo->findChildrenSeriesByParent($dbid, 1, 0);
 
@@ -44,7 +44,7 @@ class FindChildrenSeriesByParentTest extends AbstractDatabaseTest
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $dbid = $this->getDbIdFromPid('b010t19z', 'Brand');
+        $dbid = $this->getDbIdFromPersistentIdentifier('b010t19z', 'Brand');
 
         $entities = $repo->findChildrenSeriesByParent($dbid, 50, 1);
 

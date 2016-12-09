@@ -14,12 +14,14 @@ class FindPopulatedChildCategoriesByNetworkMediumTest extends AbstractDatabaseTe
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');
 
-        $entity = $repo->findPopulatedChildCategoriesByNetworkMedium(1, 'genre', null);
+        $entity = $repo->findPopulatedChildCategoriesByNetworkMedium(
+            $dbId = $this->getDbIdFromPersistentIdentifier('C00193', 'Category', true),
+            'genre',
+            null
+        );
 
-        $this->assertEquals(2, $entity[0]['id']);
-        $this->assertEquals('Sitcoms', $entity[0]['title']);
+        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00196', 'Category', true), $entity[0]['id']);
         $this->assertEquals('sitcoms', $entity[0]['urlKey']);
-        $this->assertEquals('1,2,', $entity[0]['ancestry']);
 
         // findChildCategoriesUsedByTleosByParentIdAndType query only
         $this->assertCount(1, $this->getDbQueries());
@@ -30,12 +32,14 @@ class FindPopulatedChildCategoriesByNetworkMediumTest extends AbstractDatabaseTe
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');
 
-        $entity = $repo->findPopulatedChildCategoriesByNetworkMedium(1, 'genre', 'radio');
+        $entity = $repo->findPopulatedChildCategoriesByNetworkMedium(
+            $dbId = $this->getDbIdFromPersistentIdentifier('C00193', 'Category', true),
+            'genre',
+            'radio'
+        );
 
-        $this->assertEquals(2, $entity[0]['id']);
-        $this->assertEquals('Sitcoms', $entity[0]['title']);
+        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00196', 'Category', true), $entity[0]['id']);
         $this->assertEquals('sitcoms', $entity[0]['urlKey']);
-        $this->assertEquals('1,2,', $entity[0]['ancestry']);
 
         // findChildCategoriesUsedByTleosByParentIdAndType query only
         $this->assertCount(1, $this->getDbQueries());

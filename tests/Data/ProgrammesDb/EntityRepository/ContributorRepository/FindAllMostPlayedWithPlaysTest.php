@@ -46,7 +46,7 @@ class FindAllMostPlayedWithPlaysTest extends AbstractDatabaseTest
         $from = new \DateTimeImmutable('2016-06-30');
         $to = new \DateTimeImmutable('2016-07-06');
 
-        $serviceId = $this->getDbIdFromPid('p00fzl7j', 'Service'); // radio 4
+        $serviceId = $this->getDbIdFromPersistentIdentifier('p00fzl7j', 'Service'); // radio 4
 
         $results = $repo->findAllMostPlayedWithPlays($from, $to, $serviceId);
 

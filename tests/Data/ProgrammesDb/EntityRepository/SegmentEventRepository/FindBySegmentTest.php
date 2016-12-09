@@ -29,7 +29,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
             list($pids, $limit, $offset, $groupByVersionId, $expectedPids) = $data;
 
             $ids = array_map(function ($dbId) {
-                return $this->getDbIdFromPid($dbId, 'Segment');
+                return $this->getDbIdFromPersistentIdentifier($dbId, 'Segment');
             }, $pids);
 
             $entities = $repo->findBySegmentFull($ids, $groupByVersionId, $limit, $offset);
@@ -73,7 +73,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
         $expectedPids = ['sv00009', 'sv000011', 'sv000010'];
 
-        $dbId = $this->getDbIdFromPid('s0000003', 'Segment');
+        $dbId = $this->getDbIdFromPersistentIdentifier('s0000003', 'Segment');
         $entities = $repo->findBySegmentFull([$dbId], true, 50, 0);
 
         // Expect embargoed version to be last (ORDER BY hasBroadcast ASC)
@@ -97,7 +97,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
             list($pids, $limit, $offset, $expectedPids) = $data;
 
             $ids = array_map(function ($dbId) {
-                return $this->getDbIdFromPid($dbId, 'Segment');
+                return $this->getDbIdFromPersistentIdentifier($dbId, 'Segment');
             }, $pids);
 
             $entities = $repo->findBySegmentFull($ids, true, $limit, $offset);

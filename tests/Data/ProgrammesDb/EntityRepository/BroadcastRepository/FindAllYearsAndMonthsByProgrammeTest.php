@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository::<public>
@@ -25,7 +24,7 @@ class FindAllYearsAndMonthsByProgrammeTest extends AbstractDatabaseTest
         foreach ($this->findAllYearsAndMonthsByProgrammeData() as $data) {
             list($pid, $type, $expectedOutput) = $data;
 
-            $ancestry = $this->getCoreEntityAncestry($pid);
+            $ancestry = $this->getAncestryFromPersistentIdentifier($pid, 'CoreEntity');
 
             $data = $repo->findAllYearsAndMonthsByProgramme($ancestry, $type);
             $this->assertSame($expectedOutput, $data);
@@ -53,7 +52,7 @@ class FindAllYearsAndMonthsByProgrammeTest extends AbstractDatabaseTest
         $this->disableEmbargoedFilter();
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
 
-        $ancestry = $this->getCoreEntityAncestry('p0000002');
+        $ancestry = $this->getAncestryFromPersistentIdentifier('p0000002', 'CoreEntity');
 
         $data = $repo->findAllYearsAndMonthsByProgramme($ancestry, 'Any');
         $this->assertSame([['year' => '2011', 'month' => '7']], $data);
