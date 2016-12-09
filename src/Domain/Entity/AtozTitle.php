@@ -4,7 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 
-class AtoZTitle
+class AtozTitle
 {
     /** @var string */
     private $title;

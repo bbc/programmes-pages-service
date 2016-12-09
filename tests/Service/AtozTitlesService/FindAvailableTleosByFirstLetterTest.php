@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Service\AtoZTitlesService;
+namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
 use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 
-class FindAvailableTleosByFirstLetterTest extends AbstractAtoZTitlesServiceTest
+class FindAvailableTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 {
     public function testFindAvailableTleosByFirstLetterDefaultPagination()
     {

@@ -1,21 +1,21 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtoZTitleRepository;
+namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtozTitleRepository;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtoZTitleRepository;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtozTitleRepository;
 use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 class FindTleosByFirstLetterTest extends AbstractDatabaseTest
 {
-    /** @var AtoZTitleRepository $repo */
+    /** @var AtozTitleRepository $repo */
     private $repo;
 
     public function setUp()
     {
-        $this->loadFixtures(['AtoZTitleFixture']);
+        $this->loadFixtures(['AtozTitleFixture']);
         $this->enableEmbargoedFilter();
-        $this->repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:AtoZTitle');
+        $this->repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:AtozTitle');
     }
 
     public function tearDown()

@@ -2,10 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\AtoZTitleMapper;
-use BBC\ProgrammesPagesService\Domain\Entity\AtoZTitle;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\AtozTitleMapper;
+use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
 
-class AtoZTitleMapperTest extends BaseMapperTestCase
+class AtozTitleMapperTest extends BaseMapperTestCase
 {
     protected $mockProgrammeMapper;
 
@@ -37,14 +37,14 @@ class AtoZTitleMapperTest extends BaseMapperTestCase
             'coreEntity' => $programmeDbEntity,
         ];
 
-        $expectedEntity = new AtoZTitle('Title', 'T', $expectedProgrammeDomainEntity);
+        $expectedEntity = new AtozTitle('Title', 'T', $expectedProgrammeDomainEntity);
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
     /**
      * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
-     * @expectedExceptionMessage All AtoZTitles must be joined to a CoreEntity
+     * @expectedExceptionMessage All AtozTitles must be joined to a CoreEntity
      */
     public function testGetDomainModelWithNoProgramme()
     {

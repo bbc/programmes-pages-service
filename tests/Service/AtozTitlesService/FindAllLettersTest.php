@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Service\AtoZTitlesService;
+namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
 use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 
-class FindAllLettersTest extends AbstractAtoZTitlesServiceTest
+class FindAllLettersTest extends AbstractAtozTitlesServiceTest
 {
     public function testFindAllLetters()
     {

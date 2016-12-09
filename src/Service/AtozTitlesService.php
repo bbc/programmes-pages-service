@@ -2,13 +2,13 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtoZTitleRepository;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtozTitleRepository;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 
-class AtoZTitlesService extends AbstractService
+class AtozTitlesService extends AbstractService
 {
     public function __construct(
-        AtoZTitleRepository $repository,
+        AtozTitleRepository $repository,
         MapperInterface $mapper
     ) {
         parent::__construct($repository, $mapper);

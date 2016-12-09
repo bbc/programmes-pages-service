@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use InvalidArgumentException;
 
-class AtoZTitleRepository extends EntityRepository
+class AtozTitleRepository extends EntityRepository
 {
     use Traits\SetLimitTrait;
     use Traits\ParentTreeWalkerTrait;
@@ -17,9 +17,9 @@ class AtoZTitleRepository extends EntityRepository
      */
     public function findAllLetters($networkMedium): array
     {
-        $qb = $this->createQueryBuilder('AtoZTitle')
-            ->select(['DISTINCT AtoZTitle.firstLetter'])
-            ->orderBy('AtoZTitle.firstLetter');
+        $qb = $this->createQueryBuilder('AtozTitle')
+            ->select(['DISTINCT AtozTitle.firstLetter'])
+            ->orderBy('AtozTitle.firstLetter');
 
         if ($networkMedium) {
             $this->assertNetworkMedium($networkMedium);
@@ -44,15 +44,15 @@ class AtoZTitleRepository extends EntityRepository
             throw new InvalidArgumentException("$letter is not a single letter");
         }
         $letter = strtolower($letter);
-        $qb = $this->createQueryBuilder('AtoZTitle')
+        $qb = $this->createQueryBuilder('AtozTitle')
             ->addSelect(['image', 'masterBrand', 'network', 'mbImage'])
             ->leftJoin('c.image', 'image')
             ->leftJoin('c.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('masterBrand.image', 'mbImage')
-            ->where('AtoZTitle.firstLetter = :firstLetter')
+            ->where('AtozTitle.firstLetter = :firstLetter')
             ->andWhere('c INSTANCE OF (ProgrammesPagesService:Brand, ProgrammesPagesService:Series, ProgrammesPagesService:Episode)')
-            ->orderBy('AtoZTitle.title')
+            ->orderBy('AtozTitle.title')
             ->addOrderBy('c.pid')
             ->setFirstResult($offset)
             ->setParameter('firstLetter', $letter);
@@ -81,9 +81,9 @@ class AtoZTitleRepository extends EntityRepository
             throw new InvalidArgumentException("$letter is not a single letter");
         }
         $letter = strtolower($letter);
-        $qb = $this->createQueryBuilder('AtoZTitle')
-            ->select('count(AtoZTitle.id)')
-            ->where('AtoZTitle.firstLetter = :firstLetter')
+        $qb = $this->createQueryBuilder('AtozTitle')
+            ->select('count(AtozTitle.id)')
+            ->where('AtozTitle.firstLetter = :firstLetter')
             ->andWhere('c INSTANCE OF (ProgrammesPagesService:Brand, ProgrammesPagesService:Series, ProgrammesPagesService:Episode)')
             ->setParameter('firstLetter', $letter);
 

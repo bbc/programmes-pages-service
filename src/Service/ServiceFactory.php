@@ -21,16 +21,16 @@ class ServiceFactory
         $this->mapperFactory = $mapperFactory;
     }
 
-    public function getAtoZTitlesService(): AtoZTitlesService
+    public function getAtozTitlesService(): AtozTitlesService
     {
-        if (!array_key_exists('AtoZTitlesService', $this->instances)) {
-            $this->instances['AtoZTitlesService'] = new AtoZTitlesService(
-                $this->entityManager->getRepository('ProgrammesPagesService:AtoZTitle'),
-                $this->mapperFactory->getAtoZTitleMapper()
+        if (!array_key_exists('AtozTitlesService', $this->instances)) {
+            $this->instances['AtozTitlesService'] = new AtozTitlesService(
+                $this->entityManager->getRepository('ProgrammesPagesService:AtozTitle'),
+                $this->mapperFactory->getAtozTitleMapper()
             );
         }
 
-        return $this->instances['AtoZTitlesService'];
+        return $this->instances['AtozTitlesService'];
     }
 
     public function getBroadcastsService(): BroadcastsService
