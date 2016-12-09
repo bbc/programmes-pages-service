@@ -150,10 +150,9 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
         // findOneByX is a magic bit of Doctrine to access property X.
         // Therefore all Entities with a 'pid' or 'pipId' property will have the
         // findOneByPid method.
-        if($usePipId) {
+        if ($usePipId) {
             $id = $repo->findOneByPipId($pid)->{'get' . $columnName}();
-        }
-        else {
+        } else {
             $id = $repo->findOneByPid($pid)->{'get' . $columnName}();
         }
 
