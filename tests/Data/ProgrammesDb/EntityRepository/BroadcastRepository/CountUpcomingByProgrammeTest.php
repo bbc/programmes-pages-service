@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 use DateTimeImmutable;
 
 /**
@@ -26,7 +25,7 @@ class CountUpcomingByProgrammeTest extends AbstractDatabaseTest
         foreach ($this->countUpcomingByProgrammeData() as $data) {
             list($pid, $type, $date, $expectedOutput) = $data;
 
-            $ancestry = $this->getCoreEntityAncestry($pid);
+            $ancestry = $this->getAncestryFromPersistentIdentifier($pid, 'CoreEntity');
 
             $data = $repo->countUpcomingByProgramme($ancestry, $type, $date);
             $this->assertSame($expectedOutput, $data);

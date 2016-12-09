@@ -5,9 +5,10 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\ApplicationTime;
+use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
-use DateTimeImmutable;
+use DateInterval;
 
 class CollapsedBroadcastsService extends AbstractService
 {
@@ -85,6 +86,41 @@ class CollapsedBroadcastsService extends AbstractService
             $programme->getDbAncestryIds(),
             'Broadcast',
             ApplicationTime::getTime()
+        );
+    }
+
+    public function findUpcomingByCategory(
+        Category $category,
+        DateInterval $interval,
+        string $medium = null,
+        $limit = self::DEFAULT_LIMIT,
+        int $offset = self::DEFAULT_PAGE
+    ) {
+        $now = ApplicationTime::getTime();
+
+        $broadcasts = $this->repository->findByCategoryAncestryAndEndingAfter(
+            $category->getDbAncestryIds(),
+            'Broadcast',
+            $now,
+            $now->add($interval),
+            $limit,
+            $offset,
+            $medium
+        );
+
+        $services = $this->fetchUsedServices($broadcasts);
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    public function countUpcomingByCategory(Category $category, DateInterval $interval, string $medium = null)
+    {
+        $now = ApplicationTime::getTime();
+        return $this->repository->countByCategoryAncestryAndEndingAfter(
+            $category->getDbAncestryIds(),
+            'Broadcast',
+            $now,
+            $now->add($interval),
+            $medium
         );
     }
 

@@ -33,6 +33,88 @@ class CoreEntityRepository extends MaterializedPathRepository
     ];
 
     /**
+     * Return the count of available episodes given category ID's
+     *
+     * @param array       $ancestryDbIds
+     * @param string|null $medium
+     *
+     * @return int
+     */
+    public function countAvailableEpisodesByCategoryAncestry(
+        array $ancestryDbIds,
+        $medium
+    ): int {
+        $ancestry = $this->ancestryIdsToString($ancestryDbIds);
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('COUNT(DISTINCT(episode.id))')
+            ->from('ProgrammesPagesService:Episode', 'episode')
+            ->innerJoin('episode.categories', 'category')
+            ->andWhere('episode.streamable = 1')
+            ->andWhere('category.ancestry LIKE :ancestry')
+            ->setParameter('ancestry', $ancestry . '%'); // Availability DESC
+
+        if ($medium) {
+            $this->assertNetworkMedium($medium);
+
+            $qb->innerJoin('episode.masterBrand', 'masterBrand')
+                ->innerJoin('masterBrand.network', 'network')
+                ->andWhere('network.medium = :medium')
+                ->setParameter('medium', $medium);
+        }
+
+        $count = $qb->getQuery()->getSingleScalarResult();
+        return $count;
+    }
+
+    /**
+     * Return available episodes given category ID's
+     *
+     * @param array       $ancestryDbIds
+     * @param string|null $medium
+     * @param int|null    $limit
+     * @param int         $offset
+     *
+     * @return array
+     */
+    public function findAvailableEpisodesByCategoryAncestry(
+        array $ancestryDbIds,
+        $medium,
+        $limit,
+        int $offset
+    ): array {
+        $ancestry = $this->ancestryIdsToString($ancestryDbIds);
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('episode', 'image', 'masterBrand', 'network', 'mbImage')
+            ->from('ProgrammesPagesService:Episode', 'episode')
+            ->innerJoin('episode.categories', 'category')
+            ->leftJoin('episode.image', 'image')
+            ->leftJoin('episode.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->andWhere('episode.streamable = 1')
+            ->andWhere('category.ancestry LIKE :ancestry')
+            ->setParameter('ancestry', $ancestry . '%')
+            ->setFirstResult($offset)
+            ->addGroupBy('episode.id')
+            ->addOrderBy('episode.streamableUntil', 'DESC')
+            ->addOrderBy('episode.title', 'DESC');
+
+        if ($medium) {
+            $this->assertNetworkMedium($medium);
+
+            $qb->andWhere('network.medium = :medium')
+                ->setParameter('medium', $medium);
+        }
+
+        $qb = $this->setLimit($qb, $limit);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        return $this->resolveParents($result);
+    }
+
+    /**
      * Get an entity, based upon its PID
      * Used when a page wants to find out about data related to an entity, but
      * doesn't need the fully hydrated entity itself.
@@ -471,6 +553,11 @@ QUERY;
         return $repo->findByIds($ids);
     }
 
+    private function ancestryIdsToString(array $ancestry)
+    {
+        return implode(',', $ancestry) . ',';
+    }
+
     private function assertEntityType($entityType, $validEntityTypes)
     {
         if (!in_array($entityType, $validEntityTypes)) {
@@ -480,6 +567,20 @@ QUERY;
                 '"' . implode('", "', $validEntityTypes) . '"',
                 $entityType
             ));
+        }
+    }
+
+    private function assertNetworkMedium(string $medium)
+    {
+        if (!in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO])) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Network medium must be %s or %s, instead got %s',
+                    NetworkMediumEnum::TV,
+                    NetworkMediumEnum::RADIO,
+                    $medium
+                )
+            );
         }
     }
 

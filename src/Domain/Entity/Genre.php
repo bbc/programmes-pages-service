@@ -2,53 +2,22 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
-class Genre
+class Genre extends Category
 {
-    /**
-     * @var string
-     */
-    private $id;
-
-    /**
-     * @var string
-     */
-    private $title;
-
-    /**
-     * @var string
-     */
-    private $urlKey;
-
     /**
      * @var Genre|null
      */
     private $parent;
 
     public function __construct(
+        array $dbAncestryIds,
         string $id,
         string $title,
         string $urlKey,
         Genre $parent = null
     ) {
-        $this->id = $id;
-        $this->title = $title;
-        $this->urlKey = $urlKey;
+        parent::__construct($dbAncestryIds, $id, $title, $urlKey);
         $this->parent = $parent;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function getUrlKey(): string
-    {
-        return $this->urlKey;
     }
 
     /**

@@ -16,7 +16,7 @@ class FindFullLatestBroadcastedForContributorTest extends AbstractDatabaseTest
         /** @var SegmentEventRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
 
-        $contributorId = $this->getDbIdFromPid('cntrbtr2', 'Contributor');
+        $contributorId = $this->getDbIdFromPersistentIdentifier('cntrbtr2', 'Contributor');
 
         $segmentEvents = $repo->findFullLatestBroadcastedForContributor(
             $contributorId,

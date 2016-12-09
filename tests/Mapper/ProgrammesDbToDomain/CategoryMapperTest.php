@@ -12,6 +12,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
     public function testGetDomainModelWithFormat()
     {
         $dbEntityArray = [
+            'ancestry' => '1,',
             'id' => '1',
             'type' => 'format',
             'pipId' => 'PT001',
@@ -20,6 +21,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
         ];
 
         $expectedEntity = new Format(
+            [1],
             'PT001',
             'Title',
             'url_key'
@@ -32,6 +34,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
     public function testGetDomainModelWithGenre()
     {
         $dbEntityArray = [
+            'ancestry' => '1,',
             'id' => '1',
             'type' => 'genre',
             'pipId' => 'C00126',
@@ -40,6 +43,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
         ];
 
         $expectedEntity = new Genre(
+            [1],
             'C00126',
             'Title',
             'url_key'
@@ -52,13 +56,15 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
     public function testGetDomainModelWithGenreWithParent()
     {
         $dbEntityArray = [
-            'id' => '1',
+            'ancestry' => '1,2,',
+            'id' => '2',
             'type' => 'genre',
             'pipId' => 'C00126',
             'title' => 'Title',
             'urlKey' => 'url_key',
             'parent' => [
-                'id' => '2',
+                'ancestry' => '1,',
+                'id' => '1',
                 'type' => 'genre',
                 'pipId' => 'C00127',
                 'title' => 'Parent Title',
@@ -67,10 +73,12 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
         ];
 
         $expectedEntity = new Genre(
+            [1, 2],
             'C00126',
             'Title',
             'url_key',
             new Genre(
+                [1],
                 'C00127',
                 'Parent Title',
                 'parent_url_key'
@@ -88,6 +96,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
     public function testGetDomainModelWithInvalidTypeThrowsExeption()
     {
         $dbEntityArray = [
+            'ancestry' => '1,',
             'id' => '1',
             'type' => 'wrongwrongwrong',
             'pipId' => 'C00126',

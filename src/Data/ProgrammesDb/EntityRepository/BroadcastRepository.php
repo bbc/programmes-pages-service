@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -54,6 +55,102 @@ class BroadcastRepository extends EntityRepository
         $qb = $this->setEntityTypeFilter($qb, $type);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
+    }
+
+    public function findByCategoryAncestryAndEndingAfter(
+        array $categoryAncestry,
+        string $type,
+        $medium,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to,
+        $limit,
+        int $offset
+    ) {
+        $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
+
+        $qb->andWhere('broadcast.endAt > :endDate')
+            ->andWhere('broadcast.endAt <= :limitDate')
+            ->addOrderBy('broadcast.startAt')
+            ->addOrderBy('networkOfService.urlKey')
+            ->setFirstResult($offset)
+            ->setParameter('endDate', $from)
+            ->setParameter('limitDate', $to);
+
+        $qb = $this->setLimit($qb, $limit);
+
+        if ($this->isValidNetworkMedium($medium)) {
+            $qb->andWhere('networkOfService.medium = :medium')
+                ->setParameter('medium', $medium);
+        }
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $this->explodeServiceIds($result);
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['programmeItem', 'ancestry']
+        );
+    }
+
+    public function countByCategoryAncestryAndEndingAfter(
+        array $categoryAncestry,
+        string $type,
+        $medium,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to
+    ): int {
+        $isWebcastValue = $this->entityTypeFilterValue($type);
+        $isWebcastClause = !is_null($isWebcastValue) ? 'AND b.is_webcast = :isWebcast' : '';
+
+        $filterByMediumClause = $this->isValidNetworkMedium($medium) ? 'AND n.medium = :medium' : '';
+
+        // Join to CoreEntity to ensure the programme is not embargoed
+        // Join to network (via broadcast service) so that we get a count of
+        // items grouped by network.
+        //  For instance consider a programme broadcast on bbc_one_london and
+        // bbc_one_yorkshire at the same time. This would result in a count of
+        // one as those two services both belong to the same network - bbc_one.
+        // However consider a programme broadcast on bbc_radio_ulster and
+        // bbc_radio_foyle at the same time. This would result in a count of two
+        // as these two services do not belong to the same network.
+        $qText = <<<QUERY
+SELECT COUNT(t.id) as cnt
+FROM (
+    SELECT b.start_at, c.id
+    FROM broadcast b
+    INNER JOIN core_entity c ON b.programme_item_id = c.id AND (c.is_embargoed = 0)
+    INNER JOIN programme_category pc ON c.id = pc.programme_id
+    INNER JOIN category cat ON pc.category_id = cat.id
+    LEFT JOIN service s ON b.service_id = s.id
+    LEFT JOIN network n ON s.network_id = n.id
+    WHERE c.type = 'episode'
+    AND cat.ancestry LIKE :categoryAncestry
+    AND b.end_at > :cutoffTime
+    AND b.end_at <= :limitTime
+    $isWebcastClause
+    $filterByMediumClause
+    GROUP BY b.start_at, c.id, n.id
+) t
+QUERY;
+
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('cnt', 'cnt');
+
+        $q = $this->getEntityManager()->createNativeQuery($qText, $rsm)
+            ->setParameter('categoryAncestry', $this->ancestryIdsToString($categoryAncestry) . '%')
+            ->setParameter('cutoffTime', $from)
+            ->setParameter('limitTime', $to);
+
+        if (!is_null($isWebcastValue)) {
+            $q->setParameter('isWebcast', $isWebcastValue);
+        }
+
+        if ($this->isValidNetworkMedium($medium)) {
+            $q->setParameter('medium', $medium);
+        }
+
+        return $q->getSingleScalarResult();
     }
 
     public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month, $limit, int $offset)
@@ -257,6 +354,26 @@ QUERY;
         return $qb;
     }
 
+    private function createCollapsedBroadcastsOfCategoryQueryBuilder($ancestry, $type)
+    {
+        $qb = $this->createQueryBuilder('broadcast', false)
+            ->addSelect(['category', 'programmeItem', 'image'])
+            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
+            ->join('broadcast.service', 'service')
+            ->leftJoin('service.network', 'networkOfService')
+            ->leftJoin('programmeItem.image', 'image')
+            ->leftJoin('programmeItem.categories', 'category')
+            ->andWhere('category.ancestry LIKE :ancestryClause')
+            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
+            ->addGroupBy('broadcast.startAt')
+            ->addGroupBy('programmeItem.id')
+            ->addGroupBy('networkOfService.id')
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+
+        $qb = $this->setEntityTypeFilter($qb, $type);
+        return $qb;
+    }
+
     private function entityTypeFilterValue($type)
     {
         $typesLookup = [
@@ -315,5 +432,10 @@ QUERY;
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
         return $repo->findByIds($ids);
+    }
+
+    private function isValidNetworkMedium($medium)
+    {
+        return in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO]);
     }
 }

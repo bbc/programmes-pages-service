@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -27,7 +28,8 @@ class NetworksFixture extends AbstractFixture
             'bbc_radio_four',
             'BBC Radio Four',
             $service,
-            'radio4'
+            'radio4',
+            'radio'
         );
 
         $service2 = $this->buildService(
@@ -47,6 +49,8 @@ class NetworksFixture extends AbstractFixture
 
         $service->setNetwork($network1);
         $service2->setNetwork($network2);
+
+        $this->buildMasterBrand('bbc_radio_four', 'p01y7bwp', 'BBC Radio 4', 'radio4', $network1);
 
         $this->manager->flush();
     }
@@ -68,13 +72,27 @@ class NetworksFixture extends AbstractFixture
         $nid,
         $title,
         $defaultService = null,
-        $urlKey = null
+        $urlKey = null,
+        $medium = null
     ) {
         $entity = new Network($nid, $title, $title);
         $entity->setDefaultService($defaultService);
         $entity->setUrlKey($urlKey);
+        if ($medium) {
+            $entity->setMedium($medium);
+        }
         $this->manager->persist($entity);
         $this->addReference('network_' . $nid, $entity);
+        return $entity;
+    }
+
+    private function buildMasterBrand($mid, $pid, $name, $urlKey, $network = null)
+    {
+        $entity = new MasterBrand($mid, $pid, $name);
+        $entity->setNetwork($network);
+        $entity->setUrlKey($urlKey);
+        $this->manager->persist($entity);
+        $this->addReference('mb_' . $mid, $entity);
         return $entity;
     }
 }
