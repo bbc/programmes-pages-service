@@ -2,18 +2,15 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
-
 use DateTimeImmutable;
 
 class FindByCategoryInRangeTest extends AbstractCollapsedBroadcastServiceTest
 {
-
     public function testFindByCategoryInRange()
     {
-        $categoryId    = 3;
-        $fromDate      = new DateTimeImmutable();
-        $toDate        = new DateTimeImmutable();
-
+        $categoryId = 3;
+        $fromDate = new DateTimeImmutable();
+        $toDate = new DateTimeImmutable();
 
         $category = $this->mockEntity('Genre', 3);
         $category->method('getDbId')->willReturn(3);
@@ -25,16 +22,16 @@ class FindByCategoryInRangeTest extends AbstractCollapsedBroadcastServiceTest
         ];
 
         $this->mockRepository->expects($this->once())
-                             ->method('findByCategoryIdInDateRange')
-                             ->with($categoryId, 'Broadcast', $fromDate, $toDate)
-                             ->willReturn($broadcastData);
+            ->method('findByCategoryIdInDateRange')
+            ->with($categoryId, 'Broadcast', $fromDate, $toDate)
+            ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->once())
-                                    ->method('findBySids')
-                                    ->with(['a', 'b'])
-                                    ->willReturn($serviceData);
+            ->method('findBySids')
+            ->with(['a', 'b'])
+            ->willReturn($serviceData);
 
-        $result = $this->service()->findByCategoryInRange($category,$fromDate, $toDate);
+        $result = $this->service()->findByCategoryInRange($category, $fromDate, $toDate);
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
     }
 }
