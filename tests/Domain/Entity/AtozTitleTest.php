@@ -16,6 +16,6 @@ class AtozTitleTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('Title', $atozTitle->getTitle());
         $this->assertEquals('T', $atozTitle->getFirstLetter());
-        $this->assertEquals($programme, $atozTitle->getCoreEntity());
+        $this->assertEquals($programme, $atozTitle->getTitledEntity());
     }
 }

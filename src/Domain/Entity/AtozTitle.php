@@ -13,16 +13,20 @@ class AtozTitle
     private $firstLetter;
 
     /** @var Programme */
-    private $coreEntity;
+    private $titledEntity;
 
+    /**
+     * @TODO $titledEntity is programmes only but eventually we should support
+     * groups too
+     */
     public function __construct(
         string $title,
         string $firstLetter,
-        Programme $coreEntity // @TODO group models
+        Programme $titledEntity
     ) {
         $this->title = $title;
         $this->firstLetter = $firstLetter;
-        $this->coreEntity = $coreEntity;
+        $this->titledEntity = $titledEntity;
     }
 
     public function getTitle(): string
@@ -35,8 +39,8 @@ class AtozTitle
         return $this->firstLetter;
     }
 
-    public function getCoreEntity(): Programme
+    public function getTitledEntity(): Programme
     {
-        return $this->coreEntity;
+        return $this->titledEntity;
     }
 }
