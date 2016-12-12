@@ -505,7 +505,9 @@ QUERY;
             if (in_array($networkMedium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
                 $qText .= ' AND network.medium = :service';
             } else {
-                throw new \InvalidArgumentException('Network medium must be tv or radio');
+                throw new InvalidArgumentException(
+                    sprintf('Network medium must be tv or radio, got %s instead', $networkMedium)
+                );
             }
         }
         $qText .= ' ORDER BY rel DESC';
