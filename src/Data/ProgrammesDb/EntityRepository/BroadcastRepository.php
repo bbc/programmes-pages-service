@@ -130,7 +130,7 @@ class BroadcastRepository extends EntityRepository
 
     }
 
-    public function countByCategoryAncestryAndStartAtDateRange(
+    public function countByCategoryAncestryAndEndAtDateRange(
         array $categoryAncestry,
         string $type,
         $medium,
