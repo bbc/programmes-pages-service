@@ -57,7 +57,7 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }
 
-    public function findByCategoryAncestryInDateRange(
+    public function findByCategoryAncestryAndEndAtDateRange(
         array $categoryAncestry,
         string $type,
         $medium,
@@ -93,7 +93,7 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
-    public function findByCategoryAncestryAndEndAtDateRange(
+    public function findByCategoryAncestryAndStartAtDateRange(
         array $categoryAncestry,
         string $type,
         $medium,
@@ -130,7 +130,7 @@ class BroadcastRepository extends EntityRepository
 
     }
 
-    public function countByCategoryAncestryInDateRange(
+    public function countByCategoryAncestryAndStartAtDateRange(
         array $categoryAncestry,
         string $type,
         $medium,
