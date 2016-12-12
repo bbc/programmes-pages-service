@@ -139,7 +139,7 @@ class CollapsedBroadcastsService extends AbstractService
         DateTimeImmutable $endDate,
         string $medium = null
     ) {
-        return $this->repository->countByCategoryAncestryAndStartAtDateRange(
+        return $this->repository->countByCategoryAncestryAndEndAtDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
             $medium,
