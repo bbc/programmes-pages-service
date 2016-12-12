@@ -68,13 +68,13 @@ class BroadcastRepository extends EntityRepository
     ) {
         $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
 
-        $qb->andWhere('broadcast.endAt > :endDate')
-            ->andWhere('broadcast.endAt <= :limitDate')
+        $qb->andWhere('broadcast.endAt > :from')
+            ->andWhere('broadcast.endAt <= :to')
             ->addOrderBy('broadcast.startAt')
             ->addOrderBy('networkOfService.urlKey')
             ->setFirstResult($offset)
-            ->setParameter('endDate', $from)
-            ->setParameter('limitDate', $to);
+            ->setParameter('from', $from)
+            ->setParameter('to', $to);
 
         $qb = $this->setLimit($qb, $limit);
 
@@ -104,13 +104,13 @@ class BroadcastRepository extends EntityRepository
     ) {
         $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
 
-        $qb->andWhere('broadcast.startAt > :endDate')
-           ->andWhere('broadcast.startAt <= :limitDate')
+        $qb->andWhere('broadcast.startAt >= :from')
+           ->andWhere('broadcast.startAt < :to')
            ->addOrderBy('broadcast.startAt')
            ->addOrderBy('networkOfService.urlKey')
            ->setFirstResult($offset)
-           ->setParameter('endDate', $from)
-           ->setParameter('limitDate', $to);
+           ->setParameter('from', $from)
+           ->setParameter('to', $to);
 
         $qb = $this->setLimit($qb, $limit);
 
@@ -392,6 +392,15 @@ QUERY;
 
     private function createCollapsedBroadcastsOfCategoryQueryBuilder(array $ancestry, string $type)
     {
+        // networkOfService is needed so that each row contains the services
+        // within a given network, rather than all services across multiple networks.
+        // For instance consider a programme broadcast on bbc_one_london and
+        // bbc_one_yorkshire at the same time. This would result in one row
+        // where the the servicesIds are "bbc_one_london,bbc_one_yorkshire" as
+        // those two services both belong to the same network - bbc_one.
+        // However consider a programme broadcast on bbc_radio_ulster and
+        // bbc_radio_foyle at the same time. This would result in two rows as
+        // these two services do not belong to the same network.
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['category', 'programmeItem', 'image'])
             ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])

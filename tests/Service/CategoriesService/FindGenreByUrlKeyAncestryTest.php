@@ -17,4 +17,17 @@ class FindGenreByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
         $result = $this->service()->findGenreByUrlKeyAncestry($urlKeyAncestry);
         $this->assertEquals($this->categoryFromDbData($dbData), $result);
     }
+
+    public function testFindGenreByUrlKeyAncestryEmptyData()
+    {
+        $urlKeyAncestry = ['key1', 'key2'];
+
+        $this->mockRepository->expects($this->once())
+            ->method('findByUrlKeyAncestryAndType')
+            ->with($urlKeyAncestry, 'genre')
+            ->willReturn(null);
+
+        $result = $this->service()->findGenreByUrlKeyAncestry($urlKeyAncestry);
+        $this->assertNull($result);
+    }
 }

@@ -17,4 +17,17 @@ class FindFormatByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
         $result = $this->service()->findFormatByUrlKeyAncestry($urlKey);
         $this->assertEquals($this->categoryFromDbData($dbData), $result);
     }
+
+    public function testFindFormatByUrlKeyAncestryEmptyData()
+    {
+        $urlKey = 'key1';
+
+        $this->mockRepository->expects($this->once())
+            ->method('findByUrlKeyAncestryAndType')
+            ->with([$urlKey], 'format')
+            ->willReturn(null);
+
+        $result = $this->service()->findFormatByUrlKeyAncestry($urlKey);
+        $this->assertNull($result);
+    }
 }

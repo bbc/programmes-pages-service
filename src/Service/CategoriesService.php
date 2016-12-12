@@ -28,16 +28,22 @@ class CategoriesService extends AbstractService
         return $this->mapManyEntities($usedByType);
     }
 
+    /**
+     * @return Format|null
+     */
+    public function findFormatByUrlKeyAncestry(string $formatUrlKey)
+    {
+        $format = $this->repository->findByUrlKeyAncestryAndType([$formatUrlKey], 'format');
+        return $this->mapSingleEntity($format);
+    }
+
+    /**
+     * @return Genre|null
+     */
     public function findGenreByUrlKeyAncestry(array $urlHierarchy)
     {
         $genre = $this->repository->findByUrlKeyAncestryAndType($urlHierarchy, 'genre');
         return $this->mapSingleEntity($genre);
-    }
-
-    public function findFormatByUrlKeyAncestry(string $formatUrlKey): Format
-    {
-        $format = $this->repository->findByUrlKeyAncestryAndType([$formatUrlKey], 'format');
-        return $this->mapSingleEntity($format);
     }
 
     public function findPopulatedChildGenres(Genre $genre, string $medium = null)
