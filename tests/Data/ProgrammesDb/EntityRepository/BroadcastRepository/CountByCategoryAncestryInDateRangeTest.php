@@ -6,14 +6,14 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepos
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 use DateTimeImmutable;
 
-class CountByCategoryAncestryInDateRange extends AbstractDatabaseTest
+class CountByCategoryAncestryAndEndAtDateRangeTest extends AbstractDatabaseTest
 {
     public function tearDown()
     {
         $this->disableEmbargoedFilter();
     }
 
-    public function countByCategoryAncestryInDateRange()
+    public function countByCategoryAncestryAndEndAtDateRange()
     {
         return [
             [
@@ -35,7 +35,7 @@ class CountByCategoryAncestryInDateRange extends AbstractDatabaseTest
         ];
     }
 
-    public function testCountByCategoryAncestryInDateRange()
+    public function testCountByCategoryAncestryAndEndAtDateRange()
     {
         $this->loadFixtures(['BroadcastsWithCategoriesFixture']);
         $this->enableEmbargoedFilter();
@@ -43,10 +43,10 @@ class CountByCategoryAncestryInDateRange extends AbstractDatabaseTest
         /** @var BroadcastRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
 
-        foreach ($this->countByCategoryAncestryInDateRange() as $data) {
+        foreach ($this->countByCategoryAncestryAndEndAtDateRange() as $data) {
             list($categoryAncestry, $type, $medium, $from, $to, $expectedOutput) = $data;
 
-            $data = $repo->countByCategoryAncestryInDateRange($categoryAncestry, $type, $medium, $from, $to);
+            $data = $repo->countByCategoryAncestryAndEndAtDateRange($categoryAncestry, $type, $medium, $from, $to);
             $this->assertSame($expectedOutput, $data);
 
             // countByCategoryAncestryAndEndingAfter query only

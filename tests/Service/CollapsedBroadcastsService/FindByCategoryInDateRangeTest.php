@@ -4,9 +4,9 @@ namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
 use DateTimeImmutable;
 
-class FindByCategoryInDateRangeTest extends AbstractCollapsedBroadcastServiceTest
+class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServiceTest
 {
-    public function testFindByCategoryInDateRange()
+    public function testFindByCategoryAndEndAtDateRangeTest()
     {
         $ancestry = [3];
         $fromDate = new DateTimeImmutable();
@@ -22,7 +22,7 @@ class FindByCategoryInDateRangeTest extends AbstractCollapsedBroadcastServiceTes
         ];
 
         $this->mockRepository->expects($this->once())
-            ->method('findByCategoryAncestryInDateRange')
+            ->method('findByCategoryAncestryAndEndAtDateRange')
             ->with($ancestry, 'Broadcast', null, $fromDate, $toDate)
             ->willReturn($broadcastData);
 
@@ -31,7 +31,7 @@ class FindByCategoryInDateRangeTest extends AbstractCollapsedBroadcastServiceTes
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
-        $result = $this->service()->findByCategoryInDateRange($category, $fromDate, $toDate);
+        $result = $this->service()->findByCategoryAndEndAtDateRange($category, $fromDate, $toDate);
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
     }
 }

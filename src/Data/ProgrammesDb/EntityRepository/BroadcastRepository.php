@@ -127,7 +127,6 @@ class BroadcastRepository extends EntityRepository
             [$this, 'programmeAncestryGetter'],
             ['programmeItem', 'ancestry']
         );
-
     }
 
     public function countByCategoryAncestryAndEndAtDateRange(
