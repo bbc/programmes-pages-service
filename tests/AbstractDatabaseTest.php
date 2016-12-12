@@ -100,11 +100,11 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
      * from the overall query count. This method will also bypass the
      * embargo filter, so will always fetch what was requested.
      *
-*@param       $identifier
+     * @param $identifier
      * @param $entityType
      * @param $usePipId
      *
-*@return int
+     * @return int
      */
     protected function getDbIdFromPersistentIdentifier(string $identifier, string $entityType, bool $usePipId = false): int
     {

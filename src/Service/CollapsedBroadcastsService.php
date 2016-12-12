@@ -8,7 +8,7 @@ use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
-use DateInterval;
+use DateTimeImmutable;
 
 class CollapsedBroadcastsService extends AbstractService
 {
@@ -89,38 +89,62 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
-    public function findUpcomingByCategory(
+    public function findByCategoryAndStartAtDateRange(
         Category $category,
-        DateInterval $interval,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
         string $medium = null,
         $limit = self::DEFAULT_LIMIT,
         int $offset = self::DEFAULT_PAGE
     ) {
-        $now = ApplicationTime::getTime();
-
-        $broadcasts = $this->repository->findByCategoryAncestryAndEndingAfter(
+        $broadcasts = $this->repository->findByCategoryAncestryAndStartAtDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
-            $now,
-            $now->add($interval),
+            $medium,
+            $startDate,
+            $endDate,
             $limit,
-            $offset,
-            $medium
+            $offset
         );
 
         $services = $this->fetchUsedServices($broadcasts);
         return $this->mapManyEntities($broadcasts, $services);
     }
 
-    public function countUpcomingByCategory(Category $category, DateInterval $interval, string $medium = null)
-    {
-        $now = ApplicationTime::getTime();
-        return $this->repository->countByCategoryAncestryAndEndingAfter(
+    public function findByCategoryAndEndAtDateRange(
+        Category $category,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+        string $medium = null,
+        $limit = self::DEFAULT_LIMIT,
+        int $offset = self::DEFAULT_PAGE
+    ) {
+        $broadcasts = $this->repository->findByCategoryAncestryAndEndAtDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
-            $now,
-            $now->add($interval),
-            $medium
+            $medium,
+            $startDate,
+            $endDate,
+            $limit,
+            $offset
+        );
+
+        $services = $this->fetchUsedServices($broadcasts);
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    public function countByCategoryAndEndAtDateRange(
+        Category $category,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+        string $medium = null
+    ) {
+        return $this->repository->countByCategoryAncestryAndEndAtDateRange(
+            $category->getDbAncestryIds(),
+            'Broadcast',
+            $medium,
+            $startDate,
+            $endDate
         );
     }
 
