@@ -68,13 +68,13 @@ class BroadcastRepository extends EntityRepository
     ) {
         $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
 
-        $qb->andWhere('broadcast.endAt > :endDate')
-            ->andWhere('broadcast.endAt <= :limitDate')
+        $qb->andWhere('broadcast.endAt > :from')
+            ->andWhere('broadcast.endAt <= :to')
             ->addOrderBy('broadcast.startAt')
             ->addOrderBy('networkOfService.urlKey')
             ->setFirstResult($offset)
-            ->setParameter('endDate', $from)
-            ->setParameter('limitDate', $to);
+            ->setParameter('from', $from)
+            ->setParameter('to', $to);
 
         $qb = $this->setLimit($qb, $limit);
 
@@ -104,13 +104,13 @@ class BroadcastRepository extends EntityRepository
     ) {
         $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
 
-        $qb->andWhere('broadcast.startAt > :endDate')
-           ->andWhere('broadcast.startAt <= :limitDate')
+        $qb->andWhere('broadcast.startAt >= :from')
+           ->andWhere('broadcast.startAt < :to')
            ->addOrderBy('broadcast.startAt')
            ->addOrderBy('networkOfService.urlKey')
            ->setFirstResult($offset)
-           ->setParameter('endDate', $from)
-           ->setParameter('limitDate', $to);
+           ->setParameter('from', $from)
+           ->setParameter('to', $to);
 
         $qb = $this->setLimit($qb, $limit);
 
