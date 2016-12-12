@@ -8,7 +8,6 @@ use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
-use DateInterval;
 use DateTimeImmutable;
 
 class CollapsedBroadcastsService extends AbstractService
@@ -90,7 +89,7 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
-    public function findByCategoryInDateRange(
+    public function findByCategoryAndStartAtDateRange(
         Category $category,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
@@ -98,7 +97,7 @@ class CollapsedBroadcastsService extends AbstractService
         $limit = self::DEFAULT_LIMIT,
         int $offset = self::DEFAULT_PAGE
     ) {
-        $broadcasts = $this->repository->findByCategoryAncestryInDateRange(
+        $broadcasts = $this->repository->findByCategoryAncestryAndStartAtDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
             $medium,
@@ -134,13 +133,13 @@ class CollapsedBroadcastsService extends AbstractService
         return $this->mapManyEntities($broadcasts, $services);
     }
 
-    public function countByCategoryInDateRange(
+    public function countByCategoryAndEndAtDateRange(
         Category $category,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
         string $medium = null
     ) {
-        return $this->repository->countByCategoryAncestryInDateRange(
+        return $this->repository->countByCategoryAncestryAndStartAtDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
             $medium,
