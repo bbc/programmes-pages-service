@@ -93,6 +93,43 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
+    public function findByCategoryAncestryAndEndAtDateRange(
+        array $categoryAncestry,
+        string $type,
+        $medium,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to,
+        $limit,
+        int $offset
+    ) {
+        $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
+
+        $qb->andWhere('broadcast.startAt > :endDate')
+           ->andWhere('broadcast.startAt <= :limitDate')
+           ->addOrderBy('broadcast.startAt')
+           ->addOrderBy('networkOfService.urlKey')
+           ->setFirstResult($offset)
+           ->setParameter('endDate', $from)
+           ->setParameter('limitDate', $to);
+
+        $qb = $this->setLimit($qb, $limit);
+
+        if ($this->isValidNetworkMedium($medium)) {
+            $qb->andWhere('networkOfService.medium = :medium')
+               ->setParameter('medium', $medium);
+        }
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $this->explodeServiceIds($result);
+
+        return $this->abstractResolveAncestry(
+            $result,
+            [$this, 'programmeAncestryGetter'],
+            ['programmeItem', 'ancestry']
+        );
+
+    }
+
     public function countByCategoryAncestryInDateRange(
         array $categoryAncestry,
         string $type,
