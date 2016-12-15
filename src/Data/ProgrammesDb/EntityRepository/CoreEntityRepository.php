@@ -31,7 +31,42 @@ class CoreEntityRepository extends MaterializedPathRepository
         'Franchise',
         'CoreEntity',
     ];
-
+    
+    public function fetchProgrammesByCategoryInSlice(
+        array $ancestryDbIds,
+        string $slice,
+        $medium,
+        int $limit
+    ) {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select(['DISTINCT programme', 'image', 'masterbrand', 'mbImage'])
+                   ->from('ProgrammesPagesService:Programme', 'programme')
+                   ->leftJoin('programme.image', 'image')
+                   ->leftJoin('programme.masterBrand', 'masterbrand')
+                   ->leftJoin('masterbrand.image', 'mbImage')
+                   ->innerJoin('programme.categories', 'category')
+                   ->andWhere('programme.parent IS NULL')
+                   ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
+                   ->andWhere('category.ancestry LIKE :ancestry')
+                   ->orderBy('programme.title', 'ASC')
+                   ->addOrderBy('programme.pid', 'ASC')
+                   ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+        
+        if ('player' === $slice) {
+            $qb->andWhere('programme.streamable = 1');
+        }
+        
+        if (!is_null($medium)) {
+            $this->assertNetworkMedium($medium);
+            
+            $qb->innerJoin('masterbrand.network', 'network')
+               ->andWhere('network.medium = :medium')
+               ->setParameter('medium', $medium);
+        }
+        
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+    
     /**
      * Return the count of available episodes given category ID's
      *
