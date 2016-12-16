@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 class FindAvailableByCategoryTest extends AbstractProgrammesServiceTest
 {
-    public function testFindAvailableByCategory()
+    public function testFindAvailableTleosByCategory()
     {
         $medium = 'tv';
         $dbId = 1;
@@ -23,7 +23,7 @@ class FindAvailableByCategoryTest extends AbstractProgrammesServiceTest
                              )
                              ->willReturn($dbData);
 
-        $result = $this->service()->findAvailableByCategory($category, $medium);
+        $result = $this->service()->findAvailableTleosByCategory($category, $medium);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 }

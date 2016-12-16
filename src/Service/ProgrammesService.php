@@ -39,7 +39,7 @@ class ProgrammesService extends AbstractService
     /**
      * @return Programme[] types: Series|Episode|Brand
      */
-    public function findAllByCategory(
+    public function findAllTleosByCategory(
         Category $category,
         $medium = null,
         $limit = self::DEFAULT_LIMIT,
@@ -58,7 +58,7 @@ class ProgrammesService extends AbstractService
     /**
      * @return Programme[] types: Series|Episode|Brand
      */
-    public function findAvailableByCategory(
+    public function findAvailableTleosByCategory(
         Category $category,
         $medium = null,
         $limit = self::DEFAULT_LIMIT,

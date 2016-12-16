@@ -4,9 +4,9 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Service\ProgrammesService;
 
-class FindAllByCategoryTest extends AbstractProgrammesServiceTest
+class findAllTleosByCategoryTest extends AbstractProgrammesServiceTest
 {
-    public function testFindAllByCategory()
+    public function testFindAllTleosByCategory()
     {
         $medium = 'tv';
         $dbId = 1;
@@ -25,7 +25,7 @@ class FindAllByCategoryTest extends AbstractProgrammesServiceTest
                              )
                              ->willReturn($dbData);
 
-        $result = $this->service()->findAllByCategory($category, $medium);
+        $result = $this->service()->findAllTleosByCategory($category, $medium);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 }
