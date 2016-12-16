@@ -36,7 +36,8 @@ class CoreEntityRepository extends MaterializedPathRepository
         array $ancestryDbIds,
         bool $filterToAvailable,
         $medium,
-        int $limit
+        $limit,
+        int $offset
     ) {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select(['DISTINCT programme', 'image', 'masterbrand', 'mbImage'])
@@ -50,6 +51,7 @@ class CoreEntityRepository extends MaterializedPathRepository
                    ->andWhere('category.ancestry LIKE :ancestry') //
                    ->orderBy('programme.title', 'ASC')
                    ->addOrderBy('programme.pid', 'ASC')
+                   ->setFirstResult($offset)
                    ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
 
         if ($filterToAvailable) {
@@ -63,6 +65,8 @@ class CoreEntityRepository extends MaterializedPathRepository
                ->andWhere('network.medium = :medium')
                ->setParameter('medium', $medium);
         }
+
+        $qb = $this->setLimit($qb, $limit);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

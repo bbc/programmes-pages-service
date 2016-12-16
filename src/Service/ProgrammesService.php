@@ -45,11 +45,13 @@ class ProgrammesService extends AbstractService
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ) {
+        $offset = $this->getOffset($limit, $page);
         $programmesInSlice = $this->repository->findTleosByCategory(
             $category->getDbAncestryIds(),
             false,
             $medium,
-            $limit
+            $limit,
+            $offset
         );
 
         return $this->mapManyEntities($programmesInSlice);
@@ -64,11 +66,13 @@ class ProgrammesService extends AbstractService
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ) {
+        $offset = $this->getOffset($limit, $page);
         $programmesInSlice = $this->repository->findTleosByCategory(
             $category->getDbAncestryIds(),
             true,
             $medium,
-            $limit
+            $limit,
+            $offset
         );
 
         return $this->mapManyEntities($programmesInSlice);
