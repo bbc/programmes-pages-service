@@ -25,7 +25,7 @@ class BroadcastMapper extends AbstractMapper
     {
         $cacheKey = $dbBroadcast['id'];
 
-        if (!array_key_exists($cacheKey, $this->cache)) {
+        if (!isset($this->cache[$cacheKey])) {
             if ($dbBroadcast['isWebcast']) {
                 $this->cache[$cacheKey] = $this->getWebcastDomainModel($dbBroadcast);
             } else {

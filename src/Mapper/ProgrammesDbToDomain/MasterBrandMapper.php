@@ -17,7 +17,7 @@ class MasterBrandMapper extends AbstractMapper
     {
         $cacheKey = $dbMasterBrand['id'];
 
-        if (!array_key_exists($cacheKey, $this->cache)) {
+        if (!isset($this->cache[$cacheKey])) {
             // A MasterBrand must have a Network attached to it.
             // A MasterBrand without a Network is not valid.
             // It may temporarily occur in the database in the time between creating

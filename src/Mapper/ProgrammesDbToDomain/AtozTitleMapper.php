@@ -16,7 +16,7 @@ class AtozTitleMapper extends AbstractMapper
     {
         $cacheKey = $dbAtozTitle['id'];
 
-        if (!array_key_exists($cacheKey, $this->cache)) {
+        if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new AtozTitle(
                 $dbAtozTitle['title'],
                 $dbAtozTitle['firstLetter'],

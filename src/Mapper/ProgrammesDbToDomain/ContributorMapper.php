@@ -15,7 +15,7 @@ class ContributorMapper implements MapperInterface
     {
         $cacheKey = $dbContributor['id'];
 
-        if (!array_key_exists($cacheKey, $this->cache)) {
+        if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new Contributor(
                 $dbContributor['id'],
                 new Pid($dbContributor['pid']),

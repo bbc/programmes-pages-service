@@ -14,7 +14,7 @@ class RelatedLinkMapper implements MapperInterface
     {
         $cacheKey = $dbRelatedLink['id'];
 
-        if (!array_key_exists($cacheKey, $this->cache)) {
+        if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new RelatedLink(
                 $dbRelatedLink['title'],
                 $dbRelatedLink['uri'],

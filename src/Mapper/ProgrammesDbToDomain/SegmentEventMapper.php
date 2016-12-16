@@ -18,7 +18,7 @@ class SegmentEventMapper extends AbstractMapper
     {
         $cacheKey = $dbSegmentEvent['id'];
 
-        if (!array_key_exists($cacheKey, $this->cache)) {
+        if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new SegmentEvent(
                 new Pid($dbSegmentEvent['pid']),
                 $this->getVersionModel($dbSegmentEvent),

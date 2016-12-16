@@ -14,7 +14,7 @@ class NetworkMapper extends AbstractMapper
     {
         $cacheKey = $dbNetwork['id'];
 
-        if (!array_key_exists($cacheKey, $this->cache)) {
+        if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new Network(
                 new Nid($dbNetwork['nid']),
                 $dbNetwork['name'],

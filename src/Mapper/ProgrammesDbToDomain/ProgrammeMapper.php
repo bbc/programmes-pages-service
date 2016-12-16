@@ -22,7 +22,7 @@ class ProgrammeMapper extends AbstractMapper
     {
         $cacheKey = $dbProgramme['id'];
 
-        if (!array_key_exists($cacheKey, $this->cache)) {
+        if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = $this->getModel($dbProgramme);
         }
 

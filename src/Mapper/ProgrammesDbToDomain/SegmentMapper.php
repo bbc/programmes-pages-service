@@ -17,7 +17,7 @@ class SegmentMapper extends AbstractMapper
     {
         $cacheKey = $dbSegment['id'];
 
-        if (!array_key_exists($cacheKey, $this->cache)) {
+        if (!isset($this->cache[$cacheKey])) {
             if (in_array($dbSegment['type'], self::MUSIC_TYPES)) {
                 $this->cache[$cacheKey] = $this->getMusicSegmentModel($dbSegment);
             } else {
