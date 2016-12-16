@@ -36,6 +36,8 @@ class RelatedLinkTest extends PHPUnit_Framework_TestCase
         $this->assertSame(null, $link->getRelatedToImage());
         $this->assertSame(false, $link->getIsExternal());
         $this->assertSame(null, $link->getPosition());
+        $this->assertSame(null, $link->getStartDate());
+        $this->assertSame(null, $link->getEndDate());
 
         $link = new RelatedLink('pid', 'title', 'uri', 'type', $promotion, false);
         $this->assertSame($promotion, $link->getRelatedTo());
@@ -71,6 +73,8 @@ class RelatedLinkTest extends PHPUnit_Framework_TestCase
             ['Type', 'a-string'],
             ['Position', 2],
             ['IsExternal', true],
+            ['StartDate', new \DateTime('2016-01-01 00:00:00')],
+            ['EndDate', new \DateTime('2017-01-01 00:00:00')],
         ];
     }
 
