@@ -45,7 +45,7 @@ class ProgrammesService extends AbstractService
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ) {
-        $programmesInSlice = $this->repository->findProgrammesByCategoryInSlice(
+        $programmesInSlice = $this->repository->findProgrammesByCategory(
             $category->getDbAncestryIds(),
             false,
             $medium,
@@ -64,7 +64,7 @@ class ProgrammesService extends AbstractService
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ) {
-        $programmesInSlice = $this->repository->findProgrammesByCategoryInSlice(
+        $programmesInSlice = $this->repository->findProgrammesByCategory(
             $category->getDbAncestryIds(),
             true,
             $medium,
