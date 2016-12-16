@@ -4,9 +4,6 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 abstract class Category
 {
-    const TYPE_GENRES = 'genres';
-    const TYPE_FORMATS = 'formats';
-
     /**
      * @var int[]
      */
