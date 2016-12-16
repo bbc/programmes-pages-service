@@ -7,31 +7,39 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 
 class MasterBrandMapper extends AbstractMapper
 {
+    private $cache = [];
+
     /**
      * @param array $dbMasterBrand
      * @return MasterBrand|null
      */
     public function getDomainModel(array $dbMasterBrand)
     {
-        // A MasterBrand must have a Network attached to it.
-        // A MasterBrand without a Network is not valid.
-        // It may temporarily occur in the database in the time between creating
-        // a new MasterBrand and the Networks denorm running (which creates the
-        // network entity for that MasterBrand), however we consider this
-        // incomplete data and we should treat it as though the MasterBrand does
-        // not exist, as it is in an incomplete state.
-        $network = $this->getNetworkModel($dbMasterBrand);
-        if (!$network) {
-            return null;
+        $cacheKey = $dbMasterBrand['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            // A MasterBrand must have a Network attached to it.
+            // A MasterBrand without a Network is not valid.
+            // It may temporarily occur in the database in the time between creating
+            // a new MasterBrand and the Networks denorm running (which creates the
+            // network entity for that MasterBrand), however we consider this
+            // incomplete data and we should treat it as though the MasterBrand does
+            // not exist, as it is in an incomplete state.
+            $network = $this->getNetworkModel($dbMasterBrand);
+            if (!$network) {
+                $this->cache[$cacheKey] = null;
+            } else {
+                $this->cache[$cacheKey] = new MasterBrand(
+                    new Mid($dbMasterBrand['mid']),
+                    $dbMasterBrand['name'],
+                    $this->getImageModel($dbMasterBrand),
+                    $network,
+                    $this->getCompetitionWarningModel($dbMasterBrand)
+                );
+            }
         }
 
-        return new MasterBrand(
-            new Mid($dbMasterBrand['mid']),
-            $dbMasterBrand['name'],
-            $this->getImageModel($dbMasterBrand),
-            $network,
-            $this->getCompetitionWarningModel($dbMasterBrand)
-        );
+        return $this->cache[$cacheKey];
     }
 
     private function getImageModel($dbMasterBrand, $key = 'image')

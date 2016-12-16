@@ -3,17 +3,27 @@
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
+use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use InvalidArgumentException;
 
 class CategoryMapper implements MapperInterface
 {
-    /**
-     * @param array $dbCategory
-     * @return Format|Genre
-     */
-    public function getDomainModel(array $dbCategory)
+    private $cache = [];
+
+    public function getDomainModel(array $dbCategory): Category
+    {
+        $cacheKey = $dbCategory['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            $this->cache[$cacheKey] = $this->getModel($dbCategory);
+        }
+
+        return $this->cache[$cacheKey];
+    }
+
+    public function getModel(array $dbCategory): Category
     {
         if ($dbCategory['type'] == 'genre') {
             return $this->getGenreDomainModel($dbCategory);

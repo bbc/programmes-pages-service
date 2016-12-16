@@ -8,22 +8,30 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 
 class NetworkMapper extends AbstractMapper
 {
+    private $cache = [];
+
     public function getDomainModel(array $dbNetwork): Network
     {
-        return new Network(
-            new Nid($dbNetwork['nid']),
-            $dbNetwork['name'],
-            $this->getImageModel($dbNetwork),
-            $dbNetwork['urlKey'],
-            $dbNetwork['type'],
-            $dbNetwork['medium'],
-            $this->getServiceModel($dbNetwork),
-            $dbNetwork['isPublicOutlet'],
-            $dbNetwork['isChildrens'],
-            $dbNetwork['isWorldServiceInternational'],
-            $dbNetwork['isInternational'],
-            $dbNetwork['isAllowedAdverts']
-        );
+        $cacheKey = $dbNetwork['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            $this->cache[$cacheKey] = new Network(
+                new Nid($dbNetwork['nid']),
+                $dbNetwork['name'],
+                $this->getImageModel($dbNetwork),
+                $dbNetwork['urlKey'],
+                $dbNetwork['type'],
+                $dbNetwork['medium'],
+                $this->getServiceModel($dbNetwork),
+                $dbNetwork['isPublicOutlet'],
+                $dbNetwork['isChildrens'],
+                $dbNetwork['isWorldServiceInternational'],
+                $dbNetwork['isInternational'],
+                $dbNetwork['isAllowedAdverts']
+            );
+        }
+
+        return $this->cache[$cacheKey];
     }
 
     private function getImageModel($dbMasterBrand, $key = 'image')

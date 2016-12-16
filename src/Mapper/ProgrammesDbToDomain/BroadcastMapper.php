@@ -15,17 +15,25 @@ use DateTimeImmutable;
 
 class BroadcastMapper extends AbstractMapper
 {
+    private $cache = [];
+
     /**
      * @param array $dbBroadcast
      * @return Broadcast|null
      */
     public function getDomainModel(array $dbBroadcast): Broadcast
     {
-        if ($dbBroadcast['isWebcast']) {
-            return $this->getWebcastDomainModel($dbBroadcast);
-        } else {
-            return $this->getBroadcastDomainModel($dbBroadcast);
+        $cacheKey = $dbBroadcast['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            if ($dbBroadcast['isWebcast']) {
+                $this->cache[$cacheKey] = $this->getWebcastDomainModel($dbBroadcast);
+            } else {
+                $this->cache[$cacheKey] = $this->getBroadcastDomainModel($dbBroadcast);
+            }
         }
+
+        return $this->cache[$cacheKey];
     }
 
     private function getBroadcastDomainModel(array $dbBroadcast): Broadcast

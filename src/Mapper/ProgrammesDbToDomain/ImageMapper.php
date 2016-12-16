@@ -9,28 +9,42 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class ImageMapper implements MapperInterface
 {
+    private $cache = [];
+
+    private $cachedDefaultImage;
+
     public function getDomainModel(array $dbImage): Image
     {
-        return new Image(
-            new Pid($dbImage['pid']),
-            $dbImage['title'],
-            $dbImage['shortSynopsis'],
-            $this->getSynopses($dbImage)->getLongestSynopsis(),
-            $dbImage['type'],
-            $dbImage['extension']
-        );
+        $cacheKey = $dbImage['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            $this->cache[$cacheKey] = new Image(
+                new Pid($dbImage['pid']),
+                $dbImage['title'],
+                $dbImage['shortSynopsis'],
+                $this->getSynopses($dbImage)->getLongestSynopsis(),
+                $dbImage['type'],
+                $dbImage['extension']
+            );
+        }
+
+        return $this->cache[$cacheKey];
     }
 
     public function getDefaultImage(): Image
     {
-        return new Image(
-            new Pid('p01tqv8z'),
-            'bbc_640x360.png',
-            'BBC Blocks for /programmes',
-            'BBC Blocks for /programmes',
-            'standard',
-            'png'
-        );
+        if (!$this->cachedDefaultImage) {
+            $this->cachedDefaultImage = new Image(
+                new Pid('p01tqv8z'),
+                'bbc_640x360.png',
+                'BBC Blocks for /programmes',
+                'BBC Blocks for /programmes',
+                'standard',
+                'png'
+            );
+        }
+
+        return $this->cachedDefaultImage;
     }
 
     private function getSynopses($dbImage): Synopses

@@ -9,17 +9,25 @@ use InvalidArgumentException;
 
 class ContributorMapper implements MapperInterface
 {
+    private $cache = [];
+
     public function getDomainModel(array $dbContributor): Contributor
     {
-        return new Contributor(
-            $dbContributor['id'],
-            new Pid($dbContributor['pid']),
-            $dbContributor['type'],
-            $dbContributor['name'],
-            $dbContributor['sortName'],
-            $dbContributor['givenName'],
-            $dbContributor['familyName'],
-            $dbContributor['musicBrainzId']
-        );
+        $cacheKey = $dbContributor['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            $this->cache[$cacheKey] = new Contributor(
+                $dbContributor['id'],
+                new Pid($dbContributor['pid']),
+                $dbContributor['type'],
+                $dbContributor['name'],
+                $dbContributor['sortName'],
+                $dbContributor['givenName'],
+                $dbContributor['familyName'],
+                $dbContributor['musicBrainzId']
+            );
+        }
+
+        return $this->cache[$cacheKey];
     }
 }

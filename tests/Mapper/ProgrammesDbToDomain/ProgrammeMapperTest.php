@@ -18,6 +18,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
     public function testGetDomainModelBrand()
     {
         $dbEntityArray = [
+            'id' => 1,
             'type' => 'brand',
             'ancestry' => '1,',
             'pid' => 'b010t19z',
@@ -73,12 +74,21 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             1001
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModel($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
+        );
     }
 
     public function testGetDomainModelSeries()
     {
         $dbEntityArray = [
+            'id' => 1,
             'type' => 'series',
             'ancestry' => '1,',
             'pid' => 'b010t19z',
@@ -134,12 +144,21 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             1001
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModel($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
+        );
     }
 
     public function testGetDomainModelEpisode()
     {
         $dbEntityArray = [
+            'id' => 1,
             'type' => 'episode',
             'ancestry' => '1,',
             'pid' => 'b010t19z',
@@ -199,12 +218,21 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             new DateTimeImmutable('2015-01-04')
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModel($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
+        );
     }
 
     public function testGetDomainModelClip()
     {
         $dbEntityArray = [
+            'id' => 3,
             'type' => 'clip',
             'ancestry' => '1,2,3,',
             'pid' => 'b010t19z',
@@ -258,12 +286,21 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             new DateTimeImmutable('2015-01-04')
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModel($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
+        );
     }
 
     public function testGetDomainModelSeriesWithParentProgramme()
     {
         $dbEntityArray = [
+            'id' => 2,
             'type' => 'series',
             'ancestry' => '1,2,',
             'pid' => 'b010t19z',
@@ -289,6 +326,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'firstBroadcastDate' => new DateTime(),
             'expectedChildCount' => 1001,
             'parent' => [
+                'id' => 1,
                 'type' => 'brand',
                 'ancestry' => '1,',
                 'pid' => 'b010t19z',
@@ -376,19 +414,19 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Could not find build domain model for unknown programme type "ham"
+     * @expectedExceptionMessage Could not build domain model for unknown programme type "ham"
      */
     public function testUnknownProgrammeType()
     {
-        $this->getMapper()->getDomainModel(['type' => 'ham']);
+        $this->getMapper()->getDomainModel(['id' => 1, 'type' => 'ham']);
     }
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Could not find build domain model for unknown programme type ""
+     * @expectedExceptionMessage Could not build domain model for unknown programme type ""
      */
     public function testEmptyProgrammeType()
     {
-        $this->getMapper()->getDomainModel([]);
+        $this->getMapper()->getDomainModel(['id' => 1]);
     }
 }

@@ -16,7 +16,20 @@ use InvalidArgumentException;
 
 class ProgrammeMapper extends AbstractMapper
 {
+    private $cache = [];
+
     public function getDomainModel(array $dbProgramme): Programme
+    {
+        $cacheKey = $dbProgramme['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            $this->cache[$cacheKey] = $this->getModel($dbProgramme);
+        }
+
+        return $this->cache[$cacheKey];
+    }
+
+    public function getModel(array $dbProgramme): Programme
     {
         if (array_key_exists('type', $dbProgramme)) {
             if ($dbProgramme['type'] == 'brand') {
@@ -33,7 +46,7 @@ class ProgrammeMapper extends AbstractMapper
             }
         }
 
-        throw new InvalidArgumentException('Could not find build domain model for unknown programme type "' . ($dbProgramme['type'] ?? '') . '"');
+        throw new InvalidArgumentException('Could not build domain model for unknown programme type "' . ($dbProgramme['type'] ?? '') . '"');
     }
 
     private function getBrandModel(array $dbProgramme): Brand

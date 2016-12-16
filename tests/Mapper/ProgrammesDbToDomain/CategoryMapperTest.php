@@ -29,6 +29,13 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
 
         $mapper = new CategoryMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModel($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
+        );
     }
 
     public function testGetDomainModelWithGenre()

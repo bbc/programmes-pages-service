@@ -12,18 +12,26 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class SegmentEventMapper extends AbstractMapper
 {
+    private $cache = [];
+
     public function getDomainModel(array $dbSegmentEvent): SegmentEvent
     {
-        return new SegmentEvent(
-            new Pid($dbSegmentEvent['pid']),
-            $this->getVersionModel($dbSegmentEvent),
-            $this->getSegmentModel($dbSegmentEvent),
-            $this->getSynopses($dbSegmentEvent),
-            $dbSegmentEvent['title'],
-            $dbSegmentEvent['isChapter'],
-            $dbSegmentEvent['offset'],
-            $dbSegmentEvent['position']
-        );
+        $cacheKey = $dbSegmentEvent['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            $this->cache[$cacheKey] = new SegmentEvent(
+                new Pid($dbSegmentEvent['pid']),
+                $this->getVersionModel($dbSegmentEvent),
+                $this->getSegmentModel($dbSegmentEvent),
+                $this->getSynopses($dbSegmentEvent),
+                $dbSegmentEvent['title'],
+                $dbSegmentEvent['isChapter'],
+                $dbSegmentEvent['offset'],
+                $dbSegmentEvent['position']
+            );
+        }
+
+        return $this->cache[$cacheKey];
     }
 
     private function getVersionModel($dbSegmentEvent, $key = 'version'): Version

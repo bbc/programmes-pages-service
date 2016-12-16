@@ -77,7 +77,15 @@ class VersionMapperTest extends BaseMapperTestCase
             $expectedVersionTypes
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModel($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
+        );
     }
 
     /**

@@ -65,6 +65,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         array $parent = null
     ) {
         return [
+            'id' => 1,
             'type' => 'series',
             'ancestry' => '1,',
             'pid' => $pid,

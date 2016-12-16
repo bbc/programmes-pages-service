@@ -10,13 +10,21 @@ use InvalidArgumentException;
 
 class AtozTitleMapper extends AbstractMapper
 {
+    private $cache = [];
+
     public function getDomainModel(array $dbAtozTitle): AtozTitle
     {
-        return new AtozTitle(
-            $dbAtozTitle['title'],
-            $dbAtozTitle['firstLetter'],
-            $this->getCoreEntityModel($dbAtozTitle)
-        );
+        $cacheKey = $dbAtozTitle['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            $this->cache[$cacheKey] = new AtozTitle(
+                $dbAtozTitle['title'],
+                $dbAtozTitle['firstLetter'],
+                $this->getCoreEntityModel($dbAtozTitle)
+            );
+        }
+
+        return $this->cache[$cacheKey];
     }
 
     private function getCoreEntityModel($dbAtozTitle, $key = 'coreEntity'): Programme

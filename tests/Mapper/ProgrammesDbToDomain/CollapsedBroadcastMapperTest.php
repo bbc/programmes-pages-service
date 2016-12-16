@@ -91,7 +91,11 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
             true
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray, $services));
+        $mapper = $mapper = $this->getMapper();
+        $this->assertEquals(
+            $expectedEntity,
+            $mapper->getDomainModel($dbEntityArray, $services)
+        );
     }
 
     public function testGetDomainModelTakingProgrammeItemFromVersion()

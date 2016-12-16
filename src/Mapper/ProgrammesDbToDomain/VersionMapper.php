@@ -11,23 +11,31 @@ use \DateTimeImmutable;
 
 class VersionMapper extends AbstractMapper
 {
+    private $cache = [];
+
     public function getDomainModel(array $dbVersion): Version
     {
-        return new Version(
-            $dbVersion['id'],
-            new Pid($dbVersion['pid']),
-            $this->getProgrammeItemModel($dbVersion),
-            $dbVersion['streamable'],
-            $dbVersion['downloadable'],
-            $dbVersion['segmentEventCount'],
-            $dbVersion['contributionsCount'],
-            $dbVersion['duration'],
-            $dbVersion['guidanceWarningCodes'],
-            $dbVersion['competitionWarning'],
-            ($dbVersion['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbVersion['streamableFrom']) : null),
-            ($dbVersion['streamableUntil'] ? DateTimeImmutable::createFromMutable($dbVersion['streamableUntil']) : null),
-            $this->getVersionTypes($dbVersion)
-        );
+        $cacheKey = $dbVersion['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            $this->cache[$cacheKey] = new Version(
+                $dbVersion['id'],
+                new Pid($dbVersion['pid']),
+                $this->getProgrammeItemModel($dbVersion),
+                $dbVersion['streamable'],
+                $dbVersion['downloadable'],
+                $dbVersion['segmentEventCount'],
+                $dbVersion['contributionsCount'],
+                $dbVersion['duration'],
+                $dbVersion['guidanceWarningCodes'],
+                $dbVersion['competitionWarning'],
+                ($dbVersion['streamableFrom'] ? DateTimeImmutable::createFromMutable($dbVersion['streamableFrom']) : null),
+                ($dbVersion['streamableUntil'] ? DateTimeImmutable::createFromMutable($dbVersion['streamableUntil']) : null),
+                $this->getVersionTypes($dbVersion)
+            );
+        }
+
+        return $this->cache[$cacheKey];
     }
 
     private function getProgrammeItemModel($dbVersion, $key = 'programmeItem'): ProgrammeItem

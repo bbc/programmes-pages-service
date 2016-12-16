@@ -4,5 +4,5 @@ namespace BBC\ProgrammesPagesService\Mapper;
 
 interface MapperInterface
 {
-    public function getDomainModel(array $doctrineEntity);
+    public function getDomainModel(array $entity);
 }

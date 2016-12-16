@@ -2,23 +2,30 @@
 
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\MusicSegment;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
-class SegmentMapper extends AbstractMapper implements MapperInterface
+class SegmentMapper extends AbstractMapper
 {
     const MUSIC_TYPES = ['music', 'classical'];
 
+    private $cache = [];
+
     public function getDomainModel(array $dbSegment): Segment
     {
-        if (in_array($dbSegment['type'], self::MUSIC_TYPES)) {
-            return $this->getMusicSegmentModel($dbSegment);
+        $cacheKey = $dbSegment['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            if (in_array($dbSegment['type'], self::MUSIC_TYPES)) {
+                $this->cache[$cacheKey] = $this->getMusicSegmentModel($dbSegment);
+            } else {
+                $this->cache[$cacheKey] = $this->getSegmentModel($dbSegment);
+            }
         }
 
-        return $this->getSegmentModel($dbSegment);
+        return $this->cache[$cacheKey];
     }
 
     private function getSegmentModel(array $dbSegment): Segment

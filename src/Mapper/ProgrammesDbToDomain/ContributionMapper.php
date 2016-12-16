@@ -10,16 +10,24 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class ContributionMapper extends AbstractMapper
 {
+    private $cache = [];
+
     public function getDomainModel(array $dbContribution): Contribution
     {
-        return new Contribution(
-            new Pid($dbContribution['pid']),
-            $this->getContributorModel($dbContribution),
-            $this->getContributedTo($dbContribution),
-            $this->getCreditRoleName($dbContribution),
-            $dbContribution['position'],
-            $dbContribution['characterName']
-        );
+        $cacheKey = $dbContribution['id'];
+
+        if (!array_key_exists($cacheKey, $this->cache)) {
+            $this->cache[$cacheKey] = new Contribution(
+                new Pid($dbContribution['pid']),
+                $this->getContributorModel($dbContribution),
+                $this->getContributedTo($dbContribution),
+                $this->getCreditRoleName($dbContribution),
+                $dbContribution['position'],
+                $dbContribution['characterName']
+            );
+        }
+
+        return $this->cache[$cacheKey];
     }
 
     private function getContributorModel($dbContribution, $key = 'contributor'): Contributor
