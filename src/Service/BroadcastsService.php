@@ -40,7 +40,7 @@ class BroadcastsService extends AbstractService
 
         return array_reduce($dbYearsAndMonths, function ($memo, $period) {
             $year = (int) $period['year'];
-            if (!array_key_exists($year, $memo)) {
+            if (!isset($memo[$year])) {
                 $memo[$year] = [];
             }
 

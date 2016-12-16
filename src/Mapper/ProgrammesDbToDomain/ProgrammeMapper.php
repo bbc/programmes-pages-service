@@ -31,7 +31,7 @@ class ProgrammeMapper extends AbstractMapper
 
     public function getModel(array $dbProgramme): Programme
     {
-        if (array_key_exists('type', $dbProgramme)) {
+        if (isset($dbProgramme['type'])) {
             if ($dbProgramme['type'] == 'brand') {
                 return $this->getBrandModel($dbProgramme);
             }
@@ -241,7 +241,7 @@ class ProgrammeMapper extends AbstractMapper
 
     private function getMasterBrandModel($dbProgramme, $key = 'masterBrand')
     {
-        if (!array_key_exists($key, $dbProgramme) || is_null($dbProgramme[$key])) {
+        if (!isset($dbProgramme[$key])) {
             // MasterBrand may be null if not requested or a Programme has no
             // MasterBrand attached to it
             return null;
@@ -250,16 +250,16 @@ class ProgrammeMapper extends AbstractMapper
         return $this->mapperFactory->getMasterBrandMapper()->getDomainModel($dbProgramme[$key]);
     }
 
-    private function getCategoriesModels($filterType, $dbProgramme, $key = 'categories'): array
+    private function getCategoriesModels(string $filterType, $dbProgramme, $key = 'categories'): array
     {
-        if (!array_key_exists($key, $dbProgramme) || is_null($dbProgramme[$key])) {
+        if (!isset($dbProgramme[$key])) {
             return [];
         }
 
         $categoryMapper = $this->mapperFactory->getCategoryMapper();
         $categories = [];
         foreach ($dbProgramme[$key] as $dbCategory) {
-            if (array_key_exists('type', $dbCategory) && $dbCategory['type'] == $filterType) {
+            if (isset($dbCategory['type']) && $dbCategory['type'] == $filterType) {
                 $categories[] = $categoryMapper->getDomainModel($dbCategory);
             }
         }

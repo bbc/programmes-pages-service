@@ -61,7 +61,7 @@ class BroadcastMapper extends AbstractMapper
     {
         // It is not valid for a Broadcast to have no version
         // so it counts as Unfetched even if the key exists but is null
-        if (!array_key_exists($key, $dbBroadcast) || is_null($dbBroadcast[$key])) {
+        if (!isset($dbBroadcast[$key])) {
             return new UnfetchedVersion();
         }
 
@@ -79,14 +79,13 @@ class BroadcastMapper extends AbstractMapper
         // Broadcaast is a Denorm.
         // It is not valid for a Version to have no programmeItem
         // so it counts as Unfetched even if the key exists but is null
-        $hasVersion = array_key_exists('version', $dbBroadcast);
-        if ($hasVersion && array_key_exists($key, $dbBroadcast['version']) && !is_null($dbBroadcast['version'][$key])) {
+        if (isset($dbBroadcast['version'][$key])) {
             return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbBroadcast['version'][$key]);
         }
 
         // It is not valid for a Broadcast to have no programmeItem
         // so it counts as Unfetched even if the key exists but is null
-        if (array_key_exists($key, $dbBroadcast) && !is_null($dbBroadcast[$key])) {
+        if (isset($dbBroadcast[$key])) {
             return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbBroadcast[$key]);
         }
 
@@ -97,7 +96,7 @@ class BroadcastMapper extends AbstractMapper
     {
         // It is not valid for a Broadcast to have no service
         // so it counts as Unfetched even if the key exists but is null
-        if (!array_key_exists($key, $dbBroadcast) || is_null($dbBroadcast[$key])) {
+        if (!isset($dbBroadcast[$key])) {
             return new UnfetchedService();
         }
 

@@ -40,7 +40,7 @@ class VersionMapper extends AbstractMapper
 
     private function getProgrammeItemModel($dbVersion, $key = 'programmeItem'): ProgrammeItem
     {
-        if (!array_key_exists($key, $dbVersion) || is_null($dbVersion[$key])) {
+        if (!isset($dbVersion[$key])) {
             throw new DataNotFetchedException('All versions must be joined to a ProgrammeItem');
         }
 
@@ -49,7 +49,7 @@ class VersionMapper extends AbstractMapper
 
     private function getVersionTypes($dbVersion, $key = 'versionTypes')
     {
-        if (!array_key_exists($key, $dbVersion) || !is_array($dbVersion[$key])) {
+        if (!isset($dbVersion[$key]) || !is_array($dbVersion[$key])) {
             return null;
         }
 

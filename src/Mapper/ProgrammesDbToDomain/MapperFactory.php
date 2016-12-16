@@ -8,7 +8,7 @@ class MapperFactory
 
     public function getAtozTitleMapper(): AtozTitleMapper
     {
-        if (!array_key_exists('AtozTitleMapper', $this->instances)) {
+        if (!isset($this->instances['AtozTitleMapper'])) {
             $this->instances['AtozTitleMapper'] = new AtozTitleMapper($this);
         }
 
@@ -17,7 +17,7 @@ class MapperFactory
 
     public function getBroadcastMapper(): BroadcastMapper
     {
-        if (!array_key_exists('BroadcastMapper', $this->instances)) {
+        if (!isset($this->instances['BroadcastMapper'])) {
             $this->instances['BroadcastMapper'] = new BroadcastMapper($this);
         }
 
@@ -26,7 +26,7 @@ class MapperFactory
 
     public function getCategoryMapper(): CategoryMapper
     {
-        if (!array_key_exists('CategoryMapper', $this->instances)) {
+        if (!isset($this->instances['CategoryMapper'])) {
             $this->instances['CategoryMapper'] = new CategoryMapper();
         }
 
@@ -35,7 +35,7 @@ class MapperFactory
 
     public function getContributionMapper(): ContributionMapper
     {
-        if (!array_key_exists('ContributionMapper', $this->instances)) {
+        if (!isset($this->instances['ContributionMapper'])) {
             $this->instances['ContributionMapper'] = new ContributionMapper($this);
         }
 
@@ -44,7 +44,7 @@ class MapperFactory
 
     public function getContributorMapper(): ContributorMapper
     {
-        if (!array_key_exists('ContributorMapper', $this->instances)) {
+        if (!isset($this->instances['ContributorMapper'])) {
             $this->instances['ContributorMapper'] = new ContributorMapper();
         }
 
@@ -53,7 +53,7 @@ class MapperFactory
 
     public function getCollapsedBroadcastMapper(): CollapsedBroadcastMapper
     {
-        if (!array_key_exists('CollapsedBroadcastMapper', $this->instances)) {
+        if (!isset($this->instances['CollapsedBroadcastMapper'])) {
             $this->instances['CollapsedBroadcastMapper'] = new CollapsedBroadcastMapper($this);
         }
 
@@ -62,7 +62,7 @@ class MapperFactory
 
     public function getImageMapper(): ImageMapper
     {
-        if (!array_key_exists('ImageMapper', $this->instances)) {
+        if (!isset($this->instances['ImageMapper'])) {
             $this->instances['ImageMapper'] = new ImageMapper();
         }
 
@@ -71,7 +71,7 @@ class MapperFactory
 
     public function getMasterBrandMapper(): MasterBrandMapper
     {
-        if (!array_key_exists('MasterBrandMapper', $this->instances)) {
+        if (!isset($this->instances['MasterBrandMapper'])) {
             $this->instances['MasterBrandMapper'] = new MasterBrandMapper($this);
         }
 
@@ -80,7 +80,7 @@ class MapperFactory
 
     public function getNetworkMapper(): NetworkMapper
     {
-        if (!array_key_exists('NetworkMapper', $this->instances)) {
+        if (!isset($this->instances['NetworkMapper'])) {
             $this->instances['NetworkMapper'] = new NetworkMapper($this);
         }
 
@@ -89,7 +89,7 @@ class MapperFactory
 
     public function getProgrammeMapper(): ProgrammeMapper
     {
-        if (!array_key_exists('ProgrammeMapper', $this->instances)) {
+        if (!isset($this->instances['ProgrammeMapper'])) {
             $this->instances['ProgrammeMapper'] = new ProgrammeMapper($this);
         }
 
@@ -98,7 +98,7 @@ class MapperFactory
 
     public function getRelatedLinkMapper(): RelatedLinkMapper
     {
-        if (!array_key_exists('RelatedLinkMapper', $this->instances)) {
+        if (!isset($this->instances['RelatedLinkMapper'])) {
             $this->instances['RelatedLinkMapper'] = new RelatedLinkMapper();
         }
 
@@ -107,7 +107,7 @@ class MapperFactory
 
     public function getSegmentMapper(): SegmentMapper
     {
-        if (!array_key_exists('SegmentMapper', $this->instances)) {
+        if (!isset($this->instances['SegmentMapper'])) {
             $this->instances['SegmentMapper'] = new SegmentMapper($this);
         }
 
@@ -116,7 +116,7 @@ class MapperFactory
 
     public function getSegmentEventMapper(): SegmentEventMapper
     {
-        if (!array_key_exists('SegmentEventMapper', $this->instances)) {
+        if (!isset($this->instances['SegmentEventMapper'])) {
             $this->instances['SegmentEventMapper'] = new SegmentEventMapper($this);
         }
 
@@ -125,7 +125,7 @@ class MapperFactory
 
     public function getServiceMapper(): ServiceMapper
     {
-        if (!array_key_exists('ServiceMapper', $this->instances)) {
+        if (!isset($this->instances['ServiceMapper'])) {
             $this->instances['ServiceMapper'] = new ServiceMapper($this);
         }
 
@@ -134,7 +134,7 @@ class MapperFactory
 
     public function getVersionMapper(): VersionMapper
     {
-        if (!array_key_exists('VersionMapper', $this->instances)) {
+        if (!isset($this->instances['VersionMapper'])) {
             $this->instances['VersionMapper'] = new VersionMapper($this);
         }
 

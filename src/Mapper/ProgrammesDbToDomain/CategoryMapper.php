@@ -57,7 +57,7 @@ class CategoryMapper implements MapperInterface
 
     private function getGenreParentModel($dbCategory, $key = 'parent')
     {
-        if (!array_key_exists($key, $dbCategory) || is_null($dbCategory[$key])) {
+        if (!isset($dbCategory[$key])) {
             return null;
         }
 

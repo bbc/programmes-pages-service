@@ -29,7 +29,7 @@ class AtozTitleMapper extends AbstractMapper
 
     private function getCoreEntityModel($dbAtozTitle, $key = 'coreEntity'): Programme
     {
-        if (!array_key_exists($key, $dbAtozTitle) || is_null($dbAtozTitle[$key])) {
+        if (!isset($dbAtozTitle[$key])) {
             throw new DataNotFetchedException('All AtozTitles must be joined to a CoreEntity');
         }
 

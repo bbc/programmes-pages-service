@@ -39,7 +39,7 @@ class LoggingServiceFactory
 
     public function __call(string $methodName, array $arguments)
     {
-        if (!array_key_exists($methodName, $this->instances)) {
+        if (!isset($this->instances[$methodName])) {
             $this->instances[$methodName] = $this->proxyClass(
                 $this->serviceFactory->{$methodName}(...$arguments),
                 $this->logger,

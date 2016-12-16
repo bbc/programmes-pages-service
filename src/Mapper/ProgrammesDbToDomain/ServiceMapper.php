@@ -33,7 +33,7 @@ class ServiceMapper extends AbstractMapper
 
     private function getNetworkModel($dbService, $key = 'network')
     {
-        if (!array_key_exists($key, $dbService) || is_null($dbService[$key])) {
+        if (!isset($dbService[$key])) {
             return null;
         }
 

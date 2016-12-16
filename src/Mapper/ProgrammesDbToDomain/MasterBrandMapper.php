@@ -44,7 +44,7 @@ class MasterBrandMapper extends AbstractMapper
 
     private function getImageModel($dbMasterBrand, $key = 'image')
     {
-        if (!array_key_exists($key, $dbMasterBrand) || is_null($dbMasterBrand[$key])) {
+        if (!isset($dbMasterBrand[$key])) {
             // Use default Image
             return $this->mapperFactory->getImageMapper()->getDefaultImage();
         }
@@ -54,7 +54,7 @@ class MasterBrandMapper extends AbstractMapper
 
     private function getNetworkModel($dbMasterBrand, $key = 'network')
     {
-        if (!array_key_exists($key, $dbMasterBrand) || is_null($dbMasterBrand[$key])) {
+        if (!isset($dbMasterBrand[$key])) {
             return null;
         }
 
@@ -63,7 +63,7 @@ class MasterBrandMapper extends AbstractMapper
 
     private function getCompetitionWarningModel($dbMasterBrand, $key = 'competitionWarning')
     {
-        if (!array_key_exists($key, $dbMasterBrand) || is_null($dbMasterBrand[$key])) {
+        if (!isset($dbMasterBrand[$key])) {
             return null;
         }
 

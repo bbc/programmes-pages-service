@@ -42,17 +42,14 @@ class CollapsedBroadcastMapper extends AbstractMapper
         // CollapsedBroadcast is a Denorm.
         // It is not valid for a Version to have no programmeItem
         // so it counts as Unfetched even if the key exists but is null
-        $hasVersion = array_key_exists('version', $dbCollapsedBroadcast);
-        if ($hasVersion &&
-            array_key_exists($key, $dbCollapsedBroadcast['version']) &&
-            !is_null($dbCollapsedBroadcast['version'][$key])
+        if (isset($dbCollapsedBroadcast['version'][$key])
         ) {
             return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbCollapsedBroadcast['version'][$key]);
         }
 
         // It is not valid for a CollapsedBroadcast to have no programmeItem
         // so it counts as Unfetched even if the key exists but is null
-        if (array_key_exists($key, $dbCollapsedBroadcast) && !is_null($dbCollapsedBroadcast[$key])) {
+        if (isset($dbCollapsedBroadcast[$key])) {
             return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbCollapsedBroadcast[$key]);
         }
 
@@ -63,7 +60,7 @@ class CollapsedBroadcastMapper extends AbstractMapper
     {
         $serviceModels = [];
         foreach ($serviceIds as $sid) {
-            if (array_key_exists($sid, $services)) {
+            if (isset($services[$sid])) {
                 $serviceModels[] = $this->mapperFactory->getServiceMapper()->getDomainModel($services[$sid]);
             }
         }
@@ -75,7 +72,7 @@ class CollapsedBroadcastMapper extends AbstractMapper
     {
         // It is not valid for a CollapsedBroadcast to have no version
         // so it counts as Unfetched even if the key exists but is null
-        if (!array_key_exists($key, $dbCollapsedBroadcast) || is_null($dbCollapsedBroadcast[$key])) {
+        if (!isset($dbCollapsedBroadcast[$key])) {
             return new UnfetchedVersion();
         }
 

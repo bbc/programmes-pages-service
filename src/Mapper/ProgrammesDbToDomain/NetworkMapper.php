@@ -36,7 +36,7 @@ class NetworkMapper extends AbstractMapper
 
     private function getImageModel($dbMasterBrand, $key = 'image')
     {
-        if (!array_key_exists($key, $dbMasterBrand) || is_null($dbMasterBrand[$key])) {
+        if (!isset($dbMasterBrand[$key])) {
             // Use default Image
             return $this->mapperFactory->getImageMapper()->getDefaultImage();
         }

@@ -51,6 +51,6 @@ class YearTest extends AbstractDatabaseTest
     {
         $matches = [];
         preg_match('/(?<=SELECT ).*(?= AS sclr_0)/', $sql, $matches);
-        return array_key_exists(0, $matches) ? $matches[0] : null;
+        return $matches[0] ?? null;
     }
 }

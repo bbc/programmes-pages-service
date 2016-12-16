@@ -23,7 +23,7 @@ class ServiceFactory
 
     public function getAtozTitlesService(): AtozTitlesService
     {
-        if (!array_key_exists('AtozTitlesService', $this->instances)) {
+        if (!isset($this->instances['AtozTitlesService'])) {
             $this->instances['AtozTitlesService'] = new AtozTitlesService(
                 $this->entityManager->getRepository('ProgrammesPagesService:AtozTitle'),
                 $this->mapperFactory->getAtozTitleMapper()
@@ -35,7 +35,7 @@ class ServiceFactory
 
     public function getBroadcastsService(): BroadcastsService
     {
-        if (!array_key_exists('BroadcastsService', $this->instances)) {
+        if (!isset($this->instances['BroadcastsService'])) {
             $this->instances['BroadcastsService'] = new BroadcastsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Broadcast'),
                 $this->mapperFactory->getBroadcastMapper()
@@ -47,7 +47,7 @@ class ServiceFactory
 
     public function getCategoriesService(): CategoriesService
     {
-        if (!array_key_exists('CategoriesService', $this->instances)) {
+        if (!isset($this->instances['CategoriesService'])) {
             $this->instances['CategoriesService'] = new CategoriesService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Category'),
                 $this->mapperFactory->getCategoryMapper()
@@ -59,7 +59,7 @@ class ServiceFactory
 
     public function getCollapsedBroadcastsService(): CollapsedBroadcastsService
     {
-        if (!array_key_exists('CollapsedBroadcastsService', $this->instances)) {
+        if (!isset($this->instances['CollapsedBroadcastsService'])) {
             $this->instances['CollapsedBroadcastsService'] = new CollapsedBroadcastsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Broadcast'),
                 $this->mapperFactory->getCollapsedBroadcastMapper(),
@@ -72,7 +72,7 @@ class ServiceFactory
 
     public function getContributionsService(): ContributionsService
     {
-        if (!array_key_exists('ContributionsService', $this->instances)) {
+        if (!isset($this->instances['ContributionsService'])) {
             $this->instances['ContributionsService'] = new ContributionsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Contribution'),
                 $this->mapperFactory->getContributionMapper()
@@ -84,7 +84,7 @@ class ServiceFactory
 
     public function getContributorsService(): ContributorsService
     {
-        if (!array_key_exists('ContributorsService', $this->instances)) {
+        if (!isset($this->instances['ContributorsService'])) {
             $this->instances['ContributorsService'] = new ContributorsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Contributor'),
                 $this->mapperFactory->getContributorMapper()
@@ -96,7 +96,7 @@ class ServiceFactory
 
     public function getNetworksService(): NetworksService
     {
-        if (!array_key_exists('NetworksService', $this->instances)) {
+        if (!isset($this->instances['NetworksService'])) {
             $this->instances['NetworksService'] = new NetworksService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Network'),
                 $this->mapperFactory->getNetworkMapper()
@@ -108,7 +108,7 @@ class ServiceFactory
 
     public function getProgrammesService(): ProgrammesService
     {
-        if (!array_key_exists('ProgrammesService', $this->instances)) {
+        if (!isset($this->instances['ProgrammesService'])) {
             $this->instances['ProgrammesService'] = new ProgrammesService(
                 $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
                 $this->mapperFactory->getProgrammeMapper()
@@ -120,7 +120,7 @@ class ServiceFactory
 
     public function getRelatedLinksService(): RelatedLinksService
     {
-        if (!array_key_exists('RelatedLinksService', $this->instances)) {
+        if (!isset($this->instances['RelatedLinksService'])) {
             $this->instances['RelatedLinksService'] = new RelatedLinksService(
                 $this->entityManager->getRepository('ProgrammesPagesService:RelatedLink'),
                 $this->mapperFactory->getRelatedLinkMapper()
@@ -132,7 +132,7 @@ class ServiceFactory
 
     public function getSegmentEventsService(): SegmentEventsService
     {
-        if (!array_key_exists('SegmentEventsService', $this->instances)) {
+        if (!isset($this->instances['SegmentEventsService'])) {
             $this->instances['SegmentEventsService'] = new SegmentEventsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:SegmentEvent'),
                 $this->mapperFactory->getSegmentEventMapper()
@@ -144,7 +144,7 @@ class ServiceFactory
 
     public function getSegmentsService(): SegmentsService
     {
-        if (!array_key_exists('SegmentsService', $this->instances)) {
+        if (!isset($this->instances['SegmentsService'])) {
             $this->instances['SegmentsService'] = new SegmentsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Segment'),
                 $this->mapperFactory->getSegmentMapper()
@@ -156,7 +156,7 @@ class ServiceFactory
 
     public function getVersionsService(): VersionsService
     {
-        if (!array_key_exists('VersionsService', $this->instances)) {
+        if (!isset($this->instances['VersionsService'])) {
             $this->instances['VersionsService'] = new VersionsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Version'),
                 $this->mapperFactory->getVersionMapper()

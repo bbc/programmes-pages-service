@@ -38,7 +38,7 @@ class SegmentEventMapper extends AbstractMapper
     {
         // It is not valid for a SegmentEvent to have no version
         // so it counts as Unfetched even if the key exists but is null
-        if (!array_key_exists($key, $dbSegmentEvent) || is_null($dbSegmentEvent[$key])) {
+        if (!isset($dbSegmentEvent[$key])) {
             return new UnfetchedVersion();
         }
 
@@ -49,7 +49,7 @@ class SegmentEventMapper extends AbstractMapper
     {
         // It is not valid for a SegmentEvent to have no segment
         // so it counts as Unfetched even if the key exists but is null
-        if (!array_key_exists($key, $dbSegmentEvent) || is_null($dbSegmentEvent[$key])) {
+        if (!isset($dbSegmentEvent[$key])) {
             return new UnfetchedSegment();
         }
 
