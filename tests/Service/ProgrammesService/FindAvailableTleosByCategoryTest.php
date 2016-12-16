@@ -14,14 +14,14 @@ class FindAvailableByCategoryTest extends AbstractProgrammesServiceTest
         $category = $this->mockEntity('Genre', $dbId);
 
         $this->mockRepository->expects($this->once())
-                             ->method('findTleosByCategory')
-                             ->with(
-                                 $category->getDbAncestryIds(),
-                                 true,
-                                 $medium,
-                                 ProgrammesService::DEFAULT_LIMIT
-                             )
-                             ->willReturn($dbData);
+            ->method('findTleosByCategory')
+            ->with(
+             $category->getDbAncestryIds(),
+             true,
+             $medium,
+             ProgrammesService::DEFAULT_LIMIT
+            )
+            ->willReturn($dbData);
 
         $result = $this->service()->findAvailableTleosByCategory($category, $medium);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
