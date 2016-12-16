@@ -4,7 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Service\ProgrammesService;
 
-class findAllTleosByCategoryTest extends AbstractProgrammesServiceTest
+class FindAllTleosByCategoryTest extends AbstractProgrammesServiceTest
 {
     public function testFindAllTleosByCategory()
     {
