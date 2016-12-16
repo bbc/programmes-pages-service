@@ -35,24 +35,42 @@ class ProgrammesService extends AbstractService
     ) {
         parent::__construct($repository, $mapper);
     }
-    
+
     /**
      * @return Programme[] types: Series|Episode|Brand
      */
-    public function findProgrammesByCategoryInSlice(
+    public function findAllByCategory(
         Category $category,
-        string $slice,
         $medium = null,
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ) {
-        $programmesInSlice = $this->repository->fetchProgrammesByCategoryInSlice(
+        $programmesInSlice = $this->repository->findProgrammesByCategoryInSlice(
             $category->getDbAncestryIds(),
-            $slice,
+            false,
             $medium,
             $limit
         );
-        
+
+        return $this->mapManyEntities($programmesInSlice);
+    }
+
+    /**
+     * @return Programme[] types: Series|Episode|Brand
+     */
+    public function findAvailableByCategory(
+        Category $category,
+        $medium = null,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ) {
+        $programmesInSlice = $this->repository->findProgrammesByCategoryInSlice(
+            $category->getDbAncestryIds(),
+            true,
+            $medium,
+            $limit
+        );
+
         return $this->mapManyEntities($programmesInSlice);
     }
 
