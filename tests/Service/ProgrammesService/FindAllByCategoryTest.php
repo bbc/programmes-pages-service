@@ -16,7 +16,7 @@ class FindAllByCategoryTest extends AbstractProgrammesServiceTest
         $category = $this->mockEntity('Genre', $dbId);
 
         $this->mockRepository->expects($this->once())
-                             ->method('findProgrammesByCategory')
+                             ->method('findTleosByCategory')
                              ->with(
                                  $category->getDbAncestryIds(),
                                  false,

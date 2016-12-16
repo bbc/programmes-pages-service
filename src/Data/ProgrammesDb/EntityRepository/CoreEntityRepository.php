@@ -32,7 +32,7 @@ class CoreEntityRepository extends MaterializedPathRepository
         'CoreEntity',
     ];
 
-    public function findProgrammesByCategory(
+    public function findTleosByCategory(
         array $ancestryDbIds,
         bool $filterToAvailable,
         $medium,
@@ -46,7 +46,7 @@ class CoreEntityRepository extends MaterializedPathRepository
                    ->leftJoin('masterbrand.image', 'mbImage')
                    ->innerJoin('programme.categories', 'category')
                    ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
-                   ->andWhere('programme.parent IS NULL') // only TEOL programmes
+                   ->andWhere('programme.parent IS NULL')
                    ->andWhere('category.ancestry LIKE :ancestry') //
                    ->orderBy('programme.title', 'ASC')
                    ->addOrderBy('programme.pid', 'ASC')
