@@ -12,7 +12,6 @@ class FindAllTleosByCategoryTest extends AbstractProgrammesServiceTest
         $dbId = 1;
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
-        //$category = new Genre([1,2,3], 3, 'mytitle', 'myurlkey');
         $category = $this->mockEntity('Genre', $dbId);
 
         $this->mockRepository->expects($this->once())
