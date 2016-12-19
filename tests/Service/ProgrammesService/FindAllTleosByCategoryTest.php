@@ -18,10 +18,10 @@ class FindAllTleosByCategoryTest extends AbstractProgrammesServiceTest
         $this->mockRepository->expects($this->once())
             ->method('findTleosByCategory')
             ->with(
-             $category->getDbAncestryIds(),
-             false,
-             $medium,
-             ProgrammesService::DEFAULT_LIMIT
+                $category->getDbAncestryIds(),
+                false,
+                $medium,
+                ProgrammesService::DEFAULT_LIMIT
             )
             ->willReturn($dbData);
 

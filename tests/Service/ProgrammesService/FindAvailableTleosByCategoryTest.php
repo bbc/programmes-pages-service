@@ -16,10 +16,10 @@ class FindAvailableByCategoryTest extends AbstractProgrammesServiceTest
         $this->mockRepository->expects($this->once())
             ->method('findTleosByCategory')
             ->with(
-             $category->getDbAncestryIds(),
-             true,
-             $medium,
-             ProgrammesService::DEFAULT_LIMIT
+                $category->getDbAncestryIds(),
+                true,
+                $medium,
+                ProgrammesService::DEFAULT_LIMIT
             )
             ->willReturn($dbData);
 
