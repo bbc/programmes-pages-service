@@ -8,9 +8,9 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepo
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository::<public>
  */
-class findTleosByCategoryTest extends AbstractDatabaseTest
+class FindTleosByCategoryTest extends AbstractDatabaseTest
 {
-    public function SetUp()
+    public function setUp()
     {
         /**
          * From fixture:
@@ -33,7 +33,7 @@ class findTleosByCategoryTest extends AbstractDatabaseTest
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $selectedCategoryForTleos = [1,2]; // /cat1/cat11
+        $selectedCategoryForTleos = [1, 2]; // /cat1/cat11
         $selectedAvailabilityForTleos = false;
 
         $tleos = $repo->findTleosByCategory(
@@ -56,7 +56,7 @@ class findTleosByCategoryTest extends AbstractDatabaseTest
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $selectedCategoryForTleos = [1,2,3]; // /cat1/cat11
+        $selectedCategoryForTleos = [1, 2, 3]; // /cat1/cat11
         $selectedAvailabilityForTleos = false;
 
         $tleos = $repo->findTleosByCategory(
@@ -78,7 +78,7 @@ class findTleosByCategoryTest extends AbstractDatabaseTest
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $selectedCategoryForTleos = [1,2]; // /cat1/cat11
+        $selectedCategoryForTleos = [1, 2]; // /cat1/cat11
         $selectedAvailabilityForTleos = true;
 
         $tleos = $repo->findTleosByCategory(
