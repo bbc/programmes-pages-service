@@ -48,7 +48,7 @@ class CoreEntityRepository extends MaterializedPathRepository
                    ->innerJoin('programme.categories', 'category')
                    ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
                    ->andWhere('programme.parent IS NULL')
-                   ->andWhere('category.ancestry LIKE :ancestry') //
+                   ->andWhere('category.ancestry LIKE :ancestry')
                    ->orderBy('programme.title', 'ASC')
                    ->addOrderBy('programme.pid', 'ASC')
                    ->setFirstResult($offset)
