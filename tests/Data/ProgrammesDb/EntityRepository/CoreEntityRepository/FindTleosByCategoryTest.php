@@ -34,11 +34,11 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
         $selectedCategoryForTleos = [1, 2]; // /cat1/cat11
-        $selectedAvailabilityForTleos = false;
+        $selectSpecificAvailavility = false;
 
         $tleos = $repo->findTleosByCategory(
             $selectedCategoryForTleos,
-            $selectedAvailabilityForTleos,
+            $selectSpecificAvailavility,
             null,
             null,
             0
