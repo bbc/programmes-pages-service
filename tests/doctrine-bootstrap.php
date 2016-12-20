@@ -35,6 +35,7 @@ $config->addCustomStringFunction('match_against', "\BBC\ProgrammesPagesService\D
 $config->addCustomStringFunction('group_concat', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\GroupConcat");
 $config->addCustomDateTimeFunction('year', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Year");
 $config->addCustomDateTimeFunction('month', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Month");
+$config->addCustomDateTimeFunction('day', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Day");
 
 // obtaining the entity manager
 return \Doctrine\ORM\EntityManager::create($conn, $config, $evm);

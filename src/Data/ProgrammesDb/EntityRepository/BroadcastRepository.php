@@ -129,6 +129,27 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
+    public function findUsedDaysByCategoryAncestryInDateRange(
+        array $categoryAncestry,
+        string $type,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to
+    ): array {
+        $qb = $this->createQueryBuilder('broadcast', false)
+            ->select('DISTINCT DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month')
+            ->leftJoin('programmeItem.categories', 'category')
+            ->andWhere('category.ancestry LIKE :ancestryClause')
+            ->andWhere('broadcast.startAt >= :from')
+            ->andWhere('broadcast.startAt < :to')
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($categoryAncestry) . '%')
+            ->setParameter('from', $from)
+            ->setParameter('to', $to);
+
+        $qb = $this->setEntityTypeFilter($qb, $type);
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
+    }
+
     public function countByCategoryAncestryAndEndAtDateRange(
         array $categoryAncestry,
         string $type,

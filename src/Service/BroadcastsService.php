@@ -3,9 +3,11 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\BroadcastMapper;
+use DateTimeImmutable;
 
 class BroadcastsService extends AbstractService
 {
@@ -45,6 +47,31 @@ class BroadcastsService extends AbstractService
             }
 
             $memo[$year][] = (int) $period['month'];
+
+            return $memo;
+        }, []);
+    }
+
+    public function findUsedDaysByCategoryInDateRange(
+        Category $category,
+        DateTimeImmutable $start,
+        DateTimeImmutable $end
+    ): array {
+        $result = $this->repository->findUsedDaysByCategoryAncestryInDateRange(
+            $category->getDbAncestryIds(),
+            'Broadcast',
+            $start,
+            $end
+        );
+
+        return array_reduce($result, function($memo, $period){
+            $month = (int) $period['month'];
+
+            if (!isset($memo[$month])) {
+                $memo[$month] = [];
+            }
+
+            $memo[$month][] = (int) $period['day'];
 
             return $memo;
         }, []);
