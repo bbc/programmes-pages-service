@@ -51,8 +51,8 @@ class FindUsedDaysByCategoryAncestryInDateRangeTest extends AbstractDatabaseTest
                 new DateTimeImmutable('2011-10-01 00:00:00'),
                 [
                     ['day' => '5', 'month' => '7'],
-                    ['day' => '5', 'month' => '9'],
                     ['day' => '5', 'month' => '8'],
+                    ['day' => '5', 'month' => '9'],
                 ],
             ],
             [

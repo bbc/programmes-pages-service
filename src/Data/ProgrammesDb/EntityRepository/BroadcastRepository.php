@@ -142,6 +142,7 @@ class BroadcastRepository extends EntityRepository
             ->andWhere('category.ancestry LIKE :ancestryClause')
             ->andWhere('broadcast.startAt >= :from')
             ->andWhere('broadcast.startAt < :to')
+            ->addOrderBy('broadcast.startAt')
             ->setParameter('ancestryClause', $this->ancestryIdsToString($categoryAncestry) . '%')
             ->setParameter('from', $from)
             ->setParameter('to', $to);
