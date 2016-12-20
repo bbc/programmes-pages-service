@@ -132,6 +132,7 @@ class BroadcastRepository extends EntityRepository
     public function findUsedDaysByCategoryAncestryInDateRange(
         array $categoryAncestry,
         string $type,
+        $medium,
         DateTimeImmutable $from,
         DateTimeImmutable $to
     ): array {
@@ -146,6 +147,13 @@ class BroadcastRepository extends EntityRepository
             ->setParameter('to', $to);
 
         $qb = $this->setEntityTypeFilter($qb, $type);
+
+        if ($this->isValidNetworkMedium($medium)) {
+            $qb->join('broadcast.service', 'service')
+                ->leftJoin('service.network', 'networkOfService')
+                ->andWhere('networkOfService.medium = :medium')
+                ->setParameter('medium', $medium);
+        }
 
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }

@@ -55,16 +55,18 @@ class BroadcastsService extends AbstractService
     public function findUsedDaysByCategoryInDateRange(
         Category $category,
         DateTimeImmutable $start,
-        DateTimeImmutable $end
+        DateTimeImmutable $end,
+        string $medium = null
     ): array {
         $result = $this->repository->findUsedDaysByCategoryAncestryInDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
+            $medium,
             $start,
             $end
         );
 
-        return array_reduce($result, function($memo, $period){
+        return array_reduce($result, function ($memo, $period) {
             $month = (int) $period['month'];
 
             if (!isset($memo[$month])) {
