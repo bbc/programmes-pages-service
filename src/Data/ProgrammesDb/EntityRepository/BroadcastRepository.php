@@ -138,7 +138,7 @@ class BroadcastRepository extends EntityRepository
     ): array {
         $qb = $this->createQueryBuilder('broadcast', false)
             ->select('DISTINCT DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month')
-            ->leftJoin('programmeItem.categories', 'category')
+            ->innerJoin('programmeItem.categories', 'category')
             ->andWhere('category.ancestry LIKE :ancestryClause')
             ->andWhere('broadcast.startAt >= :from')
             ->andWhere('broadcast.startAt < :to')
@@ -150,7 +150,7 @@ class BroadcastRepository extends EntityRepository
 
         if ($this->isValidNetworkMedium($medium)) {
             $qb->join('broadcast.service', 'service')
-                ->leftJoin('service.network', 'networkOfService')
+                ->innerJoin('service.network', 'networkOfService')
                 ->andWhere('networkOfService.medium = :medium')
                 ->setParameter('medium', $medium);
         }
@@ -436,7 +436,7 @@ QUERY;
             ->join('broadcast.service', 'service')
             ->leftJoin('service.network', 'networkOfService')
             ->leftJoin('programmeItem.image', 'image')
-            ->leftJoin('programmeItem.categories', 'category')
+            ->innerJoin('programmeItem.categories', 'category')
             ->andWhere('category.ancestry LIKE :ancestryClause')
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->addGroupBy('broadcast.startAt')

@@ -28,6 +28,7 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
         $version2 = $this->getReference('v0000004');
         $version3 = $this->getReference('v0000005');
         $version4 = $this->getReference('v0000006');
+        $version5 = $this->getReference('v0000002');
 
         // services
         $service1 = $this->getReference('p00fzl7j');
@@ -52,8 +53,8 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
         $broadcast3 = $this->buildBroadcast(
             'b0000003',
             $version3,
-            new DateTime('2011-07-05 15:00:00'),
-            new DateTime('2011-07-05 15:25:00'),
+            new DateTime('2011-08-05 15:00:00'),
+            new DateTime('2011-08-05 15:25:00'),
             $service2
         );
 
@@ -73,6 +74,23 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             new DateTime('2011-07-05 15:00:00'),
             new DateTime('2011-07-05 15:25:00'),
             null
+        );
+
+        $broadcast2 = $this->buildBroadcast(
+            'b0000006',
+            $version2,
+            new DateTime('2011-09-05 15:00:00'),
+            new DateTime('2011-09-05 16:00:01'),
+            $service2
+        );
+
+        // Embargoed
+        $broadcast5 = $this->buildBroadcast(
+            'b0000007',
+            $version5,
+            new DateTime('2013-07-05 15:00:00'),
+            new DateTime('2013-07-05 15:25:00'),
+            $service2
         );
 
         $manager->flush();

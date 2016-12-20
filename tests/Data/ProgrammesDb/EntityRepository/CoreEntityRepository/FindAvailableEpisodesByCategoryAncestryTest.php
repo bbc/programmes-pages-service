@@ -14,7 +14,7 @@ class FindAvailableEpisodesByCategoryAncestryTest extends AbstractDatabaseTest
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
         $count = $repo->countAvailableEpisodesByAncestryCategoryIds(
-            $dbId = $this->getAncestryFromPersistentIdentifier('C00999', 'Category', true),
+            $dbId = $this->getAncestryFromPersistentIdentifier('C00999', 'Category', 'PipId'),
             30,
             0
         );
@@ -28,7 +28,7 @@ class FindAvailableEpisodesByCategoryAncestryTest extends AbstractDatabaseTest
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:CoreEntity');
         $entities = $repo->findAvailableEpisodesByCategoryAncestry(
-            $dbId = $this->getAncestryFromPersistentIdentifier('C00999', 'Category', true),
+            $dbId = $this->getAncestryFromPersistentIdentifier('C00999', 'Category', 'PipId'),
             null,
             30,
             0

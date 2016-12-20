@@ -37,7 +37,7 @@ class FindByContributionToTest extends AbstractDatabaseTest
     {
         return [
             [['v0000001'], 'Broadcast', 50, 0, 'Version', ['b0000001']],
-            [['v0000004'], 'Broadcast', 50, 0, 'Version', ['b0000002']],
+            [['v0000004'], 'Broadcast', 50, 0, 'Version', ['b0000006', 'b0000002']],
             [['v0000005'], 'Broadcast', 50, 0, 'Version', ['b0000003']],
             [['v0000006'], 'Webcast', 50, 0, 'Version', ['b0000004', 'b0000005']],
         ];
