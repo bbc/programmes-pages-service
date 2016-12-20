@@ -28,6 +28,28 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         $this->loadFixtures(['TleosByCategoryFixture']);
     }
 
+    public function testFindTleosByCategoryAllAvailabilityInCategory()
+    {
+        /** @var CoreEntityRepository $repo */
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+
+        $selectedCategoryForTleos = [1, 2, 3]; // /cat1/cat11
+        $selectedAvailabilityForTleos = false;
+
+        $tleos = $repo->findTleosByCategory(
+            $selectedCategoryForTleos,
+            $selectedAvailabilityForTleos,
+            null,
+            null,
+            0
+        );
+
+        $this->assertInternalType('array', $tleos);
+        $this->assertCount(1, $tleos);
+
+        $this->assertEquals('Brand2', $tleos[0]['title']);
+    }
+
     public function testFindTleosByCategoryAllAvailability()
     {
         /** @var CoreEntityRepository $repo */
@@ -49,28 +71,6 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
 
         $this->assertEquals('Brand1', $tleos[0]['title']);
         $this->assertEquals('Brand2', $tleos[1]['title']);
-    }
-
-    public function testFindTleosByCategoryAllAvailabilityInCategory()
-    {
-        /** @var CoreEntityRepository $repo */
-        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-
-        $selectedCategoryForTleos = [1, 2, 3]; // /cat1/cat11
-        $selectedAvailabilityForTleos = false;
-
-        $tleos = $repo->findTleosByCategory(
-            $selectedCategoryForTleos,
-            $selectedAvailabilityForTleos,
-            null,
-            null,
-            0
-        );
-
-        $this->assertInternalType('array', $tleos);
-        $this->assertCount(1, $tleos);
-
-        $this->assertEquals('Brand2', $tleos[0]['title']);
     }
 
     public function testFindTleosByCategoryPlayerAvailability()
