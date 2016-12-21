@@ -46,6 +46,9 @@ class CategoriesService extends AbstractService
         return $this->mapSingleEntity($genre);
     }
 
+    /**
+     * @return Genre[]
+     */
     public function findPopulatedChildGenres(Genre $genre, string $medium = null)
     {
         $subcategories = $this->repository->findPopulatedChildCategoriesByNetworkMedium(

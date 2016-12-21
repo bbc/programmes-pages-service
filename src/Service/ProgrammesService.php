@@ -36,6 +36,48 @@ class ProgrammesService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
+    /**
+     * @return Programme[] types: Series|Episode|Brand
+     */
+    public function findAllTleosByCategory(
+        Category $category,
+        $medium = null,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ) {
+        $offset = $this->getOffset($limit, $page);
+        $programmesInSlice = $this->repository->findTleosByCategory(
+            $category->getDbAncestryIds(),
+            false,
+            $medium,
+            $limit,
+            $offset
+        );
+
+        return $this->mapManyEntities($programmesInSlice);
+    }
+
+    /**
+     * @return Programme[] types: Series|Episode|Brand
+     */
+    public function findAvailableTleosByCategory(
+        Category $category,
+        $medium = null,
+        $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ) {
+        $offset = $this->getOffset($limit, $page);
+        $programmesInSlice = $this->repository->findTleosByCategory(
+            $category->getDbAncestryIds(),
+            true,
+            $medium,
+            $limit,
+            $offset
+        );
+
+        return $this->mapManyEntities($programmesInSlice);
+    }
+
     public function findAll(
         $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE

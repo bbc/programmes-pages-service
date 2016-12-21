@@ -32,6 +32,45 @@ class CoreEntityRepository extends MaterializedPathRepository
         'CoreEntity',
     ];
 
+    public function findTleosByCategory(
+        array $ancestryDbIds,
+        bool $filterToAvailable,
+        $medium,
+        $limit,
+        int $offset
+    ) {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select(['DISTINCT programme', 'image', 'masterbrand', 'mbImage'])
+                   ->from('ProgrammesPagesService:Programme', 'programme')
+                   ->leftJoin('programme.image', 'image')
+                   ->leftJoin('programme.masterBrand', 'masterbrand')
+                   ->leftJoin('masterbrand.image', 'mbImage')
+                   ->innerJoin('programme.categories', 'category')
+                   ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
+                   ->andWhere('programme.parent IS NULL')
+                   ->andWhere('category.ancestry LIKE :ancestry')
+                   ->orderBy('programme.title', 'ASC')
+                   ->addOrderBy('programme.pid', 'ASC')
+                   ->setFirstResult($offset)
+                   ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+
+        if ($filterToAvailable) {
+            $qb->andWhere('programme.streamable = 1');
+        }
+
+        if (!is_null($medium)) {
+            $this->assertNetworkMedium($medium);
+
+            $qb->innerJoin('masterbrand.network', 'network')
+               ->andWhere('network.medium = :medium')
+               ->setParameter('medium', $medium);
+        }
+
+        $qb = $this->setLimit($qb, $limit);
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
     /**
      * Return the count of available episodes given category ID's
      *
