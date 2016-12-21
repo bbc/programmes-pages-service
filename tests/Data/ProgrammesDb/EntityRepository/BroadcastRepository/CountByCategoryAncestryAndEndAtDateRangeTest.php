@@ -46,7 +46,7 @@ class CountByCategoryAncestryAndEndAtDateRangeTest extends AbstractDatabaseTest
         foreach ($this->countByCategoryAncestryAndEndAtDateRange() as $data) {
             list($categoryId, $type, $medium, $from, $to, $expectedOutput) = $data;
 
-            $categoryAncestry = $this->getAncestryFromPersistentIdentifier($categoryId, 'Category', 'PipId');
+            $categoryAncestry = $this->getAncestryFromPersistentIdentifier($categoryId, 'Category', 'pipId');
 
             $data = $repo->countByCategoryAncestryAndEndAtDateRange($categoryAncestry, $type, $medium, $from, $to);
             $this->assertSame($expectedOutput, $data);

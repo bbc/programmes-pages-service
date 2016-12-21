@@ -10,14 +10,16 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository::<public>
  */
-class FindUsedDaysByCategoryAncestryInDateRangeTest extends AbstractDatabaseTest
+class FindDaysByCategoryAncestryInDateRangeTestTest extends AbstractDatabaseTest
 {
     public function tearDown()
     {
         $this->disableEmbargoedFilter();
     }
-
-    public function testFindAllYearsAndMonthsByProgramme()
+    /**
+     * @dataProvider findDaysByCategoryAncestryInDateRangeDataProvider
+     */
+    public function testFindDaysByCategoryAncestryInDateRange($pipId, $type, $medium, $from, $to, $expectedOutput)
     {
         $this->loadFixtures(['BroadcastsWithCategoriesFixture']);
         $this->enableEmbargoedFilter();
@@ -25,22 +27,15 @@ class FindUsedDaysByCategoryAncestryInDateRangeTest extends AbstractDatabaseTest
         /** @var BroadcastRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
 
-        foreach ($this->findAllYearsAndMonthsByProgrammeData() as $data) {
-            list($pipId, $type, $medium, $from, $to, $expectedOutput) = $data;
+        $ancestry = $this->getAncestryFromPersistentIdentifier($pipId, 'Category', 'pipId');
 
-            $ancestry = $this->getAncestryFromPersistentIdentifier($pipId, 'Category', 'PipId');
+        $data = $repo->findDaysByCategoryAncestryInDateRange($ancestry, $type, $medium, $from, $to);
 
-            $data = $repo->findUsedDaysByCategoryAncestryInDateRange($ancestry, $type, $medium, $from, $to);
-            $this->assertSame($expectedOutput, $data);
-
-            // findAllYearsAndMonthsByProgramme query only
-            $this->assertCount(1, $this->getDbQueries());
-
-            $this->resetDbQueryLogger();
-        }
+        $this->assertSame($expectedOutput, $data);
+        $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function findAllYearsAndMonthsByProgrammeData()
+    public function findDaysByCategoryAncestryInDateRangeDataProvider()
     {
         return [
             [
@@ -50,9 +45,9 @@ class FindUsedDaysByCategoryAncestryInDateRangeTest extends AbstractDatabaseTest
                 new DateTimeImmutable('2011-07-01 00:00:00'),
                 new DateTimeImmutable('2011-10-01 00:00:00'),
                 [
-                    ['day' => '5', 'month' => '7'],
-                    ['day' => '5', 'month' => '8'],
-                    ['day' => '5', 'month' => '9'],
+                    ['day' => '5', 'month' => '7', 'year' => '2011'],
+                    ['day' => '5', 'month' => '8', 'year' => '2011'],
+                    ['day' => '5', 'month' => '9', 'year' => '2011'],
                 ],
             ],
             [
@@ -62,7 +57,7 @@ class FindUsedDaysByCategoryAncestryInDateRangeTest extends AbstractDatabaseTest
                 new DateTimeImmutable('2011-07-01 00:00:00'),
                 new DateTimeImmutable('2011-10-01 00:00:00'),
                 [
-                    ['day' => '5', 'month' => '7'],
+                    ['day' => '5', 'month' => '7', 'year' => '2011'],
                 ],
             ],
             [
@@ -72,7 +67,7 @@ class FindUsedDaysByCategoryAncestryInDateRangeTest extends AbstractDatabaseTest
                 new DateTimeImmutable('2011-07-01 00:00:00'),
                 new DateTimeImmutable('2011-10-01 00:00:00'),
                 [
-                    ['day' => '5', 'month' => '8'],
+                    ['day' => '5', 'month' => '8', 'year' => '2011'],
                 ],
             ],
             [
@@ -94,15 +89,15 @@ class FindUsedDaysByCategoryAncestryInDateRangeTest extends AbstractDatabaseTest
         ];
     }
 
-    public function testFindAllYearsAndMonthsByProgrammeDataWhenEmbargoIsDisabled()
+    public function testFindDaysByCategoryAncestryInDateRangeWhenEmbargoIsDisabled()
     {
         $this->loadFixtures(['BroadcastsWithCategoriesFixture']);
         $this->disableEmbargoedFilter();
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
 
-        $ancestry = $this->getAncestryFromPersistentIdentifier('c0000001', 'Category', 'PipId');
+        $ancestry = $this->getAncestryFromPersistentIdentifier('c0000001', 'Category', 'pipId');
 
-        $data = $repo->findUsedDaysByCategoryAncestryInDateRange(
+        $data = $repo->findDaysByCategoryAncestryInDateRange(
             $ancestry,
             'Any',
             null,
@@ -110,18 +105,17 @@ class FindUsedDaysByCategoryAncestryInDateRangeTest extends AbstractDatabaseTest
             new DateTimeImmutable('2013-08-01 00:00:00')
         );
 
-        $this->assertSame([['day' => '5', 'month' => '7']], $data);
+        $this->assertSame([['day' => '5', 'month' => '7', 'year' => '2013']], $data);
 
-        // findAllYearsAndMonthsByProgramme query only
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindAllYearsAndMonthsByProgrammeWhenEmptyResultSet()
+    public function testFindDaysByCategoryAncestryInDateRangeWhenEmptyResultSet()
     {
         $this->loadFixtures([]);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
 
-        $entities = $repo->findUsedDaysByCategoryAncestryInDateRange(
+        $entities = $repo->findDaysByCategoryAncestryInDateRange(
             [1],
             'Any',
             null,
@@ -131,7 +125,6 @@ class FindUsedDaysByCategoryAncestryInDateRangeTest extends AbstractDatabaseTest
 
         $this->assertEquals([], $entities);
 
-        // findAllYearsAndMonthsByProgramme query only
         $this->assertCount(1, $this->getDbQueries());
     }
 }

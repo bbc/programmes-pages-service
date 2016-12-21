@@ -129,7 +129,7 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
-    public function findUsedDaysByCategoryAncestryInDateRange(
+    public function findDaysByCategoryAncestryInDateRange(
         array $categoryAncestry,
         string $type,
         $medium,
@@ -137,7 +137,7 @@ class BroadcastRepository extends EntityRepository
         DateTimeImmutable $to
     ): array {
         $qb = $this->createQueryBuilder('broadcast', false)
-            ->select('DISTINCT DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month')
+            ->select('DISTINCT DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
             ->innerJoin('programmeItem.categories', 'category')
             ->andWhere('category.ancestry LIKE :ancestryClause')
             ->andWhere('broadcast.startAt >= :from')

@@ -40,25 +40,27 @@ class BroadcastsService extends AbstractService
             'Broadcast'
         );
 
-        return array_reduce($dbYearsAndMonths, function ($memo, $period) {
+        $result = [];
+
+        foreach ($dbYearsAndMonths as $period) {
             $year = (int) $period['year'];
-            if (!isset($memo[$year])) {
-                $memo[$year] = [];
+            if (!isset($result[$year])) {
+                $result[$year] = [];
             }
 
-            $memo[$year][] = (int) $period['month'];
+            $result[$year][] = (int) $period['month'];
+        }
 
-            return $memo;
-        }, []);
+        return $result;
     }
 
-    public function findUsedDaysByCategoryInDateRange(
+    public function findDaysByCategoryInDateRange(
         Category $category,
         DateTimeImmutable $start,
         DateTimeImmutable $end,
         string $medium = null
     ): array {
-        $result = $this->repository->findUsedDaysByCategoryAncestryInDateRange(
+        $dbDays = $this->repository->findDaysByCategoryAncestryInDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
             $medium,
@@ -66,16 +68,22 @@ class BroadcastsService extends AbstractService
             $end
         );
 
-        return array_reduce($result, function ($memo, $period) {
-            $month = (int) $period['month'];
+        $result = [];
 
-            if (!isset($memo[$month])) {
-                $memo[$month] = [];
+        foreach ($dbDays as $day) {
+            $year = (int) $day['year'];
+            if (!isset($result[$year])) {
+                $result[$year] = [];
             }
 
-            $memo[$month][] = (int) $period['day'];
+            $month = (int) $day['month'];
+            if (!isset($result[$year][$month])) {
+                $result[$year][$month] = [];
+            }
 
-            return $memo;
-        }, []);
+            $result[$year][$month][] = (int) $day['day'];
+        }
+
+        return $result;
     }
 }
