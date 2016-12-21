@@ -12,6 +12,7 @@ use InvalidArgumentException;
 class Membership
 {
     use TimestampableEntity;
+    use Traits\PartnerPidTrait;
 
     /**
      * @var int

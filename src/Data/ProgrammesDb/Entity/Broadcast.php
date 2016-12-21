@@ -19,6 +19,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Broadcast
 {
     use TimestampableEntity;
+    use Traits\PartnerPidTrait;
 
     /**
      * @var int

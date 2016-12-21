@@ -3,10 +3,22 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
+use ReflectionClass;
 use PHPUnit_Framework_TestCase;
 
 class ImageTest extends PHPUnit_Framework_TestCase
 {
+    public function testTraits()
+    {
+        $reflection = new ReflectionClass(Image::CLASS);
+        $this->assertEquals([
+            'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsEmbargoedTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait',
+        ], $reflection->getTraitNames());
+    }
+
     public function testDefaults()
     {
         $image = new Image('pid', 'title');

@@ -12,6 +12,7 @@ class Image
 {
     use TimestampableEntity;
     use Traits\IsEmbargoedTrait;
+    use Traits\PartnerPidTrait;
     use Traits\SynopsesTrait;
 
     /**

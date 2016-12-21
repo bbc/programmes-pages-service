@@ -15,6 +15,7 @@ use DateTime;
 class Service
 {
     use TimestampableEntity;
+    use Traits\PartnerPidTrait;
 
     /**
      * @var int|null

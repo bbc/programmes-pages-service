@@ -13,8 +13,9 @@ class RelatedLinkTest extends PHPUnit_Framework_TestCase
     {
         $reflection = new ReflectionClass(RelatedLink::CLASS);
         $this->assertEquals([
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait',
             'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait',
         ], $reflection->getTraitNames());
     }
 

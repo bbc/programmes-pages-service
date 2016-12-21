@@ -38,6 +38,7 @@ abstract class CoreEntity
 {
     use TimestampableEntity;
     use Traits\IsEmbargoedTrait;
+    use Traits\PartnerPidTrait;
     use Traits\SynopsesTrait;
     use StripPunctuationTrait;
 

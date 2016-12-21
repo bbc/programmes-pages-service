@@ -6,10 +6,20 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
+use ReflectionClass;
 use PHPUnit_Framework_TestCase;
 
 class BroadcastTest extends PHPUnit_Framework_TestCase
 {
+    public function testTraits()
+    {
+        $reflection = new ReflectionClass(Broadcast::CLASS);
+        $this->assertEquals([
+            'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
+        ], $reflection->getTraitNames());
+    }
+
     public function testDefaults()
     {
         $episode = new Episode('episode_pid', 'episode_title');

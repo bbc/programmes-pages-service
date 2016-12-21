@@ -8,10 +8,20 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use DateTime;
+use ReflectionClass;
 use PHPUnit_Framework_TestCase;
 
 class MasterBrandTest extends PHPUnit_Framework_TestCase
 {
+    public function testTraits()
+    {
+        $reflection = new ReflectionClass(MasterBrand::CLASS);
+        $this->assertEquals([
+            'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
+        ], $reflection->getTraitNames());
+    }
+
     public function testDefaults()
     {
         $entity = new MasterBrand('mid', 'pid', 'name');

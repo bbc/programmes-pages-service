@@ -3,10 +3,20 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationshipType;
+use ReflectionClass;
 use PHPUnit_Framework_TestCase;
 
 class RefRelationshipTypeTest extends PHPUnit_Framework_TestCase
 {
+    public function testTraits()
+    {
+        $reflection = new ReflectionClass(RefRelationshipType::CLASS);
+        $this->assertEquals([
+            'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
+        ], $reflection->getTraitNames());
+    }
+
     public function testDefaults()
     {
         $entity = new RefRelationshipType('pid', 'name');

@@ -5,10 +5,23 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
+use ReflectionClass;
 use PHPUnit_Framework_TestCase;
 
 class CoreEntityTest extends PHPUnit_Framework_TestCase
 {
+    public function testTraits()
+    {
+        $reflection = new ReflectionClass('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity');
+        $this->assertEquals([
+            'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsEmbargoedTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait',
+        ], $reflection->getTraitNames());
+    }
+
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(

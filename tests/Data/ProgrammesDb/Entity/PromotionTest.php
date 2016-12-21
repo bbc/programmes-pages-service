@@ -14,6 +14,7 @@ class PromotionTest extends PHPUnit_Framework_TestCase
         $reflection = new ReflectionClass(Promotion::CLASS);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait',
         ], $reflection->getTraitNames());
     }

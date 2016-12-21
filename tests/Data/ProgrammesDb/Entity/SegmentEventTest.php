@@ -13,6 +13,7 @@ class SegmentEventTest extends PHPUnit_Framework_TestCase
         $reflection = new ReflectionClass(SegmentEvent::CLASS);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait',
         ], $reflection->getTraitNames());
     }

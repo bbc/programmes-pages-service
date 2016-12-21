@@ -13,6 +13,7 @@ class MembershipTest extends PHPUnit_Framework_TestCase
         $reflection = new ReflectionClass(Membership::CLASS);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
         ], $reflection->getTraitNames());
     }
 

@@ -12,6 +12,7 @@ use InvalidArgumentException;
 class Contribution
 {
     use TimestampableEntity;
+    use Traits\PartnerPidTrait;
 
     /**
      * @var int|null

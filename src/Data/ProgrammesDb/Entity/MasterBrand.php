@@ -12,6 +12,7 @@ use DateTime;
 class MasterBrand
 {
     use TimestampableEntity;
+    use Traits\PartnerPidTrait;
 
     /**
      * @var int|null

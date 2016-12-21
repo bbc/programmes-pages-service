@@ -6,10 +6,20 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use DateTime;
+use ReflectionClass;
 use PHPUnit_Framework_TestCase;
 
 class ServiceTest extends PHPUnit_Framework_TestCase
 {
+    public function testTraits()
+    {
+        $reflection = new ReflectionClass(Service::CLASS);
+        $this->assertEquals([
+            'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
+        ], $reflection->getTraitNames());
+    }
+
     public function testDefaults()
     {
         $entity = new Service('sid', 'pid', 'name', 'type', 'mediaType');

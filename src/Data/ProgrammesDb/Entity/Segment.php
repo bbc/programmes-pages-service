@@ -12,6 +12,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Segment
 {
     use TimestampableEntity;
+    use Traits\PartnerPidTrait;
     use Traits\SynopsesTrait;
 
     /**

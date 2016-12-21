@@ -13,6 +13,7 @@ use InvalidArgumentException;
 class Promotion
 {
     use TimestampableEntity;
+    use Traits\PartnerPidTrait;
     use Traits\SynopsesTrait;
 
     /**

@@ -15,6 +15,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class RefRelationship
 {
     use TimestampableEntity;
+    use Traits\PartnerPidTrait;
 
     /**
      * @var int|null

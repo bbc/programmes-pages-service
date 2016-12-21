@@ -13,6 +13,7 @@ class ContributorTest extends PHPUnit_Framework_TestCase
         $reflection = new ReflectionClass(Contributor::CLASS);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
         ], $reflection->getTraitNames());
     }
 

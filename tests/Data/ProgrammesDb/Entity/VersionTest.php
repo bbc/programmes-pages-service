@@ -5,10 +5,20 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
+use ReflectionClass;
 use PHPUnit_Framework_TestCase;
 
 class VersionTest extends PHPUnit_Framework_TestCase
 {
+    public function testTraits()
+    {
+        $reflection = new ReflectionClass(Version::CLASS);
+        $this->assertEquals([
+            'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
+        ], $reflection->getTraitNames());
+    }
+
     public function testDefaults()
     {
         $episode = new Episode('pid', 'title');

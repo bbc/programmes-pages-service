@@ -12,8 +12,9 @@ use DateTime;
  */
 class RelatedLink
 {
-    use Traits\SynopsesTrait;
     use TimestampableEntity;
+    use Traits\PartnerPidTrait;
+    use Traits\SynopsesTrait;
 
     /**
      * @var int|null
