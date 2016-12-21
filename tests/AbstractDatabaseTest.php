@@ -102,13 +102,16 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
      *
      * @param $identifier
      * @param $entityType
-     * @param $usePipId
+     * @param $identifierName
      *
      * @return int
      */
-    protected function getDbIdFromPersistentIdentifier(string $identifier, string $entityType, bool $usePipId = false): int
-    {
-        return $this->getColumnValueFromPid($identifier, $entityType, 'Id', $usePipId);
+    protected function getDbIdFromPersistentIdentifier(
+        string $identifier,
+        string $entityType,
+        string $identifierName = 'pid'
+    ): int {
+        return $this->getColumnValueFromIdentifier($identifier, $entityType, 'Id', $identifierName);
     }
 
     /**
@@ -118,15 +121,15 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
      */
     protected function getCoreEntityDbId(string $pid): int
     {
-        return $this->getColumnValueFromPid($pid, 'CoreEntity', 'Id');
+        return $this->getColumnValueFromIdentifier($pid, 'CoreEntity', 'Id');
     }
 
     protected function getAncestryFromPersistentIdentifier(
         string $identifier,
         string $entityType,
-        bool $usePipId = false
+        string $identifierName = 'pid'
     ): array {
-        $ancestryString = $this->getColumnValueFromPid($identifier, $entityType, 'Ancestry', $usePipId);
+        $ancestryString = $this->getColumnValueFromIdentifier($identifier, $entityType, 'Ancestry', $identifierName);
 
         // $ancestryString contains a string of all IDs including the current
         // one with a trailing comma at the end (which is an empty item when exploding).
@@ -137,8 +140,12 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
         }, $ancestry);
     }
 
-    private function getColumnValueFromPid(string $pid, string $entityType, string $columnName, bool $usePipId = false)
-    {
+    private function getColumnValueFromIdentifier(
+        string $identifier,
+        string $entityType,
+        string $columnName,
+        string $identifierName = 'pid'
+    ) {
         // Disable the logger for this call as we don't want to count it
         $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = false;
 
@@ -150,11 +157,7 @@ abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
         // findOneByX is a magic bit of Doctrine to access property X.
         // Therefore all Entities with a 'pid' or 'pipId' property will have the
         // findOneByPid method.
-        if ($usePipId) {
-            $id = $repo->findOneByPipId($pid)->{'get' . $columnName}();
-        } else {
-            $id = $repo->findOneByPid($pid)->{'get' . $columnName}();
-        }
+        $id = $repo->findOneBy([$identifierName => $identifier])->{'get' . $columnName}();
 
         // Return the embargo filter to it's prior state
         if ($embargoFilterWasEnabled) {

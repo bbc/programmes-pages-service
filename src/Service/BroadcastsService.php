@@ -3,9 +3,11 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\BroadcastMapper;
+use DateTimeImmutable;
 
 class BroadcastsService extends AbstractService
 {
@@ -38,15 +40,50 @@ class BroadcastsService extends AbstractService
             'Broadcast'
         );
 
-        return array_reduce($dbYearsAndMonths, function ($memo, $period) {
+        $result = [];
+
+        foreach ($dbYearsAndMonths as $period) {
             $year = (int) $period['year'];
-            if (!isset($memo[$year])) {
-                $memo[$year] = [];
+            if (!isset($result[$year])) {
+                $result[$year] = [];
             }
 
-            $memo[$year][] = (int) $period['month'];
+            $result[$year][] = (int) $period['month'];
+        }
 
-            return $memo;
-        }, []);
+        return $result;
+    }
+
+    public function findDaysByCategoryInDateRange(
+        Category $category,
+        DateTimeImmutable $start,
+        DateTimeImmutable $end,
+        string $medium = null
+    ): array {
+        $dbDays = $this->repository->findDaysByCategoryAncestryInDateRange(
+            $category->getDbAncestryIds(),
+            'Broadcast',
+            $medium,
+            $start,
+            $end
+        );
+
+        $result = [];
+
+        foreach ($dbDays as $day) {
+            $year = (int) $day['year'];
+            if (!isset($result[$year])) {
+                $result[$year] = [];
+            }
+
+            $month = (int) $day['month'];
+            if (!isset($result[$year][$month])) {
+                $result[$year][$month] = [];
+            }
+
+            $result[$year][$month][] = (int) $day['day'];
+        }
+
+        return $result;
     }
 }

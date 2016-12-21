@@ -129,6 +129,36 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
+    public function findDaysByCategoryAncestryInDateRange(
+        array $categoryAncestry,
+        string $type,
+        $medium,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to
+    ): array {
+        $qb = $this->createQueryBuilder('broadcast', false)
+            ->select('DISTINCT DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
+            ->innerJoin('programmeItem.categories', 'category')
+            ->andWhere('category.ancestry LIKE :ancestryClause')
+            ->andWhere('broadcast.startAt >= :from')
+            ->andWhere('broadcast.startAt < :to')
+            ->addOrderBy('broadcast.startAt')
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($categoryAncestry) . '%')
+            ->setParameter('from', $from)
+            ->setParameter('to', $to);
+
+        $qb = $this->setEntityTypeFilter($qb, $type);
+
+        if ($this->isValidNetworkMedium($medium)) {
+            $qb->join('broadcast.service', 'service')
+                ->innerJoin('service.network', 'networkOfService')
+                ->andWhere('networkOfService.medium = :medium')
+                ->setParameter('medium', $medium);
+        }
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
+    }
+
     public function countByCategoryAncestryAndEndAtDateRange(
         array $categoryAncestry,
         string $type,
@@ -407,7 +437,7 @@ QUERY;
             ->join('broadcast.service', 'service')
             ->leftJoin('service.network', 'networkOfService')
             ->leftJoin('programmeItem.image', 'image')
-            ->leftJoin('programmeItem.categories', 'category')
+            ->innerJoin('programmeItem.categories', 'category')
             ->andWhere('category.ancestry LIKE :ancestryClause')
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->addGroupBy('broadcast.startAt')

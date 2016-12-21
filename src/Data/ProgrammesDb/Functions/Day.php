@@ -10,7 +10,7 @@ use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\DBAL\DBALException;
 
-class Year extends FunctionNode
+class Day extends FunctionNode
 {
     public $date;
 
@@ -19,16 +19,16 @@ class Year extends FunctionNode
         $dbPlatform = $sqlWalker->getConnection()->getDatabasePlatform();
 
         if ($dbPlatform instanceof MySqlPlatform) {
-            return "YEAR(" . $sqlWalker->walkArithmeticPrimary($this->date) . ")";
+            return "DAY(" . $sqlWalker->walkArithmeticPrimary($this->date) . ")";
         }
 
         if ($dbPlatform instanceof SqlitePlatform) {
             // Mysql returns a number, Sqlite should do the same, rather than
             // a (potentially zero padded) string that looks like a number
-            return "CAST(strftime('%Y', " . $sqlWalker->walkArithmeticPrimary($this->date) . ") AS INTEGER)";
+            return "CAST(strftime('%d', " . $sqlWalker->walkArithmeticPrimary($this->date) . ") AS INTEGER)";
         }
 
-        throw DBALException::notSupported("YEAR not supported by Platform.");
+        throw DBALException::notSupported("DAY not supported by Platform.");
     }
 
     public function parse(Parser $parser)

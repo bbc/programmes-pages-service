@@ -17,7 +17,7 @@ class CountByCategoryAncestryAndEndAtDateRangeTest extends AbstractDatabaseTest
     {
         return [
             [
-                [1], // music
+                'c0000001', // music
                 'Broadcast',
                 null,
                 new DateTimeImmutable('2016-07-01'),
@@ -25,11 +25,11 @@ class CountByCategoryAncestryAndEndAtDateRangeTest extends AbstractDatabaseTest
                 1,
             ],
             [
-                [1, 2], // jazzandblues, music
+                'c0000002', // jazzandblues, music
                 'Broadcast',
                 null,
-                new DateTimeImmutable('2011-07-01'),
-                new DateTimeImmutable('2011-07-31'),
+                new DateTimeImmutable('2011-08-01'),
+                new DateTimeImmutable('2011-08-31'),
                 1,
             ],
         ];
@@ -44,7 +44,9 @@ class CountByCategoryAncestryAndEndAtDateRangeTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
 
         foreach ($this->countByCategoryAncestryAndEndAtDateRange() as $data) {
-            list($categoryAncestry, $type, $medium, $from, $to, $expectedOutput) = $data;
+            list($categoryId, $type, $medium, $from, $to, $expectedOutput) = $data;
+
+            $categoryAncestry = $this->getAncestryFromPersistentIdentifier($categoryId, 'Category', 'pipId');
 
             $data = $repo->countByCategoryAncestryAndEndAtDateRange($categoryAncestry, $type, $medium, $from, $to);
             $this->assertSame($expectedOutput, $data);

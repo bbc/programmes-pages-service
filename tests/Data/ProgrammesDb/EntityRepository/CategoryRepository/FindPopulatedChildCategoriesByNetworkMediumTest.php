@@ -15,12 +15,12 @@ class FindPopulatedChildCategoriesByNetworkMediumTest extends AbstractDatabaseTe
         $repo = $this->getRepository('ProgrammesPagesService:Category');
 
         $entity = $repo->findPopulatedChildCategoriesByNetworkMedium(
-            $dbId = $this->getDbIdFromPersistentIdentifier('C00193', 'Category', true),
+            $dbId = $this->getDbIdFromPersistentIdentifier('C00193', 'Category', 'pipId'),
             'genre',
             null
         );
 
-        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00196', 'Category', true), $entity[0]['id']);
+        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00196', 'Category', 'pipId'), $entity[0]['id']);
         $this->assertEquals('sitcoms', $entity[0]['urlKey']);
 
         // findChildCategoriesUsedByTleosByParentIdAndType query only
@@ -33,12 +33,12 @@ class FindPopulatedChildCategoriesByNetworkMediumTest extends AbstractDatabaseTe
         $repo = $this->getRepository('ProgrammesPagesService:Category');
 
         $entity = $repo->findPopulatedChildCategoriesByNetworkMedium(
-            $dbId = $this->getDbIdFromPersistentIdentifier('C00193', 'Category', true),
+            $dbId = $this->getDbIdFromPersistentIdentifier('C00193', 'Category', 'pipId'),
             'genre',
             'radio'
         );
 
-        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00196', 'Category', true), $entity[0]['id']);
+        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00196', 'Category', 'pipId'), $entity[0]['id']);
         $this->assertEquals('sitcoms', $entity[0]['urlKey']);
 
         // findChildCategoriesUsedByTleosByParentIdAndType query only

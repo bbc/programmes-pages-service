@@ -63,6 +63,7 @@ doctrine:
             datetime_functions:
                 YEAR: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Year
                 MONTH: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Month
+                DAY: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Day
 ```
 
 Add the doctrine extensions configuration (in config.yml), under the
