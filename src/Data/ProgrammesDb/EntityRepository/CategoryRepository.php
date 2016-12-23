@@ -46,6 +46,7 @@ class CategoryRepository extends MaterializedPathRepository
             ->select(['DISTINCT category'])
             ->join('category.programmes', 'programmes')
             ->andWhere('programmes.parent IS NULL')
+            ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
             ->andWhere('category.parent = :parentId')
             ->andWhere('category INSTANCE OF :type')
             ->addOrderBy('category.title')
