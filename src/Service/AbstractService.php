@@ -11,6 +11,7 @@ abstract class AbstractService
     const DEFAULT_PAGE = 1;
     const DEFAULT_LIMIT = 300;
     const NO_LIMIT = null;
+    const DEFAULT_OFFSET = 0;
 
     /**
      * @var MapperInterface

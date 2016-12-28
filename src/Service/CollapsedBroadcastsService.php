@@ -117,7 +117,7 @@ class CollapsedBroadcastsService extends AbstractService
         DateTimeImmutable $endDate,
         string $medium = null,
         $limit = self::DEFAULT_LIMIT,
-        int $offset = self::DEFAULT_PAGE
+        int $offset = self::DEFAULT_OFFSET
     ) {
         $broadcasts = $this->repository->findByCategoryAncestryAndEndAtDateRange(
             $category->getDbAncestryIds(),
