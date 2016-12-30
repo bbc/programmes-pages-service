@@ -86,4 +86,30 @@ class BroadcastsService extends AbstractService
 
         return $result;
     }
+
+    public function filterBroadcastedCategoriesByScheduleDate(
+      $categories,
+      DateTimeImmutable $from,
+      DateTimeImmutable $to,
+      string $medium = null
+    ) {
+        $categoriesFiltered = [];
+        foreach ($categories as $subcategory) {
+            $broadCastsExistAtDate = $this->findDaysByCategoryInDateRange(
+                $subcategory,
+                $from,
+                $to,
+                $medium
+            );
+
+            if (empty($broadCastsExistAtDate)) {
+                continue;
+            }
+
+            $categoriesFiltered[] = $subcategory;
+        }
+
+        return $categoriesFiltered;
+    }
+
 }
