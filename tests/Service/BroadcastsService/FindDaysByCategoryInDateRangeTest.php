@@ -12,33 +12,32 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
         $category = $this->mockEntity('Genre', 3);
         $category->method('getDbAncestryIds')->willReturn($dbAncestry);
 
-        $dbData = [
-            ['day' => '1', 'month' => '8', 'year' => '2011'],
-            ['day' => '2', 'month' => '8', 'year' => '2011'],
-            ['day' => '3', 'month' => '8', 'year' => '2011'],
-            ['day' => '1', 'month' => '9', 'year' => '2011'],
-            ['day' => '2', 'month' => '9', 'year' => '2011'],
-            ['day' => '4', 'month' => '9', 'year' => '2011'],
-            ['day' => '5', 'month' => '10', 'year' => '2011'],
-        ];
-
-        $expectedResult = [
-            2011 => [
-                8 => [1, 2, 3],
-                9 => [1, 2, 4],
-                10 => [5],
-            ],
+        $dbBroadcastedResults = [
+            ['ancestry' => '1,2,3,', 'day' => '1', 'month' => '8', 'year' => '2011'],
+            ['ancestry' => '1,2,3,4,', 'day' => '2', 'month' => '8', 'year' => '2011'],
         ];
 
         $start = new DateTimeImmutable();
         $end = new DateTimeImmutable();
 
         $this->mockRepository->expects($this->once())
-            ->method('findDaysByCategoryAncestryInDateRange')
-            ->with($dbAncestry, 'Broadcast', null, $start, $end)
-            ->willReturn($dbData);
+                             ->method('findBroadcastedDatesForCategories')
+                             ->with([$dbAncestry], 'Broadcast', null, $start, $end)
+                             ->willReturn($dbBroadcastedResults);
 
-        $result = $this->service()->findDaysByCategoryInDateRange($category, $start, $end);
-        $this->assertSame($expectedResult, $result);
+        $resultBroadcastedCategories = $this->service()->findDaysByCategoryInDateRange(
+            $category,
+            $start,
+            $end
+        );
+
+        $expectedResults = [
+          '2011' => [
+              '8' => [1,2]
+          ]
+        ];
+
+        $this->assertCount(1, $resultBroadcastedCategories);
+        $this->assertSame($expectedResults, $resultBroadcastedCategories);
     }
 }

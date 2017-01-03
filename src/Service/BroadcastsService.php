@@ -60,8 +60,8 @@ class BroadcastsService extends AbstractService
         DateTimeImmutable $end,
         string $medium = null
     ): array {
-        $dbDays = $this->repository->findDaysByCategoryAncestryInDateRange(
-            $category->getDbAncestryIds(),
+        $dbDays = $this->repository->findBroadcastedDatesForCategories(
+            [$category->getDbAncestryIds()],
             'Broadcast',
             $medium,
             $start,
