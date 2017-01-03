@@ -19,7 +19,7 @@ class FindDaysByCategoryAncestryInDateRangeTestTest extends AbstractDatabaseTest
     /**
      * @dataProvider findDaysByCategoryAncestryInDateRangeDataProvider
      */
-    public function testFindDaysByCategoryAncestryInDateRange($pipId, $type, $medium, $from, $to, $expectedOutput)
+    public function testFindDaysByCategoryAncestryInDateRangeMultipleEntries($pipId, $type, $medium, $from, $to, $expectedOutput)
     {
         $this->loadFixtures(['BroadcastsWithCategoriesFixture']);
         $this->enableEmbargoedFilter();
@@ -40,7 +40,7 @@ class FindDaysByCategoryAncestryInDateRangeTestTest extends AbstractDatabaseTest
     {
         return [
             [
-                'c0000001',
+                'c0000001', // ancestryId = 1
                 'Broadcast',
                 null,
                 new DateTimeImmutable('2011-07-01 00:00:00'),
@@ -53,7 +53,7 @@ class FindDaysByCategoryAncestryInDateRangeTestTest extends AbstractDatabaseTest
                 ],
             ],
             [
-                'c0000001',
+                'c0000001', // ancestryId = 1
                 'Broadcast',
                 'radio',
                 new DateTimeImmutable('2011-07-01 00:00:00'),
@@ -63,7 +63,7 @@ class FindDaysByCategoryAncestryInDateRangeTestTest extends AbstractDatabaseTest
                 ],
             ],
             [
-                'c0000002',
+                'c0000002', // ancestryId = 1,2,
                 'Broadcast',
                 null,
                 new DateTimeImmutable('2011-07-01 00:00:00'),
@@ -73,7 +73,7 @@ class FindDaysByCategoryAncestryInDateRangeTestTest extends AbstractDatabaseTest
                 ],
             ],
             [
-                'c0000001',
+                'c0000001', // ancestryId = 1
                 'Webcast',
                 null,
                 new DateTimeImmutable('2011-06-01 00:00:00'),
@@ -81,7 +81,7 @@ class FindDaysByCategoryAncestryInDateRangeTestTest extends AbstractDatabaseTest
                 [],
             ],
             [
-                'c0000002',
+                'c0000002', // ancestryId = 1,2,
                 'Broadcast',
                 null,
                 new DateTimeImmutable('2013-06-01 00:00:00'),
