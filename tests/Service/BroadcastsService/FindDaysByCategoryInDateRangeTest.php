@@ -33,8 +33,8 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
 
         $expectedResults = [
           '2011' => [
-              '8' => [1,2]
-          ]
+              '8' => [1, 2],
+          ],
         ];
 
         $this->assertCount(1, $resultBroadcastedCategories);
