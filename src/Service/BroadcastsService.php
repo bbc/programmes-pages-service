@@ -55,18 +55,13 @@ class BroadcastsService extends AbstractService
     }
 
     public function findDaysByCategoryInDateRange(
-        array $categories,
+        Category $category,
         DateTimeImmutable $start,
         DateTimeImmutable $end,
         string $medium = null
     ): array {
-        $categoriesAncestryIds = [];
-        foreach ($categories as $category) {
-            $categoriesAncestryIds[] = $category->getDbAncestryIds();
-        }
-
         $dbDays = $this->repository->findDaysByCategoryAncestryInDateRange(
-            $categoriesAncestryIds,
+            $category->getDbAncestryIds(),
             'Broadcast',
             $medium,
             $start,
@@ -86,10 +81,7 @@ class BroadcastsService extends AbstractService
                 $result[$year][$month] = [];
             }
 
-            $day = (int) $day['day'];
-            if (!in_array($day, $result[$year][$month])) {
-                $result[$year][$month][] = $day;
-            }
+            $result[$year][$month][] = (int) $day['day'];
         }
 
         return $result;
