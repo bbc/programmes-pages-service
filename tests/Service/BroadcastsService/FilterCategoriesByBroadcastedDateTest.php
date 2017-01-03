@@ -3,7 +3,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
 
 use DateTimeImmutable;
 
-Class FilterCategoriesByBroadcastedDateTest extends AbstractBroadcastsServiceTest
+class FilterCategoriesByBroadcastedDateTest extends AbstractBroadcastsServiceTest
 {
     public function testFilterCategoriesByBroadcastedDate()
     {
@@ -17,7 +17,7 @@ Class FilterCategoriesByBroadcastedDateTest extends AbstractBroadcastsServiceTes
 
         $dbBroadcastedResults = [
             ['ancestry' => '1,2,3,', 'day' => '1', 'month' => '8', 'year' => '2011'],
-            ['ancestry' => '1,2,3,4,', 'day' => '2', 'month' => '8', 'year' => '2011']
+            ['ancestry' => '1,2,3,4,', 'day' => '2', 'month' => '8', 'year' => '2011'],
         ];
 
         $start = new DateTimeImmutable();
@@ -36,6 +36,6 @@ Class FilterCategoriesByBroadcastedDateTest extends AbstractBroadcastsServiceTes
 
 
         $this->assertCount(1, $resultBroadcastedCategories);
-        $this->assertSame([1,2,3], $resultBroadcastedCategories[0]->getDbAncestryIds());
+        $this->assertSame([1, 2, 3], $resultBroadcastedCategories[0]->getDbAncestryIds());
     }
 }
