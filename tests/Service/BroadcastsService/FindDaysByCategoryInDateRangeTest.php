@@ -15,6 +15,7 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
         $dbBroadcastedResults = [
             ['ancestry' => '1,2,3,', 'day' => '1', 'month' => '8', 'year' => '2011'],
             ['ancestry' => '1,2,3,4,', 'day' => '2', 'month' => '8', 'year' => '2011'],
+            ['ancestry' => '1,2,3,5,', 'day' => '2', 'month' => '8', 'year' => '2011'],
         ];
 
         $start = new DateTimeImmutable();

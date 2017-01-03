@@ -81,7 +81,10 @@ class BroadcastsService extends AbstractService
                 $result[$year][$month] = [];
             }
 
-            $result[$year][$month][] = (int) $day['day'];
+            $day = (int) $day['day'];
+            if (!in_array($day, $result[$year][$month])) {
+                $result[$year][$month][] = $day;
+            }
         }
 
         return $result;
