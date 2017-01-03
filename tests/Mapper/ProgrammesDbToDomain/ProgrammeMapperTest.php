@@ -42,7 +42,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'isPodcastable' => false,
             'parent' => null,
             'position' => 101,
-            'firstBroadcastDate' => new \DateTime(),
+            'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
         ];
 
@@ -70,7 +70,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            new DateTimeImmutable(),
+            new DateTimeImmutable('2017-01-03T18:00:00Z'),
             1001
         );
 
@@ -112,7 +112,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'isPodcastable' => false,
             'parent' => null,
             'position' => 101,
-            'firstBroadcastDate' => new DateTime(),
+            'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
         ];
 
@@ -140,7 +140,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            new DateTimeImmutable(),
+            new DateTimeImmutable('2017-01-03T18:00:00Z'),
             1001
         );
 
@@ -180,7 +180,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'availableClipsCount' => 102,
             'availableGalleriesCount' => 103,
             'parent' => null,
-            'firstBroadcastDate' => new DateTime(),
+            'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 1001,
             'duration' => 1002,
@@ -211,7 +211,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            new DateTimeImmutable(),
+            new DateTimeImmutable('2017-01-03T18:00:00Z'),
             new PartialDate(2015, 01, 02),
             1002,
             new DateTimeImmutable('2015-01-03'),
@@ -251,7 +251,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'mediaType' => MediaTypeEnum::UNKNOWN,
             'segmentEventCount' => 11,
             'parent' => null,
-            'firstBroadcastDate' => new DateTime(),
+            'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 1001,
             'duration' => 1002,
@@ -279,7 +279,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             [],
             [],
-            new DateTimeImmutable(),
+            new DateTimeImmutable('2017-01-03T18:00:00Z'),
             new PartialDate(2015, 01, 02),
             1002,
             new DateTimeImmutable('2015-01-03'),
@@ -323,7 +323,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'availableGalleriesCount' => 15,
             'isPodcastable' => false,
             'position' => 101,
-            'firstBroadcastDate' => new DateTime(),
+            'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
             'parent' => [
                 'id' => 1,
@@ -350,7 +350,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'isPodcastable' => false,
                 'parent' => null,
                 'position' => 101,
-                'firstBroadcastDate' => new DateTime(),
+                'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
                 'expectedChildCount' => 1001,
             ],
         ];
@@ -398,14 +398,14 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 null,
                 [],
                 [],
-                new DateTimeImmutable(),
+                new DateTimeImmutable('2017-01-03T18:00:00Z'),
                 1001
             ),
             101,
             null,
             [],
             [],
-            new DateTimeImmutable(),
+            new DateTimeImmutable('2017-01-03T18:00:00Z'),
             1001
         );
 

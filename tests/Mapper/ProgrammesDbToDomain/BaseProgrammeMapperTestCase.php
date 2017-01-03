@@ -91,7 +91,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'position' => 101,
             'masterBrand' => $masterBrand,
             'categories' => $categories,
-            'firstBroadcastDate' => new \DateTime(),
+            'firstBroadcastDate' => new \DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
         ];
     }
@@ -132,7 +132,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             $masterBrand,
             $genres,
             $formats,
-            new \DateTimeImmutable(),
+            new \DateTimeImmutable('2017-01-03T18:00:00Z'),
             1001
         );
     }
