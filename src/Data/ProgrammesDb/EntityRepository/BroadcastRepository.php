@@ -146,15 +146,12 @@ class BroadcastRepository extends EntityRepository
             $ancestryClause[] = "category.ancestry LIKE '" . $this->ancestryIdsToString($categoryAncestry) . "%'";
         }
 
-        if (!empty($ancestryClause)) {
-            $qb->andWhere(implode(' OR ', $ancestryClause));
-        }
-
-        $qb->andWhere('broadcast.startAt >= :from')
-        ->andWhere('broadcast.startAt < :to')
-        ->addOrderBy('broadcast.startAt')
-        ->setParameter('from', $from)
-        ->setParameter('to', $to);
+        $qb->andWhere(implode(' OR ', $ancestryClause))
+            ->andWhere('broadcast.startAt >= :from')
+            ->andWhere('broadcast.startAt < :to')
+            ->addOrderBy('broadcast.startAt')
+            ->setParameter('from', $from)
+            ->setParameter('to', $to);
 
         $qb = $this->setEntityTypeFilter($qb, $type);
 

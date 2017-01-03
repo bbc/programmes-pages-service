@@ -101,6 +101,10 @@ class BroadcastsService extends AbstractService
         DateTimeImmutable $to,
         string $medium = null
     ) {
+        if (empty($allCategories)) {
+            return [];
+        }
+
         $categoriesAncestryIds = [];
         foreach ($allCategories as $category) {
             $categoriesAncestryIds[] = $category->getDbAncestryIds();
