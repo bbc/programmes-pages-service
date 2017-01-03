@@ -130,22 +130,31 @@ class BroadcastRepository extends EntityRepository
     }
 
     public function findDaysByCategoryAncestryInDateRange(
-        array $categoryAncestry,
+        array $categoryAncestries,
         string $type,
         $medium,
         DateTimeImmutable $from,
         DateTimeImmutable $to
     ): array {
         $qb = $this->createQueryBuilder('broadcast', false)
-            ->select('DISTINCT DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
-            ->innerJoin('programmeItem.categories', 'category')
-            ->andWhere('category.ancestry LIKE :ancestryClause')
-            ->andWhere('broadcast.startAt >= :from')
-            ->andWhere('broadcast.startAt < :to')
-            ->addOrderBy('broadcast.startAt')
-            ->setParameter('ancestryClause', $this->ancestryIdsToString($categoryAncestry) . '%')
-            ->setParameter('from', $from)
-            ->setParameter('to', $to);
+            ->select('DISTINCT category.ancestry, DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
+            ->innerJoin('programmeItem.categories', 'category');
+
+        $ancestryClause = [];
+
+        foreach ($categoryAncestries as $categoryAncestry) {
+            $ancestryClause[] = "category.ancestry LIKE '" . $this->ancestryIdsToString($categoryAncestry) . "%'";
+        }
+
+        if (!empty($ancestryClause)) {
+            $qb->andWhere(implode(' OR ', $ancestryClause));
+        }
+
+        $qb->andWhere('broadcast.startAt >= :from')
+        ->andWhere('broadcast.startAt < :to')
+        ->addOrderBy('broadcast.startAt')
+        ->setParameter('from', $from)
+        ->setParameter('to', $to);
 
         $qb = $this->setEntityTypeFilter($qb, $type);
 

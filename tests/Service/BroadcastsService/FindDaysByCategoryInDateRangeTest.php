@@ -13,13 +13,13 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
         $category->method('getDbAncestryIds')->willReturn($dbAncestry);
 
         $dbData = [
-            ['day' => '1', 'month' => '8', 'year' => '2011'],
-            ['day' => '2', 'month' => '8', 'year' => '2011'],
-            ['day' => '3', 'month' => '8', 'year' => '2011'],
-            ['day' => '1', 'month' => '9', 'year' => '2011'],
-            ['day' => '2', 'month' => '9', 'year' => '2011'],
-            ['day' => '4', 'month' => '9', 'year' => '2011'],
-            ['day' => '5', 'month' => '10', 'year' => '2011'],
+            ['ancestry' => '1,2,', 'day' => '1', 'month' => '8', 'year' => '2011'],
+            ['ancestry' => '1,2,', 'day' => '2', 'month' => '8', 'year' => '2011'],
+            ['ancestry' => '1,2,', 'day' => '3', 'month' => '8', 'year' => '2011'],
+            ['ancestry' => '1,2,', 'day' => '1', 'month' => '9', 'year' => '2011'],
+            ['ancestry' => '1,2,', 'day' => '2', 'month' => '9', 'year' => '2011'],
+            ['ancestry' => '1,2,', 'day' => '4', 'month' => '9', 'year' => '2011'],
+            ['ancestry' => '1,2,', 'day' => '5', 'month' => '10', 'year' => '2011'],
         ];
 
         $expectedResult = [
@@ -35,10 +35,11 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findDaysByCategoryAncestryInDateRange')
-            ->with($dbAncestry, 'Broadcast', null, $start, $end)
+            ->with([$dbAncestry], 'Broadcast', null, $start, $end)
             ->willReturn($dbData);
 
-        $result = $this->service()->findDaysByCategoryInDateRange($category, $start, $end);
+        $result = $this->service()->findDaysByCategoryInDateRange([$category], $start, $end);
+
         $this->assertSame($expectedResult, $result);
     }
 }
