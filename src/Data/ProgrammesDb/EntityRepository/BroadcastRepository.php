@@ -159,7 +159,7 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }
 
-    public function findDaysForBroadcastedCategoriesAtScheduledDate(
+    public function findBroadcastedCategoriesAtScheduledDate(
         array $categoryAncestries,
         string $type,
         $medium,

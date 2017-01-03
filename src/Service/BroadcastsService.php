@@ -102,7 +102,7 @@ class BroadcastsService extends AbstractService
             $categoriesAncestryIds[] = $category->getDbAncestryIds();
         }
 
-        $broadcastedCategoriesAncestriesByDay = $this->repository->findDaysByCategoryAncestryInDateRange(
+        $broadcastedCategoriesAncestriesByDay = $this->repository->findBroadcastedCategoriesAtScheduledDate(
             $categoriesAncestryIds,
             'Broadcast',
             $medium,
