@@ -8,7 +8,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository::<public>
  */
-class FilterCategoriesByBroadcastedDateTest extends AbstractDatabaseTest
+class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
 {
     public function tearDown()
     {
@@ -29,6 +29,8 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractDatabaseTest
 
         $data = $repo->findBroadcastedDatesForCategories([$ancestry], $type, $medium, $from, $to);
         $this->assertSame($expectedOutput, $data);
+        $this->assertCount(count($expectedOutput), $data);
+
     }
 
     public function findDaysByCategoryAncestryInDateRangeDataProvider()
@@ -108,8 +110,6 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractDatabaseTest
             ['ancestry' => '1,2,3,', 'day' => '5', 'month' => '7', 'year' => '2013'],
         ], $data);
 
-
-
         $this->assertCount(1, $this->getDbQueries());
     }
 
@@ -127,7 +127,6 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractDatabaseTest
         );
 
         $this->assertEquals([], $entities);
-
         $this->assertCount(1, $this->getDbQueries());
     }
 }

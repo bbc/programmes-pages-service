@@ -157,8 +157,8 @@ class BroadcastRepository extends EntityRepository
 
         if ($this->isValidNetworkMedium($medium)) {
             $qb->join('broadcast.service', 'service')
-               ->innerJoin('service.network', 'networkOfService')
-               ->andWhere('networkOfService.medium = :medium')
+               ->innerJoin('service.network', 'network')
+               ->andWhere('network.medium = :medium')
                ->setParameter('medium', $medium);
         }
 

@@ -15,7 +15,7 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractBroadcastsServiceTes
         $category2 = $this->mockEntity('Genre', 5);
         $category2->method('getDbAncestryIds')->willReturn($dbAncestry2);
 
-        $dbBroadcastedResults = [
+        $mockBroadcastedResults = [
             ['ancestry' => '1,2,3,', 'day' => '1', 'month' => '8', 'year' => '2011'],
             ['ancestry' => '1,2,3,4,', 'day' => '2', 'month' => '8', 'year' => '2011'],
         ];
@@ -24,18 +24,17 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractBroadcastsServiceTes
         $end = new DateTimeImmutable();
 
         $this->mockRepository->expects($this->once())
-                             ->method('findBroadcastedDatesForCategories')
-                             ->with([$dbAncestry1, $dbAncestry2], 'Broadcast', null, $start, $end)
-                             ->willReturn($dbBroadcastedResults);
+            ->method('findBroadcastedDatesForCategories')
+            ->with([$dbAncestry1, $dbAncestry2], 'Broadcast', null, $start, $end)
+            ->willReturn($mockBroadcastedResults);
 
-        $resultBroadcastedCategories = $this->service()->filterCategoriesByBroadcastedDate(
+        $dbBroadcastedCategories = $this->service()->filterCategoriesByBroadcastedDate(
             [$category1, $category2],
             $start,
             $end
         );
 
-
-        $this->assertCount(1, $resultBroadcastedCategories);
-        $this->assertSame([1, 2, 3], $resultBroadcastedCategories[0]->getDbAncestryIds());
+        $this->assertCount(1, $dbBroadcastedCategories);
+        $this->assertSame([1, 2, 3], $dbBroadcastedCategories[0]->getDbAncestryIds());
     }
 }
