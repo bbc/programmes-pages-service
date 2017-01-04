@@ -203,14 +203,14 @@ QUERY;
         }
 
         $qb = $this->createQueryBuilder('broadcast', false)
-                   ->select('DISTINCT category.ancestry, DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
-                   ->innerJoin('programmeItem.categories', 'category')
-                   ->andWhere('broadcast.startAt >= :from')
-                   ->andWhere('broadcast.startAt < :to')
-                   ->addOrderBy('broadcast.startAt')
-                   ->setParameter('from', $from)
-                   ->setParameter('to', $to)
-                   ->andWhere(implode(' OR ', $ancestryClause));
+               ->select('DISTINCT category.ancestry, DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
+               ->innerJoin('programmeItem.categories', 'category')
+               ->andWhere('broadcast.startAt >= :from')
+               ->andWhere('broadcast.startAt < :to')
+               ->addOrderBy('broadcast.startAt')
+               ->setParameter('from', $from)
+               ->setParameter('to', $to)
+               ->andWhere(implode(' OR ', $ancestryClause));
 
 
         $qb = $this->setEntityTypeFilter($qb, $type);

@@ -29,7 +29,6 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
 
         $data = $repo->findBroadcastedDatesForCategories([$ancestry], $type, $medium, $from, $to);
         $this->assertSame($expectedOutput, $data);
-        $this->assertCount(count($expectedOutput), $data);
     }
 
     public function findDaysByCategoryAncestryInDateRangeDataProvider()
