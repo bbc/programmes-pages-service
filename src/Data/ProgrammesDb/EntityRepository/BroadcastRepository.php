@@ -144,12 +144,12 @@ class BroadcastRepository extends EntityRepository
         $qb = $this->createQueryBuilder('broadcast', false)
             ->select('DISTINCT category.ancestry, DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
             ->innerJoin('programmeItem.categories', 'category')
+            ->andWhere(implode(' OR ', $ancestryClause))
             ->andWhere('broadcast.startAt >= :from')
             ->andWhere('broadcast.startAt < :to')
             ->addOrderBy('broadcast.startAt')
             ->setParameter('from', $from)
-            ->setParameter('to', $to)
-            ->andWhere(implode(' OR ', $ancestryClause));
+            ->setParameter('to', $to);
 
         $qb = $this->setEntityTypeFilter($qb, $type);
 
