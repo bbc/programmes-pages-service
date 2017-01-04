@@ -18,6 +18,12 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
             ['ancestry' => '1,2,3,5,', 'day' => '2', 'month' => '8', 'year' => '2011'],
         ];
 
+        $expectedResult = [
+            '2011' => [
+                '8' => [1, 2],
+            ],
+        ];
+
         $start = new DateTimeImmutable();
         $end = new DateTimeImmutable();
 
@@ -32,12 +38,6 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
             $end
         );
 
-        $expectedResults = [
-          '2011' => [
-              '8' => [1, 2],
-          ],
-        ];
-
-        $this->assertSame($expectedResults, $resultBroadcastedCategories);
+        $this->assertSame($expectedResult, $resultBroadcastedCategories);
     }
 }
