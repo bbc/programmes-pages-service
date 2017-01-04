@@ -68,7 +68,10 @@ class BroadcastRepository extends EntityRepository
     ) {
         $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
 
-        $qb->andWhere('broadcast.endAt > :from')
+        $qb->addSelect(['masterBrand', 'network'])
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->andWhere('broadcast.endAt > :from')
             ->andWhere('broadcast.endAt <= :to')
             ->addOrderBy('broadcast.startAt')
             ->addOrderBy('networkOfService.urlKey')
