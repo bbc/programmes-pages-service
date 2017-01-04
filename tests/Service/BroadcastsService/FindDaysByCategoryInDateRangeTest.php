@@ -28,15 +28,11 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
         $end = new DateTimeImmutable();
 
         $this->mockRepository->expects($this->once())
-             ->method('findBroadcastedDatesForCategories')
-             ->with([$dbAncestry], 'Broadcast', null, $start, $end)
-             ->willReturn($dbData);
+            ->method('findBroadcastedDatesForCategories')
+            ->with([$dbAncestry], 'Broadcast', null, $start, $end)
+            ->willReturn($dbData);
 
-        $resultBroadcastedCategories = $this->service()->findDaysByCategoryInDateRange(
-            $category,
-            $start,
-            $end
-        );
+        $resultBroadcastedCategories = $this->service()->findDaysByCategoryInDateRange($category, $start, $end);
 
         $this->assertSame($expectedResult, $resultBroadcastedCategories);
     }
