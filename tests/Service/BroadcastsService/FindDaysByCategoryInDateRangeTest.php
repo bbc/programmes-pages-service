@@ -38,7 +38,6 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
           ],
         ];
 
-        $this->assertCount(1, $resultBroadcastedCategories);
         $this->assertSame($expectedResults, $resultBroadcastedCategories);
     }
 }
