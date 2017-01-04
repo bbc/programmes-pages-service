@@ -32,8 +32,7 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
             ->with([$dbAncestry], 'Broadcast', null, $start, $end)
             ->willReturn($dbData);
 
-        $resultBroadcastedCategories = $this->service()->findDaysByCategoryInDateRange($category, $start, $end);
-
-        $this->assertSame($expectedResult, $resultBroadcastedCategories);
+        $result = $this->service()->findDaysByCategoryInDateRange($category, $start, $end);
+        $this->assertSame($expectedResult, $result);
     }
 }
