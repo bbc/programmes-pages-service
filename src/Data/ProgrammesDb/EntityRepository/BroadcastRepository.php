@@ -136,22 +136,22 @@ class BroadcastRepository extends EntityRepository
         DateTimeImmutable $from,
         DateTimeImmutable $to
     ): array {
-        $qb = $this->createQueryBuilder('broadcast', false)
-                   ->select('DISTINCT category.ancestry, DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
-                   ->innerJoin('programmeItem.categories', 'category');
 
         $ancestryClause = [];
-
         foreach ($categoryAncestries as $categoryAncestry) {
             $ancestryClause[] = "category.ancestry LIKE '" . $this->ancestryIdsToString($categoryAncestry) . "%'";
         }
 
-        $qb->andWhere(implode(' OR ', $ancestryClause))
-           ->andWhere('broadcast.startAt >= :from')
-           ->andWhere('broadcast.startAt < :to')
-           ->addOrderBy('broadcast.startAt')
-           ->setParameter('from', $from)
-           ->setParameter('to', $to);
+        $qb = $this->createQueryBuilder('broadcast', false)
+            ->select('DISTINCT category.ancestry, DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
+            ->innerJoin('programmeItem.categories', 'category')
+            ->andWhere('broadcast.startAt >= :from')
+            ->andWhere('broadcast.startAt < :to')
+            ->addOrderBy('broadcast.startAt')
+            ->setParameter('from', $from)
+            ->setParameter('to', $to)
+            ->andWhere(implode(' OR ', $ancestryClause));
+
 
         $qb = $this->setEntityTypeFilter($qb, $type);
 
