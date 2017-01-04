@@ -129,42 +129,6 @@ class BroadcastRepository extends EntityRepository
         );
     }
 
-    public function findBroadcastedDatesForCategories(
-        array $categoryAncestries,
-        string $type,
-        $medium,
-        DateTimeImmutable $from,
-        DateTimeImmutable $to
-    ): array {
-
-        $ancestryClause = [];
-        foreach ($categoryAncestries as $categoryAncestry) {
-            $ancestryClause[] = "category.ancestry LIKE '" . $this->ancestryIdsToString($categoryAncestry) . "%'";
-        }
-
-        $qb = $this->createQueryBuilder('broadcast', false)
-            ->select('DISTINCT category.ancestry, DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
-            ->innerJoin('programmeItem.categories', 'category')
-            ->andWhere('broadcast.startAt >= :from')
-            ->andWhere('broadcast.startAt < :to')
-            ->addOrderBy('broadcast.startAt')
-            ->setParameter('from', $from)
-            ->setParameter('to', $to)
-            ->andWhere(implode(' OR ', $ancestryClause));
-
-
-        $qb = $this->setEntityTypeFilter($qb, $type);
-
-        if ($this->isValidNetworkMedium($medium)) {
-            $qb->join('broadcast.service', 'service')
-               ->innerJoin('service.network', 'network')
-               ->andWhere('network.medium = :medium')
-               ->setParameter('medium', $medium);
-        }
-
-        return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
-    }
-
     public function countByCategoryAncestryAndEndAtDateRange(
         array $categoryAncestry,
         string $type,
@@ -223,6 +187,42 @@ QUERY;
         }
 
         return $q->getSingleScalarResult();
+    }
+
+    public function findBroadcastedDatesForCategories(
+        array $categoryAncestries,
+        string $type,
+        $medium,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to
+    ): array {
+
+        $ancestryClause = [];
+        foreach ($categoryAncestries as $categoryAncestry) {
+            $ancestryClause[] = "category.ancestry LIKE '" . $this->ancestryIdsToString($categoryAncestry) . "%'";
+        }
+
+        $qb = $this->createQueryBuilder('broadcast', false)
+                   ->select('DISTINCT category.ancestry, DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
+                   ->innerJoin('programmeItem.categories', 'category')
+                   ->andWhere('broadcast.startAt >= :from')
+                   ->andWhere('broadcast.startAt < :to')
+                   ->addOrderBy('broadcast.startAt')
+                   ->setParameter('from', $from)
+                   ->setParameter('to', $to)
+                   ->andWhere(implode(' OR ', $ancestryClause));
+
+
+        $qb = $this->setEntityTypeFilter($qb, $type);
+
+        if ($this->isValidNetworkMedium($medium)) {
+            $qb->join('broadcast.service', 'service')
+               ->innerJoin('service.network', 'network')
+               ->andWhere('network.medium = :medium')
+               ->setParameter('medium', $medium);
+        }
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }
 
     public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month, $limit, int $offset)
