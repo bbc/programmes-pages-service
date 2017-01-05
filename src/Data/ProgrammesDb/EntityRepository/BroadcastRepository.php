@@ -436,7 +436,7 @@ QUERY;
         // these two services do not belong to the same network.
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['category', 'programmeItem', 'image'])
-            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
+            ->addSelect(['GROUP_CONCAT(DISTINCT service.sid ORDER BY service.sid) as serviceIds'])
             ->join('broadcast.service', 'service')
             ->leftJoin('service.network', 'networkOfService')
             ->leftJoin('programmeItem.image', 'image')
