@@ -18,6 +18,18 @@ class PipsChangeRepository extends EntityRepository
         $em->flush();
     }
 
+    public function addChanges(array $pipsChanges)
+    {
+        $em = $this->getEntityManager();
+        foreach ($pipsChanges as $pipsChange) {
+            if (!($pipsChange instanceof PipsChangeBase)) {
+                throw new \InvalidArgumentException("pipsChange is not an instance of PipsChangeBase");
+            }
+            $em->persist($pipsChange);
+        }
+        $em->flush();
+    }
+
     /**
      * @return PipsChange
      */
