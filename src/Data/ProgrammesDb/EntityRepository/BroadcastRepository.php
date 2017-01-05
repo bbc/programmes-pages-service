@@ -68,7 +68,10 @@ class BroadcastRepository extends EntityRepository
     ) {
         $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
 
-        $qb->andWhere('broadcast.endAt > :from')
+        $qb->addSelect(['masterBrand', 'network'])
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->andWhere('broadcast.endAt > :from')
             ->andWhere('broadcast.endAt <= :to')
             ->addOrderBy('broadcast.startAt')
             ->addOrderBy('networkOfService.urlKey')
@@ -433,7 +436,7 @@ QUERY;
         // these two services do not belong to the same network.
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['category', 'programmeItem', 'image'])
-            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
+            ->addSelect(['GROUP_CONCAT(DISTINCT service.sid ORDER BY service.sid) as serviceIds'])
             ->join('broadcast.service', 'service')
             ->leftJoin('service.network', 'networkOfService')
             ->leftJoin('programmeItem.image', 'image')
