@@ -60,8 +60,8 @@ class BroadcastsService extends AbstractService
         DateTimeImmutable $end,
         string $medium = null
     ): array {
-        $dbDays = $this->repository->findDaysByCategoryAncestryInDateRange(
-            $category->getDbAncestryIds(),
+        $dbDays = $this->repository->findBroadcastedDatesForCategories(
+            [$category->getDbAncestryIds()],
             'Broadcast',
             $medium,
             $start,
@@ -81,9 +81,48 @@ class BroadcastsService extends AbstractService
                 $result[$year][$month] = [];
             }
 
-            $result[$year][$month][] = (int) $day['day'];
+            $day = (int) $day['day'];
+            if (!in_array($day, $result[$year][$month])) {
+                $result[$year][$month][] = $day;
+            }
         }
 
         return $result;
+    }
+
+    public function filterCategoriesByBroadcastedDate(
+        array $allCategories,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to,
+        string $medium = null
+    ) {
+        if (empty($allCategories)) {
+            return [];
+        }
+
+        $categoriesAncestryIds = [];
+        foreach ($allCategories as $category) {
+            $categoriesAncestryIds[] = $category->getDbAncestryIds();
+        }
+
+        $broadcastedCategoriesAncestriesByDay = $this->repository->findBroadcastedDatesForCategories(
+            $categoriesAncestryIds,
+            'Broadcast',
+            $medium,
+            $from,
+            $to
+        );
+
+        $broadcastedAncestries = array_column($broadcastedCategoriesAncestriesByDay, 'ancestry');
+
+        $broadcastedCategories = [];
+        foreach ($allCategories as $category) {
+            $ancestryCategory = implode(',', $category->getDbAncestryIds()) . ',';
+            if (in_array($ancestryCategory, $broadcastedAncestries)) {
+                $broadcastedCategories[] = $category;
+            }
+        }
+
+        return $broadcastedCategories;
     }
 }
