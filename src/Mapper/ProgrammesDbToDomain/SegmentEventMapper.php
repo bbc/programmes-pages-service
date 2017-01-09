@@ -14,9 +14,17 @@ class SegmentEventMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbSegmentEvent): string
+    {
+        return $this->buildCacheKey($dbSegmentEvent, 'id', [
+            'version' => 'Version',
+            'segment' => 'Segment',
+        ]);
+    }
+
     public function getDomainModel(array $dbSegmentEvent): SegmentEvent
     {
-        $cacheKey = $dbSegmentEvent['id'];
+        $cacheKey = $this->getCacheKey($dbSegmentEvent);
 
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new SegmentEvent(

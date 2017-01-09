@@ -3,6 +3,8 @@
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
+use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
@@ -58,16 +60,17 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
      * ProgrammeMapper depends upon.
      */
     protected function getSampleProgrammeDbEntity(
-        $pid,
-        $image = null,
-        $masterBrand = null,
+        string $pid,
+        array $image = null,
+        array $masterBrand = null,
         array $categories = [],
-        array $parent = null
+        array $parent = null,
+        int $id = 1
     ) {
         return [
-            'id' => 1,
+            'id' => $id,
             'type' => 'series',
-            'ancestry' => '1,',
+            'ancestry' => $id . ',',
             'pid' => $pid,
             'title' => 'Title',
             'searchTitle' => 'Search Title',
@@ -101,15 +104,16 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
      * that the ProgrammeMapper depends upon.
      */
     protected function getSampleProgrammeDomainEntity(
-        $pid,
-        $image = null,
-        $masterBrand = null,
+        string $pid,
+        Image $image = null,
+        MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
-        Programme $parent = null
+        Programme $parent = null,
+        int $id = 1
     ) {
         return new Series(
-            [1],
+            [$id],
             new Pid($pid),
             'Title',
             'Search Title',

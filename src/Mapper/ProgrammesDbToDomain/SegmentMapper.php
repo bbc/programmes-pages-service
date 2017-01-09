@@ -13,9 +13,16 @@ class SegmentMapper extends AbstractMapper
 
     private $cache = [];
 
+    public function getCacheKey(array $dbSegment): string
+    {
+        return $this->buildCacheKey($dbSegment, 'id', [], [
+            'contributions' => 'Contribution',
+        ]);
+    }
+
     public function getDomainModel(array $dbSegment): Segment
     {
-        $cacheKey = $dbSegment['id'];
+        $cacheKey = $this->getCacheKey($dbSegment);
 
         if (!isset($this->cache[$cacheKey])) {
             if (in_array($dbSegment['type'], self::MUSIC_TYPES)) {

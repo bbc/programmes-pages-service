@@ -5,9 +5,8 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use PHPUnit_Framework_TestCase;
 
-class ImageMapperTest extends PHPUnit_Framework_TestCase
+class ImageMapperTest extends BaseMapperTestCase
 {
     public function testGetDomainModel()
     {
@@ -25,7 +24,7 @@ class ImageMapperTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $expectedEntity = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
-        $mapper = new ImageMapper();
+        $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
 
         // Requesting the same entity multiple times reuses a cached instance
@@ -47,11 +46,16 @@ class ImageMapperTest extends PHPUnit_Framework_TestCase
             'png'
         );
 
-        $mapper = new ImageMapper();
+        $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDefaultImage());
 
         // Requesting the same entity multiple times reuses a cached instance
         // of the entity, rather than creating a new one every time
         $this->assertSame($mapper->getDefaultImage(), $mapper->getDefaultImage());
+    }
+
+    private function getMapper(): ImageMapper
+    {
+        return new ImageMapper($this->getMapperFactory());
     }
 }

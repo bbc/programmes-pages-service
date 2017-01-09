@@ -27,7 +27,7 @@ class MapperFactory
     public function getCategoryMapper(): CategoryMapper
     {
         if (!isset($this->instances['CategoryMapper'])) {
-            $this->instances['CategoryMapper'] = new CategoryMapper();
+            $this->instances['CategoryMapper'] = new CategoryMapper($this);
         }
 
         return $this->instances['CategoryMapper'];
@@ -45,7 +45,7 @@ class MapperFactory
     public function getContributorMapper(): ContributorMapper
     {
         if (!isset($this->instances['ContributorMapper'])) {
-            $this->instances['ContributorMapper'] = new ContributorMapper();
+            $this->instances['ContributorMapper'] = new ContributorMapper($this);
         }
 
         return $this->instances['ContributorMapper'];
@@ -63,7 +63,7 @@ class MapperFactory
     public function getImageMapper(): ImageMapper
     {
         if (!isset($this->instances['ImageMapper'])) {
-            $this->instances['ImageMapper'] = new ImageMapper();
+            $this->instances['ImageMapper'] = new ImageMapper($this);
         }
 
         return $this->instances['ImageMapper'];
@@ -99,7 +99,7 @@ class MapperFactory
     public function getRelatedLinkMapper(): RelatedLinkMapper
     {
         if (!isset($this->instances['RelatedLinkMapper'])) {
-            $this->instances['RelatedLinkMapper'] = new RelatedLinkMapper();
+            $this->instances['RelatedLinkMapper'] = new RelatedLinkMapper($this);
         }
 
         return $this->instances['RelatedLinkMapper'];
@@ -139,5 +139,14 @@ class MapperFactory
         }
 
         return $this->instances['VersionMapper'];
+    }
+
+    public function getVersionTypeMapper(): VersionTypeMapper
+    {
+        if (!isset($this->instances['VersionTypeMapper'])) {
+            $this->instances['VersionTypeMapper'] = new VersionTypeMapper($this);
+        }
+
+        return $this->instances['VersionTypeMapper'];
     }
 }

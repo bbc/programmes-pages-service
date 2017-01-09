@@ -4,9 +4,8 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
-use PHPUnit_Framework_TestCase;
 
-class RelatedLinkMapperTest extends PHPUnit_Framework_TestCase
+class RelatedLinkMapperTest extends BaseMapperTestCase
 {
     public function testGetDomainModel()
     {
@@ -32,7 +31,7 @@ class RelatedLinkMapperTest extends PHPUnit_Framework_TestCase
             true
         );
 
-        $mapper = new RelatedLinkMapper();
+        $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
 
         // Requesting the same entity multiple times reuses a cached instance
@@ -41,5 +40,10 @@ class RelatedLinkMapperTest extends PHPUnit_Framework_TestCase
             $mapper->getDomainModel($dbEntityArray),
             $mapper->getDomainModel($dbEntityArray)
         );
+    }
+
+    private function getMapper(): RelatedLinkMapper
+    {
+        return new RelatedLinkMapper($this->getMapperFactory());
     }
 }

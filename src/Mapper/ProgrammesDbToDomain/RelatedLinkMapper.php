@@ -2,17 +2,21 @@
 
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
-class RelatedLinkMapper implements MapperInterface
+class RelatedLinkMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbRelatedLink): string
+    {
+        return $this->buildCacheKey($dbRelatedLink, 'id');
+    }
+
     public function getDomainModel(array $dbRelatedLink): RelatedLink
     {
-        $cacheKey = $dbRelatedLink['id'];
+        $cacheKey = $this->getCacheKey($dbRelatedLink);
 
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new RelatedLink(

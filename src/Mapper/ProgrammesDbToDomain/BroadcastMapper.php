@@ -17,13 +17,22 @@ class BroadcastMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbBroadcast): string
+    {
+        return $this->buildCacheKey($dbBroadcast, 'id', [
+            'programmeItem' => 'Programme',
+            'version' => 'Version',
+            'service' => 'Service',
+        ]);
+    }
+
     /**
      * @param array $dbBroadcast
      * @return Broadcast|null
      */
     public function getDomainModel(array $dbBroadcast): Broadcast
     {
-        $cacheKey = $dbBroadcast['id'];
+        $cacheKey = $this->getCacheKey($dbBroadcast);
 
         if (!isset($this->cache[$cacheKey])) {
             if ($dbBroadcast['isWebcast']) {

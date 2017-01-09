@@ -10,9 +10,17 @@ class NetworkMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbNetwork): string
+    {
+        return $this->buildCacheKey($dbNetwork, 'id', [
+            'image' => 'Image',
+            'service' => 'Service',
+        ]);
+    }
+
     public function getDomainModel(array $dbNetwork): Network
     {
-        $cacheKey = $dbNetwork['id'];
+        $cacheKey = $this->getCacheKey($dbNetwork);
 
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new Network(

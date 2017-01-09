@@ -5,9 +5,8 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributorMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use PHPUnit_Framework_TestCase;
 
-class ContributorMapperTest extends PHPUnit_Framework_TestCase
+class ContributorMapperTest extends BaseMapperTestCase
 {
     public function testGetDomainModel()
     {
@@ -25,7 +24,7 @@ class ContributorMapperTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01v0q3w');
         $expectedEntity = new Contributor(1, $pid, 'person', 'Peter Capaldi', 'Capaldi, Peter');
 
-        $mapper = new ContributorMapper();
+        $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
 
         // Requesting the same entity multiple times reuses a cached instance
@@ -62,7 +61,12 @@ class ContributorMapperTest extends PHPUnit_Framework_TestCase
             '5df5318d-4af6-4349-afc2-7391f092e9e2'
         );
 
-        $mapper = new ContributorMapper();
+        $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+    }
+
+    private function getMapper(): ContributorMapper
+    {
+        return new ContributorMapper($this->getMapperFactory());
     }
 }

@@ -4,18 +4,26 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
-use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use \DateTimeImmutable;
+use DateTimeImmutable;
 
 class VersionMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbVersion): string
+    {
+        return $this->buildCacheKey($dbVersion, 'id', [
+            'programmeItem' => 'Programme',
+        ], [
+            'versionTypes' => 'VersionType',
+        ]);
+    }
+
     public function getDomainModel(array $dbVersion): Version
     {
-        $cacheKey = $dbVersion['id'];
+        $cacheKey = $this->getCacheKey($dbVersion);
 
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new Version(
@@ -53,14 +61,12 @@ class VersionMapper extends AbstractMapper
             return null;
         }
 
-        return array_map([$this, 'getVersionTypeModel'], $dbVersion[$key]);
-    }
+        $versionTypeMapper = $this->mapperFactory->getVersionTypeMapper();
+        $versionTypes = [];
+        foreach ($dbVersion[$key] as $dbVersionType) {
+            $versionTypes[] = $versionTypeMapper->getDomainModel($dbVersionType);
+        }
 
-    private function getVersionTypeModel(array $dbVersionType): VersionType
-    {
-        return new VersionType(
-            $dbVersionType['type'],
-            $dbVersionType['name']
-        );
+        return $versionTypes;
     }
 }

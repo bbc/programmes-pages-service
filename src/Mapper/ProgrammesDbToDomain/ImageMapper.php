@@ -2,20 +2,24 @@
 
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
-class ImageMapper implements MapperInterface
+class ImageMapper extends AbstractMapper
 {
     private $cache = [];
 
     private $cachedDefaultImage;
 
+    public function getCacheKey(array $dbImage): string
+    {
+        return $this->buildCacheKey($dbImage, 'id');
+    }
+
     public function getDomainModel(array $dbImage): Image
     {
-        $cacheKey = $dbImage['id'];
+        $cacheKey = $this->getCacheKey($dbImage);
 
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new Image(

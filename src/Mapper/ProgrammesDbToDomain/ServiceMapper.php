@@ -10,9 +10,16 @@ class ServiceMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbService): string
+    {
+        return $this->buildCacheKey($dbService, 'id', [
+            'network' => 'Network',
+        ]);
+    }
+
     public function getDomainModel(array $dbService): Service
     {
-        $cacheKey = $dbService['id'];
+        $cacheKey = $this->getCacheKey($dbService);
 
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new Service(

@@ -18,9 +18,20 @@ class ProgrammeMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbProgramme): string
+    {
+        return $this->buildCacheKey($dbProgramme, 'id', [
+            'image' => 'Image',
+            'parent' => 'Programme',
+            'masterBrand' => 'MasterBrand',
+        ], [
+            'categories' => 'Category',
+        ]);
+    }
+
     public function getDomainModel(array $dbProgramme): Programme
     {
-        $cacheKey = $dbProgramme['id'];
+        $cacheKey = $this->getCacheKey($dbProgramme);
 
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = $this->getModel($dbProgramme);

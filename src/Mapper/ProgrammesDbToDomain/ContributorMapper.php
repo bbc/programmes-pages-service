@@ -2,18 +2,22 @@
 
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use InvalidArgumentException;
 
-class ContributorMapper implements MapperInterface
+class ContributorMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbContributor): string
+    {
+        return $this->buildCacheKey($dbContributor, 'id');
+    }
+
     public function getDomainModel(array $dbContributor): Contributor
     {
-        $cacheKey = $dbContributor['id'];
+        $cacheKey = $this->getCacheKey($dbContributor);
 
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new Contributor(

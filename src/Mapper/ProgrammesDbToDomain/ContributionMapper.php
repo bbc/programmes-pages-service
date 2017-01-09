@@ -12,9 +12,18 @@ class ContributionMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbContribution): string
+    {
+        return $this->buildCacheKey($dbContribution, 'id', [
+            'contributionToSegment' => 'Segment',
+            'contributionToCoreEntity' => 'Programme',
+            'contributionToVersion' => 'Version',
+        ]);
+    }
+
     public function getDomainModel(array $dbContribution): Contribution
     {
-        $cacheKey = $dbContribution['id'];
+        $cacheKey = $this->getCacheKey($dbContribution);
 
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new Contribution(

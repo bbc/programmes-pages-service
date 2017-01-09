@@ -2,19 +2,25 @@
 
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use InvalidArgumentException;
 
-class CategoryMapper implements MapperInterface
+class CategoryMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbCategory): string
+    {
+        return $this->buildCacheKey($dbCategory, 'id', [
+            'parent' => 'Category',
+        ]);
+    }
+
     public function getDomainModel(array $dbCategory): Category
     {
-        $cacheKey = $dbCategory['id'];
+        $cacheKey = $this->getCacheKey($dbCategory);
 
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = $this->getModel($dbCategory);

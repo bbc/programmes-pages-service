@@ -6,7 +6,8 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use \DateTime;
+use DateTime;
+use DateTimeImmutable;
 
 class VersionMapperTest extends BaseMapperTestCase
 {
@@ -17,20 +18,43 @@ class VersionMapperTest extends BaseMapperTestCase
         $this->mockProgrammeMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper'
         );
+
+        $this->mockVersionTypeMapper = $this->createMock(
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionTypeMapper'
+        );
     }
 
     public function testGetDomainModel()
     {
         $programmeDbEntity = ['pid' => 'p01m5mss'];
 
+        $versionTypeDbEntities = [
+            ['type' => 'original', 'name' => 'Original Version'],
+            ['type' => 'ad', 'name' => 'Audio Described'],
+        ];
+
         $expectedProgrammeDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem'
         );
+
+        $expectedVersionTypes = [
+            new VersionType('original', 'Original Version'),
+            new VersionType('ad', 'Audio Described'),
+        ];
 
         $this->mockProgrammeMapper->expects($this->once())
             ->method('getDomainModel')
             ->with($programmeDbEntity)
             ->willReturn($expectedProgrammeDomainEntity);
+
+
+        $this->mockVersionTypeMapper->expects($this->exactly(2))
+            ->method('getDomainModel')
+            ->withConsecutive(
+                [$versionTypeDbEntities[0]],
+                [$versionTypeDbEntities[1]]
+            )
+            ->will($this->onConsecutiveCalls(...$expectedVersionTypes));
 
 
         $streamableFrom = new DateTime();
@@ -49,15 +73,7 @@ class VersionMapperTest extends BaseMapperTestCase
             'streamableFrom' => $streamableFrom,
             'streamableUntil' => $streamableUntil,
             'programmeItem' => $programmeDbEntity,
-            'versionTypes' => [
-                ['type' => 'original', 'name' => 'Original Version'],
-                ['type' => 'ad', 'name' => 'Audio Described'],
-            ],
-        ];
-
-        $expectedVersionTypes = [
-            new VersionType('original', 'Original Version'),
-            new VersionType('ad', 'Audio Described'),
+            'versionTypes' => $versionTypeDbEntities,
         ];
 
         $pid = new Pid('b0007c3v');
@@ -72,8 +88,8 @@ class VersionMapperTest extends BaseMapperTestCase
             360,
             'warnings',
             true,
-            \DateTimeImmutable::createFromMutable($streamableFrom),
-            \DateTimeImmutable::createFromMutable($streamableUntil),
+            DateTimeImmutable::createFromMutable($streamableFrom),
+            DateTimeImmutable::createFromMutable($streamableUntil),
             $expectedVersionTypes
         );
 
@@ -150,6 +166,7 @@ class VersionMapperTest extends BaseMapperTestCase
     {
         return new VersionMapper($this->getMapperFactory([
             'ProgrammeMapper' => $this->mockProgrammeMapper,
+            'VersionTypeMapper' => $this->mockVersionTypeMapper,
         ]));
     }
 }

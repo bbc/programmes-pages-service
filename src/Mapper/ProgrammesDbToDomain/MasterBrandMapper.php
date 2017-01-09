@@ -9,13 +9,22 @@ class MasterBrandMapper extends AbstractMapper
 {
     private $cache = [];
 
+    public function getCacheKey(array $dbMasterBrand): string
+    {
+        return $this->buildCacheKey($dbMasterBrand, 'id', [
+            'image' => 'Image',
+            'competitionWarning' => 'Version',
+            'network' => 'Network',
+        ]);
+    }
+
     /**
      * @param array $dbMasterBrand
      * @return MasterBrand|null
      */
     public function getDomainModel(array $dbMasterBrand)
     {
-        $cacheKey = $dbMasterBrand['id'];
+        $cacheKey = $this->getCacheKey($dbMasterBrand);
 
         if (!isset($this->cache[$cacheKey])) {
             // A MasterBrand must have a Network attached to it.

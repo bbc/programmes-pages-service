@@ -43,6 +43,7 @@ class MapperFactoryTest extends PHPUnit_Framework_TestCase
             ['SegmentEventMapper'],
             ['ServiceMapper'],
             ['VersionMapper'],
+            ['VersionTypeMapper'],
         ];
     }
 }

@@ -5,9 +5,8 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
-use PHPUnit_Framework_TestCase;
 
-class CategoryMapperTest extends PHPUnit_Framework_TestCase
+class CategoryMapperTest extends BaseMapperTestCase
 {
     public function testGetDomainModelWithFormat()
     {
@@ -27,7 +26,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
             'url_key'
         );
 
-        $mapper = new CategoryMapper();
+        $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
 
         // Requesting the same entity multiple times reuses a cached instance
@@ -56,7 +55,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
             'url_key'
         );
 
-        $mapper = new CategoryMapper();
+        $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
     }
 
@@ -92,7 +91,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $mapper = new CategoryMapper();
+        $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
     }
 
@@ -111,7 +110,12 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
             'urlKey' => 'url_key',
         ];
 
-        $mapper = new CategoryMapper();
+        $mapper = $this->getMapper();
         $mapper->getDomainModel($dbEntityArray);
+    }
+
+    private function getMapper(): CategoryMapper
+    {
+        return new CategoryMapper($this->getMapperFactory());
     }
 }
