@@ -407,7 +407,7 @@ QUERY;
         // these two services do not belong to the same network.
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['programmeItem', 'image', 'masterBrand', 'network'])
-            ->addSelect(['GROUP_CONCAT(service.sid ORDER BY service.sid) as serviceIds'])
+            ->addSelect(['GROUP_CONCAT(DISTINCT service.sid ORDER BY service.sid) as serviceIds'])
             ->join('broadcast.service', 'service')
             ->leftJoin('service.network', 'networkOfService')
             ->leftJoin('programmeItem.image', 'image')
@@ -416,8 +416,8 @@ QUERY;
             ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->addGroupBy('broadcast.startAt')
-            ->addGroupBy('programmeItem.id')
             ->addGroupBy('networkOfService.id')
+            ->addGroupBy('programmeItem.id')
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
 
         $qb = $this->setEntityTypeFilter($qb, $type);
@@ -447,8 +447,8 @@ QUERY;
             ->andWhere('category.ancestry LIKE :ancestryClause')
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->addGroupBy('broadcast.startAt')
-            ->addGroupBy('programmeItem.id')
             ->addGroupBy('networkOfService.id')
+            ->addGroupBy('programmeItem.id')
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
 
         $qb = $this->setEntityTypeFilter($qb, $type);
