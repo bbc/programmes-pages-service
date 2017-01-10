@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # If we're not already using php70, try and solve that
-if ! (php --version | grep -q "PHP 7.0.") ; then
+if ! (php --version | grep -q "PHP 7.1.") ; then
     if [[ "$HOSTNAME" == "sandbox.bbc.co.uk" ]]; then
-        echo "You're on the sandbox, but you haven't installed php70u-cli :("
+        echo "You're on the sandbox, but you haven't installed php71u-cli :("
         exit
     fi
 fi

@@ -94,7 +94,7 @@ class LoggingServiceFactoryTest extends PHPUnit_Framework_TestCase
         $timedService = $this->serviceProxyClass($service, new NullLogger(), new Stopwatch());
 
         $this->expectException('TypeError');
-        $this->expectExceptionMessage('Argument 1 passed to ' . VersionsService::CLASS . '::findByPidFull() must be an instance of ' . Pid::CLASS . ', none given');
+        $this->expectExceptionMessage('Too few arguments to function ' . VersionsService::CLASS . '::findByPidFull(), 0 passed in');
 
         $timedService->findByPidFull();
     }
