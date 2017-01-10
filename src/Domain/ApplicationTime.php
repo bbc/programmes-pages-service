@@ -11,6 +11,7 @@ use DateTimeImmutable;
  */
 class ApplicationTime
 {
+    /** @var DateTimeImmutable  */
     private static $appTime = null;
 
     public static function getTime()
@@ -20,6 +21,20 @@ class ApplicationTime
         }
 
         return static::$appTime;
+    }
+
+    public static function getTruncatedTime()
+    {
+        static::getTime();
+        return static::$appTime->setTime(static::$appTime->format('H'), static::$appTime->format('i'), 0);
+    }
+
+    public static function getCurrent3MinuteWindow()
+    {
+        static::getTime();
+
+        $currentWindow = floor(static::$appTime->format('i') / 3) * 3;
+        return static::$appTime->setTime(static::$appTime->format('H'), $currentWindow, 0);
     }
 
     public static function setTime(int $appTime = null)
