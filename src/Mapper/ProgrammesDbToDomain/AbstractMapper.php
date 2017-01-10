@@ -43,8 +43,11 @@ abstract class AbstractMapper implements MapperInterface
         return '{' . $cacheKey . '}';
     }
 
-    private function buildCacheKeyForOneToManyTuple(array $dbEntity, string $field, string $mapper): string
-    {
+    private function buildCacheKeyForOneToManyTuple(
+        array $dbEntity,
+        string $field,
+        string $mapper
+    ): string {
         // Cache key shall be ! if it has not been fetched
         if (!array_key_exists($field, $dbEntity)) {
             return self::KEY_NOT_REQUESTED;
@@ -61,8 +64,11 @@ abstract class AbstractMapper implements MapperInterface
         );
     }
 
-    private function buildCacheKeyForManyToManyTuple(array $dbEntity, string $field, string $mapper): string
-    {
+    private function buildCacheKeyForManyToManyTuple(
+        array $dbEntity,
+        string $field,
+        string $mapper
+    ): string {
         // Cache key shall be ! if it has not been fetched
         if (!array_key_exists($field, $dbEntity)) {
             return self::KEY_NOT_REQUESTED;

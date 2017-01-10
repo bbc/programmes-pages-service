@@ -4,7 +4,6 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use InvalidArgumentException;
 
 class ContributorMapper extends AbstractMapper
 {

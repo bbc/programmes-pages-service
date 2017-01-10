@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
@@ -185,7 +186,7 @@ class ProgrammeMapper extends AbstractMapper
         );
     }
 
-    private function getAncestryArray($dbProgramme, $key = 'ancestry')
+    private function getAncestryArray(array $dbProgramme, string $key = 'ancestry'): array
     {
         // ancestry contains a string of all IDs including the current one with
         // a trailing comma at the end (which makes it an empty item when exploding)
@@ -196,7 +197,7 @@ class ProgrammeMapper extends AbstractMapper
         }, $ancestors);
     }
 
-    private function getParentModel($dbProgramme, $key = 'parent')
+    private function getParentModel(array $dbProgramme, string $key = 'parent'): ?Programme
     {
         // It is possible to have no parent, where the key does
         // exist but is set to null. We'll only say it's Unfetched
@@ -212,7 +213,7 @@ class ProgrammeMapper extends AbstractMapper
         return $this->getDomainModel($dbProgramme[$key]);
     }
 
-    private function getImageModel($dbProgramme, $key = 'image')
+    private function getImageModel(array $dbProgramme, string $key = 'image'): ?Image
     {
         $imageMapper = $this->mapperFactory->getImageMapper();
 
@@ -250,7 +251,7 @@ class ProgrammeMapper extends AbstractMapper
         return $imageMapper->getDefaultImage();
     }
 
-    private function getMasterBrandModel($dbProgramme, $key = 'masterBrand')
+    private function getMasterBrandModel(array $dbProgramme, string $key = 'masterBrand'): ?MasterBrand
     {
         if (!isset($dbProgramme[$key])) {
             // MasterBrand may be null if not requested or a Programme has no
@@ -261,7 +262,7 @@ class ProgrammeMapper extends AbstractMapper
         return $this->mapperFactory->getMasterBrandMapper()->getDomainModel($dbProgramme[$key]);
     }
 
-    private function getCategoriesModels(string $filterType, $dbProgramme, $key = 'categories'): array
+    private function getCategoriesModels(string $filterType, array $dbProgramme, string $key = 'categories'): array
     {
         if (!isset($dbProgramme[$key])) {
             return [];

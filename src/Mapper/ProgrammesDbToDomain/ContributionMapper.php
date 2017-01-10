@@ -48,7 +48,7 @@ class ContributionMapper extends AbstractMapper
         return $this->mapperFactory->getContributorMapper()->getDomainModel($dbContribution[$key]);
     }
 
-    private function getContributedTo($dbContribution)
+    private function getContributedTo(array $dbContribution)
     {
         if (isset($dbContribution['contributionToSegment'])) {
             return $this->mapperFactory->getSegmentMapper()->getDomainModel($dbContribution['contributionToSegment']);
@@ -63,7 +63,7 @@ class ContributionMapper extends AbstractMapper
         return new UnfetchedProgramme();
     }
 
-    private function getCreditRoleName($dbContribution, $key = 'creditRole'): string
+    private function getCreditRoleName(array $dbContribution, string $key = 'creditRole'): string
     {
         if (!isset($dbContribution[$key])) {
             throw new DataNotFetchedException('All Contributions must be joined to a CreditRole');

@@ -42,7 +42,7 @@ class SegmentEventMapper extends AbstractMapper
         return $this->cache[$cacheKey];
     }
 
-    private function getVersionModel($dbSegmentEvent, $key = 'version'): Version
+    private function getVersionModel(array $dbSegmentEvent, string $key = 'version'): Version
     {
         // It is not valid for a SegmentEvent to have no version
         // so it counts as Unfetched even if the key exists but is null
@@ -53,7 +53,7 @@ class SegmentEventMapper extends AbstractMapper
         return $this->mapperFactory->getVersionMapper()->getDomainModel($dbSegmentEvent[$key]);
     }
 
-    private function getSegmentModel($dbSegmentEvent, $key = 'segment'): Segment
+    private function getSegmentModel(array $dbSegmentEvent, string $key = 'segment'): Segment
     {
         // It is not valid for a SegmentEvent to have no segment
         // so it counts as Unfetched even if the key exists but is null
@@ -64,7 +64,7 @@ class SegmentEventMapper extends AbstractMapper
         return $this->mapperFactory->getSegmentMapper()->getDomainModel($dbSegmentEvent[$key]);
     }
 
-    private function getSynopses($dbSegmentEvent): Synopses
+    private function getSynopses(array $dbSegmentEvent): Synopses
     {
         return new Synopses(
             $dbSegmentEvent['shortSynopsis'],

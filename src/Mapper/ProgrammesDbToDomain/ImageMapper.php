@@ -51,7 +51,7 @@ class ImageMapper extends AbstractMapper
         return $this->cachedDefaultImage;
     }
 
-    private function getSynopses($dbImage): Synopses
+    private function getSynopses(array $dbImage): Synopses
     {
         return new Synopses(
             $dbImage['shortSynopsis'],

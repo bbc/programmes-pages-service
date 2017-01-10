@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use DateTimeImmutable;
@@ -38,7 +39,7 @@ class ServiceMapper extends AbstractMapper
         return $this->cache[$cacheKey];
     }
 
-    private function getNetworkModel($dbService, $key = 'network')
+    private function getNetworkModel(array $dbService, string $key = 'network'): ?Network
     {
         if (!isset($dbService[$key])) {
             return null;

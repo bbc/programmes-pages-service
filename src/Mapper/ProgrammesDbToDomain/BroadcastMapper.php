@@ -26,10 +26,6 @@ class BroadcastMapper extends AbstractMapper
         ]);
     }
 
-    /**
-     * @param array $dbBroadcast
-     * @return Broadcast|null
-     */
     public function getDomainModel(array $dbBroadcast): Broadcast
     {
         $cacheKey = $this->getCacheKey($dbBroadcast);
@@ -66,7 +62,7 @@ class BroadcastMapper extends AbstractMapper
         return null;
     }
 
-    private function getVersionModel($dbBroadcast, $key = 'version'): Version
+    private function getVersionModel(array $dbBroadcast, string $key = 'version'): Version
     {
         // It is not valid for a Broadcast to have no version
         // so it counts as Unfetched even if the key exists but is null
@@ -77,7 +73,7 @@ class BroadcastMapper extends AbstractMapper
         return $this->mapperFactory->getVersionMapper()->getDomainModel($dbBroadcast[$key]);
     }
 
-    private function getProgrammeItemModel($dbBroadcast, $key = 'programmeItem'): ProgrammeItem
+    private function getProgrammeItemModel(array $dbBroadcast, string $key = 'programmeItem'): ProgrammeItem
     {
         // Inverted logic compared to other model getters as we have two choices
         // of where to get the ProgrammeItem from - either directly attached to
@@ -101,7 +97,7 @@ class BroadcastMapper extends AbstractMapper
         return new UnfetchedProgrammeItem();
     }
 
-    private function getServiceModel(array $dbBroadcast, $key = 'service'): Service
+    private function getServiceModel(array $dbBroadcast, string $key = 'service'): Service
     {
         // It is not valid for a Broadcast to have no service
         // so it counts as Unfetched even if the key exists but is null

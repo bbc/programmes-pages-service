@@ -31,7 +31,7 @@ class CollapsedBroadcastMapper extends AbstractMapper
         );
     }
 
-    private function getProgrammeItemModel($dbCollapsedBroadcast, $key = 'programmeItem'): Programme
+    private function getProgrammeItemModel(array $dbCollapsedBroadcast, string $key = 'programmeItem'): Programme
     {
         // Inverted logic compared to other model getters as we have two choices
         // of where to get the ProgrammeItem from - either directly attached to
@@ -68,7 +68,7 @@ class CollapsedBroadcastMapper extends AbstractMapper
         return $serviceModels;
     }
 
-    private function getVersionModel($dbCollapsedBroadcast, $key = 'version'): Version
+    private function getVersionModel(array $dbCollapsedBroadcast, string $key = 'version'): Version
     {
         // It is not valid for a CollapsedBroadcast to have no version
         // so it counts as Unfetched even if the key exists but is null

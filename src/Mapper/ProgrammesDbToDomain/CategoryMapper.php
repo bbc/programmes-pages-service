@@ -61,7 +61,7 @@ class CategoryMapper extends AbstractMapper
         );
     }
 
-    private function getGenreParentModel($dbCategory, $key = 'parent')
+    private function getGenreParentModel(array $dbCategory, string $key = 'parent'): ?Genre
     {
         if (!isset($dbCategory[$key])) {
             return null;
@@ -70,7 +70,7 @@ class CategoryMapper extends AbstractMapper
         return $this->getDomainModel($dbCategory[$key]);
     }
 
-    private function getAncestryArray($dbCategory, $key = 'ancestry')
+    private function getAncestryArray(array $dbCategory, string $key = 'ancestry'): array
     {
         // ancestry contains a string of all IDs including the current one with
         // a trailing comma at the end (which makes it an empty item when exploding)

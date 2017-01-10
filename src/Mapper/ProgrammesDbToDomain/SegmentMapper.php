@@ -73,7 +73,7 @@ class SegmentMapper extends AbstractMapper
         );
     }
 
-    private function getSynopses($dbSegment): Synopses
+    private function getSynopses(array $dbSegment): Synopses
     {
         return new Synopses(
             $dbSegment['shortSynopsis'],
@@ -82,11 +82,7 @@ class SegmentMapper extends AbstractMapper
         );
     }
 
-    /**
-     * @param $dbSegment
-     * @return array|null
-     */
-    private function getContributions($dbSegment)
+    private function getContributions(array $dbSegment): ?array
     {
         $contributors = [];
 

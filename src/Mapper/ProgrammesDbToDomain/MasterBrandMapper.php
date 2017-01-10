@@ -2,7 +2,10 @@
 
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
+use BBC\ProgrammesPagesService\Domain\Entity\Network;
+use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 
 class MasterBrandMapper extends AbstractMapper
@@ -18,11 +21,7 @@ class MasterBrandMapper extends AbstractMapper
         ]);
     }
 
-    /**
-     * @param array $dbMasterBrand
-     * @return MasterBrand|null
-     */
-    public function getDomainModel(array $dbMasterBrand)
+    public function getDomainModel(array $dbMasterBrand): ?MasterBrand
     {
         $cacheKey = $this->getCacheKey($dbMasterBrand);
 
@@ -51,7 +50,7 @@ class MasterBrandMapper extends AbstractMapper
         return $this->cache[$cacheKey];
     }
 
-    private function getImageModel($dbMasterBrand, $key = 'image')
+    private function getImageModel(array $dbMasterBrand, string $key = 'image'): ?Image
     {
         if (!isset($dbMasterBrand[$key])) {
             // Use default Image
@@ -61,7 +60,7 @@ class MasterBrandMapper extends AbstractMapper
         return $this->mapperFactory->getImageMapper()->getDomainModel($dbMasterBrand[$key]);
     }
 
-    private function getNetworkModel($dbMasterBrand, $key = 'network')
+    private function getNetworkModel(array $dbMasterBrand, string $key = 'network'): ?Network
     {
         if (!isset($dbMasterBrand[$key])) {
             return null;
@@ -70,7 +69,7 @@ class MasterBrandMapper extends AbstractMapper
         return $this->mapperFactory->getNetworkMapper()->getDomainModel($dbMasterBrand[$key]);
     }
 
-    private function getCompetitionWarningModel($dbMasterBrand, $key = 'competitionWarning')
+    private function getCompetitionWarningModel(array $dbMasterBrand, string $key = 'competitionWarning'): ?Version
     {
         if (!isset($dbMasterBrand[$key])) {
             return null;

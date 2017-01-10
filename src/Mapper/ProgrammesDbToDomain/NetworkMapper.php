@@ -2,7 +2,9 @@
 
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
+use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 
@@ -42,7 +44,7 @@ class NetworkMapper extends AbstractMapper
         return $this->cache[$cacheKey];
     }
 
-    private function getImageModel($dbMasterBrand, $key = 'image')
+    private function getImageModel(array $dbMasterBrand, string $key = 'image'): ?Image
     {
         if (!isset($dbMasterBrand[$key])) {
             // Use default Image
@@ -52,7 +54,7 @@ class NetworkMapper extends AbstractMapper
         return $this->mapperFactory->getImageMapper()->getDomainModel($dbMasterBrand[$key]);
     }
 
-    private function getServiceModel($dbNetwork, $key = 'defaultService')
+    private function getServiceModel(array $dbNetwork, string $key = 'defaultService'): ?Service
     {
         if (!array_key_exists($key, $dbNetwork)) {
             return new UnfetchedService();

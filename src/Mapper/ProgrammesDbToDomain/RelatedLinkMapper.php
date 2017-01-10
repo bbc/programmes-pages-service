@@ -32,7 +32,7 @@ class RelatedLinkMapper extends AbstractMapper
         return $this->cache[$cacheKey];
     }
 
-    private function getSynopses($dbRelatedLink): Synopses
+    private function getSynopses(array $dbRelatedLink): Synopses
     {
         return new Synopses(
             $dbRelatedLink['shortSynopsis'],

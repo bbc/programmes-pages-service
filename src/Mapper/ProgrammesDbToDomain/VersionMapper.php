@@ -46,7 +46,7 @@ class VersionMapper extends AbstractMapper
         return $this->cache[$cacheKey];
     }
 
-    private function getProgrammeItemModel($dbVersion, $key = 'programmeItem'): ProgrammeItem
+    private function getProgrammeItemModel(array $dbVersion, string $key = 'programmeItem'): ProgrammeItem
     {
         if (!isset($dbVersion[$key])) {
             throw new DataNotFetchedException('All versions must be joined to a ProgrammeItem');
@@ -55,7 +55,7 @@ class VersionMapper extends AbstractMapper
         return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbVersion[$key]);
     }
 
-    private function getVersionTypes($dbVersion, $key = 'versionTypes')
+    private function getVersionTypes(array $dbVersion, string $key = 'versionTypes'): ?array
     {
         if (!isset($dbVersion[$key]) || !is_array($dbVersion[$key])) {
             return null;
