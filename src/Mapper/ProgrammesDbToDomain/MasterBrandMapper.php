@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 
 class MasterBrandMapper extends AbstractMapper
@@ -71,7 +72,14 @@ class MasterBrandMapper extends AbstractMapper
 
     private function getCompetitionWarningModel(array $dbMasterBrand, string $key = 'competitionWarning'): ?Version
     {
-        if (!isset($dbMasterBrand[$key])) {
+        // It is possible to have no competition warning, where the key does
+        // exist but is set to null. We'll only say it's Unfetched
+        // if the key doesn't exist at all.
+        if (!array_key_exists($key, $dbMasterBrand)) {
+            return new UnfetchedVersion();
+        }
+
+        if (is_null($dbMasterBrand[$key])) {
             return null;
         }
 

@@ -2,6 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 
 class MasterBrand
@@ -57,6 +59,12 @@ class MasterBrand
 
     public function getCompetitionWarning(): ?Version
     {
+        if ($this->competitionWarning instanceof UnfetchedVersion) {
+            throw new DataNotFetchedException(
+                'Could not get Competition Warning of MasterBrand "'
+                    . $this->mid . '" as it was not fetched'
+            );
+        }
         return $this->competitionWarning;
     }
 }

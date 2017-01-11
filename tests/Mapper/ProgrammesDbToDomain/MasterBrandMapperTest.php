@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MasterBrandMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use PHPUnit_Framework_TestCase;
 
@@ -57,6 +58,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'mid' => 'bbc_three',
             'name' => 'Three',
             'network' => $networkDbEntity,
+            'competitionWarning' => null,
         ];
 
         $mid = new Mid('bbc_three');
@@ -79,6 +81,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'id' => 1,
             'mid' => 'bbc_three',
             'name' => 'Three',
+            'competitionWarning' => null,
         ];
 
         $this->assertEquals(null, $this->getMapper()->getDomainModel($dbEntityArray));
@@ -91,6 +94,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'mid' => 'bbc_three',
             'name' => 'Three',
             'network' => null,
+            'competitionWarning' => null,
         ];
 
         $this->assertEquals(null, $this->getMapper()->getDomainModel($dbEntityArray));
@@ -118,6 +122,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'name' => 'Three',
             'network' => $networkDbEntity,
             'image' => $imageDbEntity,
+            'competitionWarning' => null,
         ];
 
         $mid = new Mid('bbc_three');
@@ -148,8 +153,33 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'mid' => 'bbc_three',
             'name' => 'Three',
             'network' => $networkDbEntity,
-
             'competitionWarning' => $versionDbEntity,
+        ];
+
+        $expectedEntity = new MasterBrand(
+            new Mid('bbc_three'),
+            'Three',
+            $this->mockDefaultImage,
+            $this->mockNetwork,
+            $expectedVersionDomainEntity
+        );
+
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+    }
+
+    public function testGetDomainModelWithoutFetchingCompetitionWarning()
+    {
+        $networkDbEntity = ['nid' => 'bbc_one'];
+
+        $this->setupNetworkMapper($networkDbEntity, $this->mockNetwork);
+
+        $expectedVersionDomainEntity = new UnfetchedVersion();
+
+        $dbEntityArray = [
+            'id' => 1,
+            'mid' => 'bbc_three',
+            'name' => 'Three',
+            'network' => $networkDbEntity,
         ];
 
         $expectedEntity = new MasterBrand(
