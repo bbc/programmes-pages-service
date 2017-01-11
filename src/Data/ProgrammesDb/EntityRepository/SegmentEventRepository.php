@@ -95,11 +95,17 @@ class SegmentEventRepository extends EntityRepository
                 'segment',
                 'version',
                 'programmeItem',
+                'masterBrand',
+                'network'
             ])
             ->join('segmentEvent.segment', 'segment')
             ->join('version.broadcasts', 'broadcast')
             // this is a left join, as there can be many contributions
             ->leftJoin('segment.contributions', 'contribution')
+            // masterBrand needs to be fetched to get ownership details
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            // fetching image pid
             ->andWhere('contribution.contributor = :id')
             ->setFirstResult($offset)
             // now we're going to order using the broadcast

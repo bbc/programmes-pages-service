@@ -137,8 +137,8 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->setParameter('ancestry', $ancestry . '%')
             ->setFirstResult($offset)
             ->addGroupBy('episode.id')
-            ->addOrderBy('episode.streamableUntil', 'DESC')
-            ->addOrderBy('episode.title', 'DESC');
+            ->addOrderBy('episode.streamableFrom', 'DESC')
+            ->addOrderBy('episode.title');
 
         if ($medium) {
             $this->assertNetworkMedium($medium);
