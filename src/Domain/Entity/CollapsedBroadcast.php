@@ -113,7 +113,10 @@ class CollapsedBroadcast
         return $this->isRepeat;
     }
 
-    private function assertArrayOfServices(array $array)
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function assertArrayOfServices(array $array): void
     {
         if (empty($array)) {
             throw new InvalidArgumentException(
@@ -131,7 +134,5 @@ class CollapsedBroadcast
                 ));
             }
         }
-
-        return true;
     }
 }

@@ -263,7 +263,10 @@ abstract class Programme
         return $this;
     }
 
-    private function assertArrayOfType($property, $array, $expectedType)
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function assertArrayOfType(string $property, array $array, string $expectedType): void
     {
         foreach ($array as $item) {
             if (!$item instanceof $expectedType) {
@@ -275,11 +278,12 @@ abstract class Programme
                 ));
             }
         }
-
-        return true;
     }
 
-    private function assertAncestry(array $array)
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function assertAncestry(array $array): void
     {
         if (empty($array)) {
             throw new InvalidArgumentException('Tried to create a Programme with invalid ancestry. Expected a non-empty array of integers but the array was empty');
@@ -293,7 +297,5 @@ abstract class Programme
                 ));
             }
         }
-
-        return true;
     }
 }
