@@ -46,7 +46,7 @@ class DatePartialType extends DateType
      * @return PartialDate|mixed
      * @throws ConversionException
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): string
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null || $value instanceof PartialDate) {
             return $value;
