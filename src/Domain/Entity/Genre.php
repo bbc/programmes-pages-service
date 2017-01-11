@@ -4,9 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 class Genre extends Category
 {
-    /**
-     * @var Genre|null
-     */
+    /** @var Genre|null */
     private $parent;
 
     public function __construct(
@@ -14,16 +12,13 @@ class Genre extends Category
         string $id,
         string $title,
         string $urlKey,
-        Genre $parent = null
+        ?Genre $parent = null
     ) {
         parent::__construct($dbAncestryIds, $id, $title, $urlKey);
         $this->parent = $parent;
     }
 
-    /**
-     * @return Genre|null
-     */
-    public function getParent()
+    public function getParent(): ?Genre
     {
         return $this->parent;
     }

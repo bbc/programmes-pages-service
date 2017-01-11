@@ -11,34 +11,22 @@ use InvalidArgumentException;
 
 abstract class ProgrammeItem extends Programme
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $mediaType;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $segmentEventCount;
 
-    /**
-     * @var PartialDate|null
-     */
+    /** @var PartialDate|null */
     private $releaseDate;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $duration;
 
-    /**
-     * @var DateTimeImmutable|null
-     */
+    /** @var DateTimeImmutable|null */
     private $streamableFrom;
 
-    /**
-     * @var DateTimeImmutable|null
-     */
+    /** @var DateTimeImmutable|null */
     private $streamableUntil;
 
     public function __construct(
@@ -56,16 +44,16 @@ abstract class ProgrammeItem extends Programme
         int $contributionsCount,
         string $mediaType,
         int $segmentEventCount,
-        Programme $parent = null,
-        int $position = null,
-        MasterBrand $masterBrand = null,
+        ?Programme $parent = null,
+        ?int $position = null,
+        ?MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
-        DateTimeImmutable $firstBroadcastDate = null,
-        PartialDate $releaseDate = null,
-        int $duration = null,
-        DateTimeImmutable $streamableFrom = null,
-        DateTimeImmutable $streamableUntil = null
+        ?DateTimeImmutable $firstBroadcastDate = null,
+        ?PartialDate $releaseDate = null,
+        ?int $duration = null,
+        ?DateTimeImmutable $streamableFrom = null,
+        ?DateTimeImmutable $streamableUntil = null
     ) {
         if (!in_array($mediaType, [MediaTypeEnum::AUDIO, MediaTypeEnum::VIDEO, MediaTypeEnum::UNKNOWN])) {
             throw new InvalidArgumentException(sprintf(
@@ -116,34 +104,22 @@ abstract class ProgrammeItem extends Programme
         return $this->segmentEventCount;
     }
 
-    /**
-     * @return PartialDate|null
-     */
-    public function getReleaseDate()
+    public function getReleaseDate(): ?PartialDate
     {
         return $this->releaseDate;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getDuration()
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getStreamableFrom()
+    public function getStreamableFrom(): ?DateTimeImmutable
     {
         return $this->streamableFrom;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getStreamableUntil()
+    public function getStreamableUntil(): ?DateTimeImmutable
     {
         return $this->streamableUntil;
     }

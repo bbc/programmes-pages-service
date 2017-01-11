@@ -8,39 +8,25 @@ use DateTimeImmutable;
 
 abstract class ProgrammeContainer extends Programme
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $aggregatedBroadcastsCount;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $aggregatedEpisodesCount;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $availableClipsCount;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $availableEpisodesCount;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $availableGalleriesCount;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isPodcastable;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $expectedChildCount;
 
     public function __construct(
@@ -62,13 +48,13 @@ abstract class ProgrammeContainer extends Programme
         int $availableEpisodesCount,
         int $availableGalleriesCount,
         bool $isPodcastable,
-        Programme $parent = null,
-        int $position = null,
-        MasterBrand $masterBrand = null,
+        ?Programme $parent = null,
+        ?int $position = null,
+        ?MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
-        DateTimeImmutable $firstBroadcastDate = null,
-        int $expectedChildCount = null
+        ?DateTimeImmutable $firstBroadcastDate = null,
+        ?int $expectedChildCount = null
     ) {
         parent::__construct(
             $dbAncestryIds,
@@ -130,10 +116,7 @@ abstract class ProgrammeContainer extends Programme
         return $this->isPodcastable;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getExpectedChildCount()
+    public function getExpectedChildCount(): ?int
     {
         return $this->expectedChildCount;
     }

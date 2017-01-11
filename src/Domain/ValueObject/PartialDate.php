@@ -19,17 +19,9 @@ class PartialDate implements JsonSerializable
     /**
      * Accepts a date where the month and day
      * components are optional. e.g. "2015", "2015-01", "2015-01-14"
-     *
-     * @param int $year
-     * @param int|null $month
-     * @param int|null $day
      */
-    public function __construct($year, $month = 0, $day = 0)
+    public function __construct(int $year, int $month = 0, int $day = 0)
     {
-        $year = (int) $year;
-        $month = (int) $month;
-        $day = (int) $day;
-
         $check = checkdate(
             $month == 0 ? 1 : $month,
             $day == 0 ? 1 : $day,

@@ -9,64 +9,40 @@ use InvalidArgumentException;
 
 class Version
 {
-    /**
-     * @var int
-     */
+    /** var int */
     private $dbId;
 
-    /**
-     * @var Pid
-     */
+    /** @var Pid */
     private $pid;
 
-    /**
-     * @var ProgrammeItem
-     */
+    /** @var ProgrammeItem */
     private $programmeItem;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isStreamable;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isDownloadable;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $segmentEventCount;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $duration;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $guidanceWarningCodes;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $hasCompetitionWarning;
 
-    /**
-     * @var DateTimeImmutable|null
-     */
+    /** @var DateTimeImmutable|null */
     private $streamableFrom;
 
-    /**
-     * @var DateTimeImmutable|null
-     */
+    /** @var DateTimeImmutable|null */
     private $streamableUntil;
 
-    /**
-     * @var VersionType[]|null
-     */
+    /** @var VersionType[]|null */
     private $versionTypes;
 
     public function __construct(
@@ -77,12 +53,12 @@ class Version
         bool $isDownloadable,
         int $segmentEventCount,
         int $contributionsCount,
-        int $duration = null,
-        string $guidanceWarningCodes = null,
+        ?int $duration = null,
+        ?string $guidanceWarningCodes = null,
         bool $hasCompetitionWarning = false,
-        DateTimeImmutable $streamableFrom = null,
-        DateTimeImmutable $streamableUntil = null,
-        array $versionTypes = null
+        ?DateTimeImmutable $streamableFrom = null,
+        ?DateTimeImmutable $streamableUntil = null,
+        ?array $versionTypes = null
     ) {
         if (is_array($versionTypes)) {
             foreach ($versionTypes as $vt) {
@@ -151,18 +127,12 @@ class Version
         return $this->segmentEventCount;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getDuration()
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getGuidanceWarningCodes()
+    public function getGuidanceWarningCodes(): ?string
     {
         return $this->guidanceWarningCodes;
     }
@@ -177,18 +147,12 @@ class Version
         return $this->contributionsCount;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getStreamableFrom()
+    public function getStreamableFrom(): ?DateTimeImmutable
     {
         return $this->streamableFrom;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getStreamableUntil()
+    public function getStreamableUntil(): ?DateTimeImmutable
     {
         return $this->streamableUntil;
     }

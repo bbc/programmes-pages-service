@@ -4,34 +4,22 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 class RelatedLink
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $uri;
 
-     /**
-     * @var string
-     */
+     /** @var string */
     private $shortSynopsis;
 
-     /**
-     * @var string
-     */
+     /** @var string */
     private $longestSynopsis;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $type;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isExternal;
 
     public function __construct(

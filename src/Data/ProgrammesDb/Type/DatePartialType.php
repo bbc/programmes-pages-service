@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\DateType;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use InvalidArgumentException;
+use TypeError;
 
 class DatePartialType extends DateType
 {
@@ -53,7 +54,7 @@ class DatePartialType extends DateType
         try {
             $values = explode('-', $value);
             return new PartialDate(...$values);
-        } catch (InvalidArgumentException $e) {
+        } catch (TypeError | InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateFormatString());
         }
     }

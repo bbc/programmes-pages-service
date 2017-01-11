@@ -4,24 +4,16 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 abstract class Category
 {
-    /**
-     * @var int[]
-     */
+    /** @var int[] */
     private $dbAncestryIds;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $urlKey;
 
     public function __construct(
@@ -30,10 +22,10 @@ abstract class Category
         string $title,
         string $urlKey
     ) {
+        $this->dbAncestryIds = $dbAncestryIds;
         $this->id = $id;
         $this->title = $title;
         $this->urlKey = $urlKey;
-        $this->dbAncestryIds = $dbAncestryIds;
     }
 
     public function getId(): string

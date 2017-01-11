@@ -11,74 +11,50 @@ use InvalidArgumentException;
 
 class Network
 {
-    /**
-     * @var Nid
-     */
+    /** @var Nid */
     private $nid;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var Image
-     */
+    /** @var Image */
     private $image;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $urlKey;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $type;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $medium;
 
-    /**
-     * @var Service|null
-     */
+    /** @var Service|null */
     private $defaultService;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isPublicOutlet;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isChildrens;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isWorldServiceInternational;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isInternational;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isAllowedAdverts;
 
     public function __construct(
         Nid $nid,
         string $name,
         Image $image,
-        string $urlKey = null,
-        string $type = null,
-        string $medium = NetworkMediumEnum::UNKNOWN,
-        Service $defaultService = null,
+        ?string $urlKey = null,
+        ?string $type = null,
+        ?string $medium = NetworkMediumEnum::UNKNOWN,
+        ?Service $defaultService = null,
         bool $isPublicOutlet = false,
         bool $isChildrens = false,
         bool $isWorldServiceInternational = false,
@@ -119,6 +95,9 @@ class Network
         return $this->name;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getImage(): Image
     {
         if ($this->image instanceof UnfetchedImage) {
@@ -130,18 +109,12 @@ class Network
         return $this->image;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getUrlKey()
+    public function getUrlKey(): ?string
     {
         return $this->urlKey;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
@@ -152,10 +125,9 @@ class Network
     }
 
     /**
-     * @return Service|null
      * @throws DataNotFetchedException
      */
-    public function getDefaultService()
+    public function getDefaultService(): ?Service
     {
         if ($this->defaultService instanceof UnfetchedService) {
             throw new DataNotFetchedException(
@@ -166,7 +138,6 @@ class Network
 
         return $this->defaultService;
     }
-
 
     public function isPublicOutlet(): bool
     {

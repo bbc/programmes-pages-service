@@ -10,13 +10,13 @@ use InvalidArgumentException;
 
 class CollapsedBroadcast
 {
-    /** @var Version $version */
+    /** @var Version */
     private $version;
 
-    /** @var ProgrammeItem $programmeItem */
+    /** @var ProgrammeItem */
     private $programmeItem;
 
-    /** @var array $service */
+    /** @var Service[] */
     private $services;
 
     /** @var string */
@@ -56,6 +56,9 @@ class CollapsedBroadcast
         $this->isRepeat = $isRepeat;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getVersion(): Version
     {
         if ($this->version instanceof UnfetchedVersion) {
@@ -65,6 +68,9 @@ class CollapsedBroadcast
         return $this->version;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getProgrammeItem(): ProgrammeItem
     {
         if ($this->programmeItem instanceof UnfetchedProgrammeItem) {
@@ -74,6 +80,9 @@ class CollapsedBroadcast
         return $this->programmeItem;
     }
 
+    /**
+     * @return Service[]
+     */
     public function getServices(): array
     {
         return $this->services;
@@ -104,7 +113,10 @@ class CollapsedBroadcast
         return $this->isRepeat;
     }
 
-    private function assertArrayOfServices($array)
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function assertArrayOfServices(array $array): void
     {
         if (empty($array)) {
             throw new InvalidArgumentException(
@@ -122,7 +134,5 @@ class CollapsedBroadcast
                 ));
             }
         }
-
-        return true;
     }
 }

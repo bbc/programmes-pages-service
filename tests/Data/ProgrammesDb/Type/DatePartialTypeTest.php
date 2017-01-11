@@ -57,6 +57,14 @@ class DatePartialTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testToPhpValueInvalid()
     {
-        $this->type->convertToPHPValue("-3", $this->platform);
+        $this->type->convertToPHPValue("ham", $this->platform);
+    }
+
+    /**
+     * @expectedException \Doctrine\DBAL\Types\ConversionException
+     */
+    public function testToPhpValueInvalidBadMonth()
+    {
+        $this->type->convertToPHPValue('2015-99', $this->platform);
     }
 }
