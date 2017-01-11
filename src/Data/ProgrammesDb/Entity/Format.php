@@ -14,10 +14,7 @@ class Format extends Category
         // FORMATS DO NOT HAVE PARENTS. GOODNIGHT.
     }
 
-    /**
-     * @return null
-     */
-    public function getParent()
+    public function getParent(): ?Category
     {
         return null;
     }

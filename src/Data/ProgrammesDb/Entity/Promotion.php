@@ -278,10 +278,9 @@ class Promotion
         $this->cascadesToDescendants = $cascadesToDescendants;
     }
 
-    private function setPromotionOfBatch(?CoreEntity $promotionOfCoreEntity, ?Image $promotionOfImage)
+    private function setPromotionOfBatch(?CoreEntity $promotionOfCoreEntity, ?Image $promotionOfImage): void
     {
         $this->promotionOfCoreEntity = $promotionOfCoreEntity;
         $this->promotionOfImage = $promotionOfImage;
     }
 }
-

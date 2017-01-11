@@ -14,7 +14,7 @@ class Day extends FunctionNode
 {
     public $date;
 
-    public function getSql(SqlWalker $sqlWalker)
+    public function getSql(SqlWalker $sqlWalker): string
     {
         $dbPlatform = $sqlWalker->getConnection()->getDatabasePlatform();
 
@@ -31,7 +31,7 @@ class Day extends FunctionNode
         throw DBALException::notSupported("DAY not supported by Platform.");
     }
 
-    public function parse(Parser $parser)
+    public function parse(Parser $parser): void
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
