@@ -29,7 +29,6 @@ class RelatedLinkRepository extends EntityRepository
             ->andWhere('relatedLink.' . $columnName . ' IN (:dbIds)')
             ->orderBy('relatedLink.position')
             ->addOrderBy('relatedLink.title')
-            ->addOrderBy('relatedLink.createdAt')
             ->setFirstResult($offset)
             ->setParameter('dbIds', $dbIds);
 
