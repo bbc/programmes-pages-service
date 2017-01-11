@@ -51,7 +51,9 @@ class DatePartialType extends DateType
             return $value;
         }
         try {
-            $values = explode('-', $value);
+            $values = array_map(function ($datePart) {
+                return (int) $datePart;
+            }, explode('-', $value));
             return new PartialDate(...$values);
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateFormatString());
