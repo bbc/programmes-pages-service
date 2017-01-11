@@ -68,8 +68,8 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             101,
             null,
-            [],
-            [],
+            null,
+            null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
             1001
         );
@@ -138,8 +138,8 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             101,
             null,
-            [],
-            [],
+            null,
+            null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
             1001
         );
@@ -209,8 +209,8 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             1001,
             null,
-            [],
-            [],
+            null,
+            null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
             new PartialDate(2015, 01, 02),
             1002,
@@ -277,8 +277,8 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             1001,
             null,
-            [],
-            [],
+            null,
+            null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
             new PartialDate(2015, 01, 02),
             1002,
@@ -396,15 +396,15 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 null,
                 101,
                 null,
-                [],
-                [],
+                null,
+                null,
                 new DateTimeImmutable('2017-01-03T18:00:00Z'),
                 1001
             ),
             101,
             null,
-            [],
-            [],
+            null,
+            null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
             1001
         );

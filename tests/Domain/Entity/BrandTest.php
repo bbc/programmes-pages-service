@@ -121,35 +121,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidGenres()
     {
-        $pid = new Pid('p01m5mss');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
-
-        $programme = new Brand(
-            [0],
-            $pid,
-            'Title',
-            'Search Title',
-            $synopses,
-            $image,
-            1101,
-            1102,
-            true,
-            true,
-            true,
-            1103,
-            1201,
-            1202,
-            1203,
-            1204,
-            1205,
-            false,
-            null,
-            2101,
-            null,
-            ['wrongwrongwrong'],
-            []
-        );
+        $this->createBrandWithGenresAndFormats(['wrongwrongwrong'], []);
     }
 
     /**
@@ -158,17 +130,38 @@ class BrandTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidFormats()
     {
-        $pid = new Pid('p01m5mss');
-        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $this->createBrandWithGenresAndFormats([], ['wrongwrongwrong']);
+    }
 
-        $programme = new Brand(
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage Could not get Genres of Programme "p01m5mss" as they were not fetched
+     */
+    public function testRequestingUnfetchedGenresThrowsException()
+    {
+        $brand = $this->createBrandWithGenresAndFormats(null, []);
+        $brand->getGenres();
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage Could not get Formats of Programme "p01m5mss" as they were not fetched
+     */
+    public function testRequestingUnfetchedFormatsThrowsException()
+    {
+        $brand = $this->createBrandWithGenresAndFormats([], null);
+        $brand->getFormats();
+    }
+
+    private function createBrandWithGenresAndFormats(?array $genres, ?array $formats)
+    {
+        return new Brand(
             [0],
-            $pid,
+            new Pid('p01m5mss'),
             'Title',
             'Search Title',
-            $synopses,
-            $image,
+            new Synopses('Short Synopsis', 'Longest Synopsis', ''),
+            new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg'),
             1101,
             1102,
             true,
@@ -184,8 +177,8 @@ class BrandTest extends PHPUnit_Framework_TestCase
             null,
             2101,
             null,
-            [],
-            ['wrongwrongwrong']
+            $genres,
+            $formats
         );
     }
 }

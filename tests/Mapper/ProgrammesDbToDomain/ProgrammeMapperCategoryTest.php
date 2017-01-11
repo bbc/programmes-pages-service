@@ -47,4 +47,27 @@ class ProgrammeMapperCategoryTest extends BaseProgrammeMapperTestCase
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
+
+    public function testGetDomainModelSeriesWithSetButEmptyGenresAndFormats()
+    {
+        $genreDbEntity = ['type' => 'genre'];
+        $formatDbEntity = ['type' => 'format'];
+
+        $dbEntityArray = $this->getSampleProgrammeDbEntity(
+            'b010t19z',
+            null,
+            null,
+            []
+        );
+
+        $expectedEntity = $this->getSampleProgrammeDomainEntity(
+            'b010t19z',
+            $this->mockDefaultImage,
+            null,
+            [],
+            []
+        );
+
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+    }
 }

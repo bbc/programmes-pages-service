@@ -56,10 +56,10 @@ abstract class Programme
     /** @var MasterBrand|null */
     private $masterBrand;
 
-    /** @var Genre[] */
+    /** @var Genre[]|null */
     private $genres;
 
-    /** @var Format[] */
+    /** @var Format[]|null */
     private $formats;
 
     /** @var DateTimeImmutable */
@@ -81,8 +81,8 @@ abstract class Programme
         ?Programme $parent = null,
         ?int $position = null,
         ?MasterBrand $masterBrand = null,
-        array $genres = [],
-        array $formats = [],
+        ?array $genres = null,
+        ?array $formats = null,
         ?DateTimeImmutable $firstBroadcastDate = null
     ) {
         $this->assertAncestry($dbAncestryIds);
@@ -230,17 +230,26 @@ abstract class Programme
 
     /**
      * @return Genre[]
+     * @throws DataNotFetchedException
      */
     public function getGenres(): array
     {
+        if (is_null($this->genres)) {
+            throw new DataNotFetchedException('Could not get Genres of Programme "' . $this->pid . '" as they were not fetched');
+        }
+
         return $this->genres;
     }
 
     /**
      * @return Format[]
+     * @throws DataNotFetchedException
      */
     public function getFormats(): array
     {
+        if (is_null($this->formats)) {
+            throw new DataNotFetchedException('Could not get Formats of Programme "' . $this->pid . '" as they were not fetched');
+        }
         return $this->formats;
     }
 
@@ -266,8 +275,12 @@ abstract class Programme
     /**
      * @throws InvalidArgumentException
      */
-    private function assertArrayOfType(string $property, array $array, string $expectedType): void
+    private function assertArrayOfType(string $property, ?array $array, string $expectedType): void
     {
+        if ($array === null) {
+            return;
+        }
+
         foreach ($array as $item) {
             if (!$item instanceof $expectedType) {
                 throw new InvalidArgumentException(sprintf(

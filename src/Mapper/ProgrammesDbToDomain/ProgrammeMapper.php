@@ -262,10 +262,10 @@ class ProgrammeMapper extends AbstractMapper
         return $this->mapperFactory->getMasterBrandMapper()->getDomainModel($dbProgramme[$key]);
     }
 
-    private function getCategoriesModels(string $filterType, array $dbProgramme, string $key = 'categories'): array
+    private function getCategoriesModels(string $filterType, array $dbProgramme, string $key = 'categories'): ?array
     {
-        if (!isset($dbProgramme[$key])) {
-            return [];
+        if (!isset($dbProgramme[$key]) || !is_array($dbProgramme[$key])) {
+            return null;
         }
 
         $categoryMapper = $this->mapperFactory->getCategoryMapper();

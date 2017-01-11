@@ -51,8 +51,8 @@ abstract class ProgrammeContainer extends Programme
         ?Programme $parent = null,
         ?int $position = null,
         ?MasterBrand $masterBrand = null,
-        array $genres = [],
-        array $formats = [],
+        ?array $genres = null,
+        ?array $formats = null,
         ?DateTimeImmutable $firstBroadcastDate = null,
         ?int $expectedChildCount = null
     ) {
