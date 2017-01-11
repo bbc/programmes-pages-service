@@ -13,7 +13,8 @@ class ContributorRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('contributor')
             ->where('contributor.musicBrainzId = :mid')
-            ->setParameter('mid', $musicBrainzId);
+            ->setParameter('mid', $musicBrainzId)
+            ->setMaxResults(1);
 
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
