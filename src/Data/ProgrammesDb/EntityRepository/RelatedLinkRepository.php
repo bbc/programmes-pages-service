@@ -16,7 +16,7 @@ class RelatedLinkRepository extends EntityRepository
      * @param int $offset
      * @return mixed
      */
-    public function findByRelatedTo(array $dbIds, string $type, $limit, int $offset)
+    public function findByRelatedTo(array $dbIds, string $type, ?int $limit, int $offset): array
     {
         $columnNameLookup = [
             'programme' => 'relatedToCoreEntity',
@@ -30,9 +30,8 @@ class RelatedLinkRepository extends EntityRepository
             ->orderBy('relatedLink.position')
             ->addOrderBy('relatedLink.title')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('dbIds', $dbIds);
-
-        $qb = $this->setLimit($qb, $limit);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

@@ -2,7 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use InvalidArgumentException;
@@ -11,11 +10,9 @@ class AtozTitleRepository extends EntityRepository
 {
     use Traits\SetLimitTrait;
     use Traits\ParentTreeWalkerTrait;
+    use Traits\NetworkMediumTrait;
 
-    /**
-     * @param string|null $networkMedium
-     */
-    public function findAllLetters($networkMedium): array
+    public function findAllLetters(?string $networkMedium): array
     {
         $qb = $this->createQueryBuilder('AtozTitle')
             ->select(['DISTINCT AtozTitle.firstLetter'])
@@ -35,11 +32,11 @@ class AtozTitleRepository extends EntityRepository
 
     public function findTleosByFirstLetter(
         string $letter,
-        $networkMedium,
+        ?string $networkMedium,
         bool $filterToAvailable,
-        $limit,
+        ?int $limit,
         int $offset
-    ) {
+    ): array {
         if (strlen($letter) !== 1) {
             throw new InvalidArgumentException("$letter is not a single letter");
         }
@@ -55,6 +52,7 @@ class AtozTitleRepository extends EntityRepository
             ->orderBy('AtozTitle.title')
             ->addOrderBy('c.pid')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('firstLetter', $letter);
 
         if ($filterToAvailable) {
@@ -65,7 +63,7 @@ class AtozTitleRepository extends EntityRepository
             $qb->andWhere('network.medium = :medium');
             $qb->setParameter('medium', $networkMedium);
         }
-        $qb = $this->setLimit($qb, $limit);
+
         $query = $qb->getQuery();
         $result = $query->getResult(Query::HYDRATE_ARRAY);
 
@@ -74,9 +72,9 @@ class AtozTitleRepository extends EntityRepository
 
     public function countTleosByFirstLetter(
         string $letter,
-        $networkMedium,
+        ?string $networkMedium,
         bool $filterToAvailable
-    ) {
+    ): int {
         if (strlen($letter) !== 1) {
             throw new InvalidArgumentException("$letter is not a single letter");
         }
@@ -111,7 +109,7 @@ class AtozTitleRepository extends EntityRepository
             ->join($alias . '.coreEntity', 'c');
     }
 
-    private function resolveParents(array $programmes)
+    private function resolveParents(array $programmes): array
     {
         $programmeRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Programme');
         return $this->abstractResolveAncestry(
@@ -119,12 +117,5 @@ class AtozTitleRepository extends EntityRepository
             [$programmeRepo, 'findByIds'],
             ['coreEntity', 'ancestry']
         );
-    }
-
-    private function assertNetworkMedium(string $medium)
-    {
-        if (!in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO])) {
-            throw new \InvalidArgumentException('Network medium must be tv or radio');
-        }
     }
 }

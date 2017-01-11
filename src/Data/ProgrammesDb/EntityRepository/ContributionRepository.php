@@ -17,8 +17,13 @@ class ContributionRepository extends EntityRepository
      * @param int $offset
      * @return mixed
      */
-    public function findByContributionTo(array $dbIds, string $type, bool $getContributionTo, $limit, int $offset)
-    {
+    public function findByContributionTo(
+        array $dbIds,
+        string $type,
+        bool $getContributionTo,
+        ?int $limit,
+        int $offset
+    ): array {
         $columnNameLookup = [
             'programme' => 'contributionToCoreEntity',
             'group' => 'contributionToCoreEntity',

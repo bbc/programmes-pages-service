@@ -3,7 +3,6 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
-use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
@@ -14,6 +13,7 @@ class CoreEntityRepository extends MaterializedPathRepository
 {
     use Traits\ParentTreeWalkerTrait;
     use Traits\SetLimitTrait;
+    use Traits\NetworkMediumTrait;
     use StripPunctuationTrait;
 
     const ALL_VALID_ENTITY_TYPES = [
@@ -35,10 +35,10 @@ class CoreEntityRepository extends MaterializedPathRepository
     public function findTleosByCategory(
         array $ancestryDbIds,
         bool $filterToAvailable,
-        $medium,
-        $limit,
+        ?string $medium,
+        ?int $limit,
         int $offset
-    ) {
+    ): array {
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->select(['DISTINCT programme', 'image', 'masterbrand', 'mbImage'])
                    ->from('ProgrammesPagesService:Programme', 'programme')
@@ -52,13 +52,14 @@ class CoreEntityRepository extends MaterializedPathRepository
                    ->orderBy('programme.title', 'ASC')
                    ->addOrderBy('programme.pid', 'ASC')
                    ->setFirstResult($offset)
+                   ->setMaxResults($limit)
                    ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
 
         if ($filterToAvailable) {
             $qb->andWhere('programme.streamable = 1');
         }
 
-        if (!is_null($medium)) {
+        if ($medium) {
             $this->assertNetworkMedium($medium);
 
             $qb->innerJoin('masterbrand.network', 'network')
@@ -66,23 +67,14 @@ class CoreEntityRepository extends MaterializedPathRepository
                ->setParameter('medium', $medium);
         }
 
-        $qb = $this->setLimit($qb, $limit);
-
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     /**
      * Return the count of available episodes given category ID's
-     *
-     * @param array       $ancestryDbIds
-     * @param string|null $medium
-     *
-     * @return int
      */
-    public function countAvailableEpisodesByCategoryAncestry(
-        array $ancestryDbIds,
-        $medium
-    ): int {
+    public function countAvailableEpisodesByCategoryAncestry(array $ancestryDbIds, ?string $medium): int
+    {
         $ancestry = $this->ancestryIdsToString($ancestryDbIds);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -102,24 +94,16 @@ class CoreEntityRepository extends MaterializedPathRepository
                 ->setParameter('medium', $medium);
         }
 
-        $count = $qb->getQuery()->getSingleScalarResult();
-        return $count;
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
      * Return available episodes given category ID's
-     *
-     * @param array       $ancestryDbIds
-     * @param string|null $medium
-     * @param int|null    $limit
-     * @param int         $offset
-     *
-     * @return array
      */
     public function findAvailableEpisodesByCategoryAncestry(
         array $ancestryDbIds,
-        $medium,
-        $limit,
+        ?string $medium,
+        ?int $limit,
         int $offset
     ): array {
         $ancestry = $this->ancestryIdsToString($ancestryDbIds);
@@ -136,6 +120,7 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->andWhere('category.ancestry LIKE :ancestry')
             ->setParameter('ancestry', $ancestry . '%')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->addGroupBy('episode.id')
             ->addOrderBy('episode.streamableFrom', 'DESC')
             ->addOrderBy('episode.title');
@@ -147,7 +132,6 @@ class CoreEntityRepository extends MaterializedPathRepository
                 ->setParameter('medium', $medium);
         }
 
-        $qb = $this->setLimit($qb, $limit);
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
         return $this->resolveParents($result);
@@ -157,12 +141,8 @@ class CoreEntityRepository extends MaterializedPathRepository
      * Get an entity, based upon its PID
      * Used when a page wants to find out about data related to an entity, but
      * doesn't need the fully hydrated entity itself.
-     *
-     * @param string $pid        The pid to lookup
-     * @param string $entityType Filter results by "Programme", "Group" or "CoreEntity"
-     * @return Programme|Group|null
      */
-    public function findByPid(string $pid, string $entityType = 'CoreEntity')
+    public function findByPid(string $pid, string $entityType = 'CoreEntity'): ?array
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
@@ -182,12 +162,8 @@ QUERY;
      * Full Find By Pid
      *
      * This resolves all parents
-     *
-     * @param string $pid        The pid to lookup
-     * @param string $entityType Filter results by "Programme", "Group" or "CoreEntity" to not filter
-     * @return array|null
      */
-    public function findByPidFull(string $pid, string $entityType = 'CoreEntity')
+    public function findByPidFull(string $pid, string $entityType = 'CoreEntity'): ?array
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
@@ -220,7 +196,7 @@ QUERY;
         return $withHydratedParents ? $this->resolveCategories([$withHydratedParents])[0] : $withHydratedParents;
     }
 
-    public function findByIds(array $ids)
+    public function findByIds(array $ids): array
     {
         return $this->createQueryBuilder('programme')
             ->addSelect(['image', 'masterBrand', 'network', 'mbImage'])
@@ -233,7 +209,7 @@ QUERY;
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findChildrenSeriesByParent(int $id, $limit, int $offset)
+    public function findChildrenSeriesByParent(int $id, ?int $limit, int $offset): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->addSelect(['programme', 'image'])
@@ -243,9 +219,8 @@ QUERY;
             ->addOrderBy('programme.position', 'ASC')
             ->addOrderBy('programme.title', 'ASC')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('parentDbId', $id);
-
-        $qb = $this->setLimit($qb, $limit);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
@@ -260,36 +235,24 @@ QUERY;
         return $result;
     }
 
-    /**
-     * @param int|AbstractService::NO_LIMIT $limit
-     * @param int $offset
-     * @return array
-     */
-    public function findAllWithParents($limit, int $offset)
+    public function findAllWithParents(?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('programme')
+            ->setMaxResults($limit)
             ->setFirstResult($offset);
-
-        $qb = $this->setLimit($qb, $limit);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         return $this->resolveParents($result);
     }
 
-    public function countAll()
+    public function countAll(): int
     {
         $qb = $this->createQueryBuilder('programme')
             ->select(['count(programme.id)']);
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    /**
-     * @param int $dbId
-     * @param int|AbstractService::NO_LIMIT $limit
-     * @param int $offset
-     * @return array
-     */
-    public function findEpisodeGuideChildren($dbId, $limit, int $offset)
+    public function findEpisodeGuideChildren(int $dbId, ?int $limit, int $offset): array
     {
         $qText = <<<QUERY
 SELECT programme, image, masterBrand, network, mbImage
@@ -305,15 +268,14 @@ QUERY;
 
         $q = $this->getEntityManager()->createQuery($qText)
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('dbId', $dbId);
-
-        $q = $this->setLimit($q, $limit);
 
         $result = $q->getResult(Query::HYDRATE_ARRAY);
         return $this->resolveParents($result);
     }
 
-    public function countEpisodeGuideChildren($dbId)
+    public function countEpisodeGuideChildren(int $dbId): int
     {
         $qText = <<<QUERY
 SELECT count(programme.id)
@@ -333,7 +295,7 @@ QUERY;
         int $position,
         string $entityType,
         string $direction
-    ) {
+    ): ?array {
         $this->assertEntityType($entityType, ['Series', 'Episode', 'Clip']);
 
         if (!in_array($direction, ['next', 'previous'])) {
@@ -368,7 +330,7 @@ QUERY;
         PartialDate $releaseDate,
         string $entityType,
         string $direction
-    ) {
+    ): ?array {
         $this->assertEntityType($entityType, ['Episode', 'Clip']);
 
         if (!in_array($direction, ['next', 'previous'])) {
@@ -402,7 +364,7 @@ QUERY;
         DateTimeInterface $firstBroadcastDate,
         string $entityType,
         string $direction
-    ) {
+    ): ?array {
         if (!in_array($direction, ['next', 'previous'])) {
             throw new InvalidArgumentException(sprintf(
                 'Called findAdjacentProgrammeItemByReleaseDate with an invalid direction type. Expected one of "%s" or "%s" but got "%s"',
@@ -429,29 +391,11 @@ QUERY;
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    /**
-     * @param Programme $programme
-     * @param int|AbstractService::NO_LIMIT $limit
-     * @param int $offset
-     * @return array
-     */
-    public function findDescendants($programme, $limit, int $offset)
-    {
-        $qb = $this->getChildrenQueryBuilder($programme)
-            ->setFirstResult($offset);
-
-        $qb = $this->setLimit($qb, $limit);
-
-        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
-        return $this->resolveParents($result);
-    }
-
     public function countByKeywords(
         string $keywords,
-        $networkMedium,
+        ?string $networkMedium,
         bool $filterAvailable,
-        array $entityTypes = null
+        ?array $entityTypes
     ): int {
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));
@@ -479,11 +423,9 @@ QUERY;
         }
 
         if ($networkMedium) {
-            if (in_array($networkMedium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
-                $qText .= ' AND network.medium = :service';
-            } else {
-                throw new \InvalidArgumentException('Network medium must be tv or radio');
-            }
+            $this->assertNetworkMedium($networkMedium);
+
+            $qText .= ' AND network.medium = :service';
         }
         $q = $this->getEntityManager()->createQuery($qText)
             ->setParameter('booleanKeywords', $booleanKeywords);
@@ -496,22 +438,13 @@ QUERY;
         return $count ? $count : 0;
     }
 
-    /**
-     * @param string $keywords
-     * @param string $networkMedium
-     * @param bool $filterAvailable
-     * @param int|AbstractService::NO_LIMIT $limit
-     * @param int $offset
-     * @param array $entityTypes
-     * @return array
-     */
     public function findByKeywords(
         string $keywords,
-        $networkMedium,
+        ?string $networkMedium,
         bool $filterAvailable,
-        $limit,
+        ?int $limit,
         int $offset,
-        array $entityTypes = null
+        ?array $entityTypes
     ): array {
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));
@@ -541,13 +474,9 @@ QUERY;
             $qText .= ' AND (' . $this->makeEntityTypesDQL($entityTypes, 'coreEntity') . ')';
         }
         if ($networkMedium) {
-            if (in_array($networkMedium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV])) {
-                $qText .= ' AND network.medium = :service';
-            } else {
-                throw new InvalidArgumentException(
-                    sprintf('Network medium must be tv or radio, got %s instead', $networkMedium)
-                );
-            }
+            $this->assertNetworkMedium($networkMedium);
+
+            $qText .= ' AND network.medium = :service';
         }
         $qText .= ' ORDER BY rel DESC';
 
@@ -565,7 +494,7 @@ QUERY;
         return $q->getResult(Query::HYDRATE_ARRAY);
     }
 
-    private function resolveParents(array $programmes)
+    private function resolveParents(array $programmes): array
     {
         return $this->abstractResolveAncestry(
             $programmes,
@@ -573,12 +502,12 @@ QUERY;
         );
     }
 
-    private function programmeAncestryGetter(array $ids)
+    private function programmeAncestryGetter(array $ids): array
     {
         return $this->findByIds($ids);
     }
 
-    private function resolveCategories(array $programmes)
+    private function resolveCategories(array $programmes): array
     {
         return $this->abstractResolveNestedAncestry(
             $programmes,
@@ -587,19 +516,19 @@ QUERY;
         );
     }
 
-    private function categoryAncestryGetter(array $ids)
+    private function categoryAncestryGetter(array $ids): array
     {
         /** @var CategoryRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
         return $repo->findByIds($ids);
     }
 
-    private function ancestryIdsToString(array $ancestry)
+    private function ancestryIdsToString(array $ancestry): string
     {
         return implode(',', $ancestry) . ',';
     }
 
-    private function assertEntityType($entityType, $validEntityTypes)
+    private function assertEntityType(?string $entityType, array $validEntityTypes): void
     {
         if (!in_array($entityType, $validEntityTypes)) {
             throw new InvalidArgumentException(sprintf(
@@ -611,31 +540,20 @@ QUERY;
         }
     }
 
-    private function assertNetworkMedium(string $medium)
+    private function makeEntityTypesDQL(?array $entityTypes, string $alias)
     {
-        if (!in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO])) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Network medium must be %s or %s, instead got %s',
-                    NetworkMediumEnum::TV,
-                    NetworkMediumEnum::RADIO,
-                    $medium
-                )
-            );
-        }
-    }
-
-    private function makeEntityTypesDQL(array $entityTypes, string $alias)
-    {
-        foreach ($entityTypes as $entityType) {
-            $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
-        }
         if (empty($entityTypes)) {
             return '';
         }
+
+        foreach ($entityTypes as $entityType) {
+            $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+        }
+
         foreach ($entityTypes as &$entityType) {
             $entityType = 'ProgrammesPagesService:' . $entityType;
         }
+
         return " ($alias INSTANCE OF (" . join(',', $entityTypes) . "))";
     }
 }

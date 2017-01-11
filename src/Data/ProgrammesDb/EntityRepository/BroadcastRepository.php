@@ -2,27 +2,20 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\ResultSetMapping;
 use DateTimeImmutable;
+use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 
 class BroadcastRepository extends EntityRepository
 {
     use Traits\SetLimitTrait;
     use Traits\ParentTreeWalkerTrait;
+    use Traits\NetworkMediumTrait;
 
-    /**
-     * @param array $dbIds
-     * @param string $type
-     * @param int|AbstractService::NO_LIMIT $limit
-     * @param int $offset
-     *
-     * @return mixed
-     */
-    public function findByVersion(array $dbIds, string $type, $limit, int $offset)
+    public function findByVersion(array $dbIds, string $type, ?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('broadcast')
             ->addSelect(['service', 'network'])
@@ -42,7 +35,7 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findAllYearsAndMonthsByProgramme(array $ancestry, string $type)
+    public function findAllYearsAndMonthsByProgramme(array $ancestry, string $type): array
     {
         $qb = $this->createQueryBuilder('broadcast', true)
             ->select(['DISTINCT YEAR(broadcast.startAt) as year', 'MONTH(broadcast.startAt) as month'])
@@ -60,10 +53,10 @@ class BroadcastRepository extends EntityRepository
     public function findByCategoryAncestryAndEndAtDateRange(
         array $categoryAncestry,
         string $type,
-        $medium,
+        ?string $medium,
         DateTimeImmutable $from,
         DateTimeImmutable $to,
-        $limit,
+        ?int $limit,
         int $offset
     ) {
         $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
@@ -73,12 +66,13 @@ class BroadcastRepository extends EntityRepository
             ->addOrderBy('broadcast.startAt')
             ->addOrderBy('networkOfService.urlKey')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('from', $from)
             ->setParameter('to', $to);
 
-        $qb = $this->setLimit($qb, $limit);
+        if ($medium) {
+            $this->assertNetworkMedium($medium);
 
-        if ($this->isValidNetworkMedium($medium)) {
             $qb->andWhere('networkOfService.medium = :medium')
                 ->setParameter('medium', $medium);
         }
@@ -96,12 +90,12 @@ class BroadcastRepository extends EntityRepository
     public function findByCategoryAncestryAndStartAtDateRange(
         array $categoryAncestry,
         string $type,
-        $medium,
+        ?string $medium,
         DateTimeImmutable $from,
         DateTimeImmutable $to,
-        $limit,
+        ?int $limit,
         int $offset
-    ) {
+    ): array {
         $qb = $this->createCollapsedBroadcastsOfCategoryQueryBuilder($categoryAncestry, $type);
 
         $qb->andWhere('broadcast.startAt >= :from')
@@ -109,12 +103,13 @@ class BroadcastRepository extends EntityRepository
            ->addOrderBy('broadcast.startAt')
            ->addOrderBy('networkOfService.urlKey')
            ->setFirstResult($offset)
+           ->setMaxResults($limit)
            ->setParameter('from', $from)
            ->setParameter('to', $to);
 
-        $qb = $this->setLimit($qb, $limit);
+        if ($medium) {
+            $this->assertNetworkMedium($medium);
 
-        if ($this->isValidNetworkMedium($medium)) {
             $qb->andWhere('networkOfService.medium = :medium')
                ->setParameter('medium', $medium);
         }
@@ -132,7 +127,7 @@ class BroadcastRepository extends EntityRepository
     public function findBroadcastedDatesForCategories(
         array $categoryAncestries,
         string $type,
-        $medium,
+        ?string $medium,
         DateTimeImmutable $from,
         DateTimeImmutable $to
     ): array {
@@ -153,7 +148,9 @@ class BroadcastRepository extends EntityRepository
 
         $qb = $this->setEntityTypeFilter($qb, $type);
 
-        if ($this->isValidNetworkMedium($medium)) {
+        if ($medium) {
+            $this->assertNetworkMedium($medium);
+
             $qb->join('broadcast.service', 'service')
                 ->innerJoin('service.network', 'networkOfService')
                 ->andWhere('networkOfService.medium = :medium')
@@ -166,14 +163,18 @@ class BroadcastRepository extends EntityRepository
     public function countByCategoryAncestryAndEndAtDateRange(
         array $categoryAncestry,
         string $type,
-        $medium,
+        ?string $medium,
         DateTimeImmutable $from,
         DateTimeImmutable $to
     ): int {
         $isWebcastValue = $this->entityTypeFilterValue($type);
         $isWebcastClause = !is_null($isWebcastValue) ? 'AND b.is_webcast = :isWebcast' : '';
 
-        $filterByMediumClause = $this->isValidNetworkMedium($medium) ? 'AND n.medium = :medium' : '';
+        $filterByMediumClause = '';
+        if ($medium) {
+            $this->assertNetworkMedium($medium);
+            $filterByMediumClause = 'AND n.medium = :medium';
+        }
 
         // Join to CoreEntity to ensure the programme is not embargoed
         // Join to network (via broadcast service) so that we get a count of
@@ -216,15 +217,22 @@ QUERY;
             $q->setParameter('isWebcast', $isWebcastValue);
         }
 
-        if ($this->isValidNetworkMedium($medium)) {
+        if ($medium) {
+            $this->assertNetworkMedium($medium);
             $q->setParameter('medium', $medium);
         }
 
         return $q->getSingleScalarResult();
     }
 
-    public function findByProgrammeAndMonth(array $ancestry, string $type, int $year, int $month, $limit, int $offset)
-    {
+    public function findByProgrammeAndMonth(
+        array $ancestry,
+        string $type,
+        int $year,
+        int $month,
+        ?int $limit,
+        int $offset
+    ): array {
         $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder(
             $ancestry,
             $type
@@ -262,9 +270,9 @@ QUERY;
         array $ancestry,
         string $type,
         DateTimeImmutable $cutoffTime,
-        $limit,
+        ?int $limit,
         int $offset
-    ) {
+    ): array {
         $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder(
             $ancestry,
             $type
@@ -274,9 +282,8 @@ QUERY;
             ->addOrderBy('broadcast.endAt', 'DESC')
             ->addOrderBy('networkOfService.nid', 'ASC')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('endTime', $cutoffTime);
-
-        $qb = $this->setLimit($qb, $limit);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         $result = $this->explodeServiceIds($result);
@@ -300,9 +307,9 @@ QUERY;
         array $ancestry,
         string $type,
         DateTimeImmutable $cutoffTime,
-        $limit,
+        ?int $limit,
         int $offset
-    ) {
+    ): array {
         $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder(
             $ancestry,
             $type
@@ -314,9 +321,8 @@ QUERY;
             // programme. We should standardise this at some point.
             ->addOrderBy('networkOfService.position', 'ASC')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('cutoffTime', $cutoffTime);
-
-        $qb = $this->setLimit($qb, $limit);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         $result = $this->explodeServiceIds($result);
@@ -393,7 +399,7 @@ QUERY;
             ->join($alias . '.programmeItem', 'programmeItem');
     }
 
-    private function createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $type)
+    private function createCollapsedBroadcastsOfProgrammeQueryBuilder(array $ancestry, string $type): QueryBuilder
     {
         // networkOfService is needed so that each row is contains the services
         // within a given network, rather than all services across multiple
@@ -420,11 +426,10 @@ QUERY;
             ->addGroupBy('programmeItem.id')
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
 
-        $qb = $this->setEntityTypeFilter($qb, $type);
-        return $qb;
+        return $this->setEntityTypeFilter($qb, $type);
     }
 
-    private function createCollapsedBroadcastsOfCategoryQueryBuilder(array $ancestry, string $type)
+    private function createCollapsedBroadcastsOfCategoryQueryBuilder(array $ancestry, string $type): QueryBuilder
     {
         // networkOfService is needed so that each row contains the services
         // within a given network, rather than all services across multiple networks.
@@ -451,11 +456,10 @@ QUERY;
             ->addGroupBy('programmeItem.id')
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
 
-        $qb = $this->setEntityTypeFilter($qb, $type);
-        return $qb;
+        return $this->setEntityTypeFilter($qb, $type);
     }
 
-    private function entityTypeFilterValue($type)
+    private function entityTypeFilterValue(string $type): ?bool
     {
         $typesLookup = [
             'Broadcast' => false,
@@ -478,7 +482,7 @@ QUERY;
     }
 
 
-    private function setEntityTypeFilter($qb, $type, $broadcastAlias = 'broadcast')
+    private function setEntityTypeFilter(QueryBuilder $qb, string $type, string $broadcastAlias = 'broadcast'): QueryBuilder
     {
         $isWebcast = $this->entityTypeFilterValue($type);
 
@@ -490,12 +494,12 @@ QUERY;
         return $qb;
     }
 
-    private function ancestryIdsToString(array $ancestry)
+    private function ancestryIdsToString(array $ancestry): string
     {
         return implode(',', $ancestry) . ',';
     }
 
-    private function explodeServiceIds($collapsedBroadcasts)
+    private function explodeServiceIds(array $collapsedBroadcasts): array
     {
         return array_map(
             function ($collapsedBroadcast) {
@@ -508,15 +512,10 @@ QUERY;
         );
     }
 
-    private function programmeAncestryGetter(array $ids)
+    private function programmeAncestryGetter(array $ids): array
     {
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
         return $repo->findByIds($ids);
-    }
-
-    private function isValidNetworkMedium($medium)
-    {
-        return in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO]);
     }
 }

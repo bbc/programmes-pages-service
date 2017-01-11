@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 
 class NetworkRepository extends EntityRepository
 {
-    public function findByUrlKeyWithDefaultService($urlKey)
+    public function findByUrlKeyWithDefaultService(string $urlKey): ?array
     {
         $qb = $this->createQueryBuilder('network')
             ->addSelect('defaultService')

@@ -19,7 +19,7 @@ class FindAllMostPlayedWithPlaysTest extends AbstractDatabaseTest
         $from = new \DateTimeImmutable('2016-06-30');
         $to = new \DateTimeImmutable('2016-07-06');
 
-        $results = $repo->findAllMostPlayedWithPlays($from, $to);
+        $results = $repo->findAllMostPlayedWithPlays($from, $to, null);
 
         $this->assertCount(3, $results);
 
