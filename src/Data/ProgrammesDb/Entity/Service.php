@@ -125,10 +125,7 @@ class Service
         $this->urlKey = $sid;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -138,7 +135,7 @@ class Service
         return $this->sid;
     }
 
-    public function setSid(string $sid)
+    public function setSid(string $sid): void
     {
         $this->sid = $sid;
     }
@@ -148,7 +145,7 @@ class Service
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         // TODO Validate PID
 
@@ -160,7 +157,7 @@ class Service
         return $this->type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -170,7 +167,7 @@ class Service
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -180,7 +177,7 @@ class Service
         return $this->shortName;
     }
 
-    public function setShortName(string $shortName)
+    public function setShortName(string $shortName): void
     {
         $this->shortName = $shortName;
     }
@@ -190,7 +187,7 @@ class Service
         return $this->urlKey;
     }
 
-    public function setUrlKey(string $urlKey)
+    public function setUrlKey(string $urlKey): void
     {
         $this->urlKey = $urlKey;
     }
@@ -200,72 +197,57 @@ class Service
         return $this->mediaType;
     }
 
-    public function setMediaType(string $mediaType)
+    public function setMediaType(string $mediaType): void
     {
         $this->mediaType = $mediaType;
     }
 
-    /**
-     * @return MasterBrand|null
-     */
-    public function getMasterBrand()
+    public function getMasterBrand(): ?MasterBrand
     {
         return $this->masterBrand;
     }
 
-    public function setMasterBrand(MasterBrand $masterBrand = null)
+    public function setMasterBrand(?MasterBrand $masterBrand): void
     {
         $this->masterBrand = $masterBrand;
     }
 
-    /**
-     * @return Network|null
-     */
-    public function getNetwork()
+    public function getNetwork(): ?Network
     {
         return $this->network;
     }
 
-    public function setNetwork(Network $network = null)
+    public function setNetwork(?Network $network): void
     {
         $this->network = $network;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getStartDate()
+    public function getStartDate(): ?DateTime
     {
         return $this->startDate;
     }
 
-    public function setStartDate(DateTime $startDate = null)
+    public function setStartDate(?DateTime $startDate): void
     {
         $this->startDate = $startDate;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getEndDate()
+    public function getEndDate(): ?DateTime
     {
         return $this->endDate;
     }
 
-    public function setEndDate(DateTime $endDate = null)
+    public function setEndDate(?DateTime $endDate): void
     {
         $this->endDate = $endDate;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getLiveStreamUrl()
+    public function getLiveStreamUrl(): ?string
     {
         return $this->liveStreamUrl;
     }
 
-    public function setLiveStreamUrl(string $liveStreamUrl = null)
+    public function setLiveStreamUrl(?string $liveStreamUrl): void
     {
         $this->liveStreamUrl = $liveStreamUrl;
     }

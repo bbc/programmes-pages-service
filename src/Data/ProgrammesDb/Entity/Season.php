@@ -26,28 +26,22 @@ class Season extends GroupProgrammeContainer
      */
     private $endDate;
 
-    /**
-     * @return DateTime|null
-     */
-    public function getStartDate()
+    public function getStartDate(): ?DateTime
     {
         return $this->startDate;
     }
 
-    public function setStartDate(DateTime $startDate = null)
+    public function setStartDate(?DateTime $startDate): void
     {
         $this->startDate = $startDate;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getEndDate()
+    public function getEndDate(): ?DateTime
     {
         return $this->endDate;
     }
 
-    public function setEndDate(DateTime $endDate = null)
+    public function setEndDate(?DateTime $endDate): void
     {
         $this->endDate = $endDate;
     }

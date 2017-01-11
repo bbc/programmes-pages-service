@@ -80,10 +80,7 @@ class Membership
         $this->setMember($member);
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -93,7 +90,7 @@ class Membership
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -103,7 +100,7 @@ class Membership
         return $this->group;
     }
 
-    public function setGroup(Group $group)
+    public function setGroup(Group $group): void
     {
         $this->group = $group;
     }
@@ -116,18 +113,12 @@ class Membership
         return $this->memberCoreEntity ?? $this->memberImage;
     }
 
-    /**
-     * @return CoreEntity|null
-     */
-    public function getMemberCoreEntity()
+    public function getMemberCoreEntity(): ?CoreEntity
     {
         return $this->memberCoreEntity;
     }
 
-    /**
-     * @return Image|null
-     */
-    public function getMemberImage()
+    public function getMemberImage(): ?Image
     {
         return $this->memberImage;
     }
@@ -151,23 +142,18 @@ class Membership
         }
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position = null)
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }
 
-    private function setMemberBatch(
-        CoreEntity $memberCoreEntity = null,
-        Image $memberImage = null
-    ) {
+    private function setMemberBatch(?CoreEntity $memberCoreEntity, ?Image $memberImage): void
+    {
         $this->memberCoreEntity = $memberCoreEntity;
         $this->memberImage = $memberImage;
     }

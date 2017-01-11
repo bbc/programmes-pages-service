@@ -255,10 +255,7 @@ abstract class CoreEntity
         $this->categories = new ArrayCollection();
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -268,7 +265,7 @@ abstract class CoreEntity
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         // TODO Validate PID
 
@@ -280,7 +277,7 @@ abstract class CoreEntity
         return $this->title;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
         $this->setSearchTitle($this->stripPunctuation($title));
@@ -291,22 +288,17 @@ abstract class CoreEntity
         return $this->searchTitle;
     }
 
-    public function setSearchTitle(string $searchTitle)
+    public function setSearchTitle(string $searchTitle): void
     {
         $this->searchTitle = $searchTitle;
     }
-    /**
-     * @return CoreEntity|null
-     */
-    public function getParent()
+
+    public function getParent(): ?CoreEntity
     {
         return $this->parent;
     }
 
-    /**
-     * @param CoreEntity|null $parent
-     */
-    public function setParent(CoreEntity $parent = null)
+    public function setParent(?CoreEntity $parent): void
     {
         $this->parent = $parent;
     }
@@ -316,28 +308,22 @@ abstract class CoreEntity
         return $this->ancestry;
     }
 
-    /**
-     * @return Image|null
-     */
-    public function getImage()
+    public function getImage(): ?Image
     {
         return $this->image;
     }
 
-    public function setImage(Image $image = null)
+    public function setImage(?Image $image): void
     {
         $this->image = $image;
     }
 
-    /**
-     * @return MasterBrand|null
-     */
-    public function getMasterBrand()
+    public function getMasterBrand(): ?MasterBrand
     {
         return $this->masterBrand;
     }
 
-    public function setMasterBrand(MasterBrand $masterBrand = null)
+    public function setMasterBrand(?MasterBrand $masterBrand): void
     {
         $this->masterBrand = $masterBrand;
     }
@@ -347,7 +333,7 @@ abstract class CoreEntity
         return $this->relatedLinksCount;
     }
 
-    public function setRelatedLinksCount(int $relatedLinksCount)
+    public function setRelatedLinksCount(int $relatedLinksCount): void
     {
         $this->relatedLinksCount = $relatedLinksCount;
     }
@@ -357,7 +343,7 @@ abstract class CoreEntity
         return $this->contributionsCount;
     }
 
-    public function setContributionsCount(int $contributionsCount)
+    public function setContributionsCount(int $contributionsCount): void
     {
         $this->contributionsCount = $contributionsCount;
     }

@@ -64,10 +64,7 @@ class CoreEntityImage
         $this->relationship = $relationship;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -77,7 +74,7 @@ class CoreEntityImage
         return $this->coreEntity;
     }
 
-    public function setCoreEntity(CoreEntity $coreEntity)
+    public function setCoreEntity(CoreEntity $coreEntity): void
     {
         $this->coreEntity = $coreEntity;
     }
@@ -87,7 +84,7 @@ class CoreEntityImage
         return $this->image;
     }
 
-    public function setImage(Image $image)
+    public function setImage(Image $image): void
     {
         $this->image = $image;
     }
@@ -97,7 +94,7 @@ class CoreEntityImage
         return $this->type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -107,7 +104,7 @@ class CoreEntityImage
         return $this->relationship;
     }
 
-    public function setRelationship(RefRelationship $relationship)
+    public function setRelationship(RefRelationship $relationship): void
     {
         $this->relationship = $relationship;
     }

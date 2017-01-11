@@ -29,7 +29,7 @@ trait PartnerPidTrait
         return $this->partnerPid;
     }
 
-    public function setPartnerPid(string $partnerPid)
+    public function setPartnerPid(string $partnerPid): void
     {
         $this->partnerPid = $partnerPid;
     }

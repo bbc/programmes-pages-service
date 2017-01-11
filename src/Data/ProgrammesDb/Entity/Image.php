@@ -60,10 +60,7 @@ class Image
         $this->title = $title;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -73,7 +70,7 @@ class Image
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -83,17 +80,17 @@ class Image
         return $this->title;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(string $type = null)
+    public function setType(?string $type)
     {
         $this->type = $type;
     }

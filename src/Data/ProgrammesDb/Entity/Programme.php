@@ -37,20 +37,17 @@ abstract class Programme extends CoreEntity
         return $this->promotionsCount;
     }
 
-    public function setPromotionsCount(int $promotionsCount)
+    public function setPromotionsCount(int $promotionsCount): void
     {
         $this->promotionsCount = $promotionsCount;
     }
 
-    /**
-     * @return boolean
-     */
-    public function getStreamable()
+    public function getStreamable(): bool
     {
         return $this->streamable;
     }
 
-    public function setStreamable(bool $streamable)
+    public function setStreamable(bool $streamable): void
     {
         $this->streamable = $streamable;
     }
@@ -60,7 +57,7 @@ abstract class Programme extends CoreEntity
         return $this->streamableAlternate;
     }
 
-    public function setStreamableAlternate(bool $streamableAlternate)
+    public function setStreamableAlternate(bool $streamableAlternate): void
     {
         $this->streamableAlternate = $streamableAlternate;
     }
@@ -70,20 +67,17 @@ abstract class Programme extends CoreEntity
         return $this->hasSupportingContent;
     }
 
-    public function setHasSupportingContent(bool $hasSupportingContent)
+    public function setHasSupportingContent(bool $hasSupportingContent): void
     {
         $this->hasSupportingContent = $hasSupportingContent;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position = null)
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }
@@ -99,7 +93,7 @@ abstract class Programme extends CoreEntity
         return $this->directCategories;
     }
 
-    public function setDirectCategories(DoctrineCollection $directCategories)
+    public function setDirectCategories(DoctrineCollection $directCategories): void
     {
         $this->directCategories = $directCategories;
     }
@@ -117,20 +111,17 @@ abstract class Programme extends CoreEntity
         return $this->categories;
     }
 
-    public function setCategories(DoctrineCollection $categories)
+    public function setCategories(DoctrineCollection $categories): void
     {
         $this->categories = $categories;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getFirstBroadcastDate()
+    public function getFirstBroadcastDate(): ?DateTime
     {
         return $this->firstBroadcastDate;
     }
 
-    public function setFirstBroadcastDate(DateTime $firstBroadcastDate = null)
+    public function setFirstBroadcastDate(?DateTime $firstBroadcastDate): void
     {
         $this->firstBroadcastDate = $firstBroadcastDate;
     }

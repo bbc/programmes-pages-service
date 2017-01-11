@@ -97,10 +97,7 @@ class RefAvailability
         $this->scheduledStart = $scheduledStart;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -110,7 +107,7 @@ class RefAvailability
         return $this->type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -120,7 +117,7 @@ class RefAvailability
         return $this->version;
     }
 
-    public function setVersion(Version $version)
+    public function setVersion(Version $version): void
     {
         $this->version = $version;
     }
@@ -130,7 +127,7 @@ class RefAvailability
         return $this->programmeItem;
     }
 
-    public function setProgrammeItem(ProgrammeItem $programmeItem)
+    public function setProgrammeItem(ProgrammeItem $programmeItem): void
     {
         $this->programmeItem = $programmeItem;
     }
@@ -140,7 +137,7 @@ class RefAvailability
         return $this->mediaSet;
     }
 
-    public function setMediaSet(RefMediaSet $mediaSet)
+    public function setMediaSet(RefMediaSet $mediaSet): void
     {
         $this->mediaSet = $mediaSet;
     }
@@ -150,33 +147,27 @@ class RefAvailability
         return $this->scheduledStart;
     }
 
-    public function setScheduledStart(DateTime $scheduledStart)
+    public function setScheduledStart(DateTime $scheduledStart): void
     {
         $this->scheduledStart = $scheduledStart;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getScheduledEnd()
+    public function getScheduledEnd(): ?DateTime
     {
         return $this->scheduledEnd;
     }
 
-    public function setScheduledEnd(DateTime $scheduledEnd = null)
+    public function setScheduledEnd(?DateTime $scheduledEnd): void
     {
         $this->scheduledEnd = $scheduledEnd;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getActualStart()
+    public function getActualStart(): ?DateTime
     {
         return $this->actualStart;
     }
 
-    public function setActualStart(DateTime $actualStart = null)
+    public function setActualStart(?DateTime $actualStart): void
     {
         $this->actualStart = $actualStart;
     }
@@ -186,7 +177,7 @@ class RefAvailability
         return $this->status;
     }
 
-    public function setStatus(string $status)
+    public function setStatus(string $status): void
     {
         if (!in_array($status, [AvailabilityStatusEnum::AVAILABLE, AvailabilityStatusEnum::FUTURE, AvailabilityStatusEnum::PENDING])) {
             throw new InvalidArgumentException(sprintf(

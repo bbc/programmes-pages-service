@@ -135,10 +135,7 @@ class RelatedLink
         $this->isExternal = $isExternal;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -148,7 +145,7 @@ class RelatedLink
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -158,7 +155,7 @@ class RelatedLink
         return $this->title;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -168,7 +165,7 @@ class RelatedLink
         return $this->uri;
     }
 
-    public function setUri(string $uri)
+    public function setUri(string $uri): void
     {
         $this->uri = $uri;
     }
@@ -178,7 +175,7 @@ class RelatedLink
         return $this->type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -191,26 +188,17 @@ class RelatedLink
         return $this->relatedToCoreEntity ?? $this->relatedToPromotion ?? $this->relatedToImage;
     }
 
-    /**
-     * @return CoreEntity|null
-     */
-    public function getRelatedToCoreEntity()
+    public function getRelatedToCoreEntity(): ?CoreEntity
     {
         return $this->relatedToCoreEntity;
     }
 
-    /**
-     * @return Promotion|null
-     */
-    public function getRelatedToPromotion()
+    public function getRelatedToPromotion(): ?Promotion
     {
         return $this->relatedToPromotion;
     }
 
-    /**
-     * @return Image|null
-     */
-    public function getRelatedToImage()
+    public function getRelatedToImage(): ?Image
     {
         return $this->relatedToImage;
     }
@@ -242,55 +230,46 @@ class RelatedLink
         return $this->isExternal;
     }
 
-    public function setIsExternal(bool $isExternal)
+    public function setIsExternal(bool $isExternal): void
     {
         $this->isExternal = $isExternal;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position = null)
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getStartDate()
+    public function getStartDate(): ?DateTime
     {
         return $this->startDate;
     }
 
-    public function setStartDate(DateTime $startDate = null)
+    public function setStartDate(?DateTime $startDate): void
     {
         $this->startDate = $startDate;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getEndDate()
+    public function getEndDate(): ?DateTime
     {
         return $this->endDate;
     }
 
-    public function setEndDate(DateTime $endDate = null)
+    public function setEndDate(?DateTime $endDate): void
     {
         $this->endDate = $endDate;
     }
 
     private function setRelatedToBatch(
-        CoreEntity $relatedToCoreEntity = null,
-        Promotion $relatedToPromotion = null,
-        Image $relatedToImage = null
-    ) {
+        ?CoreEntity $relatedToCoreEntity,
+        ?Promotion $relatedToPromotion,
+        ?Image $relatedToImage
+    ): void {
         $this->relatedToCoreEntity = $relatedToCoreEntity;
         $this->relatedToPromotion = $relatedToPromotion;
         $this->relatedToImage = $relatedToImage;

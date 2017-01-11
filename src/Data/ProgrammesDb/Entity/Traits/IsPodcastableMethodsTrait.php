@@ -11,7 +11,7 @@ trait IsPodcastableMethodsTrait
         return $this->isPodcastable;
     }
 
-    public function setIsPodcastable(bool $isPodcastable)
+    public function setIsPodcastable(bool $isPodcastable): void
     {
         $this->isPodcastable = $isPodcastable;
     }

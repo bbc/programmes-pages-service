@@ -33,10 +33,7 @@ class RefMediaSet
         $this->name = $name;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -46,7 +43,7 @@ class RefMediaSet
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }

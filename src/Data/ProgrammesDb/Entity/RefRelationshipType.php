@@ -41,10 +41,7 @@ class RefRelationshipType
         $this->name = $name;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -54,7 +51,7 @@ class RefRelationshipType
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -64,7 +61,7 @@ class RefRelationshipType
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
