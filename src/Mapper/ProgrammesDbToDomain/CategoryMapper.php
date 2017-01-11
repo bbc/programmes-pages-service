@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedGenre;
 use InvalidArgumentException;
 
 class CategoryMapper extends AbstractMapper
@@ -63,7 +64,14 @@ class CategoryMapper extends AbstractMapper
 
     private function getGenreParentModel(array $dbCategory, string $key = 'parent'): ?Genre
     {
-        if (!isset($dbCategory[$key])) {
+        // It is possible to have no parent, where the key does
+        // exist but is set to null. We'll only say it's Unfetched
+        // if the key doesn't exist at all.
+        if (!array_key_exists($key, $dbCategory)) {
+            return new UnfetchedGenre();
+        }
+
+        if (is_null($dbCategory[$key])) {
             return null;
         }
 

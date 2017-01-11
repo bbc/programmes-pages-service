@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedGenre;
 
 class CategoryMapperTest extends BaseMapperTestCase
 {
@@ -46,13 +47,15 @@ class CategoryMapperTest extends BaseMapperTestCase
             'pipId' => 'C00126',
             'title' => 'Title',
             'urlKey' => 'url_key',
+            'parent' => null,
         ];
 
         $expectedEntity = new Genre(
             [1],
             'C00126',
             'Title',
-            'url_key'
+            'url_key',
+            null
         );
 
         $mapper = $this->getMapper();
@@ -75,6 +78,7 @@ class CategoryMapperTest extends BaseMapperTestCase
                 'pipId' => 'C00127',
                 'title' => 'Parent Title',
                 'urlKey' => 'parent_url_key',
+                'parent' => null,
             ],
         ];
 
@@ -87,8 +91,32 @@ class CategoryMapperTest extends BaseMapperTestCase
                 [1],
                 'C00127',
                 'Parent Title',
-                'parent_url_key'
+                'parent_url_key',
+                null
             )
+        );
+
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+    }
+
+    public function testGetDomainModelWithGenreWithoutFetchingParent()
+    {
+        $dbEntityArray = [
+            'ancestry' => '1,',
+            'id' => '1',
+            'type' => 'genre',
+            'pipId' => 'C00126',
+            'title' => 'Title',
+            'urlKey' => 'url_key',
+        ];
+
+        $expectedEntity = new Genre(
+            [1],
+            'C00126',
+            'Title',
+            'url_key',
+            new UnfetchedGenre()
         );
 
         $mapper = $this->getMapper();
