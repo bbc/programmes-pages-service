@@ -214,6 +214,32 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
     }
 
     /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage All CollapsedBroadcasts must be joined to at least one Service
+     */
+    public function testGetDomainModelWithNonExistantServiceIds()
+    {
+        $services = ['a' => ['mid' => 'bbc_one', 'sid' => 'a']];
+
+        $dbEntityArray = [
+            'id'               => 1,
+            'startAt'          => new DateTime('2015-01-03T00:00:00'),
+            'endAt'            => new DateTime('2015-01-03T01:00:00'),
+            'duration'         => 120,
+            'isLive'           => false,
+            'isBlanked'        => true,
+            'isRepeat'         => true,
+            'isCritical'       => false,
+            'isAudioDescribed' => false,
+            'isWebcast'        => false,
+            'version'          => ['pid' => 'b03szzzz'],
+            'programmeItem'    => ['pid' => 'b007b5xt'],
+        ];
+
+        $this->getMapper()->getDomainModel($dbEntityArray, $services);
+    }
+
+    /**
      * @expectedException InvalidArgumentException
      */
     public function testGetDomainModelWithNonExistantService()

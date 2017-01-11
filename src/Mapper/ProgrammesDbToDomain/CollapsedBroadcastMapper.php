@@ -7,6 +7,8 @@ use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
+
 use DateTimeImmutable;
 
 class CollapsedBroadcastMapper extends AbstractMapper
@@ -22,7 +24,7 @@ class CollapsedBroadcastMapper extends AbstractMapper
         return new CollapsedBroadcast(
             $this->getVersionModel($dbCollapsedBroadcast),
             $this->getProgrammeItemModel($dbCollapsedBroadcast),
-            $this->getServiceModels($dbCollapsedBroadcast['serviceIds'], $services),
+            $this->getServiceModels($services, $dbCollapsedBroadcast),
             DateTimeImmutable::createFromMutable($dbCollapsedBroadcast['startAt']),
             DateTimeImmutable::createFromMutable($dbCollapsedBroadcast['endAt']),
             $dbCollapsedBroadcast['duration'],
@@ -56,10 +58,20 @@ class CollapsedBroadcastMapper extends AbstractMapper
         return new UnfetchedProgrammeItem();
     }
 
-    private function getServiceModels(array $serviceIds, array $services): array
-    {
+    private function getServiceModels(
+        array $services,
+        array $dbCollapsedBroadcast,
+        string $key = 'serviceIds'
+    ): array {
+        if (!array_key_exists($key, $dbCollapsedBroadcast) ||
+            !is_array($dbCollapsedBroadcast[$key]) ||
+            empty($dbCollapsedBroadcast[$key])
+        ) {
+            throw new DataNotFetchedException('All CollapsedBroadcasts must be joined to at least one Service');
+        }
+
         $serviceModels = [];
-        foreach ($serviceIds as $sid) {
+        foreach ($dbCollapsedBroadcast[$key] as $sid) {
             if (isset($services[$sid])) {
                 $serviceModels[] = $this->mapperFactory->getServiceMapper()->getDomainModel($services[$sid]);
             }
