@@ -6,44 +6,28 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class Contributor
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $dbId;
 
-    /**
-     * @var Pid
-     */
+    /** @var Pid */
     private $pid;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $type;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var string
-     */
+    /** @var string|null */
     private $sortName;
 
-    /**
-     * @var string
-     */
+    /** @var string|null */
     private $givenName;
 
-    /**
-     * @var string
-     */
+    /** @var string|null */
     private $familyName;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $musicBrainzId;
 
     public function __construct(
@@ -51,10 +35,10 @@ class Contributor
         Pid $pid,
         string $type,
         string $name,
-        string $sortName = null,
-        string $givenName = null,
-        string $familyName = null,
-        string $musicBrainzId = null
+        ?string $sortName = null,
+        ?string $givenName = null,
+        ?string $familyName = null,
+        ?string $musicBrainzId = null
     ) {
         $this->dbId = $dbId;
         $this->pid = $pid;
@@ -92,31 +76,22 @@ class Contributor
         return $this->name;
     }
 
-    public function getSortName()
+    public function getSortName(): ?string
     {
         return $this->sortName;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getGivenName()
+    public function getGivenName(): ?string
     {
         return $this->givenName;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getFamilyName()
+    public function getFamilyName(): ?string
     {
         return $this->familyName;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMusicBrainzId()
+    public function getMusicBrainzId(): ?string
     {
         return $this->musicBrainzId;
     }

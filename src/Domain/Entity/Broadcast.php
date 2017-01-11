@@ -14,13 +14,13 @@ class Broadcast
     /** @var Pid */
     private $pid;
 
-    /** @var Version $version */
+    /** @var Version */
     private $version;
 
-    /** @var ProgrammeItem $programmeItem */
+    /** @var ProgrammeItem */
     private $programmeItem;
 
-    /** @var Service $service */
+    /** @var Service */
     private $service;
 
     /** @var string */
@@ -65,6 +65,9 @@ class Broadcast
         return $this->pid;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getVersion(): Version
     {
         if ($this->version instanceof UnfetchedVersion) {
@@ -74,6 +77,9 @@ class Broadcast
         return $this->version;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getProgrammeItem(): ProgrammeItem
     {
         if ($this->programmeItem instanceof UnfetchedProgrammeItem) {
@@ -83,6 +89,9 @@ class Broadcast
         return $this->programmeItem;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getService(): Service
     {
         if ($this->service instanceof UnfetchedService) {

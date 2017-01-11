@@ -11,94 +11,58 @@ use InvalidArgumentException;
 
 abstract class Programme
 {
-    /**
-     * @var int[]
-     */
+    /** @var int[]*/
     private $dbAncestryIds;
 
-    /**
-     * @var Pid
-     */
+    /** @var Pid */
     private $pid;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $searchTitle;
 
-    /**
-     * @var Synopses
-     */
+    /** @var Synopses */
     private $synopses;
 
-    /**
-     * @var Image
-     */
+    /** @var Image */
     private $image;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $promotionsCount;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $relatedLinksCount;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $contributionsCount;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $hasSupportingContent;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isStreamable;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isStreamableAlternatate;
 
-    /**
-     * @var Programme|null
-     */
+    /** @var Programme|null */
     private $parent;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $position;
 
-    /**
-     * @var MasterBrand|null
-     */
+    /** @var MasterBrand|null */
     private $masterBrand;
 
-    /**
-     * @var Genre[]
-     */
+    /** @var Genre[] */
     private $genres;
 
-    /**
-     * @var Format[]
-     */
+    /** @var Format[] */
     private $formats;
 
-    /**
-     * @var DateTimeImmutable
-     */
+    /** @var DateTimeImmutable */
     private $firstBroadcastDate;
 
     public function __construct(
@@ -114,12 +78,12 @@ abstract class Programme
         bool $isStreamable,
         bool $isStreamableAlternate,
         int $contributionsCount,
-        Programme $parent = null,
-        int $position = null,
-        MasterBrand $masterBrand = null,
+        ?Programme $parent = null,
+        ?int $position = null,
+        ?MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
-        DateTimeImmutable $firstBroadcastDate = null
+        ?DateTimeImmutable $firstBroadcastDate = null
     ) {
         $this->assertAncestry($dbAncestryIds);
         $this->assertArrayOfType('genres', $genres, Genre::CLASS);
@@ -241,10 +205,9 @@ abstract class Programme
     }
 
     /**
-     * @return Programme|null
      * @throws DataNotFetchedException
      */
-    public function getParent()
+    public function getParent(): ?Programme
     {
         if ($this->parent instanceof UnfetchedProgramme) {
             throw new DataNotFetchedException(
@@ -255,18 +218,12 @@ abstract class Programme
         return $this->parent;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    /**
-     * @return MasterBrand|null
-     */
-    public function getMasterBrand()
+    public function getMasterBrand(): ?MasterBrand
     {
         return $this->masterBrand;
     }
@@ -287,18 +244,12 @@ abstract class Programme
         return $this->formats;
     }
 
-    /**
-     * @return Network|null
-     */
-    public function getNetwork()
+    public function getNetwork(): ?Network
     {
         return $this->masterBrand ? $this->masterBrand->getNetwork() : null;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getFirstBroadcastDate()
+    public function getFirstBroadcastDate(): ?DateTimeImmutable
     {
         return $this->firstBroadcastDate;
     }
@@ -328,7 +279,7 @@ abstract class Programme
         return true;
     }
 
-    private function assertAncestry($array)
+    private function assertAncestry(array $array)
     {
         if (empty($array)) {
             throw new InvalidArgumentException('Tried to create a Programme with invalid ancestry. Expected a non-empty array of integers but the array was empty');

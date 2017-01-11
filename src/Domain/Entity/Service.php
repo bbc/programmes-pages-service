@@ -7,61 +7,43 @@ use DateTimeImmutable;
 
 class Service
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $dbId;
 
-    /**
-     * @var Sid
-     */
+    /** @var Sid */
     private $sid;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $shortName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $urlKey;
 
-    /**
-     * @var Network|null
-     */
+    /** @var Network|null */
     private $network;
 
-    /**
-     * @var DateTimeImmutable|null
-     */
+    /** @var DateTimeImmutable|null */
     private $startDate;
 
-    /**
-     * @var DateTimeImmutable|null
-     */
+    /** @var DateTimeImmutable|null */
     private $endDate;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $liveStreamUrl;
 
     public function __construct(
         int $dbId,
         Sid $sid,
         string $name,
-        string $shortName = null,
-        string $urlKey = null,
-        Network $network = null,
-        DateTimeImmutable $startDate = null,
-        DateTimeImmutable $endDate = null,
-        string $liveStreamUrl = null
+        ?string $shortName = null,
+        ?string $urlKey = null,
+        ?Network $network = null,
+        ?DateTimeImmutable $startDate = null,
+        ?DateTimeImmutable $endDate = null,
+        ?string $liveStreamUrl = null
     ) {
         $this->dbId = $dbId;
         $this->sid = $sid;
@@ -105,34 +87,22 @@ class Service
         return $this->urlKey;
     }
 
-    /**
-     * @return Network|null
-     */
-    public function getNetwork()
+    public function getNetwork(): ?Network
     {
         return $this->network;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getStartDate()
+    public function getStartDate(): ?DateTimeImmutable
     {
         return $this->startDate;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
-    public function getEndDate()
+    public function getEndDate(): ?DateTimeImmutable
     {
         return $this->endDate;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getLiveStreamUrl()
+    public function getLiveStreamUrl(): ?string
     {
         return $this->liveStreamUrl;
     }

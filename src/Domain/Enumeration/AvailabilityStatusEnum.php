@@ -4,7 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Enumeration;
 
 class AvailabilityStatusEnum
 {
-    const AVAILABLE = 'available';
-    const FUTURE = 'future';
-    const PENDING = 'pending';
+    public const AVAILABLE = 'available';
+    public const FUTURE = 'future';
+    public const PENDING = 'pending';
 }

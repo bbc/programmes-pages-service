@@ -7,54 +7,34 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class MusicSegment extends Segment
 {
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $musicRecordId;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $releaseTitle;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $catalogueNumber;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $recordLabel;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $publisher;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $trackNumber;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $trackSide;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $sourceMedia;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $musicCode;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $recordingDate;
 
     public function __construct(
@@ -65,17 +45,17 @@ class MusicSegment extends Segment
         int $contributionsCount,
         string $title = null,
         int $duration = null,
-        $contributions = null,
-        string $musicRecordId = null,
-        string $releaseTitle = null,
-        string $catalogueNumber = null,
-        string $recordLabel = null,
-        string $publisher = null,
-        string $trackNumber = null,
-        string $trackSide = null,
-        string $sourceMedia = null,
-        string $musicCode = null,
-        string $recordingDate = null
+        ?array $contributions = null,
+        ?string $musicRecordId = null,
+        ?string $releaseTitle = null,
+        ?string $catalogueNumber = null,
+        ?string $recordLabel = null,
+        ?string $publisher = null,
+        ?string $trackNumber = null,
+        ?string $trackSide = null,
+        ?string $sourceMedia = null,
+        ?string $musicCode = null,
+        ?string $recordingDate = null
     ) {
         parent::__construct($dbId, $pid, $type, $synopses, $contributionsCount, $title, $duration, $contributions);
 
@@ -91,82 +71,52 @@ class MusicSegment extends Segment
         $this->recordingDate = $recordingDate;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMusicRecordId()
+    public function getMusicRecordId(): ?string
     {
         return $this->musicRecordId;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getReleaseTitle()
+    public function getReleaseTitle(): ?string
     {
         return $this->releaseTitle;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCatalogueNumber()
+    public function getCatalogueNumber(): ?string
     {
         return $this->catalogueNumber;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getRecordLabel()
+    public function getRecordLabel(): ?string
     {
         return $this->recordLabel;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPublisher()
+    public function getPublisher(): ?string
     {
         return $this->publisher;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getTrackNumber()
+    public function getTrackNumber(): ?string
     {
         return $this->trackNumber;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getTrackSide()
+    public function getTrackSide(): ?string
     {
         return $this->trackSide;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSourceMedia()
+    public function getSourceMedia(): ?string
     {
         return $this->sourceMedia;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMusicCode()
+    public function getMusicCode(): ?string
     {
         return $this->musicCode;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getRecordingDate()
+    public function getRecordingDate(): ?string
     {
         return $this->recordingDate;
     }

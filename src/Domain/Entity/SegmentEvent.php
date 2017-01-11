@@ -10,44 +10,28 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class SegmentEvent
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $pid;
 
-    /**
-     * @var Version
-     */
+    /** @var Version */
     private $version;
 
-    /**
-     * @var Segment
-     */
+    /** @var Segment */
     private $segment;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $title;
 
-    /**
-     * @var Synopses
-     */
+    /** @var Synopses */
     private $synopses;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isChapter = false;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $offset;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $position;
 
     public function __construct(
@@ -55,16 +39,16 @@ class SegmentEvent
         Version $version,
         Segment $segment,
         Synopses $synopses,
-        string $title = null,
+        ?string $title = null,
         bool $isChapter = false,
-        int $offset = null,
-        int $position = null
+        ?int $offset = null,
+        ?int $position = null
     ) {
         $this->pid = $pid;
         $this->version = $version;
         $this->segment = $segment;
-        $this->title = $title;
         $this->synopses = $synopses;
+        $this->title = $title;
         $this->isChapter = $isChapter;
         $this->offset = $offset;
         $this->position = $position;
@@ -75,6 +59,9 @@ class SegmentEvent
         return $this->pid;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getVersion(): Version
     {
         if ($this->version instanceof UnfetchedVersion) {
@@ -84,6 +71,9 @@ class SegmentEvent
         return $this->version;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getSegment(): Segment
     {
         if ($this->segment instanceof UnfetchedSegment) {
@@ -93,17 +83,14 @@ class SegmentEvent
         return $this->segment;
     }
 
-    /**
-     * @return null|string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
     public function getSynopses(): Synopses
     {
         return $this->synopses;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
     }
 
     public function isChapter(): bool
@@ -111,18 +98,12 @@ class SegmentEvent
         return $this->isChapter;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getOffset()
+    public function getOffset(): ?int
     {
         return $this->offset;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }

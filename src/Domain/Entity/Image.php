@@ -6,34 +6,22 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class Image
 {
-    /**
-     * @var Pid
-     */
+    /** @var Pid */
     private $pid;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $shortSynopsis;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $longestSynopsis;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $type;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $filename;
 
     public function __construct(
@@ -85,7 +73,7 @@ class Image
         return ($this->type == 'letterbox');
     }
 
-    public function getType() : string
+    public function getType(): string
     {
         return $this->type;
     }

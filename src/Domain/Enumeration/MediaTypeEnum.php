@@ -4,7 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Enumeration;
 
 class MediaTypeEnum
 {
-    const AUDIO = 'audio';
-    const VIDEO = 'audio_video';
-    const UNKNOWN = '';
+    public const AUDIO = 'audio';
+    public const VIDEO = 'audio_video';
+    public const UNKNOWN = '';
 }

@@ -6,38 +6,27 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 
 class MasterBrand
 {
-    /**
-     * @var Mid
-     */
+    /** @var Mid */
     private $mid;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var Image
-     */
+    /** @var Image */
     private $image;
 
-    /**
-     * @var Network
-     */
+    /** @var Network */
     private $network;
 
-    /**
-     * @var Version|null
-     */
+    /** @var Version|null */
     private $competitionWarning;
-
 
     public function __construct(
         Mid $mid,
         string $name,
         Image $image,
         Network $network,
-        Version $competitionWarning = null
+        ?Version $competitionWarning = null
     ) {
         $this->mid = $mid;
         $this->name = $name;
@@ -66,10 +55,7 @@ class MasterBrand
         return $this->network;
     }
 
-    /**
-     * @return Version|null
-     */
-    public function getCompetitionWarning()
+    public function getCompetitionWarning(): ?Version
     {
         return $this->competitionWarning;
     }

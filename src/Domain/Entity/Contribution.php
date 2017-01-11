@@ -11,44 +11,31 @@ use InvalidArgumentException;
 
 class Contribution
 {
-    /**
-     * @var Pid
-     */
+    /** @var Pid */
     private $pid;
 
-    /**
-     * @var Contributor
-     */
+    /** @var Contributor */
     private $contributor;
 
-    /**
-     * @var Programme|Segment|Version
-     */
+    /** @var Programme|Segment|Version */
     private $contributedTo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $creditRole;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $position;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $characterName;
-
 
     public function __construct(
         Pid $pid,
         Contributor $contributor,
         $contributedTo,
         string $creditRole,
-        int $position = null,
-        string $characterName = null
+        ?int $position = null,
+        ?string $characterName = null
     ) {
         if (!($contributedTo instanceof Programme || $contributedTo instanceof Segment || $contributedTo instanceof Version)) {
             throw new InvalidArgumentException(sprintf(
@@ -98,18 +85,12 @@ class Contribution
         return $this->creditRole;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCharacterName()
+    public function getCharacterName(): ?string
     {
         return $this->characterName;
     }

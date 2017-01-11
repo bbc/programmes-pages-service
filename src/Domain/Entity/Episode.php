@@ -9,21 +9,14 @@ use DateTimeImmutable;
 
 class Episode extends ProgrammeItem
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $aggregatedBroadcastsCount;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $availableClipsCount;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $availableGalleriesCount;
-
 
     public function __construct(
         array $dbAncestryIds,
@@ -43,16 +36,16 @@ class Episode extends ProgrammeItem
         int $aggregatedBroadcastsCount,
         int $availableClipsCount,
         int $availableGalleriesCount,
-        Programme $parent = null,
-        int $position = null,
-        MasterBrand $masterBrand = null,
+        ?Programme $parent = null,
+        ?int $position = null,
+        ?MasterBrand $masterBrand = null,
         array $genres = [],
         array $formats = [],
-        DateTimeImmutable $firstBroadcastDate = null,
-        PartialDate $releaseDate = null,
-        int $duration = null,
-        DateTimeImmutable $streamableFrom = null,
-        DateTimeImmutable $streamableUntil = null
+        ?DateTimeImmutable $firstBroadcastDate = null,
+        ?PartialDate $releaseDate = null,
+        ?int $duration = null,
+        ?DateTimeImmutable $streamableFrom = null,
+        ?DateTimeImmutable $streamableUntil = null
     ) {
         parent::__construct(
             $dbAncestryIds,
