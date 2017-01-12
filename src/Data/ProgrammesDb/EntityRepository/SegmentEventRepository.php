@@ -83,7 +83,7 @@ class SegmentEventRepository extends EntityRepository
                 'version',
                 'programmeItem',
                 'masterBrand',
-                'network'
+                'network',
             ])
             ->join('segmentEvent.segment', 'segment')
             ->join('version.broadcasts', 'broadcast')
