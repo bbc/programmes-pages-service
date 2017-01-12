@@ -10,6 +10,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use DateTimeImmutable;
@@ -253,9 +254,14 @@ class ProgrammeMapper extends AbstractMapper
 
     private function getMasterBrandModel(array $dbProgramme, string $key = 'masterBrand'): ?MasterBrand
     {
-        if (!isset($dbProgramme[$key])) {
-            // MasterBrand may be null if not requested or a Programme has no
-            // MasterBrand attached to it
+        // It is possible to have no MasterBrand, where the key does
+        // exist but is set to null. We'll only say it's Unfetched
+        // if the key doesn't exist at all.
+        if (!array_key_exists($key, $dbProgramme)) {
+            return new UnfetchedMasterBrand();
+        }
+
+        if (is_null($dbProgramme[$key])) {
             return null;
         }
 

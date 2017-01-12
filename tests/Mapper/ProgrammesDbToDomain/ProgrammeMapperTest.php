@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -42,6 +43,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'isPodcastable' => false,
             'parent' => null,
             'position' => 101,
+            'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
         ];
@@ -112,6 +114,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'isPodcastable' => false,
             'parent' => null,
             'position' => 101,
+            'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
         ];
@@ -183,6 +186,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 1001,
+            'masterBrand' => null,
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
@@ -254,6 +258,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'releaseDate' => new PartialDate(2015, 01, 02),
             'position' => 1001,
+            'masterBrand' => null,
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
@@ -323,6 +328,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'availableGalleriesCount' => 15,
             'isPodcastable' => false,
             'position' => 101,
+            'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
             'parent' => [
@@ -350,6 +356,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'isPodcastable' => false,
                 'parent' => null,
                 'position' => 101,
+                'masterBrand' => null,
                 'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
                 'expectedChildCount' => 1001,
             ],
