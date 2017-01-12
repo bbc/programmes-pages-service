@@ -2,16 +2,14 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\SegmentEvent;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
 class SegmentEventRepository extends EntityRepository
 {
     use Traits\ParentTreeWalkerTrait;
-    use Traits\SetLimitTrait;
 
-    public function findByPid(string $pid)
+    public function findByPid(string $pid): ?array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['segment', 'version'])
@@ -22,7 +20,7 @@ class SegmentEventRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findByPidFull(string $pid)
+    public function findByPidFull(string $pid): ?array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect([
@@ -49,13 +47,7 @@ class SegmentEventRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    /**
-     * @param array $dbIds
-     * @param int|AbstractService::NO_LIMIT $limit
-     * @param int $offset
-     * @return SegmentEvent[]
-     */
-    public function findByVersionWithContributions(array $dbIds, $limit, int $offset)
+    public function findByVersionWithContributions(array $dbIds, ?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect([
@@ -73,20 +65,13 @@ class SegmentEventRepository extends EntityRepository
             ->addOrderBy('contributions.position', 'ASC')
             ->addOrderBy('contributor.sortName', 'ASC')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('dbIds', $dbIds);
-
-        $qb = $this->setLimit($qb, $limit);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    /**
-     * @param int $contributorId
-     * @param int|AbstractService::NO_LIMIT $limit
-     * @param int $offset
-     * @return array
-     */
-    public function findFullLatestBroadcastedForContributor(int $contributorId, $limit, int $offset)
+    public function findFullLatestBroadcastedForContributor(int $contributorId, ?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             // fetching full, so we need a big select to return details
@@ -96,7 +81,7 @@ class SegmentEventRepository extends EntityRepository
                 'version',
                 'programmeItem',
                 'masterBrand',
-                'network'
+                'network',
             ])
             ->join('segmentEvent.segment', 'segment')
             ->join('version.broadcasts', 'broadcast')
@@ -108,6 +93,7 @@ class SegmentEventRepository extends EntityRepository
             // fetching image pid
             ->andWhere('contribution.contributor = :id')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             // now we're going to order using the broadcast
             // first by the most recent broadcast date
             // then by the segmentEvent offset/position in case
@@ -116,8 +102,6 @@ class SegmentEventRepository extends EntityRepository
             ->addOrderBy('segmentEvent.offset', 'DESC')
             ->addOrderBy('segmentEvent.position', 'DESC')
             ->setParameter('id', $contributorId);
-
-        $qb = $this->setLimit($qb, $limit);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
@@ -128,14 +112,7 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
-    /**
-     * @param array $dbIds
-     * @param bool $groupByVersionId
-     * @param int|AbstractService::NO_LIMIT $limit
-     * @param int $offset
-     * @return array
-     */
-    public function findBySegmentFull(array $dbIds, bool $groupByVersionId, $limit, int $offset) : array
+    public function findBySegmentFull(array $dbIds, bool $groupByVersionId, ?int $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem', 'image', 'masterBrand', 'network'])
@@ -150,14 +127,13 @@ class SegmentEventRepository extends EntityRepository
             // versions that have been broadcast come first
             ->addSelect('CASE WHEN broadcast.startAt IS NULL THEN 1 ELSE 0 AS HIDDEN hasBroadcast')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->addOrderBy('hasBroadcast', 'ASC')
             // oldests broadcasts come first
             ->addOrderBy('broadcast.startAt', 'ASC')
             // alphabetical ordering by title
             ->addOrderBy('programmeItem.title', 'ASC')
             ->setParameter('dbIds', $dbIds);
-
-        $qb = $this->setLimit($qb, $limit);
 
         if ($groupByVersionId) {
             $qb->addGroupBy('version.id');
@@ -172,26 +148,18 @@ class SegmentEventRepository extends EntityRepository
         );
     }
 
-    /**
-     * @param array $dbIds
-     * @param bool $groupByVersionId
-     * @param int|AbstractService::NO_LIMIT $limit
-     * @param int $offset
-     * @return array
-     */
-    public function findBySegment(array $dbIds, bool $groupByVersionId, $limit, int $offset) : array
+    public function findBySegment(array $dbIds, bool $groupByVersionId, ?int $limit, int $offset) : array
     {
         $qb = $this->createQueryBuilder('segmentEvent')
             ->addSelect(['version', 'programmeItem'])
             ->andWhere('segmentEvent.segment IN (:dbIds)')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('dbIds', $dbIds);
 
         if ($groupByVersionId) {
             $qb->addGroupBy('version.id');
         }
-
-        $qb = $this->setLimit($qb, $limit);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
@@ -208,7 +176,7 @@ class SegmentEventRepository extends EntityRepository
             ->join('version.programmeItem', 'programmeItem');
     }
 
-    private function programmeAncestryGetter(array $ids)
+    private function programmeAncestryGetter(array $ids): array
     {
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');

@@ -9,8 +9,6 @@ use Doctrine\ORM\NoResultException;
 
 class PipsChangeRepository extends EntityRepository
 {
-    use Traits\SetLimitTrait;
-
     public function addChange(PipsChangeBase $pipsChange)
     {
         $em = $this->getEntityManager();
@@ -69,14 +67,14 @@ class PipsChangeRepository extends EntityRepository
         try {
             $qb = $this->createQueryBuilder('pipsChange')
                 ->where('pipsChange.processedTime IS NULL')
-                ->addOrderBy('pipsChange.cid', 'Desc');
-
-            $qb = $this->setLimit($qb, $limit);
+                ->addOrderBy('pipsChange.cid', 'Desc')
+                ->setMaxResults($limit);
 
             if ($startCid) {
                 $qb->andWhere('pipsChange.cid >= :cid')
                     ->setParameter(':cid', $startCid);
             }
+
             $query = $qb->getQuery();
 
             return $query->getResult();
@@ -95,9 +93,8 @@ class PipsChangeRepository extends EntityRepository
             $query = $this->createQueryBuilder('pipsChange')
                 ->where('pipsChange.processedTime IS NULL')
                 ->addOrderBy('pipsChange.cid', 'Asc')
+                ->setMaxResults($limit)
                 ->getQuery();
-
-            $query = $this->setLimit($query, $limit);
 
             return $query->getResult();
         } catch (NoResultException $e) {

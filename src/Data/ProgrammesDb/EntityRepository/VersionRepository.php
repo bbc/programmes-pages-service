@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 
 class VersionRepository extends EntityRepository
 {
-    public function findByPid(string $pid)
+    public function findByPid(string $pid): ?array
     {
         $qb = $this->createQueryBuilder('version')
             ->andWhere('version.pid = :pid')
@@ -16,7 +16,7 @@ class VersionRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findByPidFull(string $pid)
+    public function findByPidFull(string $pid): ?array
     {
         // YIKES! versionTypes is a many-to-many join, that could result in
         // an increase of rows returned by the DB and the potential for slow DB
@@ -37,7 +37,7 @@ class VersionRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findByProgrammeItem(string $programmeDbId)
+    public function findByProgrammeItem(string $programmeDbId): array
     {
         // YIKES! versionTypes is a many-to-many join, that could result in
         // an increase of rows returned by the DB and the potential for slow DB
@@ -59,7 +59,7 @@ class VersionRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findOriginalVersionForProgrammeItem(string $programmeDbId)
+    public function findOriginalVersionForProgrammeItem(string $programmeDbId): ?array
     {
         // YIKES! versionTypes is a many-to-many join, that could result in
         // an increase of rows returned by the DB and the potential for slow DB

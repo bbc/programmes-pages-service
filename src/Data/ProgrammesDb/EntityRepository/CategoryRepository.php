@@ -2,15 +2,15 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use Doctrine\ORM\Query;
 
 class CategoryRepository extends MaterializedPathRepository
 {
     use Traits\ParentTreeWalkerTrait;
+    use Traits\NetworkMediumTrait;
 
-    public function findByIds(array $dbIds)
+    public function findByIds(array $dbIds): array
     {
         return $this->createQueryBuilder('category')
             ->where("category.id IN(:ids)")
@@ -18,7 +18,7 @@ class CategoryRepository extends MaterializedPathRepository
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findByUrlKeyAncestryAndType(array $urlKeys, string $type)
+    public function findByUrlKeyAncestryAndType(array $urlKeys, string $type): ?array
     {
 
         $query = $this->createQueryBuilder('category0')
@@ -40,8 +40,11 @@ class CategoryRepository extends MaterializedPathRepository
         return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findPopulatedChildCategoriesByNetworkMedium(int $categoryId, string $categoryType, $medium): array
-    {
+    public function findPopulatedChildCategoriesByNetworkMedium(
+        int $categoryId,
+        string $categoryType,
+        ?string $medium
+    ): array {
         $qb = $this->createQueryBuilder('category')
             ->select(['DISTINCT category'])
             ->join('category.programmes', 'programmes')
@@ -53,7 +56,8 @@ class CategoryRepository extends MaterializedPathRepository
             ->setParameter('parentId', $categoryId)
             ->setParameter('type', $categoryType);
 
-        if ($this->isValidNetworkMedium($medium)) {
+        if ($medium) {
+            $this->assertNetworkMedium($medium);
             $qb->join('programmes.masterBrand', 'masterBrand')
                 ->join('masterBrand.network', 'network')
                 ->andWhere('network.medium = :medium')
@@ -63,7 +67,7 @@ class CategoryRepository extends MaterializedPathRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findUsedByType(string $type)
+    public function findUsedByType(string $type): array
     {
         $result = $this->createQueryBuilder('category')
             ->select(['DISTINCT category'])
@@ -80,13 +84,8 @@ class CategoryRepository extends MaterializedPathRepository
         return $this->resolveParents($result);
     }
 
-    protected function resolveParents(array $categories)
+    protected function resolveParents(array $categories): array
     {
         return $this->abstractResolveAncestry($categories, [$this, 'findByIds']);
-    }
-
-    private function isValidNetworkMedium($medium)
-    {
-        return in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO]);
     }
 }

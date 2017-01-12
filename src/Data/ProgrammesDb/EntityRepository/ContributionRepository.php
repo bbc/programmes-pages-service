@@ -7,8 +7,6 @@ use Doctrine\ORM\Query;
 
 class ContributionRepository extends EntityRepository
 {
-    use Traits\SetLimitTrait;
-
     /**
      * @param array $dbIds
      * @param string $type
@@ -17,8 +15,13 @@ class ContributionRepository extends EntityRepository
      * @param int $offset
      * @return mixed
      */
-    public function findByContributionTo(array $dbIds, string $type, bool $getContributionTo, $limit, int $offset)
-    {
+    public function findByContributionTo(
+        array $dbIds,
+        string $type,
+        bool $getContributionTo,
+        ?int $limit,
+        int $offset
+    ): array {
         $columnNameLookup = [
             'programme' => 'contributionToCoreEntity',
             'group' => 'contributionToCoreEntity',
@@ -34,9 +37,8 @@ class ContributionRepository extends EntityRepository
             ->andWhere('contribution.' . $columnName . ' IN (:dbIds)')
             ->orderBy('contribution.position')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('dbIds', $dbIds);
-
-        $qb = $this->setLimit($qb, $limit);
 
         if ($getContributionTo) {
             $qb->addSelect('contributionTo')

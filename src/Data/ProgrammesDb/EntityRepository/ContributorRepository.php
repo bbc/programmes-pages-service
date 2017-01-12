@@ -9,7 +9,7 @@ use Doctrine\ORM\QueryBuilder;
 
 class ContributorRepository extends EntityRepository
 {
-    public function findByMusicBrainzId(string $musicBrainzId)
+    public function findByMusicBrainzId(string $musicBrainzId): ?array
     {
         $qb = $this->createQueryBuilder('contributor')
             ->where('contributor.musicBrainzId = :mid')
@@ -23,7 +23,7 @@ class ContributorRepository extends EntityRepository
     public function findAllMostPlayedWithPlays(
         DateTimeImmutable $from,
         DateTimeImmutable $to,
-        int $serviceId = null
+        ?int $serviceId
     ): array {
         $qb = $this->getPlaysQuery(
             $from,
@@ -40,7 +40,7 @@ class ContributorRepository extends EntityRepository
     private function getPlaysQuery(
         DateTimeImmutable $from,
         DateTimeImmutable $to,
-        int $serviceId = null
+        ?int $serviceId
     ): QueryBuilder {
         // In APS this used a sub-query for optimisation.
         // It seems however that the performance

@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 
 class SegmentRepository extends EntityRepository
 {
-    public function findByPidFull(string $pid)
+    public function findByPidFull(string $pid): ?array
     {
         $qb = $this->createQueryBuilder('segment')
             ->addSelect(['contribution', 'contributor', 'creditRole'])
