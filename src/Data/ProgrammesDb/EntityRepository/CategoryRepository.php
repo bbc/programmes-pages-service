@@ -35,7 +35,14 @@ class CategoryRepository extends MaterializedPathRepository
                 ->setParameter('urlKey' . $i, $urlKey);
         }
 
-        $query->andWhere('category' . (count($urlKeys) - 1) . '.parent IS NULL');
+        // Join onto the what we should be the top category and assert it is not
+        // set. Note we need to join to the table here so Doctrine knows that
+        // we have attempted to look for the parent and it is null, rather than
+        // thinking we haven't attempted to fetch it
+        $finalI = count($urlKeys);
+        $query->addSelect('category' . $finalI)
+            ->leftJoin('category' . ($finalI - 1) . '.parent', 'category' . $finalI)
+            ->andWhere('category' . $finalI . '.id IS NULL');
 
         return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
