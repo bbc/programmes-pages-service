@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use DateTimeImmutable;
 
@@ -41,7 +42,14 @@ class ServiceMapper extends AbstractMapper
 
     private function getNetworkModel(array $dbService, string $key = 'network'): ?Network
     {
-        if (!isset($dbService[$key])) {
+        // It is possible to have no Network, where the key does
+        // exist but is set to null. We'll only say it's Unfetched
+        // if the key doesn't exist at all.
+        if (!array_key_exists($key, $dbService)) {
+            return new UnfetchedNetwork();
+        }
+
+        if (is_null($dbService[$key])) {
             return null;
         }
 

@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 
 class MasterBrandMapper extends AbstractMapper
@@ -63,7 +64,14 @@ class MasterBrandMapper extends AbstractMapper
 
     private function getNetworkModel(array $dbMasterBrand, string $key = 'network'): ?Network
     {
-        if (!isset($dbMasterBrand[$key])) {
+        // It is possible to have no Network, where the key does
+        // exist but is set to null. We'll only say it's Unfetched
+        // if the key doesn't exist at all.
+        if (!array_key_exists($key, $dbMasterBrand)) {
+            return new UnfetchedNetwork();
+        }
+
+        if (is_null($dbMasterBrand[$key])) {
             return null;
         }
 

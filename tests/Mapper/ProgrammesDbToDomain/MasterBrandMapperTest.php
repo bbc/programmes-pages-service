@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MasterBrandMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use PHPUnit_Framework_TestCase;
 
@@ -75,7 +76,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
         );
     }
 
-    public function testGetDomainModelWithoutSetNetworkReturnsNull()
+    public function testGetDomainModelWithoutSetNetwork()
     {
         $dbEntityArray = [
             'id' => 1,
@@ -84,7 +85,11 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'competitionWarning' => null,
         ];
 
-        $this->assertEquals(null, $this->getMapper()->getDomainModel($dbEntityArray));
+        $mid = new Mid('bbc_three');
+        $expectedEntity = new MasterBrand($mid, 'Three', $this->mockDefaultImage, new UnfetchedNetwork());
+
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
     }
 
     public function testGetDomainModelWithSetButNullNetworkReturnsNull()
@@ -130,7 +135,6 @@ class MasterBrandMapperTest extends BaseMapperTestCase
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
-
 
     public function testGetDomainModelWithSetCompetitionWarning()
     {

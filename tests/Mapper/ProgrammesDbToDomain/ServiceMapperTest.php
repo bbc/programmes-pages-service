@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use DateTime;
 use DateTimeImmutable;
@@ -30,6 +31,7 @@ class ServiceMapperTest extends BaseMapperTestCase
             'shortName' => 'FM',
             'urlKey' => 'fm',
             'mediaType' => 'audio',
+            'network' => null,
             'startDate' => new DateTime('2015-01-03'),
             'endDate' => new DateTime('2015-01-04'),
             'liveStreamUrl' => 'liveStream',
@@ -98,6 +100,44 @@ class ServiceMapperTest extends BaseMapperTestCase
         );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+    }
+
+    public function testGetDomainModelWithUnfetchedNetwork()
+    {
+        $dbEntityArray = [
+            'id' => 1,
+            'sid' => 'radio_four_fm',
+            'type' => 'National Radio',
+            'name' => 'Radio Four',
+            'shortName' => 'FM',
+            'urlKey' => 'fm',
+            'mediaType' => 'audio',
+            'startDate' => new DateTime('2015-01-03'),
+            'endDate' => new DateTime('2015-01-04'),
+            'liveStreamUrl' => 'liveStream',
+        ];
+
+        $expectedEntity = new Service(
+            1,
+            new Sid('radio_four_fm'),
+            'Radio Four',
+            'FM',
+            'fm',
+            new UnfetchedNetwork(),
+            new DateTimeImmutable('2015-01-03'),
+            new DateTimeImmutable('2015-01-04'),
+            'liveStream'
+        );
+
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModel($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
+        );
     }
 
     private function getMapper(): ServiceMapper
