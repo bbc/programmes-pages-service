@@ -277,7 +277,7 @@ abstract class Programme
      */
     private function assertArrayOfType(string $property, ?array $array, string $expectedType): void
     {
-        if ($array === null) {
+        if (is_null($array)) {
             return;
         }
 
