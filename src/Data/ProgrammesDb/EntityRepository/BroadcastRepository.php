@@ -11,7 +11,6 @@ use InvalidArgumentException;
 
 class BroadcastRepository extends EntityRepository
 {
-    use Traits\SetLimitTrait;
     use Traits\ParentTreeWalkerTrait;
     use Traits\NetworkMediumTrait;
 
@@ -26,9 +25,8 @@ class BroadcastRepository extends EntityRepository
             ->addOrderBy('broadcast.startAt', 'DESC')
             ->addOrderBy('service.sid', 'DESC')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('dbIds', $dbIds);
-
-        $qb = $this->setLimit($qb, $limit);
 
         $this->setEntityTypeFilter($qb, $type);
 
@@ -170,11 +168,8 @@ class BroadcastRepository extends EntityRepository
         $isWebcastValue = $this->entityTypeFilterValue($type);
         $isWebcastClause = !is_null($isWebcastValue) ? 'AND b.is_webcast = :isWebcast' : '';
 
-        $filterByMediumClause = '';
-        if ($medium) {
-            $this->assertNetworkMedium($medium);
-            $filterByMediumClause = 'AND n.medium = :medium';
-        }
+        $this->assertNetworkMedium($medium);
+        $filterByMediumClause = $medium ? 'AND n.medium = :medium' : '';
 
         // Join to CoreEntity to ensure the programme is not embargoed
         // Join to network (via broadcast service) so that we get a count of
@@ -218,7 +213,6 @@ QUERY;
         }
 
         if ($medium) {
-            $this->assertNetworkMedium($medium);
             $q->setParameter('medium', $medium);
         }
 
@@ -243,10 +237,9 @@ QUERY;
             ->addOrderBy('broadcast.startAt', 'DESC')
             ->addOrderBy('service.urlKey', 'ASC')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('year', $year)
             ->setParameter('month', $month);
-
-        $qb = $this->setLimit($qb, $limit);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         $result = $this->explodeServiceIds($result);

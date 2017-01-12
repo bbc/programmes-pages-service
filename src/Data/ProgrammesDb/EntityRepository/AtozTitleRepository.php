@@ -8,7 +8,6 @@ use InvalidArgumentException;
 
 class AtozTitleRepository extends EntityRepository
 {
-    use Traits\SetLimitTrait;
     use Traits\ParentTreeWalkerTrait;
     use Traits\NetworkMediumTrait;
 

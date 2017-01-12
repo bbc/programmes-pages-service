@@ -7,8 +7,6 @@ use Doctrine\ORM\Query;
 
 class ContributionRepository extends EntityRepository
 {
-    use Traits\SetLimitTrait;
-
     /**
      * @param array $dbIds
      * @param string $type
@@ -39,9 +37,8 @@ class ContributionRepository extends EntityRepository
             ->andWhere('contribution.' . $columnName . ' IN (:dbIds)')
             ->orderBy('contribution.position')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('dbIds', $dbIds);
-
-        $qb = $this->setLimit($qb, $limit);
 
         if ($getContributionTo) {
             $qb->addSelect('contributionTo')

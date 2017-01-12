@@ -2,14 +2,12 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\SegmentEvent;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
 class SegmentEventRepository extends EntityRepository
 {
     use Traits\ParentTreeWalkerTrait;
-    use Traits\SetLimitTrait;
 
     public function findByPid(string $pid): ?array
     {
@@ -95,6 +93,7 @@ class SegmentEventRepository extends EntityRepository
             // fetching image pid
             ->andWhere('contribution.contributor = :id')
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             // now we're going to order using the broadcast
             // first by the most recent broadcast date
             // then by the segmentEvent offset/position in case
@@ -103,8 +102,6 @@ class SegmentEventRepository extends EntityRepository
             ->addOrderBy('segmentEvent.offset', 'DESC')
             ->addOrderBy('segmentEvent.position', 'DESC')
             ->setParameter('id', $contributorId);
-
-        $qb = $this->setLimit($qb, $limit);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 

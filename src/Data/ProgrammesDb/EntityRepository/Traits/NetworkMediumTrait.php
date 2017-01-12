@@ -9,7 +9,7 @@ trait NetworkMediumTrait
 {
     private function assertNetworkMedium(?string $medium): void
     {
-        if (!in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO])) {
+        if (!in_array($medium, [NetworkMediumEnum::TV, NetworkMediumEnum::RADIO]) && !is_null($medium)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Network medium must be %s or %s, instead got %s',

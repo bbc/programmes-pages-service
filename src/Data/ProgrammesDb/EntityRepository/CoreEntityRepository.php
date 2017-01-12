@@ -12,7 +12,6 @@ use DateTimeInterface;
 class CoreEntityRepository extends MaterializedPathRepository
 {
     use Traits\ParentTreeWalkerTrait;
-    use Traits\SetLimitTrait;
     use Traits\NetworkMediumTrait;
     use StripPunctuationTrait;
 
@@ -397,6 +396,8 @@ QUERY;
         bool $filterAvailable,
         ?array $entityTypes
     ): int {
+        $this->assertNetworkMedium($networkMedium);
+
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));
         $booleanKeywords = '+' . $booleanKeywords;
@@ -423,8 +424,6 @@ QUERY;
         }
 
         if ($networkMedium) {
-            $this->assertNetworkMedium($networkMedium);
-
             $qText .= ' AND network.medium = :service';
         }
         $q = $this->getEntityManager()->createQuery($qText)
@@ -446,6 +445,8 @@ QUERY;
         int $offset,
         ?array $entityTypes
     ): array {
+        $this->assertNetworkMedium($networkMedium);
+
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));
         $booleanKeywords = '+' . $booleanKeywords;
@@ -473,15 +474,14 @@ QUERY;
         if ($entityTypes) {
             $qText .= ' AND (' . $this->makeEntityTypesDQL($entityTypes, 'coreEntity') . ')';
         }
-        if ($networkMedium) {
-            $this->assertNetworkMedium($networkMedium);
 
-            $qText .= ' AND network.medium = :service';
-        }
+        $qText .= $networkMedium ? ' AND network.medium = :service' : '';
+
         $qText .= ' ORDER BY rel DESC';
 
         $q = $this->getEntityManager()->createQuery($qText)
             ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('keywords', $keywords)
             ->setParameter('booleanKeywords', $booleanKeywords)
             ->setParameter('quotedKeywords', '"' . $keywords . '"');
@@ -489,7 +489,6 @@ QUERY;
         if ($networkMedium) {
             $q->setParameter('service', $networkMedium);
         }
-        $q = $this->setLimit($q, $limit);
 
         return $q->getResult(Query::HYDRATE_ARRAY);
     }

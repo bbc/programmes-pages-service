@@ -7,8 +7,6 @@ use Doctrine\ORM\Query;
 
 class RelatedLinkRepository extends EntityRepository
 {
-    use Traits\SetLimitTrait;
-
     /**
      * @param array $dbIds
      * @param string $type
