@@ -121,7 +121,7 @@ class SegmentEvent
         $this->title = $title;
     }
 
-    public function getOffset(): ?string
+    public function getOffset(): ?int
     {
         return $this->offset;
     }
