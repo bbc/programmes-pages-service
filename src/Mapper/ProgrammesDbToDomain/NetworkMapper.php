@@ -20,7 +20,7 @@ class NetworkMapper extends AbstractMapper
         ]);
     }
 
-    public function getDomainModel(array $dbNetwork): Network
+    public function getDomainModel(array $dbNetwork, array ...$parents): Network
     {
         $cacheKey = $this->getCacheKey($dbNetwork);
 

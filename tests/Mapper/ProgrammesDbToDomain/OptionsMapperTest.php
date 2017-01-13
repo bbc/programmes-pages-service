@@ -102,10 +102,13 @@ class OptionsMapperTest extends BaseMapperTestCase
         $expectedEntity = new Options($expectedOptions);
 
         $mapper = $this->getMapper();
-        $ancestorOptions = [$parentOptions, $grandparentOptions];
+
+
+        $arrayOfAncestors = [$parentOptions, $grandparentOptions];
+
         $this->assertEquals(
             $expectedEntity,
-            $mapper->getDomainModel($options, $ancestorOptions)
+            $mapper->getDomainModel($options, ...$arrayOfAncestors)
         );
     }
 
