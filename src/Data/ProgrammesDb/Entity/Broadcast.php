@@ -129,10 +129,7 @@ class Broadcast
         $this->updateDuration();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -142,7 +139,7 @@ class Broadcast
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -152,33 +149,27 @@ class Broadcast
         return $this->version;
     }
 
-    public function setVersion(Version $version)
+    public function setVersion(Version $version): void
     {
         $this->version = $version;
     }
 
-    /**
-     * @return ProgrammeItem|null
-     */
-    public function getProgrammeItem()
+    public function getProgrammeItem(): ?ProgrammeItem
     {
         return $this->programmeItem;
     }
 
-    public function setProgrammeItem(ProgrammeItem $programmeItem)
+    public function setProgrammeItem(ProgrammeItem $programmeItem): void
     {
         $this->programmeItem = $programmeItem;
     }
 
-    /**
-     * @return Service|null
-     */
-    public function getService()
+    public function getService(): ?Service
     {
         return $this->service;
     }
 
-    public function setService(Service $service = null)
+    public function setService(?Service $service): void
     {
         $this->service = $service;
     }
@@ -188,7 +179,7 @@ class Broadcast
         return $this->isLive;
     }
 
-    public function setIsLive(bool $isLive)
+    public function setIsLive(bool $isLive): void
     {
         $this->isLive = $isLive;
     }
@@ -198,7 +189,7 @@ class Broadcast
         return $this->isBlanked;
     }
 
-    public function setIsBlanked(bool $isBlanked)
+    public function setIsBlanked(bool $isBlanked): void
     {
         $this->isBlanked = $isBlanked;
     }
@@ -208,7 +199,7 @@ class Broadcast
         return $this->isRepeat;
     }
 
-    public function setIsRepeat(bool $isRepeat)
+    public function setIsRepeat(bool $isRepeat): void
     {
         $this->isRepeat = $isRepeat;
     }
@@ -218,7 +209,7 @@ class Broadcast
         return $this->isCritical;
     }
 
-    public function setIsCritical(bool $isCritical)
+    public function setIsCritical(bool $isCritical): void
     {
         $this->isCritical = $isCritical;
     }
@@ -228,7 +219,7 @@ class Broadcast
         return $this->isAudioDescribed;
     }
 
-    public function setIsAudioDescribed(bool $isAudioDescribed)
+    public function setIsAudioDescribed(bool $isAudioDescribed): void
     {
         $this->isAudioDescribed = $isAudioDescribed;
     }
@@ -238,7 +229,7 @@ class Broadcast
         return $this->isWebcast;
     }
 
-    public function setIsWebcast(bool $isWebcast)
+    public function setIsWebcast(bool $isWebcast): void
     {
         $this->isWebcast = $isWebcast;
     }
@@ -248,7 +239,7 @@ class Broadcast
         return $this->startAt;
     }
 
-    public function setStart(DateTime $start)
+    public function setStart(DateTime $start): void
     {
         $this->startAt = $start;
         $this->updateDuration();
@@ -259,7 +250,7 @@ class Broadcast
         return $this->endAt;
     }
 
-    public function setEnd(DateTime $end)
+    public function setEnd(DateTime $end): void
     {
         $this->endAt = $end;
         $this->updateDuration();
@@ -270,12 +261,12 @@ class Broadcast
         return $this->duration;
     }
 
-    public function setDuration(int $duration)
+    public function setDuration(int $duration): void
     {
         $this->duration = $duration;
     }
 
-    protected function updateDuration()
+    protected function updateDuration(): void
     {
         if ($this->startAt instanceof DateTime && $this->endAt instanceof DateTime) {
             $this->setDuration($this->endAt->getTimestamp() - $this->startAt->getTimestamp());

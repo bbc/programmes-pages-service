@@ -135,10 +135,7 @@ class Promotion
         $this->weighting = $weighting;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -148,7 +145,7 @@ class Promotion
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -161,18 +158,12 @@ class Promotion
         return $this->promotionOfCoreEntity ?? $this->promotionOfImage;
     }
 
-    /**
-     * @return CoreEntity|null
-     */
-    public function getPromotionOfCoreEntity()
+    public function getPromotionOfCoreEntity(): ?CoreEntity
     {
         return $this->promotionOfCoreEntity;
     }
 
-    /**
-     * @return Image|null
-     */
-    public function getPromotionOfImage()
+    public function getPromotionOfImage(): ?Image
     {
         return $this->promotionOfImage;
     }
@@ -201,7 +192,7 @@ class Promotion
         return $this->startDate;
     }
 
-    public function setStartDate(DateTime $startDate)
+    public function setStartDate(DateTime $startDate): void
     {
         $this->startDate = $startDate;
     }
@@ -211,7 +202,7 @@ class Promotion
         return $this->endDate;
     }
 
-    public function setEndDate(DateTime $endDate)
+    public function setEndDate(DateTime $endDate): void
     {
         $this->endDate = $endDate;
     }
@@ -221,7 +212,7 @@ class Promotion
         return $this->weighting;
     }
 
-    public function setWeighting(int $weighting)
+    public function setWeighting(int $weighting): void
     {
         $this->weighting = $weighting;
     }
@@ -231,33 +222,27 @@ class Promotion
         return $this->isActive;
     }
 
-    public function setIsActive(bool $isActive)
+    public function setIsActive(bool $isActive): void
     {
         $this->isActive = $isActive;
     }
 
-    /**
-     * @return CoreEntity|null
-     */
-    public function getContext()
+    public function getContext(): ?CoreEntity
     {
         return $this->context;
     }
 
-    public function setContext(CoreEntity $context = null)
+    public function setContext(?CoreEntity $context): void
     {
         $this->context = $context;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPromotedFor()
+    public function getPromotedFor(): ?string
     {
         return $this->promotedFor;
     }
 
-    public function setPromotedFor(string $promotedFor = null)
+    public function setPromotedFor(?string $promotedFor): void
     {
         $this->promotedFor = $promotedFor;
     }
@@ -267,7 +252,7 @@ class Promotion
         return $this->title;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -277,7 +262,7 @@ class Promotion
         return $this->uri;
     }
 
-    public function setUri(string $uri)
+    public function setUri(string $uri): void
     {
         $this->uri = $uri;
     }
@@ -288,15 +273,13 @@ class Promotion
         return $this->cascadesToDescendants;
     }
 
-    public function setCascadesToDescendants(bool $cascadesToDescendants)
+    public function setCascadesToDescendants(bool $cascadesToDescendants): void
     {
         $this->cascadesToDescendants = $cascadesToDescendants;
     }
 
-    private function setPromotionOfBatch(
-        CoreEntity $promotionOfCoreEntity = null,
-        Image $promotionOfImage = null
-    ) {
+    private function setPromotionOfBatch(?CoreEntity $promotionOfCoreEntity, ?Image $promotionOfImage): void
+    {
         $this->promotionOfCoreEntity = $promotionOfCoreEntity;
         $this->promotionOfImage = $promotionOfImage;
     }

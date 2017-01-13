@@ -140,10 +140,7 @@ class Network
         $this->name = $name;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -153,7 +150,7 @@ class Network
         return $this->nid;
     }
 
-    public function setNid(string $nid)
+    public function setNid(string $nid): void
     {
         $this->nid = $nid;
     }
@@ -163,33 +160,27 @@ class Network
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getUrlKey()
+    public function getUrlKey(): ?string
     {
         return $this->urlKey;
     }
 
-    public function setUrlKey(string $urlKey = null)
+    public function setUrlKey(?string $urlKey): void
     {
         $this->urlKey = $urlKey;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(string $type = null)
+    public function setType(?string $type)
     {
         $this->type = $type;
     }
@@ -199,7 +190,7 @@ class Network
         return $this->medium;
     }
 
-    public function setMedium(string $medium)
+    public function setMedium(string $medium): void
     {
         if (!in_array($medium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV, NetworkMediumEnum::UNKNOWN])) {
             throw new InvalidArgumentException(sprintf(
@@ -214,41 +205,32 @@ class Network
         $this->medium = $medium;
     }
 
-    /**
-     * @return Image|null
-     */
-    public function getImage()
+    public function getImage(): ?Image
     {
         return $this->image;
     }
 
-    public function setImage(Image $image = null)
+    public function setImage(?Image $image): void
     {
         $this->image = $image;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position = null)
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }
 
-    /**
-     * @return Service|null
-     */
-    public function getDefaultService()
+    public function getDefaultService(): ?Service
     {
         return $this->defaultService;
     }
 
-    public function setDefaultService(Service $defaultService = null)
+    public function setDefaultService(?Service $defaultService)
     {
         $this->defaultService = $defaultService;
     }
@@ -259,7 +241,7 @@ class Network
         return $this->isPublicOutlet;
     }
 
-    public function setIsPublicOutlet(bool $isPublicOutlet)
+    public function setIsPublicOutlet(bool $isPublicOutlet): void
     {
         $this->isPublicOutlet = $isPublicOutlet;
     }
@@ -269,7 +251,7 @@ class Network
         return $this->isChildrens;
     }
 
-    public function setIsChildrens(bool $isChildrens)
+    public function setIsChildrens(bool $isChildrens): void
     {
         $this->isChildrens = $isChildrens;
     }
@@ -279,7 +261,7 @@ class Network
         return $this->isWorldServiceInternational;
     }
 
-    public function setIsWorldServiceInternational(bool $isWorldServiceInternational)
+    public function setIsWorldServiceInternational(bool $isWorldServiceInternational): void
     {
         $this->isWorldServiceInternational = $isWorldServiceInternational;
     }
@@ -289,7 +271,7 @@ class Network
         return $this->isInternational;
     }
 
-    public function setIsInternational(bool $isInternational)
+    public function setIsInternational(bool $isInternational): void
     {
         $this->isInternational = $isInternational;
     }
@@ -299,33 +281,27 @@ class Network
         return $this->isAllowedAdverts;
     }
 
-    public function setIsAllowedAdverts(bool $isAllowedAdverts)
+    public function setIsAllowedAdverts(bool $isAllowedAdverts): void
     {
         $this->isAllowedAdverts = $isAllowedAdverts;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getStartDate()
+    public function getStartDate(): ?DateTime
     {
         return $this->startDate;
     }
 
-    public function setStartDate(DateTime $startDate = null)
+    public function setStartDate(?DateTime $startDate): void
     {
         $this->startDate = $startDate;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getEndDate()
+    public function getEndDate(): ?DateTime
     {
         return $this->endDate;
     }
 
-    public function setEndDate(DateTime $endDate = null)
+    public function setEndDate(?DateTime $endDate): void
     {
         $this->endDate = $endDate;
     }

@@ -110,10 +110,7 @@ class MasterBrand
         $this->name = $name;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -123,7 +120,7 @@ class MasterBrand
         return $this->mid;
     }
 
-    public function setMid(string $mid)
+    public function setMid(string $mid): void
     {
         $this->mid = $mid;
     }
@@ -133,7 +130,7 @@ class MasterBrand
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         // TODO Validate PID
 
@@ -145,111 +142,87 @@ class MasterBrand
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return Network|null
-     */
-    public function getNetwork()
+    public function getNetwork(): ?Network
     {
         return $this->network;
     }
 
-    public function setNetwork(Network $network = null)
+    public function setNetwork(?Network $network): void
     {
         $this->network = $network;
     }
 
-    /**
-     * @return Image|null
-     */
-    public function getImage()
+    public function getImage(): ?Image
     {
         return $this->image;
     }
 
-    public function setImage(Image $image = null)
+    public function setImage(?Image $image): void
     {
         $this->image = $image;
     }
 
-    /**
-     * @return Version|null
-     */
-    public function getCompetitionWarning()
+    public function getCompetitionWarning(): ?Version
     {
         return $this->competitionWarning;
     }
 
-    public function setCompetitionWarning(Version $competitionWarning = null)
+    public function setCompetitionWarning(?Version $competitionWarning): void
     {
         $this->competitionWarning = $competitionWarning;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getColour()
+    public function getColour(): ?string
     {
         return $this->colour;
     }
 
-    public function setColour(string $colour = null)
+    public function setColour(?string $colour)
     {
         $this->colour = $colour;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getUrlKey()
+    public function getUrlKey(): ?string
     {
         return $this->urlKey;
     }
 
-    public function setUrlKey(string $urlKey = null)
+    public function setUrlKey(?string $urlKey): void
     {
         $this->urlKey = $urlKey;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position = null)
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getStartDate()
+    public function getStartDate(): ?DateTime
     {
         return $this->startDate;
     }
 
-    public function setStartDate(DateTime $startDate = null)
+    public function setStartDate(?DateTime $startDate): void
     {
         $this->startDate = $startDate;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getEndDate()
+    public function getEndDate(): ?DateTime
     {
         return $this->endDate;
     }
 
-    public function setEndDate(DateTime $endDate = null)
+    public function setEndDate(?DateTime $endDate): void
     {
         $this->endDate = $endDate;
     }

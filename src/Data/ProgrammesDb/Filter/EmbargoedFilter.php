@@ -7,7 +7,7 @@ use Doctrine\ORM\Query\Filter\SQLFilter;
 
 class EmbargoedFilter extends SQLFilter
 {
-    public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
+    public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias): string
     {
         $embargoedField = 'isEmbargoed';
 

@@ -133,10 +133,7 @@ class Version
         $this->setProgrammeItem($programmeItem);
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -146,7 +143,7 @@ class Version
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -156,33 +153,27 @@ class Version
         return $this->streamable;
     }
 
-    public function setStreamable(bool $streamable)
+    public function setStreamable(bool $streamable): void
     {
         $this->streamable = $streamable;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getStreamableFrom()
+    public function getStreamableFrom(): ?DateTime
     {
         return $this->streamableFrom;
     }
 
-    public function setStreamableFrom(DateTime $streamableFrom = null)
+    public function setStreamableFrom(?DateTime $streamableFrom): void
     {
         $this->streamableFrom = $streamableFrom;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getStreamableUntil()
+    public function getStreamableUntil(): ?DateTime
     {
         return $this->streamableUntil;
     }
 
-    public function setStreamableUntil(DateTime $streamableUntil = null)
+    public function setStreamableUntil(?DateTime $streamableUntil): void
     {
         $this->streamableUntil = $streamableUntil;
     }
@@ -192,46 +183,37 @@ class Version
         return $this->downloadable;
     }
 
-    public function setDownloadable(bool $downloadable)
+    public function setDownloadable(bool $downloadable): void
     {
         $this->downloadable = $downloadable;
     }
 
-    /**
-     * @return array|null
-     */
-    public function getDownloadableMediaSets()
+    public function getDownloadableMediaSets(): ?array
     {
         return $this->downloadableMediaSets;
     }
 
-    public function setDownloadableMediaSets(array $downloadableMediaSets = null)
+    public function setDownloadableMediaSets(?array $downloadableMediaSets): void
     {
         $this->downloadableMediaSets = $downloadableMediaSets;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getDuration()
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
 
-    public function setDuration(int $duration = null)
+    public function setDuration(?int $duration): void
     {
         $this->duration = $duration;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getGuidanceWarningCodes()
+    public function getGuidanceWarningCodes(): ?string
     {
         return $this->guidanceWarningCodes;
     }
 
-    public function setGuidanceWarningCodes(string $guidanceWarningCodes = null)
+    public function setGuidanceWarningCodes(?string $guidanceWarningCodes): void
     {
         $this->guidanceWarningCodes = $guidanceWarningCodes;
     }
@@ -241,7 +223,7 @@ class Version
         return $this->competitionWarning;
     }
 
-    public function setCompetitionWarning(bool $competitionWarning)
+    public function setCompetitionWarning(bool $competitionWarning): void
     {
         $this->competitionWarning = $competitionWarning;
     }
@@ -251,22 +233,19 @@ class Version
         return $this->contributionsCount;
     }
 
-    public function setContributionsCount(int $contributionsCount)
+    public function setContributionsCount(int $contributionsCount): void
     {
         $this->contributionsCount = $contributionsCount;
     }
 
-    /**
-     * @return ProgrammeItem
-     */
-    public function getProgrammeItem()
+    public function getProgrammeItem(): ProgrammeItem
     {
         return $this->programmeItem;
     }
 
-    public function setProgrammeItem(ProgrammeItem $programmeItem)
+    public function setProgrammeItem(ProgrammeItem $programmeItem): void
     {
-        return $this->programmeItem = $programmeItem;
+        $this->programmeItem = $programmeItem;
     }
 
     public function getVersionTypes(): DoctrineCollection
@@ -274,7 +253,7 @@ class Version
         return $this->versionTypes;
     }
 
-    public function setVersionTypes(DoctrineCollection $versionTypes)
+    public function setVersionTypes(DoctrineCollection $versionTypes): void
     {
         $this->versionTypes = $versionTypes;
     }
@@ -284,7 +263,7 @@ class Version
         return $this->segmentEventCount;
     }
 
-    public function setSegmentEventCount(int $segmentEventCount)
+    public function setSegmentEventCount(int $segmentEventCount): void
     {
         $this->segmentEventCount = $segmentEventCount;
     }

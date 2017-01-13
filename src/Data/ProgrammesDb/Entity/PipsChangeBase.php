@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -83,33 +84,27 @@ abstract class PipsChangeBase
         return $this->cid;
     }
 
-    public function setCid(int $cid)
+    public function setCid(int $cid): void
     {
         $this->cid = $cid;
     }
 
-    public function getCreatedTime(): \DateTime
+    public function getCreatedTime(): DateTime
     {
         return $this->createdTime;
     }
 
-    public function setCreatedTime(\DateTime $createdTime)
+    public function setCreatedTime(DateTime $createdTime): void
     {
         $this->createdTime = $createdTime;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getProcessedTime()
+    public function getProcessedTime(): DateTime
     {
         return $this->processedTime;
     }
 
-    /**
-     * @param \DateTime $processedTime
-     */
-    public function setProcessedTime($processedTime)
+    public function setProcessedTime(DateTime $processedTime): void
     {
         $this->processedTime = $processedTime;
     }
@@ -119,20 +114,17 @@ abstract class PipsChangeBase
         return $this->entityId;
     }
 
-    public function setEntityId(string $entityId)
+    public function setEntityId(string $entityId): void
     {
         $this->entityId = $entityId;
     }
 
-    /**
-     * @return string
-     */
-    public function getEntityType()
+    public function getEntityType(): string
     {
         return $this->entityType;
     }
 
-    public function setEntityType(string $entityType)
+    public function setEntityType(string $entityType): void
     {
         $this->entityType = $entityType;
     }
@@ -142,7 +134,7 @@ abstract class PipsChangeBase
         return $this->entityUrl;
     }
 
-    public function setEntityUrl(string $entityUrl)
+    public function setEntityUrl(string $entityUrl): void
     {
         $this->entityUrl = $entityUrl;
     }
@@ -152,7 +144,7 @@ abstract class PipsChangeBase
         return $this->status;
     }
 
-    public function setStatus(string $status)
+    public function setStatus(string $status): void
     {
         $this->status = $status;
     }
@@ -162,12 +154,12 @@ abstract class PipsChangeBase
         return $this->type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
 
-    public function getQueuedAt(): \DateTime
+    public function getQueuedAt(): DateTime
     {
         return $this->queuedAt;
     }

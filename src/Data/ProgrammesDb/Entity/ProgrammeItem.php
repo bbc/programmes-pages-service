@@ -83,12 +83,7 @@ abstract class ProgrammeItem extends Programme
         return $this->mediaType;
     }
 
-
-    /**
-     * @param string $mediaType
-     * @throws InvalidArgumentException
-     */
-    public function setMediaType($mediaType)
+    public function setMediaType(string $mediaType): void
     {
         if (!in_array($mediaType, [MediaTypeEnum::AUDIO, MediaTypeEnum::VIDEO, MediaTypeEnum::UNKNOWN])) {
             throw new InvalidArgumentException(sprintf(
@@ -103,80 +98,62 @@ abstract class ProgrammeItem extends Programme
         $this->mediaType = $mediaType;
     }
 
-    /**
-     * @return PartialDate|null
-     */
-    public function getReleaseDate()
+    public function getReleaseDate(): ?PartialDate
     {
         return $this->releaseDate;
     }
 
-    public function setReleaseDate(PartialDate $releaseDate = null)
+    public function setReleaseDate(?PartialDate $releaseDate): void
     {
         $this->releaseDate = $releaseDate;
     }
 
-    /**
-     * @return Version|null
-     */
-    public function getStreamableVersion()
+    public function getStreamableVersion(): ?Version
     {
         return $this->streamableVersion;
     }
 
-    public function setStreamableVersion(Version $streamableVersion = null)
+    public function setStreamableVersion(?Version $streamableVersion): void
     {
         $this->streamableVersion = $streamableVersion;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getStreamableFrom()
+    public function getStreamableFrom(): ?DateTime
     {
         return $this->streamableFrom;
     }
 
-    public function setStreamableFrom(DateTime $streamableFrom = null)
+    public function setStreamableFrom(?DateTime $streamableFrom): void
     {
         $this->streamableFrom = $streamableFrom;
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getStreamableUntil()
+    public function getStreamableUntil(): ?DateTime
     {
         return $this->streamableUntil;
     }
 
-    public function setStreamableUntil(DateTime $streamableUntil = null)
+    public function setStreamableUntil(?DateTime $streamableUntil): void
     {
         $this->streamableUntil = $streamableUntil;
     }
 
-    /**
-     * @return Version|null
-     */
-    public function getDownloadableVersion()
+    public function getDownloadableVersion(): ?Version
     {
         return $this->downloadableVersion;
     }
 
-    public function setDownloadableVersion(Version $downloadableVersion = null)
+    public function setDownloadableVersion(?Version $downloadableVersion): void
     {
         $this->downloadableVersion = $downloadableVersion;
     }
 
-    /**
-     * @return array|null
-     */
-    public function getDownloadableMediaSets()
+    public function getDownloadableMediaSets(): ?array
     {
         return $this->downloadableMediaSets;
     }
 
-    public function setDownloadableMediaSets(array $downloadableMediaSets = null)
+    public function setDownloadableMediaSets(?array $downloadableMediaSets): void
     {
         $this->downloadableMediaSets = $downloadableMediaSets;
     }
@@ -186,23 +163,17 @@ abstract class ProgrammeItem extends Programme
         return $this->embeddable;
     }
 
-    public function setEmbeddable(bool $embeddable)
+    public function setEmbeddable(bool $embeddable): void
     {
         $this->embeddable = $embeddable;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getDuration()
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
 
-    /**
-     * @param int|null $duration
-     */
-    public function setDuration($duration)
+    public function setDuration(?int $duration): void
     {
         $this->duration = $duration;
     }
@@ -212,7 +183,7 @@ abstract class ProgrammeItem extends Programme
         return $this->segmentEventCount;
     }
 
-    public function setSegmentEventCount(int $segmentEventCount)
+    public function setSegmentEventCount(int $segmentEventCount): void
     {
         $this->segmentEventCount = $segmentEventCount;
     }

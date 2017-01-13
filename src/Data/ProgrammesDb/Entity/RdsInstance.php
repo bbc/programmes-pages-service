@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -102,155 +103,101 @@ class RdsInstance
         return $this->cluster;
     }
 
-    /**
-     * @return string
-     */
     public function getDatabaseIdentifier(): string
     {
         return $this->databaseIdentifier;
     }
 
-    public function getFirstSeenAt(): \DateTime
+    public function getFirstSeenAt(): DateTime
     {
         return $this->firstSeenAt;
     }
 
-    public function setFirstSeenAt(\DateTime $firstSeenAt)
+    public function setFirstSeenAt(DateTime $firstSeenAt): void
     {
         $this->firstSeenAt = $firstSeenAt;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getLastPassOrFailLogged()
+    public function getLastPassOrFailLogged(): ?DateTime
     {
         return $this->lastPassOrFailLogged;
     }
 
-    /**
-     * @param \DateTime $lastPassOrFailLogged
-     */
-    public function setLastPassOrFailLogged(\DateTime $lastPassOrFailLogged)
+    public function setLastPassOrFailLogged(DateTime $lastPassOrFailLogged): void
     {
         $this->lastPassOrFailLogged = $lastPassOrFailLogged;
     }
 
-    /**
-     * @return int
-     */
     public function getConsecutiveFailedHealthChecks(): int
     {
         return $this->consecutiveFailedHealthChecks;
     }
 
-    /**
-     * @param int $consecutiveFailedHealthChecks
-     */
-    public function setConsecutiveFailedHealthChecks(int $consecutiveFailedHealthChecks)
+    public function setConsecutiveFailedHealthChecks(int $consecutiveFailedHealthChecks): void
     {
         $this->consecutiveFailedHealthChecks = $consecutiveFailedHealthChecks;
     }
 
-    /**
-     * @return int
-     */
     public function getConsecutivePassedHealthChecks(): int
     {
         return $this->consecutivePassedHealthChecks;
     }
 
-    /**
-     * @param int $consecutivePassedHealthChecks
-     */
-    public function setConsecutivePassedHealthChecks(int $consecutivePassedHealthChecks)
+    public function setConsecutivePassedHealthChecks(int $consecutivePassedHealthChecks): void
     {
         $this->consecutivePassedHealthChecks = $consecutivePassedHealthChecks;
     }
 
-    /**
-     * @return string
-     */
     public function getEndpoint(): string
     {
         return $this->endpoint;
     }
 
-    /**
-     * @param string $endpoint
-     */
-    public function setEndpoint(string $endpoint)
+    public function setEndpoint(string $endpoint): void
     {
         $this->endpoint = $endpoint;
     }
 
-    /**
-     * @return string
-     */
     public function getPort(): string
     {
         return $this->port;
     }
 
-    /**
-     * @param string $port
-     */
-    public function setPort(string $port)
+    public function setPort(string $port): void
     {
         $this->port = $port;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @param string $status
-     */
-    public function setStatus(string $status)
+    public function setStatus(string $status): void
     {
         $this->status = $status;
     }
 
-    /**
-     * @return boolean
-     */
     public function isInPool(): bool
     {
         return $this->inPool;
     }
 
-    /**
-     * @param boolean $inPool
-     */
-    public function setInPool(bool $inPool)
+    public function setInPool(bool $inPool): void
     {
         $this->inPool = $inPool;
     }
 
-    /**
-     * @return int
-     */
     public function getWeight(): int
     {
         return $this->weight;
     }
 
-    /**
-     * @param int $weight
-     */
-    public function setWeight(int $weight)
+    public function setWeight(int $weight): void
     {
         $this->weight = $weight;
     }
 
-    /**
-     * @return boolean
-     */
     public function isDraining(): bool
     {
         return $this->draining;

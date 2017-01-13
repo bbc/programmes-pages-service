@@ -36,7 +36,7 @@ class CreditRole
     private $name;
 
     /**
-     * @var string|null
+     * @var string
      *
      * @ORM\Column(type="text", nullable=false)
      */
@@ -47,10 +47,7 @@ class CreditRole
         $this->creditRoleId = $creditRoleId;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -60,28 +57,22 @@ class CreditRole
         return $this->creditRoleId;
     }
 
-    public function setCreditRoleId(string $creditRoleId)
+    public function setCreditRoleId(string $creditRoleId): void
     {
         $this->creditRoleId = $creditRoleId;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name = null)
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }

@@ -76,10 +76,7 @@ class SegmentEvent
         $this->segment = $segment;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -89,7 +86,7 @@ class SegmentEvent
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -99,7 +96,7 @@ class SegmentEvent
         return $this->version;
     }
 
-    public function setVersion(Version $version)
+    public function setVersion(Version $version): void
     {
         $this->version = $version;
     }
@@ -109,46 +106,37 @@ class SegmentEvent
         return $this->segment;
     }
 
-    public function setSegment(Segment $segment)
+    public function setSegment(Segment $segment): void
     {
         $this->segment = $segment;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title = null)
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getOffset()
+    public function getOffset(): ?int
     {
         return $this->offset;
     }
 
-    public function setOffset(int $offset = null)
+    public function setOffset(?int $offset): void
     {
         $this->offset = $offset;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position = null)
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }
@@ -158,7 +146,7 @@ class SegmentEvent
         return $this->isChapter;
     }
 
-    public function setIsChapter(bool $isChapter)
+    public function setIsChapter(bool $isChapter): void
     {
         $this->isChapter = $isChapter;
     }

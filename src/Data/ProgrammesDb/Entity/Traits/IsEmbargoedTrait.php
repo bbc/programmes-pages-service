@@ -18,7 +18,7 @@ trait IsEmbargoedTrait
         return $this->isEmbargoed;
     }
 
-    public function setIsEmbargoed(bool $isEmbargoed)
+    public function setIsEmbargoed(bool $isEmbargoed): void
     {
         $this->isEmbargoed = $isEmbargoed;
     }

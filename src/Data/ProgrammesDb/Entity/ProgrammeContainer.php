@@ -33,15 +33,12 @@ abstract class ProgrammeContainer extends Programme implements
      */
     private $expectedChildCount;
 
-    /**
-     * @return int|null
-     */
-    public function getExpectedChildCount()
+    public function getExpectedChildCount(): ?int
     {
         return $this->expectedChildCount;
     }
 
-    public function setExpectedChildCount(int $expectedChildCount = null)
+    public function setExpectedChildCount(?int $expectedChildCount): void
     {
         $this->expectedChildCount = $expectedChildCount;
     }

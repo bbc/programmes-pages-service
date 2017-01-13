@@ -88,10 +88,7 @@ class RefRelationship
         $this->pipsLastModified = $pipsLastModified;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -101,7 +98,7 @@ class RefRelationship
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -111,7 +108,7 @@ class RefRelationship
         return $this->subjectId;
     }
 
-    public function setSubjectId(string $subjectId)
+    public function setSubjectId(string $subjectId): void
     {
         $this->subjectId = $subjectId;
     }
@@ -121,7 +118,7 @@ class RefRelationship
         return $this->subjectType;
     }
 
-    public function setSubjectType(string $subjectType)
+    public function setSubjectType(string $subjectType): void
     {
         $this->subjectType = $subjectType;
     }
@@ -131,7 +128,7 @@ class RefRelationship
         return $this->objectId;
     }
 
-    public function setObjectId(string $objectId)
+    public function setObjectId(string $objectId): void
     {
         $this->objectId = $objectId;
     }
@@ -141,7 +138,7 @@ class RefRelationship
         return $this->objectType;
     }
 
-    public function setObjectType(string $objectType)
+    public function setObjectType(string $objectType): void
     {
         $this->objectType = $objectType;
     }
@@ -151,7 +148,7 @@ class RefRelationship
         return $this->relationshipType;
     }
 
-    public function setRelationshipType(RefRelationshipType $relationshipType)
+    public function setRelationshipType(RefRelationshipType $relationshipType): void
     {
         $this->relationshipType = $relationshipType;
     }
@@ -161,7 +158,7 @@ class RefRelationship
         return $this->pipsLastModified;
     }
 
-    public function setPipsLastModified(DateTime $pipsLastModified)
+    public function setPipsLastModified(DateTime $pipsLastModified): void
     {
         $this->pipsLastModified = $pipsLastModified;
     }

@@ -149,10 +149,7 @@ class Segment
         $this->segmentEvents = new ArrayCollection();
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -162,7 +159,7 @@ class Segment
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -172,163 +169,127 @@ class Segment
         return $this->type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title = null)
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getDuration()
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
 
-    public function setDuration(int $duration = null)
+    public function setDuration(?int $duration): void
     {
         $this->duration = $duration;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMusicRecordId()
+    public function getMusicRecordId(): ?string
     {
         return $this->musicRecordId;
     }
 
-    public function setMusicRecordId(string $musicRecordId = null)
+    public function setMusicRecordId(?string $musicRecordId): void
     {
         $this->musicRecordId = $musicRecordId;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getReleaseTitle()
+    public function getReleaseTitle(): ?string
     {
         return $this->releaseTitle;
     }
 
-    public function setReleaseTitle(string $releaseTitle = null)
+    public function setReleaseTitle(?string $releaseTitle): void
     {
         $this->releaseTitle = $releaseTitle;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCatalogueNumber()
+    public function getCatalogueNumber(): ?string
     {
         return $this->catalogueNumber;
     }
 
-    public function setCatalogueNumber(string $catalogueNumber = null)
+    public function setCatalogueNumber(?string $catalogueNumber): void
     {
         $this->catalogueNumber = $catalogueNumber;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getRecordLabel()
+    public function getRecordLabel(): ?string
     {
         return $this->recordLabel;
     }
 
-    public function setRecordLabel(string $recordLabel = null)
+    public function setRecordLabel(?string $recordLabel): void
     {
         $this->recordLabel = $recordLabel;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPublisher()
+    public function getPublisher(): ?string
     {
         return $this->publisher;
     }
 
-    public function setPublisher(string $publisher = null)
+    public function setPublisher(?string $publisher): void
     {
         $this->publisher = $publisher;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getTrackNumber()
+    public function getTrackNumber(): ?string
     {
         return $this->trackNumber;
     }
 
-    public function setTrackNumber(string $trackNumber = null)
+    public function setTrackNumber(?string $trackNumber): void
     {
         $this->trackNumber = $trackNumber;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getTrackSide()
+    public function getTrackSide(): ?string
     {
         return $this->trackSide;
     }
 
-    public function setTrackSide(string $trackSide = null)
+    public function setTrackSide(?string $trackSide): void
     {
         $this->trackSide = $trackSide;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSourceMedia()
+    public function getSourceMedia(): ?string
     {
         return $this->sourceMedia;
     }
 
-    public function setSourceMedia(string $sourceMedia = null)
+    public function setSourceMedia(?string $sourceMedia): void
     {
         $this->sourceMedia = $sourceMedia;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMusicCode()
+    public function getMusicCode(): ?string
     {
         return $this->musicCode;
     }
 
-    public function setMusicCode(string $musicCode = null)
+    public function setMusicCode(?string $musicCode): void
     {
         $this->musicCode = $musicCode;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getRecordingDate()
+    public function getRecordingDate(): ?string
     {
         return $this->recordingDate;
     }
 
-    public function setRecordingDate(string $recordingDate = null)
+    public function setRecordingDate(?string $recordingDate): void
     {
         $this->recordingDate = $recordingDate;
     }
@@ -338,7 +299,7 @@ class Segment
         return $this->contributionsCount;
     }
 
-    public function setContributionsCount(int $contributionsCount)
+    public function setContributionsCount(int $contributionsCount): void
     {
         $this->contributionsCount = $contributionsCount;
     }

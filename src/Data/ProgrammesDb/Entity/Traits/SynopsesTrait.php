@@ -27,50 +27,32 @@ trait SynopsesTrait
      */
     private $longSynopsis = '';
 
-    /**
-     * @return string
-     */
     public function getShortSynopsis(): string
     {
         return $this->shortSynopsis;
     }
 
-    /**
-     * @param string $shortSynopsis
-     */
-    public function setShortSynopsis($shortSynopsis)
+    public function setShortSynopsis(string $shortSynopsis): void
     {
         $this->shortSynopsis = $shortSynopsis;
     }
 
-    /**
-     * @return string
-     */
     public function getMediumSynopsis(): string
     {
         return $this->mediumSynopsis;
     }
 
-    /**
-     * @param string $mediumSynopsis
-     */
-    public function setMediumSynopsis($mediumSynopsis)
+    public function setMediumSynopsis(string $mediumSynopsis): void
     {
         $this->mediumSynopsis = $mediumSynopsis;
     }
 
-    /**
-     * @return string
-     */
     public function getLongSynopsis(): string
     {
         return $this->longSynopsis;
     }
 
-    /**
-     * @param string $longSynopsis
-     */
-    public function setLongSynopsis($longSynopsis)
+    public function setLongSynopsis(string $longSynopsis)
     {
         $this->longSynopsis = $longSynopsis;
     }

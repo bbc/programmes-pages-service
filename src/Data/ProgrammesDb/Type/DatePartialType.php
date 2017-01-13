@@ -27,7 +27,7 @@ class DatePartialType extends DateType
      * @return string
      * @throws ConversionException
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if (null === $value) {
             return $value;
@@ -46,7 +46,7 @@ class DatePartialType extends DateType
      * @return PartialDate|mixed
      * @throws ConversionException
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null || $value instanceof PartialDate) {
             return $value;
@@ -62,7 +62,7 @@ class DatePartialType extends DateType
     /**
      * @inheritdoc
      */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }

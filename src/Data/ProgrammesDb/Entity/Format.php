@@ -9,15 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Format extends Category
 {
-    public function setParent(Category $parent = null)
+    public function setParent(?Category $parent)
     {
         // FORMATS DO NOT HAVE PARENTS. GOODNIGHT.
     }
 
-    /**
-     * @return null
-     */
-    public function getParent()
+    public function getParent(): ?Category
     {
         return null;
     }

@@ -110,10 +110,7 @@ class Contribution
         $this->setContributionTo($contributionTo);
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -123,7 +120,7 @@ class Contribution
         return $this->pid;
     }
 
-    public function setPid(string $pid)
+    public function setPid(string $pid): void
     {
         $this->pid = $pid;
     }
@@ -133,7 +130,7 @@ class Contribution
         return $this->contributor;
     }
 
-    public function setContributor(Contributor $contributor)
+    public function setContributor(Contributor $contributor): void
     {
         $this->contributor = $contributor;
     }
@@ -143,7 +140,7 @@ class Contribution
         return $this->creditRole;
     }
 
-    public function setCreditRole(CreditRole $creditRole)
+    public function setCreditRole(CreditRole $creditRole): void
     {
         $this->creditRole = $creditRole;
     }
@@ -156,26 +153,17 @@ class Contribution
         return $this->contributionToCoreEntity ?? $this->contributionToSegment ?? $this->contributionToVersion;
     }
 
-    /**
-     * @return CoreEntity|null
-     */
-    public function getContributionToCoreEntity()
+    public function getContributionToCoreEntity(): ?CoreEntity
     {
         return $this->contributionToCoreEntity;
     }
 
-    /**
-     * @return Segment|null
-     */
-    public function getContributionToSegment()
+    public function getContributionToSegment(): ?Segment
     {
         return $this->contributionToSegment;
     }
 
-    /**
-     * @return Version|null
-     */
-    public function getContributionToVersion()
+    public function getContributionToVersion(): ?Version
     {
         return $this->contributionToVersion;
     }
@@ -202,37 +190,31 @@ class Contribution
         }
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position = null)
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCharacterName()
+    public function getCharacterName(): ?string
     {
         return $this->characterName;
     }
 
-    public function setCharacterName(string $characterName = null)
+    public function setCharacterName(?string $characterName): void
     {
         $this->characterName = $characterName;
     }
 
     private function setContributionToBatch(
-        CoreEntity $contributionToCoreEntity = null,
-        Segment $contributionToSegment = null,
-        Version $contributionToVersion = null
-    ) {
+        ?CoreEntity $contributionToCoreEntity,
+        ?Segment $contributionToSegment,
+        ?Version $contributionToVersion
+    ): void {
         $this->contributionToCoreEntity = $contributionToCoreEntity;
         $this->contributionToSegment = $contributionToSegment;
         $this->contributionToVersion = $contributionToVersion;

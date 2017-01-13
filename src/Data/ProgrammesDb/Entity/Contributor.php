@@ -116,10 +116,7 @@ class Contributor
         $this->contributions = new ArrayCollection();
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -154,106 +151,82 @@ class Contributor
         $this->name = $name;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMusicBrainzId()
+    public function getMusicBrainzId(): ?string
     {
         return $this->musicBrainzId;
     }
 
-    public function setMusicBrainzId(string $musicBrainzId = null)
+    public function setMusicBrainzId(?string $musicBrainzId)
     {
         $this->musicBrainzId = $musicBrainzId;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPresentationName()
+    public function getPresentationName(): ?string
     {
         return $this->presentationName;
     }
 
-    public function setPresentationName(string $presentationName = null)
+    public function setPresentationName(?string $presentationName)
     {
         $this->presentationName = $presentationName;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getGivenName()
+    public function getGivenName(): ?string
     {
         return $this->givenName;
     }
 
-    public function setGivenName(string $givenName = null)
+    public function setGivenName(?string $givenName)
     {
         $this->givenName = $givenName;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getFamilyName()
+    public function getFamilyName(): ?string
     {
         return $this->familyName;
     }
 
-    public function setFamilyName(string $familyName = null)
+    public function setFamilyName(?string $familyName)
     {
         $this->familyName = $familyName;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSortName()
+    public function getSortName(): ?string
     {
         return $this->sortName;
     }
 
-    public function setSortName(string $sortName = null)
+    public function setSortName(?string $sortName)
     {
         $this->sortName = $sortName;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getNameLanguage()
+    public function getNameLanguage(): ?string
     {
         return $this->nameLanguage;
     }
 
-    public function setNameLanguage(string $nameLanguage = null)
+    public function setNameLanguage(?string $nameLanguage)
     {
         $this->nameLanguage = $nameLanguage;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getDisambiguation()
+    public function getDisambiguation(): ?string
     {
         return $this->disambiguation;
     }
 
-    public function setDisambiguation(string $disambiguation = null)
+    public function setDisambiguation(?string $disambiguation)
     {
         $this->disambiguation = $disambiguation;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getGender()
+    public function getGender(): ?string
     {
         return $this->gender;
     }
 
-    public function setGender(string $gender = null)
+    public function setGender(?string $gender)
     {
         $this->gender = $gender;
     }

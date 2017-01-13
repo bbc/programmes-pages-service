@@ -110,18 +110,12 @@ abstract class Category
         $this->children = new ArrayCollection();
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return null|string
-     */
-    public function getAncestry()
+    public function getAncestry(): ?string
     {
         return $this->ancestry;
     }
@@ -136,7 +130,7 @@ abstract class Category
         return $this->title;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -146,20 +140,17 @@ abstract class Category
         return $this->pipId;
     }
 
-    public function setPipId(string $pipId)
+    public function setPipId(string $pipId): void
     {
         $this->pipId = $pipId;
     }
 
-    /**
-     * @return Category|null
-     */
-    public function getParent()
+    public function getParent(): ?Category
     {
         return $this->parent;
     }
 
-    public function setParent(Category $parent = null)
+    public function setParent(?Category $parent)
     {
         $this->parent = $parent;
     }
@@ -169,7 +160,7 @@ abstract class Category
         return $this->urlKey;
     }
 
-    public function setUrlKey(string $urlKey)
+    public function setUrlKey(string $urlKey): void
     {
         $this->urlKey = $urlKey;
     }
