@@ -18,8 +18,8 @@ trait OptionsTrait
         return $this->options;
     }
 
-    public function setOptions(string $shortSynopsis): void
+    public function setOptions(?array $options): void
     {
-        $this->shortSynopsis = $shortSynopsis;
+        $this->options = $options;
     }
 }
