@@ -69,7 +69,7 @@ class Service
         return $this->dbId;
     }
 
-    public function getSid(): string
+    public function getSid(): Sid
     {
         return $this->sid;
     }
