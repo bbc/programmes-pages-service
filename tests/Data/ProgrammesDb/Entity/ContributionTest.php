@@ -111,7 +111,7 @@ class ContributionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testInvalidContributionToThrowsExceptionOnConstruct()
     {
@@ -124,7 +124,7 @@ class ContributionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testInvalidContributionToThrowsExceptionOnSet()
     {

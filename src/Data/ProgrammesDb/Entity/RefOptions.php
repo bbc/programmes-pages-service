@@ -28,7 +28,7 @@ class RefOptions
      * @ORM\ManyToOne(targetEntity="CoreEntity")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $optionsToCoreEntity;
+    private $optionsForCoreEntity;
 
     /**
      * @var Network
@@ -36,7 +36,7 @@ class RefOptions
      * @ORM\ManyToOne(targetEntity="Network")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $optionsToNetwork;
+    private $optionsForNetwork;
 
     /**
      * @var array
@@ -61,11 +61,11 @@ class RefOptions
 
     /**
      * RefOptions constructor.
-     * @param CoreEntity|Network $optionsTo
+     * @param CoreEntity|Network $optionsFor
      */
-    public function __construct($optionsTo)
+    public function __construct($optionsFor)
     {
-        $this->setOptionsTo($optionsTo);
+        $this->setOptionsFor($optionsFor);
     }
 
     public function getId(): ?int
@@ -76,19 +76,19 @@ class RefOptions
     /**
      * @return CoreEntity|Network
      */
-    public function getOptionsTo()
+    public function getOptionsFor()
     {
-        return $this->optionsToCoreEntity ?? $this->optionsToNetwork;
+        return $this->optionsForCoreEntity ?? $this->optionsForNetwork;
     }
 
-    public function getOptionsToCoreEntity(): ?CoreEntity
+    public function getOptionsForCoreEntity(): ?CoreEntity
     {
-        return $this->optionsToCoreEntity;
+        return $this->optionsForCoreEntity;
     }
 
-    public function getOptionsToNetwork(): ?Network
+    public function getOptionsForNetwork(): ?Network
     {
-        return $this->optionsToNetwork;
+        return $this->optionsForNetwork;
     }
 
     public function getAdminOptions(): ?array
@@ -124,15 +124,15 @@ class RefOptions
     /**
      * @param CoreEntity|Network $item
      */
-    public function setOptionsTo($item)
+    public function setOptionsFor($item)
     {
         if ($item instanceof CoreEntity) {
-            $this->setOptionsToBatch($item, null);
+            $this->setOptionsForBatch($item, null);
         } elseif ($item instanceof Network) {
-            $this->setOptionsToBatch(null, $item);
+            $this->setOptionsForBatch(null, $item);
         } else {
             throw new InvalidArgumentException(sprintf(
-                'Expected setOptionsTo() to be called with an an instance of "%s", "%s" or "%s". Found instance of "%s"',
+                'Expected setOptionsFor() to be called with an an instance of "%s", "%s" or "%s". Found instance of "%s"',
                 CoreEntity::CLASS,
                 Network::CLASS,
                 (is_object($item) ? get_class($item) : gettype($item))
@@ -140,11 +140,11 @@ class RefOptions
         }
     }
 
-    private function setOptionsToBatch(
-        ?CoreEntity $optionsToCoreEntity,
-        ?Network $optionsToNetwork
+    private function setOptionsForBatch(
+        ?CoreEntity $optionsForCoreEntity,
+        ?Network $optionsForNetwork
     ): void {
-        $this->optionsToCoreEntity = $optionsToCoreEntity;
-        $this->optionsToNetwork = $optionsToNetwork;
+        $this->optionsForCoreEntity = $optionsForCoreEntity;
+        $this->optionsForNetwork = $optionsForNetwork;
     }
 }
