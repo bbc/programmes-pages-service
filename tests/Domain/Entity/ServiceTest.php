@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -55,5 +56,23 @@ class ServiceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($startDate, $service->getStartDate());
         $this->assertEquals($endDate, $service->getEndDate());
         $this->assertEquals('liveStreamUrl', $service->getLiveStreamUrl());
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage Could not get Network of Service "bbc_1xtra" as it was not fetched
+     */
+    public function testRequestingUnfetchedNetworkThrowsException()
+    {
+        $service = new Service(
+            0,
+            new Sid('bbc_1xtra'),
+            'Name',
+            'shortName',
+            'urlKey',
+            new UnfetchedNetwork()
+        );
+
+        $service->getNetwork();
     }
 }

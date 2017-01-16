@@ -2,6 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use DateTimeImmutable;
 
@@ -87,8 +89,17 @@ class Service
         return $this->urlKey;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getNetwork(): ?Network
     {
+        if ($this->network instanceof UnfetchedNetwork) {
+            throw new DataNotFetchedException(
+                'Could not get Network of Service "'
+                    . $this->sid . '" as it was not fetched'
+            );
+        }
         return $this->network;
     }
 

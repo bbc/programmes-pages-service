@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -223,8 +224,16 @@ abstract class Programme
         return $this->position;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getMasterBrand(): ?MasterBrand
     {
+        if ($this->masterBrand instanceof UnfetchedMasterBrand) {
+            throw new DataNotFetchedException(
+                'Could not get MasterBrand of Programme "' . $this->pid . '" as it was not fetched'
+            );
+        }
         return $this->masterBrand;
     }
 

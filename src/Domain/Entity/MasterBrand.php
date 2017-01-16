@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
@@ -52,11 +53,23 @@ class MasterBrand
         return $this->image;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getNetwork(): Network
     {
+        if ($this->network instanceof UnfetchedNetwork) {
+            throw new DataNotFetchedException(
+                'Could not get Network of MasterBrand "'
+                    . $this->mid . '" as it was not fetched'
+            );
+        }
         return $this->network;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getCompetitionWarning(): ?Version
     {
         if ($this->competitionWarning instanceof UnfetchedVersion) {

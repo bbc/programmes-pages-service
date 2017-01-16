@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
@@ -113,6 +114,43 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([$format], $programme->getFormats());
         $this->assertEquals($firstBroadcastDate, $programme->getFirstBroadcastDate());
         $this->assertEquals(2201, $programme->getExpectedChildCount());
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage Could not get MasterBrand of Programme "p01m5mss" as it was not fetched
+     */
+    public function testRequestingUnfetchedMasterBrandThrowsException()
+    {
+        $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+
+        $programme = new Brand(
+            [0],
+            $pid,
+            'Title',
+            'Search Title',
+            $synopses,
+            $image,
+            1101,
+            1102,
+            true,
+            true,
+            true,
+            1103,
+            1201,
+            1202,
+            1203,
+            1204,
+            1205,
+            false,
+            null,
+            2101,
+            new UnfetchedMasterBrand()
+        );
+
+        $programme->getMasterBrand();
     }
 
     /**
