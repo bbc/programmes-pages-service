@@ -28,19 +28,13 @@ class CategoriesService extends AbstractService
         return $this->mapManyEntities($usedByType);
     }
 
-    /**
-     * @return Format|null
-     */
-    public function findFormatByUrlKeyAncestry(string $formatUrlKey)
+    public function findFormatByUrlKeyAncestry(string $formatUrlKey): ?Format
     {
         $format = $this->repository->findByUrlKeyAncestryAndType([$formatUrlKey], 'format');
         return $this->mapSingleEntity($format);
     }
 
-    /**
-     * @return Genre|null
-     */
-    public function findGenreByUrlKeyAncestry(array $urlHierarchy)
+    public function findGenreByUrlKeyAncestry(array $urlHierarchy): ?Genre
     {
         $genre = $this->repository->findByUrlKeyAncestryAndType($urlHierarchy, 'genre');
         return $this->mapSingleEntity($genre);
@@ -49,7 +43,7 @@ class CategoriesService extends AbstractService
     /**
      * @return Genre[]
      */
-    public function findPopulatedChildGenres(Genre $genre, string $medium = null)
+    public function findPopulatedChildGenres(Genre $genre, string $medium = null): array
     {
         $subcategories = $this->repository->findPopulatedChildCategoriesByNetworkMedium(
             $genre->getDbId(),

@@ -2,11 +2,11 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\SegmentEvent;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentEventRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
+use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentEventMapper;
 
@@ -19,10 +19,7 @@ class SegmentEventsService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    /**
-     * @return SegmentEvent|null
-     */
-    public function findByPidFull(Pid $pid)
+    public function findByPidFull(Pid $pid): ?SegmentEvent
     {
         $dbEntity = $this->repository->findByPidFull($pid);
 
@@ -31,7 +28,7 @@ class SegmentEventsService extends AbstractService
 
     public function findLatestBroadcastedForContributor(
         Contributor $contributor,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findFullLatestBroadcastedForContributor(
@@ -45,7 +42,7 @@ class SegmentEventsService extends AbstractService
 
     public function findByVersionWithContributions(
         Version $version,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByVersionWithContributions(
@@ -60,7 +57,7 @@ class SegmentEventsService extends AbstractService
     public function findBySegmentFull(
         Segment $segment,
         bool $groupByVersionId = false,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findBySegmentFull(
@@ -77,7 +74,7 @@ class SegmentEventsService extends AbstractService
     public function findBySegment(
         Segment $segment,
         bool $groupByVersionId = false,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findBySegment(

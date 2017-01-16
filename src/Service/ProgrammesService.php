@@ -16,7 +16,7 @@ use InvalidArgumentException;
 
 class ProgrammesService extends AbstractService
 {
-    const ALL_VALID_ENTITY_TYPES = [
+    private const ALL_VALID_ENTITY_TYPES = [
         'Programme',
         'ProgrammeContainer',
         'ProgrammeItem',
@@ -41,15 +41,15 @@ class ProgrammesService extends AbstractService
      */
     public function findAllTleosByCategory(
         Category $category,
-        $medium = null,
-        $limit = self::DEFAULT_LIMIT,
+        ?string $networkMedium = null,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ) {
+    ): array {
         $offset = $this->getOffset($limit, $page);
         $programmesInSlice = $this->repository->findTleosByCategory(
             $category->getDbAncestryIds(),
             false,
-            $medium,
+            $networkMedium,
             $limit,
             $offset
         );
@@ -62,15 +62,15 @@ class ProgrammesService extends AbstractService
      */
     public function findAvailableTleosByCategory(
         Category $category,
-        $medium = null,
-        $limit = self::DEFAULT_LIMIT,
+        ?string $networkMedium = null,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ) {
+    ): array {
         $offset = $this->getOffset($limit, $page);
         $programmesInSlice = $this->repository->findTleosByCategory(
             $category->getDbAncestryIds(),
             true,
-            $medium,
+            $networkMedium,
             $limit,
             $offset
         );
@@ -79,7 +79,7 @@ class ProgrammesService extends AbstractService
     }
 
     public function findAll(
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findAllWithParents(
@@ -92,7 +92,7 @@ class ProgrammesService extends AbstractService
 
     public function findChildrenSeriesByParent(
         ProgrammeContainer $container,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findChildrenSeriesByParent(
@@ -108,12 +108,7 @@ class ProgrammesService extends AbstractService
         return $this->repository->countAll();
     }
 
-    /**
-     * @param Pid $pid
-     * @param string $entityType
-     * @return Programme|null
-     */
-    public function findByPid(Pid $pid, string $entityType = 'Programme')
+    public function findByPid(Pid $pid, string $entityType = 'Programme'): ?Programme
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
@@ -122,11 +117,7 @@ class ProgrammesService extends AbstractService
         return $this->mapSingleEntity($dbEntity);
     }
 
-    /**
-     * @param Pid $pid
-     * @return Programme|null
-     */
-    public function findByPidFull(Pid $pid, string $entityType = 'Programme')
+    public function findByPidFull(Pid $pid, string $entityType = 'Programme'): ?Programme
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
@@ -137,7 +128,7 @@ class ProgrammesService extends AbstractService
 
     public function findEpisodeGuideChildren(
         Programme $programme,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findEpisodeGuideChildren(
@@ -154,19 +145,19 @@ class ProgrammesService extends AbstractService
         return $this->repository->countEpisodeGuideChildren($programme->getDbId());
     }
 
-    public function findNextSiblingByProgramme(Programme $programme)
+    public function findNextSiblingByProgramme(Programme $programme): ?Programme
     {
         return $this->findSiblingByProgramme($programme, 'next');
     }
 
-    public function findPreviousSiblingByProgramme(Programme $programme)
+    public function findPreviousSiblingByProgramme(Programme $programme): ?Programme
     {
         return $this->findSiblingByProgramme($programme, 'previous');
     }
 
     public function findDescendantsByPid(
         Pid $pid,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         // in order for this to be efficient, we need to know the original programme database ID.
@@ -188,23 +179,23 @@ class ProgrammesService extends AbstractService
 
     public function countAvailableEpisodesByCategory(
         Category $category,
-        string $medium = null
-    ) {
+        ?string $networkMedium = null
+    ): int {
         return $this->repository->countAvailableEpisodesByCategoryAncestry(
             $category->getDbAncestryIds(),
-            $medium
+            $networkMedium
         );
     }
 
     public function findAvailableEpisodesByCategory(
         Category $category,
-        string $medium = null,
-        $limit = self::DEFAULT_LIMIT,
+        ?string $networkMedium = null,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ) {
+    ): array {
         $dbEntities = $this->repository->findAvailableEpisodesByCategoryAncestry(
             $category->getDbAncestryIds(),
-            $medium,
+            $networkMedium,
             $limit,
             $this->getOffset($limit, $page)
         );
@@ -214,8 +205,8 @@ class ProgrammesService extends AbstractService
 
     public function searchByKeywords(
         string $keywords,
-        string $networkMedium = null,
-        $limit = self::DEFAULT_LIMIT,
+        ?string $networkMedium = null,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
 
@@ -238,8 +229,8 @@ class ProgrammesService extends AbstractService
 
     public function searchAvailableByKeywords(
         string $keywords,
-        string $networkMedium = null,
-        $limit = self::DEFAULT_LIMIT,
+        ?string $networkMedium = null,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
 
@@ -260,7 +251,7 @@ class ProgrammesService extends AbstractService
         return $this->repository->countByKeywords($keywords, $networkMedium, true, ['Brand', 'Series', 'Episode']);
     }
 
-    private function findSiblingByProgramme(Programme $programme, string $direction)
+    private function findSiblingByProgramme(Programme $programme, string $direction): ?Programme
     {
         // Programmes that don't have a parent can't have any siblings
         if (!$programme->getParent()) {
@@ -299,11 +290,8 @@ class ProgrammesService extends AbstractService
 
     /**
      * A utility for returning the db type for a given Domain object
-     *
-     * @param Programme $entity
-     * @return null|string
      */
-    private function dbType(Programme $entity)
+    private function dbType(Programme $entity): ?string
     {
         if ($entity instanceof Brand) {
             return 'Brand';

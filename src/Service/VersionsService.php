@@ -17,11 +17,7 @@ class VersionsService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    /**
-     * @param Pid $pid
-     * @return Version|null
-     */
-    public function findByPidFull(Pid $pid)
+    public function findByPidFull(Pid $pid): ?Version
     {
         $dbEntity = $this->repository->findByPidFull($pid);
 
@@ -35,7 +31,7 @@ class VersionsService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function findOriginalVersionForProgrammeItem(ProgrammeItem $programmeItem)
+    public function findOriginalVersionForProgrammeItem(ProgrammeItem $programmeItem): ?Version
     {
         $dbEntity = $this->repository->findOriginalVersionForProgrammeItem($programmeItem->getDbId());
 

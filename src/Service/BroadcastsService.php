@@ -20,7 +20,7 @@ class BroadcastsService extends AbstractService
 
     public function findByVersion(
         Version $version,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findByVersion(
@@ -95,7 +95,7 @@ class BroadcastsService extends AbstractService
         DateTimeImmutable $from,
         DateTimeImmutable $to,
         string $medium = null
-    ) {
+    ): array {
         if (empty($allCategories)) {
             return [];
         }

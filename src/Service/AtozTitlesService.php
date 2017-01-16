@@ -14,7 +14,7 @@ class AtozTitlesService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findAllLetters(string $networkMedium = null)
+    public function findAllLetters(string $networkMedium = null): array
     {
         return $this->repository->findAllLetters($networkMedium);
     }
@@ -22,7 +22,7 @@ class AtozTitlesService extends AbstractService
     public function findTleosByFirstLetter(
         string $letter,
         string $networkMedium = null,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $entities = $this->repository->findTleosByFirstLetter(
@@ -35,7 +35,7 @@ class AtozTitlesService extends AbstractService
         return $this->mapManyEntities($entities);
     }
 
-    public function countTleosByFirstLetter(string $letter, string $networkMedium = null)
+    public function countTleosByFirstLetter(string $letter, string $networkMedium = null): int
     {
         return $this->repository->countTleosByFirstLetter($letter, $networkMedium, false);
     }
@@ -43,7 +43,7 @@ class AtozTitlesService extends AbstractService
     public function findAvailableTleosByFirstLetter(
         string $letter,
         string $networkMedium = null,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $entities = $this->repository->findTleosByFirstLetter(

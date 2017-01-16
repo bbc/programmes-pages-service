@@ -16,11 +16,7 @@ class SegmentsService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    /**
-     * @param Pid $pid
-     * @return Segment|null
-     */
-    public function findByPidFull(Pid $pid)
+    public function findByPidFull(Pid $pid): ?Segment
     {
         $dbEntity = $this->repository->findByPidFull($pid);
 

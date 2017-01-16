@@ -17,9 +17,8 @@ class ContributorsService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findByMusicBrainzId(
-        string $musicBrainzId
-    ) {
+    public function findByMusicBrainzId(string $musicBrainzId): ?Contributor
+    {
         $dbEntity = $this->repository->findByMusicBrainzId($musicBrainzId);
         return $this->mapSingleEntity($dbEntity);
     }
@@ -27,7 +26,7 @@ class ContributorsService extends AbstractService
     public function findAllMostPlayed(
         DateTimeImmutable $from,
         DateTimeImmutable $to,
-        Service $service = null
+        ?Service $service = null
     ): array {
         $serviceId = $service ? $service->getDbId() : null;
 

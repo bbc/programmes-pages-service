@@ -8,9 +8,9 @@ use Doctrine\ORM\EntityRepository;
 
 abstract class AbstractService
 {
-    const DEFAULT_PAGE = 1;
-    const DEFAULT_LIMIT = 300;
-    const NO_LIMIT = null;
+    public const DEFAULT_PAGE = 1;
+    public const DEFAULT_LIMIT = 300;
+    public const NO_LIMIT = null;
 
     /**
      * @var MapperInterface
@@ -30,14 +30,8 @@ abstract class AbstractService
         $this->mapper = $mapper;
     }
 
-    protected function getOffset($limit, int $page): int
+    protected function getOffset(?int $limit, int $page): int
     {
-        if ($limit !== self::NO_LIMIT && !is_integer($limit)) {
-            throw new InvalidArgumentException(
-                'Limit should either be self::NO_LIMIT or an integer but got ' . $limit
-            );
-        }
-
         if ($page < 1) {
             throw new InvalidArgumentException('Page should be greater than 0 but got ' . $page);
         }
@@ -49,7 +43,7 @@ abstract class AbstractService
         return $limit * ($page - 1);
     }
 
-    protected function mapSingleEntity($dbEntity, ...$additionalArgs)
+    protected function mapSingleEntity(?array $dbEntity, ...$additionalArgs)
     {
         if (is_null($dbEntity)) {
             return null;

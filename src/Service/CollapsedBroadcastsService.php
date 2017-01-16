@@ -30,7 +30,7 @@ class CollapsedBroadcastsService extends AbstractService
         Programme $programme,
         int $year,
         int $month,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $broadcasts = $this->repository->findByProgrammeAndMonth(
@@ -48,7 +48,7 @@ class CollapsedBroadcastsService extends AbstractService
 
     public function findPastByProgramme(
         Programme $programme,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $broadcasts = $this->repository->findPastByProgramme(
@@ -65,7 +65,7 @@ class CollapsedBroadcastsService extends AbstractService
 
     public function findUpcomingByProgramme(
         Programme $programme,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $broadcasts = $this->repository->findUpcomingByProgramme(
@@ -94,9 +94,9 @@ class CollapsedBroadcastsService extends AbstractService
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
         string $medium = null,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ) {
+    ): array {
         $broadcasts = $this->repository->findByCategoryAncestryAndStartAtDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
@@ -116,9 +116,9 @@ class CollapsedBroadcastsService extends AbstractService
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
         string $medium = null,
-        $limit = self::DEFAULT_LIMIT,
+        ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ) {
+    ): array {
         $broadcasts = $this->repository->findByCategoryAncestryAndEndAtDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
@@ -137,8 +137,8 @@ class CollapsedBroadcastsService extends AbstractService
         Category $category,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
-        string $medium = null
-    ) {
+        ?string $medium = null
+    ): int {
         return $this->repository->countByCategoryAncestryAndEndAtDateRange(
             $category->getDbAncestryIds(),
             'Broadcast',
