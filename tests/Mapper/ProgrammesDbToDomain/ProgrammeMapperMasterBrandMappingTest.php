@@ -8,9 +8,16 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelSeriesWithSetMasterBrand()
     {
-        $masterBrandDbEntity = ['mid' => 'bbc_one'];
+        $programmeOptions = ['progOptions'];
+        $mbOptions = ['mbOptions'];
+
+        $masterBrandDbEntity = ['mid' => 'bbc_one', 'options' => $mbOptions];
 
         $expectedMasterBrandDomainEntity = $this->createMock(
+            'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
+        );
+
+        $expectedOptionsEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
         );
 
@@ -19,16 +26,30 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
             ->with($masterBrandDbEntity)
             ->willReturn($expectedMasterBrandDomainEntity);
 
+        $this->mockOptionsMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($programmeOptions, $mbOptions)
+            ->willReturn($expectedOptionsEntity);
+
         $dbEntityArray = $this->getSampleProgrammeDbEntity(
             'b010t19z',
             null,
-            $masterBrandDbEntity
+            $masterBrandDbEntity,
+            [],
+            [],
+            1,
+            $programmeOptions
         );
 
         $expectedEntity = $this->getSampleProgrammeDomainEntity(
             'b010t19z',
             $this->mockDefaultImage,
-            $expectedMasterBrandDomainEntity
+            $expectedMasterBrandDomainEntity,
+            [],
+            [],
+            null,
+            1,
+            $expectedOptionsEntity
         );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));

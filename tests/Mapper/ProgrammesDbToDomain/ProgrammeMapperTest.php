@@ -18,6 +18,13 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelBrand()
     {
+        $options = ['programmeOptions'];
+
+        $this->mockOptionsMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($options)
+            ->willReturn($this->mockOptions);
+
         $dbEntityArray = [
             'id' => 1,
             'type' => 'brand',
@@ -46,12 +53,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
-            'options' => [
-                'one' => [
-                    'cascades' => false,
-                    'value' => 1
-                ],
-            ],
+            'options' => $options,
         ];
 
         $expectedEntity = new Brand(
@@ -80,7 +82,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
             1001,
-            new Options(['one' => 1])
+            $this->mockOptions
         );
 
         $mapper = $this->getMapper();
@@ -96,6 +98,13 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
 
     public function testGetDomainModelSeries()
     {
+        $options = ['programmeOptions'];
+
+        $this->mockOptionsMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($options)
+            ->willReturn($this->mockOptions);
+
         $dbEntityArray = [
             'id' => 1,
             'type' => 'series',
@@ -124,12 +133,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
-            'options' => [
-                'one' => [
-                    'cascades' => false,
-                    'value' => 1
-                ],
-            ]
+            'options' => $options,
         ];
 
         $expectedEntity = new Series(
@@ -158,7 +162,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
             1001,
-            new Options(['one' => 1])
+            $this->mockOptions
         );
 
         $mapper = $this->getMapper();
@@ -174,6 +178,13 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
 
     public function testGetDomainModelEpisode()
     {
+        $options = ['programmeOptions'];
+
+        $this->mockOptionsMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($options)
+            ->willReturn($this->mockOptions);
+
         $dbEntityArray = [
             'id' => 1,
             'type' => 'episode',
@@ -204,12 +215,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
-            'options' => [
-                'one' => [
-                    'cascades' => false,
-                    'value' => 1
-                ],
-            ]
+            'options' => $options,
         ];
 
         $expectedEntity = new Episode(
@@ -240,7 +246,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             1002,
             new DateTimeImmutable('2015-01-03'),
             new DateTimeImmutable('2015-01-04'),
-            new Options(['one' => 1])
+            $this->mockOptions
         );
 
         $mapper = $this->getMapper();
@@ -256,6 +262,13 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
 
     public function testGetDomainModelClip()
     {
+        $options = ['programmeOptions'];
+
+        $this->mockOptionsMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($options)
+            ->willReturn($this->mockOptions);
+
         $dbEntityArray = [
             'id' => 3,
             'type' => 'clip',
@@ -283,12 +296,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
-            'options' => [
-                'one' => [
-                    'cascades' => false,
-                    'value' => 1
-                ],
-            ]
+            'options' => $options
         ];
 
         $expectedEntity = new Clip(
@@ -316,7 +324,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             1002,
             new DateTimeImmutable('2015-01-03'),
             new DateTimeImmutable('2015-01-04'),
-            new Options(['one' => 1])
+            $this->mockOptions
         );
 
         $mapper = $this->getMapper();
@@ -332,6 +340,21 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
 
     public function testGetDomainModelSeriesWithParentProgramme()
     {
+        $options = ['programmeOptions'];
+        $parentOptions = ['parentOptions'];
+
+        $mockOptions2 = clone $this->mockOptions;
+
+        $this->mockOptionsMapper->expects($this->at(0))
+            ->method('getDomainModel')
+            ->with($options, $parentOptions)
+            ->willReturn($this->mockOptions);
+
+        $this->mockOptionsMapper->expects($this->at(1))
+            ->method('getDomainModel')
+            ->with($parentOptions)
+            ->willReturn($mockOptions2);
+
         $dbEntityArray = [
             'id' => 2,
             'type' => 'series',
@@ -359,12 +382,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
-            'options' => [
-                'one' => [
-                    'cascades' => false,
-                    'value' => 1
-                ],
-            ],
+            'options' => $options,
             'parent' => [
                 'id' => 1,
                 'type' => 'brand',
@@ -393,12 +411,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'masterBrand' => null,
                 'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
                 'expectedChildCount' => 1001,
-                'options' => [
-                    'two' => [
-                        'cascades' => true,
-                        'value' => 2
-                    ],
-                ]
+                'options' => $parentOptions
             ],
         ];
 
@@ -447,7 +460,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 null,
                 new DateTimeImmutable('2017-01-03T18:00:00Z'),
                 1001,
-                new Options(['two' => 2])
+                $mockOptions2
             ),
             101,
             null,
@@ -455,7 +468,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
             1001,
-            new Options(['one' => 1, 'two' => 2])
+            $this->mockOptions
         );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));

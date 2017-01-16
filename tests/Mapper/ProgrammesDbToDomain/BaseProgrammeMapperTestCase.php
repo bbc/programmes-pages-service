@@ -8,7 +8,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
-use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
@@ -18,9 +17,13 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
     protected $mockMasterBrandMapper;
 
+    protected $mockOptionsMapper;
+
     protected $mockCategoryMapper;
 
     protected $mockDefaultImage;
+
+    protected $mockOptions;
 
     public function setUp()
     {
@@ -36,8 +39,16 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper'
         );
 
+        $this->mockOptionsMapper = $this->createMock(
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\OptionsMapper'
+        );
+
         $this->mockDefaultImage = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
+        );
+
+        $this->mockOptions = $this->createMock(
+            'BBC\ProgrammesPagesService\Domain\Entity\Options'
         );
 
         $this->mockDefaultImage->method('getTitle')->willReturn('DefaultImage');
@@ -66,7 +77,8 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         array $masterBrand = null,
         array $categories = [],
         array $parent = null,
-        int $id = 1
+        int $id = 1,
+        array $options = null
     ) {
         return [
             'id' => $id,
@@ -97,12 +109,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'categories' => $categories,
             'firstBroadcastDate' => new \DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
-            'options' => [
-                'one' => [
-                    'value' => 1,
-                    'cascades' => true,
-                ]
-            ]
+            'options' => $options
         ];
     }
 

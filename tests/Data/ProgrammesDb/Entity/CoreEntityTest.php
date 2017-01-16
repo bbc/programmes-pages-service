@@ -16,6 +16,7 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsEmbargoedTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\OptionsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait',

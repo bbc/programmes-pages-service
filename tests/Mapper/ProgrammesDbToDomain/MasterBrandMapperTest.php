@@ -2,12 +2,12 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MasterBrandMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
-use PHPUnit_Framework_TestCase;
 
 class MasterBrandMapperTest extends BaseMapperTestCase
 {
@@ -15,11 +15,15 @@ class MasterBrandMapperTest extends BaseMapperTestCase
 
     protected $mockNetworkMapper;
 
+    protected $mockOptionsMapper;
+
     protected $mockVersionMapper;
 
     protected $mockDefaultImage;
 
     protected $mockNetwork;
+
+    protected $mockOptions;
 
     public function setUp()
     {
@@ -29,6 +33,10 @@ class MasterBrandMapperTest extends BaseMapperTestCase
 
         $this->mockNetworkMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper'
+        );
+
+        $this->mockOptionsMapper = $this->createMock(
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\OptionsMapper'
         );
 
         $this->mockVersionMapper = $this->createMock(
@@ -43,6 +51,10 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'BBC\ProgrammesPagesService\Domain\Entity\Network'
         );
 
+        $this->mockOptions = $this->createMock(
+            'BBC\ProgrammesPagesService\Domain\Entity\Options'
+        );
+
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
             ->willReturn($this->mockDefaultImage);
@@ -51,8 +63,15 @@ class MasterBrandMapperTest extends BaseMapperTestCase
     public function testGetDomainModel()
     {
         $networkDbEntity = ['nid' => 'bbc_one'];
+        $optionsDbEntity = [
+            'one' => [
+                'value' => 1,
+                'cascades' => false,
+            ],
+        ];
 
         $this->setupNetworkMapper($networkDbEntity, $this->mockNetwork);
+        $this->setupOptionsMapper($optionsDbEntity, $this->mockOptions);
 
         $dbEntityArray = [
             'id' => 1,
@@ -60,10 +79,18 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'name' => 'Three',
             'network' => $networkDbEntity,
             'competitionWarning' => null,
+            'options' => $optionsDbEntity,
         ];
 
         $mid = new Mid('bbc_three');
-        $expectedEntity = new MasterBrand($mid, 'Three', $this->mockDefaultImage, $this->mockNetwork);
+        $expectedEntity = new MasterBrand(
+            $mid,
+            'Three',
+            $this->mockDefaultImage,
+            $this->mockNetwork,
+            null,
+            new Options(['one' => 1])
+        );
 
         $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
@@ -200,6 +227,14 @@ class MasterBrandMapperTest extends BaseMapperTestCase
     private function setupNetworkMapper($expectedDbEntity, $result)
     {
         $this->mockNetworkMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($expectedDbEntity)
+            ->willReturn($result);
+    }
+
+    private function setupOptionsMapper($expectedDbEntity, $result)
+    {
+        $this->mockOptionsMapper->expects($this->once())
             ->method('getDomainModel')
             ->with($expectedDbEntity)
             ->willReturn($result);
