@@ -3,10 +3,10 @@
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
-use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -46,6 +46,12 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
+            'options' => [
+                'one' => [
+                    'cascades' => false,
+                    'value' => 1
+                ],
+            ],
         ];
 
         $expectedEntity = new Brand(
@@ -73,7 +79,8 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
-            1001
+            1001,
+            new Options(['one' => 1])
         );
 
         $mapper = $this->getMapper();
@@ -117,6 +124,12 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
+            'options' => [
+                'one' => [
+                    'cascades' => false,
+                    'value' => 1
+                ],
+            ]
         ];
 
         $expectedEntity = new Series(
@@ -144,7 +157,8 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             null,
             null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
-            1001
+            1001,
+            new Options(['one' => 1])
         );
 
         $mapper = $this->getMapper();
@@ -190,6 +204,12 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
+            'options' => [
+                'one' => [
+                    'cascades' => false,
+                    'value' => 1
+                ],
+            ]
         ];
 
         $expectedEntity = new Episode(
@@ -219,7 +239,8 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             new PartialDate(2015, 01, 02),
             1002,
             new DateTimeImmutable('2015-01-03'),
-            new DateTimeImmutable('2015-01-04')
+            new DateTimeImmutable('2015-01-04'),
+            new Options(['one' => 1])
         );
 
         $mapper = $this->getMapper();
@@ -262,6 +283,12 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
+            'options' => [
+                'one' => [
+                    'cascades' => false,
+                    'value' => 1
+                ],
+            ]
         ];
 
         $expectedEntity = new Clip(
@@ -288,7 +315,8 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             new PartialDate(2015, 01, 02),
             1002,
             new DateTimeImmutable('2015-01-03'),
-            new DateTimeImmutable('2015-01-04')
+            new DateTimeImmutable('2015-01-04'),
+            new Options(['one' => 1])
         );
 
         $mapper = $this->getMapper();
@@ -331,6 +359,12 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
+            'options' => [
+                'one' => [
+                    'cascades' => false,
+                    'value' => 1
+                ],
+            ],
             'parent' => [
                 'id' => 1,
                 'type' => 'brand',
@@ -359,6 +393,12 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'masterBrand' => null,
                 'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
                 'expectedChildCount' => 1001,
+                'options' => [
+                    'two' => [
+                        'cascades' => true,
+                        'value' => 2
+                    ],
+                ]
             ],
         ];
 
@@ -406,21 +446,23 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 null,
                 null,
                 new DateTimeImmutable('2017-01-03T18:00:00Z'),
-                1001
+                1001,
+                new Options(['two' => 2])
             ),
             101,
             null,
             null,
             null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
-            1001
+            1001,
+            new Options(['one' => 1, 'two' => 2])
         );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Could not build domain model for unknown programme type "ham"
      */
     public function testUnknownProgrammeType()
@@ -429,7 +471,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Could not build domain model for unknown programme type ""
      */
     public function testEmptyProgrammeType()

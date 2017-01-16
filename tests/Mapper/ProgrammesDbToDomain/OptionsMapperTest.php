@@ -23,7 +23,7 @@ class OptionsMapperTest extends BaseMapperTestCase
 
         $expectedOptions = [
             'language' => 'cy',
-            'second_option' => null
+            'second_option' => null,
         ];
         $expectedEntity = new Options($expectedOptions);
         $mapper = $this->getMapper();
@@ -33,9 +33,9 @@ class OptionsMapperTest extends BaseMapperTestCase
 
     public function testGetDomainModelWithInheritance()
     {
-        // create three levels of options
-        // and check the ones that are allowed to cascade, do so
-        // once in the domain model, we don't care about that property
+        // Create three levels of options
+        // and check the ones that are allowed to cascade, do so.
+        // Once in the domain model, we don't care about the cascades property
 
         $options = [
             'language' => [
@@ -96,7 +96,7 @@ class OptionsMapperTest extends BaseMapperTestCase
             'language' => 'cy',
             'second_option' => 'red',
             'third_option' => 'monday',
-            'fourth_option' => null
+            'fourth_option' => null,
         ];
 
         $expectedEntity = new Options($expectedOptions);

@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
@@ -55,7 +56,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         ]));
     }
 
-    /**
+    /*
      * A sample DB Entity that can be used for testing any mappers that the
      * ProgrammeMapper depends upon.
      */
@@ -96,10 +97,16 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'categories' => $categories,
             'firstBroadcastDate' => new \DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
+            'options' => [
+                'one' => [
+                    'value' => 1,
+                    'cascades' => true,
+                ]
+            ]
         ];
     }
 
-    /**
+    /*
      * A sample expected domain model that can be used for testing any mappers
      * that the ProgrammeMapper depends upon.
      */
@@ -110,7 +117,8 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         array $genres = [],
         array $formats = [],
         Programme $parent = null,
-        int $id = 1
+        int $id = 1,
+        ?Options $options = null
     ) {
         return new Series(
             [$id],
@@ -137,7 +145,8 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             $genres,
             $formats,
             new \DateTimeImmutable('2017-01-03T18:00:00Z'),
-            1001
+            1001,
+            $options
         );
     }
 }
