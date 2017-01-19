@@ -74,14 +74,14 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             14,
             15,
             false,
+            $this->mockOptions,
             null,
             101,
             null,
             null,
             null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
-            1001,
-            $this->mockOptions
+            1001
         );
 
         $mapper = $this->getMapper();
@@ -154,14 +154,14 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             14,
             15,
             false,
+            $this->mockOptions,
             null,
             101,
             null,
             null,
             null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
-            1001,
-            $this->mockOptions
+            1001
         );
 
         $mapper = $this->getMapper();
@@ -235,6 +235,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             101,
             102,
             103,
+            $this->mockOptions,
             null,
             1001,
             null,
@@ -244,8 +245,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             new PartialDate(2015, 01, 02),
             1002,
             new DateTimeImmutable('2015-01-03'),
-            new DateTimeImmutable('2015-01-04'),
-            $this->mockOptions
+            new DateTimeImmutable('2015-01-04')
         );
 
         $mapper = $this->getMapper();
@@ -313,6 +313,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             10,
             MediaTypeEnum::UNKNOWN,
             11,
+            $this->mockOptions,
             null,
             1001,
             null,
@@ -322,8 +323,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             new PartialDate(2015, 01, 02),
             1002,
             new DateTimeImmutable('2015-01-03'),
-            new DateTimeImmutable('2015-01-04'),
-            $this->mockOptions
+            new DateTimeImmutable('2015-01-04')
         );
 
         $mapper = $this->getMapper();
@@ -433,6 +433,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             14,
             15,
             false,
+            $this->mockOptions,
             new Brand(
                 [1],
                 new Pid('b010t19z'),
@@ -452,22 +453,21 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 14,
                 15,
                 false,
+                $mockOptions2,
                 null,
                 101,
                 null,
                 null,
                 null,
                 new DateTimeImmutable('2017-01-03T18:00:00Z'),
-                1001,
-                $mockOptions2
+                1001
             ),
             101,
             null,
             null,
             null,
             new DateTimeImmutable('2017-01-03T18:00:00Z'),
-            1001,
-            $this->mockOptions
+            1001
         );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));

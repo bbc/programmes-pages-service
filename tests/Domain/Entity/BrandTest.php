@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
@@ -20,6 +21,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['one' => 1]);
 
         $programme = new Brand(
             [0, 1, 2],
@@ -39,7 +41,8 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1203,
             1204,
             1205,
-            false
+            false,
+            $options
         );
 
         $this->assertEquals(2, $programme->getDbId());
@@ -70,6 +73,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['one' => 1]);
 
         $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Brand');
         $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
@@ -98,6 +102,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            $options,
             $parent,
             2101,
             $masterBrand,
@@ -125,6 +130,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['one' => 1]);
 
         $programme = new Brand(
             [0],
@@ -145,6 +151,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            $options,
             null,
             2101,
             new UnfetchedMasterBrand()
@@ -212,6 +219,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            new Options([]),
             null,
             2101,
             null,

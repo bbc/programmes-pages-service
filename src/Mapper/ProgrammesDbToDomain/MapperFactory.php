@@ -87,6 +87,15 @@ class MapperFactory
         return $this->instances['NetworkMapper'];
     }
 
+    public function getOptionsMapper(): OptionsMapper
+    {
+        if (!isset($this->instances['OptionsMapper'])) {
+            $this->instances['OptionsMapper'] = new OptionsMapper($this);
+        }
+
+        return $this->instances['OptionsMapper'];
+    }
+
     public function getProgrammeMapper(): ProgrammeMapper
     {
         if (!isset($this->instances['ProgrammeMapper'])) {

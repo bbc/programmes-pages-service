@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
@@ -21,6 +22,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['two' => 2]);
 
         $programme = new Clip(
             [0, 1, 2],
@@ -36,7 +38,8 @@ class ClipTest extends PHPUnit_Framework_TestCase
             true,
             1103,
             MediaTypeEnum::UNKNOWN,
-            1201
+            1201,
+            $options
         );
 
         $this->assertEquals(2, $programme->getDbId());
@@ -56,6 +59,8 @@ class ClipTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1103, $programme->getContributionsCount());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
         $this->assertEquals(1201, $programme->getSegmentEventCount());
+        $this->assertEquals($options, $programme->getOptions());
+        $this->assertSame(2, $programme->getOption('two'));
     }
 
     public function testConstructorOptionalArgs()
@@ -90,6 +95,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
             1103,
             MediaTypeEnum::UNKNOWN,
             1201,
+            new Options([]),
             $parent,
             2101,
             $masterBrand,

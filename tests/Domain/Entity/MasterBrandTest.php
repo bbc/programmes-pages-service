@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
@@ -21,18 +22,22 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
         $mid = new Mid('bbc_1xtra');
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $network = new Network(new Nid('bbc_1xtra'), '1 Xtra', $image);
+        $options = new Options(['one' => 1]);
 
         $masterBrand = new MasterBrand(
             $mid,
             'Name',
             $image,
-            $network
+            $network,
+            $options
         );
 
         $this->assertEquals($mid, $masterBrand->getMid());
         $this->assertEquals('Name', $masterBrand->getName());
         $this->assertEquals($image, $masterBrand->getImage());
         $this->assertEquals($network, $masterBrand->getNetwork());
+        $this->assertEquals($options, $masterBrand->getOptions());
+        $this->assertSame(1, $masterBrand->getOption('one'));
     }
 
     public function testConstructorOptionalArgs()
@@ -40,8 +45,8 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
         $mid = new Mid('bbc_1xtra');
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $network = new Network(new Nid('bbc_1xtra'), '1 Xtra', $image);
+        $options = new Options(['one' => 1]);
 
-        $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
         $version = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version');
 
         $masterBrand = new MasterBrand(
@@ -49,6 +54,7 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
             'Name',
             $image,
             $network,
+            $options,
             $version
         );
 
@@ -73,6 +79,7 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
             'Name',
             $image,
             $network,
+            new Options([]),
             new UnfetchedVersion()
         );
 
@@ -91,12 +98,14 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
         $mid = new Mid('bbc_1xtra');
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
         $network = new UnfetchedNetwork();
+        $options = new Options(['one' => 1]);
 
         $masterBrand = new MasterBrand(
             $mid,
             'Name',
             $image,
-            $network
+            $network,
+            $options
         );
 
         $masterBrand->getNetwork();

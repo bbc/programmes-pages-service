@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -21,6 +22,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['two' => 2]);
 
         $programme = new Episode(
             [0, 1, 2],
@@ -39,7 +41,8 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             1201,
             1301,
             1302,
-            1303
+            1303,
+            $options
         );
 
         $this->assertEquals(2, $programme->getDbId());
@@ -62,6 +65,8 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1301, $programme->getAggregatedBroadcastsCount());
         $this->assertEquals(1302, $programme->getAvailableClipsCount());
         $this->assertEquals(1303, $programme->getAvailableGalleriesCount());
+        $this->assertEquals($options, $programme->getOptions());
+        $this->assertSame(2, $programme->getOption('two'));
     }
 
     public function testConstructorOptionalArgs()
@@ -99,6 +104,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             1301,
             1302,
             1303,
+            new Options([]),
             $parent,
             2101,
             $masterBrand,
@@ -132,7 +138,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
-        $programme = new Episode(
+        new Episode(
             [0],
             $pid,
             'Title',
@@ -149,7 +155,8 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             1201,
             1301,
             1302,
-            1303
+            1303,
+            new Options([])
         );
     }
 
@@ -180,6 +187,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             1301,
             1302,
             1303,
+            new Options([]),
             new UnfetchedProgramme()
         );
 

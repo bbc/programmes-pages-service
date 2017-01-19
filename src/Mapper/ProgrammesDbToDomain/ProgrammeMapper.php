@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
@@ -83,6 +84,7 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['availableEpisodesCount'],
             $dbProgramme['availableGalleriesCount'],
             $dbProgramme['isPodcastable'],
+            $this->getOptionsModel($dbProgramme),
             $this->getParentModel($dbProgramme),
             $dbProgramme['position'],
             $this->getMasterBrandModel($dbProgramme),
@@ -114,6 +116,7 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['availableEpisodesCount'],
             $dbProgramme['availableGalleriesCount'],
             $dbProgramme['isPodcastable'],
+            $this->getOptionsModel($dbProgramme),
             $this->getParentModel($dbProgramme),
             $dbProgramme['position'],
             $this->getMasterBrandModel($dbProgramme),
@@ -144,6 +147,7 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['aggregatedBroadcastsCount'],
             $dbProgramme['availableClipsCount'],
             $dbProgramme['availableGalleriesCount'],
+            $this->getOptionsModel($dbProgramme),
             $this->getParentModel($dbProgramme),
             $dbProgramme['position'] ?? null,
             $this->getMasterBrandModel($dbProgramme),
@@ -174,6 +178,7 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['contributionsCount'],
             $dbProgramme['mediaType'],
             $dbProgramme['segmentEventCount'],
+            $this->getOptionsModel($dbProgramme),
             $this->getParentModel($dbProgramme),
             $dbProgramme['position'] ?? null,
             $this->getMasterBrandModel($dbProgramme),
@@ -196,6 +201,27 @@ class ProgrammeMapper extends AbstractMapper
         return array_map(function ($a) {
             return (int) $a;
         }, $ancestors);
+    }
+
+    private function getOptionsModel(array $dbProgramme, string $key = 'options'): Options
+    {
+        $options = $this->crawlOptions($dbProgramme, $key);
+
+        // MasterBrands have no parents so this is simple
+        return $this->mapperFactory->getOptionsMapper()->getDomainModel(
+            ...$options
+        );
+    }
+
+    private function crawlOptions(array $dbProgramme, string $key, array $tree = []): array
+    {
+        $tree[] = $dbProgramme[$key] ?? [];
+        if (isset($dbProgramme['parent'])) {
+            $tree = $this->crawlOptions($dbProgramme['parent'], $key, $tree);
+        } elseif (isset($dbProgramme['masterBrand'])) {
+            $tree = $this->crawlOptions($dbProgramme['masterBrand'], $key, $tree);
+        }
+        return $tree;
     }
 
     private function getParentModel(array $dbProgramme, string $key = 'parent'): ?Programme

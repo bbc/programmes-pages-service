@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullPid;
@@ -25,7 +26,8 @@ class UnfetchedProgrammeItem extends ProgrammeItem
             false,
             0,
             MediaTypeEnum::UNKNOWN,
-            0
+            0,
+            new Options([])
         );
     }
 }

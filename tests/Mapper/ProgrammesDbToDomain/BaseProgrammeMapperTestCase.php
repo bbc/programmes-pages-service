@@ -64,6 +64,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'ImageMapper' => $this->mockImageMapper,
             'MasterBrandMapper' => $this->mockMasterBrandMapper,
             'CategoryMapper' => $this->mockCategoryMapper,
+            'OptionsMapper' => $this->mockOptionsMapper,
         ]));
     }
 
@@ -127,6 +128,10 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         int $id = 1,
         ?Options $options = null
     ) {
+        if (!$options) {
+            $options = new Options([]);
+        }
+
         return new Series(
             [$id],
             new Pid($pid),
@@ -146,14 +151,14 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             14,
             15,
             false,
+            $options,
             $parent,
             101,
             $masterBrand,
             $genres,
             $formats,
             new \DateTimeImmutable('2017-01-03T18:00:00Z'),
-            1001,
-            $options
+            1001
         );
     }
 }
