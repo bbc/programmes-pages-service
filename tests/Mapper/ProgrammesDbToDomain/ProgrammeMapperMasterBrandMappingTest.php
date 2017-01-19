@@ -11,14 +11,18 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
         $programmeOptions = ['progOptions'];
         $mbOptions = ['mbOptions'];
 
-        $masterBrandDbEntity = ['mid' => 'bbc_one', 'options' => $mbOptions];
+        $masterBrandDbEntity = [
+            'id' => 1,
+            'mid' => 'bbc_one',
+            'options' => $mbOptions,
+        ];
 
         $expectedMasterBrandDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
         );
 
         $expectedOptionsEntity = $this->createMock(
-            'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
+            'BBC\ProgrammesPagesService\Domain\Entity\Options'
         );
 
         $this->mockMasterBrandMapper->expects($this->once())
@@ -36,7 +40,7 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
             null,
             $masterBrandDbEntity,
             [],
-            [],
+            null,
             1,
             $programmeOptions
         );

@@ -23,14 +23,14 @@ class RefOptionsTest extends PHPUnit_Framework_TestCase
         $masterBrand = $this->mockMasterBrand();
 
         $options = new RefOptions($coreEntity);
-        $this->assertNull($options->getOptionsForNetwork());
+        $this->assertNull($options->getOptionsForMasterBrand());
         $this->assertSame($coreEntity, $options->getOptionsForCoreEntity());
         $this->assertSame($coreEntity, $options->getOptionsFor());
 
 
         $options = new RefOptions($masterBrand);
         $this->assertNull($options->getOptionsForCoreEntity());
-        $this->assertSame($masterBrand, $options->getOptionsForNetwork());
+        $this->assertSame($masterBrand, $options->getOptionsForMasterBrand());
         $this->assertSame($masterBrand, $options->getOptionsFor());
 
         $this->assertNull($options->getId());

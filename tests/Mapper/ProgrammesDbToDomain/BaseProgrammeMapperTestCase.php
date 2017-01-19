@@ -109,7 +109,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'categories' => $categories,
             'firstBroadcastDate' => new \DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
-            'options' => $options
+            'options' => $options,
         ];
     }
 

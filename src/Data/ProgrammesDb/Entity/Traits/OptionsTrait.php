@@ -9,7 +9,7 @@ trait OptionsTrait
     /**
      * @var array
      *
-     * @ORM\Column(type="json", nullable=true)
+     * @ORM\Column(type="array", nullable=true)
      */
     private $options;
 

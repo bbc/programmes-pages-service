@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
-use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
@@ -296,7 +295,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
-            'options' => $options
+            'options' => $options,
         ];
 
         $expectedEntity = new Clip(
@@ -411,7 +410,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'masterBrand' => null,
                 'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
                 'expectedChildCount' => 1001,
-                'options' => $parentOptions
+                'options' => $parentOptions,
             ],
         ];
 

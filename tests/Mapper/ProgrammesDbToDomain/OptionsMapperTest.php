@@ -28,7 +28,6 @@ class OptionsMapperTest extends BaseMapperTestCase
         $expectedEntity = new Options($expectedOptions);
         $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($options));
-
     }
 
     public function testGetDomainModelWithInheritance()
