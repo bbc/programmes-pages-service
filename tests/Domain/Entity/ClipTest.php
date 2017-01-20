@@ -95,7 +95,7 @@ class ClipTest extends PHPUnit_Framework_TestCase
             1103,
             MediaTypeEnum::UNKNOWN,
             1201,
-            new Options([]),
+            new Options(),
             $parent,
             2101,
             $masterBrand,

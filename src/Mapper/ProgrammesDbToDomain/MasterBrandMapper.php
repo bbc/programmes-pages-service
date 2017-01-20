@@ -5,7 +5,6 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
-use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
@@ -45,21 +44,12 @@ class MasterBrandMapper extends AbstractMapper
                     $dbMasterBrand['name'],
                     $this->getImageModel($dbMasterBrand),
                     $network,
-                    $this->getOptionsModel($dbMasterBrand),
                     $this->getCompetitionWarningModel($dbMasterBrand)
                 );
             }
         }
 
         return $this->cache[$cacheKey];
-    }
-
-    private function getOptionsModel(array $dbProgramme, string $key = 'options'): Options
-    {
-        // MasterBrands have no parents so this is simple
-        return $this->mapperFactory->getOptionsMapper()->getDomainModel(
-            $dbProgramme[$key] ?? []
-        );
     }
 
     private function getImageModel(array $dbMasterBrand, string $key = 'image'): ?Image

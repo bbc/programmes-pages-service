@@ -8,9 +8,19 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use DateTime;
 use PHPUnit_Framework_TestCase;
+use ReflectionClass;
 
 class NetworkTest extends PHPUnit_Framework_TestCase
 {
+    public function testTraits()
+    {
+        $reflection = new ReflectionClass(Network::CLASS);
+        $this->assertEquals([
+            'Gedmo\Timestampable\Traits\TimestampableEntity',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\OptionsTrait',
+            ], $reflection->getTraitNames());
+    }
+
     public function testDefaults()
     {
         $entity = new Network('nid', 'name');

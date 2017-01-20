@@ -104,7 +104,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             1301,
             1302,
             1303,
-            new Options([]),
+            new Options(),
             $parent,
             2101,
             $masterBrand,
@@ -156,7 +156,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             1301,
             1302,
             1303,
-            new Options([])
+            new Options()
         );
     }
 
@@ -187,7 +187,7 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
             1301,
             1302,
             1303,
-            new Options([]),
+            new Options(),
             new UnfetchedProgramme()
         );
 

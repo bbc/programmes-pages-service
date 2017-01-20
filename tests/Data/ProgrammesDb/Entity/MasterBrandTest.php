@@ -18,7 +18,6 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
         $reflection = new ReflectionClass(MasterBrand::CLASS);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\OptionsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
         ], $reflection->getTraitNames());
     }

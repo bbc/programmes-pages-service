@@ -219,7 +219,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
-            new Options([]),
+            new Options(),
             null,
             2101,
             null,

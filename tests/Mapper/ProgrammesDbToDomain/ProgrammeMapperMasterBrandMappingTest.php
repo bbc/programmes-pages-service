@@ -9,12 +9,12 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
     public function testGetDomainModelSeriesWithSetMasterBrand()
     {
         $programmeOptions = ['progOptions'];
-        $mbOptions = ['mbOptions'];
+        $networkOptions = ['networkOptions'];
 
         $masterBrandDbEntity = [
             'id' => 1,
             'mid' => 'bbc_one',
-            'options' => $mbOptions,
+            'options' => $networkOptions,
         ];
 
         $expectedMasterBrandDomainEntity = $this->createMock(
@@ -32,7 +32,7 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
 
         $this->mockOptionsMapper->expects($this->once())
             ->method('getDomainModel')
-            ->with($programmeOptions, $mbOptions)
+            ->with($programmeOptions, $networkOptions)
             ->willReturn($expectedOptionsEntity);
 
         $dbEntityArray = $this->getSampleProgrammeDbEntity(

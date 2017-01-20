@@ -3,7 +3,6 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
-use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullMid;
 
 class UnfetchedMasterBrand extends MasterBrand
@@ -14,8 +13,7 @@ class UnfetchedMasterBrand extends MasterBrand
             new NullMid(),
             '',
             new UnfetchedImage(),
-            new UnfetchedNetwork(),
-            new Options([])
+            new UnfetchedNetwork()
         );
     }
 }

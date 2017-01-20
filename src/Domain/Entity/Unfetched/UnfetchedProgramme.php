@@ -24,7 +24,7 @@ class UnfetchedProgramme extends Programme
             false,
             false,
             0,
-            new Options([])
+            new Options()
         );
     }
 }

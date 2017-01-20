@@ -129,7 +129,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         ?Options $options = null
     ) {
         if (!$options) {
-            $options = new Options([]);
+            $options = new Options();
         }
 
         return new Series(

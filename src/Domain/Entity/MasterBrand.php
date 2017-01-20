@@ -18,9 +18,6 @@ class MasterBrand
     /** @var Image */
     private $image;
 
-    /** @var Network */
-    private $network;
-
     /** @var Version|null */
     private $competitionWarning;
 
@@ -29,7 +26,6 @@ class MasterBrand
         string $name,
         Image $image,
         Network $network,
-        Options $options,
         ?Version $competitionWarning = null
     ) {
         $this->mid = $mid;
@@ -66,16 +62,6 @@ class MasterBrand
             );
         }
         return $this->network;
-    }
-
-    public function getOptions(): Options
-    {
-        return $this->options;
-    }
-
-    public function getOption(string $key)
-    {
-        return $this->options->getOption($key);
     }
 
     /**

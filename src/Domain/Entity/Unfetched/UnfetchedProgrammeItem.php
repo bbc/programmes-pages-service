@@ -27,7 +27,7 @@ class UnfetchedProgrammeItem extends ProgrammeItem
             0,
             MediaTypeEnum::UNKNOWN,
             0,
-            new Options([])
+            new Options()
         );
     }
 }

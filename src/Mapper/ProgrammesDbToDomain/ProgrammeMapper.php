@@ -215,11 +215,12 @@ class ProgrammeMapper extends AbstractMapper
 
     private function crawlOptions(array $dbProgramme, string $key, array $tree = []): array
     {
+        // Recursive up the programme hierarchy, then to the network above that
         $tree[] = $dbProgramme[$key] ?? [];
         if (isset($dbProgramme['parent'])) {
             $tree = $this->crawlOptions($dbProgramme['parent'], $key, $tree);
-        } elseif (isset($dbProgramme['masterBrand'])) {
-            $tree = $this->crawlOptions($dbProgramme['masterBrand'], $key, $tree);
+        } elseif (isset($dbProgramme['network'])) {
+            $tree = $this->crawlOptions($dbProgramme['network'], $key, $tree);
         }
         return $tree;
     }

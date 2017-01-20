@@ -101,7 +101,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
-            new Options([]),
+            new Options(),
             $parent,
             2101,
             $masterBrand,

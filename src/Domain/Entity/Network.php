@@ -47,10 +47,14 @@ class Network
     /** @var bool */
     private $isAllowedAdverts;
 
+    /** @var Network */
+    private $network;
+
     public function __construct(
         Nid $nid,
         string $name,
         Image $image,
+        Options $options,
         ?string $urlKey = null,
         ?string $type = null,
         ?string $medium = NetworkMediumEnum::UNKNOWN,
@@ -162,5 +166,15 @@ class Network
     public function isAllowedAdverts(): bool
     {
         return $this->isAllowedAdverts;
+    }
+
+    public function getOptions(): Options
+    {
+        return $this->options;
+    }
+
+    public function getOption(string $key)
+    {
+        return $this->options->getOption($key);
     }
 }
