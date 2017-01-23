@@ -130,7 +130,6 @@ class NetworkMapperTest extends BaseMapperTestCase
             'isInternational' => true,
             'isAllowedAdverts' => true,
             'defaultService' => null,
-            'options' => ['one'],
         ];
 
         $expectedEntity = new Network(

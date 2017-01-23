@@ -8,10 +8,7 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelSeriesWithSetMasterBrand()
     {
-        $masterBrandDbEntity = [
-            'id' => 1,
-            'mid' => 'bbc_one',
-        ];
+        $masterBrandDbEntity = ['mid' => 'bbc_one'];
 
         $expectedMasterBrandDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\MasterBrand'
@@ -25,20 +22,13 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
         $dbEntityArray = $this->getSampleProgrammeDbEntity(
             'b010t19z',
             null,
-            $masterBrandDbEntity,
-            [],
-            null,
-            1
+            $masterBrandDbEntity
         );
 
         $expectedEntity = $this->getSampleProgrammeDomainEntity(
             'b010t19z',
             $this->mockDefaultImage,
-            $expectedMasterBrandDomainEntity,
-            [],
-            [],
-            null,
-            1
+            $expectedMasterBrandDomainEntity
         );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));

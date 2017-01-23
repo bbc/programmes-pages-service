@@ -206,11 +206,8 @@ class ProgrammeMapper extends AbstractMapper
     private function getOptionsModel(array $dbProgramme, string $key = 'options'): Options
     {
         $options = $this->crawlOptions($dbProgramme, $key);
-
-        // MasterBrands have no parents so this is simple
-        return $this->mapperFactory->getOptionsMapper()->getDomainModel(
-            ...$options
-        );
+        return $this->mapperFactory->getOptionsMapper()
+            ->getDomainModel(...$options);
     }
 
     private function crawlOptions(array $dbProgramme, string $key, array $tree = []): array

@@ -18,6 +18,9 @@ class MasterBrand
     /** @var Image */
     private $image;
 
+    /** @var Network */
+    private $network;
+
     /** @var Version|null */
     private $competitionWarning;
 

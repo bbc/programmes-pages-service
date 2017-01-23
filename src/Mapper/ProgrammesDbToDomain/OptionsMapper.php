@@ -10,12 +10,12 @@ class OptionsMapper extends AbstractMapper
     {
         // $parentEntities must start from the bottom of the hierarchy
 
-        $options = [];
         // first generate the base options
         // where we don't care about the cascade
-        foreach ($entity as $key => $data) {
-            $options[$key] = $data['value'];
-        }
+        // array_map will maintain the keys
+        $options = array_map(function ($data) {
+            return $data['value'];
+        }, $entity);
 
         // now loop through parents and apply the data
         // ONLY if the key is allowed to cascade AND
