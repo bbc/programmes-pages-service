@@ -219,8 +219,8 @@ class ProgrammeMapper extends AbstractMapper
         $tree[] = $dbProgramme[$key] ?? [];
         if (isset($dbProgramme['parent'])) {
             $tree = $this->crawlOptions($dbProgramme['parent'], $key, $tree);
-        } elseif (isset($dbProgramme['network'])) {
-            $tree = $this->crawlOptions($dbProgramme['network'], $key, $tree);
+        } elseif (isset($dbProgramme['masterBrand']['network'])) {
+            $tree = $this->crawlOptions($dbProgramme['masterBrand']['network'], $key, $tree);
         }
         return $tree;
     }

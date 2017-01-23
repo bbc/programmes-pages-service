@@ -44,6 +44,10 @@ class NetworkMapperTest extends BaseMapperTestCase
             'BBC\ProgrammesPagesService\Domain\Entity\Options'
         );
 
+        $this->mockOptionsMapper->expects($this->any())
+            ->method('getDomainModel')
+            ->willReturn($this->mockOptions);
+
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
             ->willReturn($this->mockDefaultImage);
@@ -51,7 +55,7 @@ class NetworkMapperTest extends BaseMapperTestCase
 
     public function testGetDomainModel()
     {
-        $optionsDbEntity = 'options';
+        $optionsDbEntity = ['options'];
         $this->setupOptionsMapper($optionsDbEntity, $this->mockOptions);
 
         $dbEntityArray = [
@@ -126,13 +130,14 @@ class NetworkMapperTest extends BaseMapperTestCase
             'isInternational' => true,
             'isAllowedAdverts' => true,
             'defaultService' => null,
+            'options' => ['one'],
         ];
 
         $expectedEntity = new Network(
             new Nid('1_xtra'),
             '1 Xtra',
             $expectedImageDomainEntity,
-            new Options(),
+            $this->mockOptions,
             '1xtra',
             'National Radio',
             'radio',
@@ -181,7 +186,7 @@ class NetworkMapperTest extends BaseMapperTestCase
             new Nid('1_xtra'),
             '1 Xtra',
             $this->mockDefaultImage,
-            new Options(),
+            $this->mockOptions,
             '1xtra',
             'National Radio',
             'radio',
@@ -218,7 +223,7 @@ class NetworkMapperTest extends BaseMapperTestCase
             new Nid('1_xtra'),
             '1 Xtra',
             $this->mockDefaultImage,
-            new Options(),
+            $this->mockOptions,
             '1xtra',
             'National Radio',
             'radio',

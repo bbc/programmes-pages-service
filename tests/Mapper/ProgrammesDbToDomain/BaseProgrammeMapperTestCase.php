@@ -53,6 +53,10 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
         $this->mockDefaultImage->method('getTitle')->willReturn('DefaultImage');
 
+        $this->mockOptionsMapper->expects($this->any())
+            ->method('getDomainModel')
+            ->willReturn($this->mockOptions);
+
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
             ->willReturn($this->mockDefaultImage);
@@ -79,7 +83,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         array $categories = [],
         array $parent = null,
         int $id = 1,
-        array $options = null
+        array $options = []
     ) {
         return [
             'id' => $id,
@@ -129,7 +133,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         ?Options $options = null
     ) {
         if (!$options) {
-            $options = new Options();
+            $options = $this->mockOptions;
         }
 
         return new Series(

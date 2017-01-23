@@ -47,8 +47,8 @@ class Network
     /** @var bool */
     private $isAllowedAdverts;
 
-    /** @var Network */
-    private $network;
+    /** @var Options */
+    private $options;
 
     public function __construct(
         Nid $nid,
@@ -81,6 +81,7 @@ class Network
         $this->urlKey = $urlKey;
         $this->type = $type;
         $this->medium = $medium;
+        $this->options = $options;
         $this->defaultService = $defaultService;
         $this->isPublicOutlet = $isPublicOutlet;
         $this->isChildrens = $isChildrens;
