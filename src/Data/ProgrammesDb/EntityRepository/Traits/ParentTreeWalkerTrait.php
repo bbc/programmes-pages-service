@@ -79,8 +79,12 @@ trait ParentTreeWalkerTrait
     {
         // Build a list of all unique parentIds found in all of the entities
         $listOfAllParentIds = [];
-        foreach ($entities as $entity) {
-            foreach ($entity[$key] ?? [] as $itemWithAncestry) {
+        foreach ($entities as $i => $entity) {
+            foreach ($entity[$key] ?? [] as $j => $itemWithAncestry) {
+                // We need to create the parent field, as we know
+                // we're making the request for parents, but we may
+                // end up bailing out early if there aren't any
+                $entities[$i][$key][$j]['parent'] = $entities[$i][$key][$j]['parent'] ?? null;
                 foreach ($this->getParentIdsFromAncestry($itemWithAncestry['ancestry']) as $parentId) {
                     $listOfAllParentIds[$parentId] = true;
                 }
