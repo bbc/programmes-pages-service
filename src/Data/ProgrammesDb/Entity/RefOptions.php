@@ -33,7 +33,7 @@ class RefOptions
      * @var CoreEntity
      *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $optionsForCoreEntity;
 
@@ -41,28 +41,28 @@ class RefOptions
      * @var Network
      *
      * @ORM\ManyToOne(targetEntity="Network")
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $optionsForNetwork;
 
     /**
      * @var array
      *
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\Column(type="json_array", nullable=true)
      */
     private $adminOptions;
 
     /**
      * @var array
      *
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\Column(type="json_array", nullable=true)
      */
     private $localOptions;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=60, nullable=true)
+     * @ORM\Column(type="string", length=30, nullable=true)
      */
     private $projectSpace;
 
@@ -115,7 +115,7 @@ class RefOptions
         return $this->adminOptions;
     }
 
-    public function setAdminOptions(?array $options)
+    public function setAdminOptions(?array $options): void
     {
         $this->adminOptions = $options;
     }
@@ -125,7 +125,7 @@ class RefOptions
         return $this->localOptions;
     }
 
-    public function setLocalOptions(?array $options)
+    public function setLocalOptions(?array $options): void
     {
         $this->localOptions = $options;
     }

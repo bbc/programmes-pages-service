@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -212,12 +213,18 @@ abstract class Programme
 
     public function getOptions(): Options
     {
+        if ($this->options instanceof UnfetchedOptions) {
+            throw new DataNotFetchedException(
+                'Could not get options of Programme "' . $this->pid . '"' .
+                'as the full hierarchy was not fetched'
+            );
+        }
         return $this->options;
     }
 
     public function getOption(string $key)
     {
-        return $this->options->getOption($key);
+        return $this->getOptions()->getOption($key);
     }
 
     /**

@@ -10,6 +10,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -205,9 +206,41 @@ class ProgrammeMapper extends AbstractMapper
 
     private function getOptionsModel(array $dbProgramme, string $key = 'options'): Options
     {
+        // ensure the full hierarchy has been fetched.
+        // Options are only valid if we got everything.
+        if (!$this->hasFetchedFullHierarchy($dbProgramme)) {
+            return new UnfetchedOptions();
+        }
+
         $options = $this->crawlOptions($dbProgramme, $key);
         return $this->mapperFactory->getOptionsMapper()
             ->getDomainModel(...$options);
+    }
+
+    private function hasFetchedFullHierarchy(array $programme): bool
+    {
+        // find the top level programme, ensuring it exists
+        $tleo = $programme;
+        while ($programme) {
+            $tleo = $programme;
+            if (!array_key_exists('parent', $programme)) {
+                return false;
+            }
+            $programme = $programme['parent'];
+        }
+        // check that the masterBrand was fetched
+        if (!array_key_exists('masterBrand', $tleo)) {
+            return false;
+        }
+
+        // check that the network was fetched
+        if ($tleo['masterBrand'] &&
+            !array_key_exists('network', $tleo['masterBrand'])
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     private function crawlOptions(array $dbProgramme, string $key, array $tree = []): array

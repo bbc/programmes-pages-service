@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -192,5 +193,39 @@ class EpisodeTest extends PHPUnit_Framework_TestCase
         );
 
         $programme->getParent();
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage Could not get options of Programme "p01m5mss"as the full hierarchy was not fetched
+     */
+    public function testRequestingUnfetchedOptionsThrowsException()
+    {
+        $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+
+        $programme = new Episode(
+            [0],
+            $pid,
+            'Title',
+            'Search Title',
+            $synopses,
+            $image,
+            1101,
+            1102,
+            true,
+            true,
+            true,
+            1103,
+            'audio',
+            1201,
+            1202,
+            1203,
+            1204,
+            new UnfetchedOptions()
+        );
+
+        $programme->getOptions();
     }
 }
