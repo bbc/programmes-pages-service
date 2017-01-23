@@ -23,6 +23,13 @@ class RefOptions
     private $id;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $originalId;
+
+    /**
      * @var CoreEntity
      *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
@@ -31,12 +38,12 @@ class RefOptions
     private $optionsForCoreEntity;
 
     /**
-     * @var MasterBrand
+     * @var Network
      *
-     * @ORM\ManyToOne(targetEntity="MasterBrand")
+     * @ORM\ManyToOne(targetEntity="Network")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
-    private $optionsForMasterBrand;
+    private $optionsForNetwork;
 
     /**
      * @var array
@@ -61,10 +68,12 @@ class RefOptions
 
     /**
      * RefOptions constructor.
-     * @param CoreEntity|MasterBrand $optionsFor
+     * @param string $originalId
+     * @param CoreEntity|Network $optionsFor
      */
-    public function __construct($optionsFor)
+    public function __construct(string $originalId, $optionsFor)
     {
+        $this->setOriginalId($originalId);
         $this->setOptionsFor($optionsFor);
     }
 
@@ -73,12 +82,22 @@ class RefOptions
         return $this->id;
     }
 
+    public function getOriginalId(): string
+    {
+        return $this->originalId;
+    }
+
+    public function setOriginalId(string $id): void
+    {
+        $this->originalId = $id;
+    }
+
     /**
-     * @return CoreEntity|MasterBrand
+     * @return CoreEntity|Network
      */
     public function getOptionsFor()
     {
-        return $this->optionsForCoreEntity ?? $this->optionsForMasterBrand;
+        return $this->optionsForCoreEntity ?? $this->optionsForNetwork;
     }
 
     public function getOptionsForCoreEntity(): ?CoreEntity
@@ -86,9 +105,9 @@ class RefOptions
         return $this->optionsForCoreEntity;
     }
 
-    public function getOptionsForMasterBrand(): ?MasterBrand
+    public function getOptionsForNetwork(): ?Network
     {
-        return $this->optionsForMasterBrand;
+        return $this->optionsForNetwork;
     }
 
     public function getAdminOptions(): ?array
@@ -116,25 +135,25 @@ class RefOptions
         return $this->projectSpace;
     }
 
-    public function setProjectSpace(?string $projectSpace)
+    public function setProjectSpace(?string $projectSpace): void
     {
         $this->projectSpace = $projectSpace;
     }
 
     /**
-     * @param CoreEntity|MasterBrand $item
+     * @param CoreEntity|Network $item
      */
-    public function setOptionsFor($item)
+    public function setOptionsFor($item): void
     {
         if ($item instanceof CoreEntity) {
             $this->setOptionsForBatch($item, null);
-        } elseif ($item instanceof MasterBrand) {
+        } elseif ($item instanceof Network) {
             $this->setOptionsForBatch(null, $item);
         } else {
             throw new InvalidArgumentException(sprintf(
                 'Expected setOptionsFor() to be called with an an instance of "%s" or "%s". Found instance of "%s"',
                 CoreEntity::CLASS,
-                MasterBrand::CLASS,
+                Network::CLASS,
                 (is_object($item) ? get_class($item) : gettype($item))
             ));
         }
@@ -142,9 +161,9 @@ class RefOptions
 
     private function setOptionsForBatch(
         ?CoreEntity $optionsForCoreEntity,
-        ?MasterBrand $optionsForMasterBrand
+        ?Network $optionsForNetwork
     ): void {
         $this->optionsForCoreEntity = $optionsForCoreEntity;
-        $this->optionsForMasterBrand = $optionsForMasterBrand;
+        $this->optionsForNetwork = $optionsForNetwork;
     }
 }

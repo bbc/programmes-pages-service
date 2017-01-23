@@ -19,19 +19,22 @@ class RefOptionsTest extends PHPUnit_Framework_TestCase
 
     public function testDefaults()
     {
+        $originalId = 'bbc_one';
         $coreEntity = $this->mockCoreEntity();
-        $masterBrand = $this->mockMasterBrand();
+        $network = $this->mockNetwork();
 
-        $options = new RefOptions($coreEntity);
-        $this->assertNull($options->getOptionsForMasterBrand());
+        $options = new RefOptions($originalId, $coreEntity);
+        $this->assertSame($originalId, $options->getOriginalId());
+        $this->assertNull($options->getOptionsForNetwork());
         $this->assertSame($coreEntity, $options->getOptionsForCoreEntity());
         $this->assertSame($coreEntity, $options->getOptionsFor());
 
 
-        $options = new RefOptions($masterBrand);
+        $options = new RefOptions($originalId, $network);
+        $this->assertSame($originalId, $options->getOriginalId());
         $this->assertNull($options->getOptionsForCoreEntity());
-        $this->assertSame($masterBrand, $options->getOptionsForMasterBrand());
-        $this->assertSame($masterBrand, $options->getOptionsFor());
+        $this->assertSame($network, $options->getOptionsForNetwork());
+        $this->assertSame($network, $options->getOptionsFor());
 
         $this->assertNull($options->getId());
         $this->assertNull($options->getAdminOptions());
@@ -41,12 +44,14 @@ class RefOptionsTest extends PHPUnit_Framework_TestCase
 
     public function testSetters()
     {
-        $options = new RefOptions($this->mockMasterBrand());
+        $options = new RefOptions('bbc_one', $this->mockNetwork());
 
+        $options->setOriginalId($eastenders = 'b006m86d');
         $options->setAdminOptions($admin = ['adminoptions']);
         $options->setLocalOptions($local = ['localoptions']);
         $options->setProjectSpace($project = 'project');
 
+        $this->assertSame($eastenders, $options->getOriginalId());
         $this->assertSame($admin, $options->getAdminOptions());
         $this->assertSame($local, $options->getLocalOptions());
         $this->assertSame($project, $options->getProjectSpace());
@@ -58,6 +63,7 @@ class RefOptionsTest extends PHPUnit_Framework_TestCase
     public function testInvalidOptionsForThrowsExceptionOnConstruct()
     {
         new RefOptions(
+            'id',
             'wrongwrongwrong'
         );
     }
@@ -67,8 +73,8 @@ class RefOptionsTest extends PHPUnit_Framework_TestCase
         return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity');
     }
 
-    private function mockMasterBrand()
+    private function mockNetwork()
     {
-        return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand');
+        return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network');
     }
 }
