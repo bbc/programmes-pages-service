@@ -78,7 +78,9 @@ class VersionRepository extends EntityRepository
             ->andWhere('version.programmeItem = :dbId')
             ->setParameter('dbId', $programmeDbId);
 
-        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        // In some cases, an episode can have more than one Original version.
+        // We account for that by returning only the first Original version we find.
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY)[0] ?? null;
     }
 
     public function createQueryBuilder($alias, $indexBy = null)
