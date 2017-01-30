@@ -32,7 +32,9 @@ class VersionRepository extends EntityRepository
             ->addSelect(['versionTypes'])
             ->leftJoin('version.versionTypes', 'versionTypes')
             ->andWhere('version.pid = :pid')
-            ->setParameter('pid', $pid);
+            ->setParameter('pid', $pid)
+            ->addOrderBy('versionTypes.type', 'DESC');
+
 
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
