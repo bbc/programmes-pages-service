@@ -251,7 +251,7 @@ class ProgrammeMapper extends AbstractMapper
         // Could not find any programme image in the masterbrand, go up to the network
         $currentItem = $dbProgramme;
         while ($currentItem) {
-            // If the current Programme's MasterBrand has an image then use that!
+            // If the current Programme's network has an image then use that!
             if (isset($currentItem['masterBrand']['network']['image'])) {
                 return $imageMapper->getDomainModel($currentItem['masterBrand']['network']['image']);
             }
