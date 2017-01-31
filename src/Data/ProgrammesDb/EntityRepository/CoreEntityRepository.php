@@ -180,12 +180,13 @@ QUERY;
         // existing image hierarchy
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select(['entity', 'image', 'masterBrand', 'network', 'mbImage', 'category'])
+            ->select(['entity', 'image', 'masterBrand', 'network', 'mbImage', 'category', 'nwImage'])
             ->from('ProgrammesPagesService:' . $entityType, 'entity') // For filtering on type
             ->leftJoin('entity.image', 'image')
             ->leftJoin('entity.masterBrand', 'masterBrand')
-            ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('masterBrand.image', 'mbImage')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('network.image', 'nwImage')
             ->leftJoin('entity.categories', 'category')
             ->where('entity.pid = :pid')
             ->setParameter('pid', $pid);

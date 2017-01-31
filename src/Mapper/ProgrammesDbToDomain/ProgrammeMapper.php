@@ -248,6 +248,18 @@ class ProgrammeMapper extends AbstractMapper
             $currentItem = $currentItem['parent'] ?? null;
         }
 
+        // Could not find any programme image in the masterbrand, go up to the network
+        $currentItem = $dbProgramme;
+        while ($currentItem) {
+            // If the current Programme's network has an image then use that!
+            if (isset($currentItem['masterBrand']['network']['image'])) {
+                return $imageMapper->getDomainModel($currentItem['masterBrand']['network']['image']);
+            }
+
+            // Otherwise set the current Programme to the parent
+            $currentItem = $currentItem['parent'] ?? null;
+        }
+
         // Couldn't find anything in the masterbrand, so use the default Image
         return $imageMapper->getDefaultImage();
     }
