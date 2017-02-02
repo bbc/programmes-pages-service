@@ -3,16 +3,12 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgrammeItem;
-use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
 class CollapsedBroadcast
 {
-    /** @var Version */
-    private $version;
-
     /** @var ProgrammeItem */
     private $programmeItem;
 
@@ -35,7 +31,6 @@ class CollapsedBroadcast
     private $isRepeat;
 
     public function __construct(
-        Version $version,
         ProgrammeItem $programmeItem,
         array $services,
         DateTimeImmutable $startAt,
@@ -46,7 +41,6 @@ class CollapsedBroadcast
     ) {
         $this->assertArrayOfServices($services);
 
-        $this->version = $version;
         $this->programmeItem = $programmeItem;
         $this->services = $services;
         $this->startAt = $startAt;
@@ -54,18 +48,6 @@ class CollapsedBroadcast
         $this->duration = $duration;
         $this->isBlanked = $isBlanked;
         $this->isRepeat = $isRepeat;
-    }
-
-    /**
-     * @throws DataNotFetchedException
-     */
-    public function getVersion(): Version
-    {
-        if ($this->version instanceof UnfetchedVersion) {
-            throw new DataNotFetchedException('Could not get Version of CollapsedBroadcast as it was not fetched');
-        }
-
-        return $this->version;
     }
 
     /**

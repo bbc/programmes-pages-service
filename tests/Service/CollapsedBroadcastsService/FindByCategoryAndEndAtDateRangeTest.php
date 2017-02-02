@@ -15,7 +15,7 @@ class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServ
         $category = $this->mockEntity('Genre', 3);
         $category->method('getDbAncestryIds')->willReturn($ancestry);
 
-        $broadcastData = [['serviceIds' => ['a', 'b']]];
+        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData   = [
             'a' => ['sid' => 'bbc_one'],
             'b' => ['sid' => 'bbc_one_hd'],
@@ -23,7 +23,7 @@ class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServ
 
         $this->mockRepository->expects($this->once())
             ->method('findByCategoryAncestryAndEndAtDateRange')
-            ->with($ancestry, 'Broadcast', null, $fromDate, $toDate)
+            ->with($ancestry, false, $fromDate, $toDate)
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->once())

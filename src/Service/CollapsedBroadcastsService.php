@@ -2,7 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CollapsedBroadcastRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Category;
@@ -18,7 +18,7 @@ class CollapsedBroadcastsService extends AbstractService
     protected $serviceRepository;
 
     public function __construct(
-        BroadcastRepository $repository,
+        CollapsedBroadcastRepository $repository,
         MapperInterface $mapper,
         ServiceRepository $serviceRepository
     ) {
@@ -35,14 +35,16 @@ class CollapsedBroadcastsService extends AbstractService
     ): array {
         $broadcasts = $this->repository->findByProgrammeAndMonth(
             $programme->getDbAncestryIds(),
-            'Broadcast',
+            false,
             $year,
             $month,
             $limit,
             $this->getOffset($limit, $page)
         );
 
+        $broadcasts = $this->stripWebcasts($broadcasts);
         $services = $this->fetchUsedServices($broadcasts);
+
         return $this->mapManyEntities($broadcasts, $services);
     }
 
@@ -53,13 +55,15 @@ class CollapsedBroadcastsService extends AbstractService
     ): array {
         $broadcasts = $this->repository->findPastByProgramme(
             $programme->getDbAncestryIds(),
-            'Broadcast',
+            false,
             ApplicationTime::getTime(),
             $limit,
             $this->getOffset($limit, $page)
         );
 
+        $broadcasts = $this->stripWebcasts($broadcasts);
         $services = $this->fetchUsedServices($broadcasts);
+
         return $this->mapManyEntities($broadcasts, $services);
     }
 
@@ -70,13 +74,15 @@ class CollapsedBroadcastsService extends AbstractService
     ): array {
         $broadcasts = $this->repository->findUpcomingByProgramme(
             $programme->getDbAncestryIds(),
-            'Broadcast',
+            false,
             ApplicationTime::getTime(),
             $limit,
             $this->getOffset($limit, $page)
         );
 
+        $broadcasts = $this->stripWebcasts($broadcasts);
         $services = $this->fetchUsedServices($broadcasts);
+
         return $this->mapManyEntities($broadcasts, $services);
     }
 
@@ -84,7 +90,7 @@ class CollapsedBroadcastsService extends AbstractService
     {
         return $this->repository->countUpcomingByProgramme(
             $programme->getDbAncestryIds(),
-            'Broadcast',
+            false,
             ApplicationTime::getTime()
         );
     }
@@ -93,21 +99,21 @@ class CollapsedBroadcastsService extends AbstractService
         Category $category,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
-        string $medium = null,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $broadcasts = $this->repository->findByCategoryAncestryAndStartAtDateRange(
             $category->getDbAncestryIds(),
-            'Broadcast',
-            $medium,
+            false,
             $startDate,
             $endDate,
             $limit,
             $this->getOffset($limit, $page)
         );
 
+        $broadcasts = $this->stripWebcasts($broadcasts);
         $services = $this->fetchUsedServices($broadcasts);
+
         return $this->mapManyEntities($broadcasts, $services);
     }
 
@@ -115,37 +121,50 @@ class CollapsedBroadcastsService extends AbstractService
         Category $category,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
-        string $medium = null,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $broadcasts = $this->repository->findByCategoryAncestryAndEndAtDateRange(
             $category->getDbAncestryIds(),
-            'Broadcast',
-            $medium,
+            false,
             $startDate,
             $endDate,
             $limit,
             $this->getOffset($limit, $page)
         );
 
+        $broadcasts = $this->stripWebcasts($broadcasts);
         $services = $this->fetchUsedServices($broadcasts);
+
         return $this->mapManyEntities($broadcasts, $services);
     }
 
     public function countByCategoryAndEndAtDateRange(
         Category $category,
         DateTimeImmutable $startDate,
-        DateTimeImmutable $endDate,
-        ?string $medium = null
+        DateTimeImmutable $endDate
     ): int {
         return $this->repository->countByCategoryAncestryAndEndAtDateRange(
             $category->getDbAncestryIds(),
-            'Broadcast',
-            $medium,
+            false,
             $startDate,
             $endDate
         );
+    }
+
+    private function stripWebcasts(array $broadcasts): array
+    {
+        return array_reduce($broadcasts, function ($memo, $broadcast) {
+            // loop through areWebcasts
+            // if it is true then remove the corresponding value from serviceIDs and any other listings
+            // if serviceIds is not empty then add this broadcast to the memo
+            for ($i = 0; $i < count($broadcast['areWebcasts']); $i++) {
+                if (!$broadcast['areWebcasts'][$i] && $broadcast['serviceIds'][$i] != CollapsedBroadcastRepository::NO_SERVICE) {
+                    $memo[] = $broadcast;
+                }
+            }
+            return $memo;
+        }, []);
     }
 
     private function fetchUsedServices(array $broadcasts): array

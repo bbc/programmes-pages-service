@@ -47,6 +47,22 @@ class NetworksFixture extends AbstractFixture
             'radio2'
         );
 
+        $service3 = $this->buildService(
+            'bbc_one_cambridge',
+            'p00fzl6h',
+            'BBC One Cambridgeshire',
+            'TV',
+            'audio_video'
+        );
+
+        $network3 = $this->buildNetwork(
+            'bbc_one',
+            'BBC One',
+            $service3,
+            'bbcone',
+            'tv'
+        );
+
         $service->setNetwork($network1);
         $service2->setNetwork($network2);
 

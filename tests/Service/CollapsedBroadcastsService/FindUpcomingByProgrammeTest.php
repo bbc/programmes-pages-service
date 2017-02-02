@@ -12,7 +12,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
         $programme = $this->mockEntity('Programme', 3);
         $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
 
-        $broadcastData = [['serviceIds' => ['a', 'b']]];
+        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
             'a' => ['sid' => 'bbc_one'],
             'b' => ['sid' => 'bbc_one_hd'],
@@ -20,7 +20,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
 
         $this->mockRepository->expects($this->once())
             ->method('findUpcomingByProgramme')
-            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()), 300, 0)
+            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 300, 0)
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->once())
@@ -38,7 +38,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
         $programme = $this->mockEntity('Programme', 3);
         $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
 
-        $broadcastData = [['serviceIds' => ['a', 'b']]];
+        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
             'a' => ['sid' => 'bbc_one'],
             'b' => ['sid' => 'bbc_one_hd'],
@@ -46,7 +46,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
 
         $this->mockRepository->expects($this->once())
             ->method('findUpcomingByProgramme')
-            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
+            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->once())
@@ -66,7 +66,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
 
         $this->mockRepository->expects($this->once())
             ->method('countUpcomingByProgramme')
-            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()))
+            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()))
             ->willReturn(10);
 
         $this->mockServiceRepository->expects($this->never())
@@ -83,7 +83,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
 
         $this->mockRepository->expects($this->once())
             ->method('findUpcomingByProgramme')
-            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
+            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
             ->willReturn([]);
 
         $this->mockServiceRepository->expects($this->never())
@@ -101,7 +101,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
 
         $this->mockRepository->expects($this->once())
             ->method('countUpcomingByProgramme')
-            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()))
+            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()))
             ->willReturn(0);
 
         $this->mockServiceRepository->expects($this->never())

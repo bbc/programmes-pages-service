@@ -15,21 +15,21 @@ class FindByCategoryAndStartAtDateRangeTest extends AbstractCollapsedBroadcastSe
         $category = $this->mockEntity('Genre', 3);
         $category->method('getDbAncestryIds')->willReturn($ancestry);
 
-        $broadcastData = [['serviceIds' => ['a', 'b']]];
+        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData   = [
             'a' => ['sid' => 'bbc_one'],
             'b' => ['sid' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
-                             ->method('findByCategoryAncestryAndStartAtDateRange')
-                             ->with($ancestry, 'Broadcast', null, $fromDate, $toDate)
-                             ->willReturn($broadcastData);
+            ->method('findByCategoryAncestryAndStartAtDateRange')
+            ->with($ancestry, false, $fromDate, $toDate)
+            ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->once())
-                                    ->method('findBySids')
-                                    ->with(['a', 'b'])
-                                    ->willReturn($serviceData);
+            ->method('findBySids')
+            ->with(['a', 'b'])
+            ->willReturn($serviceData);
 
         $result = $this->service()->findByCategoryAndStartAtDateRange($category, $fromDate, $toDate);
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);

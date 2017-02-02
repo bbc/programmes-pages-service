@@ -10,21 +10,21 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
         $programme = $this->mockEntity('Programme', 3);
         $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
 
-        $broadcastData = [['serviceIds' => ['a', 'b']]];
+        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
             'a' => ['sid' => 'bbc_one'],
             'b' => ['sid' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
-             ->method('findByProgrammeAndMonth')
-             ->with($dbAncestry, 'Broadcast', 2007, 12)
-             ->willReturn($broadcastData);
+            ->method('findByProgrammeAndMonth')
+            ->with($dbAncestry, false, 2007, 12)
+            ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
-             ->method('findBySids')
-             ->with(['a', 'b'])
-             ->willReturn($serviceData);
+            ->method('findBySids')
+            ->with(['a', 'b'])
+            ->willReturn($serviceData);
 
         $result = $this->service()->findByProgrammeAndMonth($programme, 2007, 12);
         $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
@@ -36,7 +36,7 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
         $programme = $this->mockEntity('Programme', 3);
         $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
 
-        $broadcastData = [['serviceIds' => ['a', 'b']]];
+        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
             'a' => ['sid' => 'bbc_one'],
             'b' => ['sid' => 'bbc_one_hd'],
@@ -44,7 +44,7 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByProgrammeAndMonth')
-            ->with($dbAncestry, 'Broadcast', 2007, 12, 5, 10)
+            ->with($dbAncestry, false, 2007, 12, 5, 10)
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
@@ -64,7 +64,7 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByProgrammeAndMonth')
-            ->with($dbAncestry, 'Broadcast', 2007, 12, 5, 10)
+            ->with($dbAncestry, false, 2007, 12, 5, 10)
             ->willReturn([]);
 
         $this->mockServiceRepository->expects($this->never())

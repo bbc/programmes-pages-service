@@ -61,7 +61,7 @@ class ServiceFactory
     {
         if (!isset($this->instances['CollapsedBroadcastsService'])) {
             $this->instances['CollapsedBroadcastsService'] = new CollapsedBroadcastsService(
-                $this->entityManager->getRepository('ProgrammesPagesService:Broadcast'),
+                $this->entityManager->getRepository('ProgrammesPagesService:CollapsedBroadcast'),
                 $this->mapperFactory->getCollapsedBroadcastMapper(),
                 $this->entityManager->getRepository('ProgrammesPagesService:Service')
             );
