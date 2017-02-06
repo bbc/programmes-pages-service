@@ -62,10 +62,8 @@ class Image
 
     public function getUrl($width, $height = 'n'): string
     {
-        // TODO Fix this if the TAs haven't yet got around to making ichef.bbci
-        // available over https. See TA-748
         $recipe = $width . 'x' . $height;
-        return '//ichef.bbci.co.uk/images/ic/' . $recipe . '/' . $this->filename;
+        return 'https://ichef.bbci.co.uk/images/ic/' . $recipe . '/' . $this->filename;
     }
 
     public function isLetterBox(): bool

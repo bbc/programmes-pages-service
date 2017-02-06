@@ -20,8 +20,8 @@ class ImageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('standard', $image->getType());
         $this->assertFalse($image->isLetterBox());
 
-        $this->assertEquals('//ichef.bbci.co.uk/images/ic/320xn/p01m5mss.jpg', $image->getUrl(320));
-        $this->assertEquals('//ichef.bbci.co.uk/images/ic/320x180/p01m5mss.jpg', $image->getUrl(320, 180));
+        $this->assertEquals('https://ichef.bbci.co.uk/images/ic/320xn/p01m5mss.jpg', $image->getUrl(320));
+        $this->assertEquals('https://ichef.bbci.co.uk/images/ic/320x180/p01m5mss.jpg', $image->getUrl(320, 180));
     }
 
     public function testIsLetterBox()
@@ -37,7 +37,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'png');
 
-        $this->assertEquals('//ichef.bbci.co.uk/images/ic/320xn/p01m5mss.png', $image->getUrl(320));
-        $this->assertEquals('//ichef.bbci.co.uk/images/ic/320x180/p01m5mss.png', $image->getUrl(320, 180));
+        $this->assertEquals('https://ichef.bbci.co.uk/images/ic/320xn/p01m5mss.png', $image->getUrl(320));
+        $this->assertEquals('https://ichef.bbci.co.uk/images/ic/320x180/p01m5mss.png', $image->getUrl(320, 180));
     }
 }
