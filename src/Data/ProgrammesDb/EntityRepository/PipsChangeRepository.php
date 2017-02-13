@@ -132,16 +132,19 @@ class PipsChangeRepository extends EntityRepository
 
     public function deleteProcessedProcessedDateUntil(DateTimeImmutable $untilDate)
     {
+        $sql = <<<SQL
+DELETE FROM BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChange pc
+WHERE 
+    pc.processedTime < :untildate
+    AND pc.processedTime <> :skipChangesEventsDate
+    AND pc.processedTime is not NULL
+SQL;
+
         $query = $this->_em
-            ->createQuery("
-                    DELETE FROM BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChange pc
-                    WHERE 
-                        pc.processedTime < :untildate
-                        AND pc.processedTime <> :skipChangesEventsDate
-                        AND pc.processedTime is not NULL"
-            )->setParameters([
-                          'untildate' => $untilDate,
-                          'skipChangesEventsDate' => self::SKIP_CHANGES_EVENTS_DATE
+            ->createQuery($sql)
+            ->setParameters([
+              'untildate' => $untilDate,
+              'skipChangesEventsDate' => self::SKIP_CHANGES_EVENTS_DATE
             ]);
 
         $query->execute();
