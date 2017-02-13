@@ -133,6 +133,8 @@ class PipsChangeRepository extends EntityRepository
         $query = $this->_em->createQueryBuilder()
                   ->delete($this->_entityName, 'pc')
                   ->where('pc.processedTime < :untildate')
+                  ->andWhere('YEAR(pc.processedTime) <> 1970')
+                  ->andWhere('pc.processedTime is not NULL')
                   ->setParameter(':untildate', $untilDate)
                   ->getQuery();
 
