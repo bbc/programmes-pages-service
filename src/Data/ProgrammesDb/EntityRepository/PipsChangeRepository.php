@@ -130,7 +130,7 @@ class PipsChangeRepository extends EntityRepository
         return $this->find($cid);
     }
 
-    public function deleteProcessedProcessedDateUntil()
+    public function deleteOldProcessedChanges()
     {
         $sql = <<<SQL
 DELETE FROM ProgrammesPagesService:PipsChange pc
