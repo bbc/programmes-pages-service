@@ -10,6 +10,8 @@ use Doctrine\ORM\NoResultException;
 
 class PipsChangeRepository extends EntityRepository
 {
+    const SKIP_CHANGES_EVENTS_DATE = '1970-01-01 00:00:00';
+
     public function addChange(PipsChangeBase $pipsChange)
     {
         $em = $this->getEntityManager();
@@ -130,13 +132,17 @@ class PipsChangeRepository extends EntityRepository
 
     public function deleteProcessedProcessedDateUntil(DateTimeImmutable $untilDate)
     {
-        $query = $this->_em->createQueryBuilder()
-                  ->delete($this->_entityName, 'pc')
-                  ->where('pc.processedTime < :untildate')
-                  ->andWhere('YEAR(pc.processedTime) <> 1970')
-                  ->andWhere('pc.processedTime is not NULL')
-                  ->setParameter(':untildate', $untilDate)
-                  ->getQuery();
+        $query = $this->_em
+            ->createQuery("
+                    DELETE FROM BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChange pc
+                    WHERE 
+                        pc.processedTime < :untildate
+                        AND pc.processedTime <> :skipChangesEventsDate
+                        AND pc.processedTime is not NULL"
+            )->setParameters([
+                          'untildate' => $untilDate,
+                          'skipChangesEventsDate' => self::SKIP_CHANGES_EVENTS_DATE
+            ]);
 
         $query->execute();
     }
