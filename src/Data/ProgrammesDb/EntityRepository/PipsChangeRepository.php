@@ -130,10 +130,10 @@ class PipsChangeRepository extends EntityRepository
         return $this->find($cid);
     }
 
-    public function deleteProcessedProcessedDateUntil(DateTimeImmutable $untilDate)
+    public function deleteProcessedProcessedDateUntil()
     {
         $sql = <<<SQL
-DELETE FROM BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChange pc
+DELETE FROM ProgrammesPagesService:PipsChange pc
 WHERE 
     pc.processedTime < :untildate
     AND pc.processedTime <> :skipChangesEventsDate
@@ -143,7 +143,7 @@ SQL;
         $query = $this->_em
             ->createQuery($sql)
             ->setParameters([
-              'untildate' => $untilDate,
+              'untildate' => new DateTimeImmutable('-3 months'),
               'skipChangesEventsDate' => self::SKIP_CHANGES_EVENTS_DATE
             ]);
 
