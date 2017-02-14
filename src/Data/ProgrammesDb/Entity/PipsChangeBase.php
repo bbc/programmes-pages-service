@@ -99,7 +99,10 @@ abstract class PipsChangeBase
         $this->createdTime = $createdTime;
     }
 
-    public function getProcessedTime(): DateTime
+    /**
+     * @return DateTime|null
+     */
+    public function getProcessedTime()
     {
         return $this->processedTime;
     }

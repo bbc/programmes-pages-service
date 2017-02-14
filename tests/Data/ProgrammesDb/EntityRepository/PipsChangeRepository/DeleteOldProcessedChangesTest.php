@@ -14,6 +14,7 @@ class DeleteOldProcessedChangesTest extends AbstractDatabaseTest
             10 months ago
             4 months ago
             1970-01-01 00:00:00
+            null
         */
         $this->loadFixtures(['PipsChange']);
 
@@ -23,12 +24,13 @@ class DeleteOldProcessedChangesTest extends AbstractDatabaseTest
 
         // assert
         $processedChangesEventsInDb = $repo->findAll();
-        $this->assertCount(2, $processedChangesEventsInDb);
+        $this->assertCount(3, $processedChangesEventsInDb);
         $processedDatesInDb = array_map(function($o) { return $o->getProcessedTime(); }, $processedChangesEventsInDb);
 
         $today = new DateTime();
         $diffTime = $today->diff($processedDatesInDb[0]);
         $this->assertTrue($diffTime->format('m') < 3);
         $this->assertEquals('1970-01-01 00:00:00', $processedDatesInDb[1]->format('Y-m-d H:i:s'));
+        $this->assertEquals(null, $processedDatesInDb[2]);
     }
 }
