@@ -144,7 +144,7 @@ SQL;
             ->createQuery($sql)
             ->setParameters([
               'untildate' => new DateTimeImmutable('-3 months'),
-              'skipChangesEventsDate' => self::SKIP_CHANGES_EVENTS_DATE
+              'skipChangesEventsDate' => self::SKIP_CHANGES_EVENTS_DATE,
             ]);
 
         $query->execute();
