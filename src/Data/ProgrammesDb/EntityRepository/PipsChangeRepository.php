@@ -4,11 +4,14 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChange;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsChangeBase;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 
 class PipsChangeRepository extends EntityRepository
 {
+    const SKIP_CHANGES_EVENTS_DATE = '1970-01-01 00:00:00';
+
     public function addChange(PipsChangeBase $pipsChange)
     {
         $em = $this->getEntityManager();
@@ -125,5 +128,25 @@ class PipsChangeRepository extends EntityRepository
     public function findById($cid)
     {
         return $this->find($cid);
+    }
+
+    public function deleteOldProcessedChanges()
+    {
+        $sql = <<<SQL
+DELETE FROM ProgrammesPagesService:PipsChange pc
+WHERE 
+    pc.processedTime < :untildate
+    AND pc.processedTime <> :skipChangesEventsDate
+    AND pc.processedTime is not NULL
+SQL;
+
+        $query = $this->_em
+            ->createQuery($sql)
+            ->setParameters([
+              'untildate' => new DateTimeImmutable('-3 months'),
+              'skipChangesEventsDate' => self::SKIP_CHANGES_EVENTS_DATE
+            ]);
+
+        $query->execute();
     }
 }
