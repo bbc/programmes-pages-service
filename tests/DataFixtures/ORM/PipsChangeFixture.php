@@ -7,7 +7,7 @@ use DateTime;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class PipsChange extends AbstractFixture
+class PipsChangeFixture extends AbstractFixture
 {
     public function load(ObjectManager $manager)
     {

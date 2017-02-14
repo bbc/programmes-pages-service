@@ -16,7 +16,7 @@ class DeleteOldProcessedChangesTest extends AbstractDatabaseTest
             1970-01-01 00:00:00
             null
         */
-        $this->loadFixtures(['PipsChange']);
+        $this->loadFixtures(['PipsChangeFixture']);
 
         // delete old changes processed
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:PipsChange');
