@@ -25,7 +25,9 @@ class DeleteOldProcessedChangesTest extends AbstractDatabaseTest
         // assert
         $processedChangesEventsInDb = $repo->findAll();
         $this->assertCount(3, $processedChangesEventsInDb);
-        $processedDatesInDb = array_map(function($o) { return $o->getProcessedTime(); }, $processedChangesEventsInDb);
+        $processedDatesInDb = array_map(function ($o) {
+            return $o->getProcessedTime();
+        }, $processedChangesEventsInDb);
 
         $today = new DateTime();
         $diffTime = $today->diff($processedDatesInDb[0]);

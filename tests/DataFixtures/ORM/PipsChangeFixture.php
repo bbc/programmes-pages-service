@@ -15,8 +15,8 @@ class PipsChangeFixture extends AbstractFixture
             new DateTime('-2 days'),
             new DateTime('-10 months'),
             new DateTime('-4 months'),
-            (new DateTime())->setDate(1970,1,1)->setTime(0, 0, 0), // '1970-01-01 00:00:00'
-            null
+            (new DateTime())->setDate(1970, 1, 1)->setTime(0, 0, 0), // '1970-01-01 00:00:00'
+            null,
         ];
 
         foreach ($datesProcessed as $index => $dateProcessed) {
@@ -38,4 +38,3 @@ class PipsChangeFixture extends AbstractFixture
         $manager->flush();
     }
 }
-
