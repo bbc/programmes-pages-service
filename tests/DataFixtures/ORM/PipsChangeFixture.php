@@ -7,7 +7,7 @@ use DateTime;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class PipsChange extends AbstractFixture
+class PipsChangeFixture extends AbstractFixture
 {
     public function load(ObjectManager $manager)
     {
@@ -16,6 +16,7 @@ class PipsChange extends AbstractFixture
             new DateTime('-10 months'),
             new DateTime('-4 months'),
             (new DateTime())->setDate(1970,1,1)->setTime(0, 0, 0), // '1970-01-01 00:00:00'
+            null
         ];
 
         foreach ($datesProcessed as $index => $dateProcessed) {
@@ -27,7 +28,10 @@ class PipsChange extends AbstractFixture
             $pipChange->setEntityUrl('');
             $pipChange->setStatus('');
             $pipChange->setType('');
-            $pipChange->setProcessedTime($dateProcessed);
+            if (null !== $dateProcessed) {
+                $pipChange->setProcessedTime($dateProcessed);
+            }
+
             $manager->persist($pipChange);
         }
 
