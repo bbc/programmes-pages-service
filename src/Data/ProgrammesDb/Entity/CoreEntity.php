@@ -11,6 +11,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 /**
  * @ORM\Table(indexes={
  *   @ORM\Index(name="core_entity_ancestry_idx", columns={"ancestry"}),
+ *   @ORM\Index(name="core_entity_tleo_id_idx", columns={"tleo_id"}),
  *   @ORM\Index(name="core_entity_type_idx", columns={"type"}),
  *   @ORM\Index(name="core_entity_streamable_idx", columns={"streamable"}),
  *   @ORM\Index(name="core_entity_streamable_alternate_idx", columns={"streamable_alternate"}),
@@ -89,6 +90,22 @@ abstract class CoreEntity
      * @Gedmo\TreePath()
      */
     private $ancestry = '';
+
+    /**
+     * @var int|null
+     *
+     * TLEO is the top level editorial object. It is the item at the top of the
+     * ancestry tree, which may be the current item if it has no parents.
+     * On initial insert into the DB this shall be null (as the entity won't
+     * know its ID yet), but shall be instantly updated in the TreePath config
+     * logic.
+     * This won't be a FK, to avoid potential locking issues, but shall be an
+     * index.
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     * @Gedmo\TreeRoot()
+     */
+    private $tleoId;
 
     /**
      * @var Image|null
@@ -306,6 +323,11 @@ abstract class CoreEntity
     public function getAncestry(): string
     {
         return $this->ancestry;
+    }
+
+    public function getTleoId(): ?int
+    {
+        return $this->tleoId;
     }
 
     public function getImage(): ?Image

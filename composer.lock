@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bfa112af5aa1b4b2bc81adbcbb81b0b3",
+    "content-hash": "45b8005b8f1a9262abee2a0b84eadc90",
     "packages": [
         {
             "name": "bbc/doctrine-extensions",
-            "version": "v2.4.136",
+            "version": "v2.4.137",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bbc/DoctrineExtensions.git",
-                "reference": "ad417e48a8f1ae75cfebfdb5f0f55ebdaf4cbbf2"
+                "reference": "9a9aaa1d625360a462a942b27c69a163c582d389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bbc/DoctrineExtensions/zipball/ad417e48a8f1ae75cfebfdb5f0f55ebdaf4cbbf2",
-                "reference": "ad417e48a8f1ae75cfebfdb5f0f55ebdaf4cbbf2",
+                "url": "https://api.github.com/repos/bbc/DoctrineExtensions/zipball/9a9aaa1d625360a462a942b27c69a163c582d389",
+                "reference": "9a9aaa1d625360a462a942b27c69a163c582d389",
                 "shasum": ""
             },
             "require": {
@@ -30,7 +30,7 @@
             },
             "require-dev": {
                 "doctrine/common": ">=2.5.0",
-                "doctrine/mongodb-odm": ">=1.0.2",
+                "doctrine/mongodb-odm": "~1.0",
                 "doctrine/orm": ">=2.5.0",
                 "phpunit/phpunit": "*",
                 "symfony/yaml": "~2.6|~3.0"
@@ -87,9 +87,9 @@
             "support": {
                 "email": "gediminas.morkevicius@gmail.com",
                 "wiki": "https://github.com/Atlantic18/DoctrineExtensions/tree/master/doc",
-                "source": "https://github.com/bbc/DoctrineExtensions/tree/v2.4.136"
+                "source": "https://github.com/bbc/DoctrineExtensions/tree/v2.4.137"
             },
-            "time": "2016-05-23T15:17:33+00:00"
+            "time": "2017-02-16T18:26:32+00:00"
         },
         {
             "name": "behat/transliterator",

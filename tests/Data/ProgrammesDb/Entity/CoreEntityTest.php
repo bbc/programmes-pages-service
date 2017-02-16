@@ -36,6 +36,7 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
         $this->assertSame('title', $entity->getSearchTitle());
         $this->assertSame(null, $entity->getParent());
         $this->assertSame('', $entity->getAncestry());
+        $this->assertSame(null, $entity->getTleoId());
         $this->assertSame('', $entity->getShortSynopsis());
         $this->assertSame('', $entity->getLongSynopsis());
         $this->assertSame('', $entity->getMediumSynopsis());
@@ -66,7 +67,8 @@ class CoreEntityTest extends PHPUnit_Framework_TestCase
             ['Title', 'a-string'],
             ['SearchTitle', 'a-string'],
             ['Parent', new Brand('pid', 'title')],
-            //ancestry
+            //ancestry doesn't have a setter as it is provided by Tree logic
+            // tleo id doesn't have a setter as it is provided by Tree logic
             ['ShortSynopsis', 'a-string'],
             ['MediumSynopsis', 'a-string'],
             ['LongSynopsis', 'a-string'],
