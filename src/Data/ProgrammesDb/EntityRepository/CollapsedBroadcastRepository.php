@@ -6,14 +6,12 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use InvalidArgumentException;
 
 class CollapsedBroadcastRepository extends EntityRepository
 {
     public const NO_SERVICE = 'NULL';
 
     use Traits\ParentTreeWalkerTrait;
-    use Traits\BroadcastTrait;
 
     public function countByCategoryAncestryAndEndAtDateRange(
         array $categoryAncestry,
@@ -205,6 +203,12 @@ class CollapsedBroadcastRepository extends EntityRepository
         );
     }
 
+    public function createQueryBuilder($alias, $indexBy = null)
+    {
+        return parent::createQueryBuilder($alias)
+            ->join($alias . '.programmeItem', 'programmeItem');
+    }
+
     private function createCollapsedBroadcastsOfProgrammeQueryBuilder(array $ancestry, bool $isWebcastOnly): QueryBuilder
     {
         return $this->createQueryBuilder('collapsedBroadcast', false)
@@ -234,10 +238,35 @@ class CollapsedBroadcastRepository extends EntityRepository
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
     }
 
+    private function explodeField(array $collapsedBroadcasts, string $field): array
+    {
+        return array_map(
+            function ($collapsedBroadcast) use ($field) {
+                // The last character is always a comma, which makes explode return an extra empty element
+                // as the last one. Leaving it could cause problems, so the -1 down here \/ removes it.
+                $collapsedBroadcast[$field] = explode(',', $collapsedBroadcast[$field], -1);
+                return $collapsedBroadcast;
+            },
+            $collapsedBroadcasts
+        );
+    }
+
     private function explodeFields(array $result): array
     {
         $result = $this->explodeField($result, 'serviceIds');
         $result = $this->explodeField($result, 'broadcastIds');
         return $this->explodeField($result, 'areWebcasts');
+    }
+
+    private function ancestryIdsToString(array $ancestry): string
+    {
+        return implode(',', $ancestry) . ',';
+    }
+
+    private function programmeAncestryGetter(array $ids): array
+    {
+        /** @var CoreEntityRepository $repo */
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+        return $repo->findByIds($ids);
     }
 }
