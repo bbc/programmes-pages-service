@@ -175,7 +175,10 @@ class CollapsedBroadcastsService extends AbstractService
                 $broadcasts,
                 function ($memo, $broadcast) {
                     foreach ($broadcast['serviceIds'] as $sid) {
-                        $memo[$sid] = true;
+                        // do not memo absent services
+                        if ($sid != CollapsedBroadcastRepository::NO_SERVICE) {
+                            $memo[$sid] = true;
+                        }
                     }
 
                     return $memo;

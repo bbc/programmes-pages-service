@@ -11,7 +11,7 @@ use DateTimeImmutable;
 
 class CollapsedBroadcastMapper extends AbstractMapper
 {
-    public function getDomainModel(array $dbCollapsedBroadcast, array $services = [], array $broadcasts = []): CollapsedBroadcast
+    public function getDomainModel(array $dbCollapsedBroadcast, array $services = []): CollapsedBroadcast
     {
         return new CollapsedBroadcast(
             $this->getProgrammeItemModel($dbCollapsedBroadcast),
