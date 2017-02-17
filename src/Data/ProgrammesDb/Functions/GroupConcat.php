@@ -29,7 +29,12 @@ class GroupConcat extends FunctionNode
         if ($lexer->isNextToken(Lexer::T_IDENTIFIER)) {
             $this->pathExp[] = $parser->StringExpression();
         } else {
-            $this->pathExp[] = $parser->SingleValuedPathExpression();
+            // $this->pathExp[] = $parser->SingleValuedPathExpression();
+            // The below seems to work for functions(which I need)
+            // and I can't see it breaks anything. If it does, you
+            // can make this specific to Lexer::T_COALESCE in the if
+            // and re-enstate the commented out code
+            $this->pathExp[] = $parser->ScalarExpression();
         }
 
         while ($lexer->isNextToken(Lexer::T_COMMA)) {
