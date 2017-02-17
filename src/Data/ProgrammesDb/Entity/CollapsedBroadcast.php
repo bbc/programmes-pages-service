@@ -7,6 +7,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
+ * CollapsedBroadcasts are a combination of multiple Broadcasts pushed into a
+ * a single entity, based upon the ProgrameItem being broadcast and the startAt
+ * date. For instance if a Programme was broadcast on bbc_one_london and
+ * bbc_one_yorkshire starting at the same time there shall be a single
+ * CollapsedBroadcast representing that. This also applies across networks, so
+ * if something was broadcast on bbc_radio_foyle and bbc_radio_ulster at the
+ * same time then they are stored as a single Entity.
+ *
+ * As we group by ProgrammeItem and StartAt, this means that Broadcasts of
+ * multiple versions that may have different durations, and thus different
+ * endAt times (e.g. an Original and Shortened Version) will be rolled up into
+ * a single CollapsedBroadcast. In this case we shall store the end_at and
+ * duration of the longest Version.
+ *
  * @ORM\Table(
  *   indexes={
  *     @ORM\Index(name="collapsed_broadcast_start_at_idx", columns={"start_at"}),
@@ -66,8 +80,13 @@ class CollapsedBroadcast
     /**
      * @var DateTime
      *
-     * This is not guaranteed to be accurate due to group by.
-     * We choose the earliest one.
+     * This is not guaranteed to be the same for all Versions that were
+     * broadcast as we group by Programme, not Version. This means that two
+     * Versions of the same Programme that have different durations (e.g
+     * the Original and a Shortened version) may be broadcast at the same time
+     * and we roll them up into a single CollapsedBroadcast.
+     * We prefer the Version with furthest away endAt. i.e. the longest
+     * Broadcast.
      *
      * @ORM\Column(type="datetime", nullable=false)
      */
@@ -76,8 +95,13 @@ class CollapsedBroadcast
     /**
      * @var int|null
      *
-     * This is not guaranteed to be accurate due to group by.
-     * We choose the shortest one.
+     * This is not guaranteed to be the same for all Versions that were
+     * broadcast as we group by Programme, not Version. This means that two
+     * Versions of the same Programme that have different durations (e.g
+     * the Original and a Shortened version) may be broadcast at the same time
+     * and we roll them up into a single CollapsedBroadcast.
+     * We prefer the Version with furthest away endAt. i.e. the longest
+     * Broadcast.
      *
      * @ORM\Column(type="integer", nullable=false)
      */
@@ -166,7 +190,7 @@ class CollapsedBroadcast
         return $this->areWebcasts;
     }
 
-    public function setAreWebcasts(string $areWebcasts)
+    public function setAreWebcasts(string $areWebcasts): void
     {
         $this->areWebcasts = $areWebcasts;
         $this->updateWebcastOnly();
@@ -192,7 +216,7 @@ class CollapsedBroadcast
         return $this->tleo;
     }
 
-    public function setTleo(?Programme $tleo)
+    public function setTleo(?Programme $tleo): void
     {
         $this->tleo = $tleo;
     }
@@ -246,7 +270,7 @@ class CollapsedBroadcast
 
     private function updateWebcastOnly(): void
     {
-        $this->isWebcastOnly = (strstr($this->areWebcasts, "0") === false);
+        $this->isWebcastOnly = (strpos($this->areWebcasts, "0") === false);
     }
 
     private function updateDuration(): void
