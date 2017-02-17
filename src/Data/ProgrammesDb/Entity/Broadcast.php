@@ -50,7 +50,7 @@ class Broadcast
 
     /**
      * @ORM\ManyToOne(targetEntity="Service")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(nullable=true, onDelete="RESTRICT")
      */
     private $service;
 
