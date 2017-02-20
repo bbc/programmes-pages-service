@@ -43,12 +43,20 @@ class CollapsedBroadcastRepository extends EntityRepository
         $qb = $this->createQueryBuilder('collapsedBroadcast', false)
             ->select('COUNT(collapsedBroadcast)')
             ->andWhere('collapsedBroadcast.endAt > :from')
-            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
-            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
             ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
             ->setParameter('isWebcastOnly', $isWebcastOnly)
-            ->setParameter('from', $from)
-            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+            ->setParameter('from', $from);
+
+        if (count($ancestry) === 1) {
+            $qb->innerJoin('collapsedBroadcast.tleo', 'tleo')
+                ->andWhere('tleo.id = :tleoId')
+                ->andWhere('tleo INSTANCE OF ProgrammesPagesService:Episode')
+                ->setParameter('tleoId', $ancestry[0]);
+        } else {
+            $qb->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+                ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
+                ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+        }
 
         return $qb->getQuery()->getSingleScalarResult();
     }
@@ -211,16 +219,26 @@ class CollapsedBroadcastRepository extends EntityRepository
 
     private function createCollapsedBroadcastsOfProgrammeQueryBuilder(array $ancestry, bool $isWebcastOnly): QueryBuilder
     {
-        return $this->createQueryBuilder('collapsedBroadcast', false)
+        $qb = $this->createQueryBuilder('collapsedBroadcast', false)
             ->addSelect(['programmeItem', 'image', 'masterBrand', 'mbNetwork'])
             ->leftJoin('programmeItem.image', 'image')
             ->leftJoin('programmeItem.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'mbNetwork')
-            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
-            ->setParameter('isWebcastOnly', $isWebcastOnly)
-            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+            ->setParameter('isWebcastOnly', $isWebcastOnly);
+
+        if (count($ancestry) === 1) {
+            $qb->innerJoin('collapsedBroadcast.tleo', 'tleo')
+                ->andWhere('tleo.id = :tleoId')
+                ->andWhere('tleo INSTANCE OF ProgrammesPagesService:Episode')
+                ->setParameter('tleoId', $ancestry[0]);
+        } else {
+            $qb->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+                ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
+                ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+        }
+
+        return $qb;
     }
 
     private function createCollapsedBroadcastsOfCategoryQueryBuilder(array $ancestry, bool $isWebcastOnly): QueryBuilder

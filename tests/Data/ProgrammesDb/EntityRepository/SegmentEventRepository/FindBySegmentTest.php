@@ -26,7 +26,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:SegmentEvent');
 
         foreach ($this->findBySegmentData() as $data) {
-            list($pids, $limit, $offset, $groupByVersionId, $expectedPids) = $data;
+            list($pids, $limit, $offset, $groupByVersionId, $expectedPids, $numQueries) = $data;
 
             $ids = array_map(function ($dbId) {
                 return $this->getDbIdFromPersistentIdentifier($dbId, 'Segment');
@@ -35,8 +35,8 @@ class FindBySegmentTest extends AbstractDatabaseTest
             $entities = $repo->findBySegmentFull($ids, $groupByVersionId, $limit, $offset);
             $this->assertEquals($expectedPids, array_column($entities, 'pid'));
 
-            // findBySegment query only
-            $this->assertCount(1, $this->getDbQueries());
+            // findBySegment query and ancestry hydration queries
+            $this->assertCount($numQueries, $this->getDbQueries());
 
             $this->resetDbQueryLogger();
         }
@@ -45,10 +45,10 @@ class FindBySegmentTest extends AbstractDatabaseTest
     public function findBySegmentData()
     {
         return [
-            [['s0000001'], 50, 0, true, ['sv000001', 'sv000003', 'sv000004', 'sv000005']], // Implicitly testing enabled embargoed filter
-            [['s0000001'], 2, 1, true, ['sv000003', 'sv000004']],
-            [['s0000002'], 50, 0, true, ['sv000007', 'sv000008']], // Test Distinct Version
-            [['s0000002'], 50, 0, false, ['sv000006', 'sv000007', 'sv000008']], // Test not group by version_id
+            [['s0000001'], 50, 0, true, ['sv000001', 'sv000003', 'sv000004', 'sv000005'], 2], // Implicitly testing enabled embargoed filter
+            [['s0000001'], 2, 1, true, ['sv000003', 'sv000004'], 1],
+            [['s0000002'], 50, 0, true, ['sv000007', 'sv000008'], 1], // Test Distinct Version
+            [['s0000002'], 50, 0, false, ['sv000006', 'sv000007', 'sv000008'], 1], // Test not group by version_id
         ];
     }
 
@@ -105,8 +105,8 @@ class FindBySegmentTest extends AbstractDatabaseTest
             // Expect embargoed version to be last (ORDER BY hasBroadcast ASC)
             $this->assertEquals($expectedPids, array_column($entities, 'pid'));
 
-            // findBySegment query only
-            $this->assertCount(1, $this->getDbQueries());
+            // findBySegment and ancestry hydration queries
+            $this->assertCount(2, $this->getDbQueries());
 
             $this->resetDbQueryLogger();
         }

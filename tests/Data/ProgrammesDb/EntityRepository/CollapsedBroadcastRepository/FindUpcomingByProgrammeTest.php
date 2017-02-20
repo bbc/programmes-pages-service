@@ -22,7 +22,7 @@ class FindUpcomingByProgrammeTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
         foreach ($this->findUpcomingByProgrammeData() as $test) {
-            [$pid, $isWebcastOnly, $cutoffTime, $limit, $offset, $expectedOutput] = $test;
+            [$pid, $isWebcastOnly, $cutoffTime, $limit, $offset, $expectedOutput, $numQueries] = $test;
 
             $ancestry = $this->getAncestryFromPersistentIdentifier($pid, 'CoreEntity');
 
@@ -34,8 +34,8 @@ class FindUpcomingByProgrammeTest extends AbstractDatabaseTest
             $this->assertSame(array_column($expectedOutput, 'programmePid'), array_column(array_column($data, 'programmeItem'), 'pid'));
             $this->assertSame(array_column($expectedOutput, 'serviceIds'), array_column($data, 'serviceIds'));
 
-            // findByProgrammeAndMonth query only
-            $this->assertCount(1, $this->getDbQueries());
+            // findByProgrammeAndMonth and ancestry hydration queries
+            $this->assertCount($numQueries, $this->getDbQueries());
 
             $this->resetDbQueryLogger();
         }
@@ -65,6 +65,7 @@ class FindUpcomingByProgrammeTest extends AbstractDatabaseTest
                         'serviceIds' => ['3', '4'],
                     ],
                 ],
+                1,
             ],
             // type
             [
@@ -81,6 +82,7 @@ class FindUpcomingByProgrammeTest extends AbstractDatabaseTest
                         'serviceIds' => ['27', '28'],
                     ],
                 ],
+                2,
             ],
             // limit
             [
@@ -97,6 +99,7 @@ class FindUpcomingByProgrammeTest extends AbstractDatabaseTest
                         'serviceIds' => ['7', '8'],
                     ],
                 ],
+                1,
             ],
             // offset
             [
@@ -113,6 +116,7 @@ class FindUpcomingByProgrammeTest extends AbstractDatabaseTest
                         'serviceIds' => ['3', '4'],
                     ],
                 ],
+                1,
             ],
             // non-working date
             [
@@ -122,6 +126,7 @@ class FindUpcomingByProgrammeTest extends AbstractDatabaseTest
                 null,
                 0,
                 [],
+                1,
             ],
         ];
     }

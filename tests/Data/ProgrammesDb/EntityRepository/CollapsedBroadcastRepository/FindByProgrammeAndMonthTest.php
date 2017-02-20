@@ -22,7 +22,7 @@ class FindByProgrammeAndMonthTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
         foreach ($this->findByProgrammeAndMonthData() as $test) {
-            [$pid, $isWebcastOnly, $year, $month, $limit, $offset, $expectedOutput] = $test;
+            [$pid, $isWebcastOnly, $year, $month, $limit, $offset, $expectedOutput, $numQueries] = $test;
 
             $ancestry = $this->getAncestryFromPersistentIdentifier($pid, 'CoreEntity');
 
@@ -34,8 +34,8 @@ class FindByProgrammeAndMonthTest extends AbstractDatabaseTest
             $this->assertSame(array_column($expectedOutput, 'programmePid'), array_column(array_column($data, 'programmeItem'), 'pid'));
             $this->assertSame(array_column($expectedOutput, 'serviceIds'), array_column($data, 'serviceIds'));
 
-            // findByProgrammeAndMonth query only
-            $this->assertCount(1, $this->getDbQueries());
+            // findByProgrammeAndMonth and ancestry hydration queries
+            $this->assertCount($numQueries, $this->getDbQueries());
 
             $this->resetDbQueryLogger();
         }
@@ -66,6 +66,7 @@ class FindByProgrammeAndMonthTest extends AbstractDatabaseTest
                         'serviceIds' => ['7', '8'],
                     ],
                 ],
+                1,
             ],
             // type
             [
@@ -83,6 +84,7 @@ class FindByProgrammeAndMonthTest extends AbstractDatabaseTest
                         'serviceIds' => ['27', '28'],
                     ],
                 ],
+                2,
             ],
             // limit
             [
@@ -100,6 +102,7 @@ class FindByProgrammeAndMonthTest extends AbstractDatabaseTest
                         'serviceIds' => ['3', '4'],
                     ],
                 ],
+                1,
             ],
             // offset
             [
@@ -117,6 +120,7 @@ class FindByProgrammeAndMonthTest extends AbstractDatabaseTest
                         'serviceIds' => ['7', '8'],
                     ],
                 ],
+                1,
             ],
             // non-working date
             [
@@ -127,6 +131,7 @@ class FindByProgrammeAndMonthTest extends AbstractDatabaseTest
                 null,
                 0,
                 [],
+                1,
             ],
             // embargoed
             [
@@ -137,6 +142,7 @@ class FindByProgrammeAndMonthTest extends AbstractDatabaseTest
                 null,
                 0,
                 [],
+                1,
             ],
         ];
     }

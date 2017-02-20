@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Format;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Genre;
@@ -48,6 +49,8 @@ class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implement
         $ep5 = $this->getReference('p0000006');
         $ep5->setCategories(new ArrayCollection([$category1]));
 
+        $brand = $this->getReference('b0000022');
+
         // radio, c0000001, p00000001
         $cb1 = $this->buildCollapsedBroadcast(
             $ep1,
@@ -57,6 +60,7 @@ class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implement
             new DateTime('2017-01-05 10:30:00'),
             '0,0,'
         );
+        $cb1->setTleo($ep1);
 
         // radio, c0000001, p00000001
         $cb6 = $this->buildCollapsedBroadcast(
@@ -67,6 +71,7 @@ class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implement
             new DateTime('2017-01-04 10:30:00'),
             '0,1,'
         );
+        $cb6->setTleo($ep1);
 
         // c0000001, p00000006
         $cb2 = $this->buildCollapsedBroadcast(
@@ -77,6 +82,7 @@ class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implement
             new DateTime('2017-01-06 10:30:00'),
             '0,1,'
         );
+        $cb2->setTleo($ep5);
 
         // c0000001,c0000002
         $cb3 = $this->buildCollapsedBroadcast(
@@ -87,6 +93,7 @@ class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implement
             new DateTime('2017-02-06 10:30:00'),
             '0,0,'
         );
+        $cb3->setTleo($brand);
 
         // null, c0000001,c0000002,c0000003, p00000002, embargoed
         $cb5 = $this->buildCollapsedBroadcast(
@@ -97,6 +104,7 @@ class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implement
             new DateTime('2017-02-07 10:30:00'),
             '0,0,'
         );
+        $cb5->setTleo($ep4);
 
         // c0000001,c0000002
         $cb3 = $this->buildCollapsedBroadcast(
@@ -108,6 +116,7 @@ class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implement
             '1,1,',
             true
         );
+        $cb3->setTleo($brand);
 
         $this->manager->flush();
     }

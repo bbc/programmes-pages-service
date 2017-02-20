@@ -22,7 +22,7 @@ class FindByCategoryAncestryAndStartAtDateRangeTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
         foreach ($this->findByCategoryAncestryAndStartAtDateRangeData() as $test) {
-            [$categoryId, $isWebcastOnly, $from, $to, $limit, $offset, $expectedOutput] = $test;
+            [$categoryId, $isWebcastOnly, $from, $to, $limit, $offset, $expectedOutput, $numQueries] = $test;
 
             $categoryAncestry = $this->getAncestryFromPersistentIdentifier($categoryId, 'Category', 'pipId');
 
@@ -34,8 +34,8 @@ class FindByCategoryAncestryAndStartAtDateRangeTest extends AbstractDatabaseTest
             $this->assertSame(array_column($expectedOutput, 'programmePid'), array_column(array_column($data, 'programmeItem'), 'pid'));
             $this->assertSame(array_column($expectedOutput, 'serviceIds'), array_column($data, 'serviceIds'));
 
-            // findByCategoryAncestryAndStartAtDateRange query only
-            $this->assertCount(1, $this->getDbQueries());
+            // findByCategoryAncestryAndStartAtDateRange and ancestry hydration queries
+            $this->assertCount($numQueries, $this->getDbQueries());
 
             $this->resetDbQueryLogger();
         }
@@ -72,6 +72,7 @@ class FindByCategoryAncestryAndStartAtDateRangeTest extends AbstractDatabaseTest
                         'serviceIds' => ['15', '16'],
                     ],
                 ],
+                2,
             ],
             // time
             [
@@ -89,6 +90,7 @@ class FindByCategoryAncestryAndStartAtDateRangeTest extends AbstractDatabaseTest
                         'serviceIds' => ['15', '16'],
                     ],
                 ],
+                2,
             ],
             // isWebcastOnly
             [
@@ -106,6 +108,7 @@ class FindByCategoryAncestryAndStartAtDateRangeTest extends AbstractDatabaseTest
                         'serviceIds' => ['27', '28'],
                     ],
                 ],
+                2,
             ],
             // subcategory
             [
@@ -123,6 +126,7 @@ class FindByCategoryAncestryAndStartAtDateRangeTest extends AbstractDatabaseTest
                         'serviceIds' => ['15', '16'],
                     ],
                 ],
+                2,
             ],
             // invalid category
             [
@@ -133,6 +137,7 @@ class FindByCategoryAncestryAndStartAtDateRangeTest extends AbstractDatabaseTest
                 null,
                 0,
                 [],
+                1,
             ],
             // EndAt out of range
             [
@@ -143,6 +148,7 @@ class FindByCategoryAncestryAndStartAtDateRangeTest extends AbstractDatabaseTest
                 null,
                 0,
                 [],
+                1,
             ],
             // Offset
             [
@@ -160,6 +166,7 @@ class FindByCategoryAncestryAndStartAtDateRangeTest extends AbstractDatabaseTest
                         'serviceIds' => ['15', '16'],
                     ],
                 ],
+                2,
             ],
             // Limit
             [
@@ -177,6 +184,7 @@ class FindByCategoryAncestryAndStartAtDateRangeTest extends AbstractDatabaseTest
                         'serviceIds' => ['3', '4'],
                     ],
                 ],
+                1,
             ],
         ];
     }
