@@ -22,6 +22,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * duration of the longest Version.
  *
  * @ORM\Table(
+ *   uniqueConstraints={@ORM\UniqueConstraint(name="collapsed_broadcast_unique_groupby", columns={"start_at", "programme_item_id"})},
  *   indexes={
  *     @ORM\Index(name="collapsed_broadcast_start_at_idx", columns={"start_at"}),
  *     @ORM\Index(name="collapsed_broadcast_end_at_idx", columns={"end_at"}),
