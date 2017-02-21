@@ -14,8 +14,8 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
 
         $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
-            'a' => ['sid' => 'bbc_one'],
-            'b' => ['sid' => 'bbc_one_hd'],
+            'a' => ['id' => 'bbc_one'],
+            'b' => ['id' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
@@ -24,7 +24,7 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
-            ->method('findBySids')
+            ->method('findByIds')
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
@@ -41,8 +41,8 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
 
         $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
-            'a' => ['sid' => 'bbc_one'],
-            'b' => ['sid' => 'bbc_one_hd'],
+            'a' => ['id' => 'bbc_one'],
+            'b' => ['id' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
@@ -51,7 +51,7 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
-            ->method('findBySids')
+            ->method('findByIds')
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
@@ -72,7 +72,7 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
             ->willReturn([]);
 
         $this->mockServiceRepository->expects($this->never())
-            ->method('findBySids');
+            ->method('findByIds');
 
         $result = $this->service()->findPastByProgramme($programme, 5, 3);
         $this->assertEquals([], $result);

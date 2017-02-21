@@ -17,8 +17,8 @@ class FindByCategoryAndStartAtDateRangeTest extends AbstractCollapsedBroadcastSe
 
         $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData   = [
-            'a' => ['sid' => 'bbc_one'],
-            'b' => ['sid' => 'bbc_one_hd'],
+            'a' => ['id' => 'bbc_one'],
+            'b' => ['id' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
@@ -27,7 +27,7 @@ class FindByCategoryAndStartAtDateRangeTest extends AbstractCollapsedBroadcastSe
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->once())
-            ->method('findBySids')
+            ->method('findByIds')
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 

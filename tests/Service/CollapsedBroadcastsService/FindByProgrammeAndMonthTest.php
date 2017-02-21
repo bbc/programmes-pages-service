@@ -12,8 +12,8 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
 
         $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
-            'a' => ['sid' => 'bbc_one'],
-            'b' => ['sid' => 'bbc_one_hd'],
+            'a' => ['id' => 'bbc_one'],
+            'b' => ['id' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
@@ -22,7 +22,7 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
-            ->method('findBySids')
+            ->method('findByIds')
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
@@ -38,8 +38,8 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
 
         $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
-            'a' => ['sid' => 'bbc_one'],
-            'b' => ['sid' => 'bbc_one_hd'],
+            'a' => ['id' => 'bbc_one'],
+            'b' => ['id' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
@@ -48,7 +48,7 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
-            ->method('findBySids')
+            ->method('findByIds')
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
@@ -68,7 +68,7 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
             ->willReturn([]);
 
         $this->mockServiceRepository->expects($this->never())
-            ->method('findBySids');
+            ->method('findByIds');
 
         $result = $this->service()->findByProgrammeAndMonth($programme, 2007, 12, 5, 3);
         $this->assertEquals([], $result);

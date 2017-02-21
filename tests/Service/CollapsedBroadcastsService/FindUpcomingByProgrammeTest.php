@@ -14,8 +14,8 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
 
         $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
-            'a' => ['sid' => 'bbc_one'],
-            'b' => ['sid' => 'bbc_one_hd'],
+            'a' => ['id' => 'bbc_one'],
+            'b' => ['id' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
@@ -24,7 +24,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->once())
-            ->method('findBySids')
+            ->method('findByIds')
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
@@ -40,8 +40,8 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
 
         $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
-            'a' => ['sid' => 'bbc_one'],
-            'b' => ['sid' => 'bbc_one_hd'],
+            'a' => ['id' => 'bbc_one'],
+            'b' => ['id' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
@@ -50,7 +50,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->once())
-            ->method('findBySids')
+            ->method('findByIds')
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
@@ -70,7 +70,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
             ->willReturn(10);
 
         $this->mockServiceRepository->expects($this->never())
-            ->method('findBySids');
+            ->method('findByIds');
 
         $this->assertEquals(10, $this->service()->countUpcomingByProgramme($programme));
     }
@@ -87,7 +87,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
             ->willReturn([]);
 
         $this->mockServiceRepository->expects($this->never())
-            ->method('findBySids');
+            ->method('findByIds');
 
         $result = $this->service()->findUpcomingByProgramme($programme, 5, 3);
         $this->assertEquals([], $result);
@@ -105,7 +105,7 @@ class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedB
             ->willReturn(0);
 
         $this->mockServiceRepository->expects($this->never())
-            ->method('findBySids');
+            ->method('findByIds');
 
         $this->assertEquals(0, $this->service()->countUpcomingByProgramme($programme));
     }
