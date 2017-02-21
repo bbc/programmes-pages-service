@@ -257,9 +257,7 @@ class CollapsedBroadcastRepository extends EntityRepository
     {
         return array_map(
             function ($collapsedBroadcast) use ($field) {
-                // The last character is always a comma, which makes explode return an extra empty element
-                // as the last one. Leaving it could cause problems, so the -1 down here \/ removes it.
-                $collapsedBroadcast[$field] = explode(',', $collapsedBroadcast[$field], -1);
+                $collapsedBroadcast[$field] = explode(',', $collapsedBroadcast[$field]);
                 return $collapsedBroadcast;
             },
             $collapsedBroadcasts

@@ -17,4 +17,15 @@ class ServiceRepository extends EntityRepository
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
+
+    public function findByIds(array $ids): array
+    {
+        return $this->createQueryBuilder('service')
+            ->addSelect(['masterBrand', 'network'])
+            ->leftJoin('service.masterBrand', 'masterBrand')
+            ->leftJoin('service.network', 'network')
+            ->where("service.id IN(:ids)")
+            ->setParameter('ids', $ids)
+            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
 }

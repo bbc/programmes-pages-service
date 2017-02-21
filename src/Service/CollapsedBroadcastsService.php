@@ -174,10 +174,10 @@ class CollapsedBroadcastsService extends AbstractService
             array_reduce(
                 $broadcasts,
                 function ($memo, $broadcast) {
-                    foreach ($broadcast['serviceIds'] as $sid) {
+                    foreach ($broadcast['serviceIds'] as $id) {
                         // do not memo absent services
-                        if ($sid != CollapsedBroadcastRepository::NO_SERVICE) {
-                            $memo[$sid] = true;
+                        if ($id != CollapsedBroadcastRepository::NO_SERVICE) {
+                            $memo[$id] = true;
                         }
                     }
 
@@ -190,12 +190,12 @@ class CollapsedBroadcastsService extends AbstractService
         // If there are no serviceIds to fetch, skip requesting them
         $services = [];
         if ($serviceIds) {
-            $services = $this->serviceRepository->findBySids($serviceIds);
+            $services = $this->serviceRepository->findByIds($serviceIds);
         }
 
-        // Fetch all the used services, keyed by their sid
+        // Fetch all the used services, keyed by their id
         return array_reduce($services, function ($memo, $service) {
-            $memo[$service['sid']] = $service;
+            $memo[$service['id']] = $service;
             return $memo;
         }, []);
     }
