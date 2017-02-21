@@ -48,10 +48,8 @@ class CollapsedBroadcastRepository extends EntityRepository
             ->setParameter('from', $from);
 
         if (count($ancestry) === 1) {
-            $qb->innerJoin('collapsedBroadcast.tleo', 'tleo')
-                ->andWhere('tleo.id = :tleoId')
-                ->andWhere('tleo INSTANCE OF ProgrammesPagesService:Episode')
-                ->setParameter('tleoId', $ancestry[0]);
+            $qb->andWhere('IDENTITY(collapsedBroadcast.tleo) = :tleoid')
+                ->setParameter('tleoid', $ancestry[0]);
         } else {
             $qb->andWhere('programmeItem.ancestry LIKE :ancestryClause')
                 ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
