@@ -135,6 +135,70 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
         $this->getMapper()->getDomainModel($dbEntityArray, $services);
     }
 
+    public function testStrippingWebcasts()
+    {
+        $programmeItemDbEntity = ['pid' => 'b007b5xt'];
+
+        $serviceDbEntity1 = ['mid' => 'bbc_one', 'sid' => 'a', 'id' => '1'];
+        $serviceDbEntity2 = ['mid' => 'bbc_one_scotland', 'sid' => 'b', 'id' => '3'];
+        $services = [1 => $serviceDbEntity1, 3 => $serviceDbEntity2];
+
+        $expectedProgrammeItemDomainEntity = $this->createMock(
+            'BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem'
+        );
+
+        $expectedServiceDomainEntity1 = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Service');
+        $expectedServiceDomainEntity2 = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Service');
+
+        $this->mockProgrammeMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($programmeItemDbEntity)
+            ->willReturn($expectedProgrammeItemDomainEntity);
+
+        $this->mockServiceMapper->expects($this->at(0))
+            ->method('getDomainModel')
+            ->with($serviceDbEntity1)
+            ->willReturn($expectedServiceDomainEntity1);
+
+        $this->mockServiceMapper->expects($this->at(1))
+            ->method('getDomainModel')
+            ->with($serviceDbEntity2)
+            ->willReturn($expectedServiceDomainEntity2);
+
+        $dbEntityArray = [
+            'id'               => 1,
+            'startAt'          => new DateTime('2015-01-03T00:00:00'),
+            'endAt'            => new DateTime('2015-01-03T01:00:00'),
+            'duration'         => 120,
+            'isLive'           => false,
+            'isBlanked'        => true,
+            'isRepeat'         => true,
+            'isCritical'       => false,
+            'isAudioDescribed' => false,
+            'isWebcast'        => false,
+            'programmeItem'    => $programmeItemDbEntity,
+            'broadcastIds'     => [1, 2, 3],
+            'areWebcasts'      => [0, 1, 0],
+            'serviceIds'       => [1, 11, 3],
+        ];
+
+        $expectedEntity = new CollapsedBroadcast(
+            $expectedProgrammeItemDomainEntity,
+            [$expectedServiceDomainEntity1, $expectedServiceDomainEntity2],
+            new DateTimeImmutable('2015-01-03T00:00:00'),
+            new DateTimeImmutable('2015-01-03T01:00:00'),
+            120,
+            true,
+            true
+        );
+
+        $mapper = $mapper = $this->getMapper();
+        $this->assertEquals(
+            $expectedEntity,
+            $mapper->getDomainModel($dbEntityArray, $services)
+        );
+    }
+
     /**
      * @expectedException InvalidArgumentException
      */
