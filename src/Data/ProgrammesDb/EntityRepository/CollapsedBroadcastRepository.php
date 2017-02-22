@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 
 class CollapsedBroadcastRepository extends EntityRepository
@@ -19,20 +20,36 @@ class CollapsedBroadcastRepository extends EntityRepository
         DateTimeImmutable $from,
         DateTimeImmutable $to
     ): int {
-        $qb = $this->createQueryBuilder('collapsedBroadcast', false)
-            ->select('COUNT(collapsedBroadcast)')
-            ->join('programmeItem.categories', 'category')
-            ->andWhere('collapsedBroadcast.endAt > :from')
-            ->andWhere('collapsedBroadcast.endAt <= :to')
-            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
-            ->andWhere('category.ancestry LIKE :categoryAncestry')
-            ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
+
+        // A programme could have two categories from the same ancestry tree assigned to it.
+        // So, a collapsed broadcast would be returned once for each category from that ancestry.
+        // We need to group by the programme id to avoid getting duplicate broadcasts.
+        $qText = <<<QUERY
+SELECT COUNT(t.id) as cnt
+FROM (
+    SELECT cb.id
+    FROM collapsed_broadcast cb
+    INNER JOIN core_entity c ON c.id = cb.programme_item_id
+    INNER JOIN programme_category pc ON c.id = pc.programme_id
+    INNER JOIN category cat ON pc.category_id = cat.id
+    WHERE cat.ancestry LIKE :categoryAncestry
+    AND cb.end_at > :from
+    AND cb.end_at <= :to
+    AND cb.is_webcast_only = :isWebcastOnly
+    GROUP BY cb.start_at, c.id
+) t
+QUERY;
+
+        $rms = new ResultSetMapping();
+        $rms->addScalarResult('cnt', 'cnt');
+
+        $q = $this->getEntityManager()->createNativeQuery($qText, $rms)
             ->setParameter('from', $from)
             ->setParameter('to', $to)
             ->setParameter('isWebcastOnly', $isWebcastOnly)
             ->setParameter('categoryAncestry', $this->ancestryIdsToString($categoryAncestry) . '%');
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return $q->getSingleScalarResult();
     }
 
     public function countUpcomingByProgramme(
@@ -247,6 +264,8 @@ class CollapsedBroadcastRepository extends EntityRepository
             ->andWhere('category.ancestry LIKE :ancestryClause')
             ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
             ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
+            ->addGroupBy('programmeItem.id')
+            ->addGroupBy('collapsedBroadcast.startAt')
             ->setParameter('isWebcastOnly', $isWebcastOnly)
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
     }
