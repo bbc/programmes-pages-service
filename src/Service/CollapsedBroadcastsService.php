@@ -154,17 +154,26 @@ class CollapsedBroadcastsService extends AbstractService
 
     private function stripWebcasts(array $broadcasts): array
     {
-        return array_reduce($broadcasts, function ($memo, $broadcast) {
-            // loop through areWebcasts
-            // if it is true then remove the corresponding value from serviceIDs and any other listings
-            // if serviceIds is not empty then add this broadcast to the memo
-            for ($i = 0; $i < count($broadcast['areWebcasts']); $i++) {
-                if (!$broadcast['areWebcasts'][$i] && $broadcast['serviceIds'][$i] != CollapsedBroadcastRepository::NO_SERVICE) {
-                    $memo[] = $broadcast;
+        $withoutWebcasts = [];
+        foreach ($broadcasts as $broadcast) {
+            $cleanedBroadcast = $broadcast;
+            $cleaned = false;
+            foreach ($broadcast['areWebcasts'] as $i => $isWebcast) {
+                if ($isWebcast || !$broadcast['serviceIds'][$i]) {
+                    unset($cleanedBroadcast['areWebcasts'][$i]);
+                    unset($cleanedBroadcast['serviceIds'][$i]);
+                    unset($cleanedBroadcast['broadcastIds'][$i]);
+                    $cleaned = true;
                 }
             }
-            return $memo;
-        }, []);
+            if ($cleaned) {
+                $cleanedBroadcast['areWebcasts'] = array_values($cleanedBroadcast['areWebcasts']);
+                $cleanedBroadcast['serviceIds'] = array_values($cleanedBroadcast['serviceIds']);
+                $cleanedBroadcast['broadcastIds'] = array_values($cleanedBroadcast['broadcastIds']);
+            }
+            $withoutWebcasts[] = $cleanedBroadcast;
+        }
+        return $withoutWebcasts;
     }
 
     private function fetchUsedServices(array $broadcasts): array

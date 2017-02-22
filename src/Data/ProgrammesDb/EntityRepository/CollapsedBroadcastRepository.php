@@ -251,22 +251,17 @@ class CollapsedBroadcastRepository extends EntityRepository
             ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
     }
 
-    private function explodeField(array $collapsedBroadcasts, string $field): array
-    {
-        return array_map(
-            function ($collapsedBroadcast) use ($field) {
-                $collapsedBroadcast[$field] = explode(',', $collapsedBroadcast[$field]);
-                return $collapsedBroadcast;
-            },
-            $collapsedBroadcasts
-        );
-    }
-
     private function explodeFields(array $result): array
     {
-        $result = $this->explodeField($result, 'serviceIds');
-        $result = $this->explodeField($result, 'broadcastIds');
-        return $this->explodeField($result, 'areWebcasts');
+        return array_map(
+            function ($collapsedBroadcast) {
+                $collapsedBroadcast['serviceIds'] = explode(',', $collapsedBroadcast['serviceIds']);
+                $collapsedBroadcast['broadcastIds'] = explode(',', $collapsedBroadcast['broadcastIds']);
+                $collapsedBroadcast['areWebcasts'] = explode(',', $collapsedBroadcast['areWebcasts']);
+                return $collapsedBroadcast;
+            },
+            $result
+        );
     }
 
     private function ancestryIdsToString(array $ancestry): string
