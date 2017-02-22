@@ -122,7 +122,7 @@ class CollapsedBroadcast
      * @var bool
      *
      * This is not guaranteed to be accurate due to group by.
-     * This value is false if any of the values for the group are false.
+     * This value is true if any of the values for the group are true.
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
