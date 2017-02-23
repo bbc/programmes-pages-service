@@ -23,13 +23,13 @@ class CollapsedBroadcastRepository extends EntityRepository
 
         // A programme could have two categories from the same ancestry tree assigned to it.
         // So, a collapsed broadcast would be returned once for each category from that ancestry.
-        // We need to group by the programme id to avoid getting duplicate broadcasts.
+        // We need to group by the programme id and start time to avoid getting duplicate broadcasts.
         $qText = <<<QUERY
 SELECT COUNT(t.id) as cnt
 FROM (
     SELECT cb.id
     FROM collapsed_broadcast cb
-    INNER JOIN core_entity c ON c.id = cb.programme_item_id
+    INNER JOIN core_entity c ON c.id = cb.programme_item_id AND (c.is_embargoed = 0)
     INNER JOIN programme_category pc ON c.id = pc.programme_id
     INNER JOIN category cat ON pc.category_id = cat.id
     WHERE cat.ancestry LIKE :categoryAncestry
@@ -65,8 +65,8 @@ QUERY;
             ->setParameter('from', $from);
 
         if (count($ancestry) === 1) {
-            $qb->andWhere('IDENTITY(collapsedBroadcast.tleo) = :tleoid')
-                ->setParameter('tleoid', $ancestry[0]);
+            $qb->andWhere('IDENTITY(collapsedBroadcast.tleo) = :tleoId')
+                ->setParameter('tleoId', $ancestry[0]);
         } else {
             $qb->andWhere('programmeItem.ancestry LIKE :ancestryClause')
                 ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
