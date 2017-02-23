@@ -69,7 +69,6 @@ QUERY;
                 ->setParameter('tleoId', $ancestry[0]);
         } else {
             $qb->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-                ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
                 ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
         }
 
