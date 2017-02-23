@@ -78,7 +78,7 @@ class FindByProgrammeAndMonthTest extends AbstractDatabaseTest
                 0,
                 [
                     [
-                        'startAt' => new DateTime('2017-02-06 09:30'),
+                        'startAt' => new DateTime('2017-02-06 09:31'),
                         'endAt' => new DateTime('2017-02-06 10:30'),
                         'programmePid' => 'p0000003',
                         'serviceIds' => ['27', '28'],

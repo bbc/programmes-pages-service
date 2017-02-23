@@ -111,7 +111,7 @@ class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implement
             $ep2,
             '25,26',
             '27,28',
-            new DateTime('2017-02-06 09:30:00'),
+            new DateTime('2017-02-06 09:31:00'),
             new DateTime('2017-02-06 10:30:00'),
             '1,1',
             true
