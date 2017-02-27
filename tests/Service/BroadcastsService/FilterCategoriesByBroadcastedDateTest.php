@@ -25,7 +25,7 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractBroadcastsServiceTes
 
         $this->mockRepository->expects($this->once())
             ->method('findBroadcastedDatesForCategories')
-            ->with([$dbAncestry1, $dbAncestry2], 'Broadcast', null, $start, $end)
+            ->with([$dbAncestry1, $dbAncestry2], 'Broadcast', $start, $end)
             ->willReturn($mockBroadcastedResults);
 
         $dbBroadcastedCategories = $this->service()->filterCategoriesByBroadcastedDate(

@@ -11,11 +11,11 @@ class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
         $dbData = [['pip_id' => 'C0001']];
 
         $this->mockRepository->expects($this->once())
-            ->method('findPopulatedChildCategoriesByNetworkMedium')
-            ->with(0, 'genre', 'tv')
+            ->method('findPopulatedChildCategories')
+            ->with(0, 'genre')
             ->willReturn($dbData);
 
-        $result = $this->service()->findPopulatedChildGenres($genre, 'tv');
+        $result = $this->service()->findPopulatedChildGenres($genre);
         $this->assertEquals($this->categoriesFromDbData($dbData), $result);
     }
 }

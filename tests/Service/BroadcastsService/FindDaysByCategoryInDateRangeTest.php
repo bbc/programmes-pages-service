@@ -29,7 +29,7 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findBroadcastedDatesForCategories')
-            ->with([$dbAncestry], 'Broadcast', null, $start, $end)
+            ->with([$dbAncestry], 'Broadcast', $start, $end)
             ->willReturn($dbData);
 
         $result = $this->service()->findDaysByCategoryInDateRange($category, $start, $end);

@@ -34,7 +34,6 @@ class CoreEntityRepository extends MaterializedPathRepository
     public function findTleosByCategory(
         array $ancestryDbIds,
         bool $filterToAvailable,
-        ?string $medium,
         ?int $limit,
         int $offset
     ): array {
@@ -58,21 +57,13 @@ class CoreEntityRepository extends MaterializedPathRepository
             $qb->andWhere('programme.streamable = 1');
         }
 
-        if ($medium) {
-            $this->assertNetworkMedium($medium);
-
-            $qb->innerJoin('masterbrand.network', 'network')
-               ->andWhere('network.medium = :medium')
-               ->setParameter('medium', $medium);
-        }
-
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     /**
      * Return the count of available episodes given category ID's
      */
-    public function countAvailableEpisodesByCategoryAncestry(array $ancestryDbIds, ?string $medium): int
+    public function countAvailableEpisodesByCategoryAncestry(array $ancestryDbIds): int
     {
         $ancestry = $this->ancestryIdsToString($ancestryDbIds);
 
@@ -84,15 +75,6 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->andWhere('category.ancestry LIKE :ancestry')
             ->setParameter('ancestry', $ancestry . '%'); // Availability DESC
 
-        if ($medium) {
-            $this->assertNetworkMedium($medium);
-
-            $qb->innerJoin('episode.masterBrand', 'masterBrand')
-                ->innerJoin('masterBrand.network', 'network')
-                ->andWhere('network.medium = :medium')
-                ->setParameter('medium', $medium);
-        }
-
         return $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -101,7 +83,6 @@ class CoreEntityRepository extends MaterializedPathRepository
      */
     public function findAvailableEpisodesByCategoryAncestry(
         array $ancestryDbIds,
-        ?string $medium,
         ?int $limit,
         int $offset
     ): array {
@@ -123,13 +104,6 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->addGroupBy('episode.id')
             ->addOrderBy('episode.streamableFrom', 'DESC')
             ->addOrderBy('episode.title');
-
-        if ($medium) {
-            $this->assertNetworkMedium($medium);
-
-            $qb->andWhere('network.medium = :medium')
-                ->setParameter('medium', $medium);
-        }
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 

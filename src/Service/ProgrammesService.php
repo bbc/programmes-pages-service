@@ -41,7 +41,6 @@ class ProgrammesService extends AbstractService
      */
     public function findAllTleosByCategory(
         Category $category,
-        ?string $networkMedium = null,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
@@ -49,7 +48,6 @@ class ProgrammesService extends AbstractService
         $programmesInSlice = $this->repository->findTleosByCategory(
             $category->getDbAncestryIds(),
             false,
-            $networkMedium,
             $limit,
             $offset
         );
@@ -62,7 +60,6 @@ class ProgrammesService extends AbstractService
      */
     public function findAvailableTleosByCategory(
         Category $category,
-        ?string $networkMedium = null,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
@@ -70,7 +67,6 @@ class ProgrammesService extends AbstractService
         $programmesInSlice = $this->repository->findTleosByCategory(
             $category->getDbAncestryIds(),
             true,
-            $networkMedium,
             $limit,
             $offset
         );
@@ -178,24 +174,20 @@ class ProgrammesService extends AbstractService
     }
 
     public function countAvailableEpisodesByCategory(
-        Category $category,
-        ?string $networkMedium = null
+        Category $category
     ): int {
         return $this->repository->countAvailableEpisodesByCategoryAncestry(
-            $category->getDbAncestryIds(),
-            $networkMedium
+            $category->getDbAncestryIds()
         );
     }
 
     public function findAvailableEpisodesByCategory(
         Category $category,
-        ?string $networkMedium = null,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $dbEntities = $this->repository->findAvailableEpisodesByCategoryAncestry(
             $category->getDbAncestryIds(),
-            $networkMedium,
             $limit,
             $this->getOffset($limit, $page)
         );

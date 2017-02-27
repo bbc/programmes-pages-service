@@ -11,7 +11,6 @@ use InvalidArgumentException;
 class BroadcastRepository extends EntityRepository
 {
     use Traits\ParentTreeWalkerTrait;
-    use Traits\NetworkMediumTrait;
 
     public function findByVersion(array $dbIds, string $type, ?int $limit, int $offset): array
     {
@@ -50,7 +49,6 @@ class BroadcastRepository extends EntityRepository
     public function findBroadcastedDatesForCategories(
         array $categoryAncestries,
         string $type,
-        ?string $medium,
         DateTimeImmutable $from,
         DateTimeImmutable $to
     ): array {
@@ -70,15 +68,6 @@ class BroadcastRepository extends EntityRepository
             ->setParameter('to', $to);
 
         $qb = $this->setEntityTypeFilter($qb, $type);
-
-        if ($medium) {
-            $this->assertNetworkMedium($medium);
-
-            $qb->join('broadcast.service', 'service')
-                ->innerJoin('service.network', 'networkOfService')
-                ->andWhere('networkOfService.medium = :medium')
-                ->setParameter('medium', $medium);
-        }
 
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }

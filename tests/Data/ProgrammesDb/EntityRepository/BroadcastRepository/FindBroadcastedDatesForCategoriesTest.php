@@ -15,7 +15,7 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
     /**
      * @dataProvider findDaysByCategoryAncestryInDateRangeDataProvider
      */
-    public function testFindDaysByCategoryAncestryInDateRangeMultipleCases($pipId, $type, $medium, $from, $to, $expectedOutput)
+    public function testFindDaysByCategoryAncestryInDateRangeMultipleCases($pipId, $type, $from, $to, $expectedOutput)
     {
         $this->loadFixtures(['BroadcastsWithCategoriesFixture']);
         $this->enableEmbargoedFilter();
@@ -25,7 +25,7 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
 
         $ancestry = $this->getAncestryFromPersistentIdentifier($pipId, 'Category', 'pipId');
 
-        $data = $repo->findBroadcastedDatesForCategories([$ancestry], $type, $medium, $from, $to);
+        $data = $repo->findBroadcastedDatesForCategories([$ancestry], $type, $from, $to);
         $this->assertSame($expectedOutput, $data);
     }
 
@@ -35,7 +35,6 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
             [
                 'c0000001', // ancestryid = 1
                 'Broadcast',
-                null,
                 new DateTimeImmutable('2011-07-01 00:00:00'),
                 new DateTimeImmutable('2011-10-01 00:00:00'),
                 [
@@ -46,19 +45,8 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
                 ],
             ],
             [
-                'c0000001',  // ancestryid = 1
-                'Broadcast',
-                'radio',
-                new DateTimeImmutable('2011-07-01 00:00:00'),
-                new DateTimeImmutable('2011-10-01 00:00:00'),
-                [
-                    ['ancestry' => '1,', 'day' => '5', 'month' => '7', 'year' => '2011'],
-                ],
-            ],
-            [
                 'c0000002',  // ancestryid = 1,2
                 'Broadcast',
-                null,
                 new DateTimeImmutable('2011-07-01 00:00:00'),
                 new DateTimeImmutable('2011-10-01 00:00:00'),
                 [
@@ -68,7 +56,6 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
             [
                 'c0000001',  // ancestryid = 1
                 'Webcast',
-                null,
                 new DateTimeImmutable('2011-06-01 00:00:00'),
                 new DateTimeImmutable('2011-09-01 00:00:00'),
                 [],
@@ -76,7 +63,6 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
             [
                 'c0000002',  // ancestryid = 1,2
                 'Broadcast',
-                null,
                 new DateTimeImmutable('2013-06-01 00:00:00'),
                 new DateTimeImmutable('2013-08-01 00:00:00'),
                 [],
@@ -97,7 +83,6 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
         $data = $repo->findBroadcastedDatesForCategories(
             [$ancestry],
             'Any',
-            null,
             new DateTimeImmutable('2013-07-01 00:00:00'),
             new DateTimeImmutable('2013-08-01 00:00:00')
         );
@@ -121,7 +106,6 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
         $entities = $repo->findBroadcastedDatesForCategories(
             [[1]],
             'Any',
-            null,
             new DateTimeImmutable(),
             new DateTimeImmutable()
         );

@@ -8,7 +8,6 @@ class FindAllTleosByCategoryTest extends AbstractProgrammesServiceTest
 {
     public function testFindAllTleosByCategory()
     {
-        $medium = 'tv';
         $dbId = 1;
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
@@ -19,12 +18,11 @@ class FindAllTleosByCategoryTest extends AbstractProgrammesServiceTest
             ->with(
                 $category->getDbAncestryIds(),
                 false,
-                $medium,
                 ProgrammesService::DEFAULT_LIMIT
             )
             ->willReturn($dbData);
 
-        $result = $this->service()->findAllTleosByCategory($category, $medium);
+        $result = $this->service()->findAllTleosByCategory($category);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 }

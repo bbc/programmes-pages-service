@@ -57,13 +57,11 @@ class BroadcastsService extends AbstractService
     public function findDaysByCategoryInDateRange(
         Category $category,
         DateTimeImmutable $start,
-        DateTimeImmutable $end,
-        string $medium = null
+        DateTimeImmutable $end
     ): array {
         $dbDays = $this->repository->findBroadcastedDatesForCategories(
             [$category->getDbAncestryIds()],
             'Broadcast',
-            $medium,
             $start,
             $end
         );
@@ -93,8 +91,7 @@ class BroadcastsService extends AbstractService
     public function filterCategoriesByBroadcastedDate(
         array $allCategories,
         DateTimeImmutable $from,
-        DateTimeImmutable $to,
-        string $medium = null
+        DateTimeImmutable $to
     ): array {
         if (empty($allCategories)) {
             return [];
@@ -108,7 +105,6 @@ class BroadcastsService extends AbstractService
         $broadcastedCategoriesAncestriesByDay = $this->repository->findBroadcastedDatesForCategories(
             $categoriesAncestryIds,
             'Broadcast',
-            $medium,
             $from,
             $to
         );

@@ -43,12 +43,11 @@ class CategoriesService extends AbstractService
     /**
      * @return Genre[]
      */
-    public function findPopulatedChildGenres(Genre $genre, string $medium = null): array
+    public function findPopulatedChildGenres(Genre $genre): array
     {
-        $subcategories = $this->repository->findPopulatedChildCategoriesByNetworkMedium(
+        $subcategories = $this->repository->findPopulatedChildCategories(
             $genre->getDbId(),
-            'genre',
-            $medium
+            'genre'
         );
         return $this->mapManyEntities($subcategories);
     }

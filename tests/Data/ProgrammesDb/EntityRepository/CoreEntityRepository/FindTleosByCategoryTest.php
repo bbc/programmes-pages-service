@@ -40,7 +40,6 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
             $selectedCategoryForTleos,
             $selectedAvailabilityForTleos,
             null,
-            null,
             0
         );
 
@@ -61,7 +60,6 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         $tleos = $repo->findTleosByCategory(
             $selectedCategoryForTleos,
             $selectSpecificAvailavility,
-            null,
             null,
             0
         );
@@ -84,7 +82,6 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         $tleos = $repo->findTleosByCategory(
             $selectedCategoryForTleos,
             $selectedAvailabilityForTleos,
-            null,
             null,
             0
         );

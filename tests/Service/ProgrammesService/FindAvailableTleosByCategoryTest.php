@@ -8,7 +8,6 @@ class FindAvailableByCategoryTest extends AbstractProgrammesServiceTest
 {
     public function testFindAvailableTleosByCategory()
     {
-        $medium = 'tv';
         $dbId = 1;
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
         $category = $this->mockEntity('Genre', $dbId);
@@ -18,12 +17,11 @@ class FindAvailableByCategoryTest extends AbstractProgrammesServiceTest
             ->with(
                 $category->getDbAncestryIds(),
                 true,
-                $medium,
                 ProgrammesService::DEFAULT_LIMIT
             )
             ->willReturn($dbData);
 
-        $result = $this->service()->findAvailableTleosByCategory($category, $medium);
+        $result = $this->service()->findAvailableTleosByCategory($category);
         $this->assertEquals($this->programmesFromDbData($dbData), $result);
     }
 }

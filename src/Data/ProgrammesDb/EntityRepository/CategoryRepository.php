@@ -8,7 +8,6 @@ use Doctrine\ORM\Query;
 class CategoryRepository extends MaterializedPathRepository
 {
     use Traits\ParentTreeWalkerTrait;
-    use Traits\NetworkMediumTrait;
 
     public function findByIds(array $dbIds): array
     {
@@ -47,10 +46,9 @@ class CategoryRepository extends MaterializedPathRepository
         return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findPopulatedChildCategoriesByNetworkMedium(
+    public function findPopulatedChildCategories(
         int $categoryId,
-        string $categoryType,
-        ?string $medium
+        string $categoryType
     ): array {
         $qb = $this->createQueryBuilder('category')
             ->select(['DISTINCT category'])
@@ -62,14 +60,6 @@ class CategoryRepository extends MaterializedPathRepository
             ->addOrderBy('category.title')
             ->setParameter('parentId', $categoryId)
             ->setParameter('type', $categoryType);
-
-        if ($medium) {
-            $this->assertNetworkMedium($medium);
-            $qb->join('programmes.masterBrand', 'masterBrand')
-                ->join('masterBrand.network', 'network')
-                ->andWhere('network.medium = :medium')
-                ->setParameter('medium', $medium);
-        }
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
