@@ -42,7 +42,7 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
             ['AtozTitlesService', ['AtozTitle'], 'AtozTitleMapper'],
             ['BroadcastsService', ['Broadcast'], 'BroadcastMapper'],
             ['CategoriesService', ['Category'], 'CategoryMapper'],
-            ['CollapsedBroadcastsService', ['Broadcast', 'Service'], 'CollapsedBroadcastMapper'],
+            ['CollapsedBroadcastsService', ['CollapsedBroadcast', 'Service'], 'CollapsedBroadcastMapper'],
             ['ContributionsService', ['Contribution'], 'ContributionMapper'],
             ['ContributorsService', ['Contributor'], 'ContributorMapper'],
             ['NetworksService', ['Network'], 'NetworkMapper'],

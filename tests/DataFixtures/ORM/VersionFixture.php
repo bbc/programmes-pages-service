@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\VersionType;
@@ -26,6 +27,9 @@ class VersionFixture extends AbstractFixture
         $episode4 = $this->buildEpisode('p0000004', 'Ep4');
         $episode5 = $this->buildEpisode('p0000005', '1 === 0');
         $episode6 = $this->buildEpisode('p0000006', 'Zzzz');
+
+        $brand = $this->buildBrand('b0000022', 'Brand 1');
+        $episode3->setParent($brand);
 
         $this->buildVersion('v0000001', $episode, [$originalType, $otherType]);
         $this->buildVersion('v0000002', $embargoedEpisode, [$originalType, $otherType]);
@@ -61,6 +65,15 @@ class VersionFixture extends AbstractFixture
     private function buildEpisode($pid, $title, $embargoed = false)
     {
         $entity = new Episode($pid, $title);
+        $entity->setIsEmbargoed($embargoed);
+        $this->addReference($pid, $entity);
+        $this->manager->persist($entity);
+        return $entity;
+    }
+
+    private function buildBrand(string $pid, string $title, bool $embargoed = false): Brand
+    {
+        $entity = new Brand($pid, $title);
         $entity->setIsEmbargoed($embargoed);
         $this->addReference($pid, $entity);
         $this->manager->persist($entity);

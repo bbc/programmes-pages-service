@@ -11,7 +11,7 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
 
     public function setUp()
     {
-        $this->setUpRepo('BroadcastRepository');
+        $this->setUpRepo('CollapsedBroadcastRepository');
         $this->setUpMapper('CollapsedBroadcastMapper', 'collapsedBroadcastFromDbData');
         $this->mockServiceRepository = $this->getRepo('ServiceRepository');
     }

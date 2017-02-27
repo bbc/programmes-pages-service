@@ -10,16 +10,11 @@ use InvalidArgumentException;
 
 class CollapsedBroadcastMapperTest extends BaseMapperTestCase
 {
-    protected $mockVersionMapper;
     protected $mockProgrammeMapper;
     protected $mockServiceMapper;
 
     public function setUp()
     {
-        $this->mockVersionMapper = $this->createMock(
-            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'
-        );
-
         $this->mockProgrammeMapper = $this->createMock(
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper'
         );
@@ -35,24 +30,16 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
 
     public function testGetDomainModel()
     {
-        $versionDbEntity = ['pid' => 'b03szzzz'];
         $programmeItemDbEntity = ['pid' => 'b007b5xt'];
 
         $serviceDbEntity = ['mid' => 'bbc_one', 'sid' => 'a'];
         $services = ['a' => $serviceDbEntity];
-
-        $expectedVersionDomainEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version');
 
         $expectedProgrammeItemDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem'
         );
 
         $expectedServiceDomainEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Service');
-
-        $this->mockVersionMapper->expects($this->once())
-            ->method('getDomainModel')
-            ->with($versionDbEntity)
-            ->willReturn($expectedVersionDomainEntity);
 
         $this->mockProgrammeMapper->expects($this->once())
             ->method('getDomainModel')
@@ -75,13 +62,11 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
             'isCritical'       => false,
             'isAudioDescribed' => false,
             'isWebcast'        => false,
-            'version'          => $versionDbEntity,
             'programmeItem'    => $programmeItemDbEntity,
             'serviceIds'       => ['a'],
         ];
 
         $expectedEntity = new CollapsedBroadcast(
-            $expectedVersionDomainEntity,
             $expectedProgrammeItemDomainEntity,
             [$expectedServiceDomainEntity],
             new DateTimeImmutable('2015-01-03T00:00:00'),
@@ -96,95 +81,6 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
             $expectedEntity,
             $mapper->getDomainModel($dbEntityArray, $services)
         );
-    }
-
-    public function testGetDomainModelTakingProgrammeItemFromVersion()
-    {
-        $programmeItemDbEntity = ['pid' => 'b007b5xt'];
-        $versionDbEntity = ['pid' => 'b03szzzz', 'programmeItem' => $programmeItemDbEntity];
-        $serviceDbEntity = ['mid' => 'bbc_one'];
-        $services = ['a' => $serviceDbEntity];
-
-        $expectedVersionDomainEntity = $this->createMock(
-            'BBC\ProgrammesPagesService\Domain\Entity\Version'
-        );
-
-        $expectedProgrammeItemDomainEntity = $this->createMock(
-            'BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem'
-        );
-
-        $expectedServiceDomainEntity = $this->createMock(
-            'BBC\ProgrammesPagesService\Domain\Entity\Service'
-        );
-
-        $this->mockVersionMapper->expects($this->once())
-            ->method('getDomainModel')
-            ->with($versionDbEntity)
-            ->willReturn($expectedVersionDomainEntity);
-
-        $this->mockProgrammeMapper->expects($this->once())
-            ->method('getDomainModel')
-            ->with($programmeItemDbEntity)
-            ->willReturn($expectedProgrammeItemDomainEntity);
-
-        $this->mockServiceMapper->expects($this->once())
-            ->method('getDomainModel')
-            ->with($serviceDbEntity)
-            ->willReturn($expectedServiceDomainEntity);
-
-        $dbEntityArray = [
-            'id'               => 1,
-            'startAt'          => new DateTime('2015-01-03T00:00:00'),
-            'endAt'            => new DateTime('2015-01-03T01:00:00'),
-            'duration'         => 120,
-            'isLive'           => false,
-            'isBlanked'        => true,
-            'isRepeat'         => true,
-            'isCritical'       => false,
-            'isAudioDescribed' => false,
-            'isWebcast'        => false,
-            'version'          => $versionDbEntity,
-            'serviceIds'       => ['a'],
-        ];
-
-        $expectedEntity = new CollapsedBroadcast(
-            $expectedVersionDomainEntity,
-            $expectedProgrammeItemDomainEntity,
-            [$expectedServiceDomainEntity],
-            new DateTimeImmutable('2015-01-03T00:00:00'),
-            new DateTimeImmutable('2015-01-03T01:00:00'),
-            120,
-            true,
-            true
-        );
-
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray, $services));
-    }
-
-    /**
-     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
-     */
-    public function testGetDomainModelWithNoVersion()
-    {
-        $serviceDbEntity = ['mid' => 'bbc_one'];
-        $services = ['a' => $serviceDbEntity];
-
-        $dbEntityArray = [
-            'id'               => 1,
-            'startAt'          => new DateTime(),
-            'endAt'            => new DateTime(),
-            'duration'         => 120,
-            'isLive'           => false,
-            'isBlanked'        => false,
-            'isRepeat'         => false,
-            'isCritical'       => false,
-            'isAudioDescribed' => false,
-            'isWebcast'        => false,
-            'programmeItem'    => ['pid' => 'b007b5xt'],
-            'serviceIds'       => ['a'],
-        ];
-
-        $this->getMapper()->getDomainModel($dbEntityArray, $services)->getVersion();
     }
 
     /**
@@ -217,7 +113,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
      * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
      * @expectedExceptionMessage All CollapsedBroadcasts must be joined to at least one Service
      */
-    public function testGetDomainModelWithNonExistantServiceIds()
+    public function testGetDomainModelWithNonExistentServiceIds()
     {
         $services = ['a' => ['mid' => 'bbc_one', 'sid' => 'a']];
 
@@ -239,10 +135,74 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
         $this->getMapper()->getDomainModel($dbEntityArray, $services);
     }
 
+    public function testStrippingWebcasts()
+    {
+        $programmeItemDbEntity = ['pid' => 'b007b5xt'];
+
+        $serviceDbEntity1 = ['mid' => 'bbc_one', 'sid' => 'a', 'id' => '1'];
+        $serviceDbEntity2 = ['mid' => 'bbc_one_scotland', 'sid' => 'b', 'id' => '3'];
+        $services = [1 => $serviceDbEntity1, 3 => $serviceDbEntity2];
+
+        $expectedProgrammeItemDomainEntity = $this->createMock(
+            'BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem'
+        );
+
+        $expectedServiceDomainEntity1 = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Service');
+        $expectedServiceDomainEntity2 = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Service');
+
+        $this->mockProgrammeMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($programmeItemDbEntity)
+            ->willReturn($expectedProgrammeItemDomainEntity);
+
+        $this->mockServiceMapper->expects($this->at(0))
+            ->method('getDomainModel')
+            ->with($serviceDbEntity1)
+            ->willReturn($expectedServiceDomainEntity1);
+
+        $this->mockServiceMapper->expects($this->at(1))
+            ->method('getDomainModel')
+            ->with($serviceDbEntity2)
+            ->willReturn($expectedServiceDomainEntity2);
+
+        $dbEntityArray = [
+            'id'               => 1,
+            'startAt'          => new DateTime('2015-01-03T00:00:00'),
+            'endAt'            => new DateTime('2015-01-03T01:00:00'),
+            'duration'         => 120,
+            'isLive'           => false,
+            'isBlanked'        => true,
+            'isRepeat'         => true,
+            'isCritical'       => false,
+            'isAudioDescribed' => false,
+            'isWebcast'        => false,
+            'programmeItem'    => $programmeItemDbEntity,
+            'broadcastIds'     => [1, 2, 3],
+            'areWebcasts'      => [0, 1, 0],
+            'serviceIds'       => [1, 11, 3],
+        ];
+
+        $expectedEntity = new CollapsedBroadcast(
+            $expectedProgrammeItemDomainEntity,
+            [$expectedServiceDomainEntity1, $expectedServiceDomainEntity2],
+            new DateTimeImmutable('2015-01-03T00:00:00'),
+            new DateTimeImmutable('2015-01-03T01:00:00'),
+            120,
+            true,
+            true
+        );
+
+        $mapper = $mapper = $this->getMapper();
+        $this->assertEquals(
+            $expectedEntity,
+            $mapper->getDomainModel($dbEntityArray, $services)
+        );
+    }
+
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testGetDomainModelWithNonExistantService()
+    public function testGetDomainModelWithNonExistentService()
     {
         $dbEntityArray = [
             'id'               => 1,
@@ -255,7 +215,6 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
             'isCritical'       => false,
             'isAudioDescribed' => false,
             'isWebcast'        => false,
-            'version'          => ['pid' => 'b03szzzz'],
             'serviceIds'       => ['a'],
         ];
 
@@ -267,7 +226,6 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
         return new CollapsedBroadcastMapper(
             $this->getMapperFactory(
                 [
-                    'VersionMapper'   => $this->mockVersionMapper,
                     'ProgrammeMapper' => $this->mockProgrammeMapper,
                     'ServiceMapper'   => $this->mockServiceMapper,
                 ]

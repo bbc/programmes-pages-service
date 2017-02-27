@@ -2,12 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 use DateTimeImmutable;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
-/**
- * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository::<public>
- */
 class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
 {
     public function tearDown()
@@ -90,6 +88,8 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
     {
         $this->loadFixtures(['BroadcastsWithCategoriesFixture']);
         $this->disableEmbargoedFilter();
+
+        /** @var BroadcastRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
 
         $ancestry = $this->getAncestryFromPersistentIdentifier('c0000001', 'Category', 'pipId');
@@ -114,6 +114,8 @@ class FindBroadcastedDatesForCategoriesTest extends AbstractDatabaseTest
     public function testFindDaysByCategoryAncestryInDateRangeWhenEmptyResultSet()
     {
         $this->loadFixtures([]);
+
+        /** @var BroadcastRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
 
         $entities = $repo->findBroadcastedDatesForCategories(

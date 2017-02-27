@@ -12,19 +12,19 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
         $programme = $this->mockEntity('Programme', 3);
         $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
 
-        $broadcastData = [['serviceIds' => ['a', 'b']]];
+        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
-            'a' => ['sid' => 'bbc_one'],
-            'b' => ['sid' => 'bbc_one_hd'],
+            'a' => ['id' => 'bbc_one'],
+            'b' => ['id' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
             ->method('findPastByProgramme')
-            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()), 300, 0)
+            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 300, 0)
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
-            ->method('findBySids')
+            ->method('findByIds')
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
@@ -39,19 +39,19 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
         $programme = $this->mockEntity('Programme', 3);
         $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
 
-        $broadcastData = [['serviceIds' => ['a', 'b']]];
+        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
         $serviceData = [
-            'a' => ['sid' => 'bbc_one'],
-            'b' => ['sid' => 'bbc_one_hd'],
+            'a' => ['id' => 'bbc_one'],
+            'b' => ['id' => 'bbc_one_hd'],
         ];
 
         $this->mockRepository->expects($this->once())
             ->method('findPastByProgramme')
-            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
+            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
             ->willReturn($broadcastData);
 
         $this->mockServiceRepository->expects($this->atLeastOnce())
-            ->method('findBySids')
+            ->method('findByIds')
             ->with(['a', 'b'])
             ->willReturn($serviceData);
 
@@ -68,11 +68,11 @@ class FindPastCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroad
 
         $this->mockRepository->expects($this->once())
             ->method('findPastByProgramme')
-            ->with($dbAncestry, 'Broadcast', $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
+            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
             ->willReturn([]);
 
         $this->mockServiceRepository->expects($this->never())
-            ->method('findBySids');
+            ->method('findByIds');
 
         $result = $this->service()->findPastByProgramme($programme, 5, 3);
         $this->assertEquals([], $result);
