@@ -152,6 +152,95 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
+    public function findBroadcastYearsAndMonthsByProgramme(Programme $programme): array
+    {
+        $dbYearsAndMonths = $this->repository->findAllYearsAndMonthsByProgramme(
+            $programme->getDbAncestryIds(),
+            false
+        );
+
+        $result = [];
+
+        foreach ($dbYearsAndMonths as $period) {
+            $year = (int) $period['year'];
+            if (!isset($result[$year])) {
+                $result[$year] = [];
+            }
+
+            $result[$year][] = (int) $period['month'];
+        }
+
+        return $result;
+    }
+
+    public function findDaysByCategoryInDateRange(
+        Category $category,
+        DateTimeImmutable $start,
+        DateTimeImmutable $end
+    ): array {
+        $rows = $this->repository->findBroadcastedDatesForCategory(
+            $category->getDbAncestryIds(),
+            false,
+            $start,
+            $end
+        );
+
+        $result = [];
+
+        foreach ($rows as $row) {
+            $year = (int) $row['year'];
+            if (!isset($result[$year])) {
+                $result[$year] = [];
+            }
+
+            $month = (int) $row['month'];
+            if (!isset($result[$year][$month])) {
+                $result[$year][$month] = [];
+            }
+
+            $day = (int) $row['day'];
+            if (!in_array($day, $result[$year][$month])) {
+                $result[$year][$month][] = $day;
+            }
+        }
+
+        return $result;
+    }
+
+    public function filterCategoriesByBroadcastedDate(
+        array $allCategories,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to
+    ): array {
+        if (empty($allCategories)) {
+            return [];
+        }
+
+        $categoriesAncestryIds = [];
+        foreach ($allCategories as $category) {
+            $categoriesAncestryIds[] = $category->getDbAncestryIds();
+        }
+
+        $broadcastedCategoriesAncestries = $this->repository->filterCategoriesByBroadcastedDates(
+            $categoriesAncestryIds,
+            false,
+            $from,
+            $to
+        );
+
+        $broadcastedAncestries = array_column($broadcastedCategoriesAncestries, 'ancestry');
+
+        $broadcastedCategories = [];
+        foreach ($allCategories as $category) {
+            $ancestryCategory = implode(',', $category->getDbAncestryIds()) . ',';
+            if (in_array($ancestryCategory, $broadcastedAncestries)) {
+                $broadcastedCategories[] = $category;
+            }
+        }
+
+        return $broadcastedCategories;
+    }
+
     private function stripWebcasts(array $broadcasts): array
     {
         $withoutWebcasts = [];

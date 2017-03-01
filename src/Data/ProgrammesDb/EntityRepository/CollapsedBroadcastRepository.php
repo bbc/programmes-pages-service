@@ -225,6 +225,75 @@ QUERY;
         );
     }
 
+    public function filterCategoriesByBroadcastedDates(
+        array $categoryAncestries,
+        bool $isWebcastOnly,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to
+    ): array {
+
+        $qb = $this->createQueryBuilder('collapsedBroadcast', false)
+            ->select('DISTINCT category.ancestry')
+            ->innerJoin('programmeItem.categories', 'category')
+            ->where('collapsedBroadcast.startAt >= :from')
+            ->andWhere('collapsedBroadcast.startAt < :to')
+            ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
+            ->addOrderBy('collapsedBroadcast.startAt')
+            ->setParameter('from', $from)
+            ->setParameter('to', $to)
+            ->setParameter('isWebcastOnly', $isWebcastOnly);
+
+        $orExpressions = [];
+        $i = 0;
+        foreach ($categoryAncestries as $categoryAncestry) {
+            $paramName = 'ancestry' . $i;
+            $orExpressions[] = $qb->expr()->like('category.ancestry', ':' . $paramName);
+            $qb->setParameter($paramName, $this->ancestryIdsToString($categoryAncestry));
+            $i++;
+        }
+        $qb->andWhere($qb->expr()->orX(
+            ...$orExpressions
+        ));
+        return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
+    }
+
+    public function findBroadcastedDatesForCategory(
+        array $categoryAncestry,
+        bool $isWebcastOnly,
+        DateTimeImmutable $from,
+        DateTimeImmutable $to
+    ): array {
+        $qb = $this->createQueryBuilder('collapsedBroadcast', false)
+            ->select('DISTINCT DAY(collapsedBroadcast.startAt) as day, MONTH(collapsedBroadcast.startAt) as month, YEAR(collapsedBroadcast.startAt) as year')
+            ->innerJoin('programmeItem.categories', 'category')
+            ->andWhere('category.ancestry LIKE :ancestry')
+            ->andWhere('collapsedBroadcast.startAt >= :from')
+            ->andWhere('collapsedBroadcast.startAt < :to')
+            ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
+            ->addOrderBy('collapsedBroadcast.startAt')
+            ->setParameter('ancestry', $this->ancestryIdsToString($categoryAncestry))
+            ->setParameter('from', $from)
+            ->setParameter('to', $to)
+            ->setParameter('isWebcastOnly', $isWebcastOnly);
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
+    }
+
+    public function findAllYearsAndMonthsByProgramme(array $ancestry, bool $isWebcastOnly): array
+    {
+        $qb = $this->createQueryBuilder('collapsedBroadcast', true)
+            ->select(['DISTINCT YEAR(collapsedBroadcast.startAt) as year', 'MONTH(collapsedBroadcast.startAt) as month'])
+            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
+            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+            ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
+            ->addOrderBy('year', 'DESC')
+            ->addOrderBy('month', 'DESC')
+            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%')
+            ->setParameter('isWebcastOnly', $isWebcastOnly);
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
+    }
+
     public function createQueryBuilder($alias, $indexBy = null)
     {
         return parent::createQueryBuilder($alias)
