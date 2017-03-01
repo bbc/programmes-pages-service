@@ -26,8 +26,6 @@ class FindBroadcastedDatesForCategoryTest extends AbstractDatabaseTest
         $ancestry = $this->getAncestryFromPersistentIdentifier($pipId, 'Category', 'pipId');
 
         $data = $repo->findBroadcastedDatesForCategory($ancestry, $isWebcastOnly, $from, $to);
-        //var_dump($expectedOutput);
-        //var_dump($data);
 
         $this->assertSame($expectedOutput, $data);
     }
