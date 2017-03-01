@@ -9,21 +9,12 @@ use InvalidArgumentException;
 class AtozTitleRepository extends EntityRepository
 {
     use Traits\ParentTreeWalkerTrait;
-    use Traits\NetworkMediumTrait;
 
-    public function findAllLetters(?string $networkMedium): array
+    public function findAllLetters(): array
     {
         $qb = $this->createQueryBuilder('AtozTitle')
             ->select(['DISTINCT AtozTitle.firstLetter'])
             ->orderBy('AtozTitle.firstLetter');
-
-        if ($networkMedium) {
-            $this->assertNetworkMedium($networkMedium);
-            $qb->join('c.masterBrand', 'masterBrand')
-                ->join('masterBrand.network', 'network')
-                ->andWhere('network.medium = :medium')
-                ->setParameter('medium', $networkMedium);
-        }
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         return array_column($result, 'firstLetter');
@@ -31,7 +22,6 @@ class AtozTitleRepository extends EntityRepository
 
     public function findTleosByFirstLetter(
         string $letter,
-        ?string $networkMedium,
         bool $filterToAvailable,
         ?int $limit,
         int $offset
@@ -57,11 +47,6 @@ class AtozTitleRepository extends EntityRepository
         if ($filterToAvailable) {
             $qb->andWhere('c.streamable = 1');
         }
-        if ($networkMedium) {
-            $this->assertNetworkMedium($networkMedium);
-            $qb->andWhere('network.medium = :medium');
-            $qb->setParameter('medium', $networkMedium);
-        }
 
         $query = $qb->getQuery();
         $result = $query->getResult(Query::HYDRATE_ARRAY);
@@ -71,7 +56,6 @@ class AtozTitleRepository extends EntityRepository
 
     public function countTleosByFirstLetter(
         string $letter,
-        ?string $networkMedium,
         bool $filterToAvailable
     ): int {
         if (strlen($letter) !== 1) {
@@ -87,13 +71,7 @@ class AtozTitleRepository extends EntityRepository
         if ($filterToAvailable) {
             $qb->andWhere('c.streamable = 1');
         }
-        if ($networkMedium) {
-            $this->assertNetworkMedium($networkMedium);
-            $qb = $qb->join('c.masterBrand', 'masterBrand')
-                ->join('masterBrand.network', 'network')
-                ->andWhere('network.medium = :medium');
-            $qb->setParameter('medium', $networkMedium);
-        }
+
         $query = $qb->getQuery();
         return $query->getSingleScalarResult();
     }

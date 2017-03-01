@@ -367,12 +367,9 @@ QUERY;
 
     public function countByKeywords(
         string $keywords,
-        ?string $networkMedium,
         bool $filterAvailable,
         ?array $entityTypes
     ): int {
-        $this->assertNetworkMedium($networkMedium);
-
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));
         $booleanKeywords = '+' . $booleanKeywords;
@@ -380,15 +377,7 @@ QUERY;
         $qText = <<<QUERY
 SELECT COUNT(coreEntity.id)
 FROM ProgrammesPagesService:CoreEntity coreEntity
-QUERY;
-        if ($networkMedium) {
-            $qText .= <<<QUERY
- JOIN coreEntity.masterBrand masterBrand
-JOIN masterBrand.network network
-QUERY;
-        }
-        $qText .= <<<QUERY
- WHERE MATCH_AGAINST (coreEntity.searchTitle, coreEntity.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
+WHERE MATCH_AGAINST (coreEntity.searchTitle, coreEntity.shortSynopsis, :booleanKeywords 'IN BOOLEAN MODE') > 0
 QUERY;
         if ($filterAvailable) {
             $qText .= ' AND coreEntity.streamable = 1';
@@ -398,9 +387,6 @@ QUERY;
             $qText .= ' AND (' . $this->makeEntityTypesDQL($entityTypes, 'coreEntity') . ')';
         }
 
-        if ($networkMedium) {
-            $qText .= ' AND network.medium = :service';
-        }
         $q = $this->getEntityManager()->createQuery($qText)
             ->setParameter('booleanKeywords', $booleanKeywords);
 
@@ -414,14 +400,11 @@ QUERY;
 
     public function findByKeywords(
         string $keywords,
-        ?string $networkMedium,
         bool $filterAvailable,
         ?int $limit,
         int $offset,
         ?array $entityTypes
     ): array {
-        $this->assertNetworkMedium($networkMedium);
-
         $keywords = $this->stripPunctuation($keywords);
         $booleanKeywords = join(' +', explode(' ', $keywords));
         $booleanKeywords = '+' . $booleanKeywords;
@@ -450,8 +433,6 @@ QUERY;
             $qText .= ' AND (' . $this->makeEntityTypesDQL($entityTypes, 'coreEntity') . ')';
         }
 
-        $qText .= $networkMedium ? ' AND network.medium = :service' : '';
-
         $qText .= ' ORDER BY rel DESC';
 
         $q = $this->getEntityManager()->createQuery($qText)
@@ -460,10 +441,6 @@ QUERY;
             ->setParameter('keywords', $keywords)
             ->setParameter('booleanKeywords', $booleanKeywords)
             ->setParameter('quotedKeywords', '"' . $keywords . '"');
-
-        if ($networkMedium) {
-            $q->setParameter('service', $networkMedium);
-        }
 
         return $q->getResult(Query::HYDRATE_ARRAY);
     }

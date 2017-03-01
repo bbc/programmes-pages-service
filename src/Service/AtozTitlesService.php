@@ -14,20 +14,18 @@ class AtozTitlesService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findAllLetters(string $networkMedium = null): array
+    public function findAllLetters(): array
     {
-        return $this->repository->findAllLetters($networkMedium);
+        return $this->repository->findAllLetters();
     }
 
     public function findTleosByFirstLetter(
         string $letter,
-        string $networkMedium = null,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $entities = $this->repository->findTleosByFirstLetter(
             $letter,
-            $networkMedium,
             false,
             $limit,
             $this->getOffset($limit, $page)
@@ -35,20 +33,18 @@ class AtozTitlesService extends AbstractService
         return $this->mapManyEntities($entities);
     }
 
-    public function countTleosByFirstLetter(string $letter, string $networkMedium = null): int
+    public function countTleosByFirstLetter(string $letter): int
     {
-        return $this->repository->countTleosByFirstLetter($letter, $networkMedium, false);
+        return $this->repository->countTleosByFirstLetter($letter, false);
     }
 
     public function findAvailableTleosByFirstLetter(
         string $letter,
-        string $networkMedium = null,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
         $entities = $this->repository->findTleosByFirstLetter(
             $letter,
-            $networkMedium,
             true,
             $limit,
             $this->getOffset($limit, $page)
@@ -56,8 +52,8 @@ class AtozTitlesService extends AbstractService
         return $this->mapManyEntities($entities);
     }
 
-    public function countAvailableTleosByFirstLetter(string $letter, string $networkMedium = null)
+    public function countAvailableTleosByFirstLetter(string $letter)
     {
-        return $this->repository->countTleosByFirstLetter($letter, $networkMedium, true);
+        return $this->repository->countTleosByFirstLetter($letter, true);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
-use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
-
 class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 {
     public function testFindTleosByFirstLetterDefaultPagination()
@@ -12,10 +10,10 @@ class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findTleosByFirstLetter')
-            ->with('t', null, false, 300, 0)
+            ->with('t', false, 300, 0)
             ->willReturn($dbData);
 
-        $result = $this->service()->findTleosByFirstLetter('t', null);
+        $result = $this->service()->findTleosByFirstLetter('t');
         $this->assertEquals($this->atoZTitlesFromDbData($dbData), $result);
     }
 
@@ -25,10 +23,10 @@ class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findTleosByFirstLetter')
-            ->with('t', null, false, 5, 10)
+            ->with('t', false, 5, 10)
             ->willReturn($dbData);
 
-        $result = $this->service()->findTleosByFirstLetter('t', null, 5, 3);
+        $result = $this->service()->findTleosByFirstLetter('t', 5, 3);
         $this->assertEquals($this->atoZTitlesFromDbData($dbData), $result);
     }
 
@@ -36,46 +34,21 @@ class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
     {
          $this->mockRepository->expects($this->once())
             ->method('findTleosByFirstLetter')
-            ->with('t', null, false, 300, 0)
+            ->with('t', false, 300, 0)
             ->willReturn([]);
 
-        $result = $this->service()->findTleosByFirstLetter('t', null);
+        $result = $this->service()->findTleosByFirstLetter('t');
         $this->assertEquals([], $result);
-    }
-
-
-    public function testFindTleosByFirstLetterWithMedium()
-    {
-        $dbData = [['title' => 'things']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findTleosByFirstLetter')
-            ->with('t', 'tv', false, 300, 0)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findTleosByFirstLetter('t', 'tv');
-        $this->assertEquals($this->atoZTitlesFromDbData($dbData), $result);
     }
 
     public function testCountTleosByFirstLetter()
     {
         $this->mockRepository->expects($this->once())
             ->method('countTleosByFirstLetter')
-            ->with('t', null)
+            ->with('t')
             ->willReturn(10);
 
         $result = $this->service()->countTleosByFirstLetter('t');
-        $this->assertEquals(10, $result);
-    }
-
-    public function testCountTleosByFirstLetterWithMedium()
-    {
-        $this->mockRepository->expects($this->once())
-            ->method('countTleosByFirstLetter')
-            ->with('t', 'tv', false)
-            ->willReturn(10);
-
-        $result = $this->service()->countTleosByFirstLetter('t', 'tv');
         $this->assertEquals(10, $result);
     }
 }

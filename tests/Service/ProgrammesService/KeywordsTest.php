@@ -12,7 +12,7 @@ class KeywordsTest extends AbstractProgrammesServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByKeywords')
-            ->with($keywords, null, false, 300, 0)
+            ->with($keywords, false, 300, 0)
             ->willReturn($dbData);
 
         $result = $this->service()->searchByKeywords($keywords);
@@ -25,7 +25,7 @@ class KeywordsTest extends AbstractProgrammesServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('countByKeywords')
-            ->with($keywords, null, false)
+            ->with($keywords, false)
             ->willReturn(10);
 
         $this->assertEquals(10, $this->service()->countByKeywords($keywords));
