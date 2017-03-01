@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
+namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CollapsedBroadcastRepository;
 
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
