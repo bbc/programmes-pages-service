@@ -31,47 +31,6 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findAllYearsAndMonthsByProgramme(array $ancestry, string $type): array
-    {
-        $qb = $this->createQueryBuilder('broadcast', true)
-            ->select(['DISTINCT YEAR(broadcast.startAt) as year', 'MONTH(broadcast.startAt) as month'])
-            ->andWhere('programmeItem INSTANCE OF ProgrammesPagesService:Episode')
-            ->andWhere('programmeItem.ancestry LIKE :ancestryClause')
-            ->addOrderBy('year', 'DESC')
-            ->addOrderBy('month', 'DESC')
-            ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
-
-        $qb = $this->setEntityTypeFilter($qb, $type);
-
-        return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
-    }
-
-    public function findBroadcastedDatesForCategories(
-        array $categoryAncestries,
-        string $type,
-        DateTimeImmutable $from,
-        DateTimeImmutable $to
-    ): array {
-        $ancestryClause = [];
-        foreach ($categoryAncestries as $categoryAncestry) {
-            $ancestryClause[] = "category.ancestry LIKE '" . $this->ancestryIdsToString($categoryAncestry) . "%'";
-        }
-
-        $qb = $this->createQueryBuilder('broadcast', false)
-            ->select('DISTINCT category.ancestry, DAY(broadcast.startAt) as day, MONTH(broadcast.startAt) as month, YEAR(broadcast.startAt) as year')
-            ->innerJoin('programmeItem.categories', 'category')
-            ->andWhere(implode(' OR ', $ancestryClause))
-            ->andWhere('broadcast.startAt >= :from')
-            ->andWhere('broadcast.startAt < :to')
-            ->addOrderBy('broadcast.startAt')
-            ->setParameter('from', $from)
-            ->setParameter('to', $to);
-
-        $qb = $this->setEntityTypeFilter($qb, $type);
-
-        return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
-    }
-
     public function createQueryBuilder($alias, $joinViaVersion = true, $indexBy = null)
     {
         // Any time Broadcasts are fetched here they must be inner joined to
@@ -121,10 +80,5 @@ class BroadcastRepository extends EntityRepository
         }
 
         return $qb;
-    }
-
-    private function ancestryIdsToString(array $ancestry): string
-    {
-        return implode(',', $ancestry) . ',';
     }
 }

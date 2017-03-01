@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
+namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
 use DateTimeImmutable;
 
-class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
+class FindDaysByCategoryInDateRangeTest extends AbstractCollapsedBroadcastServiceTest
 {
     public function testFindUsedDaysByCategoryInDateRange()
     {
@@ -13,9 +13,9 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
         $category->method('getDbAncestryIds')->willReturn($dbAncestry);
 
         $dbData = [
-            ['ancestry' => '1,2,3,', 'day' => '1', 'month' => '8', 'year' => '2011'],
-            ['ancestry' => '1,2,3,4,', 'day' => '2', 'month' => '8', 'year' => '2011'],
-            ['ancestry' => '1,2,3,5,', 'day' => '2', 'month' => '8', 'year' => '2011'],
+            ['day' => '1', 'month' => '8', 'year' => '2011'],
+            ['day' => '2', 'month' => '8', 'year' => '2011'],
+            ['day' => '2', 'month' => '8', 'year' => '2011'],
         ];
 
         $expectedResult = [
@@ -28,8 +28,8 @@ class FindDaysByCategoryInDateRangeTest extends AbstractBroadcastsServiceTest
         $end = new DateTimeImmutable();
 
         $this->mockRepository->expects($this->once())
-            ->method('findBroadcastedDatesForCategories')
-            ->with([$dbAncestry], 'Broadcast', $start, $end)
+            ->method('findBroadcastedDatesForCategory')
+            ->with($dbAncestry, false, $start, $end)
             ->willReturn($dbData);
 
         $result = $this->service()->findDaysByCategoryInDateRange($category, $start, $end);

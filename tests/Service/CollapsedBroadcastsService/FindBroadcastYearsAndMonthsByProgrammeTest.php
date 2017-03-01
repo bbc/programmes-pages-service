@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
+namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
-class FindBroadcastYearsAndMonthsByProgrammeTest extends AbstractBroadcastsServiceTest
+class FindBroadcastYearsAndMonthsByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
     public function testFindBroadcastYearsAndMonthsByProgramme()
     {
@@ -28,7 +28,7 @@ class FindBroadcastYearsAndMonthsByProgrammeTest extends AbstractBroadcastsServi
 
         $this->mockRepository->expects($this->once())
             ->method('FindAllYearsAndMonthsByProgramme')
-            ->with($dbAncestry, 'Broadcast')
+            ->with($dbAncestry, false)
             ->willReturn($dbData);
 
         $result = $this->service()->findBroadcastYearsAndMonthsByProgramme($programme);
