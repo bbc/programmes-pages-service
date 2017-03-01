@@ -113,8 +113,7 @@ class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implement
             '27,28',
             new DateTime('2017-02-06 09:31:00'),
             new DateTime('2017-02-06 10:30:00'),
-            '1,1',
-            true
+            '1,1'
         );
         $cb3->setTleo($brand);
 
@@ -127,10 +126,9 @@ class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implement
         string $serviceIds,
         DateTime $start,
         DateTime $end,
-        string $areWebcasts,
-        bool $isWebcastOnly = false
+        string $areWebcasts
     ): CollapsedBroadcast {
-        $entity = new CollapsedBroadcast($programmeItem, $broadcastIds, $serviceIds, $areWebcasts, $start, $end, $isWebcastOnly);
+        $entity = new CollapsedBroadcast($programmeItem, $broadcastIds, $serviceIds, $areWebcasts, $start, $end);
         $this->manager->persist($entity);
         return $entity;
     }

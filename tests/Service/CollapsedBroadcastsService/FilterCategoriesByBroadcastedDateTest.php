@@ -1,9 +1,9 @@
 <?php
-namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
+namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
 use DateTimeImmutable;
 
-class FilterCategoriesByBroadcastedDateTest extends AbstractBroadcastsServiceTest
+class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastServiceTest
 {
     public function testFilterCategoriesByBroadcastedDate()
     {
@@ -16,16 +16,16 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractBroadcastsServiceTes
         $category2->method('getDbAncestryIds')->willReturn($dbAncestry2);
 
         $mockBroadcastedResults = [
-            ['ancestry' => '1,2,3,', 'day' => '1', 'month' => '8', 'year' => '2011'],
-            ['ancestry' => '1,2,3,4,', 'day' => '2', 'month' => '8', 'year' => '2011'],
+            ['ancestry' => '1,2,3,'],
+            ['ancestry' => '1,2,3,4,'],
         ];
 
         $start = new DateTimeImmutable();
         $end = new DateTimeImmutable();
 
         $this->mockRepository->expects($this->once())
-            ->method('findBroadcastedDatesForCategories')
-            ->with([$dbAncestry1, $dbAncestry2], 'Broadcast', $start, $end)
+            ->method('filterCategoriesByBroadcastedDates')
+            ->with([$dbAncestry1, $dbAncestry2], false, $start, $end)
             ->willReturn($mockBroadcastedResults);
 
         $dbBroadcastedCategories = $this->service()->filterCategoriesByBroadcastedDate(

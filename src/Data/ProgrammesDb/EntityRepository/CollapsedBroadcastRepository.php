@@ -248,7 +248,7 @@ QUERY;
         foreach ($categoryAncestries as $categoryAncestry) {
             $paramName = 'ancestry' . $i;
             $orExpressions[] = $qb->expr()->like('category.ancestry', ':' . $paramName);
-            $qb->setParameter($paramName, $this->ancestryIdsToString($categoryAncestry));
+            $qb->setParameter($paramName, $this->ancestryIdsToString($categoryAncestry) . '%');
             $i++;
         }
         $qb->andWhere($qb->expr()->orX(
@@ -271,7 +271,7 @@ QUERY;
             ->andWhere('collapsedBroadcast.startAt < :to')
             ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
             ->addOrderBy('collapsedBroadcast.startAt')
-            ->setParameter('ancestry', $this->ancestryIdsToString($categoryAncestry))
+            ->setParameter('ancestry', $this->ancestryIdsToString($categoryAncestry) . '%')
             ->setParameter('from', $from)
             ->setParameter('to', $to)
             ->setParameter('isWebcastOnly', $isWebcastOnly);

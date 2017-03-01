@@ -16,16 +16,15 @@ class FindAllYearsAndMonthsByProgrammeTest extends AbstractDatabaseTest
 
     public function testFindAllYearsAndMonthsByProgramme()
     {
-        $this->loadFixtures(['BroadcastMonthsFixture']);
+        $this->loadFixtures(['CollapsedBroadcastMonthsFixture']);
         $this->enableEmbargoedFilter();
 
-        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
         foreach ($this->findAllYearsAndMonthsByProgrammeData() as $data) {
             list($pid, $type, $expectedOutput) = $data;
 
             $ancestry = $this->getAncestryFromPersistentIdentifier($pid, 'CoreEntity');
-
             $data = $repo->findAllYearsAndMonthsByProgramme($ancestry, $type);
             $this->assertSame($expectedOutput, $data);
 
@@ -39,22 +38,21 @@ class FindAllYearsAndMonthsByProgrammeTest extends AbstractDatabaseTest
     public function findAllYearsAndMonthsByProgrammeData()
     {
         return [
-            ['p0000001', 'Any', [['year' => '2016', 'month' => '7'], ['year' => '2015', 'month' => '6'], ['year' => '2015', 'month' => '5'], ['year' => '2014', 'month' => '6']] ],
-            ['p0000001', 'Broadcast', [['year' => '2016', 'month' => '7'], ['year' => '2015', 'month' => '6'], ['year' => '2015', 'month' => '5']] ],
-            ['p0000001', 'Webcast', [['year' => '2014', 'month' => '6']] ],
-            ['p0000002', 'Any', []], // embargoed
+            ['p0000001', false, [['year' => '2016', 'month' => '7'], ['year' => '2015', 'month' => '6']] ],
+            ['p0000001', true, [['year' => '2014', 'month' => '6']] ],
+            ['p0000003', false, []], // embargoed
         ];
     }
 
     public function testFindAllYearsAndMonthsByProgrammeDataWhenEmbargoIsDisabled()
     {
-        $this->loadFixtures(['BroadcastMonthsFixture']);
+        $this->loadFixtures(['CollapsedBroadcastMonthsFixture']);
         $this->disableEmbargoedFilter();
-        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
-        $ancestry = $this->getAncestryFromPersistentIdentifier('p0000002', 'CoreEntity');
+        $ancestry = $this->getAncestryFromPersistentIdentifier('p0000003', 'CoreEntity');
 
-        $data = $repo->findAllYearsAndMonthsByProgramme($ancestry, 'Any');
+        $data = $repo->findAllYearsAndMonthsByProgramme($ancestry, false);
         $this->assertSame([['year' => '2011', 'month' => '7']], $data);
 
         // findAllYearsAndMonthsByProgramme query only
@@ -64,9 +62,9 @@ class FindAllYearsAndMonthsByProgrammeTest extends AbstractDatabaseTest
     public function testFindAllYearsAndMonthsByProgrammeWhenEmptyResultSet()
     {
         $this->loadFixtures([]);
-        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
-        $entities = $repo->findAllYearsAndMonthsByProgramme([1], 'Any');
+        $entities = $repo->findAllYearsAndMonthsByProgramme([1], false);
         $this->assertEquals([], $entities);
 
         // findAllYearsAndMonthsByProgramme query only
