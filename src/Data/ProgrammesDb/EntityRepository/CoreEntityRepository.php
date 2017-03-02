@@ -60,6 +60,26 @@ class CoreEntityRepository extends MaterializedPathRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function countTleosByCategory(
+        array $ancestryDbIds,
+        bool $filterToAvailable
+    ): int {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['COUNT(DISTINCT programme)'])
+            ->from('ProgrammesPagesService:Programme', 'programme')
+            ->innerJoin('programme.categories', 'category')
+            ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
+            ->andWhere('programme.parent IS NULL')
+            ->andWhere('category.ancestry LIKE :ancestry')
+            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+
+        if ($filterToAvailable) {
+            $qb->andWhere('programme.streamable = 1');
+        }
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
     /**
      * Return the count of available episodes given category ID's
      */
