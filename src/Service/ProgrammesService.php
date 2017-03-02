@@ -36,7 +36,8 @@ class ProgrammesService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function countAllTleosByCategory(Category $category): int {
+    public function countAllTleosByCategory(Category $category): int
+    {
         return $this->repository->countTleosByCategory($category->getDbAncestryIds(), false);
     }
 
@@ -59,7 +60,8 @@ class ProgrammesService extends AbstractService
         return $this->mapManyEntities($programmesInSlice);
     }
 
-    public function countAvailableTleosByCategory(Category $category): int {
+    public function countAvailableTleosByCategory(Category $category): int
+    {
         return $this->repository->countTleosByCategory($category->getDbAncestryIds(), true);
     }
 
