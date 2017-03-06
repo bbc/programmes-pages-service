@@ -10,16 +10,6 @@ class AtozTitleRepository extends EntityRepository
 {
     use Traits\ParentTreeWalkerTrait;
 
-    public function findAllLetters(): array
-    {
-        $qb = $this->createQueryBuilder('AtozTitle')
-            ->select(['DISTINCT AtozTitle.firstLetter'])
-            ->orderBy('AtozTitle.firstLetter');
-
-        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        return array_column($result, 'firstLetter');
-    }
-
     public function findTleosByFirstLetter(
         string $letter,
         bool $filterToAvailable,
