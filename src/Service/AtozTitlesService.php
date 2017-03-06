@@ -2,11 +2,14 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\AtozTitle;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtozTitleRepository;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 
 class AtozTitlesService extends AbstractService
 {
+    public const LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', AtozTitle::NUMERIC_KEY];
+
     public function __construct(
         AtozTitleRepository $repository,
         MapperInterface $mapper
@@ -16,7 +19,7 @@ class AtozTitlesService extends AbstractService
 
     public function findAllLetters(): array
     {
-        return ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '@'];
+        return self::LETTERS;
     }
 
     public function findTleosByFirstLetter(

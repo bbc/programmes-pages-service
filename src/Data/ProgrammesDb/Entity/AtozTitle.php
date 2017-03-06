@@ -16,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AtozTitle
 {
+    public const NUMERIC_KEY = '@';
+
     /**
      * @var int
      *
@@ -70,12 +72,12 @@ class AtozTitle
     public function setTitle(string $title)
     {
         $this->title = $title;
-        $firstLetter = '@';
+        $firstLetter = self::NUMERIC_KEY;
         $possibleAlphas = preg_replace('/[^A-Za-z0-9]/', '', $title);
         if ($possibleAlphas) {
             $firstLetter = substr($possibleAlphas, 0, 1);
             if (preg_match('/^[0-9]/', $firstLetter)) {
-                $firstLetter = '@';
+                $firstLetter = self::NUMERIC_KEY;
             }
         }
         $this->firstLetter = strtolower($firstLetter);
