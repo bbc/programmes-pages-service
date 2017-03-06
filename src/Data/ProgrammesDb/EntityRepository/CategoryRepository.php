@@ -86,7 +86,7 @@ class CategoryRepository extends MaterializedPathRepository
         $result = $this->createQueryBuilder('category')
             ->andWhere('category INSTANCE OF :type')
             ->andWhere('category.depth <= :maxDepth')
-            ->addOrderBy('category.urlKey')
+            ->addOrderBy('category.urlKeys')
             ->setParameter('type', $type)
             ->setParameter('maxDepth', $maxDepth)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
