@@ -22,13 +22,6 @@ class FindTleosByFirstLetterTest extends AbstractDatabaseTest
         $this->disableEmbargoedFilter();
     }
 
-    public function testFindAllLetters()
-    {
-        $letters = $this->repo->findAllLetters();
-        $expectedLetters = ['@', 'm', 't', 'w'];
-        $this->assertEquals($expectedLetters, $letters);
-    }
-
     public function testFindByFirstLetterAt()
     {
         $tleos = $this->repo->findTleosByFirstLetter('@', false, null, 0);
