@@ -30,13 +30,13 @@ class CategoriesService extends AbstractService
 
     public function findFormats(): array
     {
-        $formats = $this->repository->findAllByType('format');
+        $formats = $this->repository->findAllByTypeAndMaxDepth('format', 2);
         return $this->mapManyEntities($formats);
     }
 
     public function findGenres(): array
     {
-        $genres = $this->repository->findAllByType('genre');
+        $genres = $this->repository->findAllByTypeAndMaxDepth('genre', 2);
         return $this->mapManyEntities($genres);
     }
 

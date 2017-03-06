@@ -81,7 +81,7 @@ class CategoryRepository extends MaterializedPathRepository
         return $this->resolveParents($result);
     }
 
-    public function findAllByType(string $type, int $maxDepth = 2): array
+    public function findAllByTypeAndMaxDepth(string $type, int $maxDepth): array
     {
         $result = $this->createQueryBuilder('category')
             ->andWhere('category INSTANCE OF :type')
