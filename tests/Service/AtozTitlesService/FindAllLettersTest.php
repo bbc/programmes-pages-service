@@ -6,14 +6,8 @@ class FindAllLettersTest extends AbstractAtozTitlesServiceTest
 {
     public function testFindAllLetters()
     {
-        $dbData = ['a', 'b', 'c'];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findAllLetters')
-            ->with()
-            ->willReturn($dbData);
-
+        $expectedResult = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '@'];
         $result = $this->service()->findAllLetters();
-        $this->assertEquals(['a', 'b', 'c'], $result);
+        $this->assertEquals($expectedResult, $result);
     }
 }
