@@ -2,9 +2,9 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
-class FindUsedGenresTest extends AbstractCategoriesServiceTest
+class FindGenresTest extends AbstractCategoriesServiceTest
 {
-    public function testFindUsedGenres()
+    public function testFindGenres()
     {
         $genre1 = $this->mockEntity('Genre');
         $genre1->method('getId')->willReturn('C00082');

@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
-class FindUsedFormatsTest extends AbstractCategoriesServiceTest
+class FindFormatsTest extends AbstractCategoriesServiceTest
 {
     public function testFindFormats()
     {

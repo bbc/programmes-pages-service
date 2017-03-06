@@ -16,18 +16,6 @@ class CategoriesService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findUsedFormats(): array
-    {
-        $usedByType = $this->repository->findUsedByType('format');
-        return $this->mapManyEntities($usedByType);
-    }
-
-    public function findUsedGenres(): array
-    {
-        $usedByType = $this->repository->findUsedByType('genre');
-        return $this->mapManyEntities($usedByType);
-    }
-
     public function findFormats(): array
     {
         $formats = $this->repository->findAllByTypeAndMaxDepth('format', 2);

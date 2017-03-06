@@ -7,7 +7,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository::<public>
  */
-class FindUsedByTypeTest extends AbstractDatabaseTest
+class FindByTypeAndMaxDepthTest extends AbstractDatabaseTest
 {
     public function testFindAllByTypeAndMaxDepth()
     {
@@ -34,7 +34,7 @@ class FindUsedByTypeTest extends AbstractDatabaseTest
         ];
     }
 
-    public function testFindUsedByTypeWhenEmptyResult()
+    public function testFindAllByTypeAndMaxDepthWhenEmptyResult()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');
