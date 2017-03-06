@@ -2,9 +2,9 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
-class FindUsedGenresTest extends AbstractCategoriesServiceTest
+class FindGenresTest extends AbstractCategoriesServiceTest
 {
-    public function testFindUsedGenres()
+    public function testFindGenres()
     {
         $genre1 = $this->mockEntity('Genre');
         $genre1->method('getId')->willReturn('C00082');
@@ -15,11 +15,11 @@ class FindUsedGenresTest extends AbstractCategoriesServiceTest
         $dbData = [['pip_id' => 'C00082'], ['pip_id' => 'C00083']];
 
         $this->mockRepository->expects($this->once())
-            ->method('findUsedByType')
-            ->with('genre')
+            ->method('findAllByTypeAndMaxDepth')
+            ->with('genre', 2)
             ->willReturn($dbData);
 
-        $result = $this->service()->findUsedGenres();
+        $result = $this->service()->findGenres();
         $this->assertEquals($this->categoriesFromDbData($dbData), $result);
     }
 }

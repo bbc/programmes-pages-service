@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
-class FindUsedFormatsTest extends AbstractCategoriesServiceTest
+class FindFormatsTest extends AbstractCategoriesServiceTest
 {
     public function testFindFormats()
     {
@@ -15,11 +15,11 @@ class FindUsedFormatsTest extends AbstractCategoriesServiceTest
         $dbData = [['pip_id' => 'PT082'], ['pip_id' => 'PT083']];
 
         $this->mockRepository->expects($this->once())
-            ->method('findUsedByType')
-            ->with('format')
+            ->method('findAllByTypeAndMaxDepth')
+            ->with('format', 2)
             ->willReturn($dbData);
 
-        $result = $this->service()->findUsedFormats();
+        $result = $this->service()->findFormats();
         $this->assertEquals($this->categoriesFromDbData($dbData), $result);
     }
 }

@@ -16,16 +16,16 @@ class CategoriesService extends AbstractService
         parent::__construct($repository, $mapper);
     }
 
-    public function findUsedFormats(): array
+    public function findFormats(): array
     {
-        $usedByType = $this->repository->findUsedByType('format');
-        return $this->mapManyEntities($usedByType);
+        $formats = $this->repository->findAllByTypeAndMaxDepth('format', 2);
+        return $this->mapManyEntities($formats);
     }
 
-    public function findUsedGenres(): array
+    public function findGenres(): array
     {
-        $usedByType = $this->repository->findUsedByType('genre');
-        return $this->mapManyEntities($usedByType);
+        $genres = $this->repository->findAllByTypeAndMaxDepth('genre', 2);
+        return $this->mapManyEntities($genres);
     }
 
     public function findFormatByUrlKeyAncestry(string $formatUrlKey): ?Format

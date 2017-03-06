@@ -64,18 +64,14 @@ class CategoryRepository extends MaterializedPathRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findUsedByType(string $type): array
+    public function findAllByTypeAndMaxDepth(string $type, int $maxDepth): array
     {
         $result = $this->createQueryBuilder('category')
-            ->select(['DISTINCT category'])
-            ->join('category.programmes', 'programme')
-            // When INSTANCE OF receives the type as a parameter, we have to use the actual value that's stored in
-            // the db instead of the ProgrammesPagesService:(type) form.
             ->andWhere('category INSTANCE OF :type')
-            // We limit the depth because for the pan-bbc feed we don't show more than subcategories
-            ->andWhere('category.depth <= 2')
+            ->andWhere('category.depth <= :maxDepth')
             ->addOrderBy('category.urlKey')
             ->setParameter('type', $type)
+            ->setParameter('maxDepth', $maxDepth)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
         return $this->resolveParents($result);
