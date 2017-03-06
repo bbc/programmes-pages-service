@@ -28,6 +28,18 @@ class CategoriesService extends AbstractService
         return $this->mapManyEntities($usedByType);
     }
 
+    public function findFormats(): array
+    {
+        $formats = $this->repository->findAllByType('format');
+        return $this->mapManyEntities($formats);
+    }
+
+    public function findGenres(): array
+    {
+        $genres = $this->repository->findAllByType('genre');
+        return $this->mapManyEntities($genres);
+    }
+
     public function findFormatByUrlKeyAncestry(string $formatUrlKey): ?Format
     {
         $format = $this->repository->findByUrlKeyAncestryAndType([$formatUrlKey], 'format');
