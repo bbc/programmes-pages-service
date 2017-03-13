@@ -248,6 +248,9 @@ QUERY;
 
     public function findEpisodeGuideChildren(int $dbId, ?int $limit, int $offset): array
     {
+        // Note the ORDER BY in this query uses DESC in everything so that the covering
+        // index core_entity_children_json_cover_idx can be used. Mixing ASC and DESC prevents MySQL
+        // using an index
         $qText = <<<QUERY
 SELECT programme, image, masterBrand, network, mbImage
 FROM ProgrammesPagesService:Programme programme
@@ -257,7 +260,7 @@ LEFT JOIN masterBrand.network network
 LEFT JOIN masterBrand.image mbImage
 WHERE programme.parent = :dbId
 AND programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode)
-ORDER BY programme.position DESC, programme.firstBroadcastDate DESC, programme.title ASC, programme.pid ASC
+ORDER BY programme.position DESC, programme.firstBroadcastDate DESC, programme.title DESC
 QUERY;
 
         $q = $this->getEntityManager()->createQuery($qText)
