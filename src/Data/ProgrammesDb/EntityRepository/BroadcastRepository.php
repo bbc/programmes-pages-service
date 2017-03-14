@@ -31,6 +31,23 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findEmbargoedBroadcastsAfter(DateTimeImmutable $from)
+    {
+        $qb = $this->createQueryBuilder('broadcast')
+            ->addSelect(['episode', 'service'])
+            ->innerJoin('broadcast.programmeItem', 'episode')
+            ->innerJoin('broadcast.service', 'service')
+            ->andWhere('episode.isEmbargoed = true')
+            ->andWhere('broadcast.endAt > :from')
+            // earliest first
+            ->addOrderBy('broadcast.endAt', 'ASC')
+            ->setParameter('from', $from);
+
+        $this->setEntityTypeFilter($qb, 'Broadcast');
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
     public function createQueryBuilder($alias, $joinViaVersion = true, $indexBy = null)
     {
         // Any time Broadcasts are fetched here they must be inner joined to
