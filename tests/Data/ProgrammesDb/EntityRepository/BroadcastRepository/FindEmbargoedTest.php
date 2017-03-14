@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\Br
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
+use Tests\BBC\ProgrammesPagesService\DataFixtures\ORM\BroadcastsEmbargoFixture;
 
 /**
  * @covers \BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository::<public>
@@ -23,7 +24,8 @@ class FindEmbargoedTest extends AbstractDatabaseTest
         /** @var BroadcastRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
 
-        $now = new \DateTimeImmutable('2017-01-01 14:00:00');
+        // The fixture knows when NOW is, so pull it out of there
+        $now = new \DateTimeImmutable(BroadcastsEmbargoFixture::NOW_STRING);
 
         $broadcasts = $repo->findEmbargoedBroadcastsAfter($now);
 

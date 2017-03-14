@@ -10,6 +10,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class BroadcastsEmbargoFixture extends AbstractFixture implements DependentFixtureInterface
 {
+    public const NOW_STRING = '2017-01-01 14:00:00';
+
     private $manager;
 
     public function getDependencies()
@@ -29,8 +31,6 @@ class BroadcastsEmbargoFixture extends AbstractFixture implements DependentFixtu
         $versionEmbargoed = $this->getReference('v0000002');
 
         $service = $this->getReference('p00fzl7j');
-
-        // For this fixture: NOW = 2017-01-01 14:00:00
 
         // A: has an embargoed episode in the past
         $this->buildBroadcast(
