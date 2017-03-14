@@ -10,7 +10,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class BroadcastsFixture extends AbstractFixture implements DependentFixtureInterface
 {
-    private $manager;
+    protected $manager;
 
     public function getDependencies()
     {
@@ -96,7 +96,7 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
         $manager->flush();
     }
 
-    private function buildBroadcast($pid, $version, $start, $end, $service)
+    protected function buildBroadcast($pid, $version, $start, $end, $service)
     {
         $entity = new Broadcast($pid, $version, $start, $end);
         $entity->setService($service);

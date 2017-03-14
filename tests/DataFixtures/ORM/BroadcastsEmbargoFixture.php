@@ -8,11 +8,9 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use DateTime;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class BroadcastsEmbargoFixture extends AbstractFixture implements DependentFixtureInterface
+class BroadcastsEmbargoFixture extends BroadcastsFixture implements DependentFixtureInterface
 {
     public const NOW_STRING = '2017-01-01 14:00:00';
-
-    private $manager;
 
     public function getDependencies()
     {
@@ -70,16 +68,5 @@ class BroadcastsEmbargoFixture extends AbstractFixture implements DependentFixtu
         );
 
         $manager->flush();
-    }
-
-    private function buildBroadcast($pid, $version, $start, $end, $service)
-    {
-        $entity = new Broadcast($pid, $version, $start, $end);
-        $entity->setService($service);
-        $entity->setProgrammeItem($version->getProgrammeItem());
-        $entity->setIsWebcast(is_null($service));
-        $this->manager->persist($entity);
-        $this->addReference($pid, $entity);
-        return $entity;
     }
 }
