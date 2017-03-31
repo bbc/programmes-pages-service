@@ -116,3 +116,12 @@ Development
 Install development dependencies with `composer install`.
 
 Run tests and code sniffer with `script/test`.
+
+
+License
+-------
+
+This repository is available under the terms of the Apache 2.0 license.
+View the LICENSE file for more information.
+
+Copyright (c) 2017 BBC
