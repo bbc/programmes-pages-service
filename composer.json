@@ -1,6 +1,6 @@
 {
     "name": "bbc/programmes-pages-service",
-    "license": "proprietary",
+    "license": "Apache-2.0",
     "type": "library",
     "description": "A library for building /programmes pages",
     "autoload": {
