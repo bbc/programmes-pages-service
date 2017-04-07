@@ -2,7 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 
 class ServiceFactory
@@ -14,7 +14,7 @@ class ServiceFactory
     protected $mapperFactory;
 
     public function __construct(
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         MapperFactory $mapperFactory
     ) {
         $this->entityManager = $entityManager;

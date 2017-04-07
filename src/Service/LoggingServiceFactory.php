@@ -2,7 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Psr\Log\LoggerInterface;
@@ -27,7 +27,7 @@ class LoggingServiceFactory
     private $stopwatch;
 
     public function __construct(
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         MapperFactory $mapperFactory,
         LoggerInterface $logger,
         Stopwatch $stopwatch
