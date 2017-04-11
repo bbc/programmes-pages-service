@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper;
@@ -18,14 +19,12 @@ class ServicesService extends AbstractService
     public function findByPidFull(Pid $pid): ?Service
     {
         $dbEntity = $this->repository->findByPidFull($pid);
-
-        return $this->mapSingleServiceEntity($dbEntity);
+        return $dbEntity;
     }
 
     public function getAllInNetworks(): array
     {
         $dbEntities = $this->repository->findAllInNetworks();
-
-        return $this->mapManyServiceEntities($dbEntities);
+        return $dbEntities;
     }
 }

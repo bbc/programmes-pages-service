@@ -30,15 +30,6 @@ class ServiceRepository extends EntityRepository
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findByPid(string $pid): ?Service
-    {
-        $qb = $this->createQueryBuilder('service')
-            ->andWhere('service.pid = :pid')
-            ->setParameter('pid', $pid);
-
-        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
-    }
-
     public function findByPidFull(string $pid): ?Service
     {
         $qb = $this->createQueryBuilder('service')
@@ -47,7 +38,7 @@ class ServiceRepository extends EntityRepository
             ->join('service.network', 'network')
             ->setParameter('pid', $pid);
 
-        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function findAllInNetworks(): array
