@@ -17,15 +17,18 @@ class ServiceTest extends PHPUnit_Framework_TestCase
     public function testConstructorRequiredArgs()
     {
         $sid = new Sid('bbc_1xtra');
+        $pid = new Pid('b0000001');
 
         $service = new Service(
             0,
             $sid,
+            $pid,
             'Name'
         );
 
         $this->assertEquals(0, $service->getDbId());
         $this->assertEquals($sid, $service->getSid());
+        $this->assertEquals($pid, $service->getPid());
         $this->assertEquals('Name', $service->getName());
         $this->assertEquals('Name', $service->getShortName());
         $this->assertSame('bbc_1xtra', $service->getUrlKey());
@@ -34,6 +37,7 @@ class ServiceTest extends PHPUnit_Framework_TestCase
     public function testConstructorOptionalArgs()
     {
         $sid = new Sid('bbc_1xtra');
+        $pid = new Pid('b0000001');
         $network = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Network');
         $startDate = new DateTimeImmutable('2015-01-01');
         $endDate = new DateTimeImmutable('2016-01-01');
@@ -41,6 +45,7 @@ class ServiceTest extends PHPUnit_Framework_TestCase
         $service = new Service(
             0,
             $sid,
+            $pid,
             'Name',
             'shortName',
             'urlKey',
@@ -67,6 +72,7 @@ class ServiceTest extends PHPUnit_Framework_TestCase
         $service = new Service(
             0,
             new Sid('bbc_1xtra'),
+            new Pid('b0000001'),
             'Name',
             'shortName',
             'urlKey',

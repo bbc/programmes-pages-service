@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 
 class ServiceRepository extends EntityRepository
 {

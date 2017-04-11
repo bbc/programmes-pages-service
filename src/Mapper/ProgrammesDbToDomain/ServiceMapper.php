@@ -28,7 +28,7 @@ class ServiceMapper extends AbstractMapper
             $this->cache[$cacheKey] = new Service(
                 $dbService['id'],
                 new Sid($dbService['sid']),
-                new Sid($dbService['pid']),
+                new Pid($dbService['pid']),
                 $dbService['name'],
                 $dbService['shortName'],
                 $dbService['urlKey'],

@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use DateTime;
 use DateTimeImmutable;
 use PHPUnit_Framework_TestCase;
@@ -26,6 +27,7 @@ class ServiceMapperTest extends BaseMapperTestCase
         $dbEntityArray = [
             'id' => 1,
             'sid' => 'radio_four_fm',
+            'pid' => 'b0000001',
             'type' => 'National Radio',
             'name' => 'Radio Four',
             'shortName' => 'FM',
@@ -40,6 +42,7 @@ class ServiceMapperTest extends BaseMapperTestCase
         $expectedEntity = new Service(
             1,
             new Sid('radio_four_fm'),
+            new Pid('b0000001'),
             'Radio Four',
             'FM',
             'fm',
@@ -76,6 +79,7 @@ class ServiceMapperTest extends BaseMapperTestCase
         $dbEntityArray = [
             'id' => 1,
             'sid' => 'radio_four_fm',
+            'pid' => 'b0000001',
             'type' => 'National Radio',
             'name' => 'Radio Four',
             'shortName' => 'FM',
@@ -90,6 +94,7 @@ class ServiceMapperTest extends BaseMapperTestCase
         $expectedEntity = new Service(
             1,
             new Sid('radio_four_fm'),
+            new Pid('b0000001'),
             'Radio Four',
             'FM',
             'fm',
@@ -107,6 +112,7 @@ class ServiceMapperTest extends BaseMapperTestCase
         $dbEntityArray = [
             'id' => 1,
             'sid' => 'radio_four_fm',
+            'pid' => 'b0000001',
             'type' => 'National Radio',
             'name' => 'Radio Four',
             'shortName' => 'FM',
@@ -120,6 +126,7 @@ class ServiceMapperTest extends BaseMapperTestCase
         $expectedEntity = new Service(
             1,
             new Sid('radio_four_fm'),
+            new Pid('b0000001'),
             'Radio Four',
             'FM',
             'fm',
