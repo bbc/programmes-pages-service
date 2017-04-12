@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullPid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullSid;
 
 class UnfetchedService extends Service
@@ -12,6 +13,7 @@ class UnfetchedService extends Service
         parent::__construct(
             0,
             new NullSid(),
+            new NullPid(),
             ''
         );
     }

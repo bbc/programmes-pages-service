@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ContributorsService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class FindAllMostPlayedTest extends AbstractContributorsServiceTest
 {
@@ -58,7 +59,7 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
     {
         $from = new \DateTimeImmutable('2016-06-01');
         $to = new \DateTimeImmutable('2016-06-07');
-        $service = new Service(1, new Sid('sid'), 'name');
+        $service = new Service(1, new Sid('sid'), new Pid('b0000001'), 'name');
 
         $mbid = '6746d775-9550-4360-b8d5-c37bd448ce01';
         $dbData = [

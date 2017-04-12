@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use DateTimeImmutable;
 
@@ -27,6 +28,7 @@ class ServiceMapper extends AbstractMapper
             $this->cache[$cacheKey] = new Service(
                 $dbService['id'],
                 new Sid($dbService['sid']),
+                new Pid($dbService['pid']),
                 $dbService['name'],
                 $dbService['shortName'],
                 $dbService['urlKey'],

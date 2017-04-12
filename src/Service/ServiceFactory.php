@@ -154,6 +154,18 @@ class ServiceFactory
         return $this->instances['SegmentsService'];
     }
 
+    public function getServicesService(): ServicesService
+    {
+        if (!isset($this->instances['ServicesService'])) {
+            $this->instances['ServicesService'] = new ServicesService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Service'),
+                $this->mapperFactory->getServiceMapper()
+            );
+        }
+
+        return $this->instances['ServicesService'];
+    }
+
     public function getVersionsService(): VersionsService
     {
         if (!isset($this->instances['VersionsService'])) {
