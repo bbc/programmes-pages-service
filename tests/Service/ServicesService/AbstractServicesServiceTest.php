@@ -21,11 +21,11 @@ abstract class AbstractServicesServiceTest extends AbstractServiceTest
 
     protected function serviceFromDbData($entity)
     {
-        $mockVersion = $this->createMock(self::ENTITY_NS . 'Service');
-        $mockVersion->method('getPid')->willReturn(
-            new Pid($entity->getPid())
+        $mockService = $this->createMock(self::ENTITY_NS . 'Service');
+        $mockService->method('getPid')->willReturn(
+            $entity['pid']
         );
-        return $mockVersion;
+        return $mockService;
     }
 
     protected function service()

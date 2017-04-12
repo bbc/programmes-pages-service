@@ -17,9 +17,9 @@ class FindByPidFullTest extends AbstractDatabaseTest
 
         $entity = $repo->findByPidFull('p00fzl7j');
 
-        $this->assertInternalType('object', $entity);
-        $this->assertEquals('p00fzl7j', $entity->getPid());
-        $this->assertEquals('National Radio', $entity->getType());
+        $this->assertInternalType('array', $entity);
+        $this->assertEquals('p00fzl7j', $entity['pid']);
+        $this->assertEquals('National Radio', $entity['type']);
 
         // must have only been one query (including the join)
         $this->assertCount(1, $this->getDbQueries());

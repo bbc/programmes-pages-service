@@ -10,13 +10,7 @@ class FindByPidFullTest extends AbstractServicesServiceTest
     public function testFindByPidFull()
     {
         $pid = new Pid('s1234567');
-        $dbData = new Service(
-            'bbc_radio_two',
-            's1234567',
-            'BBC Radio Two',
-            'radio',
-            'audio'
-        );
+        $dbData = ['pid' => 's1234567'];
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
@@ -24,9 +18,8 @@ class FindByPidFullTest extends AbstractServicesServiceTest
             ->willReturn($dbData);
 
         $result = $this->service()->findByPidFull($pid);
-        $serviceResult = $this->serviceFromDbData($dbData);
 
-        $this->assertEquals($serviceResult->getPid(), $result->getPid());
+        $this->assertEquals($this->serviceFromDbData($dbData), $result);
     }
 
     public function testFindByPidFullEmptyData()
