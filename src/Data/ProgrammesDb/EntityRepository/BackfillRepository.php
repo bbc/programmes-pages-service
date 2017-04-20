@@ -37,7 +37,7 @@ class BackfillRepository extends EntityRepository
         try {
             $em->getConnection()->beginTransaction();
             $query = $this->createQueryBuilder('backfill')
-                ->where('backfill.processedTime IS NULL')
+                ->andWhere('backfill.processedTime IS NULL')
                 ->andWhere('backfill.locked = 0')
                 ->setMaxResults($limit)
                 ->addOrderBy('backfill.cid', 'Asc')
@@ -109,7 +109,7 @@ class BackfillRepository extends EntityRepository
     public function findByIds(array $ids)
     {
         $query = $this->createQueryBuilder('backfill')
-            ->where('backfill.cid IN (:ids)')
+            ->andWhere('backfill.cid IN (:ids)')
             ->setParameter('ids', $ids)
             ->getQuery();
         return $query->getResult();
@@ -125,7 +125,7 @@ class BackfillRepository extends EntityRepository
         try {
             $em->getConnection()->beginTransaction();
             $query = $this->createQueryBuilder('backfill')
-                ->where('backfill.cid IN (:ids)')
+                ->andWhere('backfill.cid IN (:ids)')
                 ->andWhere('backfill.locked = 1')
                 ->setParameter('ids', $ids)
                 ->getQuery();
@@ -202,7 +202,7 @@ class BackfillRepository extends EntityRepository
     {
         try {
             $qb = $this->createQueryBuilder('backfill')
-                ->where('backfill.processedTime IS NOT NULL')
+                ->andWhere('backfill.processedTime IS NOT NULL')
                 ->addOrderBy('backfill.processedTime', 'Desc')
                 ->setMaxResults(1);
 
@@ -216,7 +216,7 @@ class BackfillRepository extends EntityRepository
     {
         try {
             $qb = $this->createQueryBuilder('backfill')
-                ->where('backfill.processedTime IS NULL')
+                ->andWhere('backfill.processedTime IS NULL')
                 ->setMaxResults($limit)
                 ->addOrderBy('backfill.cid', 'Desc');
 
@@ -236,7 +236,7 @@ class BackfillRepository extends EntityRepository
     {
         try {
             $query = $this->createQueryBuilder('backfill')
-                ->where('backfill.processedTime IS NULL')
+                ->andWhere('backfill.processedTime IS NULL')
                 ->setMaxResults($limit)
                 ->getQuery();
 
@@ -250,7 +250,7 @@ class BackfillRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('backfill')
             ->select('count(backfill.cid)')
-            ->where('backfill.processedTime IS NULL')
+            ->andWhere('backfill.processedTime IS NULL')
             ->getQuery();
 
         return $query->getSingleScalarResult();

@@ -12,7 +12,7 @@ class CategoryRepository extends MaterializedPathRepository
     public function findByIds(array $dbIds): array
     {
         return $this->createQueryBuilder('category')
-            ->where("category.id IN(:ids)")
+            ->andWhere("category.id IN(:ids)")
             ->setParameter('ids', $dbIds)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

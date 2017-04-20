@@ -235,7 +235,7 @@ QUERY;
         $qb = $this->createQueryBuilder('collapsedBroadcast', false)
             ->select('DISTINCT category.ancestry')
             ->innerJoin('programmeItem.categories', 'category')
-            ->where('collapsedBroadcast.startAt >= :from')
+            ->andWhere('collapsedBroadcast.startAt >= :from')
             ->andWhere('collapsedBroadcast.startAt < :to')
             ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
             ->addOrderBy('collapsedBroadcast.startAt')

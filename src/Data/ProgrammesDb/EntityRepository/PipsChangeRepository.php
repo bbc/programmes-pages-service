@@ -50,7 +50,7 @@ class PipsChangeRepository extends EntityRepository
     {
         try {
             $qb = $this->createQueryBuilder('pipsChange')
-                ->where('pipsChange.processedTime IS NOT NULL')
+                ->andWhere('pipsChange.processedTime IS NOT NULL')
                 ->addOrderBy('pipsChange.processedTime', 'Desc')
                 ->setMaxResults(1);
 
@@ -69,7 +69,7 @@ class PipsChangeRepository extends EntityRepository
     {
         try {
             $qb = $this->createQueryBuilder('pipsChange')
-                ->where('pipsChange.processedTime IS NULL')
+                ->andWhere('pipsChange.processedTime IS NULL')
                 ->addOrderBy('pipsChange.cid', 'Desc')
                 ->setMaxResults($limit);
 
@@ -94,7 +94,7 @@ class PipsChangeRepository extends EntityRepository
     {
         try {
             $query = $this->createQueryBuilder('pipsChange')
-                ->where('pipsChange.processedTime IS NULL')
+                ->andWhere('pipsChange.processedTime IS NULL')
                 ->addOrderBy('pipsChange.cid', 'Asc')
                 ->setMaxResults($limit)
                 ->getQuery();
@@ -109,7 +109,7 @@ class PipsChangeRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('pipsChange')
             ->select('count(pipsChange.cid)')
-            ->where('pipsChange.processedTime IS NULL')
+            ->andWhere('pipsChange.processedTime IS NULL')
             ->getQuery();
 
         return $query->getSingleScalarResult();
@@ -134,7 +134,7 @@ class PipsChangeRepository extends EntityRepository
     {
         $sql = <<<SQL
 DELETE FROM ProgrammesPagesService:PipsChange pc
-WHERE 
+WHERE
     pc.processedTime < :untildate
     AND pc.processedTime <> :skipChangesEventsDate
     AND pc.processedTime is not NULL

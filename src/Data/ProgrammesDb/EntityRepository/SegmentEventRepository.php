@@ -60,7 +60,7 @@ class SegmentEventRepository extends EntityRepository
             ->leftJoin('segment.contributions', 'contributions')
             ->leftJoin('contributions.contributor', 'contributor')
             ->leftJoin('contributions.creditRole', 'creditRole')
-            ->where("segmentEvent.version IN (:dbIds)")
+            ->andWhere("segmentEvent.version IN (:dbIds)")
             ->addOrderBy('segmentEvent.position', 'ASC')
             ->addOrderBy('contributions.position', 'ASC')
             ->addOrderBy('contributor.sortName', 'ASC')

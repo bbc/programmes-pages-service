@@ -12,7 +12,7 @@ class NetworkRepository extends EntityRepository
         $qb = $this->createQueryBuilder('network')
             ->addSelect('defaultService')
             ->join('network.defaultService', 'defaultService')
-            ->where('network.urlKey = :urlKey')
+            ->andWhere('network.urlKey = :urlKey')
             ->setParameter('urlKey', $urlKey);
 
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);

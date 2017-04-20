@@ -26,7 +26,7 @@ class AtozTitleRepository extends EntityRepository
             ->leftJoin('c.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('masterBrand.image', 'mbImage')
-            ->where('AtozTitle.firstLetter = :firstLetter')
+            ->andWhere('AtozTitle.firstLetter = :firstLetter')
             ->andWhere('c INSTANCE OF (ProgrammesPagesService:Brand, ProgrammesPagesService:Series, ProgrammesPagesService:Episode)')
             ->orderBy('AtozTitle.title')
             ->addOrderBy('c.pid')
@@ -54,7 +54,7 @@ class AtozTitleRepository extends EntityRepository
         $letter = strtolower($letter);
         $qb = $this->createQueryBuilder('AtozTitle')
             ->select('count(AtozTitle.id)')
-            ->where('AtozTitle.firstLetter = :firstLetter')
+            ->andWhere('AtozTitle.firstLetter = :firstLetter')
             ->andWhere('c INSTANCE OF (ProgrammesPagesService:Brand, ProgrammesPagesService:Series, ProgrammesPagesService:Episode)')
             ->setParameter('firstLetter', $letter);
 

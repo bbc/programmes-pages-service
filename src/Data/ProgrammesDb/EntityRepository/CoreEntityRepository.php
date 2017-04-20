@@ -182,7 +182,7 @@ QUERY;
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('network.image', 'nwImage')
             ->leftJoin('entity.categories', 'category')
-            ->where('entity.pid = :pid')
+            ->andWhere('entity.pid = :pid')
             ->setParameter('pid', $pid);
 
         $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
@@ -198,7 +198,7 @@ QUERY;
             ->leftJoin('programme.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('masterBrand.image', 'mbImage')
-            ->where("programme.id IN(:ids)")
+            ->andWhere("programme.id IN(:ids)")
             ->setParameter('ids', $ids)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

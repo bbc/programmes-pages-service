@@ -12,7 +12,7 @@ class ContributorRepository extends EntityRepository
     public function findByMusicBrainzId(string $musicBrainzId): ?array
     {
         $qb = $this->createQueryBuilder('contributor')
-            ->where('contributor.musicBrainzId = :mid')
+            ->andWhere('contributor.musicBrainzId = :mid')
             ->setParameter('mid', $musicBrainzId)
             // Limit 1 due to duplicate artists with the same musicbrainz id
             ->setMaxResults(1);
@@ -57,7 +57,7 @@ class ContributorRepository extends EntityRepository
             ->join('segmentEvent.version', 'version')
             ->join('version.broadcasts', 'broadcast')
             ->join('contribution.creditRole', 'creditRole')
-            ->where('broadcast.startAt BETWEEN :from AND :to')
+            ->andWhere('broadcast.startAt BETWEEN :from AND :to')
             ->andWhere('creditRole.creditRoleId = \'PERFORMER\'')
             ->groupBy('contributor.id')
             ->orderBy('contributorPlayCount', 'DESC')
