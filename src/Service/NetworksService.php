@@ -20,4 +20,18 @@ class NetworksService extends AbstractService
         $dbEntity = $this->repository->findByUrlKeyWithDefaultService($urlKey);
         return $this->mapSingleEntity($dbEntity);
     }
+
+    public function findPublishedNetworksByType(
+        array $types,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $dbEntities = $this->repository->findPublishedNetworksByType(
+            $types,
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        return $this->mapManyEntities($dbEntities);
+    }
 }

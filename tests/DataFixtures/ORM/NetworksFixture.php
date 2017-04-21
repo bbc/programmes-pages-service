@@ -29,7 +29,9 @@ class NetworksFixture extends AbstractFixture
             'BBC Radio Four',
             $service,
             'radio4',
-            'radio'
+            'National Radio',
+            'radio',
+            5
         );
 
         $service2 = $this->buildService(
@@ -44,7 +46,10 @@ class NetworksFixture extends AbstractFixture
             'bbc_radio_two',
             'BBC Radio 2',
             $service2,
-            'radio2'
+            'radio2',
+            'National Radio',
+            null,
+            3
         );
 
         $service3 = $this->buildService(
@@ -60,7 +65,9 @@ class NetworksFixture extends AbstractFixture
             'BBC One',
             $service3,
             'bbcone',
-            'tv'
+            'TV',
+            'tv',
+            1
         );
 
         $service->setNetwork($network1);
@@ -89,11 +96,16 @@ class NetworksFixture extends AbstractFixture
         $title,
         $defaultService = null,
         $urlKey = null,
-        $medium = null
+        $type = null,
+        $medium = null,
+        $position = null
     ) {
         $entity = new Network($nid, $title, $title);
         $entity->setDefaultService($defaultService);
         $entity->setUrlKey($urlKey);
+        $entity->setType($type);
+        $entity->setPosition($position);
+
         if ($medium) {
             $entity->setMedium($medium);
         }
