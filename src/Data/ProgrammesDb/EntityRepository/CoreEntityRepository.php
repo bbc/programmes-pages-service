@@ -239,10 +239,14 @@ QUERY;
         return $this->resolveParents($result);
     }
 
-    public function countAll(): int
+    public function countAll(string $entityType = 'CoreEntity'): int
     {
-        $qb = $this->createQueryBuilder('programme')
-            ->select(['count(programme.id)']);
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('count(entity.id)')
+            ->from('ProgrammesPagesService:' . $entityType, 'entity');
+
         return $qb->getQuery()->getSingleScalarResult();
     }
 

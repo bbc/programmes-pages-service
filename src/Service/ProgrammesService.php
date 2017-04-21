@@ -109,9 +109,10 @@ class ProgrammesService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function countAll(): int
+    public function countAll(string $entityType = 'Programme'): int
     {
-        return $this->repository->countAll();
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+        return $this->repository->countAll($entityType);
     }
 
     public function findByPid(Pid $pid, string $entityType = 'Programme'): ?Programme
