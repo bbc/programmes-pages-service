@@ -7,14 +7,16 @@ use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper;
+use Psr\Cache\CacheItemPoolInterface;
 
 class VersionsService extends AbstractService
 {
     public function __construct(
         VersionRepository $repository,
-        VersionMapper $mapper
+        VersionMapper $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($repository, $mapper);
+        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
     }
 
     public function findByPidFull(Pid $pid): ?Version

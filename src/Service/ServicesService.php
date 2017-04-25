@@ -6,14 +6,16 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceReposit
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper;
+use Psr\Cache\CacheItemPoolInterface;
 
 class ServicesService extends AbstractService
 {
     public function __construct(
         ServiceRepository $repository,
-        ServiceMapper $mapper
+        ServiceMapper $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($repository, $mapper);
+        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
     }
 
     public function findByPidFull(Pid $pid): ?Service

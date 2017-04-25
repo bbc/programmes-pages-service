@@ -7,14 +7,16 @@ use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributionMapper;
+use Psr\Cache\CacheItemPoolInterface;
 
 class ContributionsService extends AbstractService
 {
     public function __construct(
         ContributionRepository $repository,
-        ContributionMapper $mapper
+        ContributionMapper $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($repository, $mapper);
+        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
     }
 
     public function findByContributionToProgramme(

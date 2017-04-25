@@ -5,14 +5,16 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\RelatedLinkRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
+use Psr\Cache\CacheItemPoolInterface;
 
 class RelatedLinksService extends AbstractService
 {
     public function __construct(
         RelatedLinkRepository $repository,
-        RelatedLinkMapper $mapper
+        RelatedLinkMapper $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($repository, $mapper);
+        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
     }
 
     public function findByRelatedToProgramme(

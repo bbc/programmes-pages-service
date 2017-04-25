@@ -7,14 +7,16 @@ use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributorMapper;
 use DateTimeImmutable;
+use Psr\Cache\CacheItemPoolInterface;
 
 class ContributorsService extends AbstractService
 {
     public function __construct(
         ContributorRepository $repository,
-        ContributorMapper $mapper
+        ContributorMapper $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($repository, $mapper);
+        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
     }
 
     public function findByMusicBrainzId(string $musicBrainzId): ?Contributor

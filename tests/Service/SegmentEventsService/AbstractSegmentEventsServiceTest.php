@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\SegmentEventsService;
 
 use BBC\ProgrammesPagesService\Service\SegmentEventsService;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractSegmentEventsServiceTest extends AbstractServiceTest
@@ -27,6 +28,6 @@ abstract class AbstractSegmentEventsServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new SegmentEventsService($this->mockRepository, $this->mockMapper);
+        return new SegmentEventsService($this->mockRepository, $this->mockMapper, new NullAdapter());
     }
 }

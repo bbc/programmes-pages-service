@@ -5,14 +5,16 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\NetworkRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper;
+use Psr\Cache\CacheItemPoolInterface;
 
 class NetworksService extends AbstractService
 {
     public function __construct(
         NetworkRepository $repository,
-        NetworkMapper $mapper
+        NetworkMapper $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($repository, $mapper);
+        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
     }
 
     public function findByUrlKeyWithDefaultService(string $urlKey): ?Network

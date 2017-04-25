@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
 use BBC\ProgrammesPagesService\Service\CategoriesService;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractCategoriesServiceTest extends AbstractServiceTest
@@ -28,6 +29,6 @@ abstract class AbstractCategoriesServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new CategoriesService($this->mockRepository, $this->mockMapper);
+        return new CategoriesService($this->mockRepository, $this->mockMapper, new NullAdapter());
     }
 }

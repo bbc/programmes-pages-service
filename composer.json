@@ -17,16 +17,18 @@
     ],
     "require": {
         "php": ">=7.1.0",
+        "bbc/doctrine-extensions": "^2.4.137",
         "doctrine/orm": "^2.5",
+        "psr/cache": "^1.0",
         "psr/log": "^1.0",
-        "symfony/stopwatch": "^3.2",
-        "bbc/doctrine-extensions": "^2.4.137"
+        "symfony/stopwatch": "^3.2"
     },
     "require-dev": {
+        "doctrine/data-fixtures": "^1.2",
+        "escapestudios/symfony2-coding-standard": "^2.9",
         "phpunit/phpunit": "^5.7",
         "squizlabs/php_codesniffer": "^2.7",
-        "escapestudios/symfony2-coding-standard": "^2.9",
-        "doctrine/data-fixtures": "^1.2"
+        "symfony/cache": "^3.2"
     },
     "config": {
         "platform": {

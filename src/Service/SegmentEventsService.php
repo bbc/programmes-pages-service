@@ -9,14 +9,16 @@ use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentEventMapper;
+use Psr\Cache\CacheItemPoolInterface;
 
 class SegmentEventsService extends AbstractService
 {
     public function __construct(
         SegmentEventRepository $repository,
-        SegmentEventMapper $mapper
+        SegmentEventMapper $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($repository, $mapper);
+        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
     }
 
     public function findByPidFull(Pid $pid): ?SegmentEvent

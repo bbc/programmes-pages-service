@@ -5,12 +5,18 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
 use Doctrine\ORM\EntityRepository;
+use Psr\Cache\CacheItemPoolInterface;
 
 abstract class AbstractService
 {
     public const DEFAULT_PAGE = 1;
     public const DEFAULT_LIMIT = 300;
     public const NO_LIMIT = null;
+
+    /**
+     * @var CacheItemPoolInterface
+     */
+    private $cacheItemPoolInterface;
 
     /**
      * @var MapperInterface
@@ -24,10 +30,12 @@ abstract class AbstractService
 
     public function __construct(
         EntityRepository $repository,
-        MapperInterface $mapper
+        MapperInterface $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
         $this->repository = $repository;
         $this->mapper = $mapper;
+        $this->cacheItemPoolInterface = $cacheItemPoolInterface;
     }
 
     protected function getOffset(?int $limit, int $page): int

@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\RelatedLinksService;
 
 use BBC\ProgrammesPagesService\Service\RelatedLinksService;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractRelatedLinksServiceTest extends AbstractServiceTest
@@ -28,6 +29,6 @@ abstract class AbstractRelatedLinksServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new RelatedLinksService($this->mockRepository, $this->mockMapper);
+        return new RelatedLinksService($this->mockRepository, $this->mockMapper, new NullAdapter());
     }
 }

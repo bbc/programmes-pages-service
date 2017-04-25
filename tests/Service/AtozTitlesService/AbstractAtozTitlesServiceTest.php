@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
 use BBC\ProgrammesPagesService\Service\AtozTitlesService;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
@@ -27,6 +28,6 @@ abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new AtozTitlesService($this->mockRepository, $this->mockMapper);
+        return new AtozTitlesService($this->mockRepository, $this->mockMapper, new NullAdapter());
     }
 }

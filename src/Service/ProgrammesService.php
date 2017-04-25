@@ -13,6 +13,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
 use InvalidArgumentException;
+use Psr\Cache\CacheItemPoolInterface;
 
 class ProgrammesService extends AbstractService
 {
@@ -31,9 +32,10 @@ class ProgrammesService extends AbstractService
 
     public function __construct(
         CoreEntityRepository $repository,
-        ProgrammeMapper $mapper
+        ProgrammeMapper $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($repository, $mapper);
+        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
     }
 
     public function countAllTleosByCategory(Category $category): int
