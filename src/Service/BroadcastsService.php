@@ -8,14 +8,16 @@ use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\BroadcastMapper;
 use DateTimeImmutable;
+use Psr\Cache\CacheItemPoolInterface;
 
 class BroadcastsService extends AbstractService
 {
     public function __construct(
         BroadcastRepository $repository,
-        BroadcastMapper $mapper
+        BroadcastMapper $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($repository, $mapper);
+        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
     }
 
     public function findByVersion(

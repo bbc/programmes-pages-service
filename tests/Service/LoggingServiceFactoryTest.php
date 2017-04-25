@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\VersionsService;
 use BBC\ProgrammesPagesService\Service\LoggingServiceFactory;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Psr\Log\NullLogger;
 use PHPUnit_Framework_TestCase;
@@ -45,7 +46,8 @@ class LoggingServiceFactoryTest extends PHPUnit_Framework_TestCase
         // We want a real service rather than a mock here so we can assert on the error messages
         $service = new VersionsService(
             $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository'),
-            $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper')
+            $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'),
+            new NullAdapter()
         );
 
         $logger = $this->createMock('Psr\Log\LoggerInterface');
@@ -88,7 +90,8 @@ class LoggingServiceFactoryTest extends PHPUnit_Framework_TestCase
         // We want a real service rather than a mock here so we can assert on the error messages
         $service = new VersionsService(
             $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository'),
-            $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper')
+            $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'),
+            new NullAdapter()
         );
 
         $timedService = $this->serviceProxyClass($service, new NullLogger(), new Stopwatch());
@@ -104,7 +107,8 @@ class LoggingServiceFactoryTest extends PHPUnit_Framework_TestCase
         // We want a real service rather than a mock here so we can assert on the error messages
         $service = new VersionsService(
             $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository'),
-            $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper')
+            $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'),
+            new NullAdapter()
         );
 
         $timedService = $this->serviceProxyClass($service, new NullLogger(), new Stopwatch());
@@ -126,7 +130,8 @@ class LoggingServiceFactoryTest extends PHPUnit_Framework_TestCase
             $mockEntityManager,
             $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory'),
             $logger,
-            $stopwatch
+            $stopwatch,
+            new NullAdapter()
         );
     }
 

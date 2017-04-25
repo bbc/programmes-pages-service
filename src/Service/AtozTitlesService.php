@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\AtozTitle;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtozTitleRepository;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 class AtozTitlesService extends AbstractService
 {
@@ -12,9 +13,10 @@ class AtozTitlesService extends AbstractService
 
     public function __construct(
         AtozTitleRepository $repository,
-        MapperInterface $mapper
+        MapperInterface $mapper,
+        CacheItemPoolInterface $cacheItemPoolInterface
     ) {
-        parent::__construct($repository, $mapper);
+        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
     }
 
     public function findAllLetters(): array

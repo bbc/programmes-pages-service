@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Service\ServiceFactory;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * @covers BBC\ProgrammesPagesService\Service\ServiceFactory
@@ -23,7 +24,8 @@ class ServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceFactory = new ServiceFactory(
             $this->entityManager($expectedRepositories),
-            $this->mapperFactory($expectedMapper)
+            $this->mapperFactory($expectedMapper),
+            new NullAdapter()
         );
 
         $service = $serviceFactory->{'get' . $serviceName}();

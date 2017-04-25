@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
 
 use BBC\ProgrammesPagesService\Service\BroadcastsService;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
@@ -27,6 +28,6 @@ abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new BroadcastsService($this->mockRepository, $this->mockMapper);
+        return new BroadcastsService($this->mockRepository, $this->mockMapper, new NullAdapter());
     }
 }

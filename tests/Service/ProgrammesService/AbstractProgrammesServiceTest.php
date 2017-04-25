@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\ProgrammesService;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractProgrammesServiceTest extends AbstractServiceTest
@@ -29,6 +30,6 @@ abstract class AbstractProgrammesServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new ProgrammesService($this->mockRepository, $this->mockMapper);
+        return new ProgrammesService($this->mockRepository, $this->mockMapper, new NullAdapter());
     }
 }

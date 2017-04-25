@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\VersionsService;
 
 use BBC\ProgrammesPagesService\Service\VersionsService;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractVersionsServiceTest extends AbstractServiceTest
@@ -27,6 +28,6 @@ abstract class AbstractVersionsServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new VersionsService($this->mockRepository, $this->mockMapper);
+        return new VersionsService($this->mockRepository, $this->mockMapper, new NullAdapter());
     }
 }

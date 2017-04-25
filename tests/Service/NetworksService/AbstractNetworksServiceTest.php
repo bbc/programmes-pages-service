@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\NetworksService;
 
 use BBC\ProgrammesPagesService\Service\NetworksService;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractNetworksServiceTest extends AbstractServiceTest
@@ -26,6 +27,6 @@ abstract class AbstractNetworksServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new NetworksService($this->mockRepository, $this->mockMapper);
+        return new NetworksService($this->mockRepository, $this->mockMapper, new NullAdapter());
     }
 }

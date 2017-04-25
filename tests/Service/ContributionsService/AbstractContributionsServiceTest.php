@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ContributionsService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\ContributionsService;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractContributionsServiceTest extends AbstractServiceTest
@@ -29,6 +30,6 @@ abstract class AbstractContributionsServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new ContributionsService($this->mockRepository, $this->mockMapper);
+        return new ContributionsService($this->mockRepository, $this->mockMapper, new NullAdapter());
     }
 }

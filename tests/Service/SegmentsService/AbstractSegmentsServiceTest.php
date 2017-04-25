@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\SegmentsService;
 
 use BBC\ProgrammesPagesService\Service\SegmentsService;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractSegmentsServiceTest extends AbstractServiceTest
@@ -27,6 +28,6 @@ abstract class AbstractSegmentsServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new SegmentsService($this->mockRepository, $this->mockMapper);
+        return new SegmentsService($this->mockRepository, $this->mockMapper, new NullAdapter());
     }
 }
