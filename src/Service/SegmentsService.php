@@ -13,9 +13,9 @@ class SegmentsService extends AbstractService
     public function __construct(
         SegmentRepository $repository,
         SegmentMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findByPidFull(Pid $pid): ?Segment

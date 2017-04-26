@@ -12,9 +12,9 @@ class RelatedLinksService extends AbstractService
     public function __construct(
         RelatedLinkRepository $repository,
         RelatedLinkMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findByRelatedToProgramme(

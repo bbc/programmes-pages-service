@@ -14,9 +14,9 @@ class ContributionsService extends AbstractService
     public function __construct(
         ContributionRepository $repository,
         ContributionMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findByContributionToProgramme(

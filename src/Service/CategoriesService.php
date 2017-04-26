@@ -13,9 +13,9 @@ class CategoriesService extends AbstractService
     public function __construct(
         CategoryRepository $repository,
         CategoryMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findFormats(): array
