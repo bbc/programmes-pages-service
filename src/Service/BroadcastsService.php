@@ -15,9 +15,9 @@ class BroadcastsService extends AbstractService
     public function __construct(
         BroadcastRepository $repository,
         BroadcastMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findByVersion(

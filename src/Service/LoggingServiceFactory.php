@@ -30,11 +30,11 @@ class LoggingServiceFactory
     public function __construct(
         EntityManagerInterface $entityManager,
         MapperFactory $mapperFactory,
+        CacheItemPoolInterface $cache,
         LoggerInterface $logger,
-        Stopwatch $stopwatch,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        Stopwatch $stopwatch
     ) {
-        $this->serviceFactory = new ServiceFactory($entityManager, $mapperFactory, $cacheItemPoolInterface);
+        $this->serviceFactory = new ServiceFactory($entityManager, $mapperFactory, $cache);
         $this->logger = $logger;
         $this->stopwatch = $stopwatch;
     }

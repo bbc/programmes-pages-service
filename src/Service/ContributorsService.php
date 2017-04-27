@@ -14,9 +14,9 @@ class ContributorsService extends AbstractService
     public function __construct(
         ContributorRepository $repository,
         ContributorMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findByMusicBrainzId(string $musicBrainzId): ?Contributor

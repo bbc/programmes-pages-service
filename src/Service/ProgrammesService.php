@@ -33,9 +33,9 @@ class ProgrammesService extends AbstractService
     public function __construct(
         CoreEntityRepository $repository,
         ProgrammeMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function countAllTleosByCategory(Category $category): int

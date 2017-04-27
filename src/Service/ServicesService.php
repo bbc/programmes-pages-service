@@ -13,9 +13,9 @@ class ServicesService extends AbstractService
     public function __construct(
         ServiceRepository $repository,
         ServiceMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findByPidFull(Pid $pid): ?Service

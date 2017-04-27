@@ -16,9 +16,9 @@ class SegmentEventsService extends AbstractService
     public function __construct(
         SegmentEventRepository $repository,
         SegmentEventMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findByPidFull(Pid $pid): ?SegmentEvent

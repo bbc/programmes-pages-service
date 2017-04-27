@@ -129,9 +129,9 @@ class LoggingServiceFactoryTest extends PHPUnit_Framework_TestCase
         return new LoggingServiceFactory(
             $mockEntityManager,
             $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory'),
+            new NullAdapter(),
             $logger,
-            $stopwatch,
-            new NullAdapter()
+            $stopwatch
         );
     }
 

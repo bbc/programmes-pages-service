@@ -16,16 +16,16 @@ class ServiceFactory
     /**
      * @var CacheItemPoolInterface
      */
-    private $cacheItemPoolInterface;
+    private $cache;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         MapperFactory $mapperFactory,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
         $this->entityManager = $entityManager;
         $this->mapperFactory = $mapperFactory;
-        $this->cacheItemPoolInterface = $cacheItemPoolInterface;
+        $this->cache = $cache;
     }
 
     public function getAtozTitlesService(): AtozTitlesService
@@ -34,7 +34,7 @@ class ServiceFactory
             $this->instances['AtozTitlesService'] = new AtozTitlesService(
                 $this->entityManager->getRepository('ProgrammesPagesService:AtozTitle'),
                 $this->mapperFactory->getAtozTitleMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -47,7 +47,7 @@ class ServiceFactory
             $this->instances['BroadcastsService'] = new BroadcastsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Broadcast'),
                 $this->mapperFactory->getBroadcastMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -60,7 +60,7 @@ class ServiceFactory
             $this->instances['CategoriesService'] = new CategoriesService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Category'),
                 $this->mapperFactory->getCategoryMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -73,7 +73,7 @@ class ServiceFactory
             $this->instances['CollapsedBroadcastsService'] = new CollapsedBroadcastsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:CollapsedBroadcast'),
                 $this->mapperFactory->getCollapsedBroadcastMapper(),
-                $this->cacheItemPoolInterface,
+                $this->cache,
                 $this->entityManager->getRepository('ProgrammesPagesService:Service')
             );
         }
@@ -87,7 +87,7 @@ class ServiceFactory
             $this->instances['ContributionsService'] = new ContributionsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Contribution'),
                 $this->mapperFactory->getContributionMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -100,7 +100,7 @@ class ServiceFactory
             $this->instances['ContributorsService'] = new ContributorsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Contributor'),
                 $this->mapperFactory->getContributorMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -113,7 +113,7 @@ class ServiceFactory
             $this->instances['NetworksService'] = new NetworksService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Network'),
                 $this->mapperFactory->getNetworkMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -126,7 +126,7 @@ class ServiceFactory
             $this->instances['ProgrammesService'] = new ProgrammesService(
                 $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
                 $this->mapperFactory->getProgrammeMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -139,7 +139,7 @@ class ServiceFactory
             $this->instances['RelatedLinksService'] = new RelatedLinksService(
                 $this->entityManager->getRepository('ProgrammesPagesService:RelatedLink'),
                 $this->mapperFactory->getRelatedLinkMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -152,7 +152,7 @@ class ServiceFactory
             $this->instances['SegmentEventsService'] = new SegmentEventsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:SegmentEvent'),
                 $this->mapperFactory->getSegmentEventMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -165,7 +165,7 @@ class ServiceFactory
             $this->instances['SegmentsService'] = new SegmentsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Segment'),
                 $this->mapperFactory->getSegmentMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -178,7 +178,7 @@ class ServiceFactory
             $this->instances['ServicesService'] = new ServicesService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Service'),
                 $this->mapperFactory->getServiceMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 
@@ -191,7 +191,7 @@ class ServiceFactory
             $this->instances['VersionsService'] = new VersionsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:Version'),
                 $this->mapperFactory->getVersionMapper(),
-                $this->cacheItemPoolInterface
+                $this->cache
             );
         }
 

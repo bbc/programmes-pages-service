@@ -14,9 +14,9 @@ class VersionsService extends AbstractService
     public function __construct(
         VersionRepository $repository,
         VersionMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findByPidFull(Pid $pid): ?Version

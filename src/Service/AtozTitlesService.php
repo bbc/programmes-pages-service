@@ -14,9 +14,9 @@ class AtozTitlesService extends AbstractService
     public function __construct(
         AtozTitleRepository $repository,
         MapperInterface $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findAllLetters(): array

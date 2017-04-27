@@ -21,10 +21,10 @@ class CollapsedBroadcastsService extends AbstractService
     public function __construct(
         CollapsedBroadcastRepository $repository,
         MapperInterface $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface,
+        CacheItemPoolInterface $cache,
         ServiceRepository $serviceRepository
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
         $this->serviceRepository = $serviceRepository;
     }
 

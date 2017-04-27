@@ -12,9 +12,9 @@ class NetworksService extends AbstractService
     public function __construct(
         NetworkRepository $repository,
         NetworkMapper $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($repository, $mapper, $cacheItemPoolInterface);
+        parent::__construct($repository, $mapper, $cache);
     }
 
     public function findByUrlKeyWithDefaultService(string $urlKey): ?Network

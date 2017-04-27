@@ -16,7 +16,7 @@ abstract class AbstractService
     /**
      * @var CacheItemPoolInterface
      */
-    private $cacheItemPoolInterface;
+    private $cache;
 
     /**
      * @var MapperInterface
@@ -31,11 +31,11 @@ abstract class AbstractService
     public function __construct(
         EntityRepository $repository,
         MapperInterface $mapper,
-        CacheItemPoolInterface $cacheItemPoolInterface
+        CacheItemPoolInterface $cache
     ) {
         $this->repository = $repository;
         $this->mapper = $mapper;
-        $this->cacheItemPoolInterface = $cacheItemPoolInterface;
+        $this->cache = $cache;
     }
 
     protected function getOffset(?int $limit, int $page): int
