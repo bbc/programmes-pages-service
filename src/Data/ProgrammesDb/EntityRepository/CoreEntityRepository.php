@@ -12,7 +12,6 @@ use InvalidArgumentException;
 class CoreEntityRepository extends MaterializedPathRepository
 {
     use Traits\ParentTreeWalkerTrait;
-    use Traits\NetworkMediumTrait;
     use StripPunctuationTrait;
 
     const ALL_VALID_ENTITY_TYPES = [
@@ -464,10 +463,6 @@ QUERY;
 
         $q = $this->getEntityManager()->createQuery($qText)
             ->setParameter('booleanKeywords', $booleanKeywords);
-
-        if ($networkMedium) {
-            $q->setParameter('service', $networkMedium);
-        }
 
         $count = $q->getSingleScalarResult();
         return $count ? $count : 0;
