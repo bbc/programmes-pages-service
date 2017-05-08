@@ -3,7 +3,6 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
-use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\BroadcastMapper;
@@ -12,8 +11,6 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class BroadcastsService extends AbstractService
 {
-    protected $repository;
-
     public function __construct(
         BroadcastRepository $repository,
         BroadcastMapper $mapper,
