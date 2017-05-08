@@ -11,7 +11,9 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use DateTime;
 use DateTimeImmutable;
+use DateTimeZone;
 
 class BroadcastMapper extends AbstractMapper
 {
@@ -48,12 +50,32 @@ class BroadcastMapper extends AbstractMapper
             $this->getVersionModel($dbBroadcast),
             $this->getProgrammeItemModel($dbBroadcast),
             $this->getServiceModel($dbBroadcast),
-            DateTimeImmutable::createFromMutable($dbBroadcast['startAt']),
-            DateTimeImmutable::createFromMutable($dbBroadcast['endAt']),
+            DateTimeImmutable::createFromMutable($this->adaptTimezoneOfDateInDatabase($dbBroadcast['startAt'])),
+            DateTimeImmutable::createFromMutable($this->adaptTimezoneOfDateInDatabase($dbBroadcast['endAt'])),
             $dbBroadcast['duration'],
             $dbBroadcast['isBlanked'],
             $dbBroadcast['isRepeat']
         );
+    }
+
+    private function adaptTimezoneOfDateInDatabase(DateTime $date)
+    {
+        $secondsOffset = $date->getOffset();
+
+        $dbTimeZone = new DateTimeZone("UTC");
+        $date = $date->setTimezone($dbTimeZone);
+
+
+        if ($secondsOffset > 0) {
+            $date->add(new \DateInterval('PT' . $secondsOffset . 'S'));
+        }
+
+        if ($secondsOffset < 0) {
+            $date->sub(new \DateInterval('PT' . $secondsOffset . 'S'));
+        }
+
+        $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        return $date;
     }
 
     private function getWebcastDomainModel(array $dbWebcast)
