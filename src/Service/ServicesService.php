@@ -29,4 +29,10 @@ class ServicesService extends AbstractService
         $dbEntities = $this->repository->findAllInNetworks();
         return $this->mapManyEntities($dbEntities);
     }
+
+    public function findAllInNetwork($networkId): array
+    {
+        $dbEntities = $this->repository->findAllInNetwork($networkId);
+        return $this->mapManyEntities($dbEntities);
+    }
 }
