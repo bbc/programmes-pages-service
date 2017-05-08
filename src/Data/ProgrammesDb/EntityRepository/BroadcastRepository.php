@@ -120,10 +120,9 @@ class BroadcastRepository extends EntityRepository
             ->setMaxResults($limit)
             ->setFirstResult($offset)
 
-
-           ->setParameter('startDate', $startDate)
-           ->setParameter('endDate', $endDate)
-           ->setParameter('sid', $serviceId);
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('sid', $serviceId);
 
         $this->setEntityTypeFilter($qb, 'Broadcast');
 
