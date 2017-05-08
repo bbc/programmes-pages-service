@@ -11,6 +11,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -65,16 +66,16 @@ class BroadcastMapper extends AbstractMapper
         $dbTimeZone = new DateTimeZone("UTC");
         $date = $date->setTimezone($dbTimeZone);
 
-
         if ($secondsOffset > 0) {
-            $date->add(new \DateInterval('PT' . $secondsOffset . 'S'));
+            $date->add(new DateInterval('PT' . $secondsOffset . 'S'));
         }
 
         if ($secondsOffset < 0) {
-            $date->sub(new \DateInterval('PT' . $secondsOffset . 'S'));
+            $date->sub(new DateInterval('PT' . $secondsOffset . 'S'));
         }
 
         $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        
         return $date;
     }
 
