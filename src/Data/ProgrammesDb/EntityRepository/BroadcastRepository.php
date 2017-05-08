@@ -104,8 +104,8 @@ class BroadcastRepository extends EntityRepository
         Sid $serviceId,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
-        $limit,
-        $offset = 0
+        ?int $limit,
+        int $offset
     ) {
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['programmeItem', 'service', 'masterBrand', 'network'])
