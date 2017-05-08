@@ -9,7 +9,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use DateTimeImmutable;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class CollapsedBroadcastsService extends AbstractService
 {
@@ -21,7 +21,7 @@ class CollapsedBroadcastsService extends AbstractService
     public function __construct(
         CollapsedBroadcastRepository $repository,
         MapperInterface $mapper,
-        CacheItemPoolInterface $cache,
+        CacheInterface $cache,
         ServiceRepository $serviceRepository
     ) {
         parent::__construct($repository, $mapper, $cache);

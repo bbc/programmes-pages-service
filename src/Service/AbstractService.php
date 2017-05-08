@@ -5,7 +5,7 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
 use Doctrine\ORM\EntityRepository;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 abstract class AbstractService
 {
@@ -14,9 +14,9 @@ abstract class AbstractService
     public const NO_LIMIT = null;
 
     /**
-     * @var CacheItemPoolInterface
+     * @var CacheInterface
      */
-    private $cache;
+    protected $cache;
 
     /**
      * @var MapperInterface
@@ -31,7 +31,7 @@ abstract class AbstractService
     public function __construct(
         EntityRepository $repository,
         MapperInterface $mapper,
-        CacheItemPoolInterface $cache
+        CacheInterface $cache
     ) {
         $this->repository = $repository;
         $this->mapper = $mapper;

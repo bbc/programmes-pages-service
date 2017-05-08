@@ -19,4 +19,6 @@ interface CacheInterface
     public function getOrSet(string $key, $ttl, callable $function, array $arguments = null);
 
     public function setFlushCache(bool $flushCache): void;
+
+    public function keyHelper(string $className, string $functionName, string ...$uniqueValues): string;
 }

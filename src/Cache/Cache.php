@@ -49,9 +49,6 @@ class Cache implements CacheInterface
 
     public function setItem($ttl, CacheItemInterface $item): bool
     {
-        if ($this->flushCache) {
-            return true;
-        }
         $ttl = $this->calculateTtl($ttl);
         $item->expiresAfter($ttl);
         return $this->cachePool->save($item);
@@ -68,15 +65,26 @@ class Cache implements CacheInterface
      */
     public function getOrSet(string $key, $ttl, callable $function, array $arguments = null)
     {
-        $cacheItem = $this->get($key);
+        $cacheItem = $this->getItem($key);
+        if ($cacheItem->isHit() && !$this->flushCache) {
+            return $cacheItem->get();
+        }
         $ttl = $this->calculateTtl($ttl);
         $result = call_user_func_array($function, $arguments);
-        if (!empty($result) && !$this->flushCache) {
+        if (!empty($result)) {
             $cacheItem->set($result);
             $cacheItem->expiresAfter($ttl);
             $this->cachePool->save($cacheItem);
         }
         return $result;
+    }
+
+    public function keyHelper(string $className, string $functionName, string ...$uniqueValues): string
+    {
+        // Please help prevent cache namespace collisions by driving carefully
+        $uniqueValues = str_replace('.', '_', $uniqueValues);
+        $values = [$className, $functionName] + $uniqueValues;
+        return join('.', $values);
     }
 
     public function setFlushCache(bool $flushCache): void
@@ -87,7 +95,7 @@ class Cache implements CacheInterface
     private function createKey(string $key)
     {
         $key = $this->prefix . '.' . $key;
-        return preg_replace('/[^A-Za-z0-9_\.]/', '.', $key);
+        return preg_replace('/[^A-Za-z0-9_\.]/', '_', $key);
     }
 
     private function calculateTtl($ttl): int

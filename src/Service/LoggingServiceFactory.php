@@ -4,7 +4,7 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Psr\Log\LoggerInterface;
 
@@ -30,7 +30,7 @@ class LoggingServiceFactory
     public function __construct(
         EntityManagerInterface $entityManager,
         MapperFactory $mapperFactory,
-        CacheItemPoolInterface $cache,
+        CacheInterface $cache,
         LoggerInterface $logger,
         Stopwatch $stopwatch
     ) {

@@ -6,14 +6,14 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceReposit
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class ServicesService extends AbstractService
 {
     public function __construct(
         ServiceRepository $repository,
         ServiceMapper $mapper,
-        CacheItemPoolInterface $cache
+        CacheInterface $cache
     ) {
         parent::__construct($repository, $mapper, $cache);
     }

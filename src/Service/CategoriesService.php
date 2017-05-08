@@ -6,14 +6,14 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryReposi
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class CategoriesService extends AbstractService
 {
     public function __construct(
         CategoryRepository $repository,
         CategoryMapper $mapper,
-        CacheItemPoolInterface $cache
+        CacheInterface $cache
     ) {
         parent::__construct($repository, $mapper, $cache);
     }

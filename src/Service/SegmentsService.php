@@ -6,14 +6,14 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentReposit
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentMapper;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class SegmentsService extends AbstractService
 {
     public function __construct(
         SegmentRepository $repository,
         SegmentMapper $mapper,
-        CacheItemPoolInterface $cache
+        CacheInterface $cache
     ) {
         parent::__construct($repository, $mapper, $cache);
     }

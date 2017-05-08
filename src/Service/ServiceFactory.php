@@ -4,7 +4,7 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class ServiceFactory
 {
@@ -14,14 +14,14 @@ class ServiceFactory
 
     protected $mapperFactory;
     /**
-     * @var CacheItemPoolInterface
+     * @var CacheInterface
      */
     private $cache;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         MapperFactory $mapperFactory,
-        CacheItemPoolInterface $cache
+        CacheInterface $cache
     ) {
         $this->entityManager = $entityManager;
         $this->mapperFactory = $mapperFactory;
