@@ -11,10 +11,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use DateInterval;
-use DateTime;
 use DateTimeImmutable;
-use DateTimeZone;
 
 class BroadcastMapper extends AbstractMapper
 {

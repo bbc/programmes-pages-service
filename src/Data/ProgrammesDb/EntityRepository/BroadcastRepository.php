@@ -2,7 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use DateTimeZone;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use DateTimeImmutable;
@@ -100,37 +100,30 @@ class BroadcastRepository extends EntityRepository
         return $qb;
     }
 
-    private function programmeAncestryGetter(array $ids): array
-    {
-        /** @var CoreEntityRepository $repo */
-        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        return $repo->findByIds($ids);
-    }
-
     public function findAllByServiceAndDateRange(
-        $serviceId,
+        Sid $serviceId,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
         $limit,
         $offset = 0
     ) {
         $qb = $this->createQueryBuilder('broadcast', false)
-                ->addSelect(['programmeItem', 'service', 'masterBrand', 'network'])
-                ->innerJoin('programmeItem.masterBrand', 'masterBrand')
-                ->innerJoin('masterBrand.network', 'network')
-                ->innerJoin('broadcast.service', 'service')
+            ->addSelect(['programmeItem', 'service', 'masterBrand', 'network'])
+            ->innerJoin('programmeItem.masterBrand', 'masterBrand')
+            ->innerJoin('masterBrand.network', 'network')
+            ->innerJoin('broadcast.service', 'service')
 
-                ->andWhere('broadcast.startAt >= :startDate')
-                ->andWhere('broadcast.endAt <= :endDate')
-                ->andWhere('service.sid = :sid')
-                ->addOrderBy('broadcast.startAt', 'ASC')
-                ->setMaxResults($limit)
-                ->setFirstResult($offset)
+            ->andWhere('broadcast.startAt >= :startDate')
+            ->andWhere('broadcast.endAt <= :endDate')
+            ->andWhere('service.sid = :sid')
+            ->addOrderBy('broadcast.startAt', 'ASC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
 
 
-               ->setParameter('startDate', $startDate)
-               ->setParameter('endDate', $endDate)
-               ->setParameter('sid', $serviceId);
+           ->setParameter('startDate', $startDate)
+           ->setParameter('endDate', $endDate)
+           ->setParameter('sid', $serviceId);
 
         $this->setEntityTypeFilter($qb, 'Broadcast');
 
@@ -144,5 +137,12 @@ class BroadcastRepository extends EntityRepository
 
         return $broadcasts;
 
+    }
+
+    private function programmeAncestryGetter(array $ids): array
+    {
+        /** @var CoreEntityRepository $repo */
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+        return $repo->findByIds($ids);
     }
 }
