@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use DateTimeZone;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use DateTimeImmutable;
@@ -97,5 +98,55 @@ class BroadcastRepository extends EntityRepository
         }
 
         return $qb;
+    }
+
+    protected function resolveParents(array $categories): array
+    {
+        return $this->abstractResolveAncestry($categories, [$this, 'findByIds']);
+    }
+
+    private function programmeAncestryGetter(array $ids): array
+    {
+        /** @var CoreEntityRepository $repo */
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+        return $repo->findByIds($ids);
+    }
+
+    public function findAllByServiceAndDateRange(
+        $serviceId,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+        $limit
+    ) {
+        $startDate = $startDate->setTimezone(new DateTimeZone('UTC'));
+        $endDate = $endDate->setTimezone(new DateTimeZone('UTC'));
+
+        $qb = $this->createQueryBuilder('broadcast', false)
+                ->addSelect(['programmeItem', 'service', 'masterBrand', 'network'])
+                ->innerJoin('programmeItem.masterBrand', 'masterBrand')
+                ->innerJoin('masterBrand.network', 'network')
+                ->innerJoin('broadcast.service', 'service')
+
+                ->andWhere('broadcast.startAt >= :startDate')
+                ->andWhere('broadcast.endAt <= :endDate')
+                ->andWhere('broadcast.service = :serviceId')
+                ->addOrderBy('broadcast.startAt', 'ASC')
+                ->setMaxResults($limit)
+
+               ->setParameter('startDate', $startDate)
+               ->setParameter('endDate', $endDate)
+               ->setParameter('serviceId', $serviceId);
+
+        $this->setEntityTypeFilter($qb, 'Broadcast');
+
+        $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        // broadcast/programmeItem needs the parent ancestry
+        $braodcasts = $this->abstractResolveAncestry(
+            $results,
+            [$this, 'programmeAncestryGetter'],
+            ['programmeItem', 'ancestry']);
+
+        return $braodcasts;
     }
 }
