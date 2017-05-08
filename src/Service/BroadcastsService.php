@@ -3,15 +3,15 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
-use BBC\ProgrammesPagesService\Domain\Entity\Service;
+use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\BroadcastMapper;
 use DateTimeImmutable;
 use Psr\Cache\CacheItemPoolInterface;
 
 class BroadcastsService extends AbstractService
 {
-    /** @var  BroadcastRepository */
     protected $repository;
 
     public function __construct(
@@ -38,16 +38,18 @@ class BroadcastsService extends AbstractService
     }
 
     public function findByServiceAndDateRange(
-        $serviceId,
+        Sid $serviceId,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
-        ?int $limit = self::DEFAULT_LIMIT
-    ) {
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
         $dbEntities = $this->repository->findAllByServiceAndDateRange(
             $serviceId,
             $startDate,
             $endDate,
-            $limit
+            $limit,
+            $this->getOffset($limit, $page)
         );
 
         return $this->mapManyEntities($dbEntities);

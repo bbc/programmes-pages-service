@@ -54,18 +54,17 @@ class ServiceRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findAllInNetwork($networkId): array
+    public function findAllInNetwork(string $networkId): array
     {
-        $alias = 's';
-        $qb = $this->createQueryBuilder($alias)
-                   ->select($alias, 'network')
+        $qb = $this->createQueryBuilder('service')
+                   ->select('service', 'network')
                    ->addSelect('CASE WHEN network.position IS NULL THEN 1 ELSE 0 AS HIDDEN hasPosition')
-                   ->join($alias . '.network', 'network')
+                   ->join('service.network', 'network')
                    ->andWhere('network.nid = :networkId')
                    ->setParameter('networkId', $networkId)
                    ->addOrderBy('hasPosition', 'ASC')
                    ->addOrderBy('network.position', 'ASC')
-                   ->addOrderBy($alias . '.shortName', 'ASC');
+                   ->addOrderBy('service.shortName', 'ASC');
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

@@ -100,11 +100,6 @@ class BroadcastRepository extends EntityRepository
         return $qb;
     }
 
-    protected function resolveParents(array $categories): array
-    {
-        return $this->abstractResolveAncestry($categories, [$this, 'findByIds']);
-    }
-
     private function programmeAncestryGetter(array $ids): array
     {
         /** @var CoreEntityRepository $repo */
@@ -116,11 +111,9 @@ class BroadcastRepository extends EntityRepository
         $serviceId,
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
-        $limit
+        $limit,
+        $offset = 0
     ) {
-        $startDate = $startDate->setTimezone(new DateTimeZone('UTC'));
-        $endDate = $endDate->setTimezone(new DateTimeZone('UTC'));
-
         $qb = $this->createQueryBuilder('broadcast', false)
                 ->addSelect(['programmeItem', 'service', 'masterBrand', 'network'])
                 ->innerJoin('programmeItem.masterBrand', 'masterBrand')
@@ -129,24 +122,27 @@ class BroadcastRepository extends EntityRepository
 
                 ->andWhere('broadcast.startAt >= :startDate')
                 ->andWhere('broadcast.endAt <= :endDate')
-                ->andWhere('broadcast.service = :serviceId')
+                ->andWhere('service.sid = :sid')
                 ->addOrderBy('broadcast.startAt', 'ASC')
                 ->setMaxResults($limit)
+                ->setFirstResult($offset)
+
 
                ->setParameter('startDate', $startDate)
                ->setParameter('endDate', $endDate)
-               ->setParameter('serviceId', $serviceId);
+               ->setParameter('sid', $serviceId);
 
         $this->setEntityTypeFilter($qb, 'Broadcast');
 
         $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
-        // broadcast/programmeItem needs the parent ancestry
-        $braodcasts = $this->abstractResolveAncestry(
+        // get parent programmeItems
+        $broadcasts = $this->abstractResolveAncestry(
             $results,
             [$this, 'programmeAncestryGetter'],
             ['programmeItem', 'ancestry']);
 
-        return $braodcasts;
+        return $broadcasts;
+
     }
 }
