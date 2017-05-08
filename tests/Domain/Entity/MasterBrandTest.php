@@ -2,11 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
-use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
-use BBC\ProgrammesPagesService\Domain\Entity\Version;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -20,7 +19,7 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
     {
         $mid = new Mid('bbc_1xtra');
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $network = new Network(new Nid('bbc_1xtra'), '1 Xtra', $image);
+        $network = new Network(new Nid('bbc_1xtra'), '1 Xtra', $image, new Options());
 
         $masterBrand = new MasterBrand(
             $mid,
@@ -39,9 +38,8 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
     {
         $mid = new Mid('bbc_1xtra');
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $network = new Network(new Nid('bbc_1xtra'), '1 Xtra', $image);
+        $network = new Network(new Nid('bbc_1xtra'), '1 Xtra', $image, new Options());
 
-        $episode = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Episode');
         $version = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version');
 
         $masterBrand = new MasterBrand(
@@ -66,7 +64,7 @@ class MasterBrandTest extends PHPUnit_Framework_TestCase
 
         $mid = new Mid('bbc_1xtra');
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $network = new Network(new Nid('bbc_1xtra'), '1 Xtra', $image);
+        $network = new Network(new Nid('bbc_1xtra'), '1 Xtra', $image, new Options());
 
         $masterBrand = new MasterBrand(
             $mid,

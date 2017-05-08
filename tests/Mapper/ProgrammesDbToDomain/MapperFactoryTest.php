@@ -37,6 +37,7 @@ class MapperFactoryTest extends PHPUnit_Framework_TestCase
             ['ImageMapper'],
             ['MasterBrandMapper'],
             ['NetworkMapper'],
+            ['OptionsMapper'],
             ['ProgrammeMapper'],
             ['RelatedLinkMapper'],
             ['SegmentMapper'],

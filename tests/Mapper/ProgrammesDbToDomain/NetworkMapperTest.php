@@ -2,11 +2,11 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
-use PHPUnit_Framework_TestCase;
 
 class NetworkMapperTest extends BaseMapperTestCase
 {
@@ -15,6 +15,12 @@ class NetworkMapperTest extends BaseMapperTestCase
     protected $mockDefaultImage;
 
     protected $mockNetworkMapper;
+
+    protected $mockOptionsMapper;
+
+    protected $mockServiceMapper;
+
+    protected $mockOptions;
 
     public function setUp()
     {
@@ -26,9 +32,21 @@ class NetworkMapperTest extends BaseMapperTestCase
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper'
         );
 
+        $this->mockOptionsMapper = $this->createMock(
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\OptionsMapper'
+        );
+
         $this->mockDefaultImage = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
         );
+
+        $this->mockOptions = $this->createMock(
+            'BBC\ProgrammesPagesService\Domain\Entity\Options'
+        );
+
+        $this->mockOptionsMapper->expects($this->any())
+            ->method('getDomainModel')
+            ->willReturn($this->mockOptions);
 
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
@@ -37,6 +55,9 @@ class NetworkMapperTest extends BaseMapperTestCase
 
     public function testGetDomainModel()
     {
+        $optionsDbEntity = ['options'];
+        $this->setupOptionsMapper($optionsDbEntity, $this->mockOptions);
+
         $dbEntityArray = [
             'id' => 1,
             'nid' => '1_xtra',
@@ -50,12 +71,14 @@ class NetworkMapperTest extends BaseMapperTestCase
             'isInternational' => true,
             'isAllowedAdverts' => true,
             'defaultService' => null,
+            'options' => $optionsDbEntity,
         ];
 
         $expectedEntity = new Network(
             new Nid('1_xtra'),
             '1 Xtra',
             $this->mockDefaultImage,
+            $this->mockOptions,
             '1xtra',
             'National Radio',
             'radio',
@@ -113,6 +136,7 @@ class NetworkMapperTest extends BaseMapperTestCase
             new Nid('1_xtra'),
             '1 Xtra',
             $expectedImageDomainEntity,
+            $this->mockOptions,
             '1xtra',
             'National Radio',
             'radio',
@@ -161,6 +185,7 @@ class NetworkMapperTest extends BaseMapperTestCase
             new Nid('1_xtra'),
             '1 Xtra',
             $this->mockDefaultImage,
+            $this->mockOptions,
             '1xtra',
             'National Radio',
             'radio',
@@ -197,6 +222,7 @@ class NetworkMapperTest extends BaseMapperTestCase
             new Nid('1_xtra'),
             '1 Xtra',
             $this->mockDefaultImage,
+            $this->mockOptions,
             '1xtra',
             'National Radio',
             'radio',
@@ -211,11 +237,20 @@ class NetworkMapperTest extends BaseMapperTestCase
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
+    private function setupOptionsMapper($expectedDbEntity, $result): void
+    {
+        $this->mockOptionsMapper->expects($this->once())
+            ->method('getDomainModel')
+            ->with($expectedDbEntity)
+            ->willReturn($result);
+    }
+
     private function getMapper(): NetworkMapper
     {
         return new NetworkMapper($this->getMapperFactory([
             'ImageMapper' => $this->mockImageMapper,
             'ServiceMapper' => $this->mockServiceMapper,
+            'OptionsMapper' => $this->mockOptionsMapper,
         ]));
     }
 }

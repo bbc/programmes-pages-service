@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
@@ -29,6 +30,7 @@ class NetworkMapper extends AbstractMapper
                 new Nid($dbNetwork['nid']),
                 $dbNetwork['name'],
                 $this->getImageModel($dbNetwork),
+                $this->getOptionsModel($dbNetwork),
                 $dbNetwork['urlKey'],
                 $dbNetwork['type'],
                 $dbNetwork['medium'],
@@ -65,5 +67,13 @@ class NetworkMapper extends AbstractMapper
         }
 
         return $this->mapperFactory->getServiceMapper()->getDomainModel($dbNetwork[$key]);
+    }
+
+    private function getOptionsModel(array $dbProgramme, string $key = 'options'): Options
+    {
+        // Networks have no parents so this is simple
+        return $this->mapperFactory->getOptionsMapper()->getDomainModel(
+            $dbProgramme[$key] ?? []
+        );
     }
 }

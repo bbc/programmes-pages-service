@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -30,7 +31,8 @@ class CachingTest extends BaseProgrammeMapperTestCase
             [],
             [],
             null,
-            1
+            1,
+            new Options()
         );
 
         $dbEntityWithFetchedItem = $this->getSampleProgrammeDbEntity(

@@ -7,7 +7,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
-use PHPUnit_Framework_TestCase;
 
 class MasterBrandMapperTest extends BaseMapperTestCase
 {
@@ -63,7 +62,13 @@ class MasterBrandMapperTest extends BaseMapperTestCase
         ];
 
         $mid = new Mid('bbc_three');
-        $expectedEntity = new MasterBrand($mid, 'Three', $this->mockDefaultImage, $this->mockNetwork);
+        $expectedEntity = new MasterBrand(
+            $mid,
+            'Three',
+            $this->mockDefaultImage,
+            $this->mockNetwork,
+            null
+        );
 
         $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
@@ -86,7 +91,12 @@ class MasterBrandMapperTest extends BaseMapperTestCase
         ];
 
         $mid = new Mid('bbc_three');
-        $expectedEntity = new MasterBrand($mid, 'Three', $this->mockDefaultImage, new UnfetchedNetwork());
+        $expectedEntity = new MasterBrand(
+            $mid,
+            'Three',
+            $this->mockDefaultImage,
+            new UnfetchedNetwork()
+        );
 
         $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
@@ -131,7 +141,12 @@ class MasterBrandMapperTest extends BaseMapperTestCase
         ];
 
         $mid = new Mid('bbc_three');
-        $expectedEntity = new MasterBrand($mid, 'Three', $expectedImageDomainEntity, $this->mockNetwork);
+        $expectedEntity = new MasterBrand(
+            $mid,
+            'Three',
+            $expectedImageDomainEntity,
+            $this->mockNetwork
+        );
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }

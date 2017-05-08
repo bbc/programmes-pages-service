@@ -17,6 +17,7 @@ use InvalidArgumentException;
 class Network
 {
     use TimestampableEntity;
+    use Traits\OptionsTrait;
 
     /**
      * @var int|null

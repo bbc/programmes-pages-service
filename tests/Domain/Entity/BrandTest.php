@@ -6,9 +6,10 @@ use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
@@ -20,6 +21,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['one' => 1]);
 
         $programme = new Brand(
             [0, 1, 2],
@@ -39,7 +41,8 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1203,
             1204,
             1205,
-            false
+            false,
+            $options
         );
 
         $this->assertEquals(2, $programme->getDbId());
@@ -63,6 +66,8 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1204, $programme->getAvailableEpisodesCount());
         $this->assertEquals(1205, $programme->getAvailableGalleriesCount());
         $this->assertEquals(false, $programme->isPodcastable());
+        $this->assertEquals($options, $programme->getOptions());
+        $this->assertSame(1, $programme->getOption('one'));
     }
 
     public function testConstructorOptionalArgs()
@@ -70,6 +75,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['one' => 1]);
 
         $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Brand');
         $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
@@ -98,6 +104,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            $options,
             $parent,
             2101,
             $masterBrand,
@@ -125,6 +132,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['one' => 1]);
 
         $programme = new Brand(
             [0],
@@ -145,12 +153,48 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            $options,
             null,
             2101,
             new UnfetchedMasterBrand()
         );
 
         $programme->getMasterBrand();
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage Could not get options of Programme "p01m5mss"as the full hierarchy was not fetched
+     */
+    public function testRequestingUnfetchedOptionsThrowsException()
+    {
+        $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+
+        $programme = new Brand(
+            [0],
+            $pid,
+            'Title',
+            'Search Title',
+            $synopses,
+            $image,
+            1101,
+            1102,
+            true,
+            true,
+            true,
+            1103,
+            1201,
+            1202,
+            1203,
+            1204,
+            1205,
+            false,
+            new UnfetchedOptions()
+        );
+
+        $programme->getOptions();
     }
 
     /**
@@ -212,6 +256,7 @@ class BrandTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            new Options(),
             null,
             2101,
             null,

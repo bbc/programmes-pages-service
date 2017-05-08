@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedImage;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
@@ -19,11 +20,13 @@ class NetworkTest extends PHPUnit_Framework_TestCase
     {
         $nid = new Nid('bbc_1xtra');
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['one' => 1]);
 
         $network = new Network(
             $nid,
             'Name',
-            $image
+            $image,
+            $options
         );
 
         $this->assertSame($nid, $network->getNid());
@@ -38,6 +41,8 @@ class NetworkTest extends PHPUnit_Framework_TestCase
         $this->assertSame(false, $network->isWorldServiceInternational());
         $this->assertSame(false, $network->isInternational());
         $this->assertSame(false, $network->isAllowedAdverts());
+        $this->assertEquals($options, $network->getOptions());
+        $this->assertSame(1, $network->getOption('one'));
     }
 
     public function testConstructorOptionalArgs()
@@ -50,6 +55,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
             $nid,
             'Name',
             $image,
+            new Options(),
             'url_key',
             'Local Radio',
             NetworkMediumEnum::RADIO,
@@ -80,10 +86,11 @@ class NetworkTest extends PHPUnit_Framework_TestCase
         $nid = new Nid('bbc_1xtra');
         $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
 
-        $network = new Network(
+        new Network(
             $nid,
             'Name',
             $image,
+            new Options(),
             'url_key',
             'Local Radio',
             'wrongwrongwrong'
@@ -100,6 +107,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
             new Nid('bbc_1xtra'),
             'Name',
             new UnfetchedImage(),
+            new Options(),
             'url_key',
             'Local Radio',
             NetworkMediumEnum::UNKNOWN,

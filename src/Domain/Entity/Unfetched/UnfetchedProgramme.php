@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullPid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
@@ -22,7 +23,8 @@ class UnfetchedProgramme extends Programme
             false,
             false,
             false,
-            0
+            0,
+            new Options()
         );
     }
 }

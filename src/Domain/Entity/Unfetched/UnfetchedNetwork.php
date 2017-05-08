@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullNid;
 
 class UnfetchedNetwork extends Network
@@ -12,7 +13,8 @@ class UnfetchedNetwork extends Network
         parent::__construct(
             new NullNid(),
             '',
-            new UnfetchedImage()
+            new UnfetchedImage(),
+            new Options()
         );
     }
 }

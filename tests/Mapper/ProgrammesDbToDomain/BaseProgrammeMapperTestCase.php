@@ -2,12 +2,12 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
-use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
@@ -17,9 +17,13 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
     protected $mockMasterBrandMapper;
 
+    protected $mockOptionsMapper;
+
     protected $mockCategoryMapper;
 
     protected $mockDefaultImage;
+
+    protected $mockOptions;
 
     public function setUp()
     {
@@ -35,11 +39,23 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper'
         );
 
+        $this->mockOptionsMapper = $this->createMock(
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\OptionsMapper'
+        );
+
         $this->mockDefaultImage = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Image'
         );
 
+        $this->mockOptions = $this->createMock(
+            'BBC\ProgrammesPagesService\Domain\Entity\Options'
+        );
+
         $this->mockDefaultImage->method('getTitle')->willReturn('DefaultImage');
+
+        $this->mockOptionsMapper->expects($this->any())
+            ->method('getDomainModel')
+            ->willReturn($this->mockOptions);
 
         $this->mockImageMapper->expects($this->any())
             ->method('getDefaultImage')
@@ -52,10 +68,11 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'ImageMapper' => $this->mockImageMapper,
             'MasterBrandMapper' => $this->mockMasterBrandMapper,
             'CategoryMapper' => $this->mockCategoryMapper,
+            'OptionsMapper' => $this->mockOptionsMapper,
         ]));
     }
 
-    /**
+    /*
      * A sample DB Entity that can be used for testing any mappers that the
      * ProgrammeMapper depends upon.
      */
@@ -65,7 +82,8 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         array $masterBrand = null,
         array $categories = [],
         array $parent = null,
-        int $id = 1
+        int $id = 1,
+        array $options = []
     ) {
         return [
             'id' => $id,
@@ -96,10 +114,11 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             'categories' => $categories,
             'firstBroadcastDate' => new \DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
+            'options' => $options,
         ];
     }
 
-    /**
+    /*
      * A sample expected domain model that can be used for testing any mappers
      * that the ProgrammeMapper depends upon.
      */
@@ -110,8 +129,13 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
         array $genres = [],
         array $formats = [],
         Programme $parent = null,
-        int $id = 1
+        int $id = 1,
+        ?Options $options = null
     ) {
+        if (!$options) {
+            $options = $this->mockOptions;
+        }
+
         return new Series(
             [$id],
             new Pid($pid),
@@ -131,6 +155,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             14,
             15,
             false,
+            $options,
             $parent,
             101,
             $masterBrand,

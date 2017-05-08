@@ -2,12 +2,13 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use PHPUnit_Framework_TestCase;
 
@@ -18,6 +19,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['two' => 2]);
 
         $programme = new Series(
             [0, 1, 2],
@@ -37,7 +39,8 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             1203,
             1204,
             1205,
-            false
+            false,
+            $options
         );
 
         $this->assertEquals(2, $programme->getDbId());
@@ -61,6 +64,8 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1204, $programme->getAvailableEpisodesCount());
         $this->assertEquals(1205, $programme->getAvailableGalleriesCount());
         $this->assertEquals(false, $programme->IsPodcastable());
+        $this->assertEquals($options, $programme->getOptions());
+        $this->assertSame(2, $programme->getOption('two'));
     }
 
     public function testConstructorOptionalArgs()
@@ -96,6 +101,7 @@ class SeriesTest extends PHPUnit_Framework_TestCase
             1204,
             1205,
             false,
+            new Options(),
             $parent,
             2101,
             $masterBrand,
@@ -112,5 +118,40 @@ class SeriesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([$format], $programme->getFormats());
         $this->assertEquals($firstBroadcastDate, $programme->getFirstBroadcastDate());
         $this->assertEquals(2201, $programme->getExpectedChildCount());
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage Could not get options of Programme "p01m5mss"as the full hierarchy was not fetched
+     */
+    public function testRequestingUnfetchedOptionsThrowsException()
+    {
+        $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+
+        $programme = new Series(
+            [0],
+            $pid,
+            'Title',
+            'Search Title',
+            $synopses,
+            $image,
+            1101,
+            1102,
+            true,
+            true,
+            true,
+            1103,
+            1201,
+            1202,
+            1203,
+            1204,
+            1205,
+            false,
+            new UnfetchedOptions()
+        );
+
+        $programme->getOptions();
     }
 }
