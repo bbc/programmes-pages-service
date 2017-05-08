@@ -135,7 +135,6 @@ class BroadcastRepository extends EntityRepository
             ['programmeItem', 'ancestry']);
 
         return $broadcasts;
-
     }
 
     private function programmeAncestryGetter(array $ids): array
