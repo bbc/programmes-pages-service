@@ -9,17 +9,7 @@ class FindAllInNetworkTest extends AbstractServicesServiceTest
     public function testFindAllInNetwork()
     {
         $nid = new Nid('bbc_radio_two');
-        $dbData = [
-            [
-                'id' => '34234234',
-                'sid'=>'asdfasdf',
-                'pid'=>'234',
-                'name'=>'anyname',
-                'shortName'=>'anyshortname',
-                'urlKey'=>'urlKey',
-                'liveStreamUrl'=> null
-            ]
-        ];
+        $dbData = [['pid'=>'234']];
 
         $this->mockRepository->expects($this->once())
                              ->method('findAllInNetwork')
@@ -28,19 +18,6 @@ class FindAllInNetworkTest extends AbstractServicesServiceTest
 
         $servicesInNetwork = $this->service()->findAllInNetwork($nid);
 
-        $this->assertInternalType('array', $servicesInNetwork);
-        $this->assertCount(1, $servicesInNetwork);
-
-        array_map(
-            function($serviceInNetwork)
-            {
-                $this->assertInstanceOf(
-                    'BBC\ProgrammesPagesService\Domain\Entity\Service',
-                    $serviceInNetwork
-                );
-            },
-
-            $servicesInNetwork
-        );
+        $this->assertEquals($this->servicesFromDbData($dbData), $servicesInNetwork);
     }
 }

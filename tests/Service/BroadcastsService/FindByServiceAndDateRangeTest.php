@@ -31,20 +31,8 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
             -1,
             1
         );
-
-        $this->assertInternalType('array', $broadcasts);
-        $this->assertCount(2, $broadcasts);
-        array_map(
-            function($broadcast)
-            {
-                $this->assertInstanceOf(
-                    'BBC\ProgrammesPagesService\Domain\Entity\Broadcast',
-                    $broadcast
-                );
-            },
-
-            $broadcasts
-        );
+        
+        $this->assertEquals($this->broadcastsFromDbData($dbData), $broadcasts);
     }
 
     public function testFindByServiceAndDateRangeWhenNoBroadcastsFound()
@@ -72,6 +60,6 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
         );
 
         $this->assertInternalType('array', $broadcasts);
-        $this->assertCount(0, $broadcasts);
+        $this->assertEmpty($broadcasts);
     }
 }
