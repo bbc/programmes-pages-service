@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedImage;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class UnfetchedImageTest extends PHPUnit_Framework_TestCase
+class UnfetchedImageTest extends TestCase
 {
     public function testUnfetchedImage()
     {

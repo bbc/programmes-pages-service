@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class VersionTypeTest extends PHPUnit_Framework_TestCase
+class VersionTypeTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

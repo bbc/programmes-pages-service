@@ -7,9 +7,9 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use DateTime;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class NetworkTest extends PHPUnit_Framework_TestCase
+class NetworkTest extends TestCase
 {
     public function testDefaults()
     {

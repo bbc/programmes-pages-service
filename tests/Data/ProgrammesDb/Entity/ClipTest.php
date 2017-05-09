@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Clip;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ClipTest extends PHPUnit_Framework_TestCase
+class ClipTest extends TestCase
 {
     public function testDefaults()
     {

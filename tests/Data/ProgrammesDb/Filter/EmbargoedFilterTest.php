@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Filter;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Filter\EmbargoedFilter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class EmbargoedFilterTest extends PHPUnit_Framework_TestCase
+class EmbargoedFilterTest extends TestCase
 {
     private $mockEntityManager;
 

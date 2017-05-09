@@ -9,9 +9,9 @@ use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SeriesTest extends PHPUnit_Framework_TestCase
+class SeriesTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

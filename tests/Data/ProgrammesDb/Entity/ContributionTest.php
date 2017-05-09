@@ -3,10 +3,10 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Contribution;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class ContributionTest extends PHPUnit_Framework_TestCase
+class ContributionTest extends TestCase
 {
     public function testTraits()
     {

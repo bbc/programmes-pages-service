@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Lease;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class LeaseTest extends PHPUnit_Framework_TestCase
+class LeaseTest extends TestCase
 {
     public function testDefaults()
     {

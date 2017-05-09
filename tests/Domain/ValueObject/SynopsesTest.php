@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\ValueObject;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SynopsesTest extends PHPUnit_Framework_TestCase
+class SynopsesTest extends TestCase
 {
     public function testSynopses()
     {

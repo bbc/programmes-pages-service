@@ -5,9 +5,9 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Type;
 use Doctrine\DBAL\Types\Type;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Type\DatePartialType;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class DatePartialTypeTest extends PHPUnit_Framework_TestCase
+class DatePartialTypeTest extends TestCase
 {
     private $type;
 

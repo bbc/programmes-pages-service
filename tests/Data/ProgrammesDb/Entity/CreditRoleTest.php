@@ -3,10 +3,10 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CreditRole;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class CreditRoleTest extends PHPUnit_Framework_TestCase
+class CreditRoleTest extends TestCase
 {
     public function testTraits()
     {

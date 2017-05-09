@@ -3,10 +3,10 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain;
 
 use BBC\ProgrammesPagesService\Domain\ApplicationTime;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTimeImmutable;
 
-class ApplicationTimeTest extends PHPUnit_Framework_TestCase
+class ApplicationTimeTest extends TestCase
 {
     public function tearDown()
     {

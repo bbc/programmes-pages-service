@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\ValueObject;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class NidTest extends PHPUnit_Framework_TestCase
+class NidTest extends TestCase
 {
     public function testValidNid()
     {

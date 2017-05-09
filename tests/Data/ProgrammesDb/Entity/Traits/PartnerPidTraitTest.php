@@ -2,9 +2,9 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PartnerPidTraitTest extends PHPUnit_Framework_TestCase
+class PartnerPidTraitTest extends TestCase
 {
     public function testDefaults()
     {

@@ -3,10 +3,10 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class EpisodeTest extends PHPUnit_Framework_TestCase
+class EpisodeTest extends TestCase
 {
     public function testTraits()
     {

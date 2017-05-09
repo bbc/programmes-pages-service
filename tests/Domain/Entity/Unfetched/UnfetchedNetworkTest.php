@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class UnfetchedNetworkTest extends PHPUnit_Framework_TestCase
+class UnfetchedNetworkTest extends TestCase
 {
     public function testUnfetchedNetwork()
     {

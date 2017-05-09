@@ -8,9 +8,9 @@ use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use DateTimeImmutable;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BroadcastTest extends PHPUnit_Framework_TestCase
+class BroadcastTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

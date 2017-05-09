@@ -2,9 +2,9 @@
 
 namespace Tests\BBC\ProgrammesPagesService;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractServiceTest extends PHPUnit_Framework_TestCase
+abstract class AbstractServiceTest extends TestCase
 {
     const ENTITY_NS = 'BBC\ProgrammesPagesService\Domain\Entity\\';
     const REPOSITORY_NS = 'BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\\';

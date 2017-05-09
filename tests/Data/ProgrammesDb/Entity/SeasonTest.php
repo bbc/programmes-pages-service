@@ -3,11 +3,11 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Season;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use DateTime;
 
-class SeasonTest extends PHPUnit_Framework_TestCase
+class SeasonTest extends TestCase
 {
     public function testTraits()
     {

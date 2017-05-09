@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\ValueObject;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullNid;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class NullNidTest extends PHPUnit_Framework_TestCase
+class NullNidTest extends TestCase
 {
     public function testNullNid()
     {

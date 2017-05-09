@@ -4,10 +4,10 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use InvalidArgumentException;
 
-class ContributionTest extends PHPUnit_Framework_TestCase
+class ContributionTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

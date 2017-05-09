@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BrandTest extends PHPUnit_Framework_TestCase
+class BrandTest extends TestCase
 {
     public function testDefaults()
     {

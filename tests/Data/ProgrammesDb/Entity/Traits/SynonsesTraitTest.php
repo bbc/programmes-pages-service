@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SynopsesTraitTest extends PHPUnit_Framework_TestCase
+class SynopsesTraitTest extends TestCase
 {
     public function testDefaults()
     {

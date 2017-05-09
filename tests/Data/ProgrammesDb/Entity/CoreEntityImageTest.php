@@ -4,9 +4,9 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntityImage;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationshipType;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CoreEntityImageTest extends PHPUnit_Framework_TestCase
+class CoreEntityImageTest extends TestCase
 {
     public function testDefaults()
     {

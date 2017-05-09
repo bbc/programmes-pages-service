@@ -7,7 +7,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
-use PHPUnit_Framework_TestCase;
 
 class MasterBrandMapperTest extends BaseMapperTestCase
 {

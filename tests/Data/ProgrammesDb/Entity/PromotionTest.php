@@ -3,11 +3,11 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Promotion;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use DateTime;
 
-class PromotionTest extends PHPUnit_Framework_TestCase
+class PromotionTest extends TestCase
 {
     public function testTraits()
     {

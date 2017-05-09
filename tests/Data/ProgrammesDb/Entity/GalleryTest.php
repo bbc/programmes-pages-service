@@ -3,10 +3,10 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Gallery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class GalleryTest extends PHPUnit_Framework_TestCase
+class GalleryTest extends TestCase
 {
     public function testDefaults()
     {

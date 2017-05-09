@@ -4,9 +4,9 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationshipType;
 use ReflectionClass;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RefRelationshipTypeTest extends PHPUnit_Framework_TestCase
+class RefRelationshipTypeTest extends TestCase
 {
     public function testTraits()
     {

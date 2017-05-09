@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefMediaSet;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RefMediaSetTest extends PHPUnit_Framework_TestCase
+class RefMediaSetTest extends TestCase
 {
     public function testDefaults()
     {

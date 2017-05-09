@@ -3,13 +3,13 @@
 namespace Tests\BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Service\ServiceFactory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * @covers BBC\ProgrammesPagesService\Service\ServiceFactory
  */
-class ServiceFactoryTest extends PHPUnit_Framework_TestCase
+class ServiceFactoryTest extends TestCase
 {
     const SERVICE_NS = 'BBC\ProgrammesPagesService\Service\\';
 
