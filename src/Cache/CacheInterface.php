@@ -11,14 +11,15 @@ interface CacheInterface
     const MEDIUM = 'medium';
     const LONG = 'long';
     const X_LONG = 'xlong';
+    const INDEFINITE = 'indefinite';
 
     public function getItem(string $key): CacheItemInterface;
 
-    public function setItem($ttl, CacheItemInterface $item): bool;
+    public function setItem(CacheItemInterface $item, $ttl): bool;
 
-    public function getOrSet(string $key, $ttl, callable $function, array $arguments = null);
+    public function getOrSet(string $key, $ttl, callable $function, array $arguments = []);
 
-    public function setFlushCache(bool $flushCache): void;
+    public function setFlushCacheItems(bool $flushCacheItems): void;
 
     public function keyHelper(string $className, string $functionName, string ...$uniqueValues): string;
 }

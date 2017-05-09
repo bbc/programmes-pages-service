@@ -126,7 +126,8 @@ class ProgrammesService extends AbstractService
         return $this->mapSingleEntity($dbEntity);
     }
 
-    public function findByPidFull(Pid $pid, string $entityType = 'Programme', $ttl = CacheInterface::NORMAL): ?Programme
+    /*
+     public function findByPidFull(Pid $pid, string $entityType = 'Programme', $ttl = CacheInterface::NORMAL): ?Programme
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
@@ -143,6 +144,15 @@ class ProgrammesService extends AbstractService
         );
 
         return $entity;
+    }
+    */
+    public function findByPidFull(Pid $pid, string $entityType = 'Programme'): ?Programme
+    {
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+
+        $dbEntity = $this->repository->findByPidFull($pid, $entityType);
+
+        return $this->mapSingleEntity($dbEntity);
     }
 
     public function findEpisodeGuideChildren(

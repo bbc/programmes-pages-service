@@ -14,7 +14,7 @@ class Cache implements CacheInterface
     private $prefix;
 
     /** @var bool */
-    private $flushCache = false;
+    private $flushCacheItems = false;
 
     private $defaultCacheTimes = [
         CacheInterface::NONE => -1,
@@ -22,7 +22,8 @@ class Cache implements CacheInterface
         CacheInterface::NORMAL => 300,
         CacheInterface::MEDIUM => 1200,
         CacheInterface::LONG => 7200,
-        CacheInterface::X_LONG => 86400
+        CacheInterface::X_LONG => 86400,
+        CacheInterface::INDEFINITE => 0,
     ];
 
     /** @var array */
@@ -40,14 +41,14 @@ class Cache implements CacheInterface
 
     public function getItem(string $key): CacheItemInterface
     {
-        $key = $this->createKey($key);
-        if ($this->flushCache) {
+        $key = $this->standardiseKey($key);
+        if ($this->flushCacheItems) {
             $this->cachePool->deleteItem($key);
         }
         return $this->cachePool->getItem($key);
     }
 
-    public function setItem($ttl, CacheItemInterface $item): bool
+    public function setItem(CacheItemInterface $item, $ttl): bool
     {
         $ttl = $this->calculateTtl($ttl);
         $item->expiresAfter($ttl);
@@ -63,10 +64,10 @@ class Cache implements CacheInterface
      * @param array|null $arguments
      * @return mixed
      */
-    public function getOrSet(string $key, $ttl, callable $function, array $arguments = null)
+    public function getOrSet(string $key, $ttl, callable $function, array $arguments = [])
     {
         $cacheItem = $this->getItem($key);
-        if ($cacheItem->isHit() && !$this->flushCache) {
+        if ($cacheItem->isHit() && !$this->flushCacheItems) {
             return $cacheItem->get();
         }
         $ttl = $this->calculateTtl($ttl);
@@ -87,12 +88,12 @@ class Cache implements CacheInterface
         return join('.', $values);
     }
 
-    public function setFlushCache(bool $flushCache): void
+    public function setFlushCacheItems(bool $flushCacheItems): void
     {
-        $this->flushCache = $flushCache;
+        $this->flushCacheItems = $flushCacheItems;
     }
 
-    private function createKey(string $key)
+    private function standardiseKey(string $key)
     {
         $key = $this->prefix . '.' . $key;
         return preg_replace('/[^A-Za-z0-9_\.]/', '_', $key);
@@ -101,7 +102,7 @@ class Cache implements CacheInterface
     private function calculateTtl($ttl): int
     {
         if (is_numeric($ttl)) {
-            $ttl = (int)$ttl;
+            $ttl = (int) $ttl;
         } elseif (is_string($ttl) && isset($this->cacheTimes[$ttl])) {
             $ttl = $this->cacheTimes[$ttl];
         } else {
@@ -110,7 +111,7 @@ class Cache implements CacheInterface
         return $this->protectLifetimeFromStampede($ttl);
     }
 
-    private function protectLifetimeFromStampede(int $ttl)
+    private function protectLifetimeFromStampede(int $ttl): int
     {
         $ten = floor($ttl / 10);
         $modifier = rand(0, $ten);
