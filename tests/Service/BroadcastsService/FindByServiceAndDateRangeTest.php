@@ -35,7 +35,8 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
         $this->assertInternalType('array', $broadcasts);
         $this->assertCount(2, $broadcasts);
         array_map(
-            function($broadcast) {
+            function($broadcast)
+            {
                 $this->assertInstanceOf(
                     'BBC\ProgrammesPagesService\Domain\Entity\Broadcast',
                     $broadcast
