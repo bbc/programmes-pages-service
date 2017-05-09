@@ -131,13 +131,13 @@ class BroadcastRepository extends EntityRepository
         // get parent programmeItems
         $broadcasts = $this->abstractResolveAncestry(
             $results,
-            [$this, 'programmeAncestryGetter'],
+            [$this, 'getParentProgrammeItem'],
             ['programmeItem', 'ancestry']);
 
         return $broadcasts;
     }
 
-    private function programmeAncestryGetter(array $ids): array
+    private function getParentProgrammeItem(array $ids): array
     {
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
