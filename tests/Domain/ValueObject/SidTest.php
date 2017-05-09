@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\ValueObject;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SidTest extends PHPUnit_Framework_TestCase
+class SidTest extends TestCase
 {
     public function testValidSid()
     {

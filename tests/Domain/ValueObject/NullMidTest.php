@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\ValueObject;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Null\NullMid;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class NullMidTest extends PHPUnit_Framework_TestCase
+class NullMidTest extends TestCase
 {
     public function testNullMid()
     {

@@ -4,9 +4,9 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedGenre;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class GenreTest extends PHPUnit_Framework_TestCase
+class GenreTest extends TestCase
 {
     public function testConstructor()
     {

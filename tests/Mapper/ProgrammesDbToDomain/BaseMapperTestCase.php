@@ -2,9 +2,9 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class BaseMapperTestCase extends PHPUnit_Framework_TestCase
+abstract class BaseMapperTestCase extends TestCase
 {
     protected function getMapperFactory(array $config = [])
     {

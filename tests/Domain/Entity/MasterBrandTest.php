@@ -12,9 +12,9 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class MasterBrandTest extends PHPUnit_Framework_TestCase
+class MasterBrandTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

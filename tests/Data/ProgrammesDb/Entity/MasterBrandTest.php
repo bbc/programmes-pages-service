@@ -9,9 +9,9 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use DateTime;
 use ReflectionClass;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class MasterBrandTest extends PHPUnit_Framework_TestCase
+class MasterBrandTest extends TestCase
 {
     public function testTraits()
     {

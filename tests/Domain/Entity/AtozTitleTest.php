@@ -4,9 +4,9 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AtozTitleTest extends PHPUnit_Framework_TestCase
+class AtozTitleTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

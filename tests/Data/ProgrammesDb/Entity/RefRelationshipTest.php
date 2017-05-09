@@ -6,9 +6,9 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationship;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationshipType;
 use DateTime;
 use ReflectionClass;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RefRelationshipTest extends PHPUnit_Framework_TestCase
+class RefRelationshipTest extends TestCase
 {
     public function testTraits()
     {

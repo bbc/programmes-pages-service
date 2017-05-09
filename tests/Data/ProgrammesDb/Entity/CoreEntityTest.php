@@ -6,9 +6,9 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
 use ReflectionClass;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CoreEntityTest extends PHPUnit_Framework_TestCase
+class CoreEntityTest extends TestCase
 {
     public function testTraits()
     {

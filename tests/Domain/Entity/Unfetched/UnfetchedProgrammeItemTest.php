@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgrammeItem;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class UnfetchedProgrammeItemTest extends PHPUnit_Framework_TestCase
+class UnfetchedProgrammeItemTest extends TestCase
 {
     public function testUnfetchedProgrammeItem()
     {

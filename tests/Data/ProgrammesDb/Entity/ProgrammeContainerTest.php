@@ -4,10 +4,10 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class ProgrammeContainerTest extends PHPUnit_Framework_TestCase
+class ProgrammeContainerTest extends TestCase
 {
     public function testTraits()
     {

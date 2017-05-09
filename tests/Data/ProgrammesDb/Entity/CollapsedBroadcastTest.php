@@ -8,9 +8,9 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use DateTime;
 use ReflectionClass;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CollapsedBroadcastTest extends PHPUnit_Framework_TestCase
+class CollapsedBroadcastTest extends TestCase
 {
     public function testTraits()
     {

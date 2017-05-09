@@ -6,7 +6,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
-use PHPUnit_Framework_TestCase;
 
 class NetworkMapperTest extends BaseMapperTestCase
 {

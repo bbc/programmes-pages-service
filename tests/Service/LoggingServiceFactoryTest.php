@@ -8,12 +8,12 @@ use BBC\ProgrammesPagesService\Service\LoggingServiceFactory;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Psr\Log\NullLogger;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers BBC\ProgrammesPagesService\Service\LoggingServiceFactory
  */
-class LoggingServiceFactoryTest extends PHPUnit_Framework_TestCase
+class LoggingServiceFactoryTest extends TestCase
 {
     public function testFactoryCallingFunction()
     {

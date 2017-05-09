@@ -4,9 +4,9 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ContributorTest extends PHPUnit_Framework_TestCase
+class ContributorTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

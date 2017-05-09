@@ -3,10 +3,10 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\GroupProgrammeContainer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class GroupProgrammeContainerTest extends PHPUnit_Framework_TestCase
+class GroupProgrammeContainerTest extends TestCase
 {
     public function testTraits()
     {

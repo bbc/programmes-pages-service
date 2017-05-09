@@ -11,9 +11,9 @@ use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class NetworkTest extends PHPUnit_Framework_TestCase
+class NetworkTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

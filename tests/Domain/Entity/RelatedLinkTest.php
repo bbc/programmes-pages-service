@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RelatedLinkTest extends PHPUnit_Framework_TestCase
+class RelatedLinkTest extends TestCase
 {
     public function testConstructor()
     {

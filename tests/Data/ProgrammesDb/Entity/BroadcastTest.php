@@ -7,9 +7,9 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use ReflectionClass;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BroadcastTest extends PHPUnit_Framework_TestCase
+class BroadcastTest extends TestCase
 {
     public function testTraits()
     {

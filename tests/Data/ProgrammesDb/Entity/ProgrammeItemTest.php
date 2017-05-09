@@ -6,10 +6,10 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
-class ProgrammeItemTest extends PHPUnit_Framework_TestCase
+class ProgrammeItemTest extends TestCase
 {
     public function testDefaults()
     {

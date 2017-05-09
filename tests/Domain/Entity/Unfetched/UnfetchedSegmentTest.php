@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity\Unfetched;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedSegment;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class UnfetchedSegmentTest extends PHPUnit_Framework_TestCase
+class UnfetchedSegmentTest extends TestCase
 {
     public function testUnfetchedSegment()
     {

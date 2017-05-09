@@ -5,9 +5,9 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SegmentEventTest extends PHPUnit_Framework_TestCase
+class SegmentEventTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

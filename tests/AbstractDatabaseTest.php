@@ -6,9 +6,9 @@ use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\DBAL\Logging\DebugStack;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractDatabaseTest extends PHPUnit_Framework_TestCase
+abstract class AbstractDatabaseTest extends TestCase
 {
     const FIXTURES_PATH = 'Tests\BBC\ProgrammesPagesService\DataFixtures\ORM\\';
     const EMBARGOED_FILTER = 'embargoed_filter';

@@ -9,7 +9,6 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use DateTime;
 use DateTimeImmutable;
-use PHPUnit_Framework_TestCase;
 
 class ServiceMapperTest extends BaseMapperTestCase
 {

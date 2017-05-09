@@ -11,9 +11,9 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BrandTest extends PHPUnit_Framework_TestCase
+class BrandTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

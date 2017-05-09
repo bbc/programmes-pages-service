@@ -11,10 +11,10 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Mid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTimeImmutable;
 
-class ClipTest extends PHPUnit_Framework_TestCase
+class ClipTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {

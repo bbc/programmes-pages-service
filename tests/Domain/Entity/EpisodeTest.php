@@ -11,10 +11,10 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTimeImmutable;
 
-class EpisodeTest extends PHPUnit_Framework_TestCase
+class EpisodeTest extends TestCase
 {
     public function testConstructorRequiredArgs()
     {
