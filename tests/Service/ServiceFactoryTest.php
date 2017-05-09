@@ -25,7 +25,7 @@ class ServiceFactoryTest extends TestCase
         $serviceFactory = new ServiceFactory(
             $this->entityManager($expectedRepositories),
             $this->mapperFactory($expectedMapper),
-            new NullAdapter()
+            $this->createMock('BBC\ProgrammesPagesService\Cache\CacheInterface')
         );
 
         $service = $serviceFactory->{'get' . $serviceName}();

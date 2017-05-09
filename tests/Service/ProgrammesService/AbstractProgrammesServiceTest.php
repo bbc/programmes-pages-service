@@ -11,6 +11,7 @@ abstract class AbstractProgrammesServiceTest extends AbstractServiceTest
 {
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('CoreEntityRepository');
         $this->setUpMapper('ProgrammeMapper', 'programmeFromDbData');
     }
@@ -30,6 +31,6 @@ abstract class AbstractProgrammesServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new ProgrammesService($this->mockRepository, $this->mockMapper, new NullAdapter());
+        return new ProgrammesService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }

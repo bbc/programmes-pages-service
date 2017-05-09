@@ -12,6 +12,7 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
 
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('CollapsedBroadcastRepository');
         $this->setUpMapper('CollapsedBroadcastMapper', 'collapsedBroadcastFromDbData');
         $this->mockServiceRepository = $this->getRepo('ServiceRepository');
@@ -32,7 +33,7 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
         return new CollapsedBroadcastsService(
             $this->mockRepository,
             $this->mockMapper,
-            new NullAdapter(),
+            $this->mockCache,
             $this->mockServiceRepository
         );
     }

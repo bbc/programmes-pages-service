@@ -11,6 +11,7 @@ abstract class AbstractContributorsServiceTest extends AbstractServiceTest
 {
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('ContributorRepository');
         $this->setUpMapper('ContributorMapper', 'contributorFromDbData');
     }
@@ -34,6 +35,6 @@ abstract class AbstractContributorsServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new ContributorsService($this->mockRepository, $this->mockMapper, new NullAdapter());
+        return new ContributorsService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }

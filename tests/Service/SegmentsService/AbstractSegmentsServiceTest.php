@@ -10,6 +10,7 @@ abstract class AbstractSegmentsServiceTest extends AbstractServiceTest
 {
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('SegmentRepository');
         $this->setUpMapper('SegmentMapper', 'segmentFromDbData');
     }
@@ -28,6 +29,6 @@ abstract class AbstractSegmentsServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new SegmentsService($this->mockRepository, $this->mockMapper, new NullAdapter());
+        return new SegmentsService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }

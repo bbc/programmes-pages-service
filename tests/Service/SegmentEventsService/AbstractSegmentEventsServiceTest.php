@@ -10,6 +10,7 @@ abstract class AbstractSegmentEventsServiceTest extends AbstractServiceTest
 {
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('SegmentEventRepository');
         $this->setUpMapper('SegmentEventMapper', 'segmentEventFromDbData');
     }
@@ -28,6 +29,6 @@ abstract class AbstractSegmentEventsServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new SegmentEventsService($this->mockRepository, $this->mockMapper, new NullAdapter());
+        return new SegmentEventsService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }

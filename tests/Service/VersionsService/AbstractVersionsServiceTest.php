@@ -10,6 +10,7 @@ abstract class AbstractVersionsServiceTest extends AbstractServiceTest
 {
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('VersionRepository');
         $this->setUpMapper('VersionMapper', 'versionFromDbData');
     }
@@ -28,6 +29,6 @@ abstract class AbstractVersionsServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new VersionsService($this->mockRepository, $this->mockMapper, new NullAdapter());
+        return new VersionsService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }

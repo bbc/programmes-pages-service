@@ -10,6 +10,7 @@ abstract class AbstractRelatedLinksServiceTest extends AbstractServiceTest
 {
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('RelatedLinkRepository');
         $this->setUpMapper('RelatedLinkMapper', 'relatedLinkFromDbData');
     }
@@ -29,6 +30,6 @@ abstract class AbstractRelatedLinksServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new RelatedLinksService($this->mockRepository, $this->mockMapper, new NullAdapter());
+        return new RelatedLinksService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }
