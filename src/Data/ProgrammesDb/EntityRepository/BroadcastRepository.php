@@ -66,40 +66,6 @@ class BroadcastRepository extends EntityRepository
             ->join($alias . '.programmeItem', 'programmeItem');
     }
 
-    private function entityTypeFilterValue(string $type): ?bool
-    {
-        $typesLookup = [
-            'Broadcast' => false,
-            'Webcast' => true,
-            'Any' => null,
-        ];
-
-        $typeNames = array_keys($typesLookup);
-
-        if (!in_array($type, $typeNames)) {
-            throw new InvalidArgumentException(sprintf(
-                'Called %s with an invalid type. Expected one of %s but got "%s"',
-                debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'],
-                '"' . implode('", "', $typeNames) . '"',
-                $type
-            ));
-        }
-
-        return $typesLookup[$type] ?? null;
-    }
-
-    private function setEntityTypeFilter(QueryBuilder $qb, string $type, string $broadcastAlias = 'broadcast'): QueryBuilder
-    {
-        $isWebcast = $this->entityTypeFilterValue($type);
-
-        if (!is_null($isWebcast)) {
-            $qb->andWhere($broadcastAlias . '.isWebcast = :isWebcast')
-                ->setParameter('isWebcast', $isWebcast);
-        }
-
-        return $qb;
-    }
-
     public function findAllByServiceAndDateRange(
         Sid $serviceId,
         DateTimeImmutable $startDate,
@@ -135,6 +101,40 @@ class BroadcastRepository extends EntityRepository
         );
 
         return $broadcasts;
+    }
+
+    private function entityTypeFilterValue(string $type): ?bool
+    {
+        $typesLookup = [
+            'Broadcast' => false,
+            'Webcast' => true,
+            'Any' => null,
+        ];
+
+        $typeNames = array_keys($typesLookup);
+
+        if (!in_array($type, $typeNames)) {
+            throw new InvalidArgumentException(sprintf(
+                'Called %s with an invalid type. Expected one of %s but got "%s"',
+                debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'],
+                '"' . implode('", "', $typeNames) . '"',
+                $type
+            ));
+        }
+
+        return $typesLookup[$type] ?? null;
+    }
+
+    private function setEntityTypeFilter(QueryBuilder $qb, string $type, string $broadcastAlias = 'broadcast'): QueryBuilder
+    {
+        $isWebcast = $this->entityTypeFilterValue($type);
+
+        if (!is_null($isWebcast)) {
+            $qb->andWhere($broadcastAlias . '.isWebcast = :isWebcast')
+               ->setParameter('isWebcast', $isWebcast);
+        }
+
+        return $qb;
     }
 
     private function getParentProgrammeItem(array $ids): array
