@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use DateTimeImmutable;
@@ -65,6 +66,43 @@ class BroadcastRepository extends EntityRepository
             ->join($alias . '.programmeItem', 'programmeItem');
     }
 
+    public function findAllByServiceAndDateRange(
+        Sid $serviceId,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+        ?int $limit,
+        int $offset
+    ):array {
+        $qb = $this->createQueryBuilder('broadcast', false)
+            ->addSelect(['programmeItem', 'service', 'masterBrand', 'network'])
+            ->innerJoin('programmeItem.masterBrand', 'masterBrand')
+            ->innerJoin('masterBrand.network', 'network')
+            ->innerJoin('broadcast.service', 'service')
+
+            ->andWhere('broadcast.startAt >= :startDate')
+            ->andWhere('broadcast.startAt < :endDate')
+            ->andWhere('service.sid = :sid')
+            ->addOrderBy('broadcast.startAt', 'ASC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('sid', $serviceId);
+
+        $this->setEntityTypeFilter($qb, 'Broadcast');
+
+        $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $broadcasts = $this->abstractResolveAncestry(
+            $results,
+            [$this, 'programmeAncestryGetter'],
+            ['programmeItem', 'ancestry']
+        );
+
+        return $broadcasts;
+    }
+
     private function entityTypeFilterValue(string $type): ?bool
     {
         $typesLookup = [
@@ -97,5 +135,12 @@ class BroadcastRepository extends EntityRepository
         }
 
         return $qb;
+    }
+
+    private function programmeAncestryGetter(array $ids): array
+    {
+        /** @var CoreEntityRepository $repo */
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+        return $repo->findByIds($ids);
     }
 }

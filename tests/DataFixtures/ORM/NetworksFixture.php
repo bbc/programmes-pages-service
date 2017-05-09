@@ -74,6 +74,7 @@ class NetworksFixture extends AbstractFixture
         $service2->setNetwork($network2);
 
         $this->buildMasterBrand('bbc_radio_four', 'p01y7bwp', 'BBC Radio 4', 'radio4', $network1);
+        $this->buildMasterBrand('bbc_radio_two', 'p01y7bwq', 'BBC Radio 2', 'radio2', $network2);
 
         $this->manager->flush();
     }

@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
@@ -50,6 +51,18 @@ class ServiceRepository extends EntityRepository
             ->addOrderBy('hasPosition', 'ASC')
             ->addOrderBy('network.position', 'ASC')
             ->addOrderBy($alias . '.shortName', 'ASC');
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
+    public function findAllInNetwork(Nid $networkId): array
+    {
+        $qb = $this->createQueryBuilder('service')
+            ->addSelect('network')
+            ->join('service.network', 'network')
+            ->andWhere('network.nid = :networkId')
+            ->setParameter('networkId', $networkId)
+            ->addOrderBy('service.shortName', 'ASC');
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

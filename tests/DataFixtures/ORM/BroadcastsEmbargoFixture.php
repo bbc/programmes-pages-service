@@ -36,7 +36,8 @@ class BroadcastsEmbargoFixture extends BroadcastsFixture implements DependentFix
             $versionEmbargoed,
             new DateTime('2017-01-01 12:00:00'),
             new DateTime('2017-01-01 13:00:00'),
-            $service
+            $service,
+            'mb_bbc_radio_four'
         );
 
         // - B: has an embargoed episode in the future
@@ -45,7 +46,8 @@ class BroadcastsEmbargoFixture extends BroadcastsFixture implements DependentFix
             $versionEmbargoed,
             new DateTime('2017-01-01 13:30:00'), // note that start is earlier than now
             new DateTime('2017-01-01 15:00:00'),
-            $service
+            $service,
+            'mb_bbc_radio_four'
         );
 
 
@@ -55,7 +57,8 @@ class BroadcastsEmbargoFixture extends BroadcastsFixture implements DependentFix
             $versionEmbargoed,
             new DateTime('2017-01-02 12:00:00'),
             new DateTime('2017-01-02 13:00:00'),
-            null
+            null,
+            'mb_bbc_radio_two'
         );
 
         // - D: has a non-embargoed episode in the future
@@ -64,7 +67,8 @@ class BroadcastsEmbargoFixture extends BroadcastsFixture implements DependentFix
             $version,
             new DateTime('2017-01-02 12:00:00'),
             new DateTime('2017-01-02 13:00:00'),
-            $service
+            $service,
+            'mb_bbc_radio_two'
         );
 
         $manager->flush();
