@@ -9,7 +9,7 @@ class FindAllInNetworkTest extends AbstractServicesServiceTest
     public function testFindAllInNetwork()
     {
         $nid = new Nid('bbc_radio_two');
-        $dbData = [['pid'=>'234']];
+        $dbData = [['pid' => '234']];
 
         $this->mockRepository->expects($this->once())
             ->method('findAllInNetwork')

@@ -16,8 +16,8 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findAllByServiceAndDateRange')
-            ->with($sid, $fromDateTime, $toDatetime, -1, 0
-            )->willReturn($dbData);
+            ->with($sid, $fromDateTime, $toDatetime, -1, 0)
+            ->willReturn($dbData);
 
         $broadcasts = $this->service()->findByServiceAndDateRange(
             $sid,
