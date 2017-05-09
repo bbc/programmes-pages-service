@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
@@ -54,7 +55,7 @@ class ServiceRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findAllInNetwork(string $networkId): array
+    public function findAllInNetwork(Nid $networkId): array
     {
         $qb = $this->createQueryBuilder('service')
             ->select('service', 'network')
