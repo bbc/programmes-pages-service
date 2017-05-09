@@ -47,7 +47,7 @@ class LoggingServiceFactoryTest extends TestCase
         $service = new VersionsService(
             $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository'),
             $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'),
-            new NullAdapter()
+            $this->createMock('BBC\ProgrammesPagesService\Cache\CacheInterface')
         );
 
         $logger = $this->createMock('Psr\Log\LoggerInterface');
@@ -91,7 +91,7 @@ class LoggingServiceFactoryTest extends TestCase
         $service = new VersionsService(
             $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository'),
             $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'),
-            new NullAdapter()
+            $this->createMock('BBC\ProgrammesPagesService\Cache\CacheInterface')
         );
 
         $timedService = $this->serviceProxyClass($service, new NullLogger(), new Stopwatch());
@@ -108,7 +108,7 @@ class LoggingServiceFactoryTest extends TestCase
         $service = new VersionsService(
             $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository'),
             $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'),
-            new NullAdapter()
+            $this->createMock('BBC\ProgrammesPagesService\Cache\CacheInterface')
         );
 
         $timedService = $this->serviceProxyClass($service, new NullLogger(), new Stopwatch());
@@ -129,7 +129,7 @@ class LoggingServiceFactoryTest extends TestCase
         return new LoggingServiceFactory(
             $mockEntityManager,
             $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory'),
-            new NullAdapter(),
+            $this->createMock('BBC\ProgrammesPagesService\Cache\CacheInterface'),
             $logger,
             $stopwatch
         );

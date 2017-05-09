@@ -9,14 +9,14 @@ use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentEventMapper;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class SegmentEventsService extends AbstractService
 {
     public function __construct(
         SegmentEventRepository $repository,
         SegmentEventMapper $mapper,
-        CacheItemPoolInterface $cache
+        CacheInterface $cache
     ) {
         parent::__construct($repository, $mapper, $cache);
     }

@@ -8,14 +8,14 @@ use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\BroadcastMapper;
 use DateTimeImmutable;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class BroadcastsService extends AbstractService
 {
     public function __construct(
         BroadcastRepository $repository,
         BroadcastMapper $mapper,
-        CacheItemPoolInterface $cache
+        CacheInterface $cache
     ) {
         parent::__construct($repository, $mapper, $cache);
     }

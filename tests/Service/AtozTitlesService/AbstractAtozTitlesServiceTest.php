@@ -10,6 +10,7 @@ abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
 {
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('AtozTitleRepository');
         $this->setUpMapper('AtozTitleMapper', 'atoZTitleFromDbData');
     }
@@ -28,6 +29,6 @@ abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new AtozTitlesService($this->mockRepository, $this->mockMapper, new NullAdapter());
+        return new AtozTitlesService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }

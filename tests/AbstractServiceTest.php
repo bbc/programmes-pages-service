@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService;
 
 use PHPUnit\Framework\TestCase;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 abstract class AbstractServiceTest extends TestCase
 {
@@ -14,6 +15,8 @@ abstract class AbstractServiceTest extends TestCase
 
     protected $mockMapper;
 
+    protected $mockCache;
+
     protected function setUpRepo($repositoryName)
     {
         $this->mockRepository = $this->getRepo($repositoryName);
@@ -22,6 +25,11 @@ abstract class AbstractServiceTest extends TestCase
     protected function getRepo($repositoryName)
     {
         return $this->createMock($this::REPOSITORY_NS . $repositoryName);
+    }
+
+    protected function setUpCache()
+    {
+        $this->mockCache = $this->createMock(CacheInterface::class);
     }
 
     protected function setUpMapper($mapperName, $entityBuilderMethod)

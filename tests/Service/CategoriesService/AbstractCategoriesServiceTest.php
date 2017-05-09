@@ -10,6 +10,7 @@ abstract class AbstractCategoriesServiceTest extends AbstractServiceTest
 {
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('CategoryRepository');
         $this->setUpMapper('CategoryMapper', 'categoryFromDbData');
     }
@@ -29,6 +30,6 @@ abstract class AbstractCategoriesServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new CategoriesService($this->mockRepository, $this->mockMapper, new NullAdapter());
+        return new CategoriesService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }

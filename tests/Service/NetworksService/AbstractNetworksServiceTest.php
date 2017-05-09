@@ -10,6 +10,7 @@ abstract class AbstractNetworksServiceTest extends AbstractServiceTest
 {
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('NetworkRepository');
         $this->setUpMapper('NetworkMapper', 'networkFromDbData');
     }
@@ -27,6 +28,6 @@ abstract class AbstractNetworksServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new NetworksService($this->mockRepository, $this->mockMapper, new NullAdapter());
+        return new NetworksService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }

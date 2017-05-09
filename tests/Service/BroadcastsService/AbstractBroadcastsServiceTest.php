@@ -10,6 +10,7 @@ abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
 {
     public function setUp()
     {
+        $this->setUpCache();
         $this->setUpRepo('BroadcastRepository');
         $this->setUpMapper('BroadcastMapper', 'broadcastFromDbData');
     }
@@ -28,6 +29,6 @@ abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
 
     protected function service()
     {
-        return new BroadcastsService($this->mockRepository, $this->mockMapper, new NullAdapter());
+        return new BroadcastsService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }

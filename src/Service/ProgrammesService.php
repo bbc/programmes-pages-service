@@ -13,7 +13,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
 use InvalidArgumentException;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class ProgrammesService extends AbstractService
 {
@@ -33,7 +33,7 @@ class ProgrammesService extends AbstractService
     public function __construct(
         CoreEntityRepository $repository,
         ProgrammeMapper $mapper,
-        CacheItemPoolInterface $cache
+        CacheInterface $cache
     ) {
         parent::__construct($repository, $mapper, $cache);
     }
@@ -126,6 +126,26 @@ class ProgrammesService extends AbstractService
         return $this->mapSingleEntity($dbEntity);
     }
 
+    /*
+     public function findByPidFull(Pid $pid, string $entityType = 'Programme', $ttl = CacheInterface::NORMAL): ?Programme
+    {
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid);
+
+        $entity = $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function(Pid $pid, string $entityType) {
+                $dbEntity = $this->repository->findByPidFull($pid, $entityType);
+                return $this->mapSingleEntity($dbEntity);
+            },
+            [$pid, $entityType]
+        );
+
+        return $entity;
+    }
+    */
     public function findByPidFull(Pid $pid, string $entityType = 'Programme'): ?Programme
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);

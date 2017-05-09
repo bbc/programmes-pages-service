@@ -5,7 +5,7 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\AtozTitle;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtozTitleRepository;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
-use Psr\Cache\CacheItemPoolInterface;
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class AtozTitlesService extends AbstractService
 {
@@ -14,7 +14,7 @@ class AtozTitlesService extends AbstractService
     public function __construct(
         AtozTitleRepository $repository,
         MapperInterface $mapper,
-        CacheItemPoolInterface $cache
+        CacheInterface $cache
     ) {
         parent::__construct($repository, $mapper, $cache);
     }
