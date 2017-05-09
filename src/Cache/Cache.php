@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Cache;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use InvalidArgumentException;
 
 class Cache implements CacheInterface
 {
@@ -48,6 +49,12 @@ class Cache implements CacheInterface
         return $this->cachePool->getItem($key);
     }
 
+    /**
+     * @param CacheItemInterface $item
+     * @param int|string $ttl
+     *   TTL in seconds, or a constant from CacheInterface
+     * @return bool
+     */
     public function setItem(CacheItemInterface $item, $ttl): bool
     {
         $ttl = $this->calculateTtl($ttl);
@@ -59,7 +66,8 @@ class Cache implements CacheInterface
      * IF CALLABLE RETURNS SOMETHING THAT EVALUATES TO EMPTY THE RESULT WILL NOT BE CACHED
      *
      * @param string $key
-     * @param int|class constant $ttl
+     * @param int|string $ttl
+     *   TTL in seconds, or a constant from CacheInterface
      * @param callable $function
      * @param array|null $arguments
      * @return mixed
@@ -80,6 +88,15 @@ class Cache implements CacheInterface
         return $result;
     }
 
+    /**
+     * Helps you to construct good cache keys by prodding you in the correct direction.
+     * Entirely optional but you are encouraged to use it.
+     *
+     * @param string $className
+     * @param string $functionName
+     * @param \string[] ...$uniqueValues
+     * @return string
+     */
     public function keyHelper(string $className, string $functionName, string ...$uniqueValues): string
     {
         // Please help prevent cache namespace collisions by driving carefully
@@ -93,12 +110,27 @@ class Cache implements CacheInterface
         $this->flushCacheItems = $flushCacheItems;
     }
 
+    /**
+     * Attach a prefix to the key and strip anything that's not a valid PSR-6
+     * cache key.
+     *
+     * @param string $key
+     * @return mixed
+     */
     private function standardiseKey(string $key)
     {
         $key = $this->prefix . '.' . $key;
         return preg_replace('/[^A-Za-z0-9_\.]/', '_', $key);
     }
 
+    /**
+     * TTL can be in seconds, or one of the constants from CacheInterface
+     * which is converted into the TTL in seconds defined in the constructor.
+     * Anything else results in an exception
+     *
+     * @param int|string $ttl
+     * @return int
+     */
     private function calculateTtl($ttl): int
     {
         if (is_numeric($ttl)) {
@@ -106,11 +138,18 @@ class Cache implements CacheInterface
         } elseif (is_string($ttl) && isset($this->cacheTimes[$ttl])) {
             $ttl = $this->cacheTimes[$ttl];
         } else {
-            throw new \InvalidArgumentException("TTL must be a number or Cache class constant");
+            throw new InvalidArgumentException("TTL must be a number or Cache class constant");
         }
         return $this->protectLifetimeFromStampede($ttl);
     }
 
+    /**
+     * Fuzz the TTL by a random value in order to avoid caches expiring simultaneously
+     * and creating unnecessary server load.
+     *
+     * @param int $ttl
+     * @return int
+     */
     private function protectLifetimeFromStampede(int $ttl): int
     {
         $ten = floor($ttl / 10);
