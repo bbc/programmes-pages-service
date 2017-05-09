@@ -128,11 +128,11 @@ class BroadcastRepository extends EntityRepository
 
         $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
-        // get parent programmeItems
         $broadcasts = $this->abstractResolveAncestry(
             $results,
             [$this, 'getParentProgrammeItem'],
-            ['programmeItem', 'ancestry']);
+            ['programmeItem', 'ancestry']
+        );
 
         return $broadcasts;
     }
