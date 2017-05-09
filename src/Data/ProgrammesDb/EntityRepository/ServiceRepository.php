@@ -59,12 +59,9 @@ class ServiceRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('service')
             ->select('service', 'network')
-            ->addSelect('CASE WHEN network.position IS NULL THEN 1 ELSE 0 AS HIDDEN hasPosition')
             ->join('service.network', 'network')
             ->andWhere('network.nid = :networkId')
             ->setParameter('networkId', $networkId)
-            ->addOrderBy('hasPosition', 'ASC')
-            ->addOrderBy('network.position', 'ASC')
             ->addOrderBy('service.shortName', 'ASC');
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
