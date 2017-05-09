@@ -2,6 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker;
 
+use Doctrine\ORM\Query\SqlWalker;
+
 /**
  * Class ForceIndexWalker
  *
@@ -11,7 +13,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker;
  *
  * @package BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker
  */
-class ForceIndexWalker extends \Doctrine\ORM\Query\SqlWalker
+class ForceIndexWalker extends SqlWalker
 {
     const HINT_USE_INDEX = 'ForceIndexWalker.ForceIndex';
 

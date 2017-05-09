@@ -2,9 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ServicesService;
 
-use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\ServicesService;
-use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractServicesServiceTest extends AbstractServiceTest

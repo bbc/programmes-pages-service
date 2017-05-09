@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository::<public>

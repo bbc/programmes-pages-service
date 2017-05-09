@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntityImage;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationshipType;
 use PHPUnit\Framework\TestCase;
 
 class CoreEntityImageTest extends TestCase

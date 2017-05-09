@@ -2,15 +2,14 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Format;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Genre;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use DateTime;
 
 class CollapsedBroadcastsWithCategoriesFixture extends AbstractFixture implements DependentFixtureInterface
 {

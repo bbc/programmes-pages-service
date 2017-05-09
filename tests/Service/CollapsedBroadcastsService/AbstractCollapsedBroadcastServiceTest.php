@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
 use BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
-use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest

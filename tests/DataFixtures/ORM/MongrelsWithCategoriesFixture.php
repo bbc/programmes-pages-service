@@ -2,11 +2,11 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Genre;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Genre;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class MongrelsWithCategoriesFixture extends AbstractFixture implements DependentFixtureInterface
 {

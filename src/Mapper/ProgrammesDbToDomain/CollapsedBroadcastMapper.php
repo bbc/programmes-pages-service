@@ -6,7 +6,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
-
 use DateTimeImmutable;
 
 class CollapsedBroadcastMapper extends AbstractMapper

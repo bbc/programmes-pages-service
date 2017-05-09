@@ -5,8 +5,8 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationship;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationshipType;
 use DateTime;
-use ReflectionClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class RefRelationshipTest extends TestCase
 {

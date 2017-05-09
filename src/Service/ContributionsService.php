@@ -2,12 +2,12 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributionRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributionMapper;
-use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class ContributionsService extends AbstractService
 {

@@ -2,9 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Type;
 
-use Doctrine\DBAL\Types\Type;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Type\DatePartialType;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
+use Doctrine\DBAL\Types\Type;
 use PHPUnit\Framework\TestCase;
 
 class DatePartialTypeTest extends TestCase

@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentRepository;
 
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentRepository;
 
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentRepository::<public>

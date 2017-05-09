@@ -2,8 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\AtozTitleMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\AtozTitleMapper;
 
 class AtozTitleMapperTest extends BaseMapperTestCase
 {

@@ -4,10 +4,10 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
-use ReflectionClass;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class BroadcastTest extends TestCase
 {

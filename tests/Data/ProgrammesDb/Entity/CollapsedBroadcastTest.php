@@ -4,11 +4,9 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use DateTime;
-use ReflectionClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class CollapsedBroadcastTest extends TestCase
 {

@@ -2,8 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
 
 class RelatedLinkMapperTest extends BaseMapperTestCase
 {

@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeContainer;
-use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 

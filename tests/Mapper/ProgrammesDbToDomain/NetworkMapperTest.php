@@ -2,10 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper;
 
 class NetworkMapperTest extends BaseMapperTestCase
 {

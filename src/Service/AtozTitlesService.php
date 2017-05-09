@@ -2,10 +2,10 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\AtozTitle;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtozTitleRepository;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
-use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class AtozTitlesService extends AbstractService
 {

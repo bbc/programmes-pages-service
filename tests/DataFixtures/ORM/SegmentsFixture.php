@@ -2,10 +2,9 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Contributor;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class SegmentsFixture extends AbstractFixture
 {

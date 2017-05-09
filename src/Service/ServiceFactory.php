@@ -2,9 +2,9 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 use BBC\ProgrammesPagesService\Cache\CacheInterface;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ServiceFactory
 {

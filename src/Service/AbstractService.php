@@ -2,10 +2,10 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
 use Doctrine\ORM\EntityRepository;
-use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 abstract class AbstractService
 {

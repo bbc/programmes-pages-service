@@ -2,7 +2,6 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ServicesService;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class FindByPidFullTest extends AbstractServicesServiceTest

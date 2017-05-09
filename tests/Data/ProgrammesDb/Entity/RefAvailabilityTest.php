@@ -7,9 +7,9 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefAvailability;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefMediaSet;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Enumeration\AvailabilityStatusEnum;
-use PHPUnit\Framework\TestCase;
 use DateTime;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
 class RefAvailabilityTest extends TestCase
 {

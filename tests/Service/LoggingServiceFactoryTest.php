@@ -3,12 +3,11 @@
 namespace Tests\BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Service\VersionsService;
 use BBC\ProgrammesPagesService\Service\LoggingServiceFactory;
-use Symfony\Component\Cache\Adapter\NullAdapter;
-use Symfony\Component\Stopwatch\Stopwatch;
-use Psr\Log\NullLogger;
+use BBC\ProgrammesPagesService\Service\VersionsService;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * @covers BBC\ProgrammesPagesService\Service\LoggingServiceFactory

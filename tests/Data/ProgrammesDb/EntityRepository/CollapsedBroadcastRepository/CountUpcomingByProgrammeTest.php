@@ -3,8 +3,8 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CollapsedBroadcastRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CollapsedBroadcastRepository;
-use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 use DateTimeImmutable;
+use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CollapsedBroadcastRepository::<public>

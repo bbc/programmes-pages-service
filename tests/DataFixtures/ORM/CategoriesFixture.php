@@ -2,10 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Genre;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Format;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Genre;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class CategoriesFixture extends AbstractFixture
 {

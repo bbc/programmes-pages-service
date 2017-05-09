@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RelatedLink;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Clip;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 

@@ -3,9 +3,9 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Enumeration\AvailabilityStatusEnum;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use DateTime;
 use InvalidArgumentException;
 
 /**

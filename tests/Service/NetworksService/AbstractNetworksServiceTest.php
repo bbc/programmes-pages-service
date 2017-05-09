@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\NetworksService;
 
 use BBC\ProgrammesPagesService\Service\NetworksService;
-use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractNetworksServiceTest extends AbstractServiceTest
