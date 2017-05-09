@@ -44,7 +44,6 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
         $broadcasts = $this->service()
             ->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, -1, 1);
 
-        $this->assertInternalType('array', $broadcasts);
-        $this->assertEmpty($broadcasts);
+        $this->assertSame([], $broadcasts);
     }
 }

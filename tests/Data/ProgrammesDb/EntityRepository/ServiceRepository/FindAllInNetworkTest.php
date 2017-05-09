@@ -38,9 +38,8 @@ class FindAllInNetworkTest extends AbstractDatabaseTest
     {
         $nid = new Nid('unexisting_bbc_radio');
         $servicesInNetwork = $this->repo->findAllInNetwork($nid);
-        $this->assertCount(0, $servicesInNetwork);
+        $this->assertSame([], $servicesInNetwork);
 
-        // findByPidFull query only
         $this->assertCount(1, $this->getDbQueries());
     }
 }

@@ -43,14 +43,12 @@ class FindAllByServiceAndDateRangeTest extends AbstractDatabaseTest
 
         // broadcasts + programmeItem parent
         $this->assertCount(2, $this->getDbQueries());
-
-        $this->resetDbQueryLogger();
     }
 
     public function testFindAllByServiceAndDateRangeWhenEmptyResultSet()
     {
-        $fromDateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2010-01-15 06:00:00');
-        $toDatetime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2017-10-16 06:00:00');
+        $fromDateTime = new DateTimeImmutable('2010-01-15 06:00:00');
+        $toDatetime = new DateTimeImmutable('2017-10-16 06:00:00');
 
         $broadcastedServices = $this->repo->findAllByServiceAndDateRange(
             new Sid('this_sid_doesnt_exist'),
@@ -60,7 +58,6 @@ class FindAllByServiceAndDateRangeTest extends AbstractDatabaseTest
             0
         );
 
-        $this->assertInternalType('array', $broadcastedServices);
-        $this->assertCount(0, $broadcastedServices);
+        $this->assertSame([], $broadcastedServices);
     }
 }

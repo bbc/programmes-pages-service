@@ -96,7 +96,7 @@ class BroadcastRepository extends EntityRepository
 
         $broadcasts = $this->abstractResolveAncestry(
             $results,
-            [$this, 'getParentProgrammeItem'],
+            [$this, 'programmeAncestryGetter'],
             ['programmeItem', 'ancestry']
         );
 
@@ -131,13 +131,13 @@ class BroadcastRepository extends EntityRepository
 
         if (!is_null($isWebcast)) {
             $qb->andWhere($broadcastAlias . '.isWebcast = :isWebcast')
-               ->setParameter('isWebcast', $isWebcast);
+                ->setParameter('isWebcast', $isWebcast);
         }
 
         return $qb;
     }
 
-    private function getParentProgrammeItem(array $ids): array
+    private function programmeAncestryGetter(array $ids): array
     {
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
