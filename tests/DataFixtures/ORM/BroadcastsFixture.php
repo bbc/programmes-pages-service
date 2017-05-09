@@ -39,7 +39,8 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             $version,
             new DateTime('2016-07-06 06:00:00'),
             new DateTime('2016-07-06 09:25:00'),
-            $service1
+            $service1,
+            'mb_bbc_radio_two'
         );
 
         $broadcast2 = $this->buildBroadcast(
@@ -47,7 +48,8 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             $version2,
             new DateTime('2011-07-05 15:00:00'),
             new DateTime('2011-07-05 16:00:01'),
-            $service1
+            $service1,
+            'mb_bbc_radio_four'
         );
 
         $broadcast3 = $this->buildBroadcast(
@@ -55,7 +57,8 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             $version3,
             new DateTime('2011-08-05 15:00:00'),
             new DateTime('2011-08-05 15:25:00'),
-            $service2
+            $service2,
+            'mb_bbc_radio_four'
         );
 
         // Webcast
@@ -64,7 +67,8 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             $version4,
             new DateTime('2011-07-05 15:00:00'),
             new DateTime('2011-07-05 15:25:00'),
-            null
+            null,
+            'mb_bbc_radio_four'
         );
 
         // Webcast
@@ -73,7 +77,8 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             $version4,
             new DateTime('2011-07-05 15:00:00'),
             new DateTime('2011-07-05 15:25:00'),
-            null
+            null,
+            'mb_bbc_radio_four'
         );
 
         $broadcast2 = $this->buildBroadcast(
@@ -81,7 +86,8 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             $version2,
             new DateTime('2011-09-05 15:00:00'),
             new DateTime('2011-09-05 16:00:01'),
-            $service2
+            $service2,
+            'mb_bbc_radio_two'
         );
 
         // Embargoed
@@ -90,17 +96,21 @@ class BroadcastsFixture extends AbstractFixture implements DependentFixtureInter
             $version5,
             new DateTime('2013-07-05 15:00:00'),
             new DateTime('2013-07-05 15:25:00'),
-            $service2
+            $service2,
+            'mb_bbc_radio_four'
         );
 
         $manager->flush();
     }
 
-    protected function buildBroadcast($pid, $version, $start, $end, $service)
+    protected function buildBroadcast($pid, $version, $start, $end, $service, $masterBrandMid)
     {
         $entity = new Broadcast($pid, $version, $start, $end);
         $entity->setService($service);
-        $entity->setProgrammeItem($version->getProgrammeItem());
+        $programmeItem = $version->getProgrammeItem();
+        $programmeItem->setMasterBrand($this->getReference($masterBrandMid));
+
+        $entity->setProgrammeItem($programmeItem);
         $entity->setIsWebcast(is_null($service));
         $this->manager->persist($entity);
         $this->addReference($pid, $entity);
