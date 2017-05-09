@@ -58,7 +58,7 @@ class ServiceRepository extends EntityRepository
     public function findAllInNetwork(Nid $networkId): array
     {
         $qb = $this->createQueryBuilder('service')
-            ->select('service', 'network')
+            ->addSelect('network')
             ->join('service.network', 'network')
             ->andWhere('network.nid = :networkId')
             ->setParameter('networkId', $networkId)
