@@ -12,9 +12,9 @@ class FindAllInNetworkTest extends AbstractServicesServiceTest
         $dbData = [['pid'=>'234']];
 
         $this->mockRepository->expects($this->once())
-                             ->method('findAllInNetwork')
-                             ->with($nid)
-                             ->willReturn($dbData);
+            ->method('findAllInNetwork')
+            ->with($nid)
+            ->willReturn($dbData);
 
         $servicesInNetwork = $this->service()->findAllInNetwork($nid);
 
