@@ -106,7 +106,7 @@ class BroadcastRepository extends EntityRepository
         DateTimeImmutable $endDate,
         ?int $limit,
         int $offset
-    ) {
+    ):array {
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['programmeItem', 'service', 'masterBrand', 'network'])
             ->innerJoin('programmeItem.masterBrand', 'masterBrand')
@@ -114,7 +114,7 @@ class BroadcastRepository extends EntityRepository
             ->innerJoin('broadcast.service', 'service')
 
             ->andWhere('broadcast.startAt >= :startDate')
-            ->andWhere('broadcast.endAt < :endDate')
+            ->andWhere('broadcast.startAt < :endDate')
             ->andWhere('service.sid = :sid')
             ->addOrderBy('broadcast.startAt', 'ASC')
             ->setMaxResults($limit)
