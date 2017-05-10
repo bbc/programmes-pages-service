@@ -2,16 +2,19 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions;
 
+use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
+use Doctrine\ORM\EntityManager;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 class DayTest extends AbstractDatabaseTest
 {
     public function testGeneratedSqlForMySql()
     {
-        $mySQLEntityManager = \Doctrine\ORM\EntityManager::create(
+        $mySQLEntityManager = EntityManager::create(
             [
                 'driver' => 'pdo_mysql',
-                'platform' => new \Doctrine\DBAL\Platforms\MySqlPlatform(),
+                'platform' => new MySqlPlatform(),
             ],
             $this->getEntityManager()->getConfiguration(),
             $this->getEntityManager()->getEventManager()
@@ -34,10 +37,10 @@ class DayTest extends AbstractDatabaseTest
      */
     public function testGeneratedSqlForUnsupportedPlatform()
     {
-        $mySQLEntityManager = \Doctrine\ORM\EntityManager::create(
+        $mySQLEntityManager = EntityManager::create(
             [
                 'driver' => 'pdo_pgsql',
-                'platform' => new \Doctrine\DBAL\Platforms\PostgreSqlPlatform(),
+                'platform' => new PostgreSqlPlatform(),
             ],
             $this->getEntityManager()->getConfiguration(),
             $this->getEntityManager()->getEventManager()

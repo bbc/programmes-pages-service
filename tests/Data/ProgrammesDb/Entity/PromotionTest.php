@@ -3,9 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Promotion;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use DateTime;
 
 class PromotionTest extends TestCase
 {

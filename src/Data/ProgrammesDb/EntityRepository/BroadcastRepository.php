@@ -3,9 +3,9 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use DateTimeImmutable;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 

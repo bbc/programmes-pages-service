@@ -2,10 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedGenre;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
 
 class CategoryMapperTest extends BaseMapperTestCase
 {

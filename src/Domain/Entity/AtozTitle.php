@@ -2,8 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
-use BBC\ProgrammesPagesService\Domain\Entity\Programme;
-
 class AtozTitle
 {
     /** @var string */

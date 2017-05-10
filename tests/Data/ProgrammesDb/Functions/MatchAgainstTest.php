@@ -2,7 +2,6 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\MatchAgainst;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 class MatchAgainstTest extends AbstractDatabaseTest

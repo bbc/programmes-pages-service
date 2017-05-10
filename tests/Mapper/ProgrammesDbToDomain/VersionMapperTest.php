@@ -2,10 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper;
 use DateTime;
 use DateTimeImmutable;
 

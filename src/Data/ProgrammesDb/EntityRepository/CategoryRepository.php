@@ -2,8 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use Doctrine\ORM\Query;
+use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 
 class CategoryRepository extends MaterializedPathRepository
 {

@@ -2,10 +2,10 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\RelatedLinkRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
-use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class RelatedLinksService extends AbstractService
 {

@@ -5,10 +5,10 @@ namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\SegmentEvent;
-use Doctrine\Common\Persistence\ObjectManager;
+use DateTime;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use DateTime;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class SegmentEventsBroadcastsOrderFixture extends AbstractFixture implements DependentFixtureInterface
 {

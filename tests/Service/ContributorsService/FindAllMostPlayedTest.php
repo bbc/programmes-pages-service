@@ -3,8 +3,8 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributorsService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 
 class FindAllMostPlayedTest extends AbstractContributorsServiceTest
 {

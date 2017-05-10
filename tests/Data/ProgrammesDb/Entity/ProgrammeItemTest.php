@@ -6,8 +6,8 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
-use PHPUnit\Framework\TestCase;
 use DateTime;
+use PHPUnit\Framework\TestCase;
 
 class ProgrammeItemTest extends TestCase
 {

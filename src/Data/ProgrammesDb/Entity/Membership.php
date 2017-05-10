@@ -2,8 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
 
 /**

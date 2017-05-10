@@ -2,8 +2,6 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
-
 class ProgrammeMapperCategoryTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelSeriesWithSetGenresAndFormats()

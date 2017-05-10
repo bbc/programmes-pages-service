@@ -3,8 +3,8 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefRelationshipType;
-use ReflectionClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class RefRelationshipTypeTest extends TestCase
 {

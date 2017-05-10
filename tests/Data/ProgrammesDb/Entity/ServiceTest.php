@@ -6,8 +6,8 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use DateTime;
-use ReflectionClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class ServiceTest extends TestCase
 {

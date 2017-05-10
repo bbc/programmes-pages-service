@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\VersionsService;
 
 use BBC\ProgrammesPagesService\Service\VersionsService;
-use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractVersionsServiceTest extends AbstractServiceTest

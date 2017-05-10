@@ -3,8 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
-use BBC\ProgrammesPagesService\Domain\Entity\Image;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class CachingTest extends BaseProgrammeMapperTestCase
 {

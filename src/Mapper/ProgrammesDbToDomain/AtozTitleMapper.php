@@ -5,7 +5,6 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
-use InvalidArgumentException;
 
 class AtozTitleMapper extends AbstractMapper
 {

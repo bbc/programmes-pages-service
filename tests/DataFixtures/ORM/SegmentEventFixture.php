@@ -4,9 +4,9 @@ namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Segment;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\SegmentEvent;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class SegmentEventFixture extends AbstractFixture implements DependentFixtureInterface
 {

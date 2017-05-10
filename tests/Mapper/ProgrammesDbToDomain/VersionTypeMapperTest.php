@@ -2,8 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionTypeMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\VersionType;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionTypeMapper;
 
 class VersionTypeMapperTest extends BaseMapperTestCase
 {

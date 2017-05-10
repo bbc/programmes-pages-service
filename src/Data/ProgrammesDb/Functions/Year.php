@@ -2,13 +2,13 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions;
 
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
-use Doctrine\ORM\Query\SqlWalker;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\Lexer;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
-use Doctrine\DBAL\DBALException;
+use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+use Doctrine\ORM\Query\Lexer;
+use Doctrine\ORM\Query\Parser;
+use Doctrine\ORM\Query\SqlWalker;
 
 class Year extends FunctionNode
 {

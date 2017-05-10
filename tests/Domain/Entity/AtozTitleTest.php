@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class AtozTitleTest extends TestCase

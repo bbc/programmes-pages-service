@@ -2,9 +2,9 @@
 
 namespace BBC\ProgrammesPagesService\Cache;
 
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use InvalidArgumentException;
 
 class Cache implements CacheInterface
 {

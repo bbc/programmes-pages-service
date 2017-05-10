@@ -4,9 +4,9 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedImage;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
+use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
-use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use InvalidArgumentException;
 
 class Network

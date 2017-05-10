@@ -5,9 +5,10 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\BackfillBase;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker\ForceIndexWalker;
 use DateTime;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\Query;
 
 class BackfillRepository extends EntityRepository
 {
@@ -43,7 +44,7 @@ class BackfillRepository extends EntityRepository
                 ->addOrderBy('backfill.cid', 'Asc')
                 ->getQuery();
 
-            $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
+            $query->setLockMode(LockMode::PESSIMISTIC_WRITE);
             // Extremely nasty hack to force doctrine to include FORCE INDEX in query
             $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, '\BBC\ProgrammesPagesService\Data\ProgrammesDb\Walker\ForceIndexWalker');
             $query->setHint(ForceIndexWalker::HINT_USE_INDEX, $this->getCompoundIndexName());
@@ -129,7 +130,7 @@ class BackfillRepository extends EntityRepository
                 ->andWhere('backfill.locked = 1')
                 ->setParameter('ids', $ids)
                 ->getQuery();
-            $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
+            $query->setLockMode(LockMode::PESSIMISTIC_WRITE);
             /** @var BackfillBase[] $changes */
             $changes = $query->getResult();
             foreach ($changes as $changeEvent) {

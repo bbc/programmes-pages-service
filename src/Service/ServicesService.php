@@ -2,12 +2,12 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper;
-use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class ServicesService extends AbstractService
 {

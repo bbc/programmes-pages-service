@@ -2,8 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService;
 
-use PHPUnit\Framework\TestCase;
 use BBC\ProgrammesPagesService\Cache\CacheInterface;
+use PHPUnit\Framework\TestCase;
 
 abstract class AbstractServiceTest extends TestCase
 {

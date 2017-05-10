@@ -3,8 +3,8 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain;
 
 use BBC\ProgrammesPagesService\Domain\ApplicationTime;
-use PHPUnit\Framework\TestCase;
 use DateTimeImmutable;
+use PHPUnit\Framework\TestCase;
 
 class ApplicationTimeTest extends TestCase
 {

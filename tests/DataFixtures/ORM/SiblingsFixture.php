@@ -2,13 +2,13 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
-use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Clip;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Series;
+use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class SiblingsFixture extends AbstractFixture
 {

@@ -2,11 +2,11 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
-use BBC\ProgrammesPagesService\Cache\CacheInterface;
 
 class CategoriesService extends AbstractService
 {

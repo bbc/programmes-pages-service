@@ -2,10 +2,12 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions;
 
-use Doctrine\ORM\Query\AST\InputParameter;
-use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+use Doctrine\ORM\Query\AST\InputParameter;
 use Doctrine\ORM\Query\AST\Literal;
+use Doctrine\ORM\Query\Lexer;
+use Doctrine\ORM\Query\Parser;
+use Doctrine\ORM\Query\SqlWalker;
 
 /**
  * "MATCH_AGAINST" "(" {StateFieldPathExpression ","}* InParameter {Literal}? ")"
@@ -21,7 +23,7 @@ class MatchAgainst extends FunctionNode
     /** @var Literal */
     public $mode;
 
-    public function parse(\Doctrine\ORM\Query\Parser $parser): void
+    public function parse(Parser $parser): void
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
@@ -36,7 +38,7 @@ class MatchAgainst extends FunctionNode
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
-    public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker): string
+    public function getSql(SqlWalker $sqlWalker): string
     {
         $haystack = null;
         $first = true;

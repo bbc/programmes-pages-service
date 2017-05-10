@@ -2,10 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class EmbargoedProgrammeFixture extends AbstractFixture
 {

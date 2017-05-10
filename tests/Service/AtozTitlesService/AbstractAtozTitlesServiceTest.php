@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
 use BBC\ProgrammesPagesService\Service\AtozTitlesService;
-use Symfony\Component\Cache\Adapter\NullAdapter;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest

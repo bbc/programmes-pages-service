@@ -3,8 +3,8 @@
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Contributor;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class ContributorsFixture extends AbstractFixture
 {

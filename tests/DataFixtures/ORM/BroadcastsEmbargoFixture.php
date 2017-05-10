@@ -2,11 +2,9 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Broadcast;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use DateTime;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class BroadcastsEmbargoFixture extends BroadcastsFixture implements DependentFixtureInterface
 {

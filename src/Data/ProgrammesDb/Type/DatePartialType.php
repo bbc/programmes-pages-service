@@ -3,9 +3,9 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Type;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
-use Doctrine\DBAL\Types\DateType;
-use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\DateType;
 use InvalidArgumentException;
 use TypeError;
 
@@ -42,6 +42,7 @@ class DatePartialType extends DateType
 
     /**
      * @param mixed $value
+     * @return PartialDate|null
      * @throws ConversionException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?PartialDate

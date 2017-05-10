@@ -2,11 +2,11 @@
 
 namespace BBC\ProgrammesPagesService\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 use BBC\ProgrammesPagesService\Cache\CacheInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * A ServiceFactory that provides Proxies to Services that wrap the Service

@@ -2,14 +2,14 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Format;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Genre;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Genre;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Format;
 
 class TleosByCategoryFixture extends AbstractFixture
 {

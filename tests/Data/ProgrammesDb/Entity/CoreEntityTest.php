@@ -5,8 +5,8 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
-use ReflectionClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class CoreEntityTest extends TestCase
 {

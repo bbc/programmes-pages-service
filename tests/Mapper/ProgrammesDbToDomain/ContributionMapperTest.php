@@ -2,10 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributionMapper;
 use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributionMapper;
 
 class ContributionMapperTest extends BaseMapperTestCase
 {

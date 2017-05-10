@@ -2,8 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService;
 
-use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\DBAL\Logging\DebugStack;
 use PHPUnit\Framework\TestCase;

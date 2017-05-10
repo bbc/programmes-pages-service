@@ -4,7 +4,6 @@ namespace Tests\BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Service\ServiceFactory;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * @covers BBC\ProgrammesPagesService\Service\ServiceFactory
