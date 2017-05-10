@@ -53,7 +53,7 @@ class BroadcastsService extends AbstractService
         return $this->mapManyEntities($dbEntities);
     }
 
-    public function groupBroadcastsByPeriodOfDay($broadcasts, DateTimeImmutable $selectedDate = null)
+    public function groupBroadcastsByPeriodOfDay(array $broadcasts, DateTimeImmutable $selectedDate)
     {
         $intervalsDay = [
             'early' => [],
@@ -79,7 +79,7 @@ class BroadcastsService extends AbstractService
         return array_filter($intervalsDay);
     }
 
-    private function _getBroadcastPeriod($broadcast, DateTimeImmutable $selectedDate)
+    private function _getBroadcastPeriod(Broadcast $broadcast, DateTimeImmutable $selectedDate)
     {
         $dayStart = $selectedDate->setTime(0,0,0);
         $dayEnd = $selectedDate->setTime(23,59,59);
