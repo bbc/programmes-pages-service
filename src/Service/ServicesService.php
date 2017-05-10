@@ -36,4 +36,16 @@ class ServicesService extends AbstractService
         $dbEntities = $this->repository->findAllInNetwork($networkId);
         return $this->mapManyEntities($dbEntities);
     }
+
+    public function isServiceAvailableOnDate(Service $service, DateTimeImmutable $date): bool
+    {
+        if (
+            (is_null($service->getEndDate()) || $date < $service->getEndDate())
+            && (is_null($service->getStartDate()) || $date >= $service->getStartDate())
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 }
