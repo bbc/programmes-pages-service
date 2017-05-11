@@ -2,8 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Cache\Cache;
 use BBC\ProgrammesPagesService\Service\ServiceFactory;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * @covers BBC\ProgrammesPagesService\Service\ServiceFactory
@@ -24,7 +26,10 @@ class ServiceFactoryTest extends TestCase
         $serviceFactory = new ServiceFactory(
             $this->entityManager($expectedRepositories),
             $this->mapperFactory($expectedMapper),
-            $this->createMock('BBC\ProgrammesPagesService\Cache\CacheInterface')
+            $this->getMockBuilder(Cache::class)
+                ->setConstructorArgs([new NullAdapter(), ''])
+                ->setMethods(null)
+                ->getMock()
         );
 
         $service = $serviceFactory->{'get' . $serviceName}();

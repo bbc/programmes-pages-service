@@ -2,11 +2,13 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service;
 
+use BBC\ProgrammesPagesService\Cache\Cache;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\LoggingServiceFactory;
 use BBC\ProgrammesPagesService\Service\VersionsService;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
@@ -46,7 +48,7 @@ class LoggingServiceFactoryTest extends TestCase
         $service = new VersionsService(
             $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository'),
             $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'),
-            $this->createMock('BBC\ProgrammesPagesService\Cache\CacheInterface')
+            $this->getMockCache()
         );
 
         $logger = $this->createMock('Psr\Log\LoggerInterface');
@@ -90,7 +92,7 @@ class LoggingServiceFactoryTest extends TestCase
         $service = new VersionsService(
             $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository'),
             $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'),
-            $this->createMock('BBC\ProgrammesPagesService\Cache\CacheInterface')
+            $this->getMockCache()
         );
 
         $timedService = $this->serviceProxyClass($service, new NullLogger(), new Stopwatch());
@@ -107,7 +109,7 @@ class LoggingServiceFactoryTest extends TestCase
         $service = new VersionsService(
             $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository'),
             $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper'),
-            $this->createMock('BBC\ProgrammesPagesService\Cache\CacheInterface')
+            $this->getMockCache()
         );
 
         $timedService = $this->serviceProxyClass($service, new NullLogger(), new Stopwatch());
@@ -116,6 +118,14 @@ class LoggingServiceFactoryTest extends TestCase
         $this->expectExceptionMessage('Call to undefined method BBC\ProgrammesPagesService\Service\VersionsService::zzzzzGarbage()');
 
         $timedService->zzzzzGarbage();
+    }
+
+    private function getMockCache()
+    {
+        return $this->getMockBuilder(Cache::class)
+            ->setConstructorArgs([new NullAdapter(), ''])
+            ->setMethods(null)
+            ->getMock();
     }
 
     private function serviceFactory($logger, $stopwatch)
@@ -128,7 +138,7 @@ class LoggingServiceFactoryTest extends TestCase
         return new LoggingServiceFactory(
             $mockEntityManager,
             $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory'),
-            $this->createMock('BBC\ProgrammesPagesService\Cache\CacheInterface'),
+            $this->getMockCache(),
             $logger,
             $stopwatch
         );

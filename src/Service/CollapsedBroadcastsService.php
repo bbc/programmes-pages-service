@@ -33,67 +33,102 @@ class CollapsedBroadcastsService extends AbstractService
         int $year,
         int $month,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $broadcasts = $this->repository->findByProgrammeAndMonth(
-            $programme->getDbAncestryIds(),
-            false,
-            $year,
-            $month,
-            $limit,
-            $this->getOffset($limit, $page)
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $year, $month, $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $year, $month, $limit, $page) {
+                $broadcasts = $this->repository->findByProgrammeAndMonth(
+                    $programme->getDbAncestryIds(),
+                    false,
+                    $year,
+                    $month,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                $broadcasts = $this->stripWebcasts($broadcasts);
+                $services = $this->fetchUsedServices($broadcasts);
+
+                return $this->mapManyEntities($broadcasts, $services);
+            }
         );
-
-        $broadcasts = $this->stripWebcasts($broadcasts);
-        $services = $this->fetchUsedServices($broadcasts);
-
-        return $this->mapManyEntities($broadcasts, $services);
     }
 
     public function findPastByProgramme(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $broadcasts = $this->repository->findPastByProgramme(
-            $programme->getDbAncestryIds(),
-            false,
-            ApplicationTime::getTime(),
-            $limit,
-            $this->getOffset($limit, $page)
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $limit, $page) {
+                $broadcasts = $this->repository->findPastByProgramme(
+                    $programme->getDbAncestryIds(),
+                    false,
+                    ApplicationTime::getTime(),
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                $broadcasts = $this->stripWebcasts($broadcasts);
+                $services = $this->fetchUsedServices($broadcasts);
+
+                return $this->mapManyEntities($broadcasts, $services);
+            }
         );
-
-        $broadcasts = $this->stripWebcasts($broadcasts);
-        $services = $this->fetchUsedServices($broadcasts);
-
-        return $this->mapManyEntities($broadcasts, $services);
     }
 
     public function findUpcomingByProgramme(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $broadcasts = $this->repository->findUpcomingByProgramme(
-            $programme->getDbAncestryIds(),
-            false,
-            ApplicationTime::getTime(),
-            $limit,
-            $this->getOffset($limit, $page)
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $limit, $page) {
+                $broadcasts = $this->repository->findUpcomingByProgramme(
+                    $programme->getDbAncestryIds(),
+                    false,
+                    ApplicationTime::getTime(),
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                $broadcasts = $this->stripWebcasts($broadcasts);
+                $services = $this->fetchUsedServices($broadcasts);
+
+                return $this->mapManyEntities($broadcasts, $services);
+            }
         );
-
-        $broadcasts = $this->stripWebcasts($broadcasts);
-        $services = $this->fetchUsedServices($broadcasts);
-
-        return $this->mapManyEntities($broadcasts, $services);
     }
 
-    public function countUpcomingByProgramme(Programme $programme): int
+    public function countUpcomingByProgramme(Programme $programme, $ttl = CacheInterface::NORMAL): int
     {
-        return $this->repository->countUpcomingByProgramme(
-            $programme->getDbAncestryIds(),
-            false,
-            ApplicationTime::getTime()
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme) {
+                return $this->repository->countUpcomingByProgramme(
+                    $programme->getDbAncestryIds(),
+                    false,
+                    ApplicationTime::getTime()
+                );
+            }
         );
     }
 
@@ -102,21 +137,30 @@ class CollapsedBroadcastsService extends AbstractService
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $broadcasts = $this->repository->findByCategoryAncestryAndStartAtDateRange(
-            $category->getDbAncestryIds(),
-            false,
-            $startDate,
-            $endDate,
-            $limit,
-            $this->getOffset($limit, $page)
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getDbId(), $startDate->getTimestamp(), $endDate->getTimestamp(), $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category, $startDate, $endDate, $limit, $page) {
+                $broadcasts = $this->repository->findByCategoryAncestryAndStartAtDateRange(
+                    $category->getDbAncestryIds(),
+                    false,
+                    $startDate,
+                    $endDate,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                $broadcasts = $this->stripWebcasts($broadcasts);
+                $services = $this->fetchUsedServices($broadcasts);
+
+                return $this->mapManyEntities($broadcasts, $services);
+            }
         );
-
-        $broadcasts = $this->stripWebcasts($broadcasts);
-        $services = $this->fetchUsedServices($broadcasts);
-
-        return $this->mapManyEntities($broadcasts, $services);
     }
 
     public function findByCategoryAndEndAtDateRange(
@@ -124,123 +168,172 @@ class CollapsedBroadcastsService extends AbstractService
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $broadcasts = $this->repository->findByCategoryAncestryAndEndAtDateRange(
-            $category->getDbAncestryIds(),
-            false,
-            $startDate,
-            $endDate,
-            $limit,
-            $this->getOffset($limit, $page)
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getDbId(), $startDate->getTimestamp(), $endDate->getTimestamp(), $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category, $startDate, $endDate, $limit, $page) {
+                $broadcasts = $this->repository->findByCategoryAncestryAndEndAtDateRange(
+                    $category->getDbAncestryIds(),
+                    false,
+                    $startDate,
+                    $endDate,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                $broadcasts = $this->stripWebcasts($broadcasts);
+                $services = $this->fetchUsedServices($broadcasts);
+
+                return $this->mapManyEntities($broadcasts, $services);
+            }
         );
-
-        $broadcasts = $this->stripWebcasts($broadcasts);
-        $services = $this->fetchUsedServices($broadcasts);
-
-        return $this->mapManyEntities($broadcasts, $services);
     }
 
     public function countByCategoryAndEndAtDateRange(
         Category $category,
         DateTimeImmutable $startDate,
-        DateTimeImmutable $endDate
+        DateTimeImmutable $endDate,
+        $ttl = CacheInterface::NORMAL
     ): int {
-        return $this->repository->countByCategoryAncestryAndEndAtDateRange(
-            $category->getDbAncestryIds(),
-            false,
-            $startDate,
-            $endDate
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getDbId(), $startDate->getTimestamp(), $endDate->getTimestamp(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category, $startDate, $endDate) {
+                return $this->repository->countByCategoryAncestryAndEndAtDateRange(
+                    $category->getDbAncestryIds(),
+                    false,
+                    $startDate,
+                    $endDate
+                );
+            }
         );
     }
 
-    public function findBroadcastYearsAndMonthsByProgramme(Programme $programme): array
+    public function findBroadcastYearsAndMonthsByProgramme(Programme $programme, $ttl = CacheInterface::NORMAL): array
     {
-        $dbYearsAndMonths = $this->repository->findAllYearsAndMonthsByProgramme(
-            $programme->getDbAncestryIds(),
-            false
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $ttl);
 
-        $result = [];
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme) {
+                $dbYearsAndMonths = $this->repository->findAllYearsAndMonthsByProgramme(
+                    $programme->getDbAncestryIds(),
+                    false
+                );
 
-        foreach ($dbYearsAndMonths as $period) {
-            $year = (int) $period['year'];
-            if (!isset($result[$year])) {
-                $result[$year] = [];
+                $result = [];
+
+                foreach ($dbYearsAndMonths as $period) {
+                    $year = (int) $period['year'];
+                    if (!isset($result[$year])) {
+                        $result[$year] = [];
+                    }
+
+                    $result[$year][] = (int) $period['month'];
+                }
+
+                return $result;
             }
-
-            $result[$year][] = (int) $period['month'];
-        }
-
-        return $result;
+        );
     }
 
     public function findDaysByCategoryInDateRange(
         Category $category,
         DateTimeImmutable $start,
-        DateTimeImmutable $end
+        DateTimeImmutable $end,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $rows = $this->repository->findBroadcastedDatesForCategory(
-            $category->getDbAncestryIds(),
-            false,
-            $start,
-            $end
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getDbId(), $start->getTimestamp(), $end->getTimestamp(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category, $start, $end) {
+                $rows = $this->repository->findBroadcastedDatesForCategory(
+                    $category->getDbAncestryIds(),
+                    false,
+                    $start,
+                    $end
+                );
+
+                $result = [];
+
+                foreach ($rows as $row) {
+                    $year = (int) $row['year'];
+                    if (!isset($result[$year])) {
+                        $result[$year] = [];
+                    }
+
+                    $month = (int) $row['month'];
+                    if (!isset($result[$year][$month])) {
+                        $result[$year][$month] = [];
+                    }
+
+                    $day = (int) $row['day'];
+                    if (!in_array($day, $result[$year][$month])) {
+                        $result[$year][$month][] = $day;
+                    }
+                }
+
+                return $result;
+            }
         );
-
-        $result = [];
-
-        foreach ($rows as $row) {
-            $year = (int) $row['year'];
-            if (!isset($result[$year])) {
-                $result[$year] = [];
-            }
-
-            $month = (int) $row['month'];
-            if (!isset($result[$year][$month])) {
-                $result[$year][$month] = [];
-            }
-
-            $day = (int) $row['day'];
-            if (!in_array($day, $result[$year][$month])) {
-                $result[$year][$month][] = $day;
-            }
-        }
-
-        return $result;
     }
 
     public function filterCategoriesByBroadcastedDate(
         array $allCategories,
         DateTimeImmutable $from,
-        DateTimeImmutable $to
+        DateTimeImmutable $to,
+        $ttl = CacheInterface::NORMAL
     ): array {
         if (empty($allCategories)) {
             return [];
         }
 
-        $categoriesAncestryIds = [];
+        $categoriesIds = [];
         foreach ($allCategories as $category) {
-            $categoriesAncestryIds[] = $category->getDbAncestryIds();
+            $categoriesIds[] = $category->getDbId();
         }
 
-        $broadcastedCategoriesAncestries = $this->repository->filterCategoriesByBroadcastedDates(
-            $categoriesAncestryIds,
-            false,
-            $from,
-            $to
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, implode('|', $categoriesIds), $from->getTimestamp(), $to->getTimestamp(), $ttl);
 
-        $broadcastedAncestries = array_column($broadcastedCategoriesAncestries, 'ancestry');
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($allCategories, $from, $to) {
+                $categoriesAncestryIds = [];
+                foreach ($allCategories as $category) {
+                    $categoriesAncestryIds[] = $category->getDbAncestryIds();
+                }
 
-        $broadcastedCategories = [];
-        foreach ($allCategories as $category) {
-            $ancestryCategory = implode(',', $category->getDbAncestryIds()) . ',';
-            if (in_array($ancestryCategory, $broadcastedAncestries)) {
-                $broadcastedCategories[] = $category;
+                $broadcastedCategoriesAncestries = $this->repository->filterCategoriesByBroadcastedDates(
+                    $categoriesAncestryIds,
+                    false,
+                    $from,
+                    $to
+                );
+
+                $broadcastedAncestries = array_column($broadcastedCategoriesAncestries, 'ancestry');
+
+                $broadcastedCategories = [];
+                foreach ($allCategories as $category) {
+                    $ancestryCategory = implode(',', $category->getDbAncestryIds()) . ',';
+                    if (in_array($ancestryCategory, $broadcastedAncestries)) {
+                        $broadcastedCategories[] = $category;
+                    }
+                }
+
+                return $broadcastedCategories;
             }
-        }
-
-        return $broadcastedCategories;
+        );
     }
 
     private function stripWebcasts(array $broadcasts): array

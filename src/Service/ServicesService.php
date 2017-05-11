@@ -19,21 +19,45 @@ class ServicesService extends AbstractService
         parent::__construct($repository, $mapper, $cache);
     }
 
-    public function findByPidFull(Pid $pid): ?Service
+    public function findByPidFull(Pid $pid, $ttl = CacheInterface::NORMAL): ?Service
     {
-        $dbEntity = $this->repository->findByPidFull($pid);
-        return $this->mapSingleEntity($dbEntity);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($pid) {
+                $dbEntity = $this->repository->findByPidFull($pid);
+                return $this->mapSingleEntity($dbEntity);
+            }
+        );
     }
 
-    public function getAllInNetworks(): array
+    public function getAllInNetworks($ttl = CacheInterface::NORMAL): array
     {
-        $dbEntities = $this->repository->findAllInNetworks();
-        return $this->mapManyEntities($dbEntities);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () {
+                $dbEntities = $this->repository->findAllInNetworks();
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 
-    public function findAllInNetwork(Nid $networkId): array
+    public function findAllInNetwork(Nid $networkId, $ttl = CacheInterface::NORMAL): array
     {
-        $dbEntities = $this->repository->findAllInNetwork($networkId);
-        return $this->mapManyEntities($dbEntities);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $networkId, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($networkId) {
+                $dbEntities = $this->repository->findAllInNetwork($networkId);
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 }

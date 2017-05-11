@@ -18,10 +18,18 @@ class SegmentsService extends AbstractService
         parent::__construct($repository, $mapper, $cache);
     }
 
-    public function findByPidFull(Pid $pid): ?Segment
+    public function findByPidFull(Pid $pid, $ttl = CacheInterface::NORMAL): ?Segment
     {
-        $dbEntity = $this->repository->findByPidFull($pid);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid, $ttl);
 
-        return $this->mapSingleEntity($dbEntity);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($pid) {
+                $dbEntity = $this->repository->findByPidFull($pid);
+
+                return $this->mapSingleEntity($dbEntity);
+            }
+        );
     }
 }
