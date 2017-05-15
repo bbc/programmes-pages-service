@@ -36,8 +36,8 @@ class ServiceTest extends TestCase
         $sid = new Sid('bbc_1xtra');
         $pid = new Pid('b0000001');
         $network = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Network');
-        $startDate = new DateTimeImmutable('2015-01-01');
-        $endDate = new DateTimeImmutable('2016-01-01');
+        $startDate = new DateTimeImmutable('2015-01-01 06:00:00');
+        $endDate = new DateTimeImmutable('2016-01-01 06:00:00');
 
         $service = new Service(
             0,
@@ -58,6 +58,32 @@ class ServiceTest extends TestCase
         $this->assertEquals($startDate, $service->getStartDate());
         $this->assertEquals($endDate, $service->getEndDate());
         $this->assertEquals('liveStreamUrl', $service->getLiveStreamUrl());
+
+        // Exactly at the start and a moment before - starts are inclusive
+        $this->assertTrue($service->isActiveAt(new DateTimeImmutable('2015-01-01 06:00:00')));
+        $this->assertFalse($service->isActiveAt(new DateTimeImmutable('2015-01-01 05:59:59')));
+
+        // Exactly at the end and a moment after - ends are exclusive
+        $this->assertTrue($service->isActiveAt(new DateTimeImmutable('2016-01-01 05:59:00')));
+        $this->assertFalse($service->isActiveAt(new DateTimeImmutable('2016-01-01 06:00:00')));
+    }
+
+    public function testIsActiveAtWithIndefiniteEnd()
+    {
+        $service = $this->serviceWithDates(new DateTimeImmutable('2015-01-01 06:00:00'), null);
+
+        // Exactly at the start and a moment before - starts are inclusive
+        $this->assertTrue($service->isActiveAt(new DateTimeImmutable('2015-01-01 06:00:00')));
+        $this->assertFalse($service->isActiveAt(new DateTimeImmutable('2015-01-01 05:59:59')));
+    }
+
+    public function testIsActiveAtWithIndefiniteStart()
+    {
+        $service = $this->serviceWithDates(null, new DateTimeImmutable('2016-01-01 06:00:00'));
+
+        // Exactly at the end and a moment after - ends are exclusive
+        $this->assertTrue($service->isActiveAt(new DateTimeImmutable('2016-01-01 05:59:00')));
+        $this->assertFalse($service->isActiveAt(new DateTimeImmutable('2016-01-01 06:00:00')));
     }
 
     /**
@@ -77,5 +103,20 @@ class ServiceTest extends TestCase
         );
 
         $service->getNetwork();
+    }
+
+    private function serviceWithDates(?DateTimeImmutable $start, ?DateTimeImmutable $end): Service
+    {
+        return new Service(
+            0,
+            new Sid('bbc_1xtra'),
+            new Pid('b0000001'),
+            'Name',
+            'shortName',
+            'urlKey',
+            $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Network'),
+            $start,
+            $end
+        );
     }
 }

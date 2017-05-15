@@ -101,11 +101,23 @@ class Broadcast
         return $this->service;
     }
 
+    /**
+     * When the broadcast started. This is inclusive, this is the very first
+     * moment of the broadcast.
+     * Given two broadcasts, the first will end at at 06:30:00 and the second
+     * will start at 06:30:00.
+     */
     public function getStartAt(): DateTimeImmutable
     {
         return $this->startAt;
     }
 
+    /**
+     * When the broadcast ended. This is exclusive, this is the very first
+     * moment that the broadcast is no longer on.
+     * Given two broadcasts, the first will end at at 06:30:00 and the second
+     * will start at 06:30:00.
+     */
     public function getEndAt(): DateTimeImmutable
     {
         return $this->endAt;
@@ -124,5 +136,16 @@ class Broadcast
     public function isRepeat(): bool
     {
         return $this->isRepeat;
+    }
+
+    /**
+     * Returns true if the broadcast is on air at a given date.
+     * Broadcast starts are inclusive and ends are exclusive.
+     * Given two broadcasts, the first will end at at 06:30:00 and the second
+     * will start at 06:30:00.
+     */
+    public function isOnAirAt(DateTimeImmutable $dateTime): bool
+    {
+        return $this->startAt <= $dateTime && $dateTime < $this->endAt;
     }
 }
