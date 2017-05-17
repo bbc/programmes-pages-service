@@ -21,55 +21,90 @@ class SegmentEventsService extends AbstractService
         parent::__construct($repository, $mapper, $cache);
     }
 
-    public function findByPidFull(Pid $pid): ?SegmentEvent
+    public function findByPidFull(Pid $pid, $ttl = CacheInterface::NORMAL): ?SegmentEvent
     {
-        $dbEntity = $this->repository->findByPidFull($pid);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid, $ttl);
 
-        return $this->mapSingleEntity($dbEntity);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($pid) {
+                $dbEntity = $this->repository->findByPidFull($pid);
+
+                return $this->mapSingleEntity($dbEntity);
+            }
+        );
     }
 
     public function findLatestBroadcastedForContributor(
         Contributor $contributor,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $dbEntities = $this->repository->findFullLatestBroadcastedForContributor(
-            $contributor->getDbId(),
-            $limit,
-            $this->getOffset($limit, $page)
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $contributor->getDbId(), $limit, $page, $ttl);
 
-        return $this->mapManyEntities($dbEntities);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($contributor, $limit, $page) {
+                $dbEntities = $this->repository->findFullLatestBroadcastedForContributor(
+                    $contributor->getDbId(),
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 
     public function findByVersionWithContributions(
         Version $version,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $dbEntities = $this->repository->findByVersionWithContributions(
-            [$version->getDbId()],
-            $limit,
-            $this->getOffset($limit, $page)
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $version->getDbId(), $limit, $page, $ttl);
 
-        return $this->mapManyEntities($dbEntities);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($version, $limit, $page) {
+                $dbEntities = $this->repository->findByVersionWithContributions(
+                    [$version->getDbId()],
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 
     public function findBySegmentFull(
         Segment $segment,
         bool $groupByVersionId = false,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $dbEntities = $this->repository->findBySegmentFull(
-            [$segment->getDbId()],
-            $groupByVersionId,
-            $limit,
-            $this->getOffset($limit, $page)
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $segment->getDbId(), $groupByVersionId, $limit, $page, $ttl);
 
-        return $this->mapManyEntities($dbEntities);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($segment, $groupByVersionId, $limit, $page) {
+                $dbEntities = $this->repository->findBySegmentFull(
+                    [$segment->getDbId()],
+                    $groupByVersionId,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 
 
@@ -77,15 +112,24 @@ class SegmentEventsService extends AbstractService
         Segment $segment,
         bool $groupByVersionId = false,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $dbEntities = $this->repository->findBySegment(
-            [$segment->getDbId()],
-            $groupByVersionId,
-            $limit,
-            $this->getOffset($limit, $page)
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $segment->getDbId(), $groupByVersionId, $limit, $page, $ttl);
 
-        return $this->mapManyEntities($dbEntities);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($segment, $groupByVersionId, $limit, $page) {
+                $dbEntities = $this->repository->findBySegment(
+                    [$segment->getDbId()],
+                    $groupByVersionId,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 }

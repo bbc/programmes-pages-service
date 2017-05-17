@@ -38,9 +38,17 @@ class ProgrammesService extends AbstractService
         parent::__construct($repository, $mapper, $cache);
     }
 
-    public function countAllTleosByCategory(Category $category): int
+    public function countAllTleosByCategory(Category $category, $ttl = CacheInterface::NORMAL): int
     {
-        return $this->repository->countTleosByCategory($category->getDbAncestryIds(), false);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getId(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category) {
+                return $this->repository->countTleosByCategory($category->getDbAncestryIds(), false);
+            }
+        );
     }
 
     /**
@@ -49,22 +57,39 @@ class ProgrammesService extends AbstractService
     public function findAllTleosByCategory(
         Category $category,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $offset = $this->getOffset($limit, $page);
-        $programmesInSlice = $this->repository->findTleosByCategory(
-            $category->getDbAncestryIds(),
-            false,
-            $limit,
-            $offset
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getId(), $limit, $page, $ttl);
 
-        return $this->mapManyEntities($programmesInSlice);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category, $limit, $page) {
+                $offset = $this->getOffset($limit, $page);
+                $programmesInSlice = $this->repository->findTleosByCategory(
+                    $category->getDbAncestryIds(),
+                    false,
+                    $limit,
+                    $offset
+                );
+
+                return $this->mapManyEntities($programmesInSlice);
+            }
+        );
     }
 
-    public function countAvailableTleosByCategory(Category $category): int
+    public function countAvailableTleosByCategory(Category $category, $ttl = CacheInterface::NORMAL): int
     {
-        return $this->repository->countTleosByCategory($category->getDbAncestryIds(), true);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getId(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category) {
+                return $this->repository->countTleosByCategory($category->getDbAncestryIds(), true);
+            }
+        );
     }
 
     /**
@@ -73,183 +98,325 @@ class ProgrammesService extends AbstractService
     public function findAvailableTleosByCategory(
         Category $category,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $offset = $this->getOffset($limit, $page);
-        $programmesInSlice = $this->repository->findTleosByCategory(
-            $category->getDbAncestryIds(),
-            true,
-            $limit,
-            $offset
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getId(), $limit, $page, $ttl);
 
-        return $this->mapManyEntities($programmesInSlice);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category, $limit, $page) {
+                $offset = $this->getOffset($limit, $page);
+                $programmesInSlice = $this->repository->findTleosByCategory(
+                    $category->getDbAncestryIds(),
+                    true,
+                    $limit,
+                    $offset
+                );
+
+                return $this->mapManyEntities($programmesInSlice);
+            }
+        );
     }
 
     public function findAll(
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $dbEntities = $this->repository->findAllWithParents(
-            $limit,
-            $this->getOffset($limit, $page)
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $limit, $page, $ttl);
 
-        return $this->mapManyEntities($dbEntities);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($limit, $page) {
+                $dbEntities = $this->repository->findAllWithParents(
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 
     public function findChildrenSeriesByParent(
         ProgrammeContainer $container,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $dbEntities = $this->repository->findChildrenSeriesByParent(
-            $container->getDbId(),
-            $limit,
-            $this->getOffset($limit, $page)
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $container->getDbId(), $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($container, $limit, $page) {
+                $dbEntities = $this->repository->findChildrenSeriesByParent(
+                    $container->getDbId(),
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+                return $this->mapManyEntities($dbEntities);
+            }
         );
-        return $this->mapManyEntities($dbEntities);
     }
 
-    public function countAll(string $entityType = 'Programme'): int
-    {
-        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
-        return $this->repository->countAll($entityType);
-    }
-
-    public function findByPid(Pid $pid, string $entityType = 'Programme'): ?Programme
+    public function countAll(string $entityType = 'Programme', $ttl = CacheInterface::NORMAL): int
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
-        $dbEntity = $this->repository->findByPid($pid, $entityType);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $entityType, $ttl);
 
-        return $this->mapSingleEntity($dbEntity);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($entityType) {
+                return $this->repository->countAll($entityType);
+            }
+        );
     }
 
-    public function findByPidFull(Pid $pid, string $entityType = 'Programme'): ?Programme
+    public function findByPid(Pid $pid, string $entityType = 'Programme', $ttl = CacheInterface::NORMAL): ?Programme
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
-        $dbEntity = $this->repository->findByPidFull($pid, $entityType);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid, $entityType, $ttl);
 
-        return $this->mapSingleEntity($dbEntity);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($pid, $entityType) {
+                $dbEntity = $this->repository->findByPid($pid, $entityType);
+                return $this->mapSingleEntity($dbEntity);
+            }
+        );
+    }
+
+    public function findByPidFull(Pid $pid, string $entityType = 'Programme', $ttl = CacheInterface::NORMAL): ?Programme
+    {
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid, $entityType, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($pid, $entityType) {
+                $dbEntity = $this->repository->findByPidFull($pid, $entityType);
+                return $this->mapSingleEntity($dbEntity);
+            }
+        );
     }
 
     public function findEpisodeGuideChildren(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $dbEntities = $this->repository->findEpisodeGuideChildren(
-            $programme->getDbId(),
-            $limit,
-            $this->getOffset($limit, $page)
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $limit, $page) {
+                $dbEntities = $this->repository->findEpisodeGuideChildren(
+                    $programme->getDbId(),
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
         );
-
-        return $this->mapManyEntities($dbEntities);
     }
 
-    public function countEpisodeGuideChildren(Programme $programme): int
+    public function countEpisodeGuideChildren(Programme $programme, $ttl = CacheInterface::NORMAL): int
     {
-        return $this->repository->countEpisodeGuideChildren($programme->getDbId());
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme) {
+                return $this->repository->countEpisodeGuideChildren($programme->getDbId());
+            }
+        );
     }
 
-    public function findNextSiblingByProgramme(Programme $programme): ?Programme
+    public function findNextSiblingByProgramme(Programme $programme, $ttl = CacheInterface::NORMAL): ?Programme
     {
-        return $this->findSiblingByProgramme($programme, 'next');
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme) {
+                return $this->findSiblingByProgramme($programme, 'next');
+            }
+        );
     }
 
-    public function findPreviousSiblingByProgramme(Programme $programme): ?Programme
+    public function findPreviousSiblingByProgramme(Programme $programme, $ttl = CacheInterface::NORMAL): ?Programme
     {
-        return $this->findSiblingByProgramme($programme, 'previous');
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme) {
+                return $this->findSiblingByProgramme($programme, 'previous');
+            }
+        );
     }
 
     public function findDescendantsByPid(
         Pid $pid,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
         // in order for this to be efficient, we need to know the original programme database ID.
         // @todo - investigate another way to do this so we don't need this effectively redundant query
 
-        $dbEntity = $this->repository->findByPidFull($pid);
-        if (!$dbEntity) {
-            return null;
-        }
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid, $limit, $page, $ttl);
 
-        $dbEntities = $this->repository->findDescendants(
-            $dbEntity,
-            $limit,
-            $this->getOffset($limit, $page)
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($pid, $limit, $page) {
+
+                $dbEntity = $this->repository->findByPidFull($pid);
+                if (!$dbEntity) {
+                    return null;
+                }
+
+                $dbEntities = $this->repository->findDescendants(
+                    $dbEntity,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
         );
-
-        return $this->mapManyEntities($dbEntities);
     }
 
     public function countAvailableEpisodesByCategory(
-        Category $category
+        Category $category,
+        $ttl = CacheInterface::NORMAL
     ): int {
-        return $this->repository->countAvailableEpisodesByCategoryAncestry(
-            $category->getDbAncestryIds()
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getId(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category) {
+                return $this->repository->countAvailableEpisodesByCategoryAncestry(
+                    $category->getDbAncestryIds()
+                );
+            }
         );
     }
 
     public function findAvailableEpisodesByCategory(
         Category $category,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $dbEntities = $this->repository->findAvailableEpisodesByCategoryAncestry(
-            $category->getDbAncestryIds(),
-            $limit,
-            $this->getOffset($limit, $page)
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getId(), $limit, $page, $ttl);
 
-        return $this->mapManyEntities($dbEntities);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category, $limit, $page) {
+                $dbEntities = $this->repository->findAvailableEpisodesByCategoryAncestry(
+                    $category->getDbAncestryIds(),
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 
     public function searchByKeywords(
         string $keywords,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $keywords, $limit, $page, $ttl);
 
-        $dbEntities = $this->repository->findByKeywords(
-            $keywords,
-            false,
-            $limit,
-            $this->getOffset($limit, $page),
-            ['Brand', 'Series', 'Episode']
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($keywords, $limit, $page) {
+                $dbEntities = $this->repository->findByKeywords(
+                    $keywords,
+                    false,
+                    $limit,
+                    $this->getOffset($limit, $page),
+                    ['Brand', 'Series', 'Episode']
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
         );
-
-        return $this->mapManyEntities($dbEntities);
     }
 
-    public function countByKeywords(string $keywords): int
+    public function countByKeywords(string $keywords, $ttl = CacheInterface::NORMAL): int
     {
-        return $this->repository->countByKeywords($keywords, false, ['Brand', 'Series', 'Episode']);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $keywords, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($keywords) {
+                return $this->repository->countByKeywords($keywords, false, ['Brand', 'Series', 'Episode']);
+            }
+        );
     }
 
     public function searchAvailableByKeywords(
         string $keywords,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $keywords, $limit, $page, $ttl);
 
-        $dbEntities = $this->repository->findByKeywords(
-            $keywords,
-            true,
-            $limit,
-            $this->getOffset($limit, $page),
-            ['Brand', 'Series', 'Episode']
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($keywords, $limit, $page) {
+                $dbEntities = $this->repository->findByKeywords(
+                    $keywords,
+                    true,
+                    $limit,
+                    $this->getOffset($limit, $page),
+                    ['Brand', 'Series', 'Episode']
+                );
+                return $this->mapManyEntities($dbEntities);
+            }
         );
-
-        return $this->mapManyEntities($dbEntities);
     }
 
-    public function countAvailableByKeywords(string $keywords): int
+    public function countAvailableByKeywords(string $keywords, $ttl = CacheInterface::NORMAL): int
     {
-        return $this->repository->countByKeywords($keywords, true, ['Brand', 'Series', 'Episode']);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $keywords, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($keywords) {
+                return $this->repository->countByKeywords($keywords, true, ['Brand', 'Series', 'Episode']);
+            }
+        );
     }
 
     private function findSiblingByProgramme(Programme $programme, string $direction): ?Programme

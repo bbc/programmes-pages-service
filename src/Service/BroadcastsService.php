@@ -22,16 +22,25 @@ class BroadcastsService extends AbstractService
     public function findByVersion(
         Version $version,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $dbEntities = $this->repository->findByVersion(
-            [$version->getDbId()],
-            'Broadcast',
-            $limit,
-            $this->getOffset($limit, $page)
-        );
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $version->getDbId(), $limit, $page, $ttl);
 
-        return $this->mapManyEntities($dbEntities);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($version, $limit, $page) {
+                $dbEntities = $this->repository->findByVersion(
+                    [$version->getDbId()],
+                    'Broadcast',
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 
     public function findByServiceAndDateRange(
@@ -39,16 +48,34 @@ class BroadcastsService extends AbstractService
         DateTimeImmutable $startDate,
         DateTimeImmutable $endDate,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $dbEntities = $this->repository->findAllByServiceAndDateRange(
-            $serviceId,
-            $startDate,
-            $endDate,
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            (string) $serviceId,
+            $startDate->getTimestamp(),
+            $endDate->getTimestamp(),
             $limit,
-            $this->getOffset($limit, $page)
+            $page,
+            $ttl
         );
 
-        return $this->mapManyEntities($dbEntities);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($serviceId, $startDate, $endDate, $limit, $page) {
+                $dbEntities = $this->repository->findAllByServiceAndDateRange(
+                    $serviceId,
+                    $startDate,
+                    $endDate,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 }

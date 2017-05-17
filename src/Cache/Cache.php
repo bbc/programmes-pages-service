@@ -94,13 +94,16 @@ class Cache implements CacheInterface
      *
      * @param string $className
      * @param string $functionName
-     * @param \string[] ...$uniqueValues
+     * @param \null[]|\string[] ...$uniqueValues
      * @return string
      */
-    public function keyHelper(string $className, string $functionName, string ...$uniqueValues): string
+    public function keyHelper(string $className, string $functionName, ?string ...$uniqueValues): string
     {
         // Please help prevent cache namespace collisions by driving carefully
-        $uniqueValues = str_replace('.', '_', $uniqueValues);
+        $uniqueValues = str_replace('.', '_', array_map(function ($v) {
+            return (is_null($v)) ? "" : $v;
+        }, $uniqueValues));
+        $uniqueValues = preg_replace('!_+!', '_', $uniqueValues);
         $values = [$className, $functionName] + $uniqueValues;
         return join('.', $values);
     }

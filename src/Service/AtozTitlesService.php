@@ -27,38 +27,72 @@ class AtozTitlesService extends AbstractService
     public function findTleosByFirstLetter(
         string $letter,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $entities = $this->repository->findTleosByFirstLetter(
-            $letter,
-            false,
-            $limit,
-            $this->getOffset($limit, $page)
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $letter, $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($letter, $limit, $page) {
+                $entities = $this->repository->findTleosByFirstLetter(
+                    $letter,
+                    false,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+                return $this->mapManyEntities($entities);
+            }
         );
-        return $this->mapManyEntities($entities);
     }
 
-    public function countTleosByFirstLetter(string $letter): int
+    public function countTleosByFirstLetter(string $letter, $ttl = CacheInterface::NORMAL): int
     {
-        return $this->repository->countTleosByFirstLetter($letter, false);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $letter, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($letter) {
+                return $this->repository->countTleosByFirstLetter($letter, false);
+            }
+        );
     }
 
     public function findAvailableTleosByFirstLetter(
         string $letter,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
     ): array {
-        $entities = $this->repository->findTleosByFirstLetter(
-            $letter,
-            true,
-            $limit,
-            $this->getOffset($limit, $page)
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $letter, $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($letter, $limit, $page) {
+                $entities = $this->repository->findTleosByFirstLetter(
+                    $letter,
+                    true,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+                return $this->mapManyEntities($entities);
+            }
         );
-        return $this->mapManyEntities($entities);
     }
 
-    public function countAvailableTleosByFirstLetter(string $letter)
+    public function countAvailableTleosByFirstLetter(string $letter, $ttl = CacheInterface::NORMAL)
     {
-        return $this->repository->countTleosByFirstLetter($letter, true);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $letter, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($letter) {
+                return $this->repository->countTleosByFirstLetter($letter, true);
+            }
+        );
     }
 }

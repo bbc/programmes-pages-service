@@ -19,24 +19,48 @@ class VersionsService extends AbstractService
         parent::__construct($repository, $mapper, $cache);
     }
 
-    public function findByPidFull(Pid $pid): ?Version
+    public function findByPidFull(Pid $pid, $ttl = CacheInterface::NORMAL): ?Version
     {
-        $dbEntity = $this->repository->findByPidFull($pid);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid, $ttl);
 
-        return $this->mapSingleEntity($dbEntity);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($pid) {
+                $dbEntity = $this->repository->findByPidFull($pid);
+
+                return $this->mapSingleEntity($dbEntity);
+            }
+        );
     }
 
-    public function findByProgrammeItem(ProgrammeItem $programmeItem): array
+    public function findByProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL): array
     {
-        $dbEntities = $this->repository->findByProgrammeItem($programmeItem->getDbId());
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);
 
-        return $this->mapManyEntities($dbEntities);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programmeItem) {
+                $dbEntities = $this->repository->findByProgrammeItem($programmeItem->getDbId());
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
     }
 
-    public function findOriginalVersionForProgrammeItem(ProgrammeItem $programmeItem): ?Version
+    public function findOriginalVersionForProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL): ?Version
     {
-        $dbEntity = $this->repository->findOriginalVersionForProgrammeItem($programmeItem->getDbId());
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);
 
-        return $this->mapSingleEntity($dbEntity);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programmeItem) {
+                $dbEntity = $this->repository->findOriginalVersionForProgrammeItem($programmeItem->getDbId());
+
+                return $this->mapSingleEntity($dbEntity);
+            }
+        );
     }
 }

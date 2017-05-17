@@ -2,8 +2,9 @@
 
 namespace Tests\BBC\ProgrammesPagesService;
 
-use BBC\ProgrammesPagesService\Cache\CacheInterface;
+use BBC\ProgrammesPagesService\Cache\Cache;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 abstract class AbstractServiceTest extends TestCase
 {
@@ -29,7 +30,10 @@ abstract class AbstractServiceTest extends TestCase
 
     protected function setUpCache()
     {
-        $this->mockCache = $this->createMock(CacheInterface::class);
+        $this->mockCache = $this->getMockBuilder(Cache::class)
+            ->setConstructorArgs([new NullAdapter(), ''])
+            ->setMethods(null)
+            ->getMock();
     }
 
     protected function setUpMapper($mapperName, $entityBuilderMethod)
