@@ -10,19 +10,19 @@ if ! (php --version | grep -q "PHP 7") ; then
     exit 1
 fi
 
-# Download and run composer
-if [ ! -f "composer.phar" ]; then
-    curl -sS https://getcomposer.org/installer | php
-fi
+export SYMFONY_ENV=prod;
+
+# setup and run composer
 if [ -n "$OAUTH" ]; then
-    php composer.phar config -g github-oauth.github.com $OAUTH
+    composer config -g github-oauth.github.com $OAUTH
 fi
+
+composer --no-ansi --no-interaction install
+
 # Make sure the reports directory exists
 if [ ! -d "build/reports" ]; then
     mkdir -p build/reports
 fi
-
-php composer.phar --no-ansi --no-interaction install
 
 # Show php version for debugging
 php --version
