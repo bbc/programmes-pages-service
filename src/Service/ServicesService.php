@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceReposit
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use DateTimeImmutable;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper;
 
 class ServicesService extends AbstractService
@@ -47,15 +48,15 @@ class ServicesService extends AbstractService
         );
     }
 
-    public function findAllInNetwork(Nid $networkId, $ttl = CacheInterface::NORMAL): array
+    public function findAllInNetworkActiveOn(Nid $networkId, DateTimeImmutable $date, $ttl = CacheInterface::NORMAL): array
     {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $networkId, $ttl);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $networkId, $date->getTimestamp(), $ttl);
 
         return $this->cache->getOrSet(
             $key,
             $ttl,
-            function () use ($networkId) {
-                $dbEntities = $this->repository->findAllInNetwork($networkId);
+            function () use ($networkId, $date) {
+                $dbEntities = $this->repository->findAllInNetworkActiveOn($networkId, $date);
                 return $this->mapManyEntities($dbEntities);
             }
         );
