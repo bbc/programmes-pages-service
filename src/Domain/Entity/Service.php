@@ -161,7 +161,7 @@ class Service
     public function isTv(): bool
     {
         // Network can be null, but unfetched should throw an exception
-        if ($this->network && $this->getNetwork()->getMedium() === NetworkMediumEnum::TV) {
+        if ($this->network && $this->getNetwork()->isTv()) {
             return true;
         }
         return false;
@@ -173,7 +173,7 @@ class Service
     public function isRadio(): bool
     {
         // Network can be null, but unfetched should throw an exception
-        if ($this->network && $this->getNetwork()->getMedium() === NetworkMediumEnum::RADIO) {
+        if ($this->network && $this->getNetwork()->isRadio()) {
             return true;
         }
         return false;
