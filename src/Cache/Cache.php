@@ -104,7 +104,7 @@ class Cache implements CacheInterface
             return (is_null($v)) ? "" : $v;
         }, $uniqueValues));
         $uniqueValues = preg_replace('!_+!', '_', $uniqueValues);
-        $values = [$className, $functionName] + $uniqueValues;
+        $values = array_merge([$className, $functionName], $uniqueValues);
         return join('.', $values);
     }
 
