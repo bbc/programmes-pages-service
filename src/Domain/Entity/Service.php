@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
+use BBC\ProgrammesPagesService\Domain\Enumeration\NetworkMediumEnum;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
@@ -152,5 +153,29 @@ class Service
     public function isActiveAt(DateTimeImmutable $dateTime): bool
     {
         return (!$this->startDate || $this->startDate <= $dateTime) && (!$this->endDate || $dateTime < $this->endDate);
+    }
+
+    /**
+     * Returns true if this service is part of a TV network
+     */
+    public function isTv(): bool
+    {
+        // Network can be null, but unfetched should throw an exception
+        if ($this->network && $this->getNetwork()->isTv()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if this service is part of a radio network
+     */
+    public function isRadio(): bool
+    {
+        // Network can be null, but unfetched should throw an exception
+        if ($this->network && $this->getNetwork()->isRadio()) {
+            return true;
+        }
+        return false;
     }
 }

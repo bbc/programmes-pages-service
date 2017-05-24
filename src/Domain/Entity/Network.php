@@ -163,4 +163,14 @@ class Network
     {
         return $this->isAllowedAdverts;
     }
+
+    public function isTv(): bool
+    {
+        return ($this->getMedium() === NetworkMediumEnum::TV);
+    }
+
+    public function isRadio(): bool
+    {
+        return ($this->getMedium() === NetworkMediumEnum::RADIO);
+    }
 }

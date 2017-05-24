@@ -9,7 +9,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository::<public>
  */
-class FindAllInNetworkTest extends AbstractDatabaseTest
+class FindAllInNetworkActiveOnTest extends AbstractDatabaseTest
 {
     /** @var  ServiceRepository */
     private $repo;
@@ -23,7 +23,7 @@ class FindAllInNetworkTest extends AbstractDatabaseTest
     public function testFindAllInNetwork()
     {
         $nid = new Nid('bbc_radio_two');
-        $servicesInNetwork = $this->repo->findAllInNetwork($nid);
+        $servicesInNetwork = $this->repo->findAllInNetworkActiveOn($nid);
 
         $this->assertInternalType('array', $servicesInNetwork);
         $this->assertCount(1, $servicesInNetwork);
@@ -37,7 +37,7 @@ class FindAllInNetworkTest extends AbstractDatabaseTest
     public function testFindAllInNetworkWhenEmptyResult()
     {
         $nid = new Nid('unexisting_bbc_radio');
-        $servicesInNetwork = $this->repo->findAllInNetwork($nid);
+        $servicesInNetwork = $this->repo->findAllInNetworkActiveOn($nid);
         $this->assertSame([], $servicesInNetwork);
 
         $this->assertCount(1, $this->getDbQueries());
