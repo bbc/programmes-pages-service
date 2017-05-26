@@ -102,6 +102,17 @@ You can repeat the `pps.programmes_service` definition, changing the
 save you having to request it through the ServiceFactory every time.
 
 
+#### Timezone support
+By default, Doctrine2 assumes all DateTimes are in UTC.  
+You can force all dates going in to the DB to be converted to UTC and all DateTimes coming out to have UTC set by adding the following configuration to your YAML files.
+```yaml
+doctrine:
+    dbal:
+        types:
+            datetime: BBC\ProgrammesPagesService\Data\ProgrammesDb\Type\UtcDateTimeType
+            datetimetz: BBC\ProgrammesPagesService\Data\ProgrammesDb\Type\UtcDateTimeType
+```
+
 Usage
 -----
 
