@@ -328,7 +328,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'isPodcastable' => false,
             'position' => 101,
             'masterBrand' => null,
-            'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
+            'firstBroadcastDate' => new DateTimeImmutable('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
             'parent' => [
                 'id' => 1,
@@ -356,7 +356,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'parent' => null,
                 'position' => 101,
                 'masterBrand' => null,
-                'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
+                'firstBroadcastDate' => new DateTimeImmutable('2017-01-03T18:00:00Z'),
                 'expectedChildCount' => 1001,
             ],
         ];

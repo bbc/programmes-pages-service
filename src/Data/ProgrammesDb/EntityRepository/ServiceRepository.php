@@ -3,9 +3,9 @@
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use DateTimeImmutable;
 
 class ServiceRepository extends EntityRepository
 {

@@ -10,7 +10,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use DateTimeImmutable;
 
 class BroadcastMapper extends AbstractMapper
 {
@@ -47,8 +46,8 @@ class BroadcastMapper extends AbstractMapper
             $this->getVersionModel($dbBroadcast),
             $this->getProgrammeItemModel($dbBroadcast),
             $this->getServiceModel($dbBroadcast),
-            DateTimeImmutable::createFromMutable($dbBroadcast['startAt']),
-            DateTimeImmutable::createFromMutable($dbBroadcast['endAt']),
+            $this->castDateTime($dbBroadcast['startAt']),
+            $this->castDateTime($dbBroadcast['endAt']),
             $dbBroadcast['duration'],
             $dbBroadcast['isBlanked'],
             $dbBroadcast['isRepeat']
