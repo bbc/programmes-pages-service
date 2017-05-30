@@ -6,7 +6,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
-use DateTimeImmutable;
 
 class CollapsedBroadcastMapper extends AbstractMapper
 {
@@ -15,8 +14,8 @@ class CollapsedBroadcastMapper extends AbstractMapper
         return new CollapsedBroadcast(
             $this->getProgrammeItemModel($dbCollapsedBroadcast),
             $this->getServiceModels($services, $dbCollapsedBroadcast),
-            DateTimeImmutable::createFromMutable($dbCollapsedBroadcast['startAt']),
-            DateTimeImmutable::createFromMutable($dbCollapsedBroadcast['endAt']),
+            $this->castDateTime($dbCollapsedBroadcast['startAt']),
+            $this->castDateTime($dbCollapsedBroadcast['endAt']),
             $dbCollapsedBroadcast['duration'],
             $dbCollapsedBroadcast['isBlanked'],
             $dbCollapsedBroadcast['isRepeat']

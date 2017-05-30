@@ -3,6 +3,8 @@
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
+use DateTimeImmutable;
+use DateTimeInterface;
 
 abstract class AbstractMapper implements MapperInterface
 {
@@ -41,6 +43,15 @@ abstract class AbstractMapper implements MapperInterface
         }
 
         return '{' . $cacheKey . '}';
+    }
+
+    protected function castDateTime(?DateTimeInterface $dt): ?DateTimeImmutable
+    {
+        if (is_null($dt) || $dt instanceof DateTimeImmutable) {
+            return $dt;
+        }
+
+        return DateTimeImmutable::createFromMutable($dt);
     }
 
     private function buildCacheKeyForOneToManyTuple(

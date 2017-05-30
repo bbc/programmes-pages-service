@@ -7,7 +7,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedNetwork;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
-use DateTimeImmutable;
 
 class ServiceMapper extends AbstractMapper
 {
@@ -33,8 +32,8 @@ class ServiceMapper extends AbstractMapper
                 $dbService['shortName'],
                 $dbService['urlKey'],
                 $this->getNetworkModel($dbService),
-                ($dbService['startDate'] ? DateTimeImmutable::createFromMutable($dbService['startDate']) : null),
-                ($dbService['endDate'] ? DateTimeImmutable::createFromMutable($dbService['endDate']) : null),
+                $this->castDateTime($dbService['startDate']),
+                $this->castDateTime($dbService['endDate']),
                 $dbService['liveStreamUrl']
             );
         }

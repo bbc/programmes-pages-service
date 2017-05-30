@@ -7,8 +7,8 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceReposit
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use DateTimeImmutable;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper;
+use DateTimeImmutable;
 
 class ServicesService extends AbstractService
 {
