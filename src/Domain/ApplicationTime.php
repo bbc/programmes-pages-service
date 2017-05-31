@@ -16,12 +16,28 @@ class ApplicationTime
     private static $appTime = null;
 
     /**
+     * Fetch the current DateTime
+     *
+     * @return DateTimeImmutable
+     */
+    public static function getTime(): DateTimeImmutable
+    {
+        if (null === static::$appTime) {
+            static::setTime();
+        }
+
+        return static::$appTime;
+    }
+
+    /**
      * When getting a time, we often want it in local UK time.
+     * This is a separate method to getTime() as some code (such as Doctrine) ignores timezones and just uses the date
+     * and time. So.... be careful!
      *
      * @param string $timezoneString
      * @return DateTimeImmutable
      */
-    public static function getTime(string $timezoneString = 'Europe/London'): DateTimeImmutable
+    public static function getLocalTime(string $timezoneString = 'Europe/London'): DateTimeImmutable
     {
         if (null === static::$appTime) {
             static::setTime();
@@ -51,7 +67,8 @@ class ApplicationTime
      */
     public static function setTime(int $appTime = null)
     {
-        static::$appTime = DateTimeImmutable::createFromFormat('U', $appTime ?? time(), new DateTimeZone('UTC'));
+        static::$appTime = DateTimeImmutable::createFromFormat('U', $appTime ?? time())
+            ->setTimezone(new DateTimeZone('UTC'));
     }
 
     /**
