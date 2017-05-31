@@ -19,8 +19,9 @@ class ApplicationTimeTest extends TestCase
 
         $initialTime = ApplicationTime::getTime();
         $this->assertEquals($currentTime, $initialTime);
-        $this->assertEquals('Europe/London', $initialTime->getTimezone()->getName());
-        $this->assertNotEquals($currentTime->format('Y-m-d H:i:s'), $initialTime->format('Y-m-d H:i:s'));
+        $this->assertEquals('UTC', $initialTime->getTimezone()->getName());
+        // Assert it always returns the same object - avoiding drift
+        $this->assertSame($initialTime, ApplicationTime::getTime());
     }
 
     public function testSetTime()
@@ -31,17 +32,40 @@ class ApplicationTimeTest extends TestCase
 
         $initialTime = ApplicationTime::getTime();
         $this->assertEquals($currentTime, $initialTime);
+        $this->assertEquals('UTC', $initialTime->getTimezone()->getName());
+        // Assert it always returns the same object - avoiding drift
+        $this->assertSame($initialTime, ApplicationTime::getTime());
+    }
+
+    public function testLocalTimeDefaultValue()
+    {
+        $currentTime = DateTimeImmutable::createFromFormat('U', time());
+
+        $initialTime = ApplicationTime::getLocalTime();
+        $this->assertEquals($currentTime, $initialTime);
         $this->assertEquals('Europe/London', $initialTime->getTimezone()->getName());
         $this->assertNotEquals($currentTime->format('Y-m-d H:i:s'), $initialTime->format('Y-m-d H:i:s'));
     }
 
-    public function testGetTimeWithUTCTimezone()
+    public function testLocalTimeSetTime()
     {
         $currentTime = DateTimeImmutable::createFromFormat('U', '1400000000');
 
         ApplicationTime::setTime(1400000000);
 
-        $initialTime = ApplicationTime::getTime('UTC');
+        $initialTime = ApplicationTime::getLocalTime();
+        $this->assertEquals($currentTime, $initialTime);
+        $this->assertEquals('Europe/London', $initialTime->getTimezone()->getName());
+        $this->assertNotEquals($currentTime->format('Y-m-d H:i:s'), $initialTime->format('Y-m-d H:i:s'));
+    }
+
+    public function testLocalTimeGetTimeWithUTCTimezone()
+    {
+        $currentTime = DateTimeImmutable::createFromFormat('U', '1400000000');
+
+        ApplicationTime::setTime(1400000000);
+
+        $initialTime = ApplicationTime::getLocalTime('UTC');
         $this->assertEquals($currentTime, $initialTime);
         $this->assertEquals('UTC', $initialTime->getTimezone()->getName());
         $this->assertEquals($currentTime->format('Y-m-d H:i:s'), $initialTime->format('Y-m-d H:i:s'));
