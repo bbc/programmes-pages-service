@@ -10,8 +10,6 @@ if ! (php --version | grep -q "PHP 7") ; then
     exit 1
 fi
 
-export SYMFONY_ENV=prod;
-
 # setup and run composer
 if [ -n "$OAUTH" ]; then
     composer config -g github-oauth.github.com $OAUTH

@@ -16,9 +16,6 @@ set -e
 branch=$(echo $GIT_BRANCH | cut -d/ -f 2)
 echo $JOB_NAME:$branch $WORKSPACE
 
-# clear old build files and tmp folder
-rm -rf RPMS SOURCES SPECS SRPMS tmp
-
 echo "Pulling latest Docker image version"
 docker pull registry.ci.rmp.api.bbci.co.uk/programmes-docker-centos7:latest
 
