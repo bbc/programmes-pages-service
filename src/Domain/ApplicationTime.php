@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Domain;
 
 use DateTimeImmutable;
+use DateTimeZone;
 
 /**
  * A Singleton class to help us ensure that our concept of "now" remains
@@ -14,13 +15,19 @@ class ApplicationTime
     /** @var DateTimeImmutable  */
     private static $appTime = null;
 
-    public static function getTime()
+    /**
+     * When getting a time, we often want it in local UK time.
+     *
+     * @param string $timezoneString
+     * @return DateTimeImmutable
+     */
+    public static function getTime(string $timezoneString = 'Europe/London'): DateTimeImmutable
     {
         if (null === static::$appTime) {
             static::setTime();
         }
 
-        return static::$appTime;
+        return static::$appTime->setTimezone(new DateTimeZone($timezoneString));
     }
 
     public static function getTruncatedTime()
@@ -37,9 +44,14 @@ class ApplicationTime
         return static::$appTime->setTime(static::$appTime->format('H'), $currentWindow, 0);
     }
 
+    /**
+     * Since it is a timestamp that is passed it, this DateTimeImmutable will always be UTC
+     *
+     * @param int|null $appTime A timestamp
+     */
     public static function setTime(int $appTime = null)
     {
-        static::$appTime = DateTimeImmutable::createFromFormat('U', $appTime ?? time());
+        static::$appTime = DateTimeImmutable::createFromFormat('U', $appTime ?? time(), new DateTimeZone('UTC'));
     }
 
     /**
