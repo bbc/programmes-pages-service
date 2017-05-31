@@ -3,9 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Type;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Type\UtcDateTimeType;
-use DateTime;
-use DateTimeImmutable;
-use DateTimeZone;
+use Cake\Chronos\Chronos;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use InvalidArgumentException;
@@ -57,24 +55,14 @@ class UtcDateTimeTypeTest extends TestCase
     public function bstValueProvider(): array
     {
         return [
-            'datetime-notimezone' => [
+            'notimezone' => [
                 function () {
-                    return new DateTime('2017-06-12 08:08:08');
+                    return new Chronos('2017-06-12 08:08:08');
                 },
             ],
-            'datetime-londontimezone' => [
+            'londontimezone' => [
                 function () {
-                    return new DateTime('2017-06-12 09:08:08', new DateTimeZone('Europe/London'));
-                },
-            ],
-            'datetimeimmutable-notimezone' => [
-                function () {
-                    return new DateTimeImmutable('2017-06-12 08:08:08');
-                },
-            ],
-            'datetimeimmutable-londontimezone' => [
-                function () {
-                    return new DateTimeImmutable('2017-06-12 09:08:08', new DateTimeZone('Europe/London'));
+                    return new Chronos('2017-06-12 09:08:08', 'Europe/London');
                 },
             ],
         ];
@@ -94,24 +82,14 @@ class UtcDateTimeTypeTest extends TestCase
     public function utcValueProvider(): array
     {
         return [
-            'datetime-notimezone' => [
+            'notimezone' => [
                 function () {
-                    return new DateTime('2017-12-12 08:08:08');
+                    return new Chronos('2017-12-12 08:08:08');
                 },
             ],
-            'datetime-londontimezone' => [
+            'londontimezone' => [
                 function () {
-                    return new DateTime('2017-12-12 08:08:08', new DateTimeZone('Europe/London'));
-                },
-            ],
-            'datetimeimmutable-notimezone' => [
-                function () {
-                    return new DateTimeImmutable('2017-12-12 08:08:08');
-                },
-            ],
-            'datetimeimmutable-londontimezone' => [
-                function () {
-                    return new DateTimeImmutable('2017-12-12 08:08:08', new DateTimeZone('Europe/London'));
+                    return new Chronos('2017-12-12 08:08:08', 'Europe/London');
                 },
             ],
         ];
@@ -125,14 +103,14 @@ class UtcDateTimeTypeTest extends TestCase
     public function testConvertToPHPValueBst()
     {
         $phpValue = $this->type->convertToPHPValue('2017-06-12 08:08:08', $this->platform);
-        $this->assertInstanceOf(DateTimeImmutable::class, $phpValue);
-        $this->assertEquals('2017-06-12 09:08:08', $phpValue->setTimezone(new DateTimeZone('Europe/London'))->format('Y-m-d H:i:s'));
+        $this->assertInstanceOf(Chronos::class, $phpValue);
+        $this->assertEquals('2017-06-12 09:08:08', $phpValue->setTimezone('Europe/London')->format('Y-m-d H:i:s'));
     }
 
     public function testConvertToPHPValueUtc()
     {
         $phpValue = $this->type->convertToPHPValue('2017-12-12 08:08:08', $this->platform);
-        $this->assertInstanceOf(DateTimeImmutable::class, $phpValue);
-        $this->assertEquals('2017-12-12 08:08:08', $phpValue->setTimezone(new DateTimeZone('Europe/London'))->format('Y-m-d H:i:s'));
+        $this->assertInstanceOf(Chronos::class, $phpValue);
+        $this->assertEquals('2017-12-12 08:08:08', $phpValue->setTimezone('Europe/London')->format('Y-m-d H:i:s'));
     }
 }

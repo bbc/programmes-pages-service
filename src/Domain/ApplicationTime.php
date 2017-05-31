@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Domain;
 
+use Cake\Chronos\Chronos;
 use DateTimeImmutable;
 use DateTimeZone;
 
@@ -69,6 +70,10 @@ class ApplicationTime
     {
         static::$appTime = DateTimeImmutable::createFromFormat('U', $appTime ?? time())
             ->setTimezone(new DateTimeZone('UTC'));
+
+        if (class_exists(Chronos::class)) {
+            Chronos::setTestNow(Chronos::createFromTimestampUTC(static::$appTime->getTimestamp()));
+        }
     }
 
     /**
