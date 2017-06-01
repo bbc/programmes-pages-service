@@ -24,6 +24,7 @@
         "symfony/stopwatch": "^3.2"
     },
     "require-dev": {
+        "cakephp/chronos": "^1.1",
         "doctrine/data-fixtures": "^1.2",
         "escapestudios/symfony2-coding-standard": "^2.9",
         "phpunit/phpunit": "^6.1",
@@ -35,5 +36,8 @@
             "php": "7.1.0"
         },
         "sort-packages": true
+    },
+    "suggest": {
+        "cakephp/chronos": "If you would like to use UtcDateTimeType"
     }
 }

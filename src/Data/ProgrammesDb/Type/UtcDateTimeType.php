@@ -2,8 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Type;
 
+use Cake\Chronos\Chronos;
 use DateTime;
-use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -13,8 +13,6 @@ use InvalidArgumentException;
 
 class UtcDateTimeType extends DateTimeType
 {
-    static private $utc;
-
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if (is_null($value)) {
@@ -35,17 +33,13 @@ class UtcDateTimeType extends DateTimeType
         return parent::convertToDatabaseValue($utcValue, $platform);
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?DateTimeInterface
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?Chronos
     {
-        if (is_null($value) || $value instanceof DateTimeInterface) {
+        if (is_null($value) || $value instanceof Chronos) {
             return $value;
         }
 
-        $converted = DateTimeImmutable::createFromFormat(
-            $platform->getDateTimeFormatString(),
-            $value,
-            self::$utc ? self::$utc : self::$utc = new DateTimeZone('UTC')
-        );
+        $converted = Chronos::createFromFormat($platform->getDateTimeFormatString(), $value, 'UTC');
 
         if (!$converted) {
             throw ConversionException::conversionFailedFormat(
