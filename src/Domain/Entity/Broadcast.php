@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
@@ -136,6 +137,11 @@ class Broadcast
     public function isRepeat(): bool
     {
         return $this->isRepeat;
+    }
+
+    public function isOnAir(): bool
+    {
+        return $this->isOnAirAt(ApplicationTime::getTime());
     }
 
     /**
