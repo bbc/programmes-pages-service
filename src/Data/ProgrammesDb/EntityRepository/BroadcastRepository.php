@@ -74,10 +74,11 @@ class BroadcastRepository extends EntityRepository
         int $offset
     ):array {
         $qb = $this->createQueryBuilder('broadcast', false)
-            ->addSelect(['programmeItem', 'service', 'masterBrand', 'network'])
+            ->addSelect(['programmeItem', 'service', 'masterBrand', 'network', 'serviceNetwork'])
             ->innerJoin('programmeItem.masterBrand', 'masterBrand')
             ->innerJoin('masterBrand.network', 'network')
             ->innerJoin('broadcast.service', 'service')
+            ->innerJoin('service.network', 'serviceNetwork')
 
             ->andWhere('broadcast.startAt >= :startDate')
             ->andWhere('broadcast.startAt < :endDate')
