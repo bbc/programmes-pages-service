@@ -68,7 +68,7 @@ class ApplicationTime
      */
     public static function setTime(int $appTime = null)
     {
-        static::$appTime = DateTimeImmutable::createFromFormat('U', $appTime ?? time())
+        static::$appTime = DateTimeImmutable::createFromFormat('U', $appTime ?? (string) time())
             ->setTimezone(new DateTimeZone('UTC'));
 
         if (class_exists(Chronos::class)) {
