@@ -151,11 +151,11 @@ class RefOptions
             $this->setOptionsForBatch(null, $item);
         } else {
             throw new InvalidArgumentException(sprintf(
-                                                   'Expected setOptionsFor() to be called with an an instance of "%s" or "%s". Found instance of "%s"',
-                                                   CoreEntity::CLASS,
-                                                   Network::CLASS,
-                                                   (is_object($item) ? get_class($item) : gettype($item))
-                                               ));
+                'Expected setOptionsFor() to be called with an an instance of "%s" or "%s". Found instance of "%s"',
+                CoreEntity::CLASS,
+                Network::CLASS,
+                (is_object($item) ? get_class($item) : gettype($item))
+            ));
         }
     }
 
