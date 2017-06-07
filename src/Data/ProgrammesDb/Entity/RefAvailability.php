@@ -179,12 +179,10 @@ class RefAvailability
 
     public function setStatus(string $status): void
     {
-        if (!in_array($status, [AvailabilityStatusEnum::AVAILABLE, AvailabilityStatusEnum::FUTURE, AvailabilityStatusEnum::PENDING])) {
+        if (!in_array($status, AvailabilityStatusEnum::validValues())) {
             throw new InvalidArgumentException(sprintf(
-                'Called setStatus with an invalid value. Expected one of "%s", "%s" or "%s" but got "%s"',
-                AvailabilityStatusEnum::AVAILABLE,
-                AvailabilityStatusEnum::FUTURE,
-                AvailabilityStatusEnum::PENDING,
+                'Called setStatus with an invalid value. Expected one of %s but got "%s"',
+                '"' . implode('", "', AvailabilityStatusEnum::validValues()) . '"',
                 $status
             ));
         }

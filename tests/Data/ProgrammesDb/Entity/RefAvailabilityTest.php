@@ -76,7 +76,7 @@ class RefAvailabilityTest extends TestCase
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Called setStatus with an invalid value. Expected one of "available", "future" or "pending" but got "garbage"
+     * @expectedExceptionMessage Called setStatus with an invalid value. Expected one of "available", "future", "pending" but got "garbage"
      */
     public function testUnknownStatusThrowsException()
     {

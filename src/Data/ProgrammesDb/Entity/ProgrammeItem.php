@@ -85,12 +85,10 @@ abstract class ProgrammeItem extends Programme
 
     public function setMediaType(string $mediaType): void
     {
-        if (!in_array($mediaType, [MediaTypeEnum::AUDIO, MediaTypeEnum::VIDEO, MediaTypeEnum::UNKNOWN])) {
+        if (!in_array($mediaType, MediaTypeEnum::validValues())) {
             throw new InvalidArgumentException(sprintf(
-                'Called setMediaType with an invalid value. Expected one of "%s", "%s" or "%s" but got "%s"',
-                MediaTypeEnum::AUDIO,
-                MediaTypeEnum::VIDEO,
-                MediaTypeEnum::UNKNOWN,
+                'Called setMediaType with an invalid value. Expected one of %s but got "%s"',
+                '"' . implode('", "', MediaTypeEnum::validValues()) . '"',
                 $mediaType
             ));
         }

@@ -55,12 +55,10 @@ abstract class ProgrammeItem extends Programme
         ?DateTimeImmutable $streamableFrom = null,
         ?DateTimeImmutable $streamableUntil = null
     ) {
-        if (!in_array($mediaType, [MediaTypeEnum::AUDIO, MediaTypeEnum::VIDEO, MediaTypeEnum::UNKNOWN])) {
+        if (!in_array($mediaType, MediaTypeEnum::validValues())) {
             throw new InvalidArgumentException(sprintf(
-                'Tried to create a ProgrammeItem with an invalid MediaType. Expected one of "%s", "%s" or "%s" but got "%s"',
-                MediaTypeEnum::AUDIO,
-                MediaTypeEnum::VIDEO,
-                MediaTypeEnum::UNKNOWN,
+                'Tried to create a ProgrammeItem with an invalid MediaType. Expected one of %s but got "%s"',
+                '"' . implode('", "', MediaTypeEnum::validValues()) . '"',
                 $mediaType
             ));
         }

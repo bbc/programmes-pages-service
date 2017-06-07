@@ -61,12 +61,10 @@ class Network
         bool $isInternational = false,
         bool $isAllowedAdverts = false
     ) {
-        if (!in_array($medium, [NetworkMediumEnum::RADIO, NetworkMediumEnum::TV, NetworkMediumEnum::UNKNOWN], true)) {
+        if (!in_array($medium, NetworkMediumEnum::validValues(), true)) {
             throw new InvalidArgumentException(sprintf(
-                '$medium has an invalid value. Expected one of "%s", "%s" or "%s" but got "%s"',
-                NetworkMediumEnum::RADIO,
-                NetworkMediumEnum::TV,
-                NetworkMediumEnum::UNKNOWN,
+                '$medium has an invalid value. Expected one of %s but got "%s"',
+                '"' . implode('", "', NetworkMediumEnum::validValues()) . '"',
                 $medium
             ));
         }
