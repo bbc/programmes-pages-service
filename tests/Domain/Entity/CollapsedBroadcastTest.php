@@ -33,6 +33,14 @@ class CollapsedBroadcastTest extends TestCase
         $this->assertSame(1, $broadcast->getDuration());
         $this->assertSame(false, $broadcast->isBlanked());
         $this->assertSame(false, $broadcast->isRepeat());
+
+        // Exactly at the start and a moment before - starts are inclusive
+        $this->assertTrue($broadcast->isOnAirAt(new DateTimeImmutable('2015-01-01 06:00:00')));
+        $this->assertFalse($broadcast->isOnAirAt(new DateTimeImmutable('2015-01-01 05:59:59')));
+
+        // Exactly at the end and a moment after - ends are exclusive
+        $this->assertTrue($broadcast->isOnAirAt(new DateTimeImmutable('2015-01-01 06:59:59')));
+        $this->assertFalse($broadcast->isOnAirAt(new DateTimeImmutable('2015-01-01 07:00:00')));
     }
 
     public function testConstructorOptionalArgs()
