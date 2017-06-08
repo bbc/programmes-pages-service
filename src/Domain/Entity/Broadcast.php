@@ -24,10 +24,10 @@ class Broadcast
     /** @var Service */
     private $service;
 
-    /** @var string */
+    /** @var DateTimeImmutable */
     private $startAt;
 
-    /** @var string */
+    /** @var DateTimeImmutable */
     private $endAt;
 
     /** @var int */
