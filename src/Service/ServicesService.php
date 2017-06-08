@@ -61,4 +61,16 @@ class ServicesService extends AbstractService
             }
         );
     }
+
+    public function isServiceAvailableOnDate(Service $service, DateTimeImmutable $date): bool
+    {
+        if (
+            (is_null($service->getEndDate()) || $date < $service->getEndDate())
+            && (is_null($service->getStartDate()) || $date >= $service->getStartDate())
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 }
