@@ -32,6 +32,7 @@ class MapperFactoryTest extends TestCase
             ['AtozTitleMapper'],
             ['BroadcastMapper'],
             ['CategoryMapper'],
+            ['CollapsedBroadcastMapper'],
             ['ContributionMapper'],
             ['ContributorMapper'],
             ['ImageMapper'],

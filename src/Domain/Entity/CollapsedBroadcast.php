@@ -109,9 +109,7 @@ class CollapsedBroadcast
         foreach ($array as $item) {
             if (!$item instanceof Service) {
                 throw new InvalidArgumentException(sprintf(
-                    'Tried to create a CollapsedBroadcast with invalid %s. Expected an array of %s but the array contained an instance of "%s"',
-                    'services',
-                    Service::CLASS,
+                    'Tried to create a CollapsedBroadcast with invalid Services. Expected a non-empty array of Services but the array contained an instance of "%s"',
                     (is_object($item) ? get_class($item) : gettype($item))
                 ));
             }
