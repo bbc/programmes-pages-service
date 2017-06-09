@@ -8,9 +8,13 @@ use InvalidArgumentException;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table(indexes={@ORM\Index(name="ref_options_entity_id_idx", columns={"entity_id"})})
  */
 class RefOptions
 {
+    const TYPE_LOCAL = 'local';
+    const TYPE_ADMIN = 'admin';
+
     use TimestampableEntity;
 
     /**
@@ -23,58 +27,54 @@ class RefOptions
     private $id;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", length=36, unique=true, nullable=false)
      */
-    private $originalId;
-
-    /**
-     * @var CoreEntity
-     *
-     * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
-    private $optionsForCoreEntity;
-
-    /**
-     * @var Network
-     *
-     * @ORM\ManyToOne(targetEntity="Network")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
-    private $optionsForNetwork;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $adminOptions;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(type="json_array", nullable=true)
-     */
-    private $localOptions;
+    private $guid;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(type="string", length=35, nullable=false)
      */
-    private $projectSpace;
+    private $projectId;
 
     /**
-     * RefOptions constructor.
-     * @param string $originalId
-     * @param CoreEntity|Network $optionsFor
+     * @var string
+     *
+     * @ORM\Column(type="string", length=55, nullable=false)
      */
-    public function __construct(string $originalId, $optionsFor)
-    {
-        $this->setOriginalId($originalId);
-        $this->setOptionsFor($optionsFor);
+    private $entityId;
+
+    /**
+     * local|admin
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=5, nullable=false)
+     */
+    private $type;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="json_array", nullable=false)
+     */
+    private $options;
+
+    public function __construct(
+        string $guid,
+        string $projectId,
+        string $entityId,
+        string $type,
+        array $options = []
+    ) {
+        $this->guid = $guid;
+        $this->projectId = $projectId;
+        $this->entityId = $entityId;
+        $this->setType($type);
+        $this->options = $options;
     }
 
     public function getId(): ?int
@@ -82,88 +82,57 @@ class RefOptions
         return $this->id;
     }
 
-    public function getOriginalId(): string
+    public function getGuid(): string
     {
-        return $this->originalId;
+        return $this->guid;
     }
 
-    public function setOriginalId(string $id): void
+    public function setGuid(string $guid)
     {
-        $this->originalId = $id;
+        $this->guid = $guid;
     }
 
-    /**
-     * @return CoreEntity|Network
-     */
-    public function getOptionsFor()
+    public function getProjectId(): string
     {
-        return $this->optionsForCoreEntity ?? $this->optionsForNetwork;
+        return $this->projectId;
     }
 
-    public function getOptionsForCoreEntity(): ?CoreEntity
+    public function setProjectId(string $projectId)
     {
-        return $this->optionsForCoreEntity;
+        $this->projectId = $projectId;
     }
 
-    public function getOptionsForNetwork(): ?Network
+    public function getEntityId(): string
     {
-        return $this->optionsForNetwork;
+        return $this->entityId;
     }
 
-    public function getAdminOptions(): ?array
+    public function setEntityId(string $entityId): void
     {
-        return $this->adminOptions;
+        $this->entityId = $entityId;
     }
 
-    public function setAdminOptions(?array $options): void
+    public function getType(): string
     {
-        $this->adminOptions = $options;
+        return $this->type;
     }
 
-    public function getLocalOptions(): ?array
+    public function setType(string $type): void
     {
-        return $this->localOptions;
-    }
-
-    public function setLocalOptions(?array $options): void
-    {
-        $this->localOptions = $options;
-    }
-
-    public function getProjectSpace(): ?string
-    {
-        return $this->projectSpace;
-    }
-
-    public function setProjectSpace(?string $projectSpace): void
-    {
-        $this->projectSpace = $projectSpace;
-    }
-
-    /**
-     * @param CoreEntity|Network $item
-     */
-    public function setOptionsFor($item): void
-    {
-        if ($item instanceof CoreEntity) {
-            $this->setOptionsForBatch($item, null);
-        } elseif ($item instanceof Network) {
-            $this->setOptionsForBatch(null, $item);
-        } else {
-            throw new InvalidArgumentException(sprintf(
-                'Expected setOptionsFor() to be called with an an instance of "%s" or "%s". Found instance of "%s"',
-                CoreEntity::CLASS,
-                Network::CLASS,
-                (is_object($item) ? get_class($item) : gettype($item))
-            ));
+        if (!in_array($type, [self::TYPE_ADMIN, self::TYPE_LOCAL])) {
+            throw new InvalidArgumentException('Type document for options not allowed');
         }
+
+        $this->type = $type;
     }
 
-    private function setOptionsForBatch(
-        ?CoreEntity $optionsForCoreEntity,
-        ?Network $optionsForNetwork
-    ): void {
-        $this->optionsForCoreEntity = $optionsForCoreEntity;
-        $this->optionsForNetwork = $optionsForNetwork;
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    public function setOptions(array $options = [])
+    {
+        $this->options = $options;
     }
 }
