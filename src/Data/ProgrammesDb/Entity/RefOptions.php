@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(indexes={@ORM\Index(name="entity_id_idx", columns={"entity_id"})})
+ * @ORM\Table(indexes={@ORM\Index(name="ref_options_entity_id_idx", columns={"entity_id"})})
  */
 class RefOptions
 {
@@ -41,9 +41,9 @@ class RefOptions
     private $projectId;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="string", length=55, nullable=false)
      */
     private $entityId;
 
@@ -102,12 +102,12 @@ class RefOptions
         $this->projectId = $projectId;
     }
 
-    public function getEntityId(): int
+    public function getEntityId(): string
     {
         return $this->entityId;
     }
 
-    public function setEntityId(int $entityId): void
+    public function setEntityId(string $entityId): void
     {
         $this->entityId = $entityId;
     }
