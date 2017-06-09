@@ -281,6 +281,24 @@ abstract class Programme
         return $this;
     }
 
+    public function isRadio(): bool
+    {
+        $network = $this->getNetwork();
+        if ($network && $network->isRadio()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isTv(): bool
+    {
+        $network = $this->getNetwork();
+        if ($network && $network->isTv()) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @throws InvalidArgumentException
      */
