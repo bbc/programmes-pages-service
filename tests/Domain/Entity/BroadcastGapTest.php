@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\BroadcastGap;

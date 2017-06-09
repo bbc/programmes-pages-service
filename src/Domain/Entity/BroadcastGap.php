@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ApplicationTime;
