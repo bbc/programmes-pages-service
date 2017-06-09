@@ -70,7 +70,7 @@ class RefOptions
         DateTime $createdAt,
         DateTime $updatedAt,
         array $options = []
-    ){
+    ) {
         $this->entity = $entity;
         $this->guid = $guid;
         $this->projectId = $projectId;
