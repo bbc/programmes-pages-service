@@ -11,12 +11,10 @@ class RefOptionsTest extends TestCase
     public function testDefaults()
     {
         $options = new RefOptions(
-            'entityId',
             'guid',
             'projectid',
-            'admin',
-            new DateTime(),
-            new DateTime()
+            'entityId',
+            'admin'
         );
 
         $this->assertSame([], $options->getOptions());
@@ -28,12 +26,10 @@ class RefOptionsTest extends TestCase
     public function testTypeSetterThrowErrorWhenNoValidValue()
     {
         new RefOptions(
-            'entityId',
             'guid',
+            'entityId',
             'projectid',
-            'wrong type',
-            new DateTime(),
-            new DateTime()
+            'wrong type'
         );
     }
 }
