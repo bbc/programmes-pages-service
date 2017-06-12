@@ -284,19 +284,13 @@ abstract class Programme
     public function isRadio(): bool
     {
         $network = $this->getNetwork();
-        if ($network && $network->isRadio()) {
-            return true;
-        }
-        return false;
+        return ($network && $network->isRadio());
     }
 
     public function isTv(): bool
     {
         $network = $this->getNetwork();
-        if ($network && $network->isTv()) {
-            return true;
-        }
-        return false;
+        return ($network && $network->isTv());
     }
 
     /**
