@@ -9,7 +9,6 @@ use InvalidArgumentException;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(indexes={@ORM\Index(name="ref_options_entity_id_idx", columns={"entity_id"})})
  */
 class RefOptions
 {
