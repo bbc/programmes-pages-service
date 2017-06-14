@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
@@ -41,11 +42,20 @@ class RefOptions
     private $projectId;
 
     /**
-     * @var string
+     * @var CoreEntity
      *
-     * @ORM\Column(type="string", length=55, nullable=false)
+     * @ORM\ManyToOne(targetEntity="CoreEntity")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
-    private $entityId;
+    private $coreEntity;
+
+    /**
+     * @var Network
+     *
+     * @ORM\ManyToOne(targetEntity="Network")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $network;
 
     /**
      * local|admin
@@ -63,17 +73,35 @@ class RefOptions
      */
     private $options;
 
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $modifiedDate;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $creationDate;
+
     public function __construct(
         string $guid,
         string $projectId,
-        string $entityId,
+        $entity,
         string $type,
+        DateTime $createdAt,
+        DateTime $modifiedAt,
         array $options = []
     ) {
         $this->guid = $guid;
         $this->projectId = $projectId;
-        $this->entityId = $entityId;
+        $this->setEntity($entity);
         $this->setType($type);
+        $this->modifiedAt = $modifiedAt;
+        $this->createdAt = $createdAt;
         $this->options = $options;
     }
 
@@ -102,14 +130,28 @@ class RefOptions
         $this->projectId = $projectId;
     }
 
-    public function getEntityId(): string
+    public function setEntity($entity)
     {
-        return $this->entityId;
+        if ($entity instanceof Network) {
+            $this->network = $entity;
+            $this->coreEntity = null;
+        } elseif ($entity instanceof CoreEntity) {
+            $this->coreEntity = $entity;
+            $this->network = null;
+        } else {
+            throw new InvalidArgumentException(sprintf(
+                'Expected an instance of "%s" or "%s". Found instance of "%s"',
+                CoreEntity::CLASS,
+                Network::CLASS,
+                (is_object($entity) ? get_class($entity) : gettype($entity))
+            ));
+        }
     }
 
-    public function setEntityId(string $entityId): void
+    /** @returns Network|CoreEntity|null */
+    public function getEntity()
     {
-        $this->entityId = $entityId;
+        return $this->network ?? $this->coreEntity ?? null;
     }
 
     public function getType(): string
@@ -134,5 +176,25 @@ class RefOptions
     public function setOptions(array $options = [])
     {
         $this->options = $options;
+    }
+
+    public function getModifiedDate(): DateTime
+    {
+        return $this->modifiedDate;
+    }
+
+    public function setModifiedDate(DateTime $modifiedDate)
+    {
+        $this->modifiedDate = $modifiedDate;
+    }
+
+    public function getCreationDate(): DateTime
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(DateTime $creationDate)
+    {
+        $this->creationDate = $creationDate;
     }
 }
