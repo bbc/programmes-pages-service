@@ -38,6 +38,7 @@ class MapperFactoryTest extends TestCase
             ['ImageMapper'],
             ['MasterBrandMapper'],
             ['NetworkMapper'],
+            ['OptionsMapper'],
             ['ProgrammeMapper'],
             ['RelatedLinkMapper'],
             ['SegmentMapper'],

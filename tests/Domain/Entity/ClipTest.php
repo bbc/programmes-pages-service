@@ -7,6 +7,8 @@ use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
@@ -20,6 +22,7 @@ class ClipTest extends TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['two' => 2]);
 
         $programme = new Clip(
             [0, 1, 2],
@@ -35,7 +38,8 @@ class ClipTest extends TestCase
             true,
             1103,
             MediaTypeEnum::UNKNOWN,
-            1201
+            1201,
+            $options
         );
 
         $this->assertEquals(2, $programme->getDbId());
@@ -55,6 +59,8 @@ class ClipTest extends TestCase
         $this->assertEquals(1103, $programme->getContributionsCount());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
         $this->assertEquals(1201, $programme->getSegmentEventCount());
+        $this->assertEquals($options, $programme->getOptions());
+        $this->assertSame(2, $programme->getOption('two'));
     }
 
     public function testConstructorOptionalArgs()
@@ -89,6 +95,7 @@ class ClipTest extends TestCase
             1103,
             MediaTypeEnum::UNKNOWN,
             1201,
+            new Options(),
             $parent,
             2101,
             $masterBrand,
@@ -111,5 +118,36 @@ class ClipTest extends TestCase
         $this->assertEquals(2201, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());
+    }
+
+    /**
+     * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     * @expectedExceptionMessage Could not get options of Programme "p01m5mss"as the full hierarchy was not fetched
+     */
+    public function testRequestingUnfetchedOptionsThrowsException()
+    {
+        $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+
+        $programme = new Clip(
+            [0],
+            $pid,
+            'Title',
+            'Search Title',
+            $synopses,
+            $image,
+            1101,
+            1102,
+            true,
+            true,
+            true,
+            1103,
+            'audio',
+            1201,
+            new UnfetchedOptions()
+        );
+
+        $programme->getOptions();
     }
 }
