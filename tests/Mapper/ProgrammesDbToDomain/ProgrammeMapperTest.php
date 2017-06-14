@@ -45,6 +45,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
+            'options' => [],
         ];
 
         $expectedEntity = new Brand(
@@ -66,6 +67,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             14,
             15,
             false,
+            $this->mockOptions,
             null,
             101,
             null,
@@ -116,6 +118,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'masterBrand' => null,
             'firstBroadcastDate' => new DateTime('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
+            'options' => [],
         ];
 
         $expectedEntity = new Series(
@@ -137,6 +140,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             14,
             15,
             false,
+            $this->mockOptions,
             null,
             101,
             null,
@@ -189,6 +193,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
+            'options' => [],
         ];
 
         $expectedEntity = new Episode(
@@ -209,6 +214,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             101,
             102,
             103,
+            $this->mockOptions,
             null,
             1001,
             null,
@@ -261,6 +267,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
+            'options' => [],
         ];
 
         $expectedEntity = new Clip(
@@ -278,6 +285,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             10,
             MediaTypeEnum::UNKNOWN,
             11,
+            $this->mockOptions,
             null,
             1001,
             null,
@@ -330,6 +338,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             'masterBrand' => null,
             'firstBroadcastDate' => new DateTimeImmutable('2017-01-03T18:00:00Z'),
             'expectedChildCount' => 1001,
+            'options' => [],
             'parent' => [
                 'id' => 1,
                 'type' => 'brand',
@@ -358,6 +367,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 'masterBrand' => null,
                 'firstBroadcastDate' => new DateTimeImmutable('2017-01-03T18:00:00Z'),
                 'expectedChildCount' => 1001,
+                'options' => [],
             ],
         ];
 
@@ -380,6 +390,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             14,
             15,
             false,
+            $this->mockOptions,
             new Brand(
                 [1],
                 new Pid('b010t19z'),
@@ -399,6 +410,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
                 14,
                 15,
                 false,
+                $this->mockOptions,
                 null,
                 101,
                 null,

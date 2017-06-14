@@ -7,8 +7,10 @@ use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -82,6 +84,7 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['availableEpisodesCount'],
             $dbProgramme['availableGalleriesCount'],
             $dbProgramme['isPodcastable'],
+            $this->getOptionsModel($dbProgramme),
             $this->getParentModel($dbProgramme),
             $dbProgramme['position'],
             $this->getMasterBrandModel($dbProgramme),
@@ -113,6 +116,7 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['availableEpisodesCount'],
             $dbProgramme['availableGalleriesCount'],
             $dbProgramme['isPodcastable'],
+            $this->getOptionsModel($dbProgramme),
             $this->getParentModel($dbProgramme),
             $dbProgramme['position'],
             $this->getMasterBrandModel($dbProgramme),
@@ -143,6 +147,7 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['aggregatedBroadcastsCount'],
             $dbProgramme['availableClipsCount'],
             $dbProgramme['availableGalleriesCount'],
+            $this->getOptionsModel($dbProgramme),
             $this->getParentModel($dbProgramme),
             $dbProgramme['position'] ?? null,
             $this->getMasterBrandModel($dbProgramme),
@@ -173,6 +178,7 @@ class ProgrammeMapper extends AbstractMapper
             $dbProgramme['contributionsCount'],
             $dbProgramme['mediaType'],
             $dbProgramme['segmentEventCount'],
+            $this->getOptionsModel($dbProgramme),
             $this->getParentModel($dbProgramme),
             $dbProgramme['position'] ?? null,
             $this->getMasterBrandModel($dbProgramme),
@@ -195,6 +201,60 @@ class ProgrammeMapper extends AbstractMapper
         return array_map(function ($a) {
             return (int) $a;
         }, $ancestors);
+    }
+
+    private function getOptionsModel(array $dbProgramme, string $key = 'options'): Options
+    {
+        // ensure the full hierarchy has been fetched.
+        // Options are only valid if we got everything.
+        if (!$this->hasFetchedFullHierarchy($dbProgramme)) {
+            return new UnfetchedOptions();
+        }
+
+        // build for current dbProgramme the tree of options
+        $optionsTree = $this->getOptionsTree($dbProgramme, $key);
+        // get final options to be applied on programme from tree options hierarchy
+        return $this->mapperFactory
+            ->getOptionsMapper()
+            ->getDomainModel(...$optionsTree);
+    }
+
+    private function hasFetchedFullHierarchy(array $programme): bool
+    {
+        // find the top level programme, ensuring it exists
+        $tleo = $programme;
+        while ($programme) {
+            $tleo = $programme;
+            if (!array_key_exists('parent', $programme)) {
+                return false;
+            }
+            $programme = $programme['parent'];
+        }
+        // check that the masterBrand was fetched
+        if (!array_key_exists('masterBrand', $tleo)) {
+            return false;
+        }
+
+        // check that the network was fetched
+        if ($tleo['masterBrand'] &&
+            !array_key_exists('network', $tleo['masterBrand'])
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function getOptionsTree(array $dbProgramme, string $keyWithOptions, array $optionsTree = []): array
+    {
+        // Recursive up the programme hierarchy, then to the network above that
+        $optionsTree[] = $dbProgramme[$keyWithOptions] ?? [];
+        if (isset($dbProgramme['parent'])) {
+            $optionsTree = $this->getOptionsTree($dbProgramme['parent'], $keyWithOptions, $optionsTree);
+        } elseif (isset($dbProgramme['masterBrand']['network'])) {
+            $optionsTree = $this->getOptionsTree($dbProgramme['masterBrand']['network'], $keyWithOptions, $optionsTree);
+        }
+        return $optionsTree;
     }
 
     private function getParentModel(array $dbProgramme, string $key = 'parent'): ?Programme

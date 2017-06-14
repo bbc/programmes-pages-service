@@ -12,7 +12,8 @@ class UnfetchedNetwork extends Network
         parent::__construct(
             new NullNid(),
             '',
-            new UnfetchedImage()
+            new UnfetchedImage(),
+            new UnfetchedOptions()
         );
     }
 }
