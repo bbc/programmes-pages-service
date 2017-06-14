@@ -52,7 +52,7 @@ class RefOptionsTest extends TestCase
      */
     public function testSetInvalidEntity()
     {
-        $entity = new MasterBrand('masterbrand', 'masterbrand' , 'masterbrand');
+        $entity = new MasterBrand('masterbrand', 'masterbrand', 'masterbrand');
         $createdAt = new DateTime("U");
         $modifiedAt = new DateTime("U");
 
@@ -64,6 +64,5 @@ class RefOptionsTest extends TestCase
             $createdAt,
             $modifiedAt
         );
-
     }
 }
