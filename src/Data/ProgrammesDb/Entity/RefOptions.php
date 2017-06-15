@@ -2,13 +2,13 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table(indexes={@ORM\Index(name="ref_options_entity_id_idx", columns={"entity_id"})})
  */
 class RefOptions
 {
@@ -41,20 +41,11 @@ class RefOptions
     private $projectId;
 
     /**
-     * @var CoreEntity
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @ORM\Column(type="string", length=55, nullable=false)
      */
-    private $coreEntity;
-
-    /**
-     * @var Network
-     *
-     * @ORM\ManyToOne(targetEntity="Network")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
-    private $network;
+    private $entityId;
 
     /**
      * local|admin
@@ -68,39 +59,21 @@ class RefOptions
     /**
      * @var array
      *
-     * @ORM\Column(type="json_array", nullable=false)
+     * @ORM\Column(type="json_array", nullabRle=false)
      */
     private $options;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=false)
-     */
-    private $modifiedDate;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=false)
-     */
-    private $creationDate;
 
     public function __construct(
         string $guid,
         string $projectId,
-        $entity,
+        string $entityId,
         string $type,
-        DateTime $createdAt,
-        DateTime $modifiedAt,
         array $options = []
     ) {
         $this->guid = $guid;
         $this->projectId = $projectId;
-        $this->setEntity($entity);
+        $this->entityId = $entityId;
         $this->setType($type);
-        $this->modifiedAt = $modifiedAt;
-        $this->createdAt = $createdAt;
         $this->options = $options;
     }
 
@@ -129,28 +102,14 @@ class RefOptions
         $this->projectId = $projectId;
     }
 
-    public function setEntity($entity)
+    public function getEntityId(): string
     {
-        if ($entity instanceof Network) {
-            $this->network = $entity;
-            $this->coreEntity = null;
-        } elseif ($entity instanceof CoreEntity) {
-            $this->coreEntity = $entity;
-            $this->network = null;
-        } else {
-            throw new InvalidArgumentException(sprintf(
-                'Expected an instance of "%s" or "%s". Found instance of "%s"',
-                CoreEntity::CLASS,
-                Network::CLASS,
-                (is_object($entity) ? get_class($entity) : gettype($entity))
-            ));
-        }
+        return $this->entityId;
     }
 
-    /** @returns Network|CoreEntity|null */
-    public function getEntity()
+    public function setEntityId(string $entityId): void
     {
-        return $this->network ?? $this->coreEntity ?? null;
+        $this->entityId = $entityId;
     }
 
     public function getType(): string
@@ -175,25 +134,5 @@ class RefOptions
     public function setOptions(array $options = [])
     {
         $this->options = $options;
-    }
-
-    public function getModifiedDate(): DateTime
-    {
-        return $this->modifiedDate;
-    }
-
-    public function setModifiedDate(DateTime $modifiedDate)
-    {
-        $this->modifiedDate = $modifiedDate;
-    }
-
-    public function getCreationDate(): DateTime
-    {
-        return $this->creationDate;
-    }
-
-    public function setCreationDate(DateTime $creationDate)
-    {
-        $this->creationDate = $creationDate;
     }
 }
