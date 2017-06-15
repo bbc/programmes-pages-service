@@ -59,7 +59,7 @@ class RefOptions
     /**
      * @var array
      *
-     * @ORM\Column(type="json_array", nullabRle=false)
+     * @ORM\Column(type="json_array", nullable=false)
      */
     private $options;
 
