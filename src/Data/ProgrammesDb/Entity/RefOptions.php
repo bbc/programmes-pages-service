@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
@@ -63,17 +64,35 @@ class RefOptions
      */
     private $options;
 
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $isiteLastModified;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $isiteCreatedAt;
+
     public function __construct(
         string $guid,
         string $projectId,
         string $entityId,
         string $type,
+        DateTime $createdAt,
+        DateTime $modifiedAt,
         array $options = []
     ) {
         $this->guid = $guid;
         $this->projectId = $projectId;
         $this->entityId = $entityId;
         $this->setType($type);
+        $this->isiteLastModified = $modifiedAt;
+        $this->isiteCreatedAt = $createdAt;
         $this->options = $options;
     }
 
@@ -134,5 +153,25 @@ class RefOptions
     public function setOptions(array $options = [])
     {
         $this->options = $options;
+    }
+
+    public function getIsiteLastModified(): DateTime
+    {
+        return $this->isiteLastModified;
+    }
+
+    public function setIsiteLastModified(DateTime $isiteLastModified)
+    {
+        $this->isiteLastModified = $isiteLastModified;
+    }
+
+    public function getIsiteCreatedAt(): DateTime
+    {
+        return $this->isiteCreatedAt;
+    }
+
+    public function setIsiteCreatedAt(DateTime $isiteCreatedAt)
+    {
+        $this->isiteCreatedAt = $isiteCreatedAt;
     }
 }
