@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefOptions;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 
 class RefOptionsTest extends TestCase
@@ -13,7 +14,9 @@ class RefOptionsTest extends TestCase
             'guid',
             'projectid',
             'entityId',
-            'admin'
+            'admin',
+            new DateTime('U'),
+            new DateTime('U')
         );
 
         $this->assertSame([], $options->getOptions());
@@ -28,7 +31,9 @@ class RefOptionsTest extends TestCase
             'guid',
             'entityId',
             'projectid',
-            'wrong type'
+            'wrong type',
+            new DateTime('U'),
+            new DateTime('U')
         );
     }
 }
