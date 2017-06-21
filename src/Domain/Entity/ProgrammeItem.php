@@ -121,4 +121,14 @@ abstract class ProgrammeItem extends Programme
     {
         return $this->streamableUntil;
     }
+
+    public function isAudio(): bool
+    {
+        return ($this->mediaType === MediaTypeEnum::AUDIO);
+    }
+
+    public function isVideo(): bool
+    {
+        return ($this->mediaType === MediaTypeEnum::VIDEO);
+    }
 }

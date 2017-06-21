@@ -293,6 +293,21 @@ abstract class Programme
         return ($network && $network->isTv());
     }
 
+    public function getAncestry(?Programme $context)
+    {
+        $currentProgramme = $this;
+        $contextPid = $context ? ((string) $context->getPid()) : null;
+        $ancestry = [];
+        do {
+            if ((string) $currentProgramme->getPid() === $contextPid) {
+                break;
+            }
+            $ancestry[] = $currentProgramme;
+        } while ($currentProgramme = $currentProgramme->getParent());
+
+        return $ancestry;
+    }
+
     /**
      * @throws InvalidArgumentException
      */
