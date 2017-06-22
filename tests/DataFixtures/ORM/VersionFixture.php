@@ -4,15 +4,24 @@ namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Version;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\VersionType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class VersionFixture extends AbstractFixture
+class VersionFixture extends AbstractFixture implements DependentFixtureInterface
 {
     private $manager;
+
+    public function getDependencies()
+    {
+        return [
+            __NAMESPACE__ . '\\ImagesFixture',
+        ];
+    }
 
     public function load(ObjectManager $manager)
     {
@@ -23,7 +32,7 @@ class VersionFixture extends AbstractFixture
 
         $episode = $this->buildEpisode('p0000001', 'Ep1');
         $embargoedEpisode = $this->buildEpisode('p0000002', 'Ep2', true);
-        $episode3 = $this->buildEpisode('p0000003', 'Ep3');
+        $episode3 = $this->buildEpisode('p0000003', 'Ep3', false, true);
         $episode4 = $this->buildEpisode('p0000004', 'Ep4');
         $episode5 = $this->buildEpisode('p0000005', '1 === 0');
         $episode6 = $this->buildEpisode('p0000006', 'Zzzz');
@@ -62,10 +71,13 @@ class VersionFixture extends AbstractFixture
         return $entity;
     }
 
-    private function buildEpisode($pid, $title, $embargoed = false)
+    private function buildEpisode($pid, $title, $embargoed = false, $addImage = false)
     {
         $entity = new Episode($pid, $title);
         $entity->setIsEmbargoed($embargoed);
+        if ($addImage) {
+            $entity->setImage($this->getReference('mg000003'));
+        }
         $this->addReference($pid, $entity);
         $this->manager->persist($entity);
         return $entity;

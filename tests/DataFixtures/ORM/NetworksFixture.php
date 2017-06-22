@@ -6,11 +6,19 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Service;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class NetworksFixture extends AbstractFixture
+class NetworksFixture extends AbstractFixture implements DependentFixtureInterface
 {
     private $manager;
+
+    public function getDependencies()
+    {
+        return [
+            __NAMESPACE__ . '\\ImagesFixture',
+        ];
+    }
 
     public function load(ObjectManager $manager)
     {
@@ -49,7 +57,8 @@ class NetworksFixture extends AbstractFixture
             'radio2',
             'National Radio',
             null,
-            3
+            3,
+            'mg000002'
         );
 
         $service3 = $this->buildService(
@@ -99,7 +108,8 @@ class NetworksFixture extends AbstractFixture
         $urlKey = null,
         $type = null,
         $medium = null,
-        $position = null
+        $position = null,
+        $imagePid = null
     ) {
         $entity = new Network($nid, $title, $title);
         $entity->setDefaultService($defaultService);
@@ -109,6 +119,9 @@ class NetworksFixture extends AbstractFixture
 
         if ($medium) {
             $entity->setMedium($medium);
+        }
+        if ($imagePid) {
+            $entity->setImage($this->getReference($imagePid));
         }
         $this->manager->persist($entity);
         $this->addReference('network_' . $nid, $entity);

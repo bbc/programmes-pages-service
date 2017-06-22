@@ -293,7 +293,11 @@ abstract class Programme
         return ($network && $network->isTv());
     }
 
-    public function getAncestry(?Programme $context)
+    /**
+     * @param Programme|null $context
+     * @return Programme[]
+     */
+    public function getAncestry(?Programme $context = null): array
     {
         $currentProgramme = $this;
         $contextPid = $context ? ((string) $context->getPid()) : null;
@@ -305,7 +309,8 @@ abstract class Programme
             $ancestry[] = $currentProgramme;
         } while ($currentProgramme = $currentProgramme->getParent());
 
-        return $ancestry;
+        // Make sure we never return an empty array, even if for some bizarre reason we are our own context
+        return !empty($ancestry) ? $ancestry : [$this];
     }
 
     /**

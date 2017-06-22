@@ -306,7 +306,7 @@ QUERY;
             ->andWhere('IDENTITY(collapsedBroadcast.programmeItem) = :id')
             ->setParameter('isWebcastOnly', $isWebcastOnly)
             ->setParameter('start', $start)
-            ->setParameter('id',  $id);
+            ->setParameter('id', $id);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         return $this->explodeFields($result);

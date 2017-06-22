@@ -145,7 +145,8 @@ class Broadcast
     public function isOnAir(): bool
     {
         if (!isset($this->isOnAir)) {
-            $this->isOnAir = $this->isOnAirAt(ApplicationTime::getTime());;
+            $this->isOnAir = $this->isOnAirAt(ApplicationTime::getTime());
+            ;
         }
         return $this->isOnAir;
     }
