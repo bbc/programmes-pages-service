@@ -112,6 +112,13 @@ class Service
      */
     private $liveStreamUrl;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $isSustainingService = false;
+
     public function __construct(string $sid, string $pid, string $name, string $type, string $mediaType)
     {
         $this->sid = $sid;
@@ -250,5 +257,15 @@ class Service
     public function setLiveStreamUrl(?string $liveStreamUrl): void
     {
         $this->liveStreamUrl = $liveStreamUrl;
+    }
+
+    public function isSustainingService(): bool
+    {
+        return $this->isSustainingService;
+    }
+
+    public function setIsSustainingService(bool $isSustainingService): void
+    {
+        $this->isSustainingService = $isSustainingService;
     }
 }
