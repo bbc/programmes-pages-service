@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefOptions;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefIsiteOptions;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 
@@ -10,7 +10,7 @@ class RefOptionsTest extends TestCase
 {
     public function testDefaults()
     {
-        $options = new RefOptions(
+        $options = new RefIsiteOptions(
             'guid',
             'projectid',
             'entityId',
@@ -27,7 +27,7 @@ class RefOptionsTest extends TestCase
      */
     public function testTypeSetterThrowErrorWhenNoValidValue()
     {
-        new RefOptions(
+        new RefIsiteOptions(
             'guid',
             'entityId',
             'projectid',

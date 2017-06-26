@@ -9,9 +9,9 @@ use InvalidArgumentException;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(indexes={@ORM\Index(name="ref_options_entity_id_idx", columns={"entity_id"})})
+ * @ORM\Table(indexes={@ORM\Index(name="ref_isite_options_entity_id_idx", columns={"entity_id"})})
  */
-class RefOptions
+class RefIsiteOptions
 {
     const TYPE_LOCAL = 'local';
     const TYPE_ADMIN = 'admin';
@@ -49,6 +49,13 @@ class RefOptions
     private $entityId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=55, nullable=false)
+     */
+    private $fileId;
+
+    /**
      * local|admin
      *
      * @var string
@@ -82,6 +89,7 @@ class RefOptions
         string $guid,
         string $projectId,
         string $entityId,
+        string $fileId,
         string $type,
         DateTime $createdAt,
         DateTime $modifiedAt,
@@ -90,6 +98,7 @@ class RefOptions
         $this->guid = $guid;
         $this->projectId = $projectId;
         $this->entityId = $entityId;
+        $this->fileId = $fileId;
         $this->setType($type);
         $this->isiteLastModified = $modifiedAt;
         $this->isiteCreatedAt = $createdAt;
@@ -129,6 +138,16 @@ class RefOptions
     public function setEntityId(string $entityId): void
     {
         $this->entityId = $entityId;
+    }
+
+    public function getFileId(): string
+    {
+        return $this->fileId;
+    }
+
+    public function setFileId(string $fileId)
+    {
+        $this->fileId = $fileId;
     }
 
     public function getType(): string
