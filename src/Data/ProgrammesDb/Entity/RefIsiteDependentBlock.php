@@ -41,6 +41,11 @@ class RefIsiteDependentBlock
     /**
      * @var null|string
      *
+     * Guid is nullable because when an options form has an unpublished dependent block,
+     * the only thing we get for it is the file id when we request it through isite2-content-reader.
+     * As we still want to know the dependent blocks for a option, we have to use file id as the primary
+     * identifier. This field is here as a 'nice-to-have', in case we need it in the future.
+     *
      * @ORM\Column(type="string", length=36, nullable=true)
      */
     private $guid;
