@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RefIsiteOptions;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 
-class RefOptionsTest extends TestCase
+class RefIsiteOptionsTest extends TestCase
 {
     public function testDefaults()
     {
@@ -14,6 +14,7 @@ class RefOptionsTest extends TestCase
             'guid',
             'projectid',
             'entityId',
+            'fileId',
             'admin',
             new DateTime('U'),
             new DateTime('U')
@@ -31,6 +32,7 @@ class RefOptionsTest extends TestCase
             'guid',
             'entityId',
             'projectid',
+            'fileId',
             'wrong type',
             new DateTime('U'),
             new DateTime('U')
