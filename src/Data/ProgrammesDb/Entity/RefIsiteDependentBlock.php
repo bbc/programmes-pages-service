@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
@@ -34,7 +34,7 @@ class RefIsiteDependentBlock
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=55, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $fileId;
 

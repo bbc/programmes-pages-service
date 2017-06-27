@@ -51,7 +51,7 @@ class RefIsiteOptions
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=55, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $fileId;
 
