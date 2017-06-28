@@ -16,7 +16,7 @@ class NetworksFixture extends AbstractFixture implements DependentFixtureInterfa
     public function getDependencies()
     {
         return [
-            __NAMESPACE__ . '\\ImagesFixture',
+            ImagesFixture::class,
         ];
     }
 
