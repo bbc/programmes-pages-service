@@ -19,7 +19,7 @@ class VersionFixture extends AbstractFixture implements DependentFixtureInterfac
     public function getDependencies()
     {
         return [
-            __NAMESPACE__ . '\\ImagesFixture',
+            ImagesFixture::class,
         ];
     }
 
