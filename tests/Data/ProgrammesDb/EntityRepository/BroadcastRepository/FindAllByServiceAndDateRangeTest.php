@@ -26,7 +26,7 @@ class FindAllByServiceAndDateRangeTest extends AbstractDatabaseTest
         $fromDateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2010-01-15 06:00:00');
         $toDatetime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2017-10-16 06:00:00');
 
-        $broadcastedServices = $this->repo->findAllByServiceAndDateRange(
+        $broadcasts = $this->repo->findAllByServiceAndDateRange(
             new Sid('bbc_radio_two'),
             $fromDateTime,
             $toDatetime,
@@ -34,12 +34,17 @@ class FindAllByServiceAndDateRangeTest extends AbstractDatabaseTest
             0
         );
 
-        $this->assertInternalType('array', $broadcastedServices);
-        $this->assertCount(3, $broadcastedServices);
+
+        $this->assertInternalType('array', $broadcasts);
+        $this->assertCount(3, $broadcasts);
         $this->assertEquals(
             ['b0000003', 'b0000006', 'b0000007'],
-            array_column($broadcastedServices, 'pid')
+            array_column($broadcasts, 'pid')
         );
+
+
+        $this->assertEquals('Programme Image', $broadcasts[0]['programmeItem']['image']['title']);
+        $this->assertEquals('Network Image', $broadcasts[1]['programmeItem']['masterBrand']['network']['image']['title']);
 
         // broadcasts + programmeItem parent
         $this->assertCount(2, $this->getDbQueries());

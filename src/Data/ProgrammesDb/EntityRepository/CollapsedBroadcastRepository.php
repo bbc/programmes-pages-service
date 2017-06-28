@@ -294,6 +294,24 @@ QUERY;
         return $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }
 
+    public function findByStartAndProgrammeItemId(DateTimeImmutable $start, int $id, bool $isWebcastOnly = false)
+    {
+        $qb = $this->createQueryBuilder('collapsedBroadcast', false)
+            ->addSelect(['programmeItem', 'image', 'masterBrand', 'mbNetwork'])
+            ->leftJoin('programmeItem.image', 'image')
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'mbNetwork')
+            ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
+            ->andWhere('collapsedBroadcast.startAt = :start')
+            ->andWhere('IDENTITY(collapsedBroadcast.programmeItem) = :id')
+            ->setParameter('isWebcastOnly', $isWebcastOnly)
+            ->setParameter('start', $start)
+            ->setParameter('id', $id);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->explodeFields($result);
+    }
+
     public function createQueryBuilder($alias, $indexBy = null)
     {
         return parent::createQueryBuilder($alias)

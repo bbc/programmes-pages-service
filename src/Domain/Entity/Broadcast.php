@@ -39,6 +39,9 @@ class Broadcast
     /** @var bool */
     private $isRepeat;
 
+    /** @var bool */
+    private $isOnAir;
+
     public function __construct(
         Pid $pid,
         Version $version,
@@ -141,7 +144,10 @@ class Broadcast
 
     public function isOnAir(): bool
     {
-        return $this->isOnAirAt(ApplicationTime::getTime());
+        if (!isset($this->isOnAir)) {
+            $this->isOnAir = $this->isOnAirAt(ApplicationTime::getTime());
+        }
+        return $this->isOnAir;
     }
 
     /**

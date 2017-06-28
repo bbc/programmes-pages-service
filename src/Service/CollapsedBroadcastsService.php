@@ -6,7 +6,9 @@ use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CollapsedBroadcastRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\ApplicationTime;
+use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Category;
+use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use DateTimeImmutable;
@@ -111,6 +113,31 @@ class CollapsedBroadcastsService extends AbstractService
                 $services = $this->fetchUsedServices($broadcasts);
 
                 return $this->mapManyEntities($broadcasts, $services);
+            }
+        );
+    }
+
+    public function findByBroadcast(
+        Broadcast $broadcast,
+        $ttl = CacheInterface::NORMAL
+    ): ?CollapsedBroadcast {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $broadcast->getPid(), $broadcast->getProgrammeItem()->getPid(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($broadcast) {
+                $broadcasts = $this->repository->findByStartAndProgrammeItemId(
+                    $broadcast->getStartAt(),
+                    $broadcast->getProgrammeItem()->getDbId()
+                );
+
+                $broadcasts = $this->stripWebcasts($broadcasts);
+                $services = $this->fetchUsedServices($broadcasts);
+                if (!empty($broadcasts[0])) {
+                    return $this->mapSingleEntity($broadcasts[0], $services);
+                }
+                return null;
             }
         );
     }

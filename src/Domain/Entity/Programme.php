@@ -294,6 +294,26 @@ abstract class Programme
     }
 
     /**
+     * @param Programme|null $context
+     * @return Programme[]
+     */
+    public function getAncestry(?Programme $context = null): array
+    {
+        $currentProgramme = $this;
+        $contextPid = $context ? ((string) $context->getPid()) : null;
+        $ancestry = [];
+        do {
+            if ((string) $currentProgramme->getPid() === $contextPid) {
+                break;
+            }
+            $ancestry[] = $currentProgramme;
+        } while ($currentProgramme = $currentProgramme->getParent());
+
+        // Make sure we never return an empty array, even if for some bizarre reason we are our own context
+        return !empty($ancestry) ? $ancestry : [$this];
+    }
+
+    /**
      * @throws InvalidArgumentException
      */
     private function assertArrayOfType(string $property, ?array $array, string $expectedType): void
