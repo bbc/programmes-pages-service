@@ -182,6 +182,10 @@ class Network
         return $this->options;
     }
 
+    /**
+     * @param string $key
+     * @return array|string|null
+     */
     public function getOption(string $key)
     {
         return $this->options->getOption($key);
