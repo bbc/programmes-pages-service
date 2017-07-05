@@ -30,7 +30,28 @@ class CachingTest extends BaseProgrammeMapperTestCase
             [],
             null,
             1,
-            new Options()
+            new Options(
+                [
+                    'branding_id' => 'br-00002',
+                    'language' => 'en',
+                    'pulse_survey' => null,
+                    'brand_2016_layout' => false,
+                    'brand_2016_layout_use_minimap' => false,
+                    'show_clip_cards' => true,
+                    'show_gallery_cards' => true,
+                    'double_width_first_promo' => false,
+                    'pid_override' => null,
+                    'show_tracklist_inadvance' => false,
+                    'show_tracklist_timings' => false,
+                    'show_enhanced_navigation' => false,
+                    'comments_clips_id' => null,
+                    'comments_clips_enabled' => false,
+                    'comments_episodes_id' => null,
+                    'comments_episodes_enabled' => false,
+                    'playlister_popularity_enabled' => false,
+                    'recipes_enabled' => false,
+                ]
+            )
         );
 
         $dbEntityWithFetchedItem = $this->getSampleProgrammeDbEntity(

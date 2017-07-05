@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -83,6 +84,7 @@ class ProgrammeTest extends TestCase
             1301,
             1302,
             1303,
+            new Options(),
             $this->getSeries()
         );
     }
@@ -111,6 +113,7 @@ class ProgrammeTest extends TestCase
             1204,
             1205,
             false,
+            new Options(),
             $this->getBrand()
         );
     }
@@ -138,7 +141,8 @@ class ProgrammeTest extends TestCase
             1203,
             1204,
             1205,
-            false
+            false,
+            new Options()
         );
     }
 }

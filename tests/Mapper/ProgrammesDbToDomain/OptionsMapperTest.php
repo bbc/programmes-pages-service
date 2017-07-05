@@ -11,19 +11,30 @@ class OptionsMapperTest extends BaseMapperTestCase
     {
         // just one set of options. no complicated inheritance
         $options = [
-            'language' => [
-                'value' => 'cy',
-                'cascades' => true,
-            ],
-            'second_option' => [
-                'value' => null,
-                'cascades' => true,
-            ],
+            'language' =>  'cy',
+            'second_option' =>  null,
         ];
 
         $expectedOptions = [
             'language' => 'cy',
-            'second_option' => null,
+            'branding_id' => 'br-00002',
+            'second_option' =>  null,
+            'pulse_survey' => null,
+            'brand_2016_layout' => false,
+            'brand_2016_layout_use_minimap' => false,
+            'show_clip_cards' => true,
+            'show_gallery_cards' => true,
+            'double_width_first_promo' => false,
+            'pid_override' => null,
+            'show_tracklist_inadvance' => false,
+            'show_tracklist_timings' => false,
+            'show_enhanced_navigation' => false,
+            'comments_clips_id' => null,
+            'comments_clips_enabled' => false,
+            'comments_episodes_id' => null,
+            'comments_episodes_enabled' => false,
+            'playlister_popularity_enabled' => false,
+            'recipes_enabled' => false,
         ];
 
         $this->assertEquals(
@@ -37,67 +48,40 @@ class OptionsMapperTest extends BaseMapperTestCase
         // Create three levels of options
         // and check the ones that are allowed to cascade, do so.
         // Once in the domain model, we don't care about the cascades property
-
         $childOptions = [
-            'language' => [
-                'value' => 'languageInChild',
-                'cascades' => true,
-            ],
-            'second_option' => [
-                'value' => null,
-                'cascades' => true,
-            ],
-            'third_option' => [
-                'value' => null,
-                'cascades' => true,
-            ],
-            'fourth_option' => [
-                'value' => null,
-                'cascades' => false,
-            ],
+            'language' => 'languageInChild',
         ];
+
         $parentOptions = [
-            'language' => [
-                'value' => 'languageInParent',
-                'cascades' => true,
-            ],
-            'second_option' => [
-                'value' => 'secondInParent',
-                'cascades' => true,
-            ],
-            'third_option' => [
-                'value' => null,
-                'cascades' => true,
-            ],
-            'fourth_option' => [
-                'value' => 'mother',
-                'cascades' => false,
-            ],
+            'language' => 'languageInParent',
+            'live_stream_id' => 'streamIdParent',
         ];
+
         $grandparentOptions = [
-            'language' => [
-                'value' => 'languageInGrandParent',
-                'cascades' => true,
-            ],
-            'second_option' => [
-                'value' => 'secondInGrandParent',
-                'cascades' => true,
-            ],
-            'third_option' => [
-                'value' => 'thirdInGrandParent',
-                'cascades' => true,
-            ],
-            'fourth_option' => [
-                'value' => 'fourthInGrandParent',
-                'cascades' => false,
-            ],
+            'language' => 'languageInGrandParent',
+            'live_stream_id' => 'streamIdGrandparent',
+            'comments_clips_id' => 'clips-id-grandparent',
         ];
 
         $expectedOptions = [
-            'language' => 'languageInChild',
-            'second_option' => 'secondInParent',
-            'third_option' => 'thirdInGrandParent',
-            'fourth_option' => null,
+            'language' => 'languageInChild', // option set in child
+            'branding_id' => 'br-00002', // default option
+            'pulse_survey' => null,
+            'brand_2016_layout' => false,
+            'brand_2016_layout_use_minimap' => false,
+            'show_clip_cards' => true,
+            'show_gallery_cards' => true,
+            'double_width_first_promo' => false,
+            'pid_override' => null,
+            'show_tracklist_inadvance' => false,
+            'show_tracklist_timings' => false,
+            'show_enhanced_navigation' => false,
+            'comments_clips_id' => 'clips-id-grandparent', // cascading option
+            'comments_clips_enabled' => false,
+            'comments_episodes_id' => null,
+            'comments_episodes_enabled' => false,
+            'playlister_popularity_enabled' => false,
+            'recipes_enabled' => false,
         ];
 
         $this->assertEquals(
