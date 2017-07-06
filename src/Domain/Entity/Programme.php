@@ -211,6 +211,10 @@ abstract class Programme
         return $this->isStreamableAlternatate;
     }
 
+
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getOptions(): Options
     {
         if ($this->options instanceof UnfetchedOptions) {
@@ -222,6 +226,9 @@ abstract class Programme
         return $this->options;
     }
 
+    /**
+     * @throws DataNotFetchedException
+     */
     public function getOption(string $key)
     {
         return $this->getOptions()->getOption($key);
