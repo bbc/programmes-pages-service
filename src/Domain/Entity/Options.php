@@ -11,10 +11,6 @@ class Options
         $this->options = $options;
     }
 
-    /**
-     * @param string $key
-     * @return mixed|null
-     */
     public function getOption(string $key)
     {
         return $this->options[$key] ?? null;
