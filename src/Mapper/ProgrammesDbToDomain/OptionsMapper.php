@@ -45,7 +45,8 @@ class OptionsMapper extends AbstractMapper
 
         // now loop through parents and apply the data
         // ONLY if the key is allowed to cascade AND
-        // the key doesn't already exist lower down
+        // the key doesn't already exist lower down.
+        // By default, options don't cascade.
         foreach ($parentEntities as $parentOptions) {
             foreach ($parentOptions as $key => $data) {
                 if (!isset($options[$key]) && (self::OPTIONS_SCHEMA[$key]['cascades'] ?? false)) {
