@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Options;
 
 class OptionsMapper extends AbstractMapper
 {
-    private const OPTIONS_SCHEMA = [
+    private const OPTIONS_DEFAULT_SCHEMA = [
         'branding_id' => [ 'default' => 'br-00002', 'cascades' => true ],
         'language' => [ 'default' => 'en', 'cascades' => true ],
         'pulse_survey' => [ 'default' => null, 'cascades' => true ],
@@ -38,20 +38,24 @@ class OptionsMapper extends AbstractMapper
 
     public function getDomainModel(array $options, array ...$parentEntities)
     {
-        // Append default values to the end of the hierarchy
-        $parentEntities[] = $this->getDefaultValues();
-
         // $parentEntities must start from the bottom of the hierarchy
 
         // now loop through parents and apply the data
         // ONLY if the key is allowed to cascade AND
         // the key doesn't already exist lower down.
-        // By default, options don't cascade.
         foreach ($parentEntities as $parentOptions) {
-            foreach ($parentOptions as $key => $data) {
-                if (!isset($options[$key]) && (self::OPTIONS_SCHEMA[$key]['cascades'] ?? false)) {
-                    $options[$key] = $data;
+            foreach ($parentOptions as $key => $value) {
+                if (!isset($options[$key]) && (self::OPTIONS_DEFAULT_SCHEMA[$key]['cascades'] ?? false)) {
+                    $options[$key] = $value;
                 }
+            }
+        }
+
+        // set default values
+        $defaults = $this->getDefaultValues();
+        foreach ($defaults as $key => $value) {
+            if (!isset($options[$key])) {
+                $options[$key] = $value;
             }
         }
 
@@ -61,7 +65,7 @@ class OptionsMapper extends AbstractMapper
     private function getDefaultValues()
     {
         if (!self::$defaults) {
-            foreach (self::OPTIONS_SCHEMA as $key => $value) {
+            foreach (self::OPTIONS_DEFAULT_SCHEMA as $key => $value) {
                 self::$defaults[$key] = $value['default'];
             }
         }
