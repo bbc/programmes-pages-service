@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -48,6 +49,9 @@ abstract class Programme
     /** @var bool */
     private $isStreamableAlternatate;
 
+    /** @var Options */
+    private $options;
+
     /** @var Programme|null */
     private $parent;
 
@@ -79,6 +83,7 @@ abstract class Programme
         bool $isStreamable,
         bool $isStreamableAlternate,
         int $contributionsCount,
+        Options $options,
         ?Programme $parent = null,
         ?int $position = null,
         ?MasterBrand $masterBrand = null,
@@ -101,6 +106,7 @@ abstract class Programme
         $this->hasSupportingContent = $hasSupportingContent;
         $this->isStreamable = $isStreamable;
         $this->isStreamableAlternatate = $isStreamableAlternate;
+        $this->options = $options;
         $this->parent = $parent;
         $this->position = $position;
         $this->masterBrand = $masterBrand;
@@ -203,6 +209,29 @@ abstract class Programme
     public function isStreamableAlternatate(): bool
     {
         return $this->isStreamableAlternatate;
+    }
+
+
+    /**
+     * @throws DataNotFetchedException
+     */
+    public function getOptions(): Options
+    {
+        if ($this->options instanceof UnfetchedOptions) {
+            throw new DataNotFetchedException(
+                'Could not get options of Programme "' . $this->pid . '"' .
+                'as the full hierarchy was not fetched'
+            );
+        }
+        return $this->options;
+    }
+
+    /**
+     * @throws DataNotFetchedException
+     */
+    public function getOption(string $key)
+    {
+        return $this->getOptions()->getOption($key);
     }
 
     /**
