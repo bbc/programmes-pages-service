@@ -50,6 +50,13 @@ class CachingTest extends BaseProgrammeMapperTestCase
                     'comments_episodes_enabled' => false,
                     'playlister_popularity_enabled' => false,
                     'recipes_enabled' => false,
+                    'brand_layout' => 'availability',
+                    'promoted_programmes' => [],
+                    'live_stream_id' => null,
+                    'live_stream_heading' => null,
+                    'ivote' => null,
+                    'coming_soon' => null,
+                    'navigation_links' => [],
                 ]
             )
         );
