@@ -65,9 +65,24 @@ class ApplicationTimeTest extends TestCase
 
         ApplicationTime::setTime(1400000000);
 
-        $initialTime = ApplicationTime::getLocalTime('UTC');
+        ApplicationTime::setLocalTimeZone('UTC');
+        $initialTime = ApplicationTime::getLocalTime();
         $this->assertEquals($currentTime, $initialTime);
         $this->assertEquals('UTC', $initialTime->getTimezone()->getName());
         $this->assertEquals($currentTime->format('Y-m-d H:i:s'), $initialTime->format('Y-m-d H:i:s'));
+    }
+
+    public function testLocalTimeIsSetWithTime()
+    {
+        $oldTime = DateTimeImmutable::createFromFormat('U', '1400000000');
+        ApplicationTime::setTime(1400000000);
+        $initialTime = ApplicationTime::getLocalTime();
+
+        $newTime = DateTimeImmutable::createFromFormat('U', '1500000000');
+        ApplicationTime::setTime(1500000000);
+        $newLocalTime = ApplicationTime::getLocalTime();
+
+        $this->assertNotEquals($initialTime, $newLocalTime);
+        $this->assertEquals($newTime->getTimestamp(), $newLocalTime->getTimestamp());
     }
 }
