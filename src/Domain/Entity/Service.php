@@ -177,4 +177,12 @@ class Service
         }
         return false;
     }
+
+    public function isInternational(): bool
+    {
+        if ($this->network && $this->getNetwork()->isInternational()) {
+            return true;
+        }
+        return false;
+    }
 }

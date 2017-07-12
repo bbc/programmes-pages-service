@@ -16,6 +16,12 @@ class ApplicationTime
     /** @var DateTimeImmutable  */
     private static $appTime = null;
 
+    /** @var DateTimeImmutable */
+    private static $localTime = null;
+
+    /** @var DateTimeZone */
+    private static $localTimeZone = null;
+
     /**
      * Fetch the current DateTime
      *
@@ -31,34 +37,39 @@ class ApplicationTime
     }
 
     /**
-     * When getting a time, we often want it in local UK time.
+     * When getting a time, we often want it in local time.
      * This is a separate method to getTime() as some code (such as Doctrine) ignores timezones and just uses the date
      * and time. So.... be careful!
-     *
-     * @param string $timezoneString
-     * @return DateTimeImmutable
      */
-    public static function getLocalTime(string $timezoneString = 'Europe/London'): DateTimeImmutable
+    public static function getLocalTime(): DateTimeImmutable
     {
-        if (null === static::$appTime) {
-            static::setTime();
+        if (null === static::$localTime) {
+            $time = self::getTime();
+            static::$localTime = $time->setTimezone(self::getLocalTimeZone());
         }
 
-        return static::$appTime->setTimezone(new DateTimeZone($timezoneString));
+        return static::$localTime;
     }
 
-    public static function getTruncatedTime()
+    public static function getLocalTimeZone(): DateTimeZone
     {
-        static::getTime();
-        return static::$appTime->setTime(static::$appTime->format('H'), static::$appTime->format('i'), 0);
+        if (null === self::$localTimeZone) {
+            self::setLocalTimeZone();
+        }
+        return self::$localTimeZone;
     }
 
-    public static function getCurrent3MinuteWindow()
+    public static function getTruncatedTime(): DateTimeImmutable
     {
-        static::getTime();
+        $time = static::getTime();
+        return $time->setTime($time->format('H'), $time->format('i'), 0);
+    }
 
-        $currentWindow = floor(static::$appTime->format('i') / 3) * 3;
-        return static::$appTime->setTime(static::$appTime->format('H'), $currentWindow, 0);
+    public static function getCurrent3MinuteWindow(): DateTimeImmutable
+    {
+        $time = static::getTime();
+        $currentWindow = floor($time->format('i') / 3) * 3;
+        return $time->setTime($time->format('H'), $currentWindow, 0);
     }
 
     /**
@@ -66,23 +77,39 @@ class ApplicationTime
      *
      * @param int|null $appTime A timestamp
      */
-    public static function setTime(int $appTime = null)
+    public static function setTime(int $appTime = null): void
     {
-        static::$appTime = DateTimeImmutable::createFromFormat('U', $appTime ?? (string) time())
-            ->setTimezone(new DateTimeZone('UTC'));
-
+        $timeToSet = $appTime ?? time();
+        static::$localTime = null;
         if (class_exists(Chronos::class)) {
-            Chronos::setTestNow(Chronos::createFromTimestampUTC(static::$appTime->getTimestamp()));
+            static::$appTime = Chronos::createFromTimestampUTC($timeToSet)
+                ->setTimezone(new DateTimeZone('UTC'));
+            Chronos::setTestNow(static::$appTime);
+        } else {
+            static::$appTime = DateTimeImmutable::createFromFormat('U', (string) $timeToSet)
+                ->setTimezone(new DateTimeZone('UTC'));
         }
+    }
+
+    /**
+     * Set the local time zone used by all subsequent requests to getLocalTime()
+     * @param string $timezoneString
+     */
+    public static function setLocalTimeZone(string $timezoneString = 'Europe/London'): void
+    {
+        self::$localTimeZone = new DateTimeZone($timezoneString);
+        self::$localTime = null;
     }
 
     /**
      * Blanks out any pre-set value of the time, so that a new value is
      * returned the next time we call this. Useful when testing.
      */
-    public static function blank()
+    public static function blank(): void
     {
         static::$appTime = null;
+        static::$localTimeZone = null;
+        static::$localTime = null;
     }
 
     protected function __construct()
