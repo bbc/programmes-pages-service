@@ -51,6 +51,7 @@ class ServiceFactoryTest extends TestCase
             ['CollapsedBroadcastsService', ['CollapsedBroadcast', 'Service'], 'CollapsedBroadcastMapper'],
             ['ContributionsService', ['Contribution'], 'ContributionMapper'],
             ['ContributorsService', ['Contributor'], 'ContributorMapper'],
+            ['GroupsService', ['CoreEntity'], 'GroupMapper'],
             ['NetworksService', ['Network'], 'NetworkMapper'],
             ['ProgrammesService', ['CoreEntity'], 'ProgrammeMapper'],
             ['RelatedLinksService', ['RelatedLink'], 'RelatedLinkMapper'],
