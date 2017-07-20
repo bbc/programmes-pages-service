@@ -25,7 +25,8 @@ class Franchise extends Group
         ?Programme $parent = null,
         ?MasterBrand $masterBrand = null
     ) {
-        parent::__construct($dbAncestryIds,
+        parent::__construct(
+            $dbAncestryIds,
             $pid,
             $title,
             $searchTitle,

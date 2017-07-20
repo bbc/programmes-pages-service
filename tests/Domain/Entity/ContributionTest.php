@@ -3,6 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
+use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedGroup;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -145,5 +148,22 @@ class ContributionTest extends TestCase
 
         // Get the contributedTo
         $coreEntity = $contribution->getContributedTo();
+    }
+
+    public function testGetContributedToUnfetchedGroup()
+    {
+        $pid = new Pid('b0000001');
+        $contributor = $this->createMock(Contributor::class);
+        $unfetchedGroup = $this->createMock(UnfetchedGroup::class);
+
+        $contribution = new Contribution(
+            $pid,
+            $contributor,
+            $unfetchedGroup,
+            'CreditRole'
+        );
+
+        $this->expectException(DataNotFetchedException::class);
+        $contribution->getContributedTo();
     }
 }

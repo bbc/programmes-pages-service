@@ -95,7 +95,7 @@ class ContributionMapperTest extends BaseMapperTestCase
     public function testGetDomainModelWithContributedToProgramme()
     {
         $contributorDbEntity = ['pid' => 'p01v0q3w'];
-        $programmeDbEntity = ['pid' => 'b0000000'];
+        $programmeDbEntity = ['pid' => 'b0000000', 'type' => 'Programme'];
 
         $expectedContributorDomainEntity = $this->createMock(
             'BBC\ProgrammesPagesService\Domain\Entity\Contributor'
