@@ -12,6 +12,9 @@ use InvalidArgumentException;
 
 abstract class Group
 {
+    /** @var Programme|null */
+    protected $parent;
+
     /** @var int[] */
     private $dbAncestryIds;
 
@@ -42,9 +45,6 @@ abstract class Group
     /** @var Options */
     private $options;
 
-    /** @var Programme|null */
-    private $parent;
-
     /** @var MasterBrand|null */
     private $masterBrand;
 
@@ -59,7 +59,6 @@ abstract class Group
         int $relatedLinksCount,
         int $contributionsCount,
         Options $options,
-        ?Programme $parent = null,
         ?MasterBrand $masterBrand = null
     ) {
         $this->assertAncestry($dbAncestryIds);
@@ -73,7 +72,6 @@ abstract class Group
         $this->promotionsCount = $promotionsCount;
         $this->relatedLinksCount = $relatedLinksCount;
         $this->options = $options;
-        $this->parent = $parent;
         $this->masterBrand = $masterBrand;
         $this->contributionsCount = $contributionsCount;
     }
@@ -212,7 +210,10 @@ abstract class Group
         return $this->masterBrand ? $this->masterBrand->getNetwork() : null;
     }
 
-    public function getTleo(): Group
+    /**
+     * @return Group|Programme
+     */
+    public function getTleo()
     {
         $parent = $this->getParent();
         if ($parent) {

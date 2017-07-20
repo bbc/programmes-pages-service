@@ -6,9 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Season;
-use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
-use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
@@ -59,7 +57,6 @@ class SeasonTest extends TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-        $parent = $this->createMock(Series::class);
         $masterBrand = $this->createMock(MasterBrand::class);
 
         $season = new Season(
@@ -74,37 +71,10 @@ class SeasonTest extends TestCase
             1103,
             1201,
             new Options(),
-            $parent,
             $masterBrand
         );
 
-        $this->assertEquals($parent, $season->getParent());
         $this->assertEquals($masterBrand, $season->getMasterBrand());
-    }
-
-    public function testUnfetchedParent()
-    {
-        $pid = new Pid('p01m5mss');
-        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
-        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
-
-        $season = new Season(
-            [0],
-            $pid,
-            'Title',
-            'Search Title',
-            $synopses,
-            $image,
-            1101,
-            1102,
-            1103,
-            1201,
-            new Options(),
-            new UnfetchedProgramme()
-        );
-
-        $this->expectException(DataNotFetchedException::class);
-        $season->getParent();
     }
 
     public function testRequestingUnfetchedOptionsThrowsException()

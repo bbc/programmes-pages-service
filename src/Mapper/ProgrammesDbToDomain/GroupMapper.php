@@ -95,7 +95,6 @@ class GroupMapper extends AbstractMapper
             $dbGroup['contributionsCount'],
             $dbGroup['aggregatedBroadcastsCount'],
             $this->getOptionsModel($dbGroup),
-            $this->getParentModel($dbGroup),
             $this->getMasterBrandModel($dbGroup)
         );
     }
@@ -132,33 +131,32 @@ class GroupMapper extends AbstractMapper
             $dbGroup['contributionsCount'],
             $dbGroup['aggregatedBroadcastsCount'],
             $this->getOptionsModel($dbGroup),
-            $this->getParentModel($dbGroup),
             $this->getMasterBrandModel($dbGroup)
         );
     }
 
-    private function getAncestryArray(array $dbProgramme, string $key = 'ancestry'): array
+    private function getAncestryArray(array $dbGroup, string $key = 'ancestry'): array
     {
         // ancestry contains a string of all IDs including the current one with
         // a trailing comma at the end (which makes it an empty item when exploding)
         // Thus we want an array of all but the final item (which is null)
-        $ancestors = explode(',', $dbProgramme[$key], -1) ?? [];
+        $ancestors = explode(',', $dbGroup[$key], -1) ?? [];
         return array_map(function ($a) {
             return (int) $a;
         }, $ancestors);
     }
 
-    private function getOptionsModel(array $dbProgramme, string $key = 'options'): Options
+    private function getOptionsModel(array $dbGroup, string $key = 'options'): Options
     {
         // ensure the full hierarchy has been fetched.
         // Options are only valid if we got everything.
-        if (!$this->hasFetchedFullHierarchy($dbProgramme)) {
+        if (!$this->hasFetchedFullHierarchy($dbGroup)) {
             return new UnfetchedOptions();
         }
 
-        // build for current dbProgramme the tree of options
-        $optionsTree = $this->getOptionsTree($dbProgramme, $key);
-        // get final options to be applied on programme from tree options hierarchy
+        // build for current dbGroup the tree of options
+        $optionsTree = $this->getOptionsTree($dbGroup, $key);
+        // get final options to be applied on group from tree options hierarchy
         return $this->mapperFactory
             ->getOptionsMapper()
             ->getDomainModel(...$optionsTree);
@@ -190,77 +188,77 @@ class GroupMapper extends AbstractMapper
         return true;
     }
 
-    private function getOptionsTree(array $dbProgramme, string $keyWithOptions, array $optionsTree = []): array
+    private function getOptionsTree(array $dbGroup, string $keyWithOptions, array $optionsTree = []): array
     {
-        // Recursive up the programme hierarchy, then to the network above that
-        $optionsTree[] = $dbProgramme[$keyWithOptions] ?? [];
-        if (isset($dbProgramme['parent'])) {
-            $optionsTree = $this->getOptionsTree($dbProgramme['parent'], $keyWithOptions, $optionsTree);
-        } elseif (isset($dbProgramme['masterBrand']['network'])) {
-            $optionsTree = $this->getOptionsTree($dbProgramme['masterBrand']['network'], $keyWithOptions, $optionsTree);
+        // Recursive up the group hierarchy, then to the network above that
+        $optionsTree[] = $dbGroup[$keyWithOptions] ?? [];
+        if (isset($dbGroup['parent'])) {
+            $optionsTree = $this->getOptionsTree($dbGroup['parent'], $keyWithOptions, $optionsTree);
+        } elseif (isset($dbGroup['masterBrand']['network'])) {
+            $optionsTree = $this->getOptionsTree($dbGroup['masterBrand']['network'], $keyWithOptions, $optionsTree);
         }
         return $optionsTree;
     }
 
-    private function getParentModel(array $dbProgramme, string $key = 'parent'): ?Programme
+    private function getParentModel(array $dbGroup, string $key = 'parent'): ?Programme
     {
         // It is possible to have no parent, where the key does
         // exist but is set to null. We'll only say it's Unfetched
         // if the key doesn't exist at all.
-        if (!array_key_exists($key, $dbProgramme)) {
+        if (!array_key_exists($key, $dbGroup)) {
             return new UnfetchedProgramme();
         }
 
-        if (is_null($dbProgramme[$key])) {
+        if (is_null($dbGroup[$key])) {
             return null;
         }
 
-        return $this->getDomainModel($dbProgramme[$key]);
+        return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbGroup[$key]);
     }
 
-    private function getImageModel(array $dbProgramme, string $key = 'image'): ?Image
+    private function getImageModel(array $dbGroup, string $key = 'image'): ?Image
     {
         $imageMapper = $this->mapperFactory->getImageMapper();
 
-        // Image inheritance. If the current programme does not have an image
+        // Image inheritance. If the current group does not have an image
         // attached to it, look to see if its parent has an image, and use that.
         // Keep going up the ancestry chain till an image is found
-        $currentItem = $dbProgramme;
+        $currentItem = $dbGroup;
         while ($currentItem) {
-            // If the current Programme has an image then use that!
+            // If the current Group has an image then use that!
             if (isset($currentItem[$key])) {
                 return $imageMapper->getDomainModel($currentItem[$key]);
             }
 
-            // Otherwise set the current Programme to the parent
+            // Otherwise set the current Group to the parent
             $currentItem = $currentItem['parent'] ?? null;
         }
 
-        // Could not find any Programme Images in the hierarchy, try the
+        // Could not find any Group Images in the hierarchy, try the
         // MasterBrand image.
-        // This should also attempt inheritance where if the current programme
+        // This should also attempt inheritance where if the current group
         // has no MasterBrand image then it should work up the ancestry chain
         // till an image is found.
-        $currentItem = $dbProgramme;
+        $currentItem = $dbGroup;
         while ($currentItem) {
-            // If the current Programme's MasterBrand has an image then use that!
+            // If the current Group's MasterBrand has an image then use that!
             if (isset($currentItem['masterBrand']['image'])) {
                 return $imageMapper->getDomainModel($currentItem['masterBrand']['image']);
             }
 
-            // Otherwise set the current Programme to the parent
+            // Otherwise set the current Group to the parent
             $currentItem = $currentItem['parent'] ?? null;
         }
 
-        // Could not find any programme image in the masterbrand, go up to the network
-        $currentItem = $dbProgramme;
+        // Could not find any group image in the masterbrand, go up to the network
+        $currentItem = $dbGroup;
         while ($currentItem) {
             // If the current Programme's network has an image then use that!
             if (isset($currentItem['masterBrand']['network']['image'])) {
                 return $imageMapper->getDomainModel($currentItem['masterBrand']['network']['image']);
             }
 
-            // Otherwise set the current Programme to the parent
+            // Otherwise set the current Group to the parent
             $currentItem = $currentItem['parent'] ?? null;
         }
 
@@ -268,28 +266,28 @@ class GroupMapper extends AbstractMapper
         return $imageMapper->getDefaultImage();
     }
 
-    private function getMasterBrandModel(array $dbProgramme, string $key = 'masterBrand'): ?MasterBrand
+    private function getMasterBrandModel(array $dbGroup, string $key = 'masterBrand'): ?MasterBrand
     {
         // It is possible to have no MasterBrand, where the key does
         // exist but is set to null. We'll only say it's Unfetched
         // if the key doesn't exist at all.
-        if (!array_key_exists($key, $dbProgramme)) {
+        if (!array_key_exists($key, $dbGroup)) {
             return new UnfetchedMasterBrand();
         }
 
-        if (is_null($dbProgramme[$key])) {
+        if (is_null($dbGroup[$key])) {
             return null;
         }
 
-        return $this->mapperFactory->getMasterBrandMapper()->getDomainModel($dbProgramme[$key]);
+        return $this->mapperFactory->getMasterBrandMapper()->getDomainModel($dbGroup[$key]);
     }
 
-    private function getSynopses($dbProgramme): Synopses
+    private function getSynopses($dbGroup): Synopses
     {
         return new Synopses(
-            $dbProgramme['shortSynopsis'],
-            $dbProgramme['mediumSynopsis'],
-            $dbProgramme['longSynopsis']
+            $dbGroup['shortSynopsis'],
+            $dbGroup['mediumSynopsis'],
+            $dbGroup['longSynopsis']
         );
     }
 }

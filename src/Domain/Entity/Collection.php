@@ -36,11 +36,11 @@ class Collection extends Group
             $relatedLinksCount,
             $contributionsCount,
             $options,
-            $parent,
             $masterBrand
         );
 
         $this->isPodcastable = $isPodcastable;
+        $this->parent = $parent;
     }
 
     public function isPodcastable(): bool

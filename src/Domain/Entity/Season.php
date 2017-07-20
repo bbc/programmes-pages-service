@@ -22,7 +22,6 @@ class Season extends Group
         int $contributionsCount,
         int $aggregatedBroadcastsCount,
         Options $options,
-        ?Programme $parent = null,
         ?MasterBrand $masterBrand = null
     ) {
         parent::__construct(
@@ -36,7 +35,6 @@ class Season extends Group
             $relatedLinksCount,
             $contributionsCount,
             $options,
-            $parent,
             $masterBrand
         );
 
