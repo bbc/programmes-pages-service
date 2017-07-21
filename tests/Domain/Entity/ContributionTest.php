@@ -3,6 +3,9 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
+use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedGroup;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +18,8 @@ class ContributionTest extends TestCase
         $contributor = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Contributor');
         $segment = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Segment');
         $version = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version');
-        $coreEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Programme');
+        $programme = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Programme');
+        $group = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Group');
 
         $contribution = new Contribution(
             $pid,
@@ -34,7 +38,14 @@ class ContributionTest extends TestCase
         $contribution3 = new Contribution(
             $pid,
             $contributor,
-            $coreEntity,
+            $programme,
+            'CreditRole'
+        );
+
+        $contribution4 = new Contribution(
+            $pid,
+            $contributor,
+            $group,
             'CreditRole'
         );
 
@@ -46,7 +57,8 @@ class ContributionTest extends TestCase
 
         $this->assertSame($segment, $contribution->getContributedTo());
         $this->assertSame($version, $contribution2->getContributedTo());
-        $this->assertSame($coreEntity, $contribution3->getContributedTo());
+        $this->assertSame($programme, $contribution3->getContributedTo());
+        $this->assertSame($group, $contribution4->getContributedTo());
     }
 
     public function testConstructorOptionalArgs()
@@ -145,5 +157,22 @@ class ContributionTest extends TestCase
 
         // Get the contributedTo
         $coreEntity = $contribution->getContributedTo();
+    }
+
+    public function testGetContributedToUnfetchedGroup()
+    {
+        $pid = new Pid('b0000001');
+        $contributor = $this->createMock(Contributor::class);
+        $unfetchedGroup = $this->createMock(UnfetchedGroup::class);
+
+        $contribution = new Contribution(
+            $pid,
+            $contributor,
+            $unfetchedGroup,
+            'CreditRole'
+        );
+
+        $this->expectException(DataNotFetchedException::class);
+        $contribution->getContributedTo();
     }
 }

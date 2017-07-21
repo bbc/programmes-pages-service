@@ -35,6 +35,7 @@ class MapperFactoryTest extends TestCase
             ['CollapsedBroadcastMapper'],
             ['ContributionMapper'],
             ['ContributorMapper'],
+            ['GroupMapper'],
             ['ImageMapper'],
             ['MasterBrandMapper'],
             ['NetworkMapper'],

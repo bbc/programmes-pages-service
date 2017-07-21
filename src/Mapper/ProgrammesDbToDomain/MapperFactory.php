@@ -60,6 +60,15 @@ class MapperFactory
         return $this->instances['CollapsedBroadcastMapper'];
     }
 
+    public function getGroupMapper(): GroupMapper
+    {
+        if (!isset($this->instances['GroupMapper'])) {
+            $this->instances['GroupMapper'] = new GroupMapper($this);
+        }
+
+        return $this->instances['GroupMapper'];
+    }
+
     public function getImageMapper(): ImageMapper
     {
         if (!isset($this->instances['ImageMapper'])) {
