@@ -75,10 +75,10 @@ class BroadcastRepository extends EntityRepository
     ):array {
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect(['programmeItem', 'service', 'masterBrand', 'network', 'serviceNetwork', 'image', 'mbimage', 'nwimage'])
-            ->innerJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
             ->leftJoin('programmeItem.image', 'image')
             ->leftJoin('masterBrand.image', 'mbimage')
-            ->innerJoin('masterBrand.network', 'network')
+            ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('network.image', 'nwimage')
             ->innerJoin('broadcast.service', 'service')
             ->innerJoin('service.network', 'serviceNetwork')
