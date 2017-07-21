@@ -71,8 +71,8 @@ class GalleryTest extends TestCase
             1102,
             1103,
             new Options(),
-            $parent,
-            $masterBrand
+            $masterBrand,
+            $parent
         );
 
         $this->assertEquals($parent, $gallery->getParent());
@@ -84,6 +84,7 @@ class GalleryTest extends TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $masterBrand = $this->createMock(MasterBrand::class);
 
         $gallery = new Gallery(
             [0],
@@ -96,6 +97,7 @@ class GalleryTest extends TestCase
             1102,
             1103,
             new Options(),
+            $masterBrand,
             new UnfetchedProgramme()
         );
 

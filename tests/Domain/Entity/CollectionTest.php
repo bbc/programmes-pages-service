@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
@@ -33,8 +34,8 @@ class CollectionTest extends TestCase
             1101,
             1102,
             1103,
-            false,
-            $options
+            $options,
+            false
         );
 
         $this->assertEquals(2, $collection->getDbId());
@@ -72,10 +73,10 @@ class CollectionTest extends TestCase
             1101,
             1102,
             1103,
-            true,
             new Options(),
-            $parent,
-            $masterBrand
+            true,
+            $masterBrand,
+            $parent
         );
 
         $this->assertEquals($parent, $collection->getParent());
@@ -87,6 +88,7 @@ class CollectionTest extends TestCase
         $pid = new Pid('p01m5mss');
         $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
         $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $masterBrand = $this->createMock(MasterBrand::class);
 
         $collection = new Collection(
             [0],
@@ -98,8 +100,9 @@ class CollectionTest extends TestCase
             1101,
             1102,
             1103,
-            true,
             new Options(),
+            true,
+            $masterBrand,
             new UnfetchedProgramme()
         );
 
@@ -123,8 +126,8 @@ class CollectionTest extends TestCase
             1101,
             1102,
             1103,
-            true,
-            new UnfetchedOptions()
+            new UnfetchedOptions(),
+            true
         );
 
         $this->expectException(DataNotFetchedException::class);

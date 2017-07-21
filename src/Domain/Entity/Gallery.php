@@ -18,8 +18,8 @@ class Gallery extends Group
         int $relatedLinksCount,
         int $contributionsCount,
         Options $options,
-        ?Programme $parent = null,
-        ?MasterBrand $masterBrand = null
+        ?MasterBrand $masterBrand = null,
+        ?Programme $parent = null
     ) {
         parent::__construct(
             $dbAncestryIds,

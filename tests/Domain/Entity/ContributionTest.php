@@ -18,7 +18,8 @@ class ContributionTest extends TestCase
         $contributor = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Contributor');
         $segment = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Segment');
         $version = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version');
-        $coreEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Programme');
+        $programme = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Programme');
+        $group = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Group');
 
         $contribution = new Contribution(
             $pid,
@@ -37,7 +38,14 @@ class ContributionTest extends TestCase
         $contribution3 = new Contribution(
             $pid,
             $contributor,
-            $coreEntity,
+            $programme,
+            'CreditRole'
+        );
+
+        $contribution4 = new Contribution(
+            $pid,
+            $contributor,
+            $group,
             'CreditRole'
         );
 
@@ -49,7 +57,8 @@ class ContributionTest extends TestCase
 
         $this->assertSame($segment, $contribution->getContributedTo());
         $this->assertSame($version, $contribution2->getContributedTo());
-        $this->assertSame($coreEntity, $contribution3->getContributedTo());
+        $this->assertSame($programme, $contribution3->getContributedTo());
+        $this->assertSame($group, $contribution4->getContributedTo());
     }
 
     public function testConstructorOptionalArgs()

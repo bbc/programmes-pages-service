@@ -31,8 +31,8 @@ class SeasonTest extends TestCase
             1101,
             1102,
             1103,
-            1201,
-            $options
+            $options,
+            1201
         );
 
         $this->assertEquals(2, $season->getDbId());
@@ -69,8 +69,8 @@ class SeasonTest extends TestCase
             1101,
             1102,
             1103,
-            1201,
             new Options(),
+            1201,
             $masterBrand
         );
 
@@ -93,8 +93,8 @@ class SeasonTest extends TestCase
             1101,
             1102,
             1103,
-            1201,
-            new UnfetchedOptions()
+            new UnfetchedOptions(),
+            1201
         );
 
         $this->expectException(DataNotFetchedException::class);

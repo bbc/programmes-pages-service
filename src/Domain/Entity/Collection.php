@@ -20,10 +20,10 @@ class Collection extends Group
         int $promotionsCount,
         int $relatedLinksCount,
         int $contributionsCount,
-        bool $isPodcastable,
         Options $options,
-        ?Programme $parent = null,
-        ?MasterBrand $masterBrand = null
+        bool $isPodcastable,
+        ?MasterBrand $masterBrand = null,
+        ?Programme $parent = null
     ) {
         parent::__construct(
             $dbAncestryIds,

@@ -12,7 +12,12 @@ use InvalidArgumentException;
 
 abstract class Group
 {
-    /** @var Programme|null */
+    /**
+     * Only Collections and Galleries may have a parent Programme.
+     * But returning null for the other group types avoids us doing a load of instanceOfs
+     *
+     * @var Programme|null
+     */
     protected $parent;
 
     /** @var int[] */

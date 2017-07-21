@@ -74,10 +74,10 @@ class GroupMapper extends AbstractMapper
             $dbGroup['promotionsCount'],
             $dbGroup['relatedLinksCount'],
             $dbGroup['contributionsCount'],
-            $dbGroup['isPodcastable'],
             $this->getOptionsModel($dbGroup),
-            $this->getParentModel($dbGroup),
-            $this->getMasterBrandModel($dbGroup)
+            $dbGroup['isPodcastable'],
+            $this->getMasterBrandModel($dbGroup),
+            $this->getParentModel($dbGroup)
         );
     }
 
@@ -93,8 +93,8 @@ class GroupMapper extends AbstractMapper
             $dbGroup['promotionsCount'],
             $dbGroup['relatedLinksCount'],
             $dbGroup['contributionsCount'],
-            $dbGroup['aggregatedBroadcastsCount'],
             $this->getOptionsModel($dbGroup),
+            $dbGroup['aggregatedBroadcastsCount'],
             $this->getMasterBrandModel($dbGroup)
         );
     }
@@ -112,8 +112,8 @@ class GroupMapper extends AbstractMapper
             $dbGroup['relatedLinksCount'],
             $dbGroup['contributionsCount'],
             $this->getOptionsModel($dbGroup),
-            $this->getParentModel($dbGroup),
-            $this->getMasterBrandModel($dbGroup)
+            $this->getMasterBrandModel($dbGroup),
+            $this->getParentModel($dbGroup)
         );
     }
 
@@ -129,8 +129,8 @@ class GroupMapper extends AbstractMapper
             $dbGroup['promotionsCount'],
             $dbGroup['relatedLinksCount'],
             $dbGroup['contributionsCount'],
-            $dbGroup['aggregatedBroadcastsCount'],
             $this->getOptionsModel($dbGroup),
+            $dbGroup['aggregatedBroadcastsCount'],
             $this->getMasterBrandModel($dbGroup)
         );
     }

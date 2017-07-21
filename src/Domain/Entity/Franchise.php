@@ -20,8 +20,8 @@ class Franchise extends Group
         int $promotionsCount,
         int $relatedLinksCount,
         int $contributionsCount,
-        int $aggregatedBroadcastsCount,
         Options $options,
+        int $aggregatedBroadcastsCount,
         ?MasterBrand $masterBrand = null
     ) {
         parent::__construct(
