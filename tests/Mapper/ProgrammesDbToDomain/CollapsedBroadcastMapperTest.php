@@ -16,7 +16,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
     public function setUp()
     {
         $this->mockProgrammeMapper = $this->createMock(
-            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper'
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper'
         );
 
         $this->mockProgrammeMapper->method('getDomainModel')->willReturn(
@@ -42,7 +42,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
         $expectedServiceDomainEntity = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Service');
 
         $this->mockProgrammeMapper->expects($this->once())
-            ->method('getDomainModel')
+            ->method('getDomainModelForProgramme')
             ->with($programmeItemDbEntity)
             ->willReturn($expectedProgrammeItemDomainEntity);
 
@@ -151,7 +151,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
         $expectedServiceDomainEntity2 = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Service');
 
         $this->mockProgrammeMapper->expects($this->once())
-            ->method('getDomainModel')
+            ->method('getDomainModelForProgramme')
             ->with($programmeItemDbEntity)
             ->willReturn($expectedProgrammeItemDomainEntity);
 
@@ -192,7 +192,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
             true
         );
 
-        $mapper = $mapper = $this->getMapper();
+        $mapper = $this->getMapper();
         $this->assertEquals(
             $expectedEntity,
             $mapper->getDomainModel($dbEntityArray, $services)
@@ -226,7 +226,7 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
         return new CollapsedBroadcastMapper(
             $this->getMapperFactory(
                 [
-                    'ProgrammeMapper' => $this->mockProgrammeMapper,
+                    'CoreEntityMapper' => $this->mockProgrammeMapper,
                     'ServiceMapper'   => $this->mockServiceMapper,
                 ]
             )

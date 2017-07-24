@@ -86,7 +86,7 @@ class ProgrammeMapperOptionsMappingTest extends BaseProgrammeMapperTestCase
             $expectedOptionsEntity1
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModelForProgramme($dbEntityArray));
     }
 
     public function testUnfetchedParentProduceUnfetchedOptions()
@@ -166,7 +166,7 @@ class ProgrammeMapperOptionsMappingTest extends BaseProgrammeMapperTestCase
             new UnfetchedOptions()
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($series));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModelForProgramme($series));
     }
 
     public function testGetDomainUnfetchedNetwork()
@@ -219,6 +219,6 @@ class ProgrammeMapperOptionsMappingTest extends BaseProgrammeMapperTestCase
             new UnfetchedOptions()
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($series));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModelForProgramme($series));
     }
 }

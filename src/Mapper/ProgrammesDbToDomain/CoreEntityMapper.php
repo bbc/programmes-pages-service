@@ -4,63 +4,224 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
+use BBC\ProgrammesPagesService\Domain\Entity\Collection;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
+use BBC\ProgrammesPagesService\Domain\Entity\Franchise;
+use BBC\ProgrammesPagesService\Domain\Entity\Gallery;
+use BBC\ProgrammesPagesService\Domain\Entity\Group;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+use BBC\ProgrammesPagesService\Domain\Entity\Season;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
-use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
+use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
+use Exception;
 use InvalidArgumentException;
 
-class ProgrammeMapper extends AbstractMapper
+class CoreEntityMapper extends AbstractMapper
 {
     private $cache = [];
 
-    public function getCacheKey(array $dbProgramme): string
+    /**
+     * For building cache keys for other mappers in a generic way
+     *
+     * @param array $dbEntity
+     * @return string
+     * @throws Exception
+     */
+    public function getCacheKey(array $dbEntity): string
+    {
+        if ($this->entityIsA(Group::class, $dbEntity)) {
+            return $this->getCacheKeyForGroup($dbEntity);
+        }
+        if ($this->entityIsA(Programme::class, $dbEntity)) {
+            return $this->getCacheKeyForProgramme($dbEntity);
+        }
+        throw new Exception('Unrecognized Core Entity');
+    }
+
+    public function getCacheKeyForGroup(array $dbGroup): string
+    {
+        return $this->buildCacheKey($dbGroup, 'id', [
+            'image' => 'Image',
+            'parent' => 'CoreEntity',
+            'masterBrand' => 'MasterBrand',
+        ]);
+    }
+
+    public function getCacheKeyForProgramme(array $dbProgramme): string
     {
         return $this->buildCacheKey($dbProgramme, 'id', [
             'image' => 'Image',
-            'parent' => 'Programme',
+            'parent' => 'CoreEntity',
             'masterBrand' => 'MasterBrand',
         ], [
             'categories' => 'Category',
         ]);
     }
 
-    public function getDomainModel(array $dbProgramme): Programme
+    /**
+     * @param array $dbEntity
+     * @return Group|Programme
+     * @throws Exception
+     */
+    public function getDomainModel(array $dbEntity)
     {
-        $cacheKey = $this->getCacheKey($dbProgramme);
+        if ($this->entityIsA(Group::class, $dbEntity)) {
+            return $this->getDomainModelForGroup($dbEntity);
+        }
+        if ($this->entityIsA(Programme::class, $dbEntity)) {
+            return $this->getDomainModelForProgramme($dbEntity);
+        }
+        throw new Exception('Unrecognized Core Entity');
+    }
+
+    public function getDomainModelForGroup(array $dbEntity): Group
+    {
+        if (!$this->entityIsA(Group::class, $dbEntity)) {
+            throw new InvalidArgumentException('Could not build domain model for unknown group type "' . ($dbEntity['type'] ?? '') . '"');
+        }
+
+        $cacheKey = $this->getCacheKeyForGroup($dbEntity);
 
         if (!isset($this->cache[$cacheKey])) {
-            $this->cache[$cacheKey] = $this->getModel($dbProgramme);
+            $this->cache[$cacheKey] = $this->getModelForGroup($dbEntity);
         }
 
         return $this->cache[$cacheKey];
     }
 
-    public function getModel(array $dbProgramme): Programme
+    public function getDomainModelForProgramme(array $dbEntity): Programme
     {
-        if (isset($dbProgramme['type'])) {
-            if ($dbProgramme['type'] == 'brand') {
-                return $this->getBrandModel($dbProgramme);
+        if (!$this->entityIsA(Programme::class, $dbEntity)) {
+            throw new InvalidArgumentException('Could not build domain model for unknown programme type "' . ($dbEntity['type'] ?? '') . '"');
+        }
+
+        $cacheKey = $this->getCacheKeyForProgramme($dbEntity);
+
+        if (!isset($this->cache[$cacheKey])) {
+            $this->cache[$cacheKey] = $this->getModelForProgramme($dbEntity);
+        }
+
+        return $this->cache[$cacheKey];
+    }
+
+    public function getModelForGroup(array $dbEntity): Group
+    {
+        if (isset($dbEntity['type'])) {
+            if ($dbEntity['type'] == 'collection') {
+                return $this->getCollectionModel($dbEntity);
             }
-            if ($dbProgramme['type'] == 'series') {
-                return $this->getSeriesModel($dbProgramme);
+            if ($dbEntity['type'] == 'gallery') {
+                return $this->getGalleryModel($dbEntity);
             }
-            if ($dbProgramme['type'] == 'episode') {
-                return $this->getEpisodeModel($dbProgramme);
+            if ($dbEntity['type'] == 'season') {
+                return $this->getSeasonModel($dbEntity);
             }
-            if ($dbProgramme['type'] == 'clip') {
-                return $this->getClipModel($dbProgramme);
+            if ($dbEntity['type'] == 'franchise') {
+                return $this->getFranchiseModel($dbEntity);
             }
         }
 
-        throw new InvalidArgumentException('Could not build domain model for unknown programme type "' . ($dbProgramme['type'] ?? '') . '"');
+        throw new InvalidArgumentException('Could not build domain model for unknown group type "' . ($dbEntity['type'] ?? '') . '"');
+    }
+
+    public function getModelForProgramme(array $dbEntity): Programme
+    {
+        if (isset($dbEntity['type'])) {
+            if ($dbEntity['type'] == 'brand') {
+                return $this->getBrandModel($dbEntity);
+            }
+            if ($dbEntity['type'] == 'series') {
+                return $this->getSeriesModel($dbEntity);
+            }
+            if ($dbEntity['type'] == 'episode') {
+                return $this->getEpisodeModel($dbEntity);
+            }
+            if ($dbEntity['type'] == 'clip') {
+                return $this->getClipModel($dbEntity);
+            }
+        }
+
+        throw new InvalidArgumentException('Could not build domain model for unknown programme type "' . ($dbEntity['type'] ?? '') . '"');
+    }
+
+    private function getCollectionModel($dbGroup): Collection
+    {
+        return new Collection(
+            $this->getAncestryArray($dbGroup),
+            new Pid($dbGroup['pid']),
+            $dbGroup['title'],
+            $dbGroup['searchTitle'],
+            $this->getSynopses($dbGroup),
+            $this->getImageModel($dbGroup),
+            $dbGroup['promotionsCount'],
+            $dbGroup['relatedLinksCount'],
+            $dbGroup['contributionsCount'],
+            $this->getOptionsModel($dbGroup),
+            $dbGroup['isPodcastable'],
+            $this->getMasterBrandModel($dbGroup),
+            $this->getParentModel($dbGroup)
+        );
+    }
+
+    private function getFranchiseModel($dbGroup): Franchise
+    {
+        return new Franchise(
+            $this->getAncestryArray($dbGroup),
+            new Pid($dbGroup['pid']),
+            $dbGroup['title'],
+            $dbGroup['searchTitle'],
+            $this->getSynopses($dbGroup),
+            $this->getImageModel($dbGroup),
+            $dbGroup['promotionsCount'],
+            $dbGroup['relatedLinksCount'],
+            $dbGroup['contributionsCount'],
+            $this->getOptionsModel($dbGroup),
+            $dbGroup['aggregatedBroadcastsCount'],
+            $this->getMasterBrandModel($dbGroup)
+        );
+    }
+
+    private function getGalleryModel(array $dbGroup): Gallery
+    {
+        return new Gallery(
+            $this->getAncestryArray($dbGroup),
+            new Pid($dbGroup['pid']),
+            $dbGroup['title'],
+            $dbGroup['searchTitle'],
+            $this->getSynopses($dbGroup),
+            $this->getImageModel($dbGroup),
+            $dbGroup['promotionsCount'],
+            $dbGroup['relatedLinksCount'],
+            $dbGroup['contributionsCount'],
+            $this->getOptionsModel($dbGroup),
+            $this->getMasterBrandModel($dbGroup),
+            $this->getParentModel($dbGroup)
+        );
+    }
+
+    private function getSeasonModel($dbGroup): Season
+    {
+        return new Season(
+            $this->getAncestryArray($dbGroup),
+            new Pid($dbGroup['pid']),
+            $dbGroup['title'],
+            $dbGroup['searchTitle'],
+            $this->getSynopses($dbGroup),
+            $this->getImageModel($dbGroup),
+            $dbGroup['promotionsCount'],
+            $dbGroup['relatedLinksCount'],
+            $dbGroup['contributionsCount'],
+            $this->getOptionsModel($dbGroup),
+            $dbGroup['aggregatedBroadcastsCount'],
+            $this->getMasterBrandModel($dbGroup)
+        );
     }
 
     private function getBrandModel(array $dbProgramme): Brand
@@ -192,28 +353,28 @@ class ProgrammeMapper extends AbstractMapper
         );
     }
 
-    private function getAncestryArray(array $dbProgramme, string $key = 'ancestry'): array
+    private function getAncestryArray(array $dbEntity, string $key = 'ancestry'): array
     {
         // ancestry contains a string of all IDs including the current one with
         // a trailing comma at the end (which makes it an empty item when exploding)
         // Thus we want an array of all but the final item (which is null)
-        $ancestors = explode(',', $dbProgramme[$key], -1) ?? [];
+        $ancestors = explode(',', $dbEntity[$key], -1) ?? [];
         return array_map(function ($a) {
             return (int) $a;
         }, $ancestors);
     }
 
-    private function getOptionsModel(array $dbProgramme, string $key = 'options'): Options
+    private function getOptionsModel(array $dbEntity, string $key = 'options'): Options
     {
         // ensure the full hierarchy has been fetched.
         // Options are only valid if we got everything.
-        if (!$this->hasFetchedFullHierarchy($dbProgramme)) {
+        if (!$this->hasFetchedFullHierarchy($dbEntity)) {
             return new UnfetchedOptions();
         }
 
-        // build for current dbProgramme the tree of options
-        $optionsTree = $this->getOptionsTree($dbProgramme, $key);
-        // get final options to be applied on programme from tree options hierarchy
+        // build for current dbGroup the tree of options
+        $optionsTree = $this->getOptionsTree($dbEntity, $key);
+        // get final options to be applied on group from tree options hierarchy
         return $this->mapperFactory
             ->getOptionsMapper()
             ->getDomainModel(...$optionsTree);
@@ -245,77 +406,77 @@ class ProgrammeMapper extends AbstractMapper
         return true;
     }
 
-    private function getOptionsTree(array $dbProgramme, string $keyWithOptions, array $optionsTree = []): array
+    private function getOptionsTree(array $dbEntity, string $keyWithOptions, array $optionsTree = []): array
     {
-        // Recursive up the programme hierarchy, then to the network above that
-        $optionsTree[] = $dbProgramme[$keyWithOptions] ?? [];
-        if (isset($dbProgramme['parent'])) {
-            $optionsTree = $this->getOptionsTree($dbProgramme['parent'], $keyWithOptions, $optionsTree);
-        } elseif (isset($dbProgramme['masterBrand']['network'])) {
-            $optionsTree = $this->getOptionsTree($dbProgramme['masterBrand']['network'], $keyWithOptions, $optionsTree);
+        // Recursive up the group hierarchy, then to the network above that
+        $optionsTree[] = $dbEntity[$keyWithOptions] ?? [];
+        if (isset($dbEntity['parent'])) {
+            $optionsTree = $this->getOptionsTree($dbEntity['parent'], $keyWithOptions, $optionsTree);
+        } elseif (isset($dbEntity['masterBrand']['network'])) {
+            $optionsTree = $this->getOptionsTree($dbEntity['masterBrand']['network'], $keyWithOptions, $optionsTree);
         }
         return $optionsTree;
     }
 
-    private function getParentModel(array $dbProgramme, string $key = 'parent'): ?Programme
+    private function getParentModel(array $dbEntity, string $key = 'parent'): ?Programme
     {
         // It is possible to have no parent, where the key does
         // exist but is set to null. We'll only say it's Unfetched
         // if the key doesn't exist at all.
-        if (!array_key_exists($key, $dbProgramme)) {
+        if (!array_key_exists($key, $dbEntity)) {
             return new UnfetchedProgramme();
         }
 
-        if (is_null($dbProgramme[$key])) {
+        if (is_null($dbEntity[$key])) {
             return null;
         }
 
-        return $this->getDomainModel($dbProgramme[$key]);
+        return $this->getDomainModelForProgramme($dbEntity[$key]);
     }
 
-    private function getImageModel(array $dbProgramme, string $key = 'image'): ?Image
+    private function getImageModel(array $dbEntity, string $key = 'image'): ?Image
     {
         $imageMapper = $this->mapperFactory->getImageMapper();
 
-        // Image inheritance. If the current programme does not have an image
+        // Image inheritance. If the current group does not have an image
         // attached to it, look to see if its parent has an image, and use that.
         // Keep going up the ancestry chain till an image is found
-        $currentItem = $dbProgramme;
+        $currentItem = $dbEntity;
         while ($currentItem) {
-            // If the current Programme has an image then use that!
+            // If the current Group has an image then use that!
             if (isset($currentItem[$key])) {
                 return $imageMapper->getDomainModel($currentItem[$key]);
             }
 
-            // Otherwise set the current Programme to the parent
+            // Otherwise set the current Group to the parent
             $currentItem = $currentItem['parent'] ?? null;
         }
 
-        // Could not find any Programme Images in the hierarchy, try the
+        // Could not find any Group Images in the hierarchy, try the
         // MasterBrand image.
-        // This should also attempt inheritance where if the current programme
+        // This should also attempt inheritance where if the current group
         // has no MasterBrand image then it should work up the ancestry chain
         // till an image is found.
-        $currentItem = $dbProgramme;
+        $currentItem = $dbEntity;
         while ($currentItem) {
-            // If the current Programme's MasterBrand has an image then use that!
+            // If the current Group's MasterBrand has an image then use that!
             if (isset($currentItem['masterBrand']['image'])) {
                 return $imageMapper->getDomainModel($currentItem['masterBrand']['image']);
             }
 
-            // Otherwise set the current Programme to the parent
+            // Otherwise set the current Group to the parent
             $currentItem = $currentItem['parent'] ?? null;
         }
 
-        // Could not find any programme image in the masterbrand, go up to the network
-        $currentItem = $dbProgramme;
+        // Could not find any group image in the masterbrand, go up to the network
+        $currentItem = $dbEntity;
         while ($currentItem) {
             // If the current Programme's network has an image then use that!
             if (isset($currentItem['masterBrand']['network']['image'])) {
                 return $imageMapper->getDomainModel($currentItem['masterBrand']['network']['image']);
             }
 
-            // Otherwise set the current Programme to the parent
+            // Otherwise set the current Group to the parent
             $currentItem = $currentItem['parent'] ?? null;
         }
 
@@ -323,20 +484,20 @@ class ProgrammeMapper extends AbstractMapper
         return $imageMapper->getDefaultImage();
     }
 
-    private function getMasterBrandModel(array $dbProgramme, string $key = 'masterBrand'): ?MasterBrand
+    private function getMasterBrandModel(array $dbEntity, string $key = 'masterBrand'): ?MasterBrand
     {
         // It is possible to have no MasterBrand, where the key does
         // exist but is set to null. We'll only say it's Unfetched
         // if the key doesn't exist at all.
-        if (!array_key_exists($key, $dbProgramme)) {
+        if (!array_key_exists($key, $dbEntity)) {
             return new UnfetchedMasterBrand();
         }
 
-        if (is_null($dbProgramme[$key])) {
+        if (is_null($dbEntity[$key])) {
             return null;
         }
 
-        return $this->mapperFactory->getMasterBrandMapper()->getDomainModel($dbProgramme[$key]);
+        return $this->mapperFactory->getMasterBrandMapper()->getDomainModel($dbEntity[$key]);
     }
 
     private function getCategoriesModels(string $filterType, array $dbProgramme, string $key = 'categories'): ?array
@@ -356,12 +517,29 @@ class ProgrammeMapper extends AbstractMapper
         return $categories;
     }
 
-    private function getSynopses($dbProgramme): Synopses
+    private function getSynopses($dbGroup): Synopses
     {
         return new Synopses(
-            $dbProgramme['shortSynopsis'],
-            $dbProgramme['mediumSynopsis'],
-            $dbProgramme['longSynopsis']
+            $dbGroup['shortSynopsis'],
+            $dbGroup['mediumSynopsis'],
+            $dbGroup['longSynopsis']
         );
+    }
+
+    private function entityIsA(string $string, array $dbEntity): bool
+    {
+        if (!isset($dbEntity['type'])) {
+            return false;
+        }
+
+        if ($string == Group::class && in_array($dbEntity['type'], ['collection', 'franchise', 'gallery', 'group', 'season'])) {
+            return true;
+        }
+
+        if ($string == Programme::class && in_array($dbEntity['type'], ['brand', 'clip', 'episode', 'series'])) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -13,7 +13,7 @@ class ProgrammeMapperImageMappingTest extends BaseProgrammeMapperTestCase
             null
         );
 
-        $domainModel = $this->getMapper()->getDomainModel($dbEntityArray);
+        $domainModel = $this->getMapper()->getDomainModelForProgramme($dbEntityArray);
         $this->assertEquals('DefaultImage', $domainModel->getImage()->getTitle());
     }
 
@@ -38,7 +38,7 @@ class ProgrammeMapperImageMappingTest extends BaseProgrammeMapperTestCase
             null
         );
 
-        $domainModel = $this->getMapper()->getDomainModel($dbEntityArray);
+        $domainModel = $this->getMapper()->getDomainModelForProgramme($dbEntityArray);
         $this->assertEquals('SetImage', $domainModel->getImage()->getTitle());
     }
 
@@ -69,7 +69,7 @@ class ProgrammeMapperImageMappingTest extends BaseProgrammeMapperTestCase
             )
         );
 
-        $domainModel = $this->getMapper()->getDomainModel($dbEntityArray);
+        $domainModel = $this->getMapper()->getDomainModelForProgramme($dbEntityArray);
         $this->assertEquals('InheritedImage', $domainModel->getImage()->getTitle());
         $this->assertEquals('InheritedImage', $domainModel->getParent()->getImage()->getTitle());
     }
@@ -98,7 +98,7 @@ class ProgrammeMapperImageMappingTest extends BaseProgrammeMapperTestCase
             null
         );
 
-        $domainModel = $this->getMapper()->getDomainModel($dbEntityArray);
+        $domainModel = $this->getMapper()->getDomainModelForProgramme($dbEntityArray);
         $this->assertEquals('MasterBrandImage', $domainModel->getImage()->getTitle());
     }
 
@@ -130,7 +130,7 @@ class ProgrammeMapperImageMappingTest extends BaseProgrammeMapperTestCase
             )
         );
 
-        $domainModel = $this->getMapper()->getDomainModel($dbEntityArray);
+        $domainModel = $this->getMapper()->getDomainModelForProgramme($dbEntityArray);
         $this->assertEquals('InheritedMasterBrandImage', $domainModel->getImage()->getTitle());
         $this->assertEquals('InheritedMasterBrandImage', $domainModel->getParent()->getImage()->getTitle());
     }

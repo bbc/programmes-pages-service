@@ -24,7 +24,7 @@ class ContributionMapperTest extends BaseMapperTestCase
         );
 
         $this->mockProgrammeMapper = $this->createMock(
-            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper'
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper'
         );
 
         $this->mockSegmentMapper = $this->createMock(
@@ -281,7 +281,7 @@ class ContributionMapperTest extends BaseMapperTestCase
     {
         return new ContributionMapper($this->getMapperFactory([
             'ContributorMapper' => $this->mockContributorMapper,
-            'ProgrammeMapper' => $this->mockProgrammeMapper,
+            'CoreEntityMapper' => $this->mockProgrammeMapper,
             'SegmentMapper' => $this->mockSegmentMapper,
             'VersionMapper' => $this->mockVersionMapper,
         ]));

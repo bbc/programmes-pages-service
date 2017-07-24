@@ -23,10 +23,10 @@ class BroadcastMapperTest extends BaseMapperTestCase
         );
 
         $this->mockProgrammeMapper = $this->createMock(
-            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper'
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper'
         );
 
-        $this->mockProgrammeMapper->method('getDomainModel')->willReturn(
+        $this->mockProgrammeMapper->method('getDomainModelForProgramme')->willReturn(
             $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem')
         );
 
@@ -59,7 +59,7 @@ class BroadcastMapperTest extends BaseMapperTestCase
             ->willReturn($expectedVersionDomainEntity);
 
         $this->mockProgrammeMapper->expects($this->once())
-            ->method('getDomainModel')
+            ->method('getDomainModelForProgramme')
             ->with($programmeItemDbEntity)
             ->willReturn($expectedProgrammeItemDomainEntity);
 
@@ -132,7 +132,7 @@ class BroadcastMapperTest extends BaseMapperTestCase
             ->willReturn($expectedVersionDomainEntity);
 
         $this->mockProgrammeMapper->expects($this->once())
-            ->method('getDomainModel')
+            ->method('getDomainModelForProgramme')
             ->with($programmeItemDbEntity)
             ->willReturn($expectedProgrammeItemDomainEntity);
 
@@ -248,7 +248,7 @@ class BroadcastMapperTest extends BaseMapperTestCase
     {
         return new BroadcastMapper($this->getMapperFactory([
             'VersionMapper' => $this->mockVersionMapper,
-            'ProgrammeMapper' => $this->mockProgrammeMapper,
+            'CoreEntityMapper' => $this->mockProgrammeMapper,
             'ServiceMapper' => $this->mockServiceMapper,
         ]));
     }

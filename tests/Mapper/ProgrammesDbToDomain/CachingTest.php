@@ -10,7 +10,7 @@ class CachingTest extends BaseProgrammeMapperTestCase
     public function testCacheAccountsForUnfetchedEntities()
     {
         $mapperFactory = new MapperFactory();
-        $programmeMapper = $mapperFactory->getProgrammeMapper();
+        $programmeMapper = $mapperFactory->getCoreEntityMapper();
 
         $dbEntityWithAllUnfetched = $this->getSampleProgrammeDbEntity(
             'b0000001',
@@ -86,10 +86,10 @@ class CachingTest extends BaseProgrammeMapperTestCase
 
 
         // Build an entity with unfetched relationships
-        $entityWithAllUnfetched = $programmeMapper->getDomainModel($dbEntityWithAllUnfetched);
+        $entityWithAllUnfetched = $programmeMapper->getDomainModelForProgramme($dbEntityWithAllUnfetched);
 
         // Then build an entity with those fetched relationships
-        $entityWithFetchedItem = $programmeMapper->getDomainModel($dbEntityWithFetchedItem);
+        $entityWithFetchedItem = $programmeMapper->getDomainModelForProgramme($dbEntityWithFetchedItem);
 
         // Assert correct entity with unfetched relationships
         $this->assertEquals($expectedDomainEntityWithAllUnfetched, $entityWithAllUnfetched);
@@ -105,9 +105,9 @@ class CachingTest extends BaseProgrammeMapperTestCase
     public function testGeneratesUniqueCacheKeysForProgramme($expectedKey, $dbEntity)
     {
         $mapperFactory = new MapperFactory();
-        $mapper = $mapperFactory->getProgrammeMapper();
+        $mapper = $mapperFactory->getCoreEntityMapper();
 
-        $this->assertEquals($expectedKey, $mapper->getCacheKey($dbEntity));
+        $this->assertEquals($expectedKey, $mapper->getCacheKeyForProgramme($dbEntity));
     }
 
     public function cacheKeysForProgrammeDataProvider()
@@ -128,7 +128,7 @@ class CachingTest extends BaseProgrammeMapperTestCase
             // Image fetched and not set
             ['{1,@,!,!,!}', ['id' => 1, 'image' => null]],
             // Parent fetched
-            ['{1,!,{3,!,!,!,!},!,!}', ['id' => 1, 'parent' => ['id' => 3]]],
+            ['{1,!,{3,!,!,!,!},!,!}', ['id' => 1, 'parent' => ['id' => 3, 'type' => 'brand']]],
             // Parent fetched and not set
             ['{1,!,@,!,!}', ['id' => 1, 'parent' => null]],
             // Recursive Parents fetched
@@ -138,8 +138,10 @@ class CachingTest extends BaseProgrammeMapperTestCase
                     'id' => 1,
                     'parent' => [
                         'id' => 3,
+                        'type' => 'brand',
                         'parent' => [
                             'id' => 4,
+                            'type' => 'brand',
                             'parent' => null,
                         ],
                     ],
