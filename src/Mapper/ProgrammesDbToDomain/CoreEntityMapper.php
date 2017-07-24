@@ -20,7 +20,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
-use Exception;
 use InvalidArgumentException;
 
 class CoreEntityMapper extends AbstractMapper
@@ -32,7 +31,7 @@ class CoreEntityMapper extends AbstractMapper
      *
      * @param array $dbEntity
      * @return string
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function getCacheKey(array $dbEntity): string
     {
@@ -42,7 +41,7 @@ class CoreEntityMapper extends AbstractMapper
         if ($this->entityIsA(Programme::class, $dbEntity)) {
             return $this->getCacheKeyForProgramme($dbEntity);
         }
-        throw new Exception('Unrecognized Core Entity');
+        throw new InvalidArgumentException('Unrecognized Core Entity');
     }
 
     public function getCacheKeyForGroup(array $dbGroup): string
@@ -68,7 +67,7 @@ class CoreEntityMapper extends AbstractMapper
     /**
      * @param array $dbEntity
      * @return Group|Programme
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function getDomainModel(array $dbEntity)
     {
@@ -78,7 +77,7 @@ class CoreEntityMapper extends AbstractMapper
         if ($this->entityIsA(Programme::class, $dbEntity)) {
             return $this->getDomainModelForProgramme($dbEntity);
         }
-        throw new Exception('Unrecognized Core Entity');
+        throw new InvalidArgumentException('Unrecognized Core Entity');
     }
 
     public function getDomainModelForGroup(array $dbEntity): Group

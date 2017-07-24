@@ -38,6 +38,6 @@ class AtozTitleMapper extends AbstractMapper
             throw new DataNotFetchedException('All AtozTitles must be joined to a CoreEntity');
         }
 
-        return $this->mapperFactory->getCoreEntityMapper()->getDomainModelForProgramme($dbAtozTitle[$key]);
+        return $this->mapperFactory->getCoreEntityMapper()->getDomainModel($dbAtozTitle[$key]);
     }
 }
