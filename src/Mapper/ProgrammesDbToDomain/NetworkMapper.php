@@ -17,7 +17,7 @@ class NetworkMapper extends AbstractMapper
     {
         return $this->buildCacheKey($dbNetwork, 'id', [
             'image' => 'Image',
-            'service' => 'Service',
+            'defaultService' => 'Service',
         ]);
     }
 
