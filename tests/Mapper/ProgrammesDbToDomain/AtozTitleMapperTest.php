@@ -25,7 +25,7 @@ class AtozTitleMapperTest extends BaseMapperTestCase
         );
 
         $this->mockProgrammeMapper->expects($this->once())
-            ->method('getDomainModelForProgramme')
+            ->method('getDomainModel')
             ->with($programmeDbEntity)
             ->willReturn($expectedProgrammeDomainEntity);
 
