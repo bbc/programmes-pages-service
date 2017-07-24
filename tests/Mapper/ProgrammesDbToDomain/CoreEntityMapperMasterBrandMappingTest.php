@@ -5,7 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 
-class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
+class CoreEntityMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelSeriesWithSetMasterBrand()
     {

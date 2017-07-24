@@ -13,7 +13,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use DateTime;
 use DateTimeImmutable;
 
-class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
+class CoreEntityMapperTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelBrand()
     {

@@ -372,9 +372,9 @@ class CoreEntityMapper extends AbstractMapper
             return new UnfetchedOptions();
         }
 
-        // build for current dbGroup the tree of options
+        // build for current dbEntity the tree of options
         $optionsTree = $this->getOptionsTree($dbEntity, $key);
-        // get final options to be applied on group from tree options hierarchy
+        // get final options to be applied on entity from tree options hierarchy
         return $this->mapperFactory
             ->getOptionsMapper()
             ->getDomainModel(...$optionsTree);
@@ -408,7 +408,7 @@ class CoreEntityMapper extends AbstractMapper
 
     private function getOptionsTree(array $dbEntity, string $keyWithOptions, array $optionsTree = []): array
     {
-        // Recursive up the group hierarchy, then to the network above that
+        // Recursive up the entity hierarchy, then to the network above that
         $optionsTree[] = $dbEntity[$keyWithOptions] ?? [];
         if (isset($dbEntity['parent'])) {
             $optionsTree = $this->getOptionsTree($dbEntity['parent'], $keyWithOptions, $optionsTree);
@@ -438,37 +438,37 @@ class CoreEntityMapper extends AbstractMapper
     {
         $imageMapper = $this->mapperFactory->getImageMapper();
 
-        // Image inheritance. If the current group does not have an image
+        // Image inheritance. If the current entity does not have an image
         // attached to it, look to see if its parent has an image, and use that.
         // Keep going up the ancestry chain till an image is found
         $currentItem = $dbEntity;
         while ($currentItem) {
-            // If the current Group has an image then use that!
+            // If the current Entity has an image then use that!
             if (isset($currentItem[$key])) {
                 return $imageMapper->getDomainModel($currentItem[$key]);
             }
 
-            // Otherwise set the current Group to the parent
+            // Otherwise set the current Entity to the parent
             $currentItem = $currentItem['parent'] ?? null;
         }
 
-        // Could not find any Group Images in the hierarchy, try the
+        // Could not find any Entity Images in the hierarchy, try the
         // MasterBrand image.
-        // This should also attempt inheritance where if the current group
+        // This should also attempt inheritance where if the current entity
         // has no MasterBrand image then it should work up the ancestry chain
         // till an image is found.
         $currentItem = $dbEntity;
         while ($currentItem) {
-            // If the current Group's MasterBrand has an image then use that!
+            // If the current Entity's MasterBrand has an image then use that!
             if (isset($currentItem['masterBrand']['image'])) {
                 return $imageMapper->getDomainModel($currentItem['masterBrand']['image']);
             }
 
-            // Otherwise set the current Group to the parent
+            // Otherwise set the current Entity to the parent
             $currentItem = $currentItem['parent'] ?? null;
         }
 
-        // Could not find any group image in the masterbrand, go up to the network
+        // Could not find any entity image in the masterbrand, go up to the network
         $currentItem = $dbEntity;
         while ($currentItem) {
             // If the current Programme's network has an image then use that!
@@ -476,7 +476,7 @@ class CoreEntityMapper extends AbstractMapper
                 return $imageMapper->getDomainModel($currentItem['masterBrand']['network']['image']);
             }
 
-            // Otherwise set the current Group to the parent
+            // Otherwise set the current Entity to the parent
             $currentItem = $currentItem['parent'] ?? null;
         }
 
@@ -517,12 +517,12 @@ class CoreEntityMapper extends AbstractMapper
         return $categories;
     }
 
-    private function getSynopses($dbGroup): Synopses
+    private function getSynopses($dbEntity): Synopses
     {
         return new Synopses(
-            $dbGroup['shortSynopsis'],
-            $dbGroup['mediumSynopsis'],
-            $dbGroup['longSynopsis']
+            $dbEntity['shortSynopsis'],
+            $dbEntity['mediumSynopsis'],
+            $dbEntity['longSynopsis']
         );
     }
 
@@ -532,7 +532,7 @@ class CoreEntityMapper extends AbstractMapper
             return false;
         }
 
-        if ($string == Group::class && in_array($dbEntity['type'], ['collection', 'franchise', 'gallery', 'group', 'season'])) {
+        if ($string == Group::class && in_array($dbEntity['type'], ['collection', 'franchise', 'gallery', 'season'])) {
             return true;
         }
 

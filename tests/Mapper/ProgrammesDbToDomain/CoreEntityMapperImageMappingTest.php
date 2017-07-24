@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-class ProgrammeMapperImageMappingTest extends BaseProgrammeMapperTestCase
+class CoreEntityMapperImageMappingTest extends BaseProgrammeMapperTestCase
 {
 
     public function testWhenImageIsNotSetThenTheDefaultImageIsUsed()

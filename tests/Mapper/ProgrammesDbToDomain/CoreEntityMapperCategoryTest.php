@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-class ProgrammeMapperCategoryTest extends BaseProgrammeMapperTestCase
+class CoreEntityMapperCategoryTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelSeriesWithSetGenresAndFormats()
     {

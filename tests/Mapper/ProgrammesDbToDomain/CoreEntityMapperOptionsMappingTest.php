@@ -8,7 +8,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 
-class ProgrammeMapperOptionsMappingTest extends BaseProgrammeMapperTestCase
+class CoreEntityMapperOptionsMappingTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelHierarchy()
     {
