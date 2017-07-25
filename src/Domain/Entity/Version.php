@@ -7,7 +7,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
-class Version
+class Version implements ContributableToInterface
 {
     /** var int */
     private $dbId;

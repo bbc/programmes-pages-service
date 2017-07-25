@@ -81,25 +81,6 @@ class ContributionTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testConstructorInvalidContributedTo()
-    {
-        $pid = new Pid('b0000001');
-        $contributor = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Contributor');
-
-        // ContributedTo cannot of type array
-        $contributedTo = ['pid' => 's0000001'];
-
-        $contribution = new Contribution(
-            $pid,
-            $contributor,
-            $contributedTo,
-            'CreditRole'
-        );
-    }
-
-    /**
      * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
      */
     public function testGetContributedToUnfetchedSegment()

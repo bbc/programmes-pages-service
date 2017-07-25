@@ -8,7 +8,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedSegment;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use InvalidArgumentException;
 
 class Contribution
 {
@@ -18,7 +17,7 @@ class Contribution
     /** @var Contributor */
     private $contributor;
 
-    /** @var Group|Programme|Segment|Version */
+    /** @var ContributableToInterface */
     private $contributedTo;
 
     /** @var string */
@@ -33,22 +32,11 @@ class Contribution
     public function __construct(
         Pid $pid,
         Contributor $contributor,
-        $contributedTo,
+        ContributableToInterface $contributedTo,
         string $creditRole,
         ?int $position = null,
         ?string $characterName = null
     ) {
-        if (!($contributedTo instanceof Programme || $contributedTo instanceof Segment || $contributedTo instanceof Version || $contributedTo instanceof Group)) {
-            throw new InvalidArgumentException(sprintf(
-                'Expected $contributedTo to be an instance of "%s", "%s", "%s" or "%s". Found instance of "%s"',
-                Group::CLASS,
-                Programme::CLASS,
-                Segment::CLASS,
-                Version::CLASS,
-                (is_object($contributedTo) ? get_class($contributedTo) : gettype($contributedTo))
-            ));
-        }
-
         $this->pid = $pid;
         $this->contributor = $contributor;
         $this->contributedTo = $contributedTo;
@@ -68,7 +56,7 @@ class Contribution
     }
 
     /**
-     * @return Group|Programme|Segment|Version
+     * @return ContributableToInterface
      * @throws DataNotFetchedException
      */
     public function getContributedTo()

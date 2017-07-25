@@ -197,7 +197,7 @@ class EpisodeTest extends TestCase
 
     /**
      * @expectedException \BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
-     * @expectedExceptionMessage Could not get options of Programme "p01m5mss"as the full hierarchy was not fetched
+     * @expectedExceptionMessage Could not get options of CoreEntity "p01m5mss" as the full hierarchy was not fetched
      */
     public function testRequestingUnfetchedOptionsThrowsException()
     {
