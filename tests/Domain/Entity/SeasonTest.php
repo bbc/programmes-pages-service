@@ -98,7 +98,7 @@ class SeasonTest extends TestCase
         );
 
         $this->expectException(DataNotFetchedException::class);
-        $this->expectExceptionMessage('Could not get options of Group "p01m5mss" as the full hierarchy was not fetched');
+        $this->expectExceptionMessage('Could not get options of CoreEntity "p01m5mss" as the full hierarchy was not fetched');
         $season->getOptions();
     }
 }

@@ -18,7 +18,7 @@ class Contribution
     /** @var Contributor */
     private $contributor;
 
-    /** @var Group|Programme|Segment|Version */
+    /** @var CoreEntity|Segment|Version */
     private $contributedTo;
 
     /** @var string */
@@ -68,7 +68,7 @@ class Contribution
     }
 
     /**
-     * @return Group|Programme|Segment|Version
+     * @return CoreEntity|Segment|Version
      * @throws DataNotFetchedException
      */
     public function getContributedTo()

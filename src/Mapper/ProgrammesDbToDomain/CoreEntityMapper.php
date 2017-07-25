@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Collection;
+use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Franchise;
 use BBC\ProgrammesPagesService\Domain\Entity\Gallery;
@@ -66,7 +67,7 @@ class CoreEntityMapper extends AbstractMapper
 
     /**
      * @param array $dbEntity
-     * @return Group|Programme
+     * @return CoreEntity
      * @throws InvalidArgumentException
      */
     public function getDomainModel(array $dbEntity)
