@@ -4,8 +4,6 @@ namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CollapsedBroadcast;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\ProgrammeItem;
 use DateTime;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
