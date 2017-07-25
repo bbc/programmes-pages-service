@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Domain\Entity\ContributableToInterface;
 
 class ContributionMapper extends AbstractMapper
 {
@@ -48,7 +49,7 @@ class ContributionMapper extends AbstractMapper
         return $this->mapperFactory->getContributorMapper()->getDomainModel($dbContribution[$key]);
     }
 
-    private function getContributedTo(array $dbContribution)
+    private function getContributedTo(array $dbContribution): ContributableToInterface
     {
         if (isset($dbContribution['contributionToSegment'])) {
             return $this->mapperFactory->getSegmentMapper()->getDomainModel($dbContribution['contributionToSegment']);
