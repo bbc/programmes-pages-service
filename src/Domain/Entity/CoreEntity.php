@@ -244,7 +244,7 @@ abstract class CoreEntity implements ContributableToInterface
                 break;
             }
             $ancestry[] = $currentEntity;
-        } while ($currentProgramme = $currentEntity->getParent());
+        } while ($currentEntity = $currentEntity->getParent());
 
         // Make sure we never return an empty array, even if for some bizarre reason we are our own context
         return !empty($ancestry) ? $ancestry : [$this];
