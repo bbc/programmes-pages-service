@@ -7,7 +7,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedGroup;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class ContributionTest extends TestCase
