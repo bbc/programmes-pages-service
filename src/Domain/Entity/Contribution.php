@@ -2,14 +2,12 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
-use BBC\ProgrammesPagesService\Domain\Entity\ContributableToInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedGroup;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedSegment;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedVersion;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use InvalidArgumentException;
 
 class Contribution
 {

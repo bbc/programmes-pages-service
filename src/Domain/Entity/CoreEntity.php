@@ -2,7 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
-use BBC\ProgrammesPagesService\Domain\Entity\ContributableToInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
@@ -185,7 +184,7 @@ abstract class CoreEntity implements ContributableToInterface
     {
         if ($this->parent instanceof UnfetchedProgramme) {
             throw new DataNotFetchedException(
-                'Could not get Parent of Programme "' . $this->pid . '" as it was not fetched'
+                'Could not get Parent of CoreEntity "' . $this->pid . '" as it was not fetched'
             );
         }
 
@@ -232,20 +231,20 @@ abstract class CoreEntity implements ContributableToInterface
     }
 
     /**
-     * @param Programme|null $context
-     * @return Programme[]
+     * @param CoreEntity|null $context
+     * @return CoreEntity[]
      */
-    public function getAncestry(?Programme $context = null): array
+    public function getAncestry(?CoreEntity $context = null): array
     {
-        $currentProgramme = $this;
+        $currentEntity = $this;
         $contextPid = $context ? ((string) $context->getPid()) : null;
         $ancestry = [];
         do {
-            if ((string) $currentProgramme->getPid() === $contextPid) {
+            if ((string) $currentEntity->getPid() === $contextPid) {
                 break;
             }
-            $ancestry[] = $currentProgramme;
-        } while ($currentProgramme = $currentProgramme->getParent());
+            $ancestry[] = $currentEntity;
+        } while ($currentProgramme = $currentEntity->getParent());
 
         // Make sure we never return an empty array, even if for some bizarre reason we are our own context
         return !empty($ancestry) ? $ancestry : [$this];
