@@ -27,7 +27,7 @@ class CollapsedBroadcastMapper extends AbstractMapper
         // It is not valid for a CollapsedBroadcast to have no programmeItem
         // so it counts as Unfetched even if the key exists but is null
         if (isset($dbCollapsedBroadcast[$key])) {
-            return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbCollapsedBroadcast[$key]);
+            return $this->mapperFactory->getCoreEntityMapper()->getDomainModelForProgramme($dbCollapsedBroadcast[$key]);
         }
 
         return new UnfetchedProgrammeItem();

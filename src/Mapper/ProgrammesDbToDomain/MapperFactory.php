@@ -60,13 +60,13 @@ class MapperFactory
         return $this->instances['CollapsedBroadcastMapper'];
     }
 
-    public function getGroupMapper(): GroupMapper
+    public function getCoreEntityMapper(): CoreEntityMapper
     {
-        if (!isset($this->instances['GroupMapper'])) {
-            $this->instances['GroupMapper'] = new GroupMapper($this);
+        if (!isset($this->instances['CoreEntityMapper'])) {
+            $this->instances['CoreEntityMapper'] = new CoreEntityMapper($this);
         }
 
-        return $this->instances['GroupMapper'];
+        return $this->instances['CoreEntityMapper'];
     }
 
     public function getImageMapper(): ImageMapper
@@ -103,15 +103,6 @@ class MapperFactory
         }
 
         return $this->instances['OptionsMapper'];
-    }
-
-    public function getProgrammeMapper(): ProgrammeMapper
-    {
-        if (!isset($this->instances['ProgrammeMapper'])) {
-            $this->instances['ProgrammeMapper'] = new ProgrammeMapper($this);
-        }
-
-        return $this->instances['ProgrammeMapper'];
     }
 
     public function getRelatedLinkMapper(): RelatedLinkMapper

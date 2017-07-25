@@ -9,7 +9,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
 
 abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 {
@@ -62,9 +62,9 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             ->willReturn($this->mockDefaultImage);
     }
 
-    protected function getMapper(): ProgrammeMapper
+    protected function getMapper(): CoreEntityMapper
     {
-        return new ProgrammeMapper($this->getMapperFactory([
+        return new CoreEntityMapper($this->getMapperFactory([
             'ImageMapper' => $this->mockImageMapper,
             'MasterBrandMapper' => $this->mockMasterBrandMapper,
             'CategoryMapper' => $this->mockCategoryMapper,
@@ -74,7 +74,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
     /*
      * A sample DB Entity that can be used for testing any mappers that the
-     * ProgrammeMapper depends upon.
+     * CoreEntityMapper depends upon.
      */
     protected function getSampleProgrammeDbEntity(
         string $pid,
@@ -120,7 +120,7 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
 
     /*
      * A sample expected domain model that can be used for testing any mappers
-     * that the ProgrammeMapper depends upon.
+     * that the CoreEntityMapper depends upon.
      */
     protected function getSampleProgrammeDomainEntity(
         string $pid,

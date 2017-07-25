@@ -16,7 +16,7 @@ class ContributionMapper extends AbstractMapper
     {
         return $this->buildCacheKey($dbContribution, 'id', [
             'contributionToSegment' => 'Segment',
-            'contributionToCoreEntity' => 'Programme',
+            'contributionToCoreEntity' => 'CoreEntity',
             'contributionToVersion' => 'Version',
         ]);
     }
@@ -54,11 +54,7 @@ class ContributionMapper extends AbstractMapper
             return $this->mapperFactory->getSegmentMapper()->getDomainModel($dbContribution['contributionToSegment']);
         }
         if (isset($dbContribution['contributionToCoreEntity'])) {
-            $type = $dbContribution['contributionToCoreEntity']['type'];
-            if (in_array($type, ['Collection', 'Franchise', 'Gallery', 'Group', 'Season'])) {
-                return $this->mapperFactory->getGroupMapper()->getDomainModel($dbContribution['contributionToCoreEntity']);
-            }
-            return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbContribution['contributionToCoreEntity']);
+            return $this->mapperFactory->getCoreEntityMapper()->getDomainModel($dbContribution['contributionToCoreEntity']);
         }
         if (isset($dbContribution['contributionToVersion'])) {
             return $this->mapperFactory->getVersionMapper()->getDomainModel($dbContribution['contributionToVersion']);

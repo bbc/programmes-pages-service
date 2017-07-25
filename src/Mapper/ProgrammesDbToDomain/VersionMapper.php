@@ -14,7 +14,7 @@ class VersionMapper extends AbstractMapper
     public function getCacheKey(array $dbVersion): string
     {
         return $this->buildCacheKey($dbVersion, 'id', [
-            'programmeItem' => 'Programme',
+            'programmeItem' => 'CoreEntity',
         ], [
             'versionTypes' => 'VersionType',
         ]);
@@ -51,7 +51,7 @@ class VersionMapper extends AbstractMapper
             throw new DataNotFetchedException('All versions must be joined to a ProgrammeItem');
         }
 
-        return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbVersion[$key]);
+        return $this->mapperFactory->getCoreEntityMapper()->getDomainModelForProgramme($dbVersion[$key]);
     }
 
     private function getVersionTypes(array $dbVersion, string $key = 'versionTypes'): ?array

@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Group;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\GroupMapper;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
 use InvalidArgumentException;
 
 class GroupsService extends AbstractService
@@ -24,7 +24,7 @@ class GroupsService extends AbstractService
 
     public function __construct(
         CoreEntityRepository $repository,
-        GroupMapper $mapper,
+        CoreEntityMapper $mapper,
         CacheInterface $cache
     ) {
         parent::__construct($repository, $mapper, $cache);
@@ -44,6 +44,15 @@ class GroupsService extends AbstractService
                 return $this->mapSingleEntity($dbEntity);
             }
         );
+    }
+
+    protected function mapSingleEntity(?array $dbEntity, ...$additionalArgs)
+    {
+        if (is_null($dbEntity)) {
+            return null;
+        }
+
+        return $this->mapper->getDomainModelForGroup($dbEntity, ...$additionalArgs);
     }
 
     private function assertEntityType($entityType, $validEntityTypes)

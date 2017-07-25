@@ -16,7 +16,7 @@ class VersionMapperTest extends BaseMapperTestCase
     public function setUp()
     {
         $this->mockProgrammeMapper = $this->createMock(
-            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper'
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper'
         );
 
         $this->mockVersionTypeMapper = $this->createMock(
@@ -43,7 +43,7 @@ class VersionMapperTest extends BaseMapperTestCase
         ];
 
         $this->mockProgrammeMapper->expects($this->once())
-            ->method('getDomainModel')
+            ->method('getDomainModelForProgramme')
             ->with($programmeDbEntity)
             ->willReturn($expectedProgrammeDomainEntity);
 
@@ -140,7 +140,7 @@ class VersionMapperTest extends BaseMapperTestCase
         );
 
         $this->mockProgrammeMapper->expects($this->once())
-            ->method('getDomainModel')
+            ->method('getDomainModelForProgramme')
             ->with($programmeDbEntity)
             ->willReturn($expectedProgrammeDomainEntity);
 
@@ -165,7 +165,7 @@ class VersionMapperTest extends BaseMapperTestCase
     private function getMapper(): VersionMapper
     {
         return new VersionMapper($this->getMapperFactory([
-            'ProgrammeMapper' => $this->mockProgrammeMapper,
+            'CoreEntityMapper' => $this->mockProgrammeMapper,
             'VersionTypeMapper' => $this->mockVersionTypeMapper,
         ]));
     }

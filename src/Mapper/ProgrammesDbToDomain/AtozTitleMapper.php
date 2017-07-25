@@ -13,7 +13,7 @@ class AtozTitleMapper extends AbstractMapper
     public function getCacheKey(array $dbAtozTitle): string
     {
         return $this->buildCacheKey($dbAtozTitle, 'id', [
-            'coreEntity' => 'Programme',
+            'coreEntity' => 'CoreEntity',
         ]);
     }
 
@@ -38,6 +38,6 @@ class AtozTitleMapper extends AbstractMapper
             throw new DataNotFetchedException('All AtozTitles must be joined to a CoreEntity');
         }
 
-        return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbAtozTitle[$key]);
+        return $this->mapperFactory->getCoreEntityMapper()->getDomainModel($dbAtozTitle[$key]);
     }
 }

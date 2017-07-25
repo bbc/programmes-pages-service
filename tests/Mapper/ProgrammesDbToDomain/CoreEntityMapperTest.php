@@ -13,7 +13,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use DateTime;
 use DateTimeImmutable;
 
-class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
+class CoreEntityMapperTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelBrand()
     {
@@ -78,13 +78,13 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         );
 
         $mapper = $this->getMapper();
-        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $mapper->getDomainModelForProgramme($dbEntityArray));
 
         // Requesting the same entity multiple times reuses a cached instance
         // of the entity, rather than creating a new one every time
         $this->assertSame(
-            $mapper->getDomainModel($dbEntityArray),
-            $mapper->getDomainModel($dbEntityArray)
+            $mapper->getDomainModelForProgramme($dbEntityArray),
+            $mapper->getDomainModelForProgramme($dbEntityArray)
         );
     }
 
@@ -151,13 +151,13 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         );
 
         $mapper = $this->getMapper();
-        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $mapper->getDomainModelForProgramme($dbEntityArray));
 
         // Requesting the same entity multiple times reuses a cached instance
         // of the entity, rather than creating a new one every time
         $this->assertSame(
-            $mapper->getDomainModel($dbEntityArray),
-            $mapper->getDomainModel($dbEntityArray)
+            $mapper->getDomainModelForProgramme($dbEntityArray),
+            $mapper->getDomainModelForProgramme($dbEntityArray)
         );
     }
 
@@ -228,13 +228,13 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         );
 
         $mapper = $this->getMapper();
-        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $mapper->getDomainModelForProgramme($dbEntityArray));
 
         // Requesting the same entity multiple times reuses a cached instance
         // of the entity, rather than creating a new one every time
         $this->assertSame(
-            $mapper->getDomainModel($dbEntityArray),
-            $mapper->getDomainModel($dbEntityArray)
+            $mapper->getDomainModelForProgramme($dbEntityArray),
+            $mapper->getDomainModelForProgramme($dbEntityArray)
         );
     }
 
@@ -299,13 +299,13 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
         );
 
         $mapper = $this->getMapper();
-        $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $mapper->getDomainModelForProgramme($dbEntityArray));
 
         // Requesting the same entity multiple times reuses a cached instance
         // of the entity, rather than creating a new one every time
         $this->assertSame(
-            $mapper->getDomainModel($dbEntityArray),
-            $mapper->getDomainModel($dbEntityArray)
+            $mapper->getDomainModelForProgramme($dbEntityArray),
+            $mapper->getDomainModelForProgramme($dbEntityArray)
         );
     }
 
@@ -427,7 +427,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
             1001
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModelForProgramme($dbEntityArray));
     }
 
     /**
@@ -436,7 +436,7 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
      */
     public function testUnknownProgrammeType()
     {
-        $this->getMapper()->getDomainModel(['id' => 1, 'type' => 'ham']);
+        $this->getMapper()->getDomainModelForProgramme(['id' => 1, 'type' => 'ham']);
     }
 
     /**
@@ -445,6 +445,6 @@ class ProgrammeMapperTest extends BaseProgrammeMapperTestCase
      */
     public function testEmptyProgrammeType()
     {
-        $this->getMapper()->getDomainModel(['id' => 1]);
+        $this->getMapper()->getDomainModelForProgramme(['id' => 1]);
     }
 }

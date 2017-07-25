@@ -5,7 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 
-class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
+class CoreEntityMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelSeriesWithSetMasterBrand()
     {
@@ -35,7 +35,7 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
             $expectedMasterBrandDomainEntity
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModelForProgramme($dbEntityArray));
     }
 
     public function testGetDomainModelSeriesWithUnfetchedMasterBrand()
@@ -60,6 +60,6 @@ class ProgrammeMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
             new UnfetchedOptions()
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModelForProgramme($dbEntityArray));
     }
 }

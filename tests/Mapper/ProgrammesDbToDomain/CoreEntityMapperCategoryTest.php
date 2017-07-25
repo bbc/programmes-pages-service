@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-class ProgrammeMapperCategoryTest extends BaseProgrammeMapperTestCase
+class CoreEntityMapperCategoryTest extends BaseProgrammeMapperTestCase
 {
     public function testGetDomainModelSeriesWithSetGenresAndFormats()
     {
@@ -43,7 +43,7 @@ class ProgrammeMapperCategoryTest extends BaseProgrammeMapperTestCase
             [$expectedFormatDomainEntity]
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModelForProgramme($dbEntityArray));
     }
 
     public function testGetDomainModelSeriesWithSetButEmptyGenresAndFormats()
@@ -66,6 +66,6 @@ class ProgrammeMapperCategoryTest extends BaseProgrammeMapperTestCase
             []
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModelForProgramme($dbEntityArray));
     }
 }

@@ -12,7 +12,7 @@ class AtozTitleMapperTest extends BaseMapperTestCase
     public function setUp()
     {
         $this->mockProgrammeMapper = $this->createMock(
-            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper'
+            'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper'
         );
     }
 
@@ -69,7 +69,7 @@ class AtozTitleMapperTest extends BaseMapperTestCase
     private function getMapper(): AToZTitleMapper
     {
         return new AToZTitleMapper($this->getMapperFactory([
-            'ProgrammeMapper' => $this->mockProgrammeMapper,
+            'CoreEntityMapper' => $this->mockProgrammeMapper,
         ]));
     }
 }

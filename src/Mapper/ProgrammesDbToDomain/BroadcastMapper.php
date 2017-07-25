@@ -18,7 +18,7 @@ class BroadcastMapper extends AbstractMapper
     public function getCacheKey(array $dbBroadcast): string
     {
         return $this->buildCacheKey($dbBroadcast, 'id', [
-            'programmeItem' => 'Programme',
+            'programmeItem' => 'CoreEntity',
             'version' => 'Version',
             'service' => 'Service',
         ]);
@@ -83,13 +83,13 @@ class BroadcastMapper extends AbstractMapper
         // It is not valid for a Version to have no programmeItem
         // so it counts as Unfetched even if the key exists but is null
         if (isset($dbBroadcast['version'][$key])) {
-            return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbBroadcast['version'][$key]);
+            return $this->mapperFactory->getCoreEntityMapper()->getDomainModelForProgramme($dbBroadcast['version'][$key]);
         }
 
         // It is not valid for a Broadcast to have no programmeItem
         // so it counts as Unfetched even if the key exists but is null
         if (isset($dbBroadcast[$key])) {
-            return $this->mapperFactory->getProgrammeMapper()->getDomainModel($dbBroadcast[$key]);
+            return $this->mapperFactory->getCoreEntityMapper()->getDomainModelForProgramme($dbBroadcast[$key]);
         }
 
         return new UnfetchedProgrammeItem();

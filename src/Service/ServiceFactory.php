@@ -112,7 +112,7 @@ class ServiceFactory
         if (!isset($this->instances['GroupsService'])) {
             $this->instances['GroupsService'] = new GroupsService(
                 $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
-                $this->mapperFactory->getGroupMapper(),
+                $this->mapperFactory->getCoreEntityMapper(),
                 $this->cache
             );
         }
@@ -138,7 +138,7 @@ class ServiceFactory
         if (!isset($this->instances['ProgrammesService'])) {
             $this->instances['ProgrammesService'] = new ProgrammesService(
                 $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
-                $this->mapperFactory->getProgrammeMapper(),
+                $this->mapperFactory->getCoreEntityMapper(),
                 $this->cache
             );
         }

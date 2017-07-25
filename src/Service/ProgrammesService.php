@@ -12,7 +12,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeContainer;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ProgrammeMapper;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
 use InvalidArgumentException;
 
 class ProgrammesService extends AbstractService
@@ -32,7 +32,7 @@ class ProgrammesService extends AbstractService
 
     public function __construct(
         CoreEntityRepository $repository,
-        ProgrammeMapper $mapper,
+        CoreEntityMapper $mapper,
         CacheInterface $cache
     ) {
         parent::__construct($repository, $mapper, $cache);
@@ -417,6 +417,15 @@ class ProgrammesService extends AbstractService
                 return $this->repository->countByKeywords($keywords, true, ['Brand', 'Series', 'Episode']);
             }
         );
+    }
+
+    protected function mapSingleEntity(?array $dbEntity, ...$additionalArgs)
+    {
+        if (is_null($dbEntity)) {
+            return null;
+        }
+
+        return $this->mapper->getDomainModelForProgramme($dbEntity, ...$additionalArgs);
     }
 
     private function findSiblingByProgramme(Programme $programme, string $direction): ?Programme

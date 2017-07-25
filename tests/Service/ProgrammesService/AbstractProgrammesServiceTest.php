@@ -12,7 +12,7 @@ abstract class AbstractProgrammesServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('CoreEntityRepository');
-        $this->setUpMapper('ProgrammeMapper', 'programmeFromDbData');
+        $this->setUpMapper('CoreEntityMapper', 'programmeFromDbData');
     }
 
     protected function programmesFromDbData(array $entities)
@@ -31,5 +31,16 @@ abstract class AbstractProgrammesServiceTest extends AbstractServiceTest
     protected function service()
     {
         return new ProgrammesService($this->mockRepository, $this->mockMapper, $this->mockCache);
+    }
+
+    protected function setUpMapper($mapperName, $entityBuilderMethod)
+    {
+        $this->mockMapper = $this->createMock($this::MAPPER_NS . $mapperName);
+
+        $this->mockMapper->expects($this->any())
+            ->method('getDomainModelForProgramme')
+            ->will($this->returnCallback(function ($entity) use ($entityBuilderMethod) {
+                return call_user_func([$this, $entityBuilderMethod], $entity);
+            }));
     }
 }
