@@ -70,7 +70,7 @@ class CoreEntityMapper extends AbstractMapper
      * @return CoreEntity
      * @throws InvalidArgumentException
      */
-    public function getDomainModel(array $dbEntity)
+    public function getDomainModel(array $dbEntity): CoreEntity
     {
         if ($this->entityIsA(Group::class, $dbEntity)) {
             return $this->getDomainModelForGroup($dbEntity);
