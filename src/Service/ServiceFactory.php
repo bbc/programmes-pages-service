@@ -107,6 +107,19 @@ class ServiceFactory
         return $this->instances['ContributorsService'];
     }
 
+    public function getCoreEntitiesService(): CoreEntitiesService
+    {
+        if (!isset($this->instances['CoreEntitiesService'])) {
+            $this->instances['CoreEntitiesService'] = new CoreEntitiesService(
+                $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
+                $this->mapperFactory->getCoreEntityMapper(),
+                $this->cache
+            );
+        }
+
+        return $this->instances['CoreEntitiesService'];
+    }
+
     public function getGroupsService(): GroupsService
     {
         if (!isset($this->instances['GroupsService'])) {

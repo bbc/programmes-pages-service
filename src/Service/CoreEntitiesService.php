@@ -8,7 +8,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
 
-class CoreEntityService extends AbstractService
+class CoreEntitiesService extends AbstractService
 {
     /** @var CoreEntityRepository */
     protected $repository;

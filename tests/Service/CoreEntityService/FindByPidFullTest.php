@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Service\CoreEntityService;
+namespace Tests\BBC\ProgrammesPagesService\Service\CoreEntitiesService;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
-class FindByPidFullTest extends AbstractCoreEntityServiceTest
+class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
 {
     public function testFindByPidFull()
     {
