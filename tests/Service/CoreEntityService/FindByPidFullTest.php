@@ -20,6 +20,20 @@ class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
         $this->assertEquals($this->coreEntityFromDbData($dbData), $result);
     }
 
+    public function testFindByPidFullWithCustomEntityType()
+    {
+        $pid = new Pid('b010t19z');
+        $dbData = ['pid' => 'b010t19z'];
+
+        $this->mockRepository->expects($this->once())
+            ->method('findByPidFull')
+            ->with($pid, 'ProgrammeContainer')
+            ->willReturn($dbData);
+
+        $result = $this->service()->findByPidFull($pid, 'ProgrammeContainer');
+        $this->assertEquals($this->programmeFromDbData($dbData), $result);
+    }
+
     public function testFindByPidFullEmptyData()
     {
         $pid = new Pid('b010t19z');

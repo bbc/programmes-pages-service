@@ -16,6 +16,7 @@ class CoreEntityRepository extends MaterializedPathRepository
     use StripPunctuationTrait;
 
     const ALL_VALID_ENTITY_TYPES = [
+        'CoreEntity',
         'Programme',
         'ProgrammeContainer',
         'ProgrammeItem',
@@ -28,7 +29,6 @@ class CoreEntityRepository extends MaterializedPathRepository
         'Gallery',
         'Season',
         'Franchise',
-        'CoreEntity',
     ];
 
     public function findTleosByCategory(
