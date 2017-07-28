@@ -224,16 +224,16 @@ class ServiceFactory
         return $this->instances['VersionsService'];
     }
 
-    public function getClipsService(): ClipsService
+    public function getProgrammesAggregationService(): ProgrammesAggregationService
     {
-        if (!isset($this->instances['ClipsService'])) {
-            $this->instances['ClipsService'] = new ClipsService(
+        if (!isset($this->instances['ProgrammesAggregationService'])) {
+            $this->instances['ProgrammesAggregationService'] = new ProgrammesAggregationService(
                 $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
                 $this->mapperFactory->getCoreEntityMapper(),
                 $this->cache
             );
         }
 
-        return $this->instances['ClipsService'];
+        return $this->instances['ProgrammesAggregationService'];
     }
 }

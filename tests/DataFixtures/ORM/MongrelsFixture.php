@@ -65,21 +65,23 @@ class MongrelsFixture extends AbstractFixture
         return $entity;
     }
 
-    private function buildEpisode($pid, $title, $position, $parent = null)
+    private function buildEpisode($pid, $title, $position, $parent = null, $streamable = true)
     {
         $entity = new Episode($pid, $title);
         $entity->setPosition($position);
         $entity->setParent($parent);
+        $entity->setStreamable($streamable);
         $this->manager->persist($entity);
         $this->addReference($pid, $entity);
         return $entity;
     }
 
-    private function buildClip($pid, $title, $position, $parent = null)
+    private function buildClip($pid, $title, $position, $parent = null, $streamable = true)
     {
         $entity = new Clip($pid, $title);
         $entity->setPosition($position);
         $entity->setParent($parent);
+        $entity->setStreamable($streamable);
         $this->manager->persist($entity);
         $this->addReference($pid, $entity);
         return $entity;

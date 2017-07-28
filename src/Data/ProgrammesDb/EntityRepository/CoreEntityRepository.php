@@ -204,26 +204,35 @@ QUERY;
     }
 
     /**
-     * @param array  $ancestryDbIds
-     * @param string $entityType
+     * @param int[]    $ancestryDbIds
+     * @param string   $entityType
+     * @param int|null $limit
+     * @param int      $offset
      * @return array
      */
-    public function findProgrammesByAncestryAndType(array $ancestryDbIds, string $entityType) : array
+    public function findProgrammesByAncestryAndType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
     {
         $this->assertEntityType($entityType, ['Clip', 'Episode', 'Series']);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select(['DISTINCT programme'])
-                   ->from('ProgrammesPagesService:Programme', 'programme')
-                   ->andWhere('programme INSTANCE OF :type')
-                   ->andWhere('programme.parent IS NOT NULL')
-                   ->andWhere('programme.ancestry LIKE :ancestry')
-                   ->setParameter('type', $entityType)
-                   ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+            ->addSelect(['programme', 'masterBrand', 'image', 'mbImage'])
+            ->from('ProgrammesPagesService:' . $entityType, 'programme')
+            ->leftJoin('programme.image', 'image')
+            ->leftJoin('programme.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->andWhere('programme.ancestry LIKE :ancestry')
+            ->andWhere('programme.streamable = 1')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
 
-        $clips = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        if (in_array($entityType, ['Episode', 'Clip'])) {
+            // Doctrine will complain loudly if the entity does not have the
+            // field to order by on it.
+            $qb->orderBy('programme.streamableFrom', 'DESC');
+        }
 
-        return $clips;
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function findChildrenSeriesByParent(int $id, ?int $limit, int $offset): array
