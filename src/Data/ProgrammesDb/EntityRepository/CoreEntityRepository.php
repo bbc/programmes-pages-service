@@ -203,6 +203,29 @@ QUERY;
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    /**
+     * @param array  $ancestryDbIds
+     * @param string $entityType
+     * @return array
+     */
+    public function findProgrammesByAncestryAndType(array $ancestryDbIds, string $entityType) : array
+    {
+        $this->assertEntityType($entityType, ['Clip', 'Episode', 'Series']);
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->select(['DISTINCT programme'])
+                   ->from('ProgrammesPagesService:Programme', 'programme')
+                   ->andWhere('programme INSTANCE OF :type')
+                   ->andWhere('programme.parent IS NOT NULL')
+                   ->andWhere('programme.ancestry LIKE :ancestry')
+                   ->setParameter('type', $entityType)
+                   ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+
+        $clips = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        return $clips;
+    }
+
     public function findChildrenSeriesByParent(int $id, ?int $limit, int $offset): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()

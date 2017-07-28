@@ -223,4 +223,17 @@ class ServiceFactory
 
         return $this->instances['VersionsService'];
     }
+
+    public function getClipsService(): ClipsService
+    {
+        if (!isset($this->instances['ClipsService'])) {
+            $this->instances['ClipsService'] = new ClipsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
+                $this->mapperFactory->getCoreEntityMapper(),
+                $this->cache
+            );
+        }
+
+        return $this->instances['ClipsService'];
+    }
 }
