@@ -31,7 +31,7 @@ class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
             ->willReturn($dbData);
 
         $result = $this->service()->findByPidFull($pid, 'ProgrammeContainer');
-        $this->assertEquals($this->programmeFromDbData($dbData), $result);
+        $this->assertEquals($this->coreEntityFromDbData($dbData), $result);
     }
 
     public function testFindByPidFullEmptyData()
