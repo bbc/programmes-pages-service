@@ -54,7 +54,7 @@ class FindByPidTest extends AbstractDatabaseTest
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Called findByPid with an invalid type. Expected one of "Programme", "ProgrammeContainer", "ProgrammeItem", "Brand", "Series", "Episode", "Clip", "Group", "Collection", "Gallery", "Season", "Franchise", "CoreEntity" but got "junk"
+     * @expectedExceptionMessage Called findByPid with an invalid type. Expected one of "CoreEntity", "Programme", "ProgrammeContainer", "ProgrammeItem", "Brand", "Series", "Episode", "Clip", "Group", "Collection", "Gallery", "Season", "Franchise" but got "junk"
      */
     public function testFindByPidWithInvalidEntityType()
     {
