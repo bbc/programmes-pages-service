@@ -210,29 +210,51 @@ QUERY;
      * @param int      $offset
      * @return array
      */
-    public function findProgrammesByAncestryAndType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
+    public function findStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
     {
         $this->assertEntityType($entityType, ['Clip', 'Episode', 'Series']);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->addSelect(['programme', 'masterBrand', 'image', 'mbImage'])
-            ->from('ProgrammesPagesService:' . $entityType, 'programme')
-            ->leftJoin('programme.image', 'image')
-            ->leftJoin('programme.masterBrand', 'masterBrand')
+            ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
+            ->from('ProgrammesPagesService:' . $entityType, 'entity')
+            ->leftJoin('entity.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('entity.image', 'image')
             ->leftJoin('masterBrand.image', 'mbImage')
-            ->andWhere('programme.ancestry LIKE :ancestry')
-            ->andWhere('programme.streamable = 1')
+            ->andWhere('entity.ancestry LIKE :ancestry')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
-            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%')
+            ->andWhere('entity.streamable = 1');
+
 
         if (in_array($entityType, ['Episode', 'Clip'])) {
-            // Doctrine will complain loudly if the entity does not have the
-            // field to order by on it.
-            $qb->orderBy('programme.streamableFrom', 'DESC');
+            $qb->orderBy('entity.streamableFrom', 'DESC');
         }
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
+    }
+
+    public function findNoStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
+    {
+        $this->assertEntityType($entityType, ['Franchise', 'Gallery', 'Collection', 'Season']);
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                   ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
+                   ->from('ProgrammesPagesService:' . $entityType, 'entity')
+                   ->leftJoin('entity.masterBrand', 'masterBrand')
+                   ->leftJoin('masterBrand.network', 'network')
+                   ->leftJoin('entity.image', 'image')
+                   ->leftJoin('masterBrand.image', 'mbImage')
+                   ->andWhere('entity.ancestry LIKE :ancestry')
+                   ->orderBy('entity.pid', 'DESC')
+                   ->setFirstResult($offset)
+                   ->setMaxResults($limit)
+                   ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
     }
 
     public function findChildrenSeriesByParent(int $id, ?int $limit, int $offset): array

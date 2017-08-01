@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -14,9 +15,17 @@ abstract class AbstractProgrammesAggregationTest extends AbstractServiceTest
         $this->setUpMapper('CoreEntityMapper', 'programmeFromDbData');
     }
 
-    protected function programmeFromDbData($entity)
+    protected function programmesFromDbData(array $entities)
     {
-        return $this->createMock(self::ENTITY_NS . ucfirst($entity['type']));
+        return array_map([$this, 'programmeFromDbData'], $entities);
+    }
+
+    protected function programmeFromDbData(array $entity)
+    {
+        $mockProgramme = $this->createMock(self::ENTITY_NS . ucfirst($entity['type']));
+
+        $mockProgramme->method('getPid')->willReturn(new Pid($entity['pid']));
+        return $mockProgramme;
     }
 
     protected function service()
@@ -29,8 +38,8 @@ abstract class AbstractProgrammesAggregationTest extends AbstractServiceTest
         $this->mockMapper = $this->createMock($this::MAPPER_NS . $mapperName);
         $this->mockMapper->expects($this->any())
              ->method('getDomainModel')
-             ->will($this->returnCallback(function ($unmappedDbEntity) use ($entityBuilderMethod) {
-                 return call_user_func([$this, $entityBuilderMethod], $unmappedDbEntity);
-             }));
+            ->will($this->returnCallback(function ($entity) use ($entityBuilderMethod) {
+                return call_user_func([$this, $entityBuilderMethod], $entity);
+            }));
     }
 }

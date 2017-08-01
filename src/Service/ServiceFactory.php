@@ -146,6 +146,19 @@ class ServiceFactory
         return $this->instances['NetworksService'];
     }
 
+    public function getProgrammesAggregationService(): ProgrammesAggregationService
+    {
+        if (!isset($this->instances['ProgrammesAggregationService'])) {
+            $this->instances['ProgrammesAggregationService'] = new ProgrammesAggregationService(
+                $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
+                $this->mapperFactory->getCoreEntityMapper(),
+                $this->cache
+            );
+        }
+
+        return $this->instances['ProgrammesAggregationService'];
+    }
+
     public function getProgrammesService(): ProgrammesService
     {
         if (!isset($this->instances['ProgrammesService'])) {
@@ -222,18 +235,5 @@ class ServiceFactory
         }
 
         return $this->instances['VersionsService'];
-    }
-
-    public function getProgrammesAggregationService(): ProgrammesAggregationService
-    {
-        if (!isset($this->instances['ProgrammesAggregationService'])) {
-            $this->instances['ProgrammesAggregationService'] = new ProgrammesAggregationService(
-                $this->entityManager->getRepository('ProgrammesPagesService:CoreEntity'),
-                $this->mapperFactory->getCoreEntityMapper(),
-                $this->cache
-            );
-        }
-
-        return $this->instances['ProgrammesAggregationService'];
     }
 }

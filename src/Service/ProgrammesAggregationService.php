@@ -5,18 +5,13 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ClipRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeContainer;
+use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
 use BBC\ProgrammesPagesService\Cache\CacheInterface;
-use InvalidArgumentException;
 
 class ProgrammesAggregationService extends AbstractService
 {
-    const AGGREGATION_VALID_TYPES = [
-        'Series',
-        'Episode',
-        'Clip',
-    ];
-
     public function __construct(
         CoreEntityRepository $repository,
         CoreEntityMapper $mapper,
@@ -26,23 +21,43 @@ class ProgrammesAggregationService extends AbstractService
     }
 
     /**
-     * @return Programme[]
+     * @return Clip[]
      */
-    public function findProgrammesChildrenByType(
+    public function findDescendantClips(
+        Programme $programme,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        return $this->findStreamableDescendantsByType($programme, 'Clip', $limit, $page);
+    }
+
+    /**
+     * @return Gallery[]
+     */
+    public function findDescendantGalleries(
+        Programme $programme,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        return $this->findNoStreamableDescendantsByType($programme, 'Gallery', $limit, $page);
+    }
+
+    /**
+     * @return ProgrammeItem[]
+     */
+    private function findStreamableDescendantsByType(
         Programme $programme,
         string $type,
-        ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE,
+        ?int $limit,
+        int $page,
         $ttl = CacheInterface::NORMAL
-    ) : array {
-        $this->assertEntityType($type, self::AGGREGATION_VALID_TYPES);
-
+    ): array {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $type, $limit, $page, $ttl);
         return $this->cache->getOrSet(
             $key,
             $ttl,
             function () use ($programme, $type, $limit, $page) {
-                $children = $this->repository->findProgrammesByAncestryAndType(
+                $children = $this->repository->findStreamableDescendantsByType(
                     $programme->getDbAncestryIds(),
                     $type,
                     $limit,
@@ -54,15 +69,30 @@ class ProgrammesAggregationService extends AbstractService
         );
     }
 
-    private function assertEntityType($entityType, $validEntityTypes)
-    {
-        if (!in_array($entityType, $validEntityTypes)) {
-            throw new InvalidArgumentException(sprintf(
-                'Called %s with an invalid type. Expected one of %s but got "%s"',
-                debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'],
-                '"' . implode('", "', $validEntityTypes) . '"',
-                $entityType
-            ));
-        }
+    /**
+     * @return ProgrammeContainer[]
+     */
+    private function findNoStreamableDescendantsByType(
+        Programme $programme,
+        string $type,
+        ?int $limit,
+        int $page,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $type, $limit, $page, $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $type, $limit, $page) {
+                $children = $this->repository->findNoStreamableDescendantsByType(
+                    $programme->getDbAncestryIds(),
+                    $type,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($children);
+            }
+        );
     }
 }
