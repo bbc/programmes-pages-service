@@ -21,14 +21,14 @@ class MonthTest extends AbstractDatabaseTest
         );
 
         $qText = 'SELECT MONTH(b.startAt) FROM ProgrammesPagesService:Broadcast b';
-        $sql = $mySQLEntityManager->createQuery($qText)->getSql();
+        $sql = $mySQLEntityManager->createQuery($qText)->getSQL();
         $this->assertEquals('MONTH(b0_.start_at)', $this->extractFirstClause($sql));
     }
 
     public function testGeneratedSqlForSqlite()
     {
         $qText = 'SELECT MONTH(b.startAt) FROM ProgrammesPagesService:Broadcast b';
-        $sql = $this->getEntityManager()->createQuery($qText)->getSql();
+        $sql = $this->getEntityManager()->createQuery($qText)->getSQL();
         $this->assertEquals("CAST(strftime('%m', b0_.start_at) AS INTEGER)", $this->extractFirstClause($sql));
     }
 
@@ -47,7 +47,7 @@ class MonthTest extends AbstractDatabaseTest
         );
 
         $qText = 'SELECT MONTH(b.startAt) FROM ProgrammesPagesService:Broadcast b';
-        $sql = $mySQLEntityManager->createQuery($qText)->getSql();
+        $sql = $mySQLEntityManager->createQuery($qText)->getSQL();
     }
 
     private function extractFirstClause(string $sql)

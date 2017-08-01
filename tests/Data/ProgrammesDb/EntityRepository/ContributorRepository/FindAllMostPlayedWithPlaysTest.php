@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentEventRepository;
+namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributorRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributorRepository;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;

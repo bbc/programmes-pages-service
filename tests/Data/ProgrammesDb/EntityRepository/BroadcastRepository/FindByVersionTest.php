@@ -7,7 +7,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository::<public>
  */
-class FindByContributionToTest extends AbstractDatabaseTest
+class FindByVersionTest extends AbstractDatabaseTest
 {
     public function testFindByVersion()
     {

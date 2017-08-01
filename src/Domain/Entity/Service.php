@@ -16,6 +16,9 @@ class Service
     /** @var Sid */
     private $sid;
 
+    /** @var Pid */
+    private $pid;
+
     /** @var string */
     private $name;
 

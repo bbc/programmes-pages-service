@@ -4,7 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
 use DateTimeImmutable;
 
-class FindUpcomingCollapsedBroadcastsForProgrammeTest extends AbstractCollapsedBroadcastServiceTest
+class FindUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
     public function testFindUpcomingByProgrammeDefaultPagination()
     {

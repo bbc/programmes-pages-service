@@ -13,6 +13,8 @@ class VersionMapperTest extends BaseMapperTestCase
 {
     protected $mockProgrammeMapper;
 
+    protected $mockVersionTypeMapper;
+
     public function setUp()
     {
         $this->mockProgrammeMapper = $this->createMock(

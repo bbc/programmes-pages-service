@@ -111,7 +111,7 @@ class NetworksFixture extends AbstractFixture implements DependentFixtureInterfa
         $position = null,
         $imagePid = null
     ) {
-        $entity = new Network($nid, $title, $title);
+        $entity = new Network($nid, $title);
         $entity->setDefaultService($defaultService);
         $entity->setUrlKey($urlKey);
         $entity->setType($type);

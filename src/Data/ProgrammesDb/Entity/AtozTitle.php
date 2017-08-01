@@ -56,7 +56,7 @@ class AtozTitle
 
     public function getEntity(): CoreEntity
     {
-        return $this->programme;
+        return $this->coreEntity;
     }
 
     public function setEntity(CoreEntity $coreEntity)

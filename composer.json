@@ -27,6 +27,7 @@
         "cakephp/chronos": "^1.1",
         "doctrine/data-fixtures": "^1.2",
         "escapestudios/symfony2-coding-standard": "^2.9",
+        "phpstan/phpstan": "^0.8.0",
         "phpunit/phpunit": "^6.1",
         "squizlabs/php_codesniffer": "^2.9",
         "symfony/cache": "^3.2"

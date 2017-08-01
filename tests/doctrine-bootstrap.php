@@ -33,9 +33,9 @@ $config->setSQLLogger(new Doctrine\DBAL\Logging\DebugStack());
 $config->addFilter("embargoed_filter", "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Filter\EmbargoedFilter");
 $config->addCustomStringFunction('match_against', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\MatchAgainst");
 $config->addCustomStringFunction('group_concat', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\GroupConcat");
-$config->addCustomDateTimeFunction('year', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Year");
-$config->addCustomDateTimeFunction('month', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Month");
-$config->addCustomDateTimeFunction('day', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Day");
+$config->addCustomDatetimeFunction('year', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Year");
+$config->addCustomDatetimeFunction('month', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Month");
+$config->addCustomDatetimeFunction('day', "\BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Day");
 
 // obtaining the entity manager
 return \Doctrine\ORM\EntityManager::create($conn, $config, $evm);

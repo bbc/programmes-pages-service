@@ -4,7 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Service\ProgrammesService;
 
-class FindAvailableByCategoryTest extends AbstractProgrammesServiceTest
+class FindAvailableTleosByCategoryTest extends AbstractProgrammesServiceTest
 {
     public function testFindAvailableTleosByCategory()
     {

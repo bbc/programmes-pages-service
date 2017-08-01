@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepo
 use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
+use InvalidArgumentException;
 
 class CoreEntitiesService extends AbstractService
 {

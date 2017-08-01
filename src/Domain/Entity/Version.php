@@ -27,6 +27,9 @@ class Version implements ContributableToInterface
     /** @var int */
     private $segmentEventCount;
 
+    /** @var int */
+    private $contributionsCount;
+
     /** @var int|null */
     private $duration;
 
