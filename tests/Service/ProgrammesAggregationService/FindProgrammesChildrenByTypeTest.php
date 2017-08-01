@@ -6,10 +6,11 @@ use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use InvalidArgumentException;
 
 /**
+ * @covers BBC\ProgrammesPagesService\Service\ProgrammesAggregationService::findProgrammesChildrenByType
  * @group service
  * @group programmesAggregation
  */
-class FindChildrenByTypeTest extends AbstractProgrammesAggregationTest
+class FindProgrammesChildrenByTypeTest extends AbstractProgrammesAggregationTest
 {
     /**
      * @expectedException InvalidArgumentException
@@ -18,7 +19,7 @@ class FindChildrenByTypeTest extends AbstractProgrammesAggregationTest
     {
         $mockProgramme = $this->createMock(Programme::class);
         $mockProgramme->method('getDbAncestryIds')->willReturn([11, 12]);
-        $this->service()->findChildrenByType($mockProgramme, 'Brand');
+        $this->service()->findProgrammesChildrenByType($mockProgramme, 'Brand');
     }
 
     public function testFindChildrenByTypeCallsProperMethods()
@@ -30,8 +31,7 @@ class FindChildrenByTypeTest extends AbstractProgrammesAggregationTest
                              ->method('findProgrammesByAncestryAndType')
                              ->willReturn([['type' => 'clip'], ['type' => 'clip']]);
 
-
-        $mappedResults = $this->service()->findChildrenByType($mockProgramme, 'Clip');
+        $mappedResults = $this->service()->findProgrammesChildrenByType($mockProgramme, 'Clip');
         $this->assertContainsOnlyInstancesOf('BBC\ProgrammesPagesService\Domain\Entity\Clip', $mappedResults);
         $this->assertCount(2, $mappedResults);
     }

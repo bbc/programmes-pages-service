@@ -5,7 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 use BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
-class AbstractProgrammesAggregationTest extends AbstractServiceTest
+abstract class AbstractProgrammesAggregationTest extends AbstractServiceTest
 {
     public function setUp()
     {

@@ -11,29 +11,46 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindProgrammesByAncestryAndTypesTest extends AbstractDatabaseTest
 {
-    public function testFindEpisodeGuideChildrenGetCorrectClips()
+    public function testProgrammesChildrenGetCorrectClips()
     {
         $this->loadFixtures(['MongrelsFixture']);
+        $dbAncestryId = $this->getAncestryFromPersistentIdentifier('b010t19z', 'Brand');
 
         $clipsUnderProgramme = $this->getEntityManager()
             ->getRepository('ProgrammesPagesService:CoreEntity')
-            ->findProgrammesByAncestryAndType([1, 15], 'Clip', 100, 0);
+            ->findProgrammesByAncestryAndType($dbAncestryId, 'Clip', 100, 0);
 
+        $this->assertCount(5, $clipsUnderProgramme);
 
-        $this->assertCount(3, $clipsUnderProgramme);
+        $dbAncestryIdString = implode(',', $dbAncestryId);
+        foreach ($clipsUnderProgramme as $clip) {
+            $this->assertRegExp("/^$dbAncestryIdString,/", $clip['ancestry']);
+            $this->assertEquals(1, $clip['streamable']);
+            $this->assertFalse($clip['isEmbargoed']);
+        }
+
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindEpisodeGuideChildrenGetCorrectEpisodes()
+    public function testProgrammesChildrenGetCorrectEpisodes()
     {
         $this->loadFixtures(['MongrelsFixture']);
+        $dbAncestryId = $this->getAncestryFromPersistentIdentifier('b010t19z', 'Brand');
 
         $episodesUnderProgramme = $this->getEntityManager()
-                                    ->getRepository('ProgrammesPagesService:CoreEntity')
-                                    ->findProgrammesByAncestryAndType([1, 14], 'Episode', 100, 0);
+            ->getRepository('ProgrammesPagesService:CoreEntity')
+            ->findProgrammesByAncestryAndType($dbAncestryId, 'Episode', 100, 0);
 
+        $this->assertCount(7, $episodesUnderProgramme);
 
-        $this->assertCount(3, $episodesUnderProgramme);
+        $dbAncestryIdString = implode(',', $dbAncestryId);
+
+        foreach ($episodesUnderProgramme as $episode) {
+            $this->assertRegExp("/^$dbAncestryIdString,/", $episode['ancestry']);
+            $this->assertEquals(1, $episode['streamable']);
+            $this->assertFalse($episode['isEmbargoed']);
+        }
+
         $this->assertCount(1, $this->getDbQueries());
     }
 }

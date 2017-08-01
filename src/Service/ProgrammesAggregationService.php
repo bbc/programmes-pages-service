@@ -25,13 +25,16 @@ class ProgrammesAggregationService extends AbstractService
         parent::__construct($repository, $mapper, $cache);
     }
 
-    public function findChildrenByType(
+    /**
+     * @return Programme[]
+     */
+    public function findProgrammesChildrenByType(
         Programme $programme,
         string $type,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
-    ) {
+    ) : array {
         $this->assertEntityType($type, self::AGGREGATION_VALID_TYPES);
 
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $type, $limit, $page, $ttl);
