@@ -14,7 +14,7 @@ class ProgrammeItemTest extends TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            ProgrammeItem::CLASS,
+            ProgrammeItem::class,
             ['pid', 'title']
         );
 
@@ -38,7 +38,7 @@ class ProgrammeItemTest extends TestCase
     public function testSetters($name, $validValue)
     {
         $entity = $this->getMockForAbstractClass(
-            ProgrammeItem::CLASS,
+            ProgrammeItem::class,
             ['pid', 'title']
         );
 
@@ -49,7 +49,7 @@ class ProgrammeItemTest extends TestCase
     public function setterDataProvider()
     {
         $entity = $this->getMockForAbstractClass(
-            ProgrammeItem::CLASS,
+            ProgrammeItem::class,
             ['pid', 'title']
         );
 
@@ -73,7 +73,7 @@ class ProgrammeItemTest extends TestCase
     public function testUnknownMediaTypeThrowsException()
     {
         $entity = $this->getMockForAbstractClass(
-            ProgrammeItem::CLASS,
+            ProgrammeItem::class,
             ['pid', 'title']
         );
 

@@ -10,7 +10,7 @@ class ContributorTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(Contributor::CLASS);
+        $reflection = new ReflectionClass(Contributor::class);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',

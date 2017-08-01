@@ -14,7 +14,7 @@ class NetworkTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(Network::CLASS);
+        $reflection = new ReflectionClass(Network::class);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\OptionsTrait',

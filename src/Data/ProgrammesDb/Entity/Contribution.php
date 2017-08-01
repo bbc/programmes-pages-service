@@ -182,9 +182,9 @@ class Contribution
         } else {
             throw new InvalidArgumentException(sprintf(
                 'Expected setContributionTo() to be called with an an instance of "%s", "%s" or "%s". Found instance of "%s"',
-                CoreEntity::CLASS,
-                Segment::CLASS,
-                Version::CLASS,
+                CoreEntity::class,
+                Segment::class,
+                Version::class,
                 (is_object($item) ? get_class($item) : gettype($item))
             ));
         }

@@ -13,7 +13,7 @@ class ServiceTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(Service::CLASS);
+        $reflection = new ReflectionClass(Service::class);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',

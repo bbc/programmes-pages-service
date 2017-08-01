@@ -24,8 +24,8 @@ class TleosByCategoryFixture extends AbstractFixture
     public function getDependencies()
     {
         return [
-            MongrelsFixture::CLASS,
-            NetworksFixture::CLASS,
+            MongrelsFixture::class,
+            NetworksFixture::class,
         ];
     }
 

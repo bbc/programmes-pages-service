@@ -10,7 +10,7 @@ class ProgrammeContainerTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(ProgrammeContainer::CLASS);
+        $reflection = new ReflectionClass(ProgrammeContainer::class);
         $this->assertEquals([
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountMethodsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedEpisodesCountMethodsTrait',
@@ -24,7 +24,7 @@ class ProgrammeContainerTest extends TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            ProgrammeContainer::CLASS,
+            ProgrammeContainer::class,
             ['pid', 'title']
         );
 
@@ -49,7 +49,7 @@ class ProgrammeContainerTest extends TestCase
     public function testSetters($name, $validValue)
     {
         $entity = $this->getMockForAbstractClass(
-            ProgrammeContainer::CLASS,
+            ProgrammeContainer::class,
             ['pid', 'title']
         );
 

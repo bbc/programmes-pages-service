@@ -13,7 +13,7 @@ class BroadcastTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(Broadcast::CLASS);
+        $reflection = new ReflectionClass(Broadcast::class);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',

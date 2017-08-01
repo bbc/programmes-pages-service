@@ -10,7 +10,7 @@ class ImageTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(Image::CLASS);
+        $reflection = new ReflectionClass(Image::class);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsEmbargoedTrait',

@@ -10,7 +10,7 @@ class CollectionTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(Collection::CLASS);
+        $reflection = new ReflectionClass(Collection::class);
         $this->assertEquals([
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsPodcastableMethodsTrait',
         ], $reflection->getTraitNames());

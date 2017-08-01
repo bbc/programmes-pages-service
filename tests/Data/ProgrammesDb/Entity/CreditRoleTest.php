@@ -10,7 +10,7 @@ class CreditRoleTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(CreditRole::CLASS);
+        $reflection = new ReflectionClass(CreditRole::class);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
         ], $reflection->getTraitNames());

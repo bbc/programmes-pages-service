@@ -10,7 +10,7 @@ class EpisodeTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(Episode::CLASS);
+        $reflection = new ReflectionClass(Episode::class);
         $this->assertEquals([
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountMethodsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountMethodsTrait',

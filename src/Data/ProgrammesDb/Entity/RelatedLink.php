@@ -217,9 +217,9 @@ class RelatedLink
         } else {
             throw new InvalidArgumentException(sprintf(
                 'Expected setRelatedTo() to be called with an an instance of "%s", "%s" or "%s". Found instance of "%s"',
-                CoreEntity::CLASS,
-                Promotion::CLASS,
-                Image::CLASS,
+                CoreEntity::class,
+                Promotion::class,
+                Image::class,
                 (is_object($relatedTo) ? get_class($relatedTo) : gettype($relatedTo))
             ));
         }

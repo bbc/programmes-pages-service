@@ -135,8 +135,8 @@ class Membership
         } else {
             throw new InvalidArgumentException(sprintf(
                 'Expected setMember() to be called with an an instance of "%s" or "%s". Found instance of "%s"',
-                CoreEntity::CLASS,
-                Image::CLASS,
+                CoreEntity::class,
+                Image::class,
                 (is_object($member) ? get_class($member) : gettype($member))
             ));
         }

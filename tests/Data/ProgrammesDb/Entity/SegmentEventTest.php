@@ -10,7 +10,7 @@ class SegmentEventTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(SegmentEvent::CLASS);
+        $reflection = new ReflectionClass(SegmentEvent::class);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',

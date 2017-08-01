@@ -180,8 +180,8 @@ class Promotion
         } else {
             throw new InvalidArgumentException(sprintf(
                 'Expected setPromotionOf() to be called with an an instance of "%s" or "%s". Found instance of "%s"',
-                CoreEntity::CLASS,
-                Image::CLASS,
+                CoreEntity::class,
+                Image::class,
                 (is_object($item) ? get_class($item) : gettype($item))
             ));
         }

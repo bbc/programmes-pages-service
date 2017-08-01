@@ -11,7 +11,7 @@ class ProgrammeTest extends TestCase
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
-            Programme::CLASS,
+            Programme::class,
             ['pid', 'title']
         );
 
@@ -34,7 +34,7 @@ class ProgrammeTest extends TestCase
     public function testSetters($name, $validValue)
     {
         $entity = $this->getMockForAbstractClass(
-            Programme::CLASS,
+            Programme::class,
             ['pid', 'title']
         );
 

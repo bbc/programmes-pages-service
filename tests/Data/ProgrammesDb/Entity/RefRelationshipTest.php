@@ -12,7 +12,7 @@ class RefRelationshipTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(RefRelationship::CLASS);
+        $reflection = new ReflectionClass(RefRelationship::class);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',

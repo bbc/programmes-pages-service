@@ -14,7 +14,7 @@ class MongrelsWithCategoriesFixture extends AbstractFixture implements Dependent
 
     public function getDependencies()
     {
-        return [MongrelsFixture::CLASS, NetworksFixture::CLASS];
+        return [MongrelsFixture::class, NetworksFixture::class];
     }
 
     public function load(ObjectManager $manager)

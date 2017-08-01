@@ -11,7 +11,7 @@ class PromotionTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(Promotion::CLASS);
+        $reflection = new ReflectionClass(Promotion::class);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',

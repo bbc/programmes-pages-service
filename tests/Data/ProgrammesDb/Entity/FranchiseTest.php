@@ -10,7 +10,7 @@ class FranchiseTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(Franchise::CLASS);
+        $reflection = new ReflectionClass(Franchise::class);
         $this->assertEquals([
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountMethodsTrait',
         ], $reflection->getTraitNames());

@@ -64,7 +64,7 @@ class LoggingServiceFactoryTest extends TestCase
     public function testProxyCallingFunction()
     {
         $mockVersion = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Version');
-        $service = $this->createMock(VersionsService::CLASS);
+        $service = $this->createMock(VersionsService::class);
         $service->method('findByPidFull')->willReturn($mockVersion);
 
         $stopwatch = new Stopwatch();
@@ -98,7 +98,7 @@ class LoggingServiceFactoryTest extends TestCase
         $timedService = $this->serviceProxyClass($service, new NullLogger(), new Stopwatch());
 
         $this->expectException('TypeError');
-        $this->expectExceptionMessage('Too few arguments to function ' . VersionsService::CLASS . '::findByPidFull(), 0 passed in');
+        $this->expectExceptionMessage('Too few arguments to function ' . VersionsService::class . '::findByPidFull(), 0 passed in');
 
         $timedService->findByPidFull();
     }

@@ -15,7 +15,7 @@ class MasterBrandTest extends TestCase
 {
     public function testTraits()
     {
-        $reflection = new ReflectionClass(MasterBrand::CLASS);
+        $reflection = new ReflectionClass(MasterBrand::class);
         $this->assertEquals([
             'Gedmo\Timestampable\Traits\TimestampableEntity',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',

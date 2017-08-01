@@ -130,12 +130,12 @@ class SegmentMapperTest extends BaseMapperTestCase
     public function domainModelTypeDataProvider()
     {
         return [
-            ['speech', Segment::CLASS],
-            ['chapter', Segment::CLASS],
-            ['highlight', Segment::CLASS],
-            ['other', Segment::CLASS],
-            ['music', MusicSegment::CLASS],
-            ['classical', MusicSegment::CLASS],
+            ['speech', Segment::class],
+            ['chapter', Segment::class],
+            ['highlight', Segment::class],
+            ['other', Segment::class],
+            ['music', MusicSegment::class],
+            ['classical', MusicSegment::class],
         ];
     }
 

@@ -52,8 +52,8 @@ abstract class Programme extends CoreEntity
         ?array $formats = null,
         ?DateTimeImmutable $firstBroadcastDate = null
     ) {
-        $this->assertArrayOfType('genres', $genres, Genre::CLASS);
-        $this->assertArrayOfType('formats', $formats, Format::CLASS);
+        $this->assertArrayOfType('genres', $genres, Genre::class);
+        $this->assertArrayOfType('formats', $formats, Format::class);
 
         parent::__construct(
             $dbAncestryIds,
