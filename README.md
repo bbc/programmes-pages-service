@@ -46,24 +46,27 @@ config.yml), under the `orm` key:
 ```yaml
 doctrine:
     orm:
-        mappings:
-            ProgrammesPagesService:
-                type: annotation
-                dir: "%kernel.root_dir%/../vendor/bbc/programmes-pages-service/src/Data/ProgrammesDb/Entity"
-                is_bundle: false
-                prefix: BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity
-        filters:
-            embargoed_filter:
-                class: BBC\ProgrammesPagesService\Data\ProgrammesDb\Filter\EmbargoedFilter
-                enabled: true
-        dql:
-            string_functions:
-                MATCH_AGAINST: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\MatchAgainst
-                GROUP_CONCAT: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\GroupConcat
-            datetime_functions:
-                YEAR: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Year
-                MONTH: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Month
-                DAY: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Day
+        default_entity_manager: default
+        entity_managers:
+            default:
+                mappings:
+                    ProgrammesPagesService:
+                        type: annotation
+                        dir: "%kernel.root_dir%/../vendor/bbc/programmes-pages-service/src/Data/ProgrammesDb/Entity"
+                        is_bundle: false
+                        prefix: BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity
+                filters:
+                    embargoed_filter:
+                        class: BBC\ProgrammesPagesService\Data\ProgrammesDb\Filter\EmbargoedFilter
+                        enabled: true
+                dql:
+                    string_functions:
+                        MATCH_AGAINST: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\MatchAgainst
+                        GROUP_CONCAT: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\GroupConcat
+                    datetime_functions:
+                        YEAR: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Year
+                        MONTH: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Month
+                        DAY: BBC\ProgrammesPagesService\Data\ProgrammesDb\Functions\Day
 ```
 
 Add the doctrine extensions configuration (in config.yml), under the
