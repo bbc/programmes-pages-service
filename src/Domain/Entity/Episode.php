@@ -9,7 +9,7 @@ use DateTimeImmutable;
 
 class Episode extends ProgrammeItem
 {
-    protected $type = 'episode';
+    const TYPE = 'episode';
 
     /** @var int */
     private $aggregatedBroadcastsCount;

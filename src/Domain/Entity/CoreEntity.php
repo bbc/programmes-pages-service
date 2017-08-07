@@ -12,14 +12,13 @@ use InvalidArgumentException;
 
 abstract class CoreEntity implements ContributableToInterface
 {
+    const TYPE = '';
+
     /** @var Programme|null */
     protected $parent;
 
     /** @var Pid */
     protected $pid;
-
-    /** @var string */
-    protected $type = '';
 
     /** @var int[] */
     private $dbAncestryIds;
@@ -223,7 +222,7 @@ abstract class CoreEntity implements ContributableToInterface
 
     public function getType(): string
     {
-        return $this->type;
+        return static::TYPE;
     }
 
     public function isRadio(): bool

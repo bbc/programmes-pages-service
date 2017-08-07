@@ -7,10 +7,10 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class Collection extends Group
 {
+    const TYPE = 'collection';
+
     /* @var bool */
     private $isPodcastable;
-
-    protected $type = 'collection';
 
     public function __construct(
         array $dbAncestryIds,
