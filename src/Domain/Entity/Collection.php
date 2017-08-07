@@ -7,7 +7,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class Collection extends Group
 {
-    const TYPE = 'collection';
+    protected const TYPE = 'collection';
 
     /* @var bool */
     private $isPodcastable;

@@ -7,7 +7,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class Franchise extends Group
 {
-    const TYPE = 'franchise';
+    protected const TYPE = 'franchise';
 
     /* @var int */
     private $aggregatedBroadcastsCount;

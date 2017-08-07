@@ -4,5 +4,5 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 class Series extends ProgrammeContainer
 {
-    const TYPE = 'series';
+    protected const TYPE = 'series';
 }

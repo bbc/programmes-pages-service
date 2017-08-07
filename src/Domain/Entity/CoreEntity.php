@@ -12,7 +12,7 @@ use InvalidArgumentException;
 
 abstract class CoreEntity implements ContributableToInterface
 {
-    const TYPE = '';
+    protected const TYPE = '';
 
     /** @var Programme|null */
     protected $parent;
