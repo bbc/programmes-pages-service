@@ -7,6 +7,8 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class Gallery extends Group
 {
+    protected const TYPE = 'gallery';
+
     public function __construct(
         array $dbAncestryIds,
         Pid $pid,

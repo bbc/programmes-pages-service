@@ -12,6 +12,8 @@ use InvalidArgumentException;
 
 abstract class CoreEntity implements ContributableToInterface
 {
+    protected const TYPE = '';
+
     /** @var Programme|null */
     protected $parent;
 
@@ -218,10 +220,25 @@ abstract class CoreEntity implements ContributableToInterface
         return $this;
     }
 
+    public function getType(): string
+    {
+        return static::TYPE;
+    }
+
     public function isRadio(): bool
     {
         $network = $this->getNetwork();
         return ($network && $network->isRadio());
+    }
+
+    public function isTlec(): bool
+    {
+        return false;
+    }
+
+    public function isTleo(): bool
+    {
+        return is_null($this->parent);
     }
 
     public function isTv(): bool

@@ -7,6 +7,8 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class Season extends Group
 {
+    protected const TYPE = 'season';
+
     /* @var int */
     private $aggregatedBroadcastsCount;
 

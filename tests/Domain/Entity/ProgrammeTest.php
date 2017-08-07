@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
+use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
@@ -58,6 +59,55 @@ class ProgrammeTest extends TestCase
         $ancestry = $brand->getAncestry();
         $this->assertCount(1, $ancestry);
         $this->assertEquals('Brand', $ancestry[0]->getTitle());
+    }
+
+    public function testIsTleo()
+    {
+        $brand = $this->getBrand();
+        $clip = $this->getClip();
+        $episode = $this->getEpisode();
+        $series = $this->getSeries();
+        $this->assertTrue($brand->isTleo());
+        $this->assertTrue($clip->isTleo());
+        $this->assertFalse($episode->isTleo());
+        $this->assertFalse($series->isTleo());
+    }
+
+    public function testIsTlec()
+    {
+        $brand = $this->getBrand();
+        $clip = $this->getClip();
+        $episode = $this->getEpisode();
+        $series = $this->getSeries();
+        $this->assertTrue($brand->isTlec());
+        $this->assertFalse($clip->isTlec());
+        $this->assertFalse($episode->isTlec());
+        $this->assertFalse($series->isTlec());
+    }
+
+    private function getClip()
+    {
+        $pid = new Pid('p01m5msd');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+
+        return new Clip(
+            [0, 1, 2],
+            $pid,
+            'Clip',
+            'Search Title',
+            $synopses,
+            $image,
+            1101,
+            1102,
+            true,
+            true,
+            true,
+            1103,
+            MediaTypeEnum::UNKNOWN,
+            1201,
+            new Options()
+        );
     }
 
     private function getEpisode()
