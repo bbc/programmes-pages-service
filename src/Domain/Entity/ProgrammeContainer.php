@@ -122,4 +122,9 @@ abstract class ProgrammeContainer extends Programme
     {
         return $this->expectedChildCount;
     }
+
+    public function isTlec(): bool
+    {
+        return $this->isTleo();
+    }
 }

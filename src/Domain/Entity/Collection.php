@@ -10,6 +10,8 @@ class Collection extends Group
     /* @var bool */
     private $isPodcastable;
 
+    protected $type = 'collection';
+
     public function __construct(
         array $dbAncestryIds,
         Pid $pid,

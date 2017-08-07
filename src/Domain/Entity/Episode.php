@@ -9,6 +9,8 @@ use DateTimeImmutable;
 
 class Episode extends ProgrammeItem
 {
+    protected $type = 'episode';
+
     /** @var int */
     private $aggregatedBroadcastsCount;
 

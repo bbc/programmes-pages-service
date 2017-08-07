@@ -18,6 +18,9 @@ abstract class CoreEntity implements ContributableToInterface
     /** @var Pid */
     protected $pid;
 
+    /** @var string */
+    protected $type = '';
+
     /** @var int[] */
     private $dbAncestryIds;
 
@@ -218,10 +221,25 @@ abstract class CoreEntity implements ContributableToInterface
         return $this;
     }
 
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
     public function isRadio(): bool
     {
         $network = $this->getNetwork();
         return ($network && $network->isRadio());
+    }
+
+    public function isTlec(): bool
+    {
+        return false;
+    }
+
+    public function isTleo(): bool
+    {
+        return is_null($this->parent);
     }
 
     public function isTv(): bool
