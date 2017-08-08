@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Clip;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Gallery;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Series;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -42,6 +43,9 @@ class MongrelsFixture extends AbstractFixture
 
         $s1e3c1 = $this->buildClip('p008nhl4', "Guide dog training", 1, $s2e3);
 
+        $s1e3g1 = $this->buildGallery('p008nhl5', 'Behind scenes: Guide dog', $s1e3c1);
+        $s1e3g2 = $this->buildGallery('p008nhl6', 'Doctor falls', $s1e3c1);
+
         $s1e1->setDownloadableMediaSets(['ms1', 'ms2']);
 
         $manager->flush();
@@ -75,10 +79,20 @@ class MongrelsFixture extends AbstractFixture
         return $entity;
     }
 
-    private function buildClip($pid, $title, $position, $parent = null)
+    private function buildClip($pid, $title, $position, $parent = null, $streamable = true)
     {
         $entity = new Clip($pid, $title);
         $entity->setPosition($position);
+        $entity->setParent($parent);
+        $entity->setStreamable($streamable);
+        $this->manager->persist($entity);
+        $this->addReference($pid, $entity);
+        return $entity;
+    }
+
+    private function buildGallery($pid, $title, $parent = null)
+    {
+        $entity = new Gallery($pid, $title);
         $entity->setParent($parent);
         $this->manager->persist($entity);
         $this->addReference($pid, $entity);
