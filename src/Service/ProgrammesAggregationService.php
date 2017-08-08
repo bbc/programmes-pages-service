@@ -53,7 +53,7 @@ class ProgrammesAggregationService extends AbstractService
         int $page,
         $ttl = CacheInterface::NORMAL
     ): array {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $type, $limit, $page, $ttl);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $limit, $page, $ttl);
         return $this->cache->getOrSet(
             $key,
             $ttl,
@@ -80,7 +80,7 @@ class ProgrammesAggregationService extends AbstractService
         int $page,
         $ttl = CacheInterface::NORMAL
     ): array {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $type, $limit, $page, $ttl);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $limit, $page, $ttl);
         return $this->cache->getOrSet(
             $key,
             $ttl,
