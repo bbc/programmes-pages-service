@@ -29,7 +29,7 @@ class FindDescendantsByTypeTest extends AbstractDatabaseTest
     }
 
     /**
-     * @cover ::findNoStremableDescendantsByType
+     * @cover ::findDescendantsByType
      */
     public function testProgrammesChildrenGetCorrectGalleries()
     {
@@ -38,7 +38,7 @@ class FindDescendantsByTypeTest extends AbstractDatabaseTest
         $dbAncestryId = $this->getAncestryFromPersistentIdentifier('b010t19z', 'Brand');
         $galleriesUnderProgramme = $this->getEntityManager()
             ->getRepository('ProgrammesPagesService:CoreEntity')
-            ->findNoStreamableDescendantsByType($dbAncestryId, 'Gallery', 100, 0);
+            ->findDescendantsByType($dbAncestryId, 'Gallery', 100, 0);
         $expectedGalleryPids = ['p008nhl6', 'p008nhl5'];
 
         $this->assertEquals($expectedGalleryPids, array_column($galleriesUnderProgramme, 'pid'));

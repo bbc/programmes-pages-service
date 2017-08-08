@@ -203,43 +203,8 @@ QUERY;
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    /**
-     * @param int[]    $ancestryDbIds
-     * @param string   $entityType
-     * @param int|null $limit
-     * @param int      $offset
-     * @return array
-     */
-    public function findStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
+    public function findDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
     {
-        $this->assertEntityType($entityType, ['Clip', 'Episode', 'Series']);
-
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
-            ->from('ProgrammesPagesService:' . $entityType, 'entity')
-            ->leftJoin('entity.masterBrand', 'masterBrand')
-            ->leftJoin('masterBrand.network', 'network')
-            ->leftJoin('entity.image', 'image')
-            ->leftJoin('masterBrand.image', 'mbImage')
-            ->andWhere('entity.ancestry LIKE :ancestry')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
-            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%')
-            ->andWhere('entity.streamable = 1');
-
-
-        if (in_array($entityType, ['Episode', 'Clip'])) {
-            $qb->orderBy('entity.streamableFrom', 'DESC');
-        }
-
-        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        return $this->resolveParents($result);
-    }
-
-    public function findNoStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
-    {
-        $this->assertEntityType($entityType, ['Franchise', 'Gallery', 'Collection', 'Season']);
-
         $qb = $this->getEntityManager()->createQueryBuilder()
                    ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
                    ->from('ProgrammesPagesService:' . $entityType, 'entity')
@@ -252,6 +217,35 @@ QUERY;
                    ->setFirstResult($offset)
                    ->setMaxResults($limit)
                    ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
+    }
+
+    /**
+     * @param int[]    $ancestryDbIds
+     * @param string   $entityType
+     * @param int|null $limit
+     * @param int      $offset
+     * @return array
+     */
+    public function findStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
+    {
+        $this->assertEntityType($entityType, ['Clip', 'Episode']);
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
+            ->from('ProgrammesPagesService:' . $entityType, 'entity')
+            ->leftJoin('entity.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('entity.image', 'image')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->andWhere('entity.ancestry LIKE :ancestry')
+            ->andWhere('entity.streamable = 1')
+            ->orderBy('entity.streamableFrom', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         return $this->resolveParents($result);

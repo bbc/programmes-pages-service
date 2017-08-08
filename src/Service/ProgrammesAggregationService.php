@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ClipRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeContainer;
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
@@ -39,7 +40,7 @@ class ProgrammesAggregationService extends AbstractService
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): array {
-        return $this->findNoStreamableDescendantsByType($programme, 'Gallery', $limit, $page);
+        return $this->findDescendantsByType($programme, 'Gallery', $limit, $page);
     }
 
     /**
@@ -70,9 +71,9 @@ class ProgrammesAggregationService extends AbstractService
     }
 
     /**
-     * @return ProgrammeContainer[]
+     * @return CoreEntity[]
      */
-    private function findNoStreamableDescendantsByType(
+    private function findDescendantsByType(
         Programme $programme,
         string $type,
         ?int $limit,
@@ -84,7 +85,7 @@ class ProgrammesAggregationService extends AbstractService
             $key,
             $ttl,
             function () use ($programme, $type, $limit, $page) {
-                $children = $this->repository->findNoStreamableDescendantsByType(
+                $children = $this->repository->findDescendantsByType(
                     $programme->getDbAncestryIds(),
                     $type,
                     $limit,
