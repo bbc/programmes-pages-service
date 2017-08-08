@@ -17,7 +17,7 @@ class FindDescendantGalleriesTest extends AbstractProgrammesAggregationTest
             ['pid' => 'p00m172y', 'type' => 'gallery'],
         ];
         $this->mockRepository->expects($this->once())
-            ->method('findNoStreamableDescendantsByType')
+            ->method('findDescendantsByType')
             ->with($dbAncestryIds, 'Gallery', 300, 0)
             ->willReturn($dbData);
 
