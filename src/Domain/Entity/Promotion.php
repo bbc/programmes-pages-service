@@ -7,9 +7,6 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class Promotion
 {
-    /** @var bool */
-    private $cascadesToDescendants;
-
     /** @var Pid */
     private $pid;
 
@@ -29,26 +26,19 @@ class Promotion
     private $weighting;
 
     public function __construct(
-        bool $cascadesToDescendants,
         Pid $pid,
         PromotableInterface $promotedEntity,
-        Synopses $synopses,
         string $title,
+        Synopses $synopses,
         string $url,
         int $weighting
     ) {
-        $this->cascadesToDescendants = $cascadesToDescendants;
         $this->pid = $pid;
         $this->promotedEntity = $promotedEntity;
         $this->synopses = $synopses;
         $this->title = $title;
         $this->url = $url;
         $this->weighting = $weighting;
-    }
-
-    public function isCascadesToDescendants(): bool
-    {
-        return $this->cascadesToDescendants;
     }
 
     public function getPid(): Pid
