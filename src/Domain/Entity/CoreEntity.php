@@ -10,7 +10,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use InvalidArgumentException;
 
-abstract class CoreEntity implements ContributableToInterface
+abstract class CoreEntity implements ContributableToInterface, PromotableInterface
 {
     protected const TYPE = '';
 
