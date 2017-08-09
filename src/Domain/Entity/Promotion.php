@@ -2,44 +2,45 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
+
 class Promotion
 {
-    /**
-     * Is the promotion propagated down in the hierarchy?
-     *
-     * @var bool
-     */
+    /** @var bool */
     private $cascadesToDescendants;
 
-    /**
-     * entity showing the promotion
-     *
-     * @var CoreEntity
-     */
-    private $context;
+    /** @var Pid */
+    private $pid;
 
-    /** @var string  */
+    /** @var PromotableInterface */
+    private $promotedEntity;
+
+    /** @var Synopses */
+    private $synopses;
+
+    /** @var string */
     private $title;
 
-    /** @var string  */
+    /** @var string */
     private $url;
 
-    /**
-     * Promotions are sorted by weights
-     *
-     * @var int
-     */
+    /** @var int */
     private $weighting;
 
     public function __construct(
         bool $cascadesToDescendants,
-        CoreEntity $context,
+        Pid $pid,
+        PromotableInterface $promotedEntity,
+        Synopses $synopses,
         string $title,
         string $url,
         int $weighting
     ) {
         $this->cascadesToDescendants = $cascadesToDescendants;
-        $this->context = $context;
+        $this->pid = $pid;
+        $this->promotedEntity = $promotedEntity;
+        $this->synopses = $synopses;
         $this->title = $title;
         $this->url = $url;
         $this->weighting = $weighting;
@@ -50,19 +51,14 @@ class Promotion
         return $this->cascadesToDescendants;
     }
 
-    public function setCascadesToDescendants(bool $cascadesToDescendants)
+    public function getPid(): Pid
     {
-        $this->cascadesToDescendants = $cascadesToDescendants;
+        return $this->pid;
     }
 
-    public function getContext(): CoreEntity
+    public function getPromotedEntity(): PromotableInterface
     {
-        return $this->context;
-    }
-
-    public function setContext(CoreEntity $context)
-    {
-        $this->context = $context;
+        return $this->promotedEntity;
     }
 
     public function getTitle(): string
@@ -70,30 +66,13 @@ class Promotion
         return $this->title;
     }
 
-    public function setTitle(string $title)
-    {
-        $this->title = $title;
-    }
-
     public function getUrl(): string
     {
         return $this->url;
-    }
-
-    public function setUrl(string $url)
-    {
-        $this->url = $url;
     }
 
     public function getWeighting(): int
     {
         return $this->weighting;
     }
-
-    public function setWeighting(int $weighting)
-    {
-        $this->weighting = $weighting;
-    }
-
-
 }

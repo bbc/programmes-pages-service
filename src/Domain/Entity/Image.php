@@ -4,7 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
-class Image implements PromotionableInterface
+class Image implements PromotableInterface
 {
     /** @var Pid */
     private $pid;

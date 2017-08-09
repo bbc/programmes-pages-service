@@ -2,7 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Domain\Entity;
 
-interface PromotionableInterface
+interface PromotableInterface
 {
 
 }
