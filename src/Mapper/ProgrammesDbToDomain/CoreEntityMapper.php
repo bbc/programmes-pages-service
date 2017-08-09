@@ -493,11 +493,42 @@ class CoreEntityMapper extends AbstractMapper
             return new UnfetchedMasterBrand();
         }
 
-        if (is_null($dbEntity[$key])) {
+        // CoreEntities may not have MasterBrands.
+        // Most systems will want to look up the parent hierarchy to see if
+        // there is a MasterBrand we can attach to the current item. However
+        // some legacy APIs we still need to maintain (e.g. Clifton) do not
+        // expose the inherited MasterBrand.
+        if (!$this->mapperFactory->getOption('core_entity_inherit_master_brand')) {
+            return $this->getMasterBrandModelWithoutInheritance($dbEntity[$key]);
+        }
+
+        $masterBrandMapper = $this->mapperFactory->getMasterBrandMapper();
+
+        // MasterBrand inheritance. If the current entity does not have a
+        // masterbrand attached to it, look to see if its parent has a
+        // masterbrand, and use that. Keep going up the ancestry chain till a
+        // masterbrand is found
+        $currentItem = $dbEntity;
+        while ($currentItem) {
+            // If the current Entity has a masterbrand then use that!
+            if (isset($currentItem[$key])) {
+                return $masterBrandMapper->getDomainModel($currentItem[$key]);
+            }
+
+            // Otherwise set the current Entity to the parent
+            $currentItem = $currentItem['parent'] ?? null;
+        }
+
+        return null;
+    }
+
+    private function getMasterBrandModelWithoutInheritance(?array $dbMasterBrand): ?MasterBrand
+    {
+        if (is_null($dbMasterBrand)) {
             return null;
         }
 
-        return $this->mapperFactory->getMasterBrandMapper()->getDomainModel($dbEntity[$key]);
+        return $this->mapperFactory->getMasterBrandMapper()->getDomainModel($dbMasterBrand);
     }
 
     private function getCategoriesModels(string $filterType, array $dbProgramme, string $key = 'categories'): ?array

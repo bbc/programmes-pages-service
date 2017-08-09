@@ -4,7 +4,34 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 class MapperFactory
 {
+    /** @var AbstractMapper[] */
     protected $instances = [];
+
+    /** @var mixed[] */
+    private $options = [
+        // Most systems will want to look up the parent hierarchy to see if
+        // there is a MasterBrand we can attach to the current item (i.e. use
+        // the MasterBrand of the parent if the child has no MasterBrand).
+        // However some legacy APIs we still need to maintain (e.g. Clifton) do
+        // not expose the inherited MasterBrand, thus we need the ability to
+        // switch between these two behaviors.
+        'core_entity_inherit_master_brand' => true,
+    ];
+
+    /**
+     * @param mixed[] $options An array of options for configuring mapper
+     *                         behavior. See the $options property for valid
+     *                         key names.
+     */
+    public function __construct(array $options = [])
+    {
+        $this->options = array_merge($this->options, $options);
+    }
+
+    public function getOption(string $key)
+    {
+        return $this->options[$key];
+    }
 
     public function getAtozTitleMapper(): AtozTitleMapper
     {

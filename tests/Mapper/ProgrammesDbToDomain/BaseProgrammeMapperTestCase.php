@@ -62,14 +62,14 @@ abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
             ->willReturn($this->mockDefaultImage);
     }
 
-    protected function getMapper(): CoreEntityMapper
+    protected function getMapper(array $factoryOptions = []): CoreEntityMapper
     {
         return new CoreEntityMapper($this->getMapperFactory([
             'ImageMapper' => $this->mockImageMapper,
             'MasterBrandMapper' => $this->mockMasterBrandMapper,
             'CategoryMapper' => $this->mockCategoryMapper,
             'OptionsMapper' => $this->mockOptionsMapper,
-        ]));
+        ], $factoryOptions));
     }
 
     /*

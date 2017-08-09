@@ -27,7 +27,7 @@ class CoreEntityMapperOptionsMappingTest extends BaseProgrammeMapperTestCase
 
         $expectedMasterBrandDomainEntity = $this->createMock(MasterBrand::class);
 
-        $this->mockMasterBrandMapper->expects($this->once())
+        $this->mockMasterBrandMapper->expects($this->atLeastOnce())
             ->method('getDomainModel')
             ->with($masterBrandDbEntity)
             ->willReturn($expectedMasterBrandDomainEntity);
@@ -69,7 +69,7 @@ class CoreEntityMapperOptionsMappingTest extends BaseProgrammeMapperTestCase
         $expectedEntity = $this->getSampleProgrammeDomainEntity(
             'b00swyx1',
             $this->mockDefaultImage,
-            null,
+            $expectedMasterBrandDomainEntity,
             [],
             [],
             $this->getSampleProgrammeDomainEntity(
@@ -179,7 +179,7 @@ class CoreEntityMapperOptionsMappingTest extends BaseProgrammeMapperTestCase
 
         // Mock the master brand itself, so the code stays in this class
         $mockMasterBrand = $this->createMock(MasterBrand::class);
-        $this->mockMasterBrandMapper->expects($this->once())
+        $this->mockMasterBrandMapper->expects($this->atLeastOnce())
             ->method('getDomainModel')
             ->willReturn($mockMasterBrand);
 
@@ -202,7 +202,7 @@ class CoreEntityMapperOptionsMappingTest extends BaseProgrammeMapperTestCase
         $expectedEntity = $this->getSampleProgrammeDomainEntity(
             'b00swyx1',
             $this->mockDefaultImage,
-            null,
+            $mockMasterBrand,
             [],
             [],
             $this->getSampleProgrammeDomainEntity(
