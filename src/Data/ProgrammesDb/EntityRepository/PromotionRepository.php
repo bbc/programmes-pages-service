@@ -9,6 +9,9 @@ use Doctrine\ORM\Query;
 
 class PromotionRepository extends EntityRepository
 {
+    /**
+     * @return array[]
+     */
     public function findActivePromotionsByPid(Pid $pid, ?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('promotion')
@@ -33,6 +36,7 @@ class PromotionRepository extends EntityRepository
 
     /**
      * @param int[] $ancestryIds
+     * @return array[]
      */
     public function findActiveSuperPromotionsByPid(array $ancestryIds, ?int $limit, int $offset): array
     {
