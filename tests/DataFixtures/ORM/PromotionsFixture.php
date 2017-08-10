@@ -15,8 +15,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
     public function getDependencies()
     {
         return [
-            MongrelsFixture::Class,
             ImagesFixture::class,
+            MongrelsFixture::class,
         ];
     }
 
@@ -27,11 +27,11 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
         $this->buildPromotion(
             'p000000h',
             'active promotion of CoreEntity',
-            $this->getReference('b00swyx1'), // promotion of Core entity - serie 1
+            $this->getReference('b00swyx1'), // promotion of Core entity - series 1
             1, // weight
             true,
-            new DateTime('1900-01-01'),
-            new DateTime('3000-01-01')
+            new DateTime('1900-01-01 00:00:00'),
+            new DateTime('3000-01-01 00:00:00')
         );
 
         $this->buildPromotion(
@@ -40,45 +40,54 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             $this->getReference('mg000003'), // promotion of image
             2,
             true,
-            new DateTime('1900-01-01'),
-            new DateTime('3000-01-01')
+            new DateTime('1900-01-01 00:00:00'),
+            new DateTime('3000-01-01 00:00:00')
         );
 
         $this->buildPromotion(
             'p000002h',
             'expired promotion B',
-            $this->getReference('b00swyx1'),
+            $this->getReference('b010t150'), // promotion of series 2 (expired)
             3,
             true,
-            new DateTime('1900-01-01'),
-            new DateTime('2000-01-01')
+            new DateTime('1900-01-01 00:00:00'),
+            new DateTime('2000-01-01 00:00:00')
         );
 
-        $this->buildPromotion(
+        $this->buildPromotion(   // promotion of series 1 (expired)
             'p000003h',
             'disabled promotion C',
             $this->getReference('b00swyx1'),
             4,
             false,
-            new DateTime('1900-01-01'),
-            new DateTime('2000-01-01')
+            new DateTime('1900-01-01 00:00:00'),
+            new DateTime('2000-01-01 00:00:00')
         );
 
-        $this->buildSuperPromotion(
+        $this->buildPromotion(
             'p000004h',
             'active super promotion D',
-            $this->getReference('b010t150'), // promotion of Core entity - serie 2
+            $this->getReference('b00swgkn'), // promotion of episode 1
             5,
             true,
-            new DateTime('1900-01-01'),
-            new DateTime('3000-01-01')
+            new DateTime('1900-01-01 00:00:00'),
+            new DateTime('3000-01-01 00:00:00'),
+            true
         );
 
         $manager->flush();
     }
 
-    private function buildPromotion(string $promoPid, string $title, $promotionOf, int $weighting, bool $isActive, DateTime $startDate, DateTime $endDate)
-    {
+    private function buildPromotion(
+        string $promoPid,
+        string $title,
+        $promotionOf,
+        int $weighting,
+        bool $isActive,
+        DateTime $startDate,
+        DateTime $endDate,
+        bool $isSuperpromotion = false
+    ): Promotion {
         $promo = new Promotion(
             $promoPid,
             $promotionOf,
@@ -88,30 +97,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
         );
 
         $promo->setTitle($title);
-        $promo->setCascadesToDescendants(0);
+        $promo->setCascadesToDescendants($isSuperpromotion);
         $promo->setIsActive($isActive);
-
-        $promo->setContext($this->getReference('b010t19z')); // brand pid
-
-        $this->manager->persist($promo);
-
-        return $promo;
-    }
-
-    private function buildSuperPromotion(string $promoPid, string $title, $promotionOf, int $weighting, bool $isActive, DateTime $startDate, DateTime $endDate)
-    {
-        $promo = new Promotion(
-            $promoPid,
-            $promotionOf,
-            $startDate,
-            $endDate,
-            $weighting
-        );
-
-        $promo->setTitle($title);
-        $promo->setCascadesToDescendants(1);
-        $promo->setIsActive($isActive);
-
         $promo->setContext($this->getReference('b010t19z')); // brand pid
 
         $this->manager->persist($promo);
