@@ -24,7 +24,7 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
     {
         $this->manager = $manager;
 
-        $activePromotionOfCoreEntity = $this->buildPromotion(
+        $this->buildPromotion(
             'p000000h',
             'active promotion of CoreEntity',
             $this->getReference('b00swyx1'), // promotion of Core entity - serie 1
@@ -34,41 +34,41 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             new DateTime('3000-01-01')
         );
 
-        $activePromotionOfImage = $this->buildPromotion(
+        $this->buildPromotion(
             'p000001h',
             'active promotion of Image ',
             $this->getReference('mg000003'), // promotion of image
-            7, // weight
+            2,
             true,
             new DateTime('1900-01-01'),
             new DateTime('3000-01-01')
         );
 
-        $expiredPromotion = $this->buildPromotion(
+        $this->buildPromotion(
             'p000002h',
             'expired promotion B',
-            $this->getReference('b00swyx1'), // promotion of Core entity - serie 1
-            30, // weight
+            $this->getReference('b00swyx1'),
+            3,
             true,
             new DateTime('1900-01-01'),
             new DateTime('2000-01-01')
         );
 
-        $disablePromotion = $this->buildPromotion(
+        $this->buildPromotion(
             'p000003h',
             'disabled promotion C',
-            $this->getReference('b00swyx1'), // promotion of Core entity - serie 1
-            31, // weight
+            $this->getReference('b00swyx1'),
+            4,
             false,
             new DateTime('1900-01-01'),
             new DateTime('2000-01-01')
         );
 
-        $activeSuperPromotion = $this->buildSuperPromotion(
+        $this->buildSuperPromotion(
             'p000004h',
             'active super promotion D',
             $this->getReference('b010t150'), // promotion of Core entity - serie 2
-            40, // weight
+            5,
             true,
             new DateTime('1900-01-01'),
             new DateTime('3000-01-01')
