@@ -25,6 +25,9 @@ use InvalidArgumentException;
 
 class CoreEntityMapper extends AbstractMapper
 {
+    private const PROGRAMME_TYPES = ['brand', 'clip', 'episode', 'series'];
+    private const GROUP_TYPES = ['collection', 'franchise', 'gallery', 'season'];
+
     private $cache = [];
 
     /**
@@ -36,12 +39,13 @@ class CoreEntityMapper extends AbstractMapper
      */
     public function getCacheKey(array $dbEntity): string
     {
-        if ($this->entityIsA(Group::class, $dbEntity)) {
-            return $this->getCacheKeyForGroup($dbEntity);
-        }
-        if ($this->entityIsA(Programme::class, $dbEntity)) {
+        if ($this->isProgramme($dbEntity)) {
             return $this->getCacheKeyForProgramme($dbEntity);
         }
+        if ($this->isGroup($dbEntity)) {
+            return $this->getCacheKeyForGroup($dbEntity);
+        }
+
         throw new InvalidArgumentException('Unrecognized Core Entity');
     }
 
@@ -72,18 +76,18 @@ class CoreEntityMapper extends AbstractMapper
      */
     public function getDomainModel(array $dbEntity): CoreEntity
     {
-        if ($this->entityIsA(Group::class, $dbEntity)) {
-            return $this->getDomainModelForGroup($dbEntity);
-        }
-        if ($this->entityIsA(Programme::class, $dbEntity)) {
+        if ($this->isProgramme($dbEntity)) {
             return $this->getDomainModelForProgramme($dbEntity);
+        }
+        if ($this->isGroup($dbEntity)) {
+            return $this->getDomainModelForGroup($dbEntity);
         }
         throw new InvalidArgumentException('Unrecognized Core Entity');
     }
 
     public function getDomainModelForGroup(array $dbEntity): Group
     {
-        if (!$this->entityIsA(Group::class, $dbEntity)) {
+        if (!$this->isGroup($dbEntity)) {
             throw new InvalidArgumentException('Could not build domain model for unknown group type "' . ($dbEntity['type'] ?? '') . '"');
         }
 
@@ -98,7 +102,7 @@ class CoreEntityMapper extends AbstractMapper
 
     public function getDomainModelForProgramme(array $dbEntity): Programme
     {
-        if (!$this->entityIsA(Programme::class, $dbEntity)) {
+        if (!$this->isProgramme($dbEntity)) {
             throw new InvalidArgumentException('Could not build domain model for unknown programme type "' . ($dbEntity['type'] ?? '') . '"');
         }
 
@@ -557,20 +561,13 @@ class CoreEntityMapper extends AbstractMapper
         );
     }
 
-    private function entityIsA(string $string, array $dbEntity): bool
+    private function isProgramme(array $dbEntity): bool
     {
-        if (!isset($dbEntity['type'])) {
-            return false;
-        }
+        return isset($dbEntity['type']) && in_array($dbEntity['type'], self::PROGRAMME_TYPES);
+    }
 
-        if ($string == Group::class && in_array($dbEntity['type'], ['collection', 'franchise', 'gallery', 'season'])) {
-            return true;
-        }
-
-        if ($string == Programme::class && in_array($dbEntity['type'], ['brand', 'clip', 'episode', 'series'])) {
-            return true;
-        }
-
-        return false;
+    private function isGroup(array $dbEntity): bool
+    {
+        return isset($dbEntity['type']) && in_array($dbEntity['type'], self::GROUP_TYPES);
     }
 }
