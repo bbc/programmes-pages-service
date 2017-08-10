@@ -30,7 +30,7 @@ class CategoryMapper extends AbstractMapper
         return $this->cache[$cacheKey];
     }
 
-    public function getModel(array $dbCategory): Category
+    private function getModel(array $dbCategory): Category
     {
         if ($dbCategory['type'] == 'genre') {
             return $this->getGenreDomainModel($dbCategory);

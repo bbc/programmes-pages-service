@@ -94,7 +94,7 @@ class CoreEntityMapper extends AbstractMapper
         $cacheKey = $this->getCacheKeyForGroup($dbEntity);
 
         if (!isset($this->cache[$cacheKey])) {
-            $this->cache[$cacheKey] = $this->getModelForGroup($dbEntity);
+            $this->cache[$cacheKey] = $this->getGroupModel($dbEntity);
         }
 
         return $this->cache[$cacheKey];
@@ -109,13 +109,13 @@ class CoreEntityMapper extends AbstractMapper
         $cacheKey = $this->getCacheKeyForProgramme($dbEntity);
 
         if (!isset($this->cache[$cacheKey])) {
-            $this->cache[$cacheKey] = $this->getModelForProgramme($dbEntity);
+            $this->cache[$cacheKey] = $this->getProgrammeModel($dbEntity);
         }
 
         return $this->cache[$cacheKey];
     }
 
-    public function getModelForGroup(array $dbEntity): Group
+    private function getGroupModel(array $dbEntity): Group
     {
         if (isset($dbEntity['type'])) {
             if ($dbEntity['type'] == 'collection') {
@@ -135,7 +135,7 @@ class CoreEntityMapper extends AbstractMapper
         throw new InvalidArgumentException('Could not build domain model for unknown group type "' . ($dbEntity['type'] ?? '') . '"');
     }
 
-    public function getModelForProgramme(array $dbEntity): Programme
+    private function getProgrammeModel(array $dbEntity): Programme
     {
         if (isset($dbEntity['type'])) {
             if ($dbEntity['type'] == 'brand') {
