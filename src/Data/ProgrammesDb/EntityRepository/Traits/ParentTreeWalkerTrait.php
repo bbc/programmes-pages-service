@@ -116,7 +116,7 @@ trait ParentTreeWalkerTrait
      *
      * @return array|null
      */
-    private function combineAncestry($entity, array $potentialAncestors = [], $keyPath = ['ancestry'])
+    private function combineAncestry($entity, array $potentialAncestors = [], array $keyPath = ['ancestry'])
     {
         // an embargoed ancestor will come through as null
         if (is_null($entity)) {
