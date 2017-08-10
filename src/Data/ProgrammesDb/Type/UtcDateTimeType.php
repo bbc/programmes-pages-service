@@ -13,6 +13,7 @@ use InvalidArgumentException;
 
 class UtcDateTimeType extends DateTimeType
 {
+    /** @var Chronos[][] */
     private static $cache = [];
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
