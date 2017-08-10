@@ -11,7 +11,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
 
-abstract class BaseProgrammeMapperTestCase extends BaseMapperTestCase
+abstract class BaseCoreEntityMapperTestCase extends BaseMapperTestCase
 {
     protected $mockImageMapper;
 

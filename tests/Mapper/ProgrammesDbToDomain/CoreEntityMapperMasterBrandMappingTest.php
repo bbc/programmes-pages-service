@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 
-class CoreEntityMapperMasterBrandMappingTest extends BaseProgrammeMapperTestCase
+class CoreEntityMapperMasterBrandMappingTest extends BaseCoreEntityMapperTestCase
 {
     /**
      * When the current entity has a MasterBrand and no parent

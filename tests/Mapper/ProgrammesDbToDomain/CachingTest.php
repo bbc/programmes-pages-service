@@ -5,7 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 
-class CachingTest extends BaseProgrammeMapperTestCase
+class CachingTest extends BaseCoreEntityMapperTestCase
 {
     public function testCacheAccountsForUnfetchedEntities()
     {
