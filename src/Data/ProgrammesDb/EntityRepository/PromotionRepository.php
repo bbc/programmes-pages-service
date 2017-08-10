@@ -2,30 +2,58 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 
 class PromotionRepository extends EntityRepository
 {
-    public function getPromotionsByPid(Pid $pid, ?int $limit, int $offset)
+    public function findActivePromotionsByPid(Pid $pid, ?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('promotion')
             ->addSelect('context')
             ->addSelect('promotionOfCoreEntity')
             ->addSelect('promotionOfImage')
-            ->lefJoin('promotion.context', 'context')
-            ->lefJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
-            ->lefJoin('promotion.promotionOfImage', 'promotionOfImage')
+            ->leftJoin('promotion.context', 'context')
+            ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
+            ->leftJoin('promotion.promotionOfImage', 'promotionOfImage')
+            ->andWhere('promotion.isActive = 1')
+            ->andWhere('promotion.startDate <= :now')
+            ->andWhere('promotion.endDate >= :now')
             ->andWhere('context.pid = :pid')
-            ->addOrderBy('promotion.weighting', 'desc')
+            ->addOrderBy('promotion.weighting', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
-            ->setParameter('pid', $pid);
+            ->setParameter('pid', $pid)
+            ->setParameter('now', new DateTime());
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function getSuperPromotionsByPid(Pid $pid, ?int $limit, int $offset)
+    /**
+     * @param int[] $ancestryIds
+     * @return array
+     */
+    public function findActiveSuperPromotionsByPid(array $ancestryIds, ?int $limit, int $offset): array
     {
+        $qb = $this->createQueryBuilder('promotion')
+           ->addSelect('context')
+           ->addSelect('promotionOfCoreEntity')
+           ->addSelect('promotionOfImage')
+           ->leftJoin('promotion.context', 'context')
+           ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
+           ->leftJoin('promotion.promotionOfImage', 'promotionOfImage')
+           ->andWhere('promotion.isActive = 1')
+           ->andWhere('promotion.startDate <= :now')
+           ->andWhere('promotion.endDate >= :now')
+           ->andWhere('context.id in (:ancestryIds)')
+           ->andWhere('promotion.cascadesToDescendants = 1')
+           ->addOrderBy('promotion.weighting', 'ASC')
+           ->setFirstResult($offset)
+           ->setMaxResults($limit)
+           ->setParameter('ancestryIds', $ancestryIds)
+           ->setParameter('now', new DateTime());
 
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 }
