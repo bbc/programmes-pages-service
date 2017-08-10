@@ -39,8 +39,8 @@ class FindPromotionsByPidTest extends AbstractDatabaseTest
     {
         $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $serie = $coreEntityRepo->findByPid('b00swyx1', 'Series');
-        $serieDbAncestryIds = explode(',', $serie['ancestry']);
+        $series = $coreEntityRepo->findByPid('b00swyx1', 'Series');
+        $serieDbAncestryIds = explode(',', $series['ancestry']);
 
         $dbPromotions = $this->promotionRepository->findActiveSuperPromotionsByPid($serieDbAncestryIds, 300, 0);
 
