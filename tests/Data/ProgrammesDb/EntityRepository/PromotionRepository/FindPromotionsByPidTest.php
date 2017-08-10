@@ -6,20 +6,61 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 /**
- * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PromotionRepository::<public>
+ * @coversDefaultClass BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PromotionRepository
  */
 class FindPromotionsByPidTest extends AbstractDatabaseTest
 {
-    /**
-     * @group dev
-     */
-    public function testNoAdditionalQueriesWhenNoCategoriesAreFound()
+    private $promotionRepository;
+
+    public function setUp()
     {
-        $this->loadFixtures(['MongrelsFixture']);
+        parent::setUp();
 
-        $repo = $this->getRepository('ProgrammesPagesService:Promotion');
+        $this->loadFixtures(['PromotionsFixture']);
+        $this->promotionRepository = $this->getRepository('ProgrammesPagesService:Promotion');
+    }
 
-        $pid = new Pid('b010t19z');
-        $entity = $repo->findActivePromotionsByPid($pid, 300, 0);
+    /**
+     * @covers ::findActivePromotionsByPid
+     */
+    public function testOnlyPromotionsAreReceived()
+    {
+        $brandPid = new Pid('b010t19z');
+        $dbPromotions = $this->promotionRepository->findActivePromotionsByPid($brandPid, 300, 0);
+
+        $this->assertEquals(['p000000h', 'p000001h', 'p000004h'], array_column($dbPromotions, 'pid'));
+        $this->assertCount(1, $this->getDbQueries());
+    }
+
+    /**
+     * @covers ::findActiveSuperPromotionsByPid
+     */
+    public function testOnlySuperpromotionsAreReceivedACoreEntity()
+    {
+        $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+
+        $serie = $coreEntityRepo->findByPid('b00swyx1', 'Series');
+        $serieDbAncestryIds = explode(',', $serie['ancestry']);
+
+        $dbPromotions = $this->promotionRepository->findActiveSuperPromotionsByPid($serieDbAncestryIds, 300, 0);
+
+        $this->assertEquals(['p000004h'], array_column($dbPromotions, 'pid'));
+        $this->assertCount(2, $this->getDbQueries());
+    }
+
+    /**
+     * @covers ::findActiveSuperPromotionsByPid
+     */
+    public function testOnlySuperpromotionsAreReceivedWhenBrandContext()
+    {
+        $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+
+        $brand = $coreEntityRepo->findByPid('b010t19z', 'Brand');
+        $brandDbAncestryIds = explode(',', $brand['ancestry']);
+
+        $dbPromotions = $this->promotionRepository->findActiveSuperPromotionsByPid($brandDbAncestryIds, 300, 0);
+
+        $this->assertEquals(['p000004h'], array_column($dbPromotions, 'pid'));
+        $this->assertCount(2, $this->getDbQueries());
     }
 }

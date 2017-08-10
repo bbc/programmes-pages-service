@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 class PromotionRepository extends EntityRepository
 {
@@ -32,7 +33,6 @@ class PromotionRepository extends EntityRepository
 
     /**
      * @param int[] $ancestryIds
-     * @return array
      */
     public function findActiveSuperPromotionsByPid(array $ancestryIds, ?int $limit, int $offset): array
     {
