@@ -13,6 +13,8 @@ use InvalidArgumentException;
 
 class UtcDateTimeType extends DateTimeType
 {
+    private static $cache = [];
+
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if (is_null($value)) {
@@ -38,17 +40,17 @@ class UtcDateTimeType extends DateTimeType
         if (is_null($value) || $value instanceof Chronos) {
             return $value;
         }
-
-        $converted = Chronos::createFromFormat($platform->getDateTimeFormatString(), $value, 'UTC');
-
-        if (!$converted) {
-            throw ConversionException::conversionFailedFormat(
-                $value,
-                $this->getName(),
-                $platform->getDateTimeFormatString()
-            );
+        $dateFormatString = $platform->getDateTimeFormatString();
+        if (!isset(self::$cache[$dateFormatString][$value])) {
+            self::$cache[$dateFormatString][$value] = Chronos::createFromFormat($dateFormatString, $value, 'UTC');
+            if (!self::$cache[$dateFormatString][$value]) {
+                throw ConversionException::conversionFailedFormat(
+                    $value,
+                    $this->getName(),
+                    $platform->getDateTimeFormatString()
+                );
+            }
         }
-
-        return $converted;
+        return self::$cache[$dateFormatString][$value];
     }
 }
