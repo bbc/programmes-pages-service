@@ -34,14 +34,12 @@ class FindAllByServiceAndDateRangeTest extends AbstractDatabaseTest
             0
         );
 
-
         $this->assertInternalType('array', $broadcasts);
         $this->assertCount(3, $broadcasts);
         $this->assertEquals(
             ['b0000003', 'b0000006', 'b0000007'],
             array_column($broadcasts, 'pid')
         );
-
 
         $this->assertEquals('Programme Image', $broadcasts[0]['programmeItem']['image']['title']);
         $this->assertEquals('Network Image', $broadcasts[1]['programmeItem']['masterBrand']['network']['image']['title']);

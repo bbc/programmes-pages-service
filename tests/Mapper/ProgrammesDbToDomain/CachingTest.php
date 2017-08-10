@@ -84,7 +84,6 @@ class CachingTest extends BaseCoreEntityMapperTestCase
             1
         );
 
-
         // Build an entity with unfetched relationships
         $entityWithAllUnfetched = $programmeMapper->getDomainModelForProgramme($dbEntityWithAllUnfetched);
 

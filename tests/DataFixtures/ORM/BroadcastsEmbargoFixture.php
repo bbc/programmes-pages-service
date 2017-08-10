@@ -48,7 +48,6 @@ class BroadcastsEmbargoFixture extends BroadcastsFixture implements DependentFix
             'mb_bbc_radio_four'
         );
 
-
         // - C: has an embargoed webcast in the future
         $this->buildBroadcast(
             'b000000c',

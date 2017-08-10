@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5f192fee8d0093209562bff8326667d",
+    "content-hash": "62a7868b4c7132dbbf7c5c176e3dc449",
     "packages": [
         {
             "name": "bbc/doctrine-extensions",
@@ -1184,23 +1184,23 @@
             "time": "2016-09-20T10:07:57+00:00"
         },
         {
-            "name": "escapestudios/symfony2-coding-standard",
-            "version": "2.11.0",
+            "name": "endouble/symfony3-custom-coding-standard",
+            "version": "2.17",
             "source": {
                 "type": "git",
-                "url": "https://github.com/djoos/Symfony-coding-standard.git",
-                "reference": "4aea10ad53d1952b2cfd8f7c9afe5e481dd574bc"
+                "url": "https://github.com/Endouble/Symfony3-custom-coding-standard.git",
+                "reference": "eb6d6847d31e84d4b9a57236393376ea9ed72789"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/djoos/Symfony-coding-standard/zipball/4aea10ad53d1952b2cfd8f7c9afe5e481dd574bc",
-                "reference": "4aea10ad53d1952b2cfd8f7c9afe5e481dd574bc",
+                "url": "https://api.github.com/repos/Endouble/Symfony3-custom-coding-standard/zipball/eb6d6847d31e84d4b9a57236393376ea9ed72789",
+                "reference": "eb6d6847d31e84d4b9a57236393376ea9ed72789",
                 "shasum": ""
             },
             "require": {
                 "squizlabs/php_codesniffer": "~2.0"
             },
-            "type": "phpcodesniffer-standard",
+            "type": "coding-standard",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.x-dev"
@@ -1214,21 +1214,16 @@
                 {
                     "name": "David Joos",
                     "email": "david.joos@escapestudios.com"
-                },
-                {
-                    "name": "Community contributors",
-                    "homepage": "https://github.com/djoos/Symfony2-coding-standard/graphs/contributors"
                 }
             ],
-            "description": "CodeSniffer ruleset for the Symfony 2+ coding standard",
-            "homepage": "https://github.com/djoos/Symfony2-coding-standard",
+            "description": "Customized CodeSniffer ruleset for the Symfony3 projects",
+            "homepage": "https://github.com/Endouble/Symfony3-coding-standard",
             "keywords": [
                 "Coding Standard",
-                "Symfony2",
                 "phpcs",
-                "symfony"
+                "symfony3"
             ],
-            "time": "2017-06-08T10:48:30+00:00"
+            "time": "2017-03-22T10:44:59+00:00"
         },
         {
             "name": "myclabs/deep-copy",

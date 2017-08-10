@@ -111,7 +111,6 @@ class ParentResolutionTest extends AbstractDatabaseTest
         // Assert grandparent has null parent (it is top of the hierarchy)
         $this->assertNull($series['parent']['parent']['parent']);
 
-
         // Ensure only two queries - the original findAll and the parent lookup
         $this->assertCount(2, $this->getDbQueries());
     }

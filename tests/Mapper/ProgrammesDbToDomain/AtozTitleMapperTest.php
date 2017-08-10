@@ -29,7 +29,6 @@ class AtozTitleMapperTest extends BaseMapperTestCase
             ->with($programmeDbEntity)
             ->willReturn($expectedProgrammeDomainEntity);
 
-
         $dbEntityArray = [
             'id' => 1,
             'title' => 'Title',

@@ -35,7 +35,6 @@ class BroadcastsWithCategoriesFixture extends AbstractFixture implements Depende
         $ep2 = $this->getReference('p0000003');
         $ep2->setCategories(new ArrayCollection([$category1, $category2]));
 
-
         $ep3 = $this->getReference('p0000004');
         $ep3->setCategories(new ArrayCollection([$format]));
 

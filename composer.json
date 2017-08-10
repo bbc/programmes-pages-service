@@ -26,7 +26,7 @@
     "require-dev": {
         "cakephp/chronos": "^1.1",
         "doctrine/data-fixtures": "^1.2",
-        "escapestudios/symfony2-coding-standard": "^2.9",
+        "endouble/symfony3-custom-coding-standard": "^2.17",
         "phpstan/phpstan": "^0.8.0",
         "phpunit/phpunit": "^6.1",
         "squizlabs/php_codesniffer": "^2.9",

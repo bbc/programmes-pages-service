@@ -36,7 +36,6 @@ class CategoryResolutionTest extends AbstractDatabaseTest
         // Assert hierarchy for sub items
         $this->assertEquals('C00193', $entity['categories'][0]['parent']['pipId']);
 
-
         $this->assertEquals('C00196', $entity['categories'][1]['parent']['pipId']);
         $this->assertEquals('C00193', $entity['categories'][1]['parent']['parent']['pipId']);
 
