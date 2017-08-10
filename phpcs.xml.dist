@@ -34,4 +34,7 @@
             <property name="nestingLevel" value="3" />
         </properties>
     </rule>
+    <rule ref="Zend.NamingConventions.ValidVariableName">
+        <exclude-pattern>src/FaucetBundle/Mapper/*</exclude-pattern>
+    </rule>
 </ruleset>
