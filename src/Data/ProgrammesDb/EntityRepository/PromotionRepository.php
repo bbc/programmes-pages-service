@@ -2,8 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
@@ -26,7 +26,7 @@ class PromotionRepository extends EntityRepository
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->setParameter('pid', $pid)
-            ->setParameter('now', new DateTime());
+            ->setParameter('now', ApplicationTime::getTime());
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
@@ -52,7 +52,7 @@ class PromotionRepository extends EntityRepository
            ->setFirstResult($offset)
            ->setMaxResults($limit)
            ->setParameter('ancestryIds', $ancestryIds)
-           ->setParameter('now', new DateTime());
+           ->setParameter('now', ApplicationTime::getTime());
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
