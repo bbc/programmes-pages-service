@@ -80,14 +80,16 @@ stof_doctrine_extensions:
             timestampable: true
 ```
 
-Define services in the DI container to swiftly get at our(in
-services.yml):
+Define services in the DI container to swiftly get at them (in services.yml):
 
 ```yaml
 services:
+    # MapperFactory takes an array of options to configure how to map entities
     pps.mapper_factory:
         class: BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory
         public: false
+        arguments:
+            - []
 
     pps.domain_service_factory:
         class: BBC\ProgrammesPagesService\Service\ServiceFactory
