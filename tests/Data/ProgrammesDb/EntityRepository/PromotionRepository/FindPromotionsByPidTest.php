@@ -23,7 +23,7 @@ class FindPromotionsByPidTest extends AbstractDatabaseTest
     /**
      * @covers ::findActivePromotionsByPid
      */
-    public function testOnlyPromotionsAreReceived()
+    public function testOnlyActivePromotionsAreReceived()
     {
         $brandPid = new Pid('b010t19z');
         $dbPromotions = $this->promotionRepository->findActivePromotionsByPid($brandPid, 300, 0);
@@ -35,7 +35,7 @@ class FindPromotionsByPidTest extends AbstractDatabaseTest
     /**
      * @covers ::findActiveSuperPromotionsByPid
      */
-    public function testOnlySuperpromotionsAreReceivedACoreEntity()
+    public function testOnlyActiveSuperpromotionsAreReceivedACoreEntity()
     {
         $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
@@ -51,7 +51,7 @@ class FindPromotionsByPidTest extends AbstractDatabaseTest
     /**
      * @covers ::findActiveSuperPromotionsByPid
      */
-    public function testOnlySuperpromotionsAreReceivedWhenBrandContext()
+    public function testOnlyActiveSuperpromotionsAreReceivedWhenBrandContext()
     {
         $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
