@@ -114,6 +114,7 @@ trait ParentTreeWalkerTrait
     /**
      * Using the potential ancestors as a source, recursively set the parents into place
      *
+     * @param array[]|null $entity
      * @return array|null
      */
     private function combineAncestry($entity, array $potentialAncestors = [], array $keyPath = ['ancestry'])
@@ -191,6 +192,7 @@ trait ParentTreeWalkerTrait
      * is equivalent to using:
      * $array['level1']['level2] = 'hello';
      *
+     * @param array[]|null $entity
      * @return mixed
      */
     private function setDeepKey($entity, $valueToSet, array $keyPath = [])
