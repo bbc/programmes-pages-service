@@ -49,7 +49,6 @@ class VersionMapperTest extends BaseMapperTestCase
             ->with($programmeDbEntity)
             ->willReturn($expectedProgrammeDomainEntity);
 
-
         $this->mockVersionTypeMapper->expects($this->exactly(2))
             ->method('getDomainModel')
             ->withConsecutive(
@@ -57,7 +56,6 @@ class VersionMapperTest extends BaseMapperTestCase
                 [$versionTypeDbEntities[1]]
             )
             ->will($this->onConsecutiveCalls(...$expectedVersionTypes));
-
 
         $streamableFrom = new DateTime();
         $streamableUntil = new DateTime('00:00:00 01/01/1970');

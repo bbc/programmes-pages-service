@@ -45,7 +45,6 @@ class TleosByCategoryFixture extends AbstractFixture
         $e23 = $this->buildEpisode('b017j556', 'Brand2 Ep 2/3', $brand2);
         $e33 = $this->buildEpisode('b017j557', 'Brand2 Ep 3/3', $brand2);
 
-
         $manager->flush();
 
         // build categories
@@ -67,7 +66,6 @@ class TleosByCategoryFixture extends AbstractFixture
         $brand2->setCategories(new ArrayCollection([$cat1, $cat11, $cat111, $form2]));
         $brand2->setStreamable(false);
         $manager->persist($brand2);
-
 
         $manager->flush();
     }

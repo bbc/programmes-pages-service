@@ -69,7 +69,6 @@ class FindAdjacentProgrammeByPositionTest extends AbstractDatabaseTest
             //Ensuring items at the start don't have a previous
             ['Clip', $episodeParentDbId, 1, 'previous', null],
 
-
             //Ordering by position previous
             ['Clip', $episodeParentDbId, 2, 'previous', 'p00hv9yz'],
             ['Clip', $episodeParentDbId, 3, 'previous', 'p008k0l5'],

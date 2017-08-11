@@ -18,7 +18,6 @@ class FindByStartAndProgrammeItemIdTest extends AbstractDatabaseTest
         $this->loadFixtures(['CollapsedBroadcastsWithBroadcastsFixture']);
         $this->enableEmbargoedFilter();
 
-
         $broadcastRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
         $broadcast = $broadcastRepo->findOneBy(['pid' => 'bcb00001']);
         $start = \DateTimeImmutable::createFromMutable($broadcast->getStart());
@@ -29,7 +28,6 @@ class FindByStartAndProgrammeItemIdTest extends AbstractDatabaseTest
         $collapsedBroadcasts = $collapsedBroadcastRepo->findByStartAndProgrammeItemId($start, $programmeItemId);
         $collapsedBroadcast = reset($collapsedBroadcasts);
 
-
         $this->assertContains($broadcast->getId(), $collapsedBroadcast['broadcastIds']);
         $this->assertCount(2, $collapsedBroadcast['broadcastIds']);
     }
@@ -38,7 +36,6 @@ class FindByStartAndProgrammeItemIdTest extends AbstractDatabaseTest
     {
         $this->loadFixtures(['CollapsedBroadcastsWithBroadcastsFixture']);
         $this->enableEmbargoedFilter();
-
 
         $broadcastRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
         $broadcast = $broadcastRepo->findOneBy(['pid' => 'bcb00003']);

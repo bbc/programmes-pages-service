@@ -100,10 +100,6 @@ abstract class AbstractDatabaseTest extends TestCase
      * from the overall query count. This method will also bypass the
      * embargo filter, so will always fetch what was requested.
      *
-     * @param $identifier
-     * @param $entityType
-     * @param $identifierName
-     *
      * @return int
      */
     protected function getDbIdFromPersistentIdentifier(

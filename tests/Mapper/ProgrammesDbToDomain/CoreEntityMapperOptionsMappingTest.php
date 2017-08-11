@@ -46,8 +46,6 @@ class CoreEntityMapperOptionsMappingTest extends BaseCoreEntityMapperTestCase
             ->with($brandOptions, $networkOptions)
             ->willReturn($expectedOptionsEntity2);
 
-
-
         $dbEntityArray = $this->getSampleProgrammeDbEntity(
             'b00swyx1',
             null,

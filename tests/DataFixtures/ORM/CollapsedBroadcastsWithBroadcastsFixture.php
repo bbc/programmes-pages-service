@@ -45,7 +45,6 @@ class CollapsedBroadcastsWithBroadcastsFixture extends AbstractFixture implement
         );
         $this->manager->flush();
 
-
         $this->buildCollapsedBroadcast(
             [$broadcast1->getPid(), $broadcast2->getPid()],
             [1, 2]

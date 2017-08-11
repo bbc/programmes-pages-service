@@ -14,7 +14,7 @@ trait ParentTreeWalkerTrait
      * the $keyPath to point to the 'ancestry' field:
      * $keyPath = [''version', 'programmeItem', 'ancestry']testConstructorRequiredArgs
      *
-     * @param  array $entities
+     * @param array $entities
      * @param callable $ancestryGetter A callable that accepts an array of ids and returns a
      *                  list of entities with those ids
      * @param array $keyPath an array of keys to follow to reach the ancestry source field
@@ -114,12 +114,10 @@ trait ParentTreeWalkerTrait
     /**
      * Using the potential ancestors as a source, recursively set the parents into place
      *
-     * @param $entity
-     * @param array $potentialAncestors
-     * @param array $keyPath
+     * @param array[]|null $entity
      * @return array|null
      */
-    private function combineAncestry($entity, array $potentialAncestors = [], $keyPath = ['ancestry'])
+    private function combineAncestry($entity, array $potentialAncestors = [], array $keyPath = ['ancestry'])
     {
         // an embargoed ancestor will come through as null
         if (is_null($entity)) {
@@ -175,8 +173,6 @@ trait ParentTreeWalkerTrait
      * but where we can't hard code how many levels to travel
      * $value = $this->getFieldFromDepth($array, ['level1','level2']);
      *
-     * @param $entity
-     * @param array $keyPath
      * @return mixed
      */
     private function getFieldFromDepth($entity, array $keyPath)
@@ -196,9 +192,7 @@ trait ParentTreeWalkerTrait
      * is equivalent to using:
      * $array['level1']['level2] = 'hello';
      *
-     * @param $entity
-     * @param $valueToSet
-     * @param array $keyPath
+     * @param array[]|null $entity
      * @return mixed
      */
     private function setDeepKey($entity, $valueToSet, array $keyPath = [])

@@ -72,7 +72,7 @@ abstract class BaseCoreEntityMapperTestCase extends BaseMapperTestCase
         ], $factoryOptions));
     }
 
-    /*
+    /**
      * A sample DB Entity that can be used for testing any mappers that the
      * CoreEntityMapper depends upon.
      */
@@ -118,7 +118,7 @@ abstract class BaseCoreEntityMapperTestCase extends BaseMapperTestCase
         ];
     }
 
-    /*
+    /**
      * A sample expected domain model that can be used for testing any mappers
      * that the CoreEntityMapper depends upon.
      */
