@@ -4,7 +4,11 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
+use BBC\ProgrammesPagesService\Domain\Entity\Collection;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
+use BBC\ProgrammesPagesService\Domain\Entity\Franchise;
+use BBC\ProgrammesPagesService\Domain\Entity\Gallery;
+use BBC\ProgrammesPagesService\Domain\Entity\Season;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\Enumeration\MediaTypeEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
@@ -84,7 +88,7 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
         // of the entity, rather than creating a new one every time
         $this->assertSame(
             $mapper->getDomainModelForProgramme($dbEntityArray),
-            $mapper->getDomainModelForProgramme($dbEntityArray)
+            $mapper->getDomainModel($dbEntityArray)
         );
     }
 
@@ -157,7 +161,7 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
         // of the entity, rather than creating a new one every time
         $this->assertSame(
             $mapper->getDomainModelForProgramme($dbEntityArray),
-            $mapper->getDomainModelForProgramme($dbEntityArray)
+            $mapper->getDomainModel($dbEntityArray)
         );
     }
 
@@ -234,7 +238,7 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
         // of the entity, rather than creating a new one every time
         $this->assertSame(
             $mapper->getDomainModelForProgramme($dbEntityArray),
-            $mapper->getDomainModelForProgramme($dbEntityArray)
+            $mapper->getDomainModel($dbEntityArray)
         );
     }
 
@@ -305,7 +309,200 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
         // of the entity, rather than creating a new one every time
         $this->assertSame(
             $mapper->getDomainModelForProgramme($dbEntityArray),
-            $mapper->getDomainModelForProgramme($dbEntityArray)
+            $mapper->getDomainModel($dbEntityArray)
+        );
+    }
+
+    public function testGetDomainModelCollection()
+    {
+        $dbEntityArray = [
+            'id' => 1,
+            'type' => 'collection',
+            'ancestry' => '1,',
+            'pid' => 'b010t19z',
+            'title' => 'Title',
+            'searchTitle' => 'Search Title',
+            'shortSynopsis' => 'Short Synopsis',
+            'mediumSynopsis' => 'Mediumest Synopsis',
+            'longSynopsis' => 'Longest Synopsis',
+            'image' => null,
+            'promotionsCount' => 1,
+            'relatedLinksCount' => 2,
+            'contributionsCount' => 10,
+            'isPodcastable' => false,
+            'parent' => null,
+            'masterBrand' => null,
+            'options' => [],
+        ];
+
+        $expectedEntity = new Collection(
+            [1],
+            new Pid('b010t19z'),
+            'Title',
+            'Search Title',
+            new Synopses('Short Synopsis', 'Mediumest Synopsis', 'Longest Synopsis'),
+            $this->mockDefaultImage,
+            1,
+            2,
+            10,
+            $this->mockOptions,
+            false,
+            null,
+            null
+        );
+
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModelForGroup($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModelForGroup($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
+        );
+    }
+
+    public function testGetDomainModelFranchise()
+    {
+        $dbEntityArray = [
+            'id' => 1,
+            'type' => 'franchise',
+            'ancestry' => '1,',
+            'pid' => 'b010t19z',
+            'title' => 'Title',
+            'searchTitle' => 'Search Title',
+            'shortSynopsis' => 'Short Synopsis',
+            'mediumSynopsis' => 'Mediumest Synopsis',
+            'longSynopsis' => 'Longest Synopsis',
+            'image' => null,
+            'promotionsCount' => 1,
+            'relatedLinksCount' => 2,
+            'contributionsCount' => 10,
+            'aggregatedBroadcastsCount' => 100,
+            'parent' => null,
+            'masterBrand' => null,
+            'options' => [],
+        ];
+
+        $expectedEntity = new Franchise(
+            [1],
+            new Pid('b010t19z'),
+            'Title',
+            'Search Title',
+            new Synopses('Short Synopsis', 'Mediumest Synopsis', 'Longest Synopsis'),
+            $this->mockDefaultImage,
+            1,
+            2,
+            10,
+            $this->mockOptions,
+            100,
+            null
+        );
+
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModelForGroup($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModelForGroup($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
+        );
+    }
+
+    public function testGetDomainModelGallery()
+    {
+        $dbEntityArray = [
+            'id' => 1,
+            'type' => 'gallery',
+            'ancestry' => '1,',
+            'pid' => 'b010t19z',
+            'title' => 'Title',
+            'searchTitle' => 'Search Title',
+            'shortSynopsis' => 'Short Synopsis',
+            'mediumSynopsis' => 'Mediumest Synopsis',
+            'longSynopsis' => 'Longest Synopsis',
+            'image' => null,
+            'promotionsCount' => 1,
+            'relatedLinksCount' => 2,
+            'contributionsCount' => 10,
+            'parent' => null,
+            'masterBrand' => null,
+            'options' => [],
+        ];
+
+        $expectedEntity = new Gallery(
+            [1],
+            new Pid('b010t19z'),
+            'Title',
+            'Search Title',
+            new Synopses('Short Synopsis', 'Mediumest Synopsis', 'Longest Synopsis'),
+            $this->mockDefaultImage,
+            1,
+            2,
+            10,
+            $this->mockOptions,
+            null
+        );
+
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModelForGroup($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModelForGroup($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
+        );
+    }
+
+    public function testGetDomainModelSeason()
+    {
+        $dbEntityArray = [
+            'id' => 1,
+            'type' => 'season',
+            'ancestry' => '1,',
+            'pid' => 'b010t19z',
+            'title' => 'Title',
+            'searchTitle' => 'Search Title',
+            'shortSynopsis' => 'Short Synopsis',
+            'mediumSynopsis' => 'Mediumest Synopsis',
+            'longSynopsis' => 'Longest Synopsis',
+            'image' => null,
+            'promotionsCount' => 1,
+            'relatedLinksCount' => 2,
+            'contributionsCount' => 10,
+            'aggregatedBroadcastsCount' => 100,
+            'startDate' => new DateTime('2015-01-03'),
+            'endDate' => new DateTime('2015-01-03'),
+            'parent' => null,
+            'masterBrand' => null,
+            'options' => [],
+        ];
+
+        $expectedEntity = new Season(
+            [1],
+            new Pid('b010t19z'),
+            'Title',
+            'Search Title',
+            new Synopses('Short Synopsis', 'Mediumest Synopsis', 'Longest Synopsis'),
+            $this->mockDefaultImage,
+            1,
+            2,
+            10,
+            $this->mockOptions,
+            100,
+            null
+        );
+
+        $mapper = $this->getMapper();
+        $this->assertEquals($expectedEntity, $mapper->getDomainModelForGroup($dbEntityArray));
+
+        // Requesting the same entity multiple times reuses a cached instance
+        // of the entity, rather than creating a new one every time
+        $this->assertSame(
+            $mapper->getDomainModelForGroup($dbEntityArray),
+            $mapper->getDomainModel($dbEntityArray)
         );
     }
 
@@ -427,24 +624,33 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
             1001
         );
 
-        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModelForProgramme($dbEntityArray));
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Could not build domain model for unknown programme type "ham"
+     * @expectedExceptionMessage Could not build domain model for unknown programme type "collection"
      */
     public function testUnknownProgrammeType()
     {
-        $this->getMapper()->getDomainModelForProgramme(['id' => 1, 'type' => 'ham']);
+        $this->getMapper()->getDomainModelForProgramme(['id' => 1, 'type' => 'collection']);
     }
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Could not build domain model for unknown programme type ""
+     * @expectedExceptionMessage Could not build domain model for unknown group type "episode"
      */
-    public function testEmptyProgrammeType()
+    public function testUnknownGroupType()
     {
-        $this->getMapper()->getDomainModelForProgramme(['id' => 1]);
+        $this->getMapper()->getDomainModelForGroup(['id' => 1, 'type' => 'episode']);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Unrecognized Core Entity
+     */
+    public function testUnknownType()
+    {
+        $this->getMapper()->getDomainModel(['id' => 1]);
     }
 }
