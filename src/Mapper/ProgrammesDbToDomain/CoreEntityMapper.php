@@ -94,7 +94,15 @@ class CoreEntityMapper extends AbstractMapper
         $cacheKey = $this->getCacheKeyForGroup($dbEntity);
 
         if (!isset($this->cache[$cacheKey])) {
-            $this->cache[$cacheKey] = $this->getGroupModel($dbEntity);
+            if ($dbEntity['type'] == 'collection') {
+                $this->cache[$cacheKey] = $this->getCollectionModel($dbEntity);
+            } elseif ($dbEntity['type'] == 'gallery') {
+                $this->cache[$cacheKey] = $this->getGalleryModel($dbEntity);
+            } elseif ($dbEntity['type'] == 'season') {
+                $this->cache[$cacheKey] = $this->getSeasonModel($dbEntity);
+            } elseif ($dbEntity['type'] == 'franchise') {
+                $this->cache[$cacheKey] = $this->getFranchiseModel($dbEntity);
+            }
         }
 
         return $this->cache[$cacheKey];
@@ -109,50 +117,18 @@ class CoreEntityMapper extends AbstractMapper
         $cacheKey = $this->getCacheKeyForProgramme($dbEntity);
 
         if (!isset($this->cache[$cacheKey])) {
-            $this->cache[$cacheKey] = $this->getProgrammeModel($dbEntity);
+            if ($dbEntity['type'] == 'brand') {
+                $this->cache[$cacheKey] = $this->getBrandModel($dbEntity);
+            } elseif ($dbEntity['type'] == 'series') {
+                $this->cache[$cacheKey] = $this->getSeriesModel($dbEntity);
+            } elseif ($dbEntity['type'] == 'episode') {
+                $this->cache[$cacheKey] = $this->getEpisodeModel($dbEntity);
+            } elseif ($dbEntity['type'] == 'clip') {
+                $this->cache[$cacheKey] = $this->getClipModel($dbEntity);
+            }
         }
 
         return $this->cache[$cacheKey];
-    }
-
-    private function getGroupModel(array $dbEntity): Group
-    {
-        if (isset($dbEntity['type'])) {
-            if ($dbEntity['type'] == 'collection') {
-                return $this->getCollectionModel($dbEntity);
-            }
-            if ($dbEntity['type'] == 'gallery') {
-                return $this->getGalleryModel($dbEntity);
-            }
-            if ($dbEntity['type'] == 'season') {
-                return $this->getSeasonModel($dbEntity);
-            }
-            if ($dbEntity['type'] == 'franchise') {
-                return $this->getFranchiseModel($dbEntity);
-            }
-        }
-
-        throw new InvalidArgumentException('Could not build domain model for unknown group type "' . ($dbEntity['type'] ?? '') . '"');
-    }
-
-    private function getProgrammeModel(array $dbEntity): Programme
-    {
-        if (isset($dbEntity['type'])) {
-            if ($dbEntity['type'] == 'brand') {
-                return $this->getBrandModel($dbEntity);
-            }
-            if ($dbEntity['type'] == 'series') {
-                return $this->getSeriesModel($dbEntity);
-            }
-            if ($dbEntity['type'] == 'episode') {
-                return $this->getEpisodeModel($dbEntity);
-            }
-            if ($dbEntity['type'] == 'clip') {
-                return $this->getClipModel($dbEntity);
-            }
-        }
-
-        throw new InvalidArgumentException('Could not build domain model for unknown programme type "' . ($dbEntity['type'] ?? '') . '"');
     }
 
     private function getCollectionModel($dbGroup): Collection
