@@ -71,7 +71,7 @@ class PromotionRepository extends EntityRepository
     {
         $coreEntitiesToResolve = [];
         foreach ($promotions as $i => $promotion) {
-            if (!empty($promotion['promotionOfCoreEntity']) && empty($promotion['promotionOfCoreEntity']['image'])) {
+            if (!empty($promotion['promotionOfCoreEntity'])) {
                 $coreEntitiesToResolve[$promotion['pid']] = $promotion;
             }
         }
