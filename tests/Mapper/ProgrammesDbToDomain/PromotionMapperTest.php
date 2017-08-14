@@ -124,7 +124,7 @@ class PromotionMapperTest extends BaseMapperTestCase
         );
     }
 
-    private function getPromotionMapper()
+    private function getPromotionMapper(): PromotionMapper
     {
         $mockImageMapper = $this->createMock('BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper');
         $mockImageMapper->method('getDomainModel')->willReturn($this->mockMappedImage);
