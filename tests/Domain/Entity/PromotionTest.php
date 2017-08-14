@@ -27,6 +27,7 @@ class PromotionTest extends TestCase
         $this->assertSame($pid, $promo->getPid());
         $this->assertSame('this is a title', $promo->getTitle());
         $this->assertSame('www.something.url', $promo->getUrl());
+        $this->assertSame(3, $promo->getWeighting());
     }
 
     public function testConstructorPromoRequiredArgsWorksForCoreEntity()
@@ -46,5 +47,6 @@ class PromotionTest extends TestCase
         $this->assertSame($pid, $promo->getPid());
         $this->assertSame('this is a title', $promo->getTitle());
         $this->assertSame('www.something.url', $promo->getUrl());
+        $this->assertSame(3, $promo->getWeighting());
     }
 }
