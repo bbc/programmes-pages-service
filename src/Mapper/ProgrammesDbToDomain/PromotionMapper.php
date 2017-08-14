@@ -4,9 +4,9 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\PromotableInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\Promotion;
+use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
-use InvalidArgumentException;
 
 class PromotionMapper extends AbstractMapper
 {
@@ -70,18 +70,18 @@ class PromotionMapper extends AbstractMapper
      */
     private function getPromotableModel(array $dbPromotion): PromotableInterface
     {
-        if (!empty($dbPromotion['promotionOfCoreEntity'])) {
+        if (isset($dbPromotion['promotionOfCoreEntity'])) {
             return $this->mapperFactory
                 ->getCoreEntityMapper()
                 ->getDomainModel($dbPromotion['promotionOfCoreEntity']);
         }
 
-        if (!empty($dbPromotion['promotionOfImage'])) {
+        if (isset($dbPromotion['promotionOfImage'])) {
             return $this->mapperFactory
                 ->getImageMapper()
                 ->getDomainModel($dbPromotion['promotionOfImage']);
         }
 
-        throw new InvalidArgumentException('A promotion has to promote something, but this one is promoting nothing');
+        throw new DataNotFetchedException('All promotions must be joined to CoreEntity and Image');
     }
 }

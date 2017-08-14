@@ -6,10 +6,13 @@ use BBC\ProgrammesPagesService\Domain\Entity\Promotion;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\PromotionMapper;
-use DateTimeImmutable;
 
 class PromotionMapperTest extends BaseMapperTestCase
 {
+    protected $mockMappedImage;
+
+    protected $mockMappedCoreEntity;
+
     public function setUp()
     {
         parent::setUp();
@@ -23,19 +26,11 @@ class PromotionMapperTest extends BaseMapperTestCase
         $promotionMapper = $this->getPromotionMapper();
 
         $dbPromotionOfImage = [
-            'id' => 1,
+            'id' => 2,
             'pid' => 'p000000h',
-            'startDate' => new DateTimeImmutable('1900-01-01 00:00:00.000000'),
-            'endDate' => new DateTimeImmutable('3000-01-01 00:00:00.000000'),
             'weighting' => 73,
-            'isActive' => 1,
-            'promotedFor' => null,
             'title' => 'active promotion of CoreEntity',
             'uri' => 'www.myuri.com',
-            'cascadesToDescendants' => false,
-            'createdAt' => new DateTimeImmutable('2017-08-11 10:39:25.000000'),
-            'updatedAt' => new DateTimeImmutable('2017-08-11 10:39:25.000000'),
-            'partnerPid' => 's0000001',
             'shortSynopsis' => 'a short synopsis',
             'mediumSynopsis' => 'a medium synopsis',
             'longSynopsis' => 'a long synopsys',
@@ -78,17 +73,9 @@ class PromotionMapperTest extends BaseMapperTestCase
         $dbPromotionOfImage = [
             'id' => 1,
             'pid' => 'p000000h',
-            'startDate' => new DateTimeImmutable('1900-01-01 00:00:00.000000'),
-            'endDate' => new DateTimeImmutable('3000-01-01 00:00:00.000000'),
             'weighting' => 73,
-            'isActive' => 1,
-            'promotedFor' => null,
             'title' => 'active promotion of CoreEntity',
             'uri' => 'www.myuri.com',
-            'cascadesToDescendants' => false,
-            'createdAt' => new DateTimeImmutable('2017-08-11 10:39:25.000000'),
-            'updatedAt' => new DateTimeImmutable('2017-08-11 10:39:25.000000'),
-            'partnerPid' => 's0000001',
             'shortSynopsis' => 'a short synopsis',
             'mediumSynopsis' => 'a medium synopsis',
             'longSynopsis' => 'a long synopsys',
@@ -122,6 +109,48 @@ class PromotionMapperTest extends BaseMapperTestCase
             $promotionMapper->getDomainModel($dbPromotionOfImage),
             $promotionMapper->getDomainModel($dbPromotionOfImage)
         );
+    }
+
+    /**
+    * @expectedException BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+    */
+    public function testPromotionWithNoFetchedDataThrowException()
+    {
+        $promotionMapper = $this->getPromotionMapper();
+        $dbPromotionOfImage = [
+            'id' => 1,
+            'pid' => 'p000000h',
+            'weighting' => 73,
+            'title' => 'active promotion of CoreEntity',
+            'uri' => 'www.myuri.com',
+            'shortSynopsis' => 'a short synopsis',
+            'mediumSynopsis' => 'a medium synopsis',
+            'longSynopsis' => 'a long synopsys',
+            'promotionOfCoreEntity' => null,
+            'promotionOfImage' => null,
+        ];
+
+        $promotionMapper->getDomainModel($dbPromotionOfImage);
+    }
+
+    /**
+     * @expectedException BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException
+     */
+    public function testPromotionWithNoFetchedDataThrowExceptionWhenNotJoined()
+    {
+        $promotionMapper = $this->getPromotionMapper();
+        $dbPromotionOfImage = [
+            'id' => 1,
+            'pid' => 'p000000h',
+            'weighting' => 73,
+            'title' => 'active promotion of CoreEntity',
+            'uri' => 'www.myuri.com',
+            'shortSynopsis' => 'a short synopsis',
+            'mediumSynopsis' => 'a medium synopsis',
+            'longSynopsis' => 'a long synopsys',
+        ];
+
+        $promotionMapper->getDomainModel($dbPromotionOfImage);
     }
 
     private function getPromotionMapper(): PromotionMapper

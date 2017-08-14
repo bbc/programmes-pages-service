@@ -114,15 +114,6 @@ class MapperFactory
         return $this->instances['MasterBrandMapper'];
     }
 
-    public function getPromotionMapper(): PromotionMapper
-    {
-        if (!isset($this->instances['PromotionMapper'])) {
-            $this->instances['PromotionMapper'] = new PromotionMapper($this);
-        }
-
-        return $this->instances['PromotionMapper'];
-    }
-
     public function getNetworkMapper(): NetworkMapper
     {
         if (!isset($this->instances['NetworkMapper'])) {
@@ -139,6 +130,15 @@ class MapperFactory
         }
 
         return $this->instances['OptionsMapper'];
+    }
+
+    public function getPromotionMapper(): PromotionMapper
+    {
+        if (!isset($this->instances['PromotionMapper'])) {
+            $this->instances['PromotionMapper'] = new PromotionMapper($this);
+        }
+
+        return $this->instances['PromotionMapper'];
     }
 
     public function getRelatedLinkMapper(): RelatedLinkMapper
