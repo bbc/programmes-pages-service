@@ -35,36 +35,15 @@ class CoreEntityMapper extends AbstractMapper
      *
      * @param array $dbEntity
      * @return string
-     * @throws InvalidArgumentException
      */
     public function getCacheKey(array $dbEntity): string
     {
-        if ($this->isProgramme($dbEntity)) {
-            return $this->getCacheKeyForProgramme($dbEntity);
-        }
-        if ($this->isGroup($dbEntity)) {
-            return $this->getCacheKeyForGroup($dbEntity);
-        }
-
-        throw new InvalidArgumentException('Unrecognized Core Entity');
-    }
-
-    public function getCacheKeyForGroup(array $dbGroup): string
-    {
-        return $this->buildCacheKey($dbGroup, 'id', [
-            'image' => 'Image',
-            'parent' => 'CoreEntity',
-            'masterBrand' => 'MasterBrand',
-        ]);
-    }
-
-    public function getCacheKeyForProgramme(array $dbProgramme): string
-    {
-        return $this->buildCacheKey($dbProgramme, 'id', [
+        return $this->buildCacheKey($dbEntity, 'id', [
             'image' => 'Image',
             'parent' => 'CoreEntity',
             'masterBrand' => 'MasterBrand',
         ], [
+            // categories are only used by Programmes
             'categories' => 'Category',
         ]);
     }
@@ -91,7 +70,7 @@ class CoreEntityMapper extends AbstractMapper
             throw new InvalidArgumentException('Could not build domain model for unknown group type "' . ($dbEntity['type'] ?? '') . '"');
         }
 
-        $cacheKey = $this->getCacheKeyForGroup($dbEntity);
+        $cacheKey = $this->getCacheKey($dbEntity);
 
         if (!isset($this->cache[$cacheKey])) {
             if ($dbEntity['type'] == 'collection') {
@@ -114,7 +93,7 @@ class CoreEntityMapper extends AbstractMapper
             throw new InvalidArgumentException('Could not build domain model for unknown programme type "' . ($dbEntity['type'] ?? '') . '"');
         }
 
-        $cacheKey = $this->getCacheKeyForProgramme($dbEntity);
+        $cacheKey = $this->getCacheKey($dbEntity);
 
         if (!isset($this->cache[$cacheKey])) {
             if ($dbEntity['type'] == 'brand') {

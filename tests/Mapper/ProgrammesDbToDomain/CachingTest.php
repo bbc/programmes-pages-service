@@ -106,7 +106,7 @@ class CachingTest extends BaseCoreEntityMapperTestCase
         $mapperFactory = new MapperFactory();
         $mapper = $mapperFactory->getCoreEntityMapper();
 
-        $this->assertEquals($expectedKey, $mapper->getCacheKeyForProgramme($dbEntity));
+        $this->assertEquals($expectedKey, $mapper->getCacheKey($dbEntity));
     }
 
     public function cacheKeysForProgrammeDataProvider()
