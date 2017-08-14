@@ -51,7 +51,7 @@ class Promotion
         return $this->promotedEntity;
     }
 
-    public function getSynopses()
+    public function getSynopses(): Synopses
     {
         return $this->synopses;
     }
