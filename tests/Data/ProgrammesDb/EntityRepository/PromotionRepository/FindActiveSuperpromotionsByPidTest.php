@@ -31,7 +31,7 @@ class FindActiveSuperpromotionsByPidTest extends AbstractDatabaseTest
         $series = $coreEntityRepo->findByPid('b00swyx1', 'Series');
         $seriesDbAncestryIds = explode(',', $series['ancestry']);
 
-        $dbPromotions = $this->promotionRepository->findActiveSuperPromotionsByAncestryIds($seriesDbAncestryIds, new DateTimeImmutable(), 300, 0);
+        $dbPromotions = $this->promotionRepository->findActiveSuperPromotionsByAncestry($seriesDbAncestryIds, new DateTimeImmutable(), 300, 0);
 
         $this->assertEquals(['p000004h'], array_column($dbPromotions, 'pid'));
         $this->assertEquals(
@@ -49,7 +49,7 @@ class FindActiveSuperpromotionsByPidTest extends AbstractDatabaseTest
         $brand = $coreEntityRepo->findByPid('b010t19z', 'Brand');
         $brandDbAncestryIds = explode(',', $brand['ancestry']);
 
-        $dbPromotions = $this->promotionRepository->findActiveSuperPromotionsByAncestryIds($brandDbAncestryIds, new DateTimeImmutable(), 300, 0);
+        $dbPromotions = $this->promotionRepository->findActiveSuperPromotionsByAncestry($brandDbAncestryIds, new DateTimeImmutable(), 300, 0);
 
         $this->assertEquals(['p000004h'], array_column($dbPromotions, 'pid'));
         $this->assertEquals(
