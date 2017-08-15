@@ -40,7 +40,7 @@ class PromotionRepository extends EntityRepository
      * @param int[] $ancestryIds
      * @return array[]
      */
-    public function findActiveSuperPromotionsByPid(array $ancestryIds, DateTimeImmutable $datetime, ?int $limit, int $offset): array
+    public function findActiveSuperPromotionsByAncestry(array $ancestryIds, DateTimeImmutable $datetime, ?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('promotion')
            ->addSelect(['promotionOfCoreEntity', 'promotionOfImage', 'imageForPromotionOfCoreEntity'])
