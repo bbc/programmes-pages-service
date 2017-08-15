@@ -132,6 +132,15 @@ class MapperFactory
         return $this->instances['OptionsMapper'];
     }
 
+    public function getPromotionMapper(): PromotionMapper
+    {
+        if (!isset($this->instances['PromotionMapper'])) {
+            $this->instances['PromotionMapper'] = new PromotionMapper($this);
+        }
+
+        return $this->instances['PromotionMapper'];
+    }
+
     public function getRelatedLinkMapper(): RelatedLinkMapper
     {
         if (!isset($this->instances['RelatedLinkMapper'])) {
