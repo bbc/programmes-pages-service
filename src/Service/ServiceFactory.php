@@ -172,6 +172,19 @@ class ServiceFactory
         return $this->instances[ProgrammesService::class];
     }
 
+    public function getPromotionsService(): PromotionsService
+    {
+        if (!isset($this->instances[PromotionsService::class])) {
+            $this->instances[PromotionsService::class] = new PromotionsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Promotion'),
+                $this->mapperFactory->getPromotionMapper(),
+                $this->cache
+            );
+        }
+
+        return $this->instances[PromotionsService::class];
+    }
+
     public function getRelatedLinksService(): RelatedLinksService
     {
         if (!isset($this->instances[RelatedLinksService::class])) {
