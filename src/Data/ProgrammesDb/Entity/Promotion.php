@@ -8,7 +8,11 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
 
 /**
+ * @ORM\Table(indexes={
+ *   @ORM\Index(name="promotion_context_idx", columns={"context_id", "is_active", "start_date", "end_date"}),
+ *  })
  * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PromotionRepository")
  */
 class Promotion
 {
