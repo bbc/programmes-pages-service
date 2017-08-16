@@ -9,9 +9,9 @@ use BBC\ProgrammesPagesService\Mapper\Traits\SynopsesTrait;
 
 class SegmentMapper extends AbstractMapper
 {
-    const MUSIC_TYPES = ['music', 'classical'];
-
     use SynopsesTrait;
+
+    const MUSIC_TYPES = ['music', 'classical'];
 
     private $cache = [];
 

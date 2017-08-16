@@ -7,14 +7,14 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 trait SynopsesTrait
 {
     /**
-     * @param mixed[] $dbImage
+     * @param mixed[] $entity
      */
-    private function getSynopses(array $dbImage): Synopses
+    private function getSynopses(array $entity): Synopses
     {
         return new Synopses(
-            $dbImage['shortSynopsis'],
-            $dbImage['mediumSynopsis'],
-            $dbImage['longSynopsis']
+            $entity['shortSynopsis'],
+            $entity['mediumSynopsis'],
+            $entity['longSynopsis']
         );
     }
 }
