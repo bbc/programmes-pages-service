@@ -2,7 +2,6 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
