@@ -35,163 +35,163 @@ class MapperFactory
 
     public function getAtozTitleMapper(): AtozTitleMapper
     {
-        if (!isset($this->instances['AtozTitleMapper'])) {
-            $this->instances['AtozTitleMapper'] = new AtozTitleMapper($this);
+        if (!isset($this->instances[AtozTitleMapper::class])) {
+            $this->instances[AtozTitleMapper::class] = new AtozTitleMapper($this);
         }
 
-        return $this->instances['AtozTitleMapper'];
+        return $this->instances[AtozTitleMapper::class];
     }
 
     public function getBroadcastMapper(): BroadcastMapper
     {
-        if (!isset($this->instances['BroadcastMapper'])) {
-            $this->instances['BroadcastMapper'] = new BroadcastMapper($this);
+        if (!isset($this->instances[BroadcastMapper::class])) {
+            $this->instances[BroadcastMapper::class] = new BroadcastMapper($this);
         }
 
-        return $this->instances['BroadcastMapper'];
+        return $this->instances[BroadcastMapper::class];
     }
 
     public function getCategoryMapper(): CategoryMapper
     {
-        if (!isset($this->instances['CategoryMapper'])) {
-            $this->instances['CategoryMapper'] = new CategoryMapper($this);
+        if (!isset($this->instances[CategoryMapper::class])) {
+            $this->instances[CategoryMapper::class] = new CategoryMapper($this);
         }
 
-        return $this->instances['CategoryMapper'];
+        return $this->instances[CategoryMapper::class];
     }
 
     public function getContributionMapper(): ContributionMapper
     {
-        if (!isset($this->instances['ContributionMapper'])) {
-            $this->instances['ContributionMapper'] = new ContributionMapper($this);
+        if (!isset($this->instances[ContributionMapper::class])) {
+            $this->instances[ContributionMapper::class] = new ContributionMapper($this);
         }
 
-        return $this->instances['ContributionMapper'];
+        return $this->instances[ContributionMapper::class];
     }
 
     public function getContributorMapper(): ContributorMapper
     {
-        if (!isset($this->instances['ContributorMapper'])) {
-            $this->instances['ContributorMapper'] = new ContributorMapper($this);
+        if (!isset($this->instances[ContributorMapper::class])) {
+            $this->instances[ContributorMapper::class] = new ContributorMapper($this);
         }
 
-        return $this->instances['ContributorMapper'];
+        return $this->instances[ContributorMapper::class];
     }
 
     public function getCollapsedBroadcastMapper(): CollapsedBroadcastMapper
     {
-        if (!isset($this->instances['CollapsedBroadcastMapper'])) {
-            $this->instances['CollapsedBroadcastMapper'] = new CollapsedBroadcastMapper($this);
+        if (!isset($this->instances[CollapsedBroadcastMapper::class])) {
+            $this->instances[CollapsedBroadcastMapper::class] = new CollapsedBroadcastMapper($this);
         }
 
-        return $this->instances['CollapsedBroadcastMapper'];
+        return $this->instances[CollapsedBroadcastMapper::class];
     }
 
     public function getCoreEntityMapper(): CoreEntityMapper
     {
-        if (!isset($this->instances['CoreEntityMapper'])) {
-            $this->instances['CoreEntityMapper'] = new CoreEntityMapper($this);
+        if (!isset($this->instances[CoreEntityMapper::class])) {
+            $this->instances[CoreEntityMapper::class] = new CoreEntityMapper($this);
         }
 
-        return $this->instances['CoreEntityMapper'];
+        return $this->instances[CoreEntityMapper::class];
     }
 
     public function getImageMapper(): ImageMapper
     {
-        if (!isset($this->instances['ImageMapper'])) {
-            $this->instances['ImageMapper'] = new ImageMapper($this);
+        if (!isset($this->instances[ImageMapper::class])) {
+            $this->instances[ImageMapper::class] = new ImageMapper($this);
         }
 
-        return $this->instances['ImageMapper'];
+        return $this->instances[ImageMapper::class];
     }
 
     public function getMasterBrandMapper(): MasterBrandMapper
     {
-        if (!isset($this->instances['MasterBrandMapper'])) {
-            $this->instances['MasterBrandMapper'] = new MasterBrandMapper($this);
+        if (!isset($this->instances[MasterBrandMapper::class])) {
+            $this->instances[MasterBrandMapper::class] = new MasterBrandMapper($this);
         }
 
-        return $this->instances['MasterBrandMapper'];
+        return $this->instances[MasterBrandMapper::class];
     }
 
     public function getNetworkMapper(): NetworkMapper
     {
-        if (!isset($this->instances['NetworkMapper'])) {
-            $this->instances['NetworkMapper'] = new NetworkMapper($this);
+        if (!isset($this->instances[NetworkMapper::class])) {
+            $this->instances[NetworkMapper::class] = new NetworkMapper($this);
         }
 
-        return $this->instances['NetworkMapper'];
+        return $this->instances[NetworkMapper::class];
     }
 
     public function getOptionsMapper(): OptionsMapper
     {
-        if (!isset($this->instances['OptionsMapper'])) {
-            $this->instances['OptionsMapper'] = new OptionsMapper($this);
+        if (!isset($this->instances[OptionsMapper::class])) {
+            $this->instances[OptionsMapper::class] = new OptionsMapper($this);
         }
 
-        return $this->instances['OptionsMapper'];
+        return $this->instances[OptionsMapper::class];
     }
 
     public function getPromotionMapper(): PromotionMapper
     {
-        if (!isset($this->instances['PromotionMapper'])) {
-            $this->instances['PromotionMapper'] = new PromotionMapper($this);
+        if (!isset($this->instances[PromotionMapper::class])) {
+            $this->instances[PromotionMapper::class] = new PromotionMapper($this);
         }
 
-        return $this->instances['PromotionMapper'];
+        return $this->instances[PromotionMapper::class];
     }
 
     public function getRelatedLinkMapper(): RelatedLinkMapper
     {
-        if (!isset($this->instances['RelatedLinkMapper'])) {
-            $this->instances['RelatedLinkMapper'] = new RelatedLinkMapper($this);
+        if (!isset($this->instances[RelatedLinkMapper::class])) {
+            $this->instances[RelatedLinkMapper::class] = new RelatedLinkMapper($this);
         }
 
-        return $this->instances['RelatedLinkMapper'];
+        return $this->instances[RelatedLinkMapper::class];
     }
 
     public function getSegmentMapper(): SegmentMapper
     {
-        if (!isset($this->instances['SegmentMapper'])) {
-            $this->instances['SegmentMapper'] = new SegmentMapper($this);
+        if (!isset($this->instances[SegmentMapper::class])) {
+            $this->instances[SegmentMapper::class] = new SegmentMapper($this);
         }
 
-        return $this->instances['SegmentMapper'];
+        return $this->instances[SegmentMapper::class];
     }
 
     public function getSegmentEventMapper(): SegmentEventMapper
     {
-        if (!isset($this->instances['SegmentEventMapper'])) {
-            $this->instances['SegmentEventMapper'] = new SegmentEventMapper($this);
+        if (!isset($this->instances[SegmentEventMapper::class])) {
+            $this->instances[SegmentEventMapper::class] = new SegmentEventMapper($this);
         }
 
-        return $this->instances['SegmentEventMapper'];
+        return $this->instances[SegmentEventMapper::class];
     }
 
     public function getServiceMapper(): ServiceMapper
     {
-        if (!isset($this->instances['ServiceMapper'])) {
-            $this->instances['ServiceMapper'] = new ServiceMapper($this);
+        if (!isset($this->instances[ServiceMapper::class])) {
+            $this->instances[ServiceMapper::class] = new ServiceMapper($this);
         }
 
-        return $this->instances['ServiceMapper'];
+        return $this->instances[ServiceMapper::class];
     }
 
     public function getVersionMapper(): VersionMapper
     {
-        if (!isset($this->instances['VersionMapper'])) {
-            $this->instances['VersionMapper'] = new VersionMapper($this);
+        if (!isset($this->instances[VersionMapper::class])) {
+            $this->instances[VersionMapper::class] = new VersionMapper($this);
         }
 
-        return $this->instances['VersionMapper'];
+        return $this->instances[VersionMapper::class];
     }
 
     public function getVersionTypeMapper(): VersionTypeMapper
     {
-        if (!isset($this->instances['VersionTypeMapper'])) {
-            $this->instances['VersionTypeMapper'] = new VersionTypeMapper($this);
+        if (!isset($this->instances[VersionTypeMapper::class])) {
+            $this->instances[VersionTypeMapper::class] = new VersionTypeMapper($this);
         }
 
-        return $this->instances['VersionTypeMapper'];
+        return $this->instances[VersionTypeMapper::class];
     }
 }
