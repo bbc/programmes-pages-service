@@ -6,10 +6,12 @@ use BBC\ProgrammesPagesService\Domain\Entity\PromotableInterface;
 use BBC\ProgrammesPagesService\Domain\Entity\Promotion;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
+use BBC\ProgrammesPagesService\Mapper\Traits\SynopsesTrait;
 
 class PromotionMapper extends AbstractMapper
 {
+    use SynopsesTrait;
+
     /**
      * @param array[] $dbPromotion
      */
@@ -56,15 +58,7 @@ class PromotionMapper extends AbstractMapper
     /**
      * @param array[] $dbPromotion
      */
-    private function getSynopses(array $dbPromotion): Synopses
-    {
-        return new Synopses(
-            $dbPromotion['shortSynopsis'],
-            $dbPromotion['mediumSynopsis'],
-            $dbPromotion['longSynopsis']
-        );
-    }
-
+    
     /**
      * @param array[] $dbPromotion
      * @throws DataNotFetchedException if we get a promotion but there is nothing being

@@ -20,11 +20,13 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
+use BBC\ProgrammesPagesService\Mapper\Traits\SynopsesTrait;
 use InvalidArgumentException;
 
 class CoreEntityMapper extends AbstractMapper
 {
+    use SynopsesTrait;
+
     private const PROGRAMME_TYPES = ['brand', 'clip', 'episode', 'series'];
     private const GROUP_TYPES = ['collection', 'franchise', 'gallery', 'season'];
 
@@ -505,15 +507,6 @@ class CoreEntityMapper extends AbstractMapper
         }
 
         return $categories;
-    }
-
-    private function getSynopses($dbEntity): Synopses
-    {
-        return new Synopses(
-            $dbEntity['shortSynopsis'],
-            $dbEntity['mediumSynopsis'],
-            $dbEntity['longSynopsis']
-        );
     }
 
     private function isProgramme(array $dbEntity): bool

@@ -3,10 +3,12 @@
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
+use BBC\ProgrammesPagesService\Mapper\Traits\SynopsesTrait;
 
 class RelatedLinkMapper extends AbstractMapper
 {
+    use SynopsesTrait;
+
     private $cache = [];
 
     public function getCacheKey(array $dbRelatedLink): string
@@ -30,14 +32,5 @@ class RelatedLinkMapper extends AbstractMapper
         }
 
         return $this->cache[$cacheKey];
-    }
-
-    private function getSynopses(array $dbRelatedLink): Synopses
-    {
-        return new Synopses(
-            $dbRelatedLink['shortSynopsis'],
-            $dbRelatedLink['mediumSynopsis'],
-            $dbRelatedLink['longSynopsis']
-        );
     }
 }
