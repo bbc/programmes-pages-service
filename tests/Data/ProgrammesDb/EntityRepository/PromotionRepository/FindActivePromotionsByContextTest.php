@@ -9,7 +9,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PromotionRepository::<public>
  */
-class FindActivePromotionsByPidTest extends AbstractDatabaseTest
+class FindActivePromotionsByContextTest extends AbstractDatabaseTest
 {
     public function testActivePromotionsAreReceived()
     {
