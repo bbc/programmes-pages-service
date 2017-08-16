@@ -9,7 +9,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PromotionRepository::<public>
  */
-class FindActiveSuperpromotionsByPidTest extends AbstractDatabaseTest
+class FindActiveSuperpromotionsByAncestryTest extends AbstractDatabaseTest
 {
     /**
      * @var PromotionRepository
