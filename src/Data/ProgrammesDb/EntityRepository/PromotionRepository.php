@@ -85,12 +85,12 @@ class PromotionRepository extends EntityRepository
     }
 
     /**
-     * @param array[] $programmes
+     * @param array[] $entities
      */
-    private function resolveParents(array $programmes): array
+    private function resolveParents(array $entities): array
     {
         return $this->abstractResolveAncestry(
-            $programmes,
+            $entities,
             [$this, 'coreEntityAncestryGetter'],
             ['promotionOfCoreEntity', 'ancestry']
         );
