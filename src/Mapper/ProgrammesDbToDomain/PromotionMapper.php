@@ -67,6 +67,8 @@ class PromotionMapper extends AbstractMapper
 
     /**
      * @param array[] $dbPromotion
+     * @throws DataNotFetchedException if we get a promotion but there is nothing being
+     *     promoted (an image or core entity) associated to the promotion
      */
     private function getPromotableModel(array $dbPromotion): PromotableInterface
     {
