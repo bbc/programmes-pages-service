@@ -16,8 +16,7 @@ class FindActivePromotionsByPidTest extends AbstractDatabaseTest
         $this->loadFixtures(['PromotionsFixture']);
         $promotionRepository = $this->getRepository('ProgrammesPagesService:Promotion');
 
-        $brandPid = new Pid('b010t19z');
-        $dbPromotions = $promotionRepository->findActivePromotionsByPid($brandPid, new DateTimeImmutable(), 300, 0);
+        $dbPromotions = $promotionRepository->findActivePromotionsByContext(1, new DateTimeImmutable(), 300, 0);
 
         $this->assertEquals(['p000000h', 'p000001h', 'p000004h'], array_column($dbPromotions, 'pid'));
         $this->assertEquals(
