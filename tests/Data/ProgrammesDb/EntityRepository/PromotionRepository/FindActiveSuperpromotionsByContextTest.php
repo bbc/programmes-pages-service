@@ -24,7 +24,7 @@ class FindActiveSuperpromotionsByContextTest extends AbstractDatabaseTest
         $this->promotionRepository = $this->getRepository('ProgrammesPagesService:Promotion');
     }
 
-    public function testActiveSuperpromotionsAreReceivedACoreEntity()
+    public function testActiveSuperpromotionsAreReceivedWithSuperPromotionsForEpisode()
     {
         $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
@@ -44,7 +44,26 @@ class FindActiveSuperpromotionsByContextTest extends AbstractDatabaseTest
         $this->assertCount(3, $this->getDbQueries());
     }
 
-    public function testActiveSuperpromotionsAreReceivedWhenBrandContext()
+    public function testActiveSuperpromotionsAreReceivedWithSuperPromotionsForSeries()
+    {
+        $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+
+        $series = $coreEntityRepo->findByPid('b00swyx1', 'Series'); // series 1/episode 1
+        $seriesDbAncestryIds = array_filter(explode(',', $series['ancestry']));
+
+        $dbPromotions = $this->promotionRepository->findActivePromotionsByContext($seriesDbAncestryIds, new DateTimeImmutable(), 300, 0);
+
+        // it fetch the promotion from the brand because is superpromotions and the one being promted by the serie itself
+        $this->assertEquals(['p000001h', 'p000000h'], array_column($dbPromotions, 'pid'));
+        $this->assertEquals(
+            ['episode', 'series', 'brand'],
+            $this->getParentTypesRecursively($dbPromotions[0]['promotionOfCoreEntity'])
+        );
+
+        $this->assertCount(3, $this->getDbQueries());
+    }
+
+    public function testActiveSuperpromotionsAreReceivedWithSuperPromotionsForBrand()
     {
         $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
@@ -53,6 +72,7 @@ class FindActiveSuperpromotionsByContextTest extends AbstractDatabaseTest
 
         $dbPromotions = $this->promotionRepository->findActivePromotionsByContext($brandDbAncestryIds, new DateTimeImmutable(), 300, 0);
 
+        // only the promotion promoted by the brand is received
         $this->assertEquals(['p000000h'], array_column($dbPromotions, 'pid'));
         $this->assertEquals(
             ['episode', 'series', 'brand'],
