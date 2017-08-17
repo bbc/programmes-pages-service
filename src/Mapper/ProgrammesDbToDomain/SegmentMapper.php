@@ -5,10 +5,12 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 use BBC\ProgrammesPagesService\Domain\Entity\MusicSegment;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
+use BBC\ProgrammesPagesService\Mapper\Traits\SynopsesTrait;
 
 class SegmentMapper extends AbstractMapper
 {
+    use SynopsesTrait;
+
     const MUSIC_TYPES = ['music', 'classical'];
 
     private $cache = [];
@@ -70,15 +72,6 @@ class SegmentMapper extends AbstractMapper
             $dbSegment['sourceMedia'],
             $dbSegment['musicCode'],
             $dbSegment['recordingDate']
-        );
-    }
-
-    private function getSynopses(array $dbSegment): Synopses
-    {
-        return new Synopses(
-            $dbSegment['shortSynopsis'],
-            $dbSegment['mediumSynopsis'],
-            $dbSegment['longSynopsis']
         );
     }
 

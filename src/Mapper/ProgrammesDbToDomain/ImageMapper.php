@@ -4,10 +4,12 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
+use BBC\ProgrammesPagesService\Mapper\Traits\SynopsesTrait;
 
 class ImageMapper extends AbstractMapper
 {
+    use SynopsesTrait;
+
     private $cache = [];
 
     private $cachedDefaultImage;
@@ -49,14 +51,5 @@ class ImageMapper extends AbstractMapper
         }
 
         return $this->cachedDefaultImage;
-    }
-
-    private function getSynopses(array $dbImage): Synopses
-    {
-        return new Synopses(
-            $dbImage['shortSynopsis'],
-            $dbImage['mediumSynopsis'],
-            $dbImage['longSynopsis']
-        );
     }
 }
