@@ -7,6 +7,9 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class Promotion
 {
+    /** @var  bool */
+    private $isSuperPromotion;
+
     /** @var Pid */
     private $pid;
 
@@ -31,7 +34,8 @@ class Promotion
         string $title,
         Synopses $synopses,
         string $url,
-        int $weighting
+        int $weighting,
+        bool $isSuperPromotion
     ) {
         $this->pid = $pid;
         $this->promotedEntity = $promotedEntity;
@@ -39,6 +43,12 @@ class Promotion
         $this->title = $title;
         $this->url = $url;
         $this->weighting = $weighting;
+        $this->isSuperPromotion = $isSuperPromotion;
+    }
+
+    public function getIsSuperPromotion(): bool
+    {
+        return $this->isSuperPromotion;
     }
 
     public function getPid(): Pid

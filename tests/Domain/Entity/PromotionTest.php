@@ -19,7 +19,8 @@ class PromotionTest extends TestCase
             'this is a title',
             $this->createMock('BBC\ProgrammesPagesService\Domain\ValueObject\Synopses'),
             'www.something.url',
-            3
+            3,
+            false
         );
 
         $this->assertInstanceOf(PromotableInterface::class, $promo->getPromotedEntity());
@@ -39,7 +40,8 @@ class PromotionTest extends TestCase
             'this is a title',
             $this->createMock('BBC\ProgrammesPagesService\Domain\ValueObject\Synopses'),
             'www.something.url',
-            3
+            3,
+            false
         );
 
         $this->assertInstanceOf(PromotableInterface::class, $promo->getPromotedEntity());

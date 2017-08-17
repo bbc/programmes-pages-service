@@ -10,7 +10,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindActivePromotionsByContextTest extends AbstractDatabaseTest
 {
-    public function testActivePromotionsAreReceived()
+    public function testFindActivePromotionsByContextFetchAllActive()
     {
         $this->loadFixtures(['PromotionsFixture']);
         $promotionRepository = $this->getRepository('ProgrammesPagesService:Promotion');
@@ -26,6 +26,22 @@ class FindActivePromotionsByContextTest extends AbstractDatabaseTest
         $this->assertEquals(
             ['episode', 'series', 'brand'],
             $this->getParentTypesRecursively($dbPromotions[2]['promotionOfCoreEntity'])
+        );
+
+        $this->assertCount(2, $this->getDbQueries());
+    }
+
+    public function testFindActivePromotionsByContextNoFetchSuperPromotions()
+    {
+        $this->loadFixtures(['PromotionsFixture']);
+        $promotionRepository = $this->getRepository('ProgrammesPagesService:Promotion');
+
+        $dbPromotions = $promotionRepository->findActivePromotionsByContext(1, new DateTimeImmutable(), 300, 0, false);
+
+        $this->assertEquals(['p000000h', 'p000001h'], array_column($dbPromotions, 'pid'));
+        $this->assertEquals(
+            ['series', 'brand'],
+            $this->getParentTypesRecursively($dbPromotions[0]['promotionOfCoreEntity'])
         );
 
         $this->assertCount(2, $this->getDbQueries());

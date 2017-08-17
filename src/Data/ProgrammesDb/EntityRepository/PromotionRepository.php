@@ -13,7 +13,7 @@ class PromotionRepository extends EntityRepository
     /**
      * @return array[]
      */
-    public function findActivePromotionsByContext(int $contextId, DateTimeImmutable $datetime, ?int $limit, int $offset): array
+    public function findActivePromotionsByContext(int $contextId, DateTimeImmutable $datetime, ?int $limit, int $offset, bool $includeSuperPromotions = true): array
     {
         $qb = $this->createQueryBuilder('promotion')
             ->addSelect(['promotionOfCoreEntity', 'promotionOfImage', 'imageForPromotionOfCoreEntity'])
@@ -29,6 +29,10 @@ class PromotionRepository extends EntityRepository
             ->setMaxResults($limit)
             ->setParameter('contextId', $contextId)
             ->setParameter('datetime', $datetime);
+
+        if (!$includeSuperPromotions) {
+            $qb->andWhere('promotion.cascadesToDescendants = 0');
+        }
 
         $promotions = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         return $this->resolveParentsForPromosOfCoreEntities($promotions);

@@ -31,7 +31,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             1, // weight
             true,
             new DateTime('1900-01-01 00:00:00'),
-            new DateTime('3000-01-01 00:00:00')
+            new DateTime('3000-01-01 00:00:00'),
+            false
         );
 
         $this->buildPromotion(
@@ -41,7 +42,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             2,
             true,
             new DateTime('1900-01-01 00:00:00'),
-            new DateTime('3000-01-01 00:00:00')
+            new DateTime('3000-01-01 00:00:00'),
+            false
         );
 
         $this->buildPromotion(
@@ -51,7 +53,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             3,
             true,
             new DateTime('1900-01-01 00:00:00'),
-            new DateTime('2000-01-01 00:00:00')
+            new DateTime('2000-01-01 00:00:00'),
+            false
         );
 
         $this->buildPromotion(   // promotion of series 1 (expired)
@@ -61,7 +64,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             4,
             false,
             new DateTime('1900-01-01 00:00:00'),
-            new DateTime('2000-01-01 00:00:00')
+            new DateTime('2000-01-01 00:00:00'),
+            false
         );
 
         $this->buildPromotion(
@@ -86,7 +90,7 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
         bool $isActive,
         DateTime $startDate,
         DateTime $endDate,
-        bool $isSuperpromotion = false
+        bool $isSuperpromotion
     ): Promotion {
         $promo = new Promotion(
             $promoPid,
