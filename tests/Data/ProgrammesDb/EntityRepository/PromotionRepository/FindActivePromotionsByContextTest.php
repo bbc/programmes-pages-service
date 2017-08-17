@@ -82,6 +82,26 @@ class FindActivePromotionsByContextTest extends AbstractDatabaseTest
         $this->assertCount(3, $this->getDbQueries());
     }
 
+    public function testActiveSuperpromotionsAreReceivedWithSuperPromotionsForImage()
+    {
+        $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+
+        $brand = $coreEntityRepo->findByPid('b010t150', 'Series'); // brand 1/series 2
+        $brandDbAncestryIds = array_filter(explode(',', $brand['ancestry']));
+
+        $dbPromotions = $this->promotionRepository->findActivePromotionsByContext($brandDbAncestryIds, new DateTimeImmutable(), 300, 0);
+
+        // we fetch promotions of images and super promotions
+        $this->assertEquals(['p000005h', 'p000000h'], array_column($dbPromotions, 'pid'));
+        $this->assertEquals('standard', $dbPromotions[0]['promotionOfImage']['type']);
+        $this->assertEquals(
+            ['episode', 'series', 'brand'],
+            $this->getParentTypesRecursively($dbPromotions[1]['promotionOfCoreEntity'])
+        );
+
+        $this->assertCount(3, $this->getDbQueries());
+    }
+
     private function getParentTypesRecursively($parent, $types = [])
     {
         if (!empty($parent)) {

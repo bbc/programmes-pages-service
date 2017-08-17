@@ -40,6 +40,7 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
 
             series 2 (b010t150)
                 promotion 3 (EXPIRED)
+                image (mg000003)
 
         */
 
