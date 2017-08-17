@@ -28,12 +28,14 @@ class FindActiveSuperpromotionsByAncestryTest extends AbstractDatabaseTest
     {
         $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $series = $coreEntityRepo->findByPid('b00swyx1', 'Series');
-        $seriesDbAncestryIds = explode(',', $series['ancestry']);
+        $series = $coreEntityRepo->findByPid('b00syxx6', 'Episode'); // series 1/episode 1
+        $seriesDbAncestryIds = array_filter(explode(',', $series['ancestry']));
 
-        $dbPromotions = $this->promotionRepository->findActiveSuperPromotionsByAncestry($seriesDbAncestryIds, new DateTimeImmutable(), 300, 0);
+        $dbPromotions = $this->promotionRepository->findActivePromotionsByContext($seriesDbAncestryIds, new DateTimeImmutable(), 300, 0);
 
-        $this->assertEquals(['p000004h'], array_column($dbPromotions, 'pid'));
+        // It doesn't fetch promotions from the series because the ones in series 1 are not super promotions.
+        // But the one in brand (p000000h), which is superpromotions, is fetched
+        $this->assertEquals(['p000004h', 'p000000h'], array_column($dbPromotions, 'pid'));
         $this->assertEquals(
             ['episode', 'series', 'brand'],
             $this->getParentTypesRecursively($dbPromotions[0]['promotionOfCoreEntity'])
@@ -47,11 +49,11 @@ class FindActiveSuperpromotionsByAncestryTest extends AbstractDatabaseTest
         $coreEntityRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
         $brand = $coreEntityRepo->findByPid('b010t19z', 'Brand');
-        $brandDbAncestryIds = explode(',', $brand['ancestry']);
+        $brandDbAncestryIds = array_filter(explode(',', $brand['ancestry']));
 
-        $dbPromotions = $this->promotionRepository->findActiveSuperPromotionsByAncestry($brandDbAncestryIds, new DateTimeImmutable(), 300, 0);
+        $dbPromotions = $this->promotionRepository->findActivePromotionsByContext($brandDbAncestryIds, new DateTimeImmutable(), 300, 0);
 
-        $this->assertEquals(['p000004h'], array_column($dbPromotions, 'pid'));
+        $this->assertEquals(['p000000h'], array_column($dbPromotions, 'pid'));
         $this->assertEquals(
             ['episode', 'series', 'brand'],
             $this->getParentTypesRecursively($dbPromotions[0]['promotionOfCoreEntity'])

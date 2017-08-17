@@ -13,8 +13,13 @@ class PromotionRepository extends EntityRepository
     /**
      * @return array[]
      */
-    public function findActivePromotionsByContext(int $contextId, DateTimeImmutable $datetime, ?int $limit, int $offset, bool $includeSuperPromotions = true): array
+    public function findActivePromotionsByContext(array $ancestryIds, DateTimeImmutable $datetime, ?int $limit, int $offset): array
     {
+        // $contextId is the current context. We want to get both cascading and non-cascading promos for this id
+        // $ancestryIds is an array ids of the parents of the current context. For these ids we only want cascading promos
+        $ancestryIdsOriginal = $ancestryIds;
+        $contextId = array_pop($ancestryIds);
+
         $qb = $this->createQueryBuilder('promotion')
             ->addSelect(['promotionOfCoreEntity', 'promotionOfImage', 'imageForPromotionOfCoreEntity'])
             ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
@@ -23,42 +28,19 @@ class PromotionRepository extends EntityRepository
             ->andWhere('promotion.isActive = 1')
             ->andWhere('promotion.startDate <= :datetime')
             ->andWhere('promotion.endDate > :datetime')
-            ->andWhere('promotion.context = :contextId')
             ->addOrderBy('promotion.weighting', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
-            ->setParameter('contextId', $contextId)
             ->setParameter('datetime', $datetime);
 
-        if (!$includeSuperPromotions) {
-            $qb->andWhere('promotion.cascadesToDescendants = 0');
+        if (!$ancestryIds) {
+            $qb->andWhere('promotion.context = :contextId')
+                ->setParameter('contextId', $contextId);
+        } else {
+            $qb->andWhere('promotion.context = :contextId OR (promotion.context IN (:ancestryIds) AND promotion.cascadesToDescendants = 1)')
+                ->setParameter('contextId', $contextId)
+                ->setParameter('ancestryIds', $ancestryIdsOriginal);
         }
-
-        $promotions = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        return $this->resolveParentsForPromosOfCoreEntities($promotions);
-    }
-
-    /**
-     * @param int[] $ancestryIds
-     * @return array[]
-     */
-    public function findActiveSuperPromotionsByAncestry(array $ancestryIds, DateTimeImmutable $datetime, ?int $limit, int $offset): array
-    {
-        $qb = $this->createQueryBuilder('promotion')
-           ->addSelect(['promotionOfCoreEntity', 'promotionOfImage', 'imageForPromotionOfCoreEntity'])
-           ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
-           ->leftJoin('promotion.promotionOfImage', 'promotionOfImage')
-           ->leftJoin('promotionOfCoreEntity.image', 'imageForPromotionOfCoreEntity')
-           ->andWhere('promotion.isActive = 1')
-           ->andWhere('promotion.startDate <= :datetime')
-           ->andWhere('promotion.endDate > :datetime')
-           ->andWhere('promotion.context in (:ancestryIds)')
-           ->andWhere('promotion.cascadesToDescendants = 1')
-           ->addOrderBy('promotion.weighting', 'ASC')
-           ->setFirstResult($offset)
-           ->setMaxResults($limit)
-           ->setParameter('ancestryIds', $ancestryIds)
-           ->setParameter('datetime', $datetime);
 
         $promotions = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         return $this->resolveParentsForPromosOfCoreEntities($promotions);
