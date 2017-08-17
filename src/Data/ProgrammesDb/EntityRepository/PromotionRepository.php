@@ -17,7 +17,6 @@ class PromotionRepository extends EntityRepository
     {
         // $contextId is the current context. We want to get both cascading and non-cascading promos for this id
         // $ancestryIds is an array ids of the parents of the current context. For these ids we only want cascading promos
-        $ancestryIdsOriginal = $ancestryIds;
         $contextId = array_pop($ancestryIds);
 
         $qb = $this->createQueryBuilder('promotion')
@@ -39,7 +38,7 @@ class PromotionRepository extends EntityRepository
         } else {
             $qb->andWhere('promotion.context = :contextId OR (promotion.context IN (:ancestryIds) AND promotion.cascadesToDescendants = 1)')
                 ->setParameter('contextId', $contextId)
-                ->setParameter('ancestryIds', $ancestryIdsOriginal);
+                ->setParameter('ancestryIds', $ancestryIds);
         }
 
         $promotions = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
