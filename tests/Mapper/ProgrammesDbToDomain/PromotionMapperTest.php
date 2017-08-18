@@ -38,6 +38,7 @@ class PromotionMapperTest extends BaseMapperTestCase
             'promotionOfImage' => [
                 'some_key' => 'some_content',
             ],
+            'cascadesToDescendants' => false,
         ];
 
         $expectedMappedPromotion = new Promotion(
@@ -50,7 +51,8 @@ class PromotionMapperTest extends BaseMapperTestCase
                 'a long synopsys'
             ),
             'www.myuri.com',
-            73
+            73,
+            false
         );
 
         $this->assertEquals(
@@ -83,6 +85,7 @@ class PromotionMapperTest extends BaseMapperTestCase
                 'some_key' => 'some_content',
             ],
             'promotionOfImage' => null,
+            'cascadesToDescendants' => true,
         ];
 
         $expectedMappedPromotion = new Promotion(
@@ -95,7 +98,8 @@ class PromotionMapperTest extends BaseMapperTestCase
                 'a long synopsys'
             ),
             'www.myuri.com',
-            73
+            73,
+            true
         );
 
         $this->assertEquals(
@@ -128,6 +132,7 @@ class PromotionMapperTest extends BaseMapperTestCase
             'longSynopsis' => 'a long synopsys',
             'promotionOfCoreEntity' => null,
             'promotionOfImage' => null,
+            'cascadesToDescendants' => false,
         ];
 
         $promotionMapper->getDomainModel($dbPromotionOfImage);
@@ -148,6 +153,7 @@ class PromotionMapperTest extends BaseMapperTestCase
             'shortSynopsis' => 'a short synopsis',
             'mediumSynopsis' => 'a medium synopsis',
             'longSynopsis' => 'a long synopsys',
+            'cascadesToDescendants' => false,
         ];
 
         $promotionMapper->getDomainModel($dbPromotionOfImage);

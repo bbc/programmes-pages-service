@@ -19,7 +19,8 @@ class PromotionTest extends TestCase
             'this is a title',
             $this->createMock('BBC\ProgrammesPagesService\Domain\ValueObject\Synopses'),
             'www.something.url',
-            3
+            3,
+            false
         );
 
         $this->assertInstanceOf(PromotableInterface::class, $promo->getPromotedEntity());
@@ -28,6 +29,7 @@ class PromotionTest extends TestCase
         $this->assertSame('this is a title', $promo->getTitle());
         $this->assertSame('www.something.url', $promo->getUrl());
         $this->assertSame(3, $promo->getWeighting());
+        $this->assertFalse($promo->isSuperPromotion());
     }
 
     public function testConstructorPromoRequiredArgsWorksForCoreEntity()
@@ -39,7 +41,8 @@ class PromotionTest extends TestCase
             'this is a title',
             $this->createMock('BBC\ProgrammesPagesService\Domain\ValueObject\Synopses'),
             'www.something.url',
-            3
+            3,
+            false
         );
 
         $this->assertInstanceOf(PromotableInterface::class, $promo->getPromotedEntity());
@@ -48,5 +51,6 @@ class PromotionTest extends TestCase
         $this->assertSame('this is a title', $promo->getTitle());
         $this->assertSame('www.something.url', $promo->getUrl());
         $this->assertSame(3, $promo->getWeighting());
+        $this->assertFalse($promo->isSuperPromotion());
     }
 }

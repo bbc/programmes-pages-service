@@ -51,7 +51,8 @@ class PromotionMapper extends AbstractMapper
             $dbPromotion['title'],
             $this->getSynopses($dbPromotion),
             $dbPromotion['uri'],
-            $dbPromotion['weighting']
+            $dbPromotion['weighting'],
+            $dbPromotion['cascadesToDescendants']
         );
     }
 

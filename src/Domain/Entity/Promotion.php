@@ -25,13 +25,17 @@ class Promotion
     /** @var int */
     private $weighting;
 
+    /** @var  bool */
+    private $isSuperPromotion;
+
     public function __construct(
         Pid $pid,
         PromotableInterface $promotedEntity,
         string $title,
         Synopses $synopses,
         string $url,
-        int $weighting
+        int $weighting,
+        bool $isSuperPromotion
     ) {
         $this->pid = $pid;
         $this->promotedEntity = $promotedEntity;
@@ -39,6 +43,7 @@ class Promotion
         $this->title = $title;
         $this->url = $url;
         $this->weighting = $weighting;
+        $this->isSuperPromotion = $isSuperPromotion;
     }
 
     public function getPid(): Pid
@@ -69,5 +74,10 @@ class Promotion
     public function getWeighting(): int
     {
         return $this->weighting;
+    }
+
+    public function isSuperPromotion(): bool
+    {
+        return $this->isSuperPromotion;
     }
 }
