@@ -29,10 +29,10 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
         ===================
 
         Brand (b010t19z)
-            promotion 0 (p000000h, SUPER PROMOTION)
+            promotion 0 (p000000h)
 
             series 1 (b00swyx1)
-                promotion 1 (p000001h)
+                promotion 1 (p000001h - SUPER PROMOTION)
                 promotion 2 (EXPIRED)
 
                 episode 1
@@ -54,7 +54,7 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             true,
             new DateTime('1900-01-01 00:00:00'),
             new DateTime('3000-01-01 00:00:00'),
-            true,
+            false,
             $this->getReference('b010t19z') // context: brand1
         );
 
@@ -68,7 +68,7 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             true,
             new DateTime('1900-01-01 00:00:00'),
             new DateTime('3000-01-01 00:00:00'),
-            false,
+            true,
             $this->getReference('b00swyx1') // context: brand1/series 1
         );
 

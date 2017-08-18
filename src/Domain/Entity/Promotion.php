@@ -7,9 +7,6 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class Promotion
 {
-    /** @var  bool */
-    private $isSuperPromotion;
-
     /** @var Pid */
     private $pid;
 
@@ -28,6 +25,9 @@ class Promotion
     /** @var int */
     private $weighting;
 
+    /** @var  bool */
+    private $isSuperPromotion;
+
     public function __construct(
         Pid $pid,
         PromotableInterface $promotedEntity,
@@ -44,11 +44,6 @@ class Promotion
         $this->url = $url;
         $this->weighting = $weighting;
         $this->isSuperPromotion = $isSuperPromotion;
-    }
-
-    public function getIsSuperPromotion(): bool
-    {
-        return $this->isSuperPromotion;
     }
 
     public function getPid(): Pid
@@ -79,5 +74,10 @@ class Promotion
     public function getWeighting(): int
     {
         return $this->weighting;
+    }
+
+    public function isSuperPromotion(): bool
+    {
+        return $this->isSuperPromotion;
     }
 }
