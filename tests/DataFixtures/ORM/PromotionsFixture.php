@@ -52,8 +52,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             $this->getReference('b0175lqm'), // promoting: series2/episode1
             5,
             true,
-            new DateTime('1900-01-01 00:00:00'),
-            new DateTime('3000-01-01 00:00:00'),
+            new DateTime('-1 year'),
+            new DateTime('+1 year'),
             false,
             $this->getReference('b010t19z') // context: brand1
         );
@@ -66,8 +66,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             $this->getReference('b0176rgj'), // promoting: series2/episode2
             1, // weight
             true,
-            new DateTime('1900-01-01 00:00:00'),
-            new DateTime('3000-01-01 00:00:00'),
+            new DateTime('-1 year'),
+            new DateTime('+1 year'),
             true,
             $this->getReference('b00swyx1') // context: brand1/series 1
         );
@@ -79,8 +79,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             $this->getReference('b0176rgj'), // promoting: series2/episode2
             4,
             false,
-            new DateTime('1900-01-01 00:00:00'),
-            new DateTime('2000-01-01 00:00:00'),
+            new DateTime('-10 year'),
+            new DateTime('-9 year'),
             false,
             $this->getReference('b00swyx1') // context: brand1/series 1
         );
@@ -92,8 +92,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             $this->getReference('b0177ffr'), // promoting: series2/episode3
             3,
             true,
-            new DateTime('1900-01-01 00:00:00'),
-            new DateTime('2000-01-01 00:00:00'),
+            new DateTime('-10 year'),
+            new DateTime('-9 year'),
             false,
             $this->getReference('b00swyx1') // context: brand1/series 1
         );
@@ -104,8 +104,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             $this->getReference('b0177ffr'), // promoting: series2/episode3
             3,
             true,
-            new DateTime('1900-01-01 00:00:00'),
-            new DateTime('2200-01-01 00:00:00'),
+            new DateTime('-1 year'),
+            new DateTime('+1 year'),
             false,
             $this->getReference('b00syxx6') // context: brand1/series1/episode2
         );
@@ -116,8 +116,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             $this->getReference('mg000003'), // promoting: image
             2,
             true,
-            new DateTime('1900-01-01 00:00:00'),
-            new DateTime('3000-01-01 00:00:00'),
+            new DateTime('-1 year'),
+            new DateTime('+1 year'),
             false,
             $this->getReference('b010t150') // context: brand1/series2
         );

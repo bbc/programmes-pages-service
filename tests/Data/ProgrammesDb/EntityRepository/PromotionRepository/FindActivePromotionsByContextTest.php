@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
+namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PromotionRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PromotionRepository;
 use DateTimeImmutable;

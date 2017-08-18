@@ -39,13 +39,15 @@ class PromotionRepository extends EntityRepository
             ->setMaxResults($limit)
             ->setParameter('datetime', $datetime);
 
-        if (!$ancestryIds) {
-            $qb->andWhere('promotion.context = :contextId')
-                ->setParameter('contextId', $contextId);
-        } else {
+        if ($ancestryIds) {
+            // If we are not in a top level core entity, fetch promotions and superpromotions.
             $qb->andWhere('promotion.context = :contextId OR (promotion.context IN (:ancestryIds) AND promotion.cascadesToDescendants = 1)')
-                ->setParameter('contextId', $contextId)
-                ->setParameter('ancestryIds', $ancestryIds);
+               ->setParameter('contextId', $contextId)
+               ->setParameter('ancestryIds', $ancestryIds);
+        } else {
+            // otherwise, there is no superpromotions to fetch, just fetch the promotion in the current context
+            $qb->andWhere('promotion.context = :contextId')
+               ->setParameter('contextId', $contextId);
         }
 
         $promotions = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
