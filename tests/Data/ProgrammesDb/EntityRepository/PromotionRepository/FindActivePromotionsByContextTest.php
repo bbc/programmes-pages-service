@@ -61,7 +61,7 @@ class FindActivePromotionsByContextTest extends AbstractDatabaseTest
 
         // it fetch promotions in this order: [current context by weight + parent context by weight]
         $this->assertEquals(['p000007h', 'p000006h', 'p000003h', 'p000002h'], array_column($dbPromotions, 'pid'));
-        $this->assertEquals([3, 3, 2, 4], array_column($dbPromotions, 'weighting'));
+        $this->assertEquals([8, 9, 2, 4], array_column($dbPromotions, 'weighting'));
         $this->assertEquals(
             ['episode', 'series', 'brand'],
             $this->getParentTypesRecursively($dbPromotions[0]['promotionOfCoreEntity'])
