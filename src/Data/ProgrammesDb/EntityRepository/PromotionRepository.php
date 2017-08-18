@@ -24,10 +24,11 @@ class PromotionRepository extends EntityRepository
             throw new InvalidArgumentException('ancestryIds cannot be an empty value');
         }
 
-        $contextId = array_pop($ancestryIds);
+        $contextId = end($ancestryIds);
+        $parentIds = array_slice($ancestryIds, 0, -1);
 
         $qb = $this->createQueryBuilder('promotion')
-            ->addSelect(['promotionOfCoreEntity', 'promotionOfImage', 'imageForPromotionOfCoreEntity'])
+            ->addSelect(['promotionOfCoreEntity', 'promotionOfImage', 'imageForPromotionOfCoreEntity', 'IDENTITY(promotion.context) AS context_id'])
             ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
             ->leftJoin('promotion.promotionOfImage', 'promotionOfImage')
             ->leftJoin('promotionOfCoreEntity.image', 'imageForPromotionOfCoreEntity')
@@ -39,18 +40,35 @@ class PromotionRepository extends EntityRepository
             ->setMaxResults($limit)
             ->setParameter('datetime', $datetime);
 
-        if ($ancestryIds) {
-            // If we are not in a top level core entity, fetch promotions and superpromotions.
-            $qb->andWhere('promotion.context = :contextId OR (promotion.context IN (:ancestryIds) AND promotion.cascadesToDescendants = 1)')
+        if ($parentIds) {
+            // If the context has parents, get all promos relating to the current context and all superpromos of its
+            // ancestors
+            $qb->andWhere('promotion.context = :contextId OR (promotion.context IN (:parentIds) AND promotion.cascadesToDescendants = 1)')
                ->setParameter('contextId', $contextId)
-               ->setParameter('ancestryIds', $ancestryIds);
+               ->setParameter('parentIds', $parentIds);
         } else {
-            // otherwise, there is no superpromotions to fetch, just fetch the promotion in the current context
+            // Otherwise there is just the context, get all promos relating to the current context
             $qb->andWhere('promotion.context = :contextId')
                ->setParameter('contextId', $contextId);
         }
 
         $promotions = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        // If there are no parents, then the list is already sorted by weight from the DB query, so we can skip this
+        // this sorting.
+        if ($parentIds) {
+            $promotions = $this->orderPromotionsByAncestryIds($promotions, $ancestryIds);
+        }
+
+        // Because we are pulling in a scalar value (the context_id) in addition to the promotion entity Doctrine
+        // returns each row as an array containing both the promotion and the scalar value. By this point we're done
+        // with the context_id and we want to return just the promotion entities. Transforming each row from
+        // [0 => [id => 1, /* The rest of a promotion's fields /*], 'context_id => 3] into
+        // [id => 1, /* The rest of a promotion's fields /*]
+        foreach ($promotions as &$promotion) {
+            $promotion = $promotion[0];
+        }
+
         return $this->resolveParentsForPromosOfCoreEntities($promotions);
     }
 
@@ -98,5 +116,38 @@ class PromotionRepository extends EntityRepository
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
         return $repo->findByIds($ids);
+    }
+
+    /**
+     * Order promos based upon where their context appears in the hierarchy. Promos of the current context should be
+     * first, then promos belonging to the parent, then the promos belonging to the grandparent etc. Secondary sort by
+     * the promo's weighting field if two promos have the same context.
+     *
+     * @param array[] $promotions
+     * @param int[] $ancestryIds
+     */
+    private function orderPromotionsByAncestryIds(array $promotions, array $ancestryIds): array
+    {
+        // We want ancestry IDs to be top so we need to build an ranking system to reflect that. Fortunatly that's
+        // already in place - $ancestryIds is ordered and the location of that an ID in that field can be used to
+        // determin order - the currentId is last so it has the highest rank. We can create this ranking lookup by
+        // flipping the $ancestryIds array. Transforming [0 => grandparentId, 1 => parentId,  2 => currentId] into
+        // [grandParentId => 0, parentId => 1, currentId => 2]
+        $ancestryRank = array_flip($ancestryIds);
+
+        usort($promotions, function (array $a, array $b) use ($ancestryRank) {
+            // Largest context weighting goes first
+            $contextDifference = $ancestryRank[$b['context_id']] <=> $ancestryRank[$a['context_id']];
+
+            // Sort based on context if they differ
+            if ($contextDifference !== 0) {
+                return $contextDifference;
+            }
+
+            // If both promos have the same context then sort on weighting. Smallest weighting goes first
+            return $a[0]['weighting'] <=> $b[0]['weighting'];
+        });
+
+        return $promotions;
     }
 }
