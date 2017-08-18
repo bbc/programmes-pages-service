@@ -11,6 +11,7 @@ class PromotionRepository extends EntityRepository
     use Traits\ParentTreeWalkerTrait;
 
     /**
+     * @param int[] $ancestryIds
      * @return array[]
      */
     public function findActivePromotionsByContext(array $ancestryIds, DateTimeImmutable $datetime, ?int $limit, int $offset): array
