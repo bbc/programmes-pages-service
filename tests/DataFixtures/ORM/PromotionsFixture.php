@@ -29,27 +29,32 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
         ===================
 
         Brand (b010t19z)
-            promotion 0 (p000000h)
+            promotion b1 a (p0000000h)
+            promotion b1 b (p0000001h)
 
             series 1 (b00swyx1)
-                promotion 1 (p000001h - SUPER PROMOTION)
-                promotion 2 (EXPIRED)
+                promotion b1.s1 a (p000002h - SUPER PROMOTION)
+                promotion b1.s2 b (p000003h - SUPER PROMOTION)
+                promotion b1.s3 c (p000004h)
+                promotion b1.s4 d (p000005h EXPIRED)
 
-                episode 1
-                    promotion 4 (p000004h)
+                episode 1 (b00syxx6)
+                    promotion b1.s1.e1 a (p000006h)
+                    promotion b1.s1.e1 b (p000007h)
 
             series 2 (b010t150)
-                promotion 3 (EXPIRED)
-                image (mg000003)
+                promotion b1.s2 a (p000008h  EXPIRED)
+                promotion b1.s2 b (p000009h) -> promoting an image
 
         */
 
         $this->manager = $manager;
 
+        // promotions in brand
         $this->buildPromotion(
             'p000000h',
-            'promotion 1',
-            $this->getReference('b0175lqm'), // promoting: series2/episode1
+            'promotion b1 a',
+            $this->getReference('b0175lqm'),
             5,
             true,
             new DateTime('-1 year'),
@@ -57,14 +62,24 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             false,
             $this->getReference('b010t19z') // context: brand1
         );
-
-        $manager->flush();
-
         $this->buildPromotion(
             'p000001h',
-            'promotion 1',
-            $this->getReference('b0176rgj'), // promoting: series2/episode2
-            1, // weight
+            'promotion b1 b',
+            $this->getReference('b0175lqm'),
+            3,
+            true,
+            new DateTime('-1 year'),
+            new DateTime('+1 year'),
+            false,
+            $this->getReference('b010t19z') // context: brand1
+        );
+
+        // promotions in series 1
+        $this->buildPromotion(
+            'p000002h',
+            'promotion b1.s1 a',
+            $this->getReference('b0176rgj'),
+            4,
             true,
             new DateTime('-1 year'),
             new DateTime('+1 year'),
@@ -72,54 +87,91 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             $this->getReference('b00swyx1') // context: brand1/series 1
         );
 
-        // EXPIRED
-        $this->buildPromotion(
-            'p000002h',
-            'promotion 2',
-            $this->getReference('b0176rgj'), // promoting: series2/episode2
-            4,
-            false,
-            new DateTime('-10 year'),
-            new DateTime('-9 year'),
-            false,
-            $this->getReference('b00swyx1') // context: brand1/series 1
-        );
-
-        // EXPIRED
         $this->buildPromotion(
             'p000003h',
-            'promotion 3',
-            $this->getReference('b0177ffr'), // promoting: series2/episode3
-            3,
+            'promotion b1.s1 b',
+            $this->getReference('b0176rgj'),
+            2,
             true,
-            new DateTime('-10 year'),
-            new DateTime('-9 year'),
-            false,
+            new DateTime('-1 year'),
+            new DateTime('+1 year'),
+            true,
             $this->getReference('b00swyx1') // context: brand1/series 1
         );
 
         $this->buildPromotion(
             'p000004h',
-            'promotion 4',
-            $this->getReference('b0177ffr'), // promoting: series2/episode3
+            'promotion b1.s1 c',
+            $this->getReference('b0176rgj'),
+            1,
+            false,
+            new DateTime('-1 year'),
+            new DateTime('+1 year'),
+            false,
+            $this->getReference('b00swyx1') // context: brand1/series 1
+        );
+
+        $this->buildPromotion(
+            'p000005h',
+            'promotion b1.s1 d',
+            $this->getReference('b0176rgj'),
+            7,
+            false,
+            new DateTime('-10 year'),
+            new DateTime('-9 year'),
+            false,
+            $this->getReference('b00swyx1') // context: brand1/series 1
+        );
+
+
+        // promotions in episode 1:
+        $this->buildPromotion(
+            'p000006h',
+            'promotion b1.s1.e1 a',
+            $this->getReference('b0177ffr'),
             3,
             true,
             new DateTime('-1 year'),
             new DateTime('+1 year'),
             false,
-            $this->getReference('b00syxx6') // context: brand1/series1/episode2
+            $this->getReference('b00syxx6')
         );
 
         $this->buildPromotion(
-            'p000005h',
+            'p000007h',
+            'promotion b1.s1.e1 b',
+            $this->getReference('b0177ffr'),
+            3,
+            true,
+            new DateTime('-1 year'),
+            new DateTime('+1 year'),
+            false,
+            $this->getReference('b00syxx6')
+        );
+
+        // promotions in series 2:
+        $this->buildPromotion(
+            'p000008h',
             'promotion 5',
-            $this->getReference('mg000003'), // promoting: image
+            $this->getReference('mg000003'),
+            2,
+            true,
+            new DateTime('-10 year'),
+            new DateTime('-9 year'),
+            false,
+            $this->getReference('b010t150')
+        );
+
+        $this->buildPromotion(
+            'p000009h',
+            'promotion 5',
+            $this->getReference('mg000003'),
             2,
             true,
             new DateTime('-1 year'),
             new DateTime('+1 year'),
             false,
-            $this->getReference('b010t150') // context: brand1/series2
+            $this->getReference('b010t150')
         );
 
         $manager->flush();
