@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use InvalidArgumentException;
 
 class PromotionRepository extends EntityRepository
 {
@@ -13,11 +14,16 @@ class PromotionRepository extends EntityRepository
     /**
      * @param int[] $ancestryIds
      * @return array[]
+     * @throws InvalidArgumentException when we pass an empty array of ancestryIds
      */
     public function findActivePromotionsByContext(array $ancestryIds, DateTimeImmutable $datetime, ?int $limit, int $offset): array
     {
         // $contextId is the current context. We want to get both cascading and non-cascading promos for this id
         // $ancestryIds is an array ids of the parents of the current context. For these ids we only want cascading promos
+        if (empty($ancestryIds)) {
+            throw new InvalidArgumentException('ancestryIds cannot be an empty value');
+        }
+
         $contextId = array_pop($ancestryIds);
 
         $qb = $this->createQueryBuilder('promotion')
