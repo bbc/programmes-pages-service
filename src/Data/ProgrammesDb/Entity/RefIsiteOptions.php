@@ -42,6 +42,13 @@ class RefIsiteOptions
     private $projectId;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=35, nullable=true)
+     */
+    private $parentProjectId;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="string", length=55, nullable=false)
@@ -88,6 +95,7 @@ class RefIsiteOptions
     public function __construct(
         string $guid,
         string $projectId,
+        string $parentProjectId,
         string $entityId,
         string $fileId,
         string $type,
@@ -97,6 +105,7 @@ class RefIsiteOptions
     ) {
         $this->guid = $guid;
         $this->projectId = $projectId;
+        $this->parentProjectId = $parentProjectId;
         $this->entityId = $entityId;
         $this->fileId = $fileId;
         $this->setType($type);
@@ -128,6 +137,16 @@ class RefIsiteOptions
     public function setProjectId(string $projectId)
     {
         $this->projectId = $projectId;
+    }
+
+    public function getParentProjectId(): ?string
+    {
+        return $this->parentProjectId;
+    }
+
+    public function setParentProjectId(?string $parentProjectId)
+    {
+        $this->parentProjectId = $parentProjectId;
     }
 
     public function getEntityId(): string
