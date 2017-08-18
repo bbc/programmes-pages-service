@@ -95,7 +95,7 @@ class RefIsiteOptions
     public function __construct(
         string $guid,
         string $projectId,
-        string $parentProjectId,
+        ?string $parentProjectId,
         string $entityId,
         string $fileId,
         string $type,
