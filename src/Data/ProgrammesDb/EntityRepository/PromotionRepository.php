@@ -135,7 +135,7 @@ class PromotionRepository extends EntityRepository
         // [grandParentId => 0, parentId => 1, currentId => 2]
         $ancestryRank = array_flip($ancestryIds);
 
-        usort($promotions, function(array $a, array $b) use ($ancestryRank) {
+        usort($promotions, function (array $a, array $b) use ($ancestryRank) {
             // Largest context weighting goes first
             $contextDifference = $ancestryRank[$b['context_id']] <=> $ancestryRank[$a['context_id']];
 

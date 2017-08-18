@@ -123,7 +123,6 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             $this->getReference('b00swyx1') // context: brand1/series 1
         );
 
-
         // promotions in episode 1:
         $this->buildPromotion(
             'p000006h',
