@@ -112,7 +112,11 @@ class PromotionRepository extends EntityRepository
         return $repo->findByIds($ids);
     }
 
-    private function orderPromotionsByAncestryIds($promotions, $ancestryIds): array
+    /**
+     * @param array[] $promotions
+     * @param int[] $ancestryIds
+     */
+    private function orderPromotionsByAncestryIds(array $promotions, array $ancestryIds): array
     {
         $parentIds = array_slice($ancestryIds, 0, -1);
         // Order promos based upon where their context appears in the hierarchy. Promos of the current context should
