@@ -13,6 +13,7 @@ class RefIsiteOptionsTest extends TestCase
         $options = new RefIsiteOptions(
             'guid',
             'projectid',
+            'parentProjectid',
             'entityId',
             'fileId',
             'admin',
@@ -30,8 +31,9 @@ class RefIsiteOptionsTest extends TestCase
     {
         new RefIsiteOptions(
             'guid',
-            'entityId',
             'projectid',
+            'parentProjectid',
+            'entityId',
             'fileId',
             'wrong type',
             new DateTime('U'),
