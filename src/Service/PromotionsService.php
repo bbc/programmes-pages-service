@@ -53,7 +53,7 @@ class PromotionsService extends AbstractService
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
-    ) {
+    ): array {
         $promotions = $this->findActivePromotionsByContext($context, $limit, $page, $ttl);
 
         $groupedPromotions = [
