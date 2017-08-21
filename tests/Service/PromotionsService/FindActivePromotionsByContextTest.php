@@ -23,32 +23,22 @@ class FindActivePromotionsByContextTest extends AbstractPromotionServiceTest
 
     public function testFindActivePromotionsByEntityDefaultPagination()
     {
-        $dbData = [['pid' => 'p000000h']];
-
         $this->mockRepository
+            ->expects($this->once())
             ->method('findActivePromotionsByContext')
-            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), 300, 0)
-            ->willReturn($dbData);
+            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), 300, 0);
 
-        $promotions = $this->service()->findActivePromotionsByContext($this->context);
-
-        $this->assertEquals($this->getDomainModelsFromDbData($dbData), $promotions);
+        $this->service()->findActivePromotionsByContext($this->context);
     }
 
     public function testFindActivePromotionsByEntityCustomPagination()
     {
-        $expectedLimit = 30;
-        $expectedOffset = 60;
-        $dbData = [['pid' => 'p000000h']];
-
         $this->mockRepository
+            ->expects($this->once())
             ->method('findActivePromotionsByContext')
-            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), $expectedLimit, $expectedOffset)
-            ->willReturn($dbData);
+            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), 30, 60);
 
-        $promotions = $this->service()->findActivePromotionsByContext($this->context, 30, 3);
-
-        $this->assertEquals($this->getDomainModelsFromDbData($dbData), $promotions);
+        $this->service()->findActivePromotionsByContext($this->context, 30, 3);
     }
 
     public function testFindActivePromotionsByEntityNonExistantDbId()
@@ -57,11 +47,24 @@ class FindActivePromotionsByContextTest extends AbstractPromotionServiceTest
 
         $this->mockRepository
             ->method('findActivePromotionsByContext')
-            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), 300, 0)
             ->willReturn($dbData);
 
         $promotions = $this->service()->findActivePromotionsByContext($this->context);
 
         $this->assertEquals([], $promotions);
     }
+
+    public function testFindActivePromotionsByEntityReturnCorrectData()
+    {
+        $dbData = [['pid' => 'p000000h']];
+
+        $this->mockRepository
+            ->method('findActivePromotionsByContext')
+            ->willReturn($dbData);
+
+        $promotions = $this->service()->findActivePromotionsByContext($this->context);
+
+        $this->assertEquals($this->getDomainModelsFromDbData($dbData), $promotions);
+    }
+
 }

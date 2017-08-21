@@ -41,6 +41,20 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
         $this->service()->findActivePromotionsByEntityGroupedByType($this->context, 5, 30);
     }
 
+    public function testfindActivePromotionsByEntityGroupedByTypeReturnEmptyStructure()
+    {
+        $dbData = [];
+
+        $this->mockRepository
+            ->method('findActivePromotionsByContext')
+            ->willReturn($dbData);
+
+        $promotions = $this->service()->findActivePromotionsByEntityGroupedByType($this->context);
+
+        $this->assertEquals(0, count($promotions['regular']));
+        $this->assertEquals(0, count($promotions['super']));
+    }
+
     public function testfindActivePromotionsByEntityGroupedByTypeReturnRightStructure()
     {
         $dbData = [
