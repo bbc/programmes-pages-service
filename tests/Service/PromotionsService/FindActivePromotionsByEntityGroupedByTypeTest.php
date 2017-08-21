@@ -59,6 +59,9 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
 
         $promotions = $this->service()->findActivePromotionsByEntityGroupedByType($this->context);
 
+        $this->assertEquals(1, count($promotions['regular']));
+        $this->assertEquals(1, count($promotions['super']));
+
         $this->assertEquals('p000000h', (string) $promotions['regular'][0]->getPid());
         $this->assertEquals('p000001h', (string) $promotions['super'][0]->getPid());
     }
