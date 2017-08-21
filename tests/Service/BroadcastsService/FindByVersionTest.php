@@ -2,36 +2,34 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
+
 class FindByVersionTest extends AbstractBroadcastsServiceTest
 {
     public function testFindByVersionDefaultPagination()
     {
         $dbId = 1;
         $version = $this->mockEntity('Version', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('findByVersion')
-            ->with([$dbId], 'Broadcast', 300, 0)
-            ->willReturn($dbData);
+            ->with([$dbId], 'Broadcast', 300, 0);
 
-        $result = $this->service()->findByVersion($version);
-        $this->assertEquals($this->broadcastsFromDbData($dbData), $result);
+        $this->service()->findByVersion($version);
     }
 
     public function testFindByVersionCustomPagination()
     {
         $dbId = 1;
         $version = $this->mockEntity('Version', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('findByVersion')
-            ->with([$dbId], 'Broadcast', 5, 10)
-            ->willReturn($dbData);
+            ->with([$dbId], 'Broadcast', 5, 10);
 
-        $result = $this->service()->findByVersion($version, 5, 3);
-        $this->assertEquals($this->broadcastsFromDbData($dbData), $result);
+        $this->service()->findByVersion($version, 5, 3);
     }
 
     public function testFindByVersionWithNonExistantDbId()
@@ -39,12 +37,30 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
         $dbId = 999;
         $version = $this->mockEntity('Version', $dbId);
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
             ->method('findByVersion')
-            ->with([$dbId], 'Broadcast', 5, 10)
             ->willReturn([]);
 
-        $result = $this->service()->findByVersion($version, 5, 3);
-        $this->assertEquals([], $result);
+        $broadcasts = $this->service()->findByVersion($version, 5, 3);
+        $this->assertEquals([], $broadcasts);
+    }
+
+    public function testFindByVersionWithExistantDbId()
+    {
+        $dbId = 1;
+        $version = $this->mockEntity('Version', $dbId);
+        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
+
+        $this->mockRepository
+            ->method('findByVersion')
+            ->willReturn($dbData);
+
+        $broadcasts = $this->service()->findByVersion($version);
+
+        $this->assertCount(2, $broadcasts);
+        $this->assertContainsOnly(Broadcast::class, $broadcasts);
+
+        $this->assertEquals('b00swyx1', (string) $broadcasts[0]->getPid());
+        $this->assertEquals('b010t150', (string) $broadcasts[1]->getPid());
     }
 }
