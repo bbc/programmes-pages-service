@@ -2,7 +2,6 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\PromotionsService;
 
-use BBC\ProgrammesPagesService\Domain\Entity\Brand;
 use BBC\ProgrammesPagesService\Domain\Entity\Promotion;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\PromotionsService;
@@ -27,7 +26,11 @@ abstract class AbstractPromotionServiceTest extends AbstractServiceTest
 
         $mockPromotion = $this->createMock(self::ENTITY_NS . 'Promotion');
         $mockPromotion->method('getPid')->willReturn($pid);
-        $mockPromotion->method('isSuperPromotion')->willReturn(true);
+        if (isset($dbPromotion['cascadesToDescendants'])) {
+            $mockPromotion->method('isSuperPromotion')
+              ->will($this->returnValue($dbPromotion['cascadesToDescendants']));
+        }
+
         return $mockPromotion;
     }
 

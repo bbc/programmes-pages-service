@@ -23,7 +23,15 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
 
     public function testfindActivePromotionsByEntityGroupedByTypeReturnRightStructure()
     {
-        $dbData = [['pid' => 'p000000h']];
+        $dbData = [
+            [
+                'pid' => 'p000000h',
+                'cascadesToDescendants' => false,
+            ], [
+                'pid' => 'p000001h',
+                'cascadesToDescendants' => true,
+            ],
+        ];
 
         $this->mockRepository
             ->method('findActivePromotionsByContext')
@@ -34,10 +42,13 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
 
         $this->assertEquals(
             [
-                'regular' => [],
-                'super' => $this->getDomainModelsFromDbData($dbData),
+                'regular' => 'p000000h',
+                'super' => 'p000001h',
             ],
-            $promotions
+            [
+                'regular' => (string) $promotions['regular'][0]->getPid(),
+                'super' => (string) $promotions['super'][0]->getPid(),
+            ]
         );
     }
 }
