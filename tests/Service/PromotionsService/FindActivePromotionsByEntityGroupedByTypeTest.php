@@ -21,6 +21,26 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
         $this->context = $context;
     }
 
+    public function testfindActivePromotionsByEntityGroupedByTypeReturnRightStructureWithDefaultPagination()
+    {
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('findActivePromotionsByContext')
+            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), 300, 0);
+
+        $this->service()->findActivePromotionsByEntityGroupedByType($this->context);
+    }
+
+    public function testfindActivePromotionsByEntityGroupedByTypeReturnRightStructureWithCustomPagination()
+    {
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('findActivePromotionsByContext')
+            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), 5, 145);
+
+        $this->service()->findActivePromotionsByEntityGroupedByType($this->context, 5, 30);
+    }
+
     public function testfindActivePromotionsByEntityGroupedByTypeReturnRightStructure()
     {
         $dbData = [
@@ -35,20 +55,11 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
 
         $this->mockRepository
             ->method('findActivePromotionsByContext')
-            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), 300, 0)
             ->willReturn($dbData);
 
         $promotions = $this->service()->findActivePromotionsByEntityGroupedByType($this->context);
 
-        $this->assertEquals(
-            [
-                'regular' => 'p000000h',
-                'super' => 'p000001h',
-            ],
-            [
-                'regular' => (string) $promotions['regular'][0]->getPid(),
-                'super' => (string) $promotions['super'][0]->getPid(),
-            ]
-        );
+        $this->assertEquals('p000000h', (string) $promotions['regular'][0]->getPid());
+        $this->assertEquals('p000001h', (string) $promotions['super'][0]->getPid());
     }
 }
