@@ -15,7 +15,7 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
         parent::setUp();
 
         $dbId = 1;
-        $context = $this->mockEntity('Brand', $dbId);
+        $context = $this->mockEntity('CoreEntity', $dbId);
         $context->method('getDbAncestryIds')->willReturn([$dbId]);
 
         $this->context = $context;
