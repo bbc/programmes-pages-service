@@ -66,5 +66,4 @@ class FindActivePromotionsByContextTest extends AbstractPromotionServiceTest
 
         $this->assertEquals($this->getDomainModelsFromDbData($dbData), $promotions);
     }
-
 }

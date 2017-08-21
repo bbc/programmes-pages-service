@@ -51,7 +51,7 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
 
         $promotions = $this->service()->findActivePromotionsByEntityGroupedByType($this->context);
 
-        $this->assertInternalType('array',$promotions);
+        $this->assertInternalType('array', $promotions);
         $this->assertArrayHasKey('regular', $promotions);
         $this->assertArrayHasKey('super', $promotions);
 
@@ -82,7 +82,7 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
 
         $promotions = $this->service()->findActivePromotionsByEntityGroupedByType($this->context);
 
-        $this->assertInternalType('array',$promotions);
+        $this->assertInternalType('array', $promotions);
         $this->assertArrayHasKey('regular', $promotions);
         $this->assertArrayHasKey('super', $promotions);
 
