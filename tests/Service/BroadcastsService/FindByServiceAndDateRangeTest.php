@@ -11,8 +11,8 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
     public function testFindByServiceAndDateRange()
     {
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
-        $fromDateTime = new DateTimeImmutable('2010-01-15 06:00:00');
-        $toDatetime = new DateTimeImmutable('2017-10-16 06:00:00');
+        $fromDateTime = new DateTimeImmutable('-1 year');
+        $toDatetime = new DateTimeImmutable('+1 year');
         $sid = new Sid('bbc_radio_two');
 
         $this->mockRepository->expects($this->once())
@@ -37,8 +37,8 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
 
     public function testFindByServiceAndDateRangeWhenNoBroadcastsFound()
     {
-        $fromDateTime = new DateTimeImmutable('2010-01-15 06:00:00');
-        $toDatetime = new DateTimeImmutable('2017-10-16 06:00:00');
+        $fromDateTime = new DateTimeImmutable('-1 year');
+        $toDatetime = new DateTimeImmutable('+1 year');
         $sid = new Sid('this_sid_doesnt_exist');
 
         $this->mockRepository->expects($this->once())
