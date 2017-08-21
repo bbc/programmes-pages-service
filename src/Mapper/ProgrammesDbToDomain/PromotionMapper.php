@@ -12,6 +12,8 @@ class PromotionMapper extends AbstractMapper
 {
     use SynopsesTrait;
 
+    private $cache = [];
+
     /**
      * @param array[] $dbPromotion
      */
