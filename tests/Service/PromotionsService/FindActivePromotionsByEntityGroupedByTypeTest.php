@@ -55,8 +55,13 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
         $this->assertArrayHasKey('regular', $promotions);
         $this->assertArrayHasKey('super', $promotions);
 
-        $this->assertEquals(0, count($promotions['regular']));
-        $this->assertEquals(0, count($promotions['super']));
+        $this->assertEquals(
+            [
+                'regular' => [],
+                'super' => [],
+            ],
+            $promotions
+        );
     }
 
     public function testfindActivePromotionsByEntityGroupedByTypeReturnRightStructure()
