@@ -29,8 +29,8 @@ class PromotionRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('promotion')
             ->addSelect(['promotionOfCoreEntity', 'promotionOfImage', 'imageForPromotionOfCoreEntity', 'IDENTITY(promotion.context) AS context_id'])
-            ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
-            ->leftJoin('promotion.promotionOfImage', 'promotionOfImage')
+            ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity', 'WITH', 'promotionOfCoreEntity.isEmbargoed != 1')
+            ->leftJoin('promotion.promotionOfImage', 'promotionOfImage', 'WITH', 'promotionOfImage.isEmbargoed != 1')
             ->leftJoin('promotionOfCoreEntity.image', 'imageForPromotionOfCoreEntity')
             ->andWhere('promotion.isActive = 1')
             ->andWhere('promotion.startDate <= :datetime')
