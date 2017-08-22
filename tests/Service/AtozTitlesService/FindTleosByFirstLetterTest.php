@@ -4,40 +4,32 @@ namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
 class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 {
-    public function testFindTleosByFirstLetterDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testFindTleosByFirstLetterPagination($expectedLimit, $expectedOffset, $paginationParams)
     {
-        $dbData = [['title' => 'things']];
-
         $this->mockRepository->expects($this->once())
             ->method('findTleosByFirstLetter')
-            ->with('t', false, 300, 0)
-            ->willReturn($dbData);
+            ->with('t', false, $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findTleosByFirstLetter('t');
-        $this->assertEquals($this->atoZTitlesFromDbData($dbData), $result);
+        $this->service()->findTleosByFirstLetter('t', ...$paginationParams);
     }
 
-    public function testFindTleosByFirstLetterCustomPagination()
+    public function paginationProvider()
     {
-        $dbData = [['title' => 'things']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findTleosByFirstLetter')
-            ->with('t', false, 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findTleosByFirstLetter('t', 5, 3);
-        $this->assertEquals($this->atoZTitlesFromDbData($dbData), $result);
+        return [
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [5, 10, [5, 3]],
+        ];
     }
 
     public function testFindTleosByFirstLetterWithEmptyResult()
     {
-         $this->mockRepository->expects($this->once())
-            ->method('findTleosByFirstLetter')
-            ->with('t', false, 300, 0)
-            ->willReturn([]);
+         $this->mockRepository->method('findTleosByFirstLetter')->willReturn([]);
 
         $result = $this->service()->findTleosByFirstLetter('t');
+
         $this->assertEquals([], $result);
     }
 
@@ -49,6 +41,7 @@ class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
             ->willReturn(10);
 
         $result = $this->service()->countTleosByFirstLetter('t');
+
         $this->assertEquals(10, $result);
     }
 }

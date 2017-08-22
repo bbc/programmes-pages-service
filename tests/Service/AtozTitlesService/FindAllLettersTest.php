@@ -8,7 +8,9 @@ class FindAllLettersTest extends AbstractAtozTitlesServiceTest
 {
     public function testFindAllLetters()
     {
-        $result = $this->service()->findAllLetters();
-        $this->assertEquals(AtozTitlesService::LETTERS, $result);
+        $this->assertEquals(
+            AtozTitlesService::LETTERS,
+            $this->service()->findAllLetters()
+        );
     }
 }
