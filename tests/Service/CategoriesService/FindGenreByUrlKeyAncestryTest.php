@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Genre;
+
 class FindGenreByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
 {
     public function testFindGenreByUrlKeyAncestry()
@@ -14,8 +16,10 @@ class FindGenreByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
             ->with($urlKeyAncestry, 'genre')
             ->willReturn($dbData);
 
-        $result = $this->service()->findGenreByUrlKeyAncestry($urlKeyAncestry);
-        $this->assertEquals($this->categoryFromDbData($dbData), $result);
+        $format = $this->service()->findGenreByUrlKeyAncestry($urlKeyAncestry);
+
+        $this->assertInstanceOf(Genre::class, $format);
+        $this->assertEquals('C0001', $format->getId());
     }
 
     public function testFindGenreByUrlKeyAncestryEmptyData()
@@ -27,7 +31,7 @@ class FindGenreByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
             ->with($urlKeyAncestry, 'genre')
             ->willReturn(null);
 
-        $result = $this->service()->findGenreByUrlKeyAncestry($urlKeyAncestry);
-        $this->assertNull($result);
+        $genre = $this->service()->findGenreByUrlKeyAncestry($urlKeyAncestry);
+        $this->assertNull($genre);
     }
 }

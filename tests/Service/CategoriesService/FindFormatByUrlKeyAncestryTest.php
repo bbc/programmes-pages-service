@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Format;
+
 class FindFormatByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
 {
     public function testFindFormatByUrlKeyAncestry()
@@ -14,8 +16,10 @@ class FindFormatByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
             ->with([$urlKey], 'format')
             ->willReturn($dbData);
 
-        $result = $this->service()->findFormatByUrlKeyAncestry($urlKey);
-        $this->assertEquals($this->categoryFromDbData($dbData), $result);
+        $format = $this->service()->findFormatByUrlKeyAncestry($urlKey);
+
+        $this->assertInstanceOf(Format::class, $format);
+        $this->assertEquals('F0001', $format->getId());
     }
 
     public function testFindFormatByUrlKeyAncestryEmptyData()
@@ -27,7 +31,7 @@ class FindFormatByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
             ->with([$urlKey], 'format')
             ->willReturn(null);
 
-        $result = $this->service()->findFormatByUrlKeyAncestry($urlKey);
-        $this->assertNull($result);
+        $format = $this->service()->findFormatByUrlKeyAncestry($urlKey);
+        $this->assertNull($format);
     }
 }

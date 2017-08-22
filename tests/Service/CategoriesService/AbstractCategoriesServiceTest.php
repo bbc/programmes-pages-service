@@ -14,11 +14,6 @@ abstract class AbstractCategoriesServiceTest extends AbstractServiceTest
         $this->setUpMapper('CategoryMapper', 'categoryFromDbData');
     }
 
-    protected function categoriesFromDbData(array $entities)
-    {
-        return array_map([$this, 'categoryFromDbData'], $entities);
-    }
-
     protected function categoryFromDbData(array $entity)
     {
         $type = substr($entity['pip_id'], 0, 1) === 'C' ? 'Genre' : 'Format';

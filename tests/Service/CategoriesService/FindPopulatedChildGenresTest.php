@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Genre;
+
 class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
 {
     public function testFindPopulatedChildGenres()
@@ -15,7 +17,10 @@ class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
             ->with(0, 'genre')
             ->willReturn($dbData);
 
-        $result = $this->service()->findPopulatedChildGenres($genre);
-        $this->assertEquals($this->categoriesFromDbData($dbData), $result);
+        $genres = $this->service()->findPopulatedChildGenres($genre);
+
+        $this->assertCount(1, $genres);
+        $this->assertContainsOnly(Genre::class, $genres);
+        $this->assertEquals('C0001', $genres[0]->getId());
     }
 }
