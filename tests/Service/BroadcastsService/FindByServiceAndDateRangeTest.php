@@ -20,17 +20,10 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
             ->with($sid, $fromDateTime, $toDatetime, -1, 0)
             ->willReturn($dbData);
 
-        $broadcasts = $this->service()->findByServiceAndDateRange(
-            $sid,
-            $fromDateTime,
-            $toDatetime,
-            -1,
-            1
-        );
+        $broadcasts = $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, -1, 1);
 
         $this->assertCount(2, $broadcasts);
         $this->assertContainsOnly(Broadcast::class, $broadcasts);
-
         $this->assertEquals('b00swyx1', (string) $broadcasts[0]->getPid());
         $this->assertEquals('b010t150', (string) $broadcasts[1]->getPid());
     }
@@ -46,13 +39,7 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
             ->with($sid, $fromDateTime, $toDatetime, -1, 0)
             ->willReturn([]);
 
-        $broadcasts = $this->service()->findByServiceAndDateRange(
-            $sid,
-            $fromDateTime,
-            $toDatetime,
-            -1,
-            1
-        );
+        $broadcasts = $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, -1, 1);
 
         $this->assertSame([], $broadcasts);
     }
