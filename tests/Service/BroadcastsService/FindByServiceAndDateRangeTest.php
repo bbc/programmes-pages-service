@@ -11,7 +11,7 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testFindByServiceAndDateRangePagination($expectedLimit, $expectedOffset, $serviceArgs)
+    public function testFindByServiceAndDateRangePagination($expectedLimit, $expectedOffset, $paginationParams)
     {
         $fromDateTime = new DateTimeImmutable('-1 year');
         $toDatetime = new DateTimeImmutable('+1 year');
@@ -21,7 +21,7 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
              ->method('findAllByServiceAndDateRange')
              ->with($sid, $fromDateTime, $toDatetime, $expectedLimit, $expectedOffset);
 
-        $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, ...$serviceArgs);
+        $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, ...$paginationParams);
     }
 
     public function paginationProvider()
