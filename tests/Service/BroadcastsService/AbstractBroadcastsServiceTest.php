@@ -16,6 +16,9 @@ abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
         $this->setUpMapper('BroadcastMapper', 'broadcastFromDbData');
     }
 
+    /**
+     * @param array[] $dbData
+     */
     protected function broadcastFromDbData(array $dbData): Broadcast
     {
         $entity = $this->createMock(Broadcast::class);
