@@ -80,7 +80,8 @@ class FindActivePromotionsByContextTest extends AbstractDatabaseTest
         $seriesdDbAncestryIds = $this->getAncestryFromPersistentIdentifier('b010t150', 'CoreEntity');
         $dbPromotions = $this->promotionRepository->findActivePromotionsByContext($seriesdDbAncestryIds, new DateTimeImmutable(), 300, 0);
 
-        // we fetch the only promotion of image in this context. No super propmotions are inherited in this context.
+        // we fetch the only promotion of image in this context.
+        // Nor super propmotions are inherited in this context and the promotions promoting an embargoed clip is not received
         $this->assertEquals(['p000009h'], array_column($dbPromotions, 'pid'));
         $this->assertEquals('standard', $dbPromotions[0]['promotionOfImage']['type']);
 
