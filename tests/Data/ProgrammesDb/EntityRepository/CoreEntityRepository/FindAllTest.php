@@ -16,10 +16,10 @@ class FindAllTest extends AbstractDatabaseTest
         $this->enableEmbargoedFilter();
     }
 
-     public function tearDown()
-     {
-         $this->disableEmbargoedFilter();
-     }
+    public function tearDown()
+    {
+     $this->disableEmbargoedFilter();
+    }
 
     /**
      * @dataProvider findAllWithParentsDataProvider
