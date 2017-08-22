@@ -3,13 +3,15 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
+use BBC\ProgrammesPagesService\Domain\Entity\Version;
 
 class FindByVersionTest extends AbstractBroadcastsServiceTest
 {
     public function testFindByVersionDefaultPagination()
     {
         $dbId = 1;
-        $version = $this->mockEntity('Version', $dbId);
+        $version = $this->createMock(Version::class);
+        $version->method('getDbId')->willReturn($dbId);
 
         $this->mockRepository
             ->expects($this->once())
@@ -22,7 +24,8 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
     public function testFindByVersionCustomPagination()
     {
         $dbId = 1;
-        $version = $this->mockEntity('Version', $dbId);
+        $version = $this->createMock(Version::class);
+        $version->method('getDbId')->willReturn($dbId);
 
         $this->mockRepository
             ->expects($this->once())
@@ -35,7 +38,8 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
     public function testFindByVersionWithNonExistantDbId()
     {
         $dbId = 999;
-        $version = $this->mockEntity('Version', $dbId);
+        $version = $this->createMock(Version::class);
+        $version->method('getDbId')->willReturn($dbId);
 
         $this->mockRepository
             ->method('findByVersion')
@@ -49,7 +53,9 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
     public function testFindByVersionWithExistantDbId()
     {
         $dbId = 1;
-        $version = $this->mockEntity('Version', $dbId);
+        $version = $this->createMock(Version::class);
+        $version->method('getDbId')->willReturn($dbId);
+
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
 
         $this->mockRepository
