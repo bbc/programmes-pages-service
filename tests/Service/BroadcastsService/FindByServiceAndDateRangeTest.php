@@ -8,6 +8,32 @@ use DateTimeImmutable;
 
 class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
 {
+    public function testFindByServiceAndDateRangeDefaultPagination()
+    {
+        $fromDateTime = new DateTimeImmutable('-1 year');
+        $toDatetime = new DateTimeImmutable('+1 year');
+        $sid = new Sid('bbc_radio_two');
+
+        $this->mockRepository->expects($this->once())
+             ->method('findAllByServiceAndDateRange')
+             ->with($sid, $fromDateTime, $toDatetime, 300, 0);
+
+        $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime);
+    }
+
+    public function testFindByServiceAndDateRangeCustomPagination()
+    {
+        $fromDateTime = new DateTimeImmutable('-1 year');
+        $toDatetime = new DateTimeImmutable('+1 year');
+        $sid = new Sid('bbc_radio_two');
+
+        $this->mockRepository->expects($this->once())
+             ->method('findAllByServiceAndDateRange')
+             ->with($sid, $fromDateTime, $toDatetime, 3, 12);
+
+        $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, 3, 5);
+    }
+
     public function testFindByServiceAndDateRange()
     {
         $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
@@ -17,10 +43,9 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findAllByServiceAndDateRange')
-            ->with($sid, $fromDateTime, $toDatetime, -1, 0)
             ->willReturn($dbData);
 
-        $broadcasts = $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, -1, 1);
+        $broadcasts = $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime);
 
         $this->assertCount(2, $broadcasts);
         $this->assertContainsOnly(Broadcast::class, $broadcasts);
@@ -36,10 +61,9 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findAllByServiceAndDateRange')
-            ->with($sid, $fromDateTime, $toDatetime, -1, 0)
             ->willReturn([]);
 
-        $broadcasts = $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, -1, 1);
+        $broadcasts = $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime);
 
         $this->assertSame([], $broadcasts);
     }

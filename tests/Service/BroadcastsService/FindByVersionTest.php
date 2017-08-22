@@ -42,6 +42,7 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
             ->willReturn([]);
 
         $broadcasts = $this->service()->findByVersion($version, 5, 3);
+
         $this->assertEquals([], $broadcasts);
     }
 
@@ -59,7 +60,6 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
 
         $this->assertCount(2, $broadcasts);
         $this->assertContainsOnly(Broadcast::class, $broadcasts);
-
         $this->assertEquals('b00swyx1', (string) $broadcasts[0]->getPid());
         $this->assertEquals('b010t150', (string) $broadcasts[1]->getPid());
     }
