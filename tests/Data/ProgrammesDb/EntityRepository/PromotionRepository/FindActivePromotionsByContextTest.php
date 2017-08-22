@@ -17,9 +17,14 @@ class FindActivePromotionsByContextTest extends AbstractDatabaseTest
     public function setUp()
     {
         parent::setUp();
-
+        $this->enableEmbargoedFilter();
         $this->loadFixtures(['PromotionsFixture']);
         $this->promotionRepository = $this->getRepository('ProgrammesPagesService:Promotion');
+    }
+
+    public function tearDown()
+    {
+        $this->disableEmbargoedFilter();
     }
 
     public function testActiveSuperpromotionsAreReceivedWithSuperPromotionsForBrand()
