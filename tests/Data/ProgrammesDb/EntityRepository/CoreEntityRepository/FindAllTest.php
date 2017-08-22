@@ -18,7 +18,7 @@ class FindAllTest extends AbstractDatabaseTest
 
     public function tearDown()
     {
-     $this->disableEmbargoedFilter();
+        $this->disableEmbargoedFilter();
     }
 
     /**
