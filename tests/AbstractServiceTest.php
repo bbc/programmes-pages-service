@@ -40,7 +40,7 @@ abstract class AbstractServiceTest extends TestCase
     {
         $this->mockMapper = $this->createMock($this::MAPPER_NS . $mapperName);
 
-        $this->mockMapper->expects($this->any())
+        $this->mockMapper
             ->method('getDomainModel')
             ->will($this->returnCallback(function ($entity) use ($entityBuilderMethod) {
                 return call_user_func([$this, $entityBuilderMethod], $entity);
