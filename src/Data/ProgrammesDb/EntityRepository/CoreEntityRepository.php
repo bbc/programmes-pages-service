@@ -241,7 +241,6 @@ QUERY;
             ->leftJoin('masterBrand.image', 'mbImage')
             ->andWhere('entity.ancestry LIKE :ancestry')
             ->andWhere('entity.streamable = 1')
-            ->andWhere('entity.isEmbargoed <> 1')
             ->orderBy('entity.streamableFrom', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
@@ -280,7 +279,6 @@ QUERY;
     public function findAllWithParents(?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('programme')
-            ->andWhere('programme.isEmbargoed <> 1')
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 

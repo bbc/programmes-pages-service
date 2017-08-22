@@ -9,6 +9,18 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindAllTest extends AbstractDatabaseTest
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->enableEmbargoedFilter();
+    }
+
+     public function tearDown()
+     {
+         $this->disableEmbargoedFilter();
+     }
+
     /**
      * @dataProvider findAllWithParentsDataProvider
      */
@@ -49,7 +61,7 @@ class FindAllTest extends AbstractDatabaseTest
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $this->assertEquals(18, $repo->countAll());
+        $this->assertEquals(17, $repo->countAll());
 
         // count query only
         $this->assertCount(1, $this->getDbQueries());
