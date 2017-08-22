@@ -35,6 +35,7 @@ class PromotionRepository extends EntityRepository
             ->andWhere('promotion.isActive = 1')
             ->andWhere('promotion.startDate <= :datetime')
             ->andWhere('promotion.endDate > :datetime')
+            ->andWhere('promotion.promotionOfCoreEntity is not null OR promotion.promotionOfImage is not null')
             ->addOrderBy('promotion.weighting', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)

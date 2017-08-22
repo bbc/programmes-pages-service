@@ -45,6 +45,7 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             series 2 (b010t150)
                 promotion b1.s2 a (p000008h  EXPIRED)
                 promotion b1.s2 b (p000009h) -> promoting an image
+                promotion b1.s2 c (p000010h) -> promoting an embargoed core entity
 
         */
 
@@ -171,6 +172,18 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             new DateTime('+1 year'),
             false,
             $this->getReference('b010t150')
+        );
+
+        $this->buildPromotion(
+            'p0000010h',
+            'promotion 5',
+            $this->getReference('mg000003'),
+            2,
+            true,
+            new DateTime('-1 year'),
+            new DateTime('+1 year'),
+            false,
+            $this->getReference('p108k0jy') // promoting an embargoed clip
         );
 
         $manager->flush();

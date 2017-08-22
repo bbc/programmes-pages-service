@@ -9,6 +9,18 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindDescendantsByTypeTest extends AbstractDatabaseTest
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->enableEmbargoedFilter();
+    }
+
+    public function tearDown()
+    {
+        $this->disableEmbargoedFilter();
+    }
+
     /**
      * @cover ::findStremableDescendantsByType
      */
