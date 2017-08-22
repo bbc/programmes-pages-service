@@ -49,7 +49,7 @@ class FindAllTest extends AbstractDatabaseTest
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $this->assertEquals(17, $repo->countAll());
+        $this->assertEquals(18, $repo->countAll());
 
         // count query only
         $this->assertCount(1, $this->getDbQueries());

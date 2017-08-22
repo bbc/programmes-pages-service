@@ -40,6 +40,7 @@ class MongrelsFixture extends AbstractFixture
 
         $s1e2c1 = $this->buildClip('p008k0l5', "Who's Paul Ross", 1, $s2e2);
         $s1e2c2 = $this->buildClip('p008k0jy', "Why dogs really bark", 2, $s2e2);
+        $s1e2c3 = $this->buildClip('p108k0jy', "This clip is embargoed", 3, $s2e2, true, true);
 
         $s1e3c1 = $this->buildClip('p008nhl4', "Guide dog training", 1, $s2e3);
 
@@ -79,12 +80,13 @@ class MongrelsFixture extends AbstractFixture
         return $entity;
     }
 
-    private function buildClip($pid, $title, $position, $parent = null, $streamable = true)
+    private function buildClip($pid, $title, $position, $parent = null, $streamable = true, $isEmbargoed = false)
     {
         $entity = new Clip($pid, $title);
         $entity->setPosition($position);
         $entity->setParent($parent);
         $entity->setStreamable($streamable);
+        $entity->setIsEmbargoed($isEmbargoed);
         $this->manager->persist($entity);
         $this->addReference($pid, $entity);
         return $entity;
