@@ -2,16 +2,16 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
-class CountAvailableTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
+class CountTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 {
-    public function testCountAvailableTleosByFirstLetter()
+    public function testCountTleosByFirstLetter()
     {
         $this->mockRepository->expects($this->once())
             ->method('countTleosByFirstLetter')
             ->with('t')
             ->willReturn(10);
 
-        $result = $this->service()->countAvailableTleosByFirstLetter('t');
+        $result = $this->service()->countTleosByFirstLetter('t');
 
         $this->assertEquals(10, $result);
     }

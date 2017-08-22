@@ -32,16 +32,4 @@ class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 
         $this->assertEquals([], $result);
     }
-
-    public function testCountTleosByFirstLetter()
-    {
-        $this->mockRepository->expects($this->once())
-            ->method('countTleosByFirstLetter')
-            ->with('t')
-            ->willReturn(10);
-
-        $result = $this->service()->countTleosByFirstLetter('t');
-
-        $this->assertEquals(10, $result);
-    }
 }
