@@ -8,7 +8,10 @@ use DateTimeImmutable;
 
 class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
 {
-    public function testFindByServiceAndDateRangeDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testFindByServiceAndDateRangePagination($expectedLimit, $expectedOffset, $serviceArgs)
     {
         $fromDateTime = new DateTimeImmutable('-1 year');
         $toDatetime = new DateTimeImmutable('+1 year');
@@ -16,22 +19,17 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
 
         $this->mockRepository->expects($this->once())
              ->method('findAllByServiceAndDateRange')
-             ->with($sid, $fromDateTime, $toDatetime, 300, 0);
+             ->with($sid, $fromDateTime, $toDatetime, $expectedLimit, $expectedOffset);
 
-        $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime);
+        $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, ...$serviceArgs);
     }
 
-    public function testFindByServiceAndDateRangeCustomPagination()
+    public function paginationProvider()
     {
-        $fromDateTime = new DateTimeImmutable('-1 year');
-        $toDatetime = new DateTimeImmutable('+1 year');
-        $sid = new Sid('bbc_radio_two');
-
-        $this->mockRepository->expects($this->once())
-             ->method('findAllByServiceAndDateRange')
-             ->with($sid, $fromDateTime, $toDatetime, 3, 12);
-
-        $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, 3, 5);
+        return [
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [3, 12, [3, 5]],
+        ];
     }
 
     public function testFindByServiceAndDateRange()
