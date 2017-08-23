@@ -7,45 +7,42 @@ use BBC\ProgrammesPagesService\Domain\Entity\Version;
 
 class FindByVersionTest extends AbstractBroadcastsServiceTest
 {
-    public function testFindByVersionDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testFindByServiceAndDateRangePagination($expectedLimit, $expectedOffset, $paginationParams)
     {
         $dbId = 1;
-        $version = $this->createMock(Version::class);
-        $version->method('getDbId')->willReturn($dbId);
+        $stubVersion = $this->createMock(Version::class);
+        $stubVersion->method('getDbId')->willReturn($dbId);
 
         $this->mockRepository
             ->expects($this->once())
             ->method('findByVersion')
-            ->with([$dbId], 'Broadcast', 300, 0);
+            ->with([$dbId], 'Broadcast', $expectedLimit, $expectedOffset);
 
-        $this->service()->findByVersion($version);
+        $this->service()->findByVersion($stubVersion, ...$paginationParams);
     }
 
-    public function testFindByVersionCustomPagination()
+    public function paginationProvider()
     {
-        $dbId = 1;
-        $version = $this->createMock(Version::class);
-        $version->method('getDbId')->willReturn($dbId);
-
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('findByVersion')
-            ->with([$dbId], 'Broadcast', 5, 10);
-
-        $this->service()->findByVersion($version, 5, 3);
+        return [
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [5, 10, [5, 3]],
+        ];
     }
 
     public function testFindByVersionWithNonExistantDbId()
     {
         $dbId = 999;
-        $version = $this->createMock(Version::class);
-        $version->method('getDbId')->willReturn($dbId);
+        $stubVersion = $this->createMock(Version::class);
+        $stubVersion->method('getDbId')->willReturn($dbId);
 
         $this->mockRepository
             ->method('findByVersion')
             ->willReturn([]);
 
-        $broadcasts = $this->service()->findByVersion($version, 5, 3);
+        $broadcasts = $this->service()->findByVersion($stubVersion);
 
         $this->assertEquals([], $broadcasts);
     }

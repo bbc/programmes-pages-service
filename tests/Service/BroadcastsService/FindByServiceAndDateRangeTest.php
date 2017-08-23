@@ -13,15 +13,21 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
      */
     public function testFindByServiceAndDateRangePagination($expectedLimit, $expectedOffset, $paginationParams)
     {
-        $fromDateTime = new DateTimeImmutable('-1 year');
-        $toDatetime = new DateTimeImmutable('+1 year');
-        $sid = new Sid('bbc_radio_two');
+        $dummyFromDate = $this->createMock(DateTimeImmutable::class);
+        $dummyToDate = $this->createMock(DateTimeImmutable::class);
+        $dummySid = $this->createMock(Sid::class);
 
         $this->mockRepository->expects($this->once())
              ->method('findAllByServiceAndDateRange')
-             ->with($sid, $fromDateTime, $toDatetime, $expectedLimit, $expectedOffset);
+             ->with(
+                 $dummySid,
+                 $dummyFromDate,
+                 $dummyToDate,
+                 $expectedLimit,
+                 $expectedOffset
+             );
 
-        $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, ...$paginationParams);
+        $this->service()->findByServiceAndDateRange($dummySid, $dummyFromDate, $dummyToDate, ...$paginationParams);
     }
 
     public function paginationProvider()
@@ -34,16 +40,15 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
 
     public function testFindByServiceAndDateRange()
     {
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
-        $fromDateTime = new DateTimeImmutable('-1 year');
-        $toDatetime = new DateTimeImmutable('+1 year');
-        $sid = new Sid('bbc_radio_two');
-
         $this->mockRepository->expects($this->once())
             ->method('findAllByServiceAndDateRange')
-            ->willReturn($dbData);
+            ->willReturn([['pid' => 'b00swyx1'], ['pid' => 'b010t150']]);
 
-        $broadcasts = $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime);
+        $broadcasts = $this->service()->findByServiceAndDateRange(
+            $this->createMock(Sid::class),
+            $this->createMock(DateTimeImmutable::class),
+            $this->createMock(DateTimeImmutable::class)
+        );
 
         $this->assertCount(2, $broadcasts);
         $this->assertContainsOnly(Broadcast::class, $broadcasts);
@@ -53,15 +58,15 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
 
     public function testFindByServiceAndDateRangeWhenNoBroadcastsFound()
     {
-        $fromDateTime = new DateTimeImmutable('-1 year');
-        $toDatetime = new DateTimeImmutable('+1 year');
-        $sid = new Sid('this_sid_doesnt_exist');
-
         $this->mockRepository->expects($this->once())
             ->method('findAllByServiceAndDateRange')
             ->willReturn([]);
 
-        $broadcasts = $this->service()->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime);
+        $broadcasts = $this->service()->findByServiceAndDateRange(
+            $this->createMock(Sid::class),
+            $this->createMock(DateTimeImmutable::class),
+            $this->createMock(DateTimeImmutable::class)
+        );
 
         $this->assertSame([], $broadcasts);
     }
