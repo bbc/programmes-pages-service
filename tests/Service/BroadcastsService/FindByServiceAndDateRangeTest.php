@@ -48,15 +48,15 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
             ->method('findAllByServiceAndDateRange')
             ->willReturn($stubRepositoryResults);
 
-        $broadcasts = $this->service()->findByServiceAndDateRange(
+        $stubBroadcasts = $this->service()->findByServiceAndDateRange(
             $this->createMock(Sid::class),
             $this->createMock(DateTimeImmutable::class),
             $this->createMock(DateTimeImmutable::class)
         );
 
-        $this->assertCount(count($expectedPids), $broadcasts);
-        $this->assertContainsOnly(Broadcast::class, $broadcasts);
-        $this->assertSame($expectedPids, $this->extractPids($broadcasts));
+        $this->assertCount(count($expectedPids), $stubBroadcasts);
+        $this->assertContainsOnly(Broadcast::class, $stubBroadcasts);
+        $this->assertSame($expectedPids, $this->extractPids($stubBroadcasts));
     }
 
     public function repositoryResultsProvider(): array
@@ -64,12 +64,12 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
         return [
             [
                 [['pid' => 'b00swyx1'], ['pid' => 'b010t150']],
-                ['b00swyx1', 'b010t150']
+                ['b00swyx1', 'b010t150'],
             ],
             [
                 [],
-                []
-            ]
+                [],
+            ],
         ];
     }
 
@@ -80,7 +80,7 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
     private function extractPids(array $broadcasts): array
     {
         return array_map(
-            function($broadcast) {
+            function ($broadcast) {
                 return (string) $broadcast->getPid();
             },
             $broadcasts
