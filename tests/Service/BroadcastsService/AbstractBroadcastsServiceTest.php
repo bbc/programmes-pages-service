@@ -17,7 +17,7 @@ abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
     }
 
     /**
-     * @param array[] $dbData
+     * @param mixed[] $dbData
      */
     protected function broadcastFromDbData(array $dbData): Broadcast
     {
