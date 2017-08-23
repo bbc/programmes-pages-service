@@ -32,6 +32,7 @@ class FindFormatByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
             ->willReturn(null);
 
         $format = $this->service()->findFormatByUrlKeyAncestry($urlKey);
+
         $this->assertNull($format);
     }
 }

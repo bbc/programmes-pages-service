@@ -8,9 +8,6 @@ class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
 {
     public function testFindPopulatedChildGenres()
     {
-        $genre = $this->createMock(Genre::class);
-        $genre->method('getDbId')->willReturn(0);
-
         $dbData = [['pip_id' => 'C0001']];
 
         $this->mockRepository->expects($this->once())
@@ -18,6 +15,8 @@ class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
             ->with(0, 'genre')
             ->willReturn($dbData);
 
+        $genre = $this->createMock(Genre::class);
+        $genre->method('getDbId')->willReturn(0);
         $genres = $this->service()->findPopulatedChildGenres($genre);
 
         $this->assertCount(1, $genres);
