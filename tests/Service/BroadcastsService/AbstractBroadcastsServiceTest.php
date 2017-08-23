@@ -21,9 +21,9 @@ abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
      */
     protected function broadcastFromDbData(array $dbData): Broadcast
     {
-        $entity = $this->createMock(Broadcast::class);
-        $entity->method('getPid')->willReturn(new Pid($dbData['pid']));
-        return $entity;
+        $stubBroadcast = $this->createMock(Broadcast::class);
+        $stubBroadcast->method('getPid')->willReturn(new Pid($dbData['pid']));
+        return $stubBroadcast;
     }
 
     protected function service(): BroadcastsService
