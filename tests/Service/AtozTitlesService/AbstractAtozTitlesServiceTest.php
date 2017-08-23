@@ -19,6 +19,7 @@ abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
     {
         $mockAtozTitle = $this->createMock(AtozTitle::class);
         $mockAtozTitle->method('getTitle')->willReturn($entity['title']);
+        $mockAtozTitle->method('getFirstletter')->willReturn($entity['firstLetter']);
         return $mockAtozTitle;
     }
 

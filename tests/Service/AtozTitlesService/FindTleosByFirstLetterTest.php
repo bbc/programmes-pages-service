@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
+
 class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 {
     /**
@@ -24,12 +26,27 @@ class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
         ];
     }
 
+    public function testFindTleosByFirstLetterCustomPagination()
+    {
+        $dbData = [['title' => 'things', 'firstLetter' => 't']];
+
+        $this->mockRepository
+            ->method('findTleosByFirstLetter')
+            ->willReturn($dbData);
+
+        $atozTleos = $this->service()->findTleosByFirstLetter('t');
+
+        $this->assertCount(1, $atozTleos);
+        $this->assertContainsOnly(AtozTitle::class, $atozTleos);
+        $this->assertEquals('t', $atozTleos[0]->getFirstletter());
+    }
+
     public function testFindTleosByFirstLetterWithEmptyResult()
     {
          $this->mockRepository->method('findTleosByFirstLetter')->willReturn([]);
 
-        $result = $this->service()->findTleosByFirstLetter('t');
+        $atozTleos = $this->service()->findTleosByFirstLetter('t');
 
-        $this->assertEquals([], $result);
+        $this->assertEquals([], $atozTleos);
     }
 }
