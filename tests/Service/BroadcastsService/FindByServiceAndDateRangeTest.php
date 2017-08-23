@@ -39,11 +39,14 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
         ];
     }
 
-    public function testFindByServiceAndDateRange()
+    /**
+     * @dataProvider repositoryResultsProvider
+     */
+    public function testFindByServiceAndDateRange($stubRepositoryResults, $expectedPids)
     {
         $this->mockRepository->expects($this->once())
             ->method('findAllByServiceAndDateRange')
-            ->willReturn([['pid' => 'b00swyx1'], ['pid' => 'b010t150']]);
+            ->willReturn($stubRepositoryResults);
 
         $broadcasts = $this->service()->findByServiceAndDateRange(
             $this->createMock(Sid::class),
@@ -51,24 +54,32 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
             $this->createMock(DateTimeImmutable::class)
         );
 
-        $this->assertCount(2, $broadcasts);
+        $this->assertCount(count($expectedPids), $broadcasts);
         $this->assertContainsOnly(Broadcast::class, $broadcasts);
-        $this->assertEquals('b00swyx1', (string) $broadcasts[0]->getPid());
-        $this->assertEquals('b010t150', (string) $broadcasts[1]->getPid());
+        $this->assertSame($expectedPids, $this->extractPids($broadcasts));
     }
 
-    public function testFindByServiceAndDateRangeWhenNoBroadcastsFound()
+    public function repositoryResultsProvider(): array
     {
-        $this->mockRepository->expects($this->once())
-            ->method('findAllByServiceAndDateRange')
-            ->willReturn([]);
+        return [
+            [
+                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']],
+                ['b00swyx1', 'b010t150']
+            ],
+            [
+                [],
+                []
+            ]
+        ];
+    }
 
-        $broadcasts = $this->service()->findByServiceAndDateRange(
-            $this->createMock(Sid::class),
-            $this->createMock(DateTimeImmutable::class),
-            $this->createMock(DateTimeImmutable::class)
+    private function extractPids(array $broadcasts)
+    {
+        return array_map(
+            function($broadcast) {
+                return (string) $broadcast->getPid();
+            },
+            $broadcasts
         );
-
-        $this->assertSame([], $broadcasts);
     }
 }
