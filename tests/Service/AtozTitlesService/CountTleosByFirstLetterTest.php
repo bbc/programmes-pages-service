@@ -11,8 +11,9 @@ class CountTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
             ->with('t')
             ->willReturn(10);
 
-        $result = $this->service()->countTleosByFirstLetter('t');
-
-        $this->assertEquals(10, $result);
+        $this->assertEquals(
+            10,
+            $this->service()->countTleosByFirstLetter('t')
+        );
     }
 }
