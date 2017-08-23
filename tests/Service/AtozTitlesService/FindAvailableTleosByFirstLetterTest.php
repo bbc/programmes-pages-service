@@ -26,7 +26,7 @@ class FindAvailableTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
             'custom pagination' => [5, 10, [5, 3]],
         ];
     }
-    
+
     public function testFindAvailableTleosByFirstLetterReturnRightResults()
     {
         $this->mockRepository->method('findTleosByFirstLetter')->willReturn([['firstLetter' => 't']]);
