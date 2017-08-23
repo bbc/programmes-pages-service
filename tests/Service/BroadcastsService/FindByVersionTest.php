@@ -10,16 +10,13 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testFindByServiceAndDateRangePagination($expectedLimit, $expectedOffset, $paginationParams)
+    public function testFindVersionPagination($expectedLimit, $expectedOffset, $paginationParams)
     {
-        $dbId = 1;
         $stubVersion = $this->createMock(Version::class);
-        $stubVersion->method('getDbId')->willReturn($dbId);
+        $stubVersion->method('getDbId')->willReturn(1);
 
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('findByVersion')
-            ->with([$dbId], 'Broadcast', $expectedLimit, $expectedOffset);
+        $this->mockRepository->expects($this->once()) ->method('findByVersion')
+            ->with([$stubVersion->getDbId()], 'Broadcast', $expectedLimit, $expectedOffset);
 
         $this->service()->findByVersion($stubVersion, ...$paginationParams);
     }
@@ -36,46 +33,23 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
     /**
      * @dataProvider repositoryResultsProvider
      */
-    public function testFindByVersionWithExistantDbId($expectedPids, $stubBroadcasts)
+    public function testFindByVersionResults($expectedPids, $stubRepositoryResults)
     {
-        $this->mockRepository
-            ->method('findByVersion')
-            ->willReturn($stubBroadcasts);
+        $this->mockRepository->method('findByVersion')->willReturn($stubRepositoryResults);
 
         $dummyVersion = $this->createMock(Version::class);
-        $stubBroadcasts = $this->service()->findByVersion($dummyVersion);
+        $broadcasts = $this->service()->findByVersion($dummyVersion);
 
-        $this->assertCount(count($expectedPids), $stubBroadcasts);
-        $this->assertContainsOnly(Broadcast::class, $stubBroadcasts);
-        $this->assertSame($expectedPids, $this->extractPids($stubBroadcasts));
+        $this->assertContainsOnly(Broadcast::class, $broadcasts);
+        $this->assertSame($expectedPids, $this->extractPids($broadcasts));
     }
 
     public function repositoryResultsProvider(): array
     {
 
         return [
-            [
-                ['b00swyx1', 'b010t150'],
-                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']],
-            ],
-            [
-                [],
-                [],
-            ],
+            'with results' => [['b00swyx1', 'b010t150'], [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]],
+            'empty results' => [[], []],
         ];
-    }
-
-    /**
-     * @param Broadcast[] $broadcasts
-     * @return string[]
-     */
-    private function extractPids(array $broadcasts): array
-    {
-        return array_map(
-            function ($broadcast) {
-                return (string) $broadcast->getPid();
-            },
-            $broadcasts
-        );
     }
 }
