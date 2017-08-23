@@ -37,7 +37,7 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
             'custom pagination' => [3, 12, [3, 5]],
         ];
     }
-
+    
     public function testFindByServiceAndDateRange()
     {
         $this->mockRepository->expects($this->once())

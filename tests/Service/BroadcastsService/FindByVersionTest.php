@@ -34,32 +34,22 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
 
     public function testFindByVersionWithNonExistantDbId()
     {
-        $dbId = 999;
-        $stubVersion = $this->createMock(Version::class);
-        $stubVersion->method('getDbId')->willReturn($dbId);
+        $this->mockRepository->method('findByVersion')->willReturn([]);
 
-        $this->mockRepository
-            ->method('findByVersion')
-            ->willReturn([]);
-
-        $broadcasts = $this->service()->findByVersion($stubVersion);
+        $dummyVersion = $this->createMock(Version::class);
+        $broadcasts = $this->service()->findByVersion($dummyVersion);
 
         $this->assertEquals([], $broadcasts);
     }
 
     public function testFindByVersionWithExistantDbId()
     {
-        $dbId = 1;
-        $version = $this->createMock(Version::class);
-        $version->method('getDbId')->willReturn($dbId);
-
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
-
         $this->mockRepository
             ->method('findByVersion')
-            ->willReturn($dbData);
+            ->willReturn([['pid' => 'b00swyx1'], ['pid' => 'b010t150']]);
 
-        $broadcasts = $this->service()->findByVersion($version);
+        $dummyVersion = $this->createMock(Version::class);
+        $broadcasts = $this->service()->findByVersion($dummyVersion);
 
         $this->assertCount(2, $broadcasts);
         $this->assertContainsOnly(Broadcast::class, $broadcasts);
