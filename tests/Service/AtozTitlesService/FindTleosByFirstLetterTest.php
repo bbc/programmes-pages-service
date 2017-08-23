@@ -30,15 +30,13 @@ class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
     {
         $dbData = [['firstLetter' => 't']];
 
-        $this->mockRepository
-            ->method('findTleosByFirstLetter')
-            ->willReturn($dbData);
+        $this->mockRepository->method('findTleosByFirstLetter')->willReturn($dbData);
 
-        $atozTleos = $this->service()->findTleosByFirstLetter('t');
+        $stubAtozTleos = $this->service()->findTleosByFirstLetter('t');
 
-        $this->assertCount(1, $atozTleos);
-        $this->assertContainsOnly(AtozTitle::class, $atozTleos);
-        $this->assertEquals('t', $atozTleos[0]->getFirstletter());
+        $this->assertCount(1, $stubAtozTleos);
+        $this->assertContainsOnly(AtozTitle::class, $stubAtozTleos);
+        $this->assertEquals('t', $stubAtozTleos[0]->getFirstletter());
     }
 
     public function testFindTleosByFirstLetterWithEmptyResult()

@@ -18,23 +18,24 @@ class FindAvailableTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
         $this->service()->findAvailableTleosByFirstLetter('t', ...$paginationParams);
     }
 
-    public function providerPagination()
+    public function providerPagination(): array
     {
         return [
+            // expectedLimit, expectedOffset, [limit, page]
             'default pagination' => [300, 0, []],
             'custom pagination' => [5, 10, [5, 3]],
         ];
     }
-
+    
     public function testFindAvailableTleosByFirstLetterReturnRightResults()
     {
         $this->mockRepository->method('findTleosByFirstLetter')->willReturn([['firstLetter' => 't']]);
 
-        $atozTitles = $this->service()->findAvailableTleosByFirstLetter('t');
+        $stubAtozTitles = $this->service()->findAvailableTleosByFirstLetter('t');
 
-        $this->assertCount(1, $atozTitles);
-        $this->assertContainsOnly(AtozTitle::class, $atozTitles);
-        $this->assertEquals('t', $atozTitles[0]->getFirstletter());
+        $this->assertCount(1, $stubAtozTitles);
+        $this->assertContainsOnly(AtozTitle::class, $stubAtozTitles);
+        $this->assertSame('t', $stubAtozTitles[0]->getFirstletter());
     }
 
     public function testFindAvailableTleosByFirstLetterWithEmptyResult()
