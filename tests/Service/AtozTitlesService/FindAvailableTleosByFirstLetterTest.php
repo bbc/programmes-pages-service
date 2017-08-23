@@ -27,23 +27,25 @@ class FindAvailableTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
         ];
     }
 
-    public function testFindAvailableTleosByFirstLetterReturnRightResults()
+    /**
+     * @dataProvider resultsProvider
+     */
+    public function testFindAvailableTleosByFirstLetterReturnRightResults($expectations, $dbResults)
     {
-        $this->mockRepository->method('findTleosByFirstLetter')->willReturn([['firstLetter' => 't']]);
-
-        $stubAtozTitles = $this->service()->findAvailableTleosByFirstLetter('t');
-
-        $this->assertCount(1, $stubAtozTitles);
-        $this->assertContainsOnly(AtozTitle::class, $stubAtozTitles);
-        $this->assertSame('t', $stubAtozTitles[0]->getFirstletter());
-    }
-
-    public function testFindAvailableTleosByFirstLetterWithEmptyResult()
-    {
-        $this->mockRepository->method('findTleosByFirstLetter')->willReturn([]);
+        $this->mockRepository->method('findTleosByFirstLetter')->willReturn($dbResults);
 
         $atozTitles = $this->service()->findAvailableTleosByFirstLetter('t');
 
-        $this->assertEquals([], $atozTitles);
+        $this->assertContainsOnly(AtozTitle::class, $atozTitles);
+        $this->assertSame($expectations, $this->extractFirstLetter($atozTitles));
+    }
+
+    public function resultsProvider(): array
+    {
+        return [
+            // [expectations], [db data]
+            [['t'], [['firstLetter' => 't']]],
+            [[],[]],
+        ];
     }
 }

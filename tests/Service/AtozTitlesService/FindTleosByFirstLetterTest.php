@@ -26,23 +26,25 @@ class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
         ];
     }
 
-    public function testFindTleosByFirstLetterCustomPagination()
+    /**
+     * @dataProvider resultsProvider
+     */
+    public function testFindTleosByFirstLetterResults($expectations, $stubResults)
     {
-        $this->mockRepository->method('findTleosByFirstLetter')->willReturn([['firstLetter' => 't']]);
-
-        $stubAtozTleos = $this->service()->findTleosByFirstLetter('t');
-
-        $this->assertCount(1, $stubAtozTleos);
-        $this->assertContainsOnly(AtozTitle::class, $stubAtozTleos);
-        $this->assertEquals('t', $stubAtozTleos[0]->getFirstletter());
-    }
-
-    public function testFindTleosByFirstLetterWithEmptyResult()
-    {
-         $this->mockRepository->method('findTleosByFirstLetter')->willReturn([]);
+        $this->mockRepository->method('findTleosByFirstLetter')->willReturn($stubResults);
 
         $atozTleos = $this->service()->findTleosByFirstLetter('t');
 
-        $this->assertEquals([], $atozTleos);
+        $this->assertContainsOnly(AtozTitle::class, $atozTleos);
+        $this->assertEquals($expectations, $this->extractFirstLetter($atozTleos));
+    }
+
+    public function resultsProvider(): array
+    {
+        return [
+            // [expectations], [db data]
+            [['t'], [['firstLetter' => 't']]],
+            [[],[]],
+        ];
     }
 }
