@@ -9,7 +9,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
 {
-    public function setUp(): void
+    public function setUp()
     {
         $this->setUpCache();
         $this->setUpRepo('BroadcastRepository');

@@ -33,28 +33,49 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
         ];
     }
 
-    public function testFindByVersionWithNonExistantDbId()
-    {
-        $this->mockRepository->method('findByVersion')->willReturn([]);
-
-        $dummyVersion = $this->createMock(Version::class);
-        $broadcasts = $this->service()->findByVersion($dummyVersion);
-
-        $this->assertEquals([], $broadcasts);
-    }
-
-    public function testFindByVersionWithExistantDbId()
+    /**
+     * @dataProvider repositoryResultsProvider
+     */
+    public function testFindByVersionWithExistantDbId($expectedPids, $stubBroadcasts)
     {
         $this->mockRepository
             ->method('findByVersion')
-            ->willReturn([['pid' => 'b00swyx1'], ['pid' => 'b010t150']]);
+            ->willReturn($stubBroadcasts);
 
         $dummyVersion = $this->createMock(Version::class);
-        $broadcasts = $this->service()->findByVersion($dummyVersion);
+        $stubBroadcasts = $this->service()->findByVersion($dummyVersion);
 
-        $this->assertCount(2, $broadcasts);
-        $this->assertContainsOnly(Broadcast::class, $broadcasts);
-        $this->assertEquals('b00swyx1', (string) $broadcasts[0]->getPid());
-        $this->assertEquals('b010t150', (string) $broadcasts[1]->getPid());
+        $this->assertCount(count($expectedPids), $stubBroadcasts);
+        $this->assertContainsOnly(Broadcast::class, $stubBroadcasts);
+        $this->assertSame($expectedPids, $this->extractPids($stubBroadcasts));
+    }
+
+    public function repositoryResultsProvider(): array
+    {
+
+        return [
+            [
+                ['b00swyx1', 'b010t150'],
+                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']],
+            ],
+            [
+                [],
+                [],
+            ],
+        ];
+    }
+
+    /**
+     * @param Broadcast[] $broadcasts
+     * @return string[]
+     */
+    private function extractPids(array $broadcasts): array
+    {
+        return array_map(
+            function ($broadcast) {
+                return (string) $broadcast->getPid();
+            },
+            $broadcasts
+        );
     }
 }

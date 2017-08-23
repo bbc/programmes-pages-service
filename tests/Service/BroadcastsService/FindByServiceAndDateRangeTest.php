@@ -42,7 +42,7 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
     /**
      * @dataProvider repositoryResultsProvider
      */
-    public function testFindByServiceAndDateRange($stubRepositoryResults, $expectedPids)
+    public function testFindByServiceAndDateRange($expectedPids, $stubRepositoryResults)
     {
         $this->mockRepository->expects($this->once())
             ->method('findAllByServiceAndDateRange')
@@ -63,8 +63,8 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
     {
         return [
             [
-                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']],
                 ['b00swyx1', 'b010t150'],
+                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']],
             ],
             [
                 [],
