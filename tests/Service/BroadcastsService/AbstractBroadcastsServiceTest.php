@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\BroadcastsService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -11,22 +13,14 @@ abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('BroadcastRepository');
-        $this->setUpMapper('BroadcastMapper', 'broadcastFromDbData');
+        $this->setUpMapper('BroadcastMapper', function (array $dbData) {
+            $stubBroadcast = $this->createMock(Broadcast::class);
+            $stubBroadcast->method('getPid')->willReturn(new Pid($dbData['pid']));
+            return $stubBroadcast;
+        });
     }
 
-    protected function broadcastsFromDbData(array $entities)
-    {
-        return array_map([$this, 'broadcastFromDbData'], $entities);
-    }
-
-    protected function broadcastFromDbData(array $entity)
-    {
-        $mockBroadcast = $this->createMock(self::ENTITY_NS . 'Broadcast');
-        $mockBroadcast->method('getPid')->willReturn($entity['pid']);
-        return $mockBroadcast;
-    }
-
-    protected function service()
+    protected function service(): BroadcastsService
     {
         return new BroadcastsService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }

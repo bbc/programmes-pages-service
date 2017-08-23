@@ -36,15 +36,18 @@ abstract class AbstractServiceTest extends TestCase
             ->getMock();
     }
 
-    protected function setUpMapper($mapperName, $entityBuilderMethod)
+    protected function setUpMapper($mapperName, $callback)
     {
         $this->mockMapper = $this->createMock($this::MAPPER_NS . $mapperName);
 
-        $this->mockMapper->expects($this->any())
-            ->method('getDomainModel')
-            ->will($this->returnCallback(function ($entity) use ($entityBuilderMethod) {
-                return call_user_func([$this, $entityBuilderMethod], $entity);
-            }));
+        // TODO once we always pass in a callable to this function then add a typehint and remove this check
+        if (!is_callable($callback)) {
+            $callback = function ($entity) use ($callback) {
+                return $this->$callback($entity);
+            };
+        }
+
+        $this->mockMapper->method('getDomainModel')->will($this->returnCallback($callback));
     }
 
     protected function mockEntity($name, $dbId = null)
@@ -56,5 +59,19 @@ abstract class AbstractServiceTest extends TestCase
         }
 
         return $entity;
+    }
+
+    /**
+     * @param array $entities any model domain with getPid() function
+     * @return string[]
+     */
+    protected function extractPids(array $entities): array
+    {
+        return array_map(
+            function ($entity) {
+                return (string) $entity->getPid();
+            },
+            $entities
+        );
     }
 }

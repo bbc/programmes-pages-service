@@ -2,48 +2,59 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use DateTimeImmutable;
 
 class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
 {
-    public function testFindByServiceAndDateRange()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testFindByServiceAndDateRangePagination($expectedLimit, $expectedOffset, $paginationParams)
     {
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
-        $fromDateTime = new DateTimeImmutable('2010-01-15 06:00:00');
-        $toDatetime = new DateTimeImmutable('2017-10-16 06:00:00');
-        $sid = new Sid('bbc_radio_two');
+        $dummyFromDate = $this->createMock(DateTimeImmutable::class);
+        $dummyToDate = $this->createMock(DateTimeImmutable::class);
+        $dummySid = $this->createMock(Sid::class);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findAllByServiceAndDateRange')
-            ->with($sid, $fromDateTime, $toDatetime, -1, 0)
-            ->willReturn($dbData);
+        $this->mockRepository->expects($this->once())->method('findAllByServiceAndDateRange')
+             ->with($dummySid, $dummyFromDate, $dummyToDate, $expectedLimit, $expectedOffset);
 
-        $broadcasts = $this->service()->findByServiceAndDateRange(
-            $sid,
-            $fromDateTime,
-            $toDatetime,
-            -1,
-            1
-        );
-
-        $this->assertEquals($this->broadcastsFromDbData($dbData), $broadcasts);
+        $this->service()->findByServiceAndDateRange($dummySid, $dummyFromDate, $dummyToDate, ...$paginationParams);
     }
 
-    public function testFindByServiceAndDateRangeWhenNoBroadcastsFound()
+    public function paginationProvider(): array
     {
-        $fromDateTime = new DateTimeImmutable('2010-01-15 06:00:00');
-        $toDatetime = new DateTimeImmutable('2017-10-16 06:00:00');
-        $sid = new Sid('this_sid_doesnt_exist');
+        return [
+            // [expectedLimit, expectedOffset, [limit, page]]
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [3, 12, [3, 5]],
+        ];
+    }
 
-        $this->mockRepository->expects($this->once())
-            ->method('findAllByServiceAndDateRange')
-            ->with($sid, $fromDateTime, $toDatetime, -1, 0)
-            ->willReturn([]);
+    /**
+     * @dataProvider repositoryResultsProvider
+     */
+    public function testFindByServiceAndDateRangeResults($expectedPids, $stubRepositoryResults)
+    {
+        $this->mockRepository->method('findAllByServiceAndDateRange')->willReturn($stubRepositoryResults);
 
-        $broadcasts = $this->service()
-            ->findByServiceAndDateRange($sid, $fromDateTime, $toDatetime, -1, 1);
+        $broadcasts = $this->service()->findByServiceAndDateRange(
+            $this->createMock(Sid::class),
+            $this->createMock(DateTimeImmutable::class),
+            $this->createMock(DateTimeImmutable::class)
+        );
 
-        $this->assertSame([], $broadcasts);
+        $this->assertContainsOnly(Broadcast::class, $broadcasts);
+        $this->assertSame($expectedPids, $this->extractPids($broadcasts));
+    }
+
+    public function repositoryResultsProvider(): array
+    {
+        return [
+            // [expectations], [results]
+            'broadcasts results' => [['b00swyx1', 'b010t150'], [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]],
+            'no results' => [[], []],
+        ];
     }
 }

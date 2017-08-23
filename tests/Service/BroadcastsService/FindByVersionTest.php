@@ -2,49 +2,55 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
+use BBC\ProgrammesPagesService\Domain\Entity\Version;
+
 class FindByVersionTest extends AbstractBroadcastsServiceTest
 {
-    public function testFindByVersionDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testFindVersionPagination($expectedLimit, $expectedOffset, $paginationParams)
     {
-        $dbId = 1;
-        $version = $this->mockEntity('Version', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
+        $stubVersion = $this->createMock(Version::class);
+        $stubVersion->method('getDbId')->willReturn(1);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByVersion')
-            ->with([$dbId], 'Broadcast', 300, 0)
-            ->willReturn($dbData);
+        $this->mockRepository->expects($this->once()) ->method('findByVersion')
+            ->with([$stubVersion->getDbId()], 'Broadcast', $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findByVersion($version);
-        $this->assertEquals($this->broadcastsFromDbData($dbData), $result);
+        $this->service()->findByVersion($stubVersion, ...$paginationParams);
     }
 
-    public function testFindByVersionCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbId = 1;
-        $version = $this->mockEntity('Version', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findByVersion')
-            ->with([$dbId], 'Broadcast', 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findByVersion($version, 5, 3);
-        $this->assertEquals($this->broadcastsFromDbData($dbData), $result);
+        return [
+            // [expectedLimit, expectedOffset, [limit, page]]
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [5, 10, [5, 3]],
+        ];
     }
 
-    public function testFindByVersionWithNonExistantDbId()
+    /**
+     * @dataProvider repositoryResultsProvider
+     */
+    public function testFindByVersionResults(array $expectedPids, array $stubRepositoryResults)
     {
-        $dbId = 999;
-        $version = $this->mockEntity('Version', $dbId);
+        $this->mockRepository->method('findByVersion')->willReturn($stubRepositoryResults);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByVersion')
-            ->with([$dbId], 'Broadcast', 5, 10)
-            ->willReturn([]);
+        $dummyVersion = $this->createMock(Version::class);
+        $broadcasts = $this->service()->findByVersion($dummyVersion);
 
-        $result = $this->service()->findByVersion($version, 5, 3);
-        $this->assertEquals([], $result);
+        $this->assertContainsOnly(Broadcast::class, $broadcasts);
+        $this->assertSame($expectedPids, $this->extractPids($broadcasts));
+    }
+
+    public function repositoryResultsProvider(): array
+    {
+
+        return [
+            // [expectations], [results]
+            'with results' => [['b00swyx1', 'b010t150'], [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]],
+            'empty results' => [[], []],
+        ];
     }
 }
