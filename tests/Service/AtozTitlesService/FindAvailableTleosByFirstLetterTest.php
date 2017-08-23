@@ -28,13 +28,13 @@ class FindAvailableTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 
     public function testFindAvailableTleosByFirstLetterReturnRightResults()
     {
-        $this->mockRepository->method('findTleosByFirstLetter')->willReturn([['title' => 'things']]);
+        $this->mockRepository->method('findTleosByFirstLetter')->willReturn([['firstLetter' => 't']]);
 
         $atozTitles = $this->service()->findAvailableTleosByFirstLetter('t');
 
         $this->assertCount(1, $atozTitles);
         $this->assertContainsOnly(AtozTitle::class, $atozTitles);
-        $this->assertEquals('things', $atozTitles[0]->getTitle());
+        $this->assertEquals('t', $atozTitles[0]->getFirstletter());
     }
 
     public function testFindAvailableTleosByFirstLetterWithEmptyResult()
