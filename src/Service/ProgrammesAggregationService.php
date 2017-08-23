@@ -5,13 +5,21 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ClipRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
+use BBC\ProgrammesPagesService\Domain\Entity\Gallery;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
 
 class ProgrammesAggregationService extends AbstractService
 {
+    /* @var CoreEntityMapper */
+    protected $mapper;
+
+    /* @var CoreEntityRepository */
+    protected $repository;
+
     public function __construct(
         CoreEntityRepository $repository,
         CoreEntityMapper $mapper,

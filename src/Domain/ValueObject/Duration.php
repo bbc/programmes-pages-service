@@ -35,6 +35,6 @@ class Duration implements JsonSerializable
 
     public function formatMysql(): string
     {
-        return $this->getSeconds();
+        return (string) $this->getSeconds();
     }
 }

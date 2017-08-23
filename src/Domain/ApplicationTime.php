@@ -13,13 +13,13 @@ use DateTimeZone;
  */
 class ApplicationTime
 {
-    /** @var DateTimeImmutable  */
+    /** @var DateTimeImmutable|null  */
     private static $appTime = null;
 
-    /** @var DateTimeImmutable */
+    /** @var DateTimeImmutable|null */
     private static $localTime = null;
 
-    /** @var DateTimeZone */
+    /** @var DateTimeZone|null */
     private static $localTimeZone = null;
 
     /**

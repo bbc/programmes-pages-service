@@ -15,7 +15,7 @@ class PromotionMapper extends AbstractMapper
     private $cache = [];
 
     /**
-     * @param array[] $dbPromotion
+     * @param mixed[] $dbPromotion
      */
     public function getDomainModel(array $dbPromotion): Promotion
     {
@@ -28,7 +28,7 @@ class PromotionMapper extends AbstractMapper
     }
 
     /**
-     * @param array[] $dbPromotion
+     * @param mixed[] $dbPromotion
      */
     private function getCacheKeyForPromotion(array $dbPromotion): string
     {
@@ -43,7 +43,7 @@ class PromotionMapper extends AbstractMapper
     }
 
     /**
-     * @param array[] $dbPromotion
+     * @param mixed[] $dbPromotion
      */
     private function getModelForPromotion(array $dbPromotion): Promotion
     {

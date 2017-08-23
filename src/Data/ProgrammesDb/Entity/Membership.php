@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\MemberOfGroupInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
@@ -65,15 +66,10 @@ class Membership
      */
     private $position;
 
-    /**
-     * @param string $pid
-     * @param Group $group
-     * @param CoreEntity|Image $member
-     */
     public function __construct(
         string $pid,
         Group $group,
-        $member
+        MemberOfGroupInterface $member
     ) {
         $this->pid = $pid;
         $this->group = $group;
@@ -123,10 +119,7 @@ class Membership
         return $this->memberImage;
     }
 
-    /**
-     * @param CoreEntity|Image $member
-     */
-    public function setMember($member)
+    public function setMember(MemberOfGroupInterface $member)
     {
         if ($member instanceof CoreEntity) {
             $this->setMemberBatch($member, null);

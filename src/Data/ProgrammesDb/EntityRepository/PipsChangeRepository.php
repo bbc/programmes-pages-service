@@ -32,7 +32,7 @@ class PipsChangeRepository extends EntityRepository
     }
 
     /**
-     * @return PipsChange
+     * @return PipsChange|null
      */
     public function findLatest()
     {
@@ -44,7 +44,7 @@ class PipsChangeRepository extends EntityRepository
     }
 
     /**
-     * @return PipsChange
+     * @return PipsChange|null
      */
     public function findLatestProcessed()
     {

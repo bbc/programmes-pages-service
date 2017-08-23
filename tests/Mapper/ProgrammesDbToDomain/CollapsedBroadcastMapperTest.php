@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
+use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CollapsedBroadcastMapper;
 use DateTime;
 use DateTimeImmutable;
@@ -131,6 +132,13 @@ class CollapsedBroadcastMapperTest extends BaseMapperTestCase
             'version'          => ['pid' => 'b03szzzz'],
             'programmeItem'    => ['pid' => 'b007b5xt'],
         ];
+
+        $expectedProgrammeItemDomainEntity = $this->createMock(ProgrammeItem::class);
+
+        $this->mockProgrammeMapper->expects($this->once())
+            ->method('getDomainModelForProgramme')
+            ->with(['pid' => 'b007b5xt'])
+            ->willReturn($expectedProgrammeItemDomainEntity);
 
         $this->getMapper()->getDomainModel($dbEntityArray, $services);
     }

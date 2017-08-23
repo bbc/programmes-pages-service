@@ -30,7 +30,7 @@ class CoreEntityImage
     private $coreEntity;
 
     /**
-     * @var CoreEntity
+     * @var Image
      *
      * @ORM\ManyToOne(targetEntity="Image")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")

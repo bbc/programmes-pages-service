@@ -27,6 +27,9 @@ class ProgrammesService extends AbstractService
         'Clip',
     ];
 
+    /** @var CoreEntityMapper */
+    protected $mapper;
+
     /** @var CoreEntityRepository */
     protected $repository;
 
@@ -272,38 +275,6 @@ class ProgrammesService extends AbstractService
         );
     }
 
-    public function findDescendantsByPid(
-        Pid $pid,
-        ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE,
-        $ttl = CacheInterface::NORMAL
-    ): array {
-        // in order for this to be efficient, we need to know the original programme database ID.
-        // @todo - investigate another way to do this so we don't need this effectively redundant query
-
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid, $limit, $page, $ttl);
-
-        return $this->cache->getOrSet(
-            $key,
-            $ttl,
-            function () use ($pid, $limit, $page) {
-
-                $dbEntity = $this->repository->findByPidFull($pid);
-                if (!$dbEntity) {
-                    return null;
-                }
-
-                $dbEntities = $this->repository->findDescendants(
-                    $dbEntity,
-                    $limit,
-                    $this->getOffset($limit, $page)
-                );
-
-                return $this->mapManyEntities($dbEntities);
-            }
-        );
-    }
-
     public function countAvailableEpisodesByCategory(
         Category $category,
         $ttl = CacheInterface::NORMAL
@@ -468,7 +439,7 @@ class ProgrammesService extends AbstractService
     /**
      * A utility for returning the db type for a given Domain object
      */
-    private function dbType(Programme $entity): ?string
+    private function dbType(Programme $entity): string
     {
         if ($entity instanceof Brand) {
             return 'Brand';

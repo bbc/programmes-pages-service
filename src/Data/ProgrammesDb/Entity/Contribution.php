@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\ContributableToInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
@@ -92,17 +93,11 @@ class Contribution
      */
     private $characterName;
 
-    /**
-     * @param string $pid
-     * @param Contributor $contributor
-     * @param CreditRole $creditRole
-     * @param CoreEntity|Segment|Version $contributionTo
-     */
     public function __construct(
         string $pid,
         Contributor $contributor,
         CreditRole $creditRole,
-        $contributionTo
+        ContributableToInterface $contributionTo
     ) {
         $this->pid = $pid;
         $this->contributor = $contributor;
@@ -168,10 +163,7 @@ class Contribution
         return $this->contributionToVersion;
     }
 
-    /**
-     * @param CoreEntity|Segment|Version $item
-     */
-    public function setContributionTo($item)
+    public function setContributionTo(ContributableToInterface $item)
     {
         if ($item instanceof CoreEntity) {
             $this->setContributionToBatch($item, null, null);

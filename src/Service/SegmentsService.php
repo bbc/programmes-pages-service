@@ -10,6 +10,12 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentMapper;
 
 class SegmentsService extends AbstractService
 {
+    /* @var SegmentMapper */
+    protected $mapper;
+
+    /* @var SegmentRepository */
+    protected $repository;
+
     public function __construct(
         SegmentRepository $repository,
         SegmentMapper $mapper,

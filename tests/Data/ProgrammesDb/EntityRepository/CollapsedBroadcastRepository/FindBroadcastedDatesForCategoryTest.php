@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CollapsedBroadcastRepository;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CollapsedBroadcastRepository;
 use DateTimeImmutable;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
@@ -20,7 +20,7 @@ class FindBroadcastedDatesForCategoryTest extends AbstractDatabaseTest
         $this->loadFixtures(['CollapsedBroadcastsWithCategoriesFixture']);
         $this->enableEmbargoedFilter();
 
-        /** @var BroadcastRepository $repo */
+        /** @var CollapsedBroadcastRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
         $ancestry = $this->getAncestryFromPersistentIdentifier($pipId, 'Category', 'pipId');
@@ -78,7 +78,7 @@ class FindBroadcastedDatesForCategoryTest extends AbstractDatabaseTest
         $this->loadFixtures(['CollapsedBroadcastsWithCategoriesFixture']);
         $this->disableEmbargoedFilter();
 
-        /** @var BroadcastRepository $repo */
+        /** @var CollapsedBroadcastRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
         $ancestry = $this->getAncestryFromPersistentIdentifier('c0000001', 'Category', 'pipId');
@@ -105,7 +105,7 @@ class FindBroadcastedDatesForCategoryTest extends AbstractDatabaseTest
     {
         $this->loadFixtures([]);
 
-        /** @var BroadcastRepository $repo */
+        /** @var CollapsedBroadcastRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
         $entities = $repo->findBroadcastedDatesForCategory(

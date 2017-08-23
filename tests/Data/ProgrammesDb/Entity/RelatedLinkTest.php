@@ -109,23 +109,6 @@ class RelatedLinkTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidRelatedToThrowsExceptionOnConstruct()
-    {
-        new RelatedLink('pid', '', '', '', 'wrongwrongwrong', false);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidRelatedToThrowsExceptionOnSet()
-    {
-        $link = new RelatedLink('pid', '', '', '', $this->mockCoreEntity(), false);
-        $link->setRelatedTo('wrongwrongwrong');
-    }
-
     private function mockCoreEntity()
     {
         return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity');

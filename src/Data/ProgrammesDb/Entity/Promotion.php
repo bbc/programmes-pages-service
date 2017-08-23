@@ -2,6 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\RelatedLinkContextInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\PromotableInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -14,7 +16,7 @@ use InvalidArgumentException;
  * @ORM\Entity()
  * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PromotionRepository")
  */
-class Promotion
+class Promotion implements RelatedLinkContextInterface
 {
     use TimestampableEntity;
     use Traits\PartnerPidTrait;
@@ -118,16 +120,9 @@ class Promotion
      */
     private $cascadesToDescendants = false;
 
-    /**
-     * @param string $pid
-     * @param CoreEntity|Image $promotionOf
-     * @param DateTime $startDate
-     * @param DateTime $endDate
-     * @param int $weighting
-     */
     public function __construct(
         string $pid,
-        $promotionOf,
+        PromotableInterface $promotionOf,
         DateTime $startDate,
         DateTime $endDate,
         int $weighting
@@ -172,10 +167,7 @@ class Promotion
         return $this->promotionOfImage;
     }
 
-    /**
-     * @param CoreEntity|Image $item
-     */
-    public function setPromotionOf($item)
+    public function setPromotionOf(PromotableInterface $item)
     {
         if ($item instanceof CoreEntity) {
             $this->setPromotionOfBatch($item, null);

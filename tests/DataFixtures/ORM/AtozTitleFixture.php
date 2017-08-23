@@ -47,7 +47,7 @@ class AtozTitleFixture extends AbstractFixture
         $this->manager->persist($episodeTLEOTitle);
 
         $embargoedTLEO = new Brand('b0000004', 'Prince Harry\'s death rattle');
-        $embargoedTLEO->setIsEmbargoed(1);
+        $embargoedTLEO->setIsEmbargoed(true);
         $manager->persist($embargoedTLEO);
         $embargoedTLEOTitle = new AtozTitle($embargoedTLEO->getTitle(), $embargoedTLEO);
         $manager->persist($embargoedTLEOTitle);

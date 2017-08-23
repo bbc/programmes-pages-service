@@ -11,6 +11,12 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper;
 
 class VersionsService extends AbstractService
 {
+    /* @var VersionMapper */
+    protected $mapper;
+
+    /* @var VersionRepository */
+    protected $repository;
+
     public function __construct(
         VersionRepository $repository,
         VersionMapper $mapper,

@@ -3,7 +3,7 @@
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
-use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 
@@ -22,7 +22,7 @@ class CollapsedBroadcastMapper extends AbstractMapper
         );
     }
 
-    private function getProgrammeItemModel(array $dbCollapsedBroadcast, string $key = 'programmeItem'): Programme
+    private function getProgrammeItemModel(array $dbCollapsedBroadcast, string $key = 'programmeItem'): ProgrammeItem
     {
         // It is not valid for a CollapsedBroadcast to have no programmeItem
         // so it counts as Unfetched even if the key exists but is null

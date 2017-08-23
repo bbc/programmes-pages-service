@@ -2,6 +2,10 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\ContributableToInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\MemberOfGroupInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\RelatedLinkContextInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\PromotableInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -37,7 +41,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * })
  * @Gedmo\Tree(type="materializedPath", cascadeDeletes=false)
  */
-abstract class CoreEntity
+abstract class CoreEntity implements ContributableToInterface, MemberOfGroupInterface, RelatedLinkContextInterface, PromotableInterface
 {
     use TimestampableEntity;
     use Traits\IsEmbargoedTrait;
@@ -57,7 +61,7 @@ abstract class CoreEntity
     private $id;
 
     /**
-     * @var string|null
+     * @var string
      *
      * @ORM\Column(type="string", length=15, nullable=false, unique=true)
      */
@@ -221,7 +225,7 @@ abstract class CoreEntity
     protected $availableGalleriesCount = 0;
 
     /**
-     * @var string
+     * @var bool
      * TRAIT_PULLDOWN for IsPodcastableMethodsTrait
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})

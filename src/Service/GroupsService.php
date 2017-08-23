@@ -19,6 +19,9 @@ class GroupsService extends AbstractService
         'Season',
     ];
 
+    /** @var CoreEntityMapper */
+    protected $mapper;
+
     /** @var CoreEntityRepository */
     protected $repository;
 

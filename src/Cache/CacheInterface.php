@@ -21,5 +21,5 @@ interface CacheInterface
 
     public function setFlushCacheItems(bool $flushCacheItems): void;
 
-    public function keyHelper(string $className, string $functionName, ?string ...$uniqueValues): string;
+    public function keyHelper(string $className, string $functionName, ...$uniqueValues): string;
 }

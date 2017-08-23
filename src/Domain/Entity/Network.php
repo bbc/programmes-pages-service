@@ -122,7 +122,7 @@ class Network
         return $this->type;
     }
 
-    public function getMedium(): string
+    public function getMedium(): ?string
     {
         return $this->medium;
     }

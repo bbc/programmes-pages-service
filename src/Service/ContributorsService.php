@@ -11,6 +11,12 @@ use DateTimeImmutable;
 
 class ContributorsService extends AbstractService
 {
+    /* @var ContributorMapper */
+    protected $mapper;
+
+    /* @var ContributorRepository */
+    protected $repository;
+
     public function __construct(
         ContributorRepository $repository,
         ContributorMapper $mapper,

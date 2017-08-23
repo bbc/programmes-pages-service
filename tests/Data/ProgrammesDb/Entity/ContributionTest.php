@@ -110,33 +110,6 @@ class ContributionTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidContributionToThrowsExceptionOnConstruct()
-    {
-        new Contribution(
-            'pid',
-            $this->mockContributor(),
-            $this->mockCreditRole(),
-            'wrongwrongwrong'
-        );
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidContributionToThrowsExceptionOnSet()
-    {
-        $contribution = new Contribution(
-            'pid',
-            $this->mockContributor(),
-            $this->mockCreditRole(),
-            $this->mockCoreEntity()
-        );
-        $contribution->setContributionTo('wrongwrongwrong');
-    }
-
     private function mockContributor()
     {
         return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Contributor');

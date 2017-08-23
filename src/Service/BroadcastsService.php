@@ -11,6 +11,12 @@ use DateTimeImmutable;
 
 class BroadcastsService extends AbstractService
 {
+    /* @var BroadcastMapper */
+    protected $mapper;
+
+    /* @var BroadcastRepository */
+    protected $repository;
+
     public function __construct(
         BroadcastRepository $repository,
         BroadcastMapper $mapper,

@@ -70,14 +70,14 @@ class RefAvailability
     private $scheduledStart;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $scheduledEnd;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */

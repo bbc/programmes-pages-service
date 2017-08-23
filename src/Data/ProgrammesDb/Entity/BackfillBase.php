@@ -48,7 +48,7 @@ abstract class BackfillBase extends PipsChangeBase
     protected $locked = false;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -77,7 +77,7 @@ abstract class BackfillBase extends PipsChangeBase
         $this->locked = $locked;
     }
 
-    public function getLockedAt(): DateTime
+    public function getLockedAt(): ?DateTime
     {
         return $this->lockedAt;
     }

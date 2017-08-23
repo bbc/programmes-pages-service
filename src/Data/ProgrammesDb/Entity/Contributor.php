@@ -41,7 +41,7 @@ class Contributor
     private $type;
 
     /**
-     * @var string|null
+     * @var string
      *
      * @ORM\Column(type="string", length=511, nullable=false)
      */

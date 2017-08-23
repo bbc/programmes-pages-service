@@ -71,7 +71,8 @@ class CoreEntityMapperImageMappingTest extends BaseCoreEntityMapperTestCase
 
         $domainModel = $this->getMapper()->getDomainModelForProgramme($dbEntityArray);
         $this->assertEquals('InheritedImage', $domainModel->getImage()->getTitle());
-        $this->assertEquals('InheritedImage', $domainModel->getParent()->getImage()->getTitle());
+        $parent = $domainModel->getParent();
+        $this->assertEquals('InheritedImage', $parent ? $parent->getImage()->getTitle() : null);
     }
 
     public function testWhenImageOnMasterBrandIsSetThenTheMasterBrandImageIsUsed()
@@ -132,6 +133,7 @@ class CoreEntityMapperImageMappingTest extends BaseCoreEntityMapperTestCase
 
         $domainModel = $this->getMapper()->getDomainModelForProgramme($dbEntityArray);
         $this->assertEquals('InheritedMasterBrandImage', $domainModel->getImage()->getTitle());
-        $this->assertEquals('InheritedMasterBrandImage', $domainModel->getParent()->getImage()->getTitle());
+        $parent = $domainModel->getParent();
+        $this->assertEquals('InheritedMasterBrandImage', $parent ? $parent->getImage()->getTitle() : null);
     }
 }

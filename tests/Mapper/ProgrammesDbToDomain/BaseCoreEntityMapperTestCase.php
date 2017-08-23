@@ -136,6 +136,10 @@ abstract class BaseCoreEntityMapperTestCase extends BaseMapperTestCase
             $options = $this->mockOptions;
         }
 
+        if (!$image) {
+            $image = $this->mockDefaultImage;
+        }
+
         return new Series(
             [$id],
             new Pid($pid),

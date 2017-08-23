@@ -185,7 +185,7 @@ class BackfillRepository extends EntityRepository
     }
 
     /**
-     * @return BackfillBase
+     * @return BackfillBase|null
      */
     public function findLatest()
     {
@@ -197,7 +197,7 @@ class BackfillRepository extends EntityRepository
     }
 
     /**
-     * @return BackfillBase
+     * @return BackfillBase|null
      */
     public function findLatestProcessed()
     {

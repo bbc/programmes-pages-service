@@ -10,7 +10,7 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
 
 class SegmentEvent
 {
-    /** @var string */
+    /** @var Pid */
     private $pid;
 
     /** @var Version */

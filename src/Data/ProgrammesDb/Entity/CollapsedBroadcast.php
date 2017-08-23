@@ -94,7 +94,7 @@ class CollapsedBroadcast
     private $endAt;
 
     /**
-     * @var int|null
+     * @var int
      *
      * This is not guaranteed to be the same for all Versions that were
      * broadcast as we group by Programme, not Version. This means that two
@@ -136,7 +136,7 @@ class CollapsedBroadcast
     private $isWebcastOnly = false;
 
     /**
-     * @var Programme
+     * @var Programme|null
      *
      * @ORM\ManyToOne(targetEntity="Programme")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")

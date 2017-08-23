@@ -15,6 +15,9 @@ use DateTimeImmutable;
 
 class CollapsedBroadcastsService extends AbstractService
 {
+    /* @var CollapsedBroadcastRepository */
+    protected $repository;
+
     /**
      * @var ServiceRepository
      */

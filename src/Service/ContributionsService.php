@@ -11,6 +11,12 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributionMapper;
 
 class ContributionsService extends AbstractService
 {
+    /* @var ContributionMapper */
+    protected $mapper;
+
+    /* @var ContributionRepository */
+    protected $repository;
+
     public function __construct(
         ContributionRepository $repository,
         ContributionMapper $mapper,

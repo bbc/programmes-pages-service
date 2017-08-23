@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class PipsChangeBase
 {
     /**
-     * @var int|null
+     * @var int
      *
      * @ORM\Id()
      * @ORM\Column(type="bigint", nullable=false,  options={"unsigned"=true})

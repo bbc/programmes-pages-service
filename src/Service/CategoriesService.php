@@ -10,6 +10,12 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
 
 class CategoriesService extends AbstractService
 {
+    /* @var CategoryMapper */
+    protected $mapper;
+
+    /* @var CategoryRepository */
+    protected $repository;
+
     public function __construct(
         CategoryRepository $repository,
         CategoryMapper $mapper,
