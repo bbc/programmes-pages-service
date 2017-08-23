@@ -24,9 +24,10 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
         $this->service()->findByVersion($stubVersion, ...$paginationParams);
     }
 
-    public function paginationProvider()
+    public function paginationProvider(): array
     {
         return [
+            // [expectedLimit, expectedOffset, [limit, page]]
             'default pagination' => [300, 0, []],
             'custom pagination' => [5, 10, [5, 3]],
         ];

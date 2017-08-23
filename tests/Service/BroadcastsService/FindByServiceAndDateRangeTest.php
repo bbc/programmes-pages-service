@@ -30,14 +30,15 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
         $this->service()->findByServiceAndDateRange($dummySid, $dummyFromDate, $dummyToDate, ...$paginationParams);
     }
 
-    public function paginationProvider()
+    public function paginationProvider(): array
     {
         return [
+            // [expectedLimit, expectedOffset, [limit, page]]
             'default pagination' => [300, 0, []],
             'custom pagination' => [3, 12, [3, 5]],
         ];
     }
-    
+
     public function testFindByServiceAndDateRange()
     {
         $this->mockRepository->expects($this->once())
