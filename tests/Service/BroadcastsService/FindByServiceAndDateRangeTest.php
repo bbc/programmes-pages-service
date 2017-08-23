@@ -52,6 +52,7 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
     public function repositoryResultsProvider(): array
     {
         return [
+            // [expectations], [results]
             'broadcasts results' => [['b00swyx1', 'b010t150'], [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]],
             'no results' => [[], []],
         ];

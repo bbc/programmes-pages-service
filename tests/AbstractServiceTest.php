@@ -62,7 +62,7 @@ abstract class AbstractServiceTest extends TestCase
     }
 
     /**
-     * @param array $entities
+     * @param array $entities any model domain with getPid() function
      * @return string[]
      */
     protected function extractPids(array $entities): array

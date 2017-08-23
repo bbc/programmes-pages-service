@@ -33,7 +33,7 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
     /**
      * @dataProvider repositoryResultsProvider
      */
-    public function testFindByVersionResults($expectedPids, $stubRepositoryResults)
+    public function testFindByVersionResults(array $expectedPids, array $stubRepositoryResults)
     {
         $this->mockRepository->method('findByVersion')->willReturn($stubRepositoryResults);
 
@@ -48,6 +48,7 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
     {
 
         return [
+            // [expectations], [results]
             'with results' => [['b00swyx1', 'b010t150'], [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]],
             'empty results' => [[], []],
         ];
