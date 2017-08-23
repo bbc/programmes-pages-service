@@ -28,9 +28,7 @@ class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 
     public function testFindTleosByFirstLetterCustomPagination()
     {
-        $dbData = [['firstLetter' => 't']];
-
-        $this->mockRepository->method('findTleosByFirstLetter')->willReturn($dbData);
+        $this->mockRepository->method('findTleosByFirstLetter')->willReturn([['firstLetter' => 't']]);
 
         $stubAtozTleos = $this->service()->findTleosByFirstLetter('t');
 
