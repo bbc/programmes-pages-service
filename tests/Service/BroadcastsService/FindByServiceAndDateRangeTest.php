@@ -73,7 +73,11 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
         ];
     }
 
-    private function extractPids(array $broadcasts)
+    /**
+     * @param Broadcast[] $broadcasts
+     * @return string[]
+     */
+    private function extractPids(array $broadcasts): array
     {
         return array_map(
             function($broadcast) {
