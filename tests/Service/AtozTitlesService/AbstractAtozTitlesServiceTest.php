@@ -17,9 +17,9 @@ abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
 
     protected function atoZTitleFromDbData(array $entity): AtozTitle
     {
-        $mockAtozTitle = $this->createMock(AtozTitle::class);
-        $mockAtozTitle->method('getFirstletter')->willReturn($entity['firstLetter']);
-        return $mockAtozTitle;
+        $stubAtozTitle = $this->createMock(AtozTitle::class);
+        $stubAtozTitle->method('getFirstletter')->willReturn($entity['firstLetter']);
+        return $stubAtozTitle;
     }
 
     protected function service(): AtozTitlesService
