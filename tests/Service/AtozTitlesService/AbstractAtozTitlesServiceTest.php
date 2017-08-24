@@ -19,22 +19,22 @@ abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
         });
     }
 
+    protected function service(): AtozTitlesService
+    {
+        return new AtozTitlesService($this->mockRepository, $this->mockMapper, $this->mockCache);
+    }
+
     /**
-     * @param array $entities any model domain with getPid() function
-     * @return string[]
+     * @param $tleosTitles[] $tleosTitles any model domain with getPid() function
+     * @return string[] with only the firstLetter property of each object
      */
-    protected function extractFirstLetter(array $entities): array
+    protected function extractFirstLetter(array $tleosTitles): array
     {
         return array_map(
             function ($entity) {
                 return $entity->getFirstletter();
             },
-            $entities
+            $tleosTitles
         );
-    }
-
-    protected function service(): AtozTitlesService
-    {
-        return new AtozTitlesService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
 }
