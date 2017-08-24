@@ -2,79 +2,91 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use DateTimeImmutable;
 
 class FindPastByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
-    public function testFindPastByProgrammeDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testPaginationDev($expectedLimit, $expectedOffset, array $paginationParams)
     {
-        $dbAncestry = [1, 2, 3];
-        $programme = $this->mockEntity('Programme', 3);
-        $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
-
-        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
-        $serviceData = [
-            'a' => ['id' => 'bbc_one'],
-            'b' => ['id' => 'bbc_one_hd'],
-        ];
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
 
         $this->mockRepository->expects($this->once())
             ->method('findPastByProgramme')
-            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 300, 0)
-            ->willReturn($broadcastData);
+            ->with($programme->getDbAncestryIds(), false, $this->lessThanOrEqual(new DateTimeImmutable()), $expectedLimit, $expectedOffset);
 
-        $this->mockServiceRepository->expects($this->atLeastOnce())
-            ->method('findByIds')
-            ->with(['a', 'b'])
-            ->willReturn($serviceData);
-
-        $result = $this->service()->findPastByProgramme($programme);
-        $this->assertEquals(count($result), 1);
-        $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
+        $this->service()->findPastByProgramme($programme, ...$paginationParams);
     }
 
-    public function testFindPastByProgrammeCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbAncestry = [1, 2, 3];
-        $programme = $this->mockEntity('Programme', 3);
-        $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
-
-        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
-        $serviceData = [
-            'a' => ['id' => 'bbc_one'],
-            'b' => ['id' => 'bbc_one_hd'],
+        return [
+            // expectedLimit, expectedOffset, [limit, page]
+            'CASE: default pagination' => [300, 0, []],
+            'CASE: custom pagination' => [5, 10, [5, 3]],
         ];
+    }
 
-        $this->mockRepository->expects($this->once())
+    public function testWebcastIsStripped()
+    {
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
+
+        $this->mockRepository
             ->method('findPastByProgramme')
-            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
-            ->willReturn($broadcastData);
+            ->willReturn([
+                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1,2,3,4]],
+                 ['areWebcasts' => [true, true], 'serviceIds' => [333, 444], 'broadcastIds' => [3,4, 56, 67]],
+                 ['areWebcasts' => [true, false], 'serviceIds' => [555, 666], 'broadcastIds' => [5,6,100]],
+                 ['areWebcasts' => [false, false], 'serviceIds' => [false, false], 'broadcastIds' => [7, 8, 20, 48, 23]],
+             ]);
 
-        $this->mockServiceRepository->expects($this->atLeastOnce())
+        $this->mockServiceRepository->expects($this->once())
             ->method('findByIds')
-            ->with(['a', 'b'])
-            ->willReturn($serviceData);
+            ->with([111, 222, 666]);
 
-        $result = $this->service()->findPastByProgramme($programme, 5, 3);
-        $this->assertEquals(count($result), 1);
-        $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
+        $this->service()->findPastByProgramme($programme);
+    }
+
+    public function testFindPastByProgrammeWithExistantPid()
+    {
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [997, 998, 999]]);
+
+        $this->mockRepository
+            ->method('findPastByProgramme')
+            ->willReturn([
+                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1,2,3,4]],
+             ]);
+
+        $this->mockServiceRepository
+            ->method('findByIds')
+            ->willReturn([['id' => 111, 'sid' => 'bbc_one'], ['id' => 222, 'sid' => 'bbc_one_hd']]);
+
+        $collapsedBroadcasts = $this->service()->findPastByProgramme($programme);
+
+        $this->assertCount(1, $collapsedBroadcasts);
+        $this->assertContainsOnly(CollapsedBroadcast::class, $collapsedBroadcasts);
+
+        $servicesInBroadcast = $collapsedBroadcasts[0]->getServices();
+        $this->assertCount(2, $servicesInBroadcast);
+        $this->assertSame('bbc_one', (string) $servicesInBroadcast[111]->getSid());
+        $this->assertSame('bbc_one_hd', (string) $servicesInBroadcast[222]->getSid());
     }
 
     public function testFindPastByProgrammeWithNonExistantPid()
     {
-        $dbAncestry = [997, 998, 999];
-        $programme = $this->mockEntity('Programme');
-        $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [997, 998, 999]]);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findPastByProgramme')
-            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
-            ->willReturn([]);
+        $this->mockRepository->method('findPastByProgramme')->willReturn([]);
 
-        $this->mockServiceRepository->expects($this->never())
-            ->method('findByIds');
+        $this->mockServiceRepository->expects($this->never())->method('findByIds');
 
-        $result = $this->service()->findPastByProgramme($programme, 5, 3);
-        $this->assertEquals([], $result);
+        $this->assertEquals(
+            [],
+            $this->service()->findPastByProgramme($programme)
+        );
     }
 }

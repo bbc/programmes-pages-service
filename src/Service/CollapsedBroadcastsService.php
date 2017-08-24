@@ -33,6 +33,9 @@ class CollapsedBroadcastsService extends AbstractService
         $this->serviceRepository = $serviceRepository;
     }
 
+    /**
+     * @return CollapsedBroadcast[]
+     */
     public function findByProgrammeAndMonth(
         Programme $programme,
         int $year,
@@ -162,6 +165,9 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
+    /**
+     * @return CollapsedBroadcast[]
+     */
     public function findByCategoryAndStartAtDateRange(
         Category $category,
         DateTimeImmutable $startDate,
@@ -193,6 +199,9 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
+    /**
+     * @return CollapsedBroadcast[]
+     */
     public function findByCategoryAndEndAtDateRange(
         Category $category,
         DateTimeImmutable $startDate,

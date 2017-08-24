@@ -6,7 +6,7 @@ use DateTimeImmutable;
 
 class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastServiceTest
 {
-    public function testFilterCategoriesByBroadcastedDateUseRepositoryCorrectly()
+    public function testRepositoryReceiveNeededParamsToFetchBroadcastsByDate()
     {
         $stubCat1 = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1, 2, 3]]);
         $stubCat2 = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [5, 6, 7]]);
@@ -30,7 +30,7 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
     /**
      * @dataProvider categoriesBroadcastedOnDateProvider
      */
-    public function testFilterCategoriesByBroadcastedDateResults($expectedCategoriesFoundOnDate, $dbResults)
+    public function testCategoriesBroadcastedOnDateAreFiltered($expectedCategoriesFoundOnDate, $dbResults)
     {
         $this->mockRepository->method('filterCategoriesByBroadcastedDates')->willReturn($dbResults);
 
@@ -48,19 +48,19 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
     public function categoriesBroadcastedOnDateProvider(): array
     {
         return [
-            'none of category specified not broadcasted on date' => [
+            'CASE: none of category specified was not broadcasted on date' => [
                 [],
                 [['ancestry' => '1,'], ['ancestry' => '1,2,']]
             ],
-            'none of category specified not broadcasted on date' => [
+            'CASE: none of category specified was not broadcasted on date' => [
                 [],
                 [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,4,']]
             ],
-            'one of the specified category was broadcasted on date' => [
+            'CASE: one of the specified category was broadcasted on date' => [
                 [[1, 2, 3]],
                 [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,'], ['ancestry' => '1,2,3,4,']]
             ],
-            'two of the specified category was broadcasted on date' => [
+            'CASE: two of the specified category was broadcasted on date' => [
                 [[1, 2, 3], [19, 20, 30,40]],
                 [['ancestry' => '1,2,'], ['ancestry' => '1,2,3,'], ['ancestry' => '1,2,3,4,'], ['ancestry' => '19,20,30,40,'], ['ancestry' => '5,6,7,']]
             ],
