@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Format;
+use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Service\CategoriesService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -11,19 +13,31 @@ abstract class AbstractCategoriesServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('CategoryRepository');
-        $this->setUpMapper('CategoryMapper', 'categoryFromDbData');
+        $this->setUpMapper('CategoryMapper', function ($dbData) {
+            $className = substr($dbData['pip_id'], 0, 1) === 'C' ? Genre::class : Format::class;
+            $stubCategory = $this->createMock($className);
+            $stubCategory->method('getId')->willReturn($dbData['pip_id']);
+            return $stubCategory;
+        });
     }
 
-    protected function categoryFromDbData(array $entity)
-    {
-        $type = substr($entity['pip_id'], 0, 1) === 'C' ? 'Genre' : 'Format';
-        $mockCategory = $this->createMock(self::ENTITY_NS . $type);
-        $mockCategory->method('getId')->willReturn($entity['pip_id']);
-        return $mockCategory;
-    }
 
-    protected function service()
+    protected function service(): CategoriesService
     {
         return new CategoriesService($this->mockRepository, $this->mockMapper, $this->mockCache);
+    }
+
+    /**
+     * @param Categories[] $categories
+     * @return string[] containing only the genres ids
+     */
+    protected function extractIds(array $categories): array
+    {
+        return array_map(
+            function ($category){
+                return $category->getId();
+            },
+            $categories
+        );
     }
 }

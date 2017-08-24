@@ -6,18 +6,22 @@ use BBC\ProgrammesPagesService\Domain\Entity\Format;
 
 class FindFormatsTest extends AbstractCategoriesServiceTest
 {
-    public function testFindFormats()
+    public function testFindFormatsUseRepositoryCorrectly()
     {
         $this->mockRepository->expects($this->once())
             ->method('findAllByTypeAndMaxDepth')
-            ->with('format', 2)
-            ->willReturn([['pip_id' => 'PT082'], ['pip_id' => 'PT083']]);
+            ->with('format', 2);
 
-        $stubFormats = $this->service()->findFormats();
+        $this->service()->findFormats();
+    }
 
-        $this->assertCount(2, $stubFormats);
-        $this->assertContainsOnly(Format::class, $stubFormats);
-        $this->assertEquals('PT082', $stubFormats[0]->getId());
-        $this->assertEquals('PT083', $stubFormats[1]->getId());
+    public function testFindFormats()
+    {
+        $this->mockRepository->method('findAllByTypeAndMaxDepth')->willReturn([['pip_id' => 'PT082'], ['pip_id' => 'PT083']]);
+
+        $formats = $this->service()->findFormats();
+
+        $this->assertContainsOnly(Format::class, $formats);
+        $this->assertSame(['PT082', 'PT083'], $this->extractIds($formats));
     }
 }

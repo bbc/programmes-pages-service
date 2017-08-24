@@ -6,17 +6,23 @@ use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 
 class FindGenreByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
 {
-    public function testFindGenreByUrlKeyAncestry()
+    public function testFindGenreByUrlKeyAncestryUseRepositoryCorrectly()
     {
         $urlKeyAncestry = ['key1', 'key2'];
-        $dbData = ['pip_id' => 'C0001'];
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('findByUrlKeyAncestryAndType')
-            ->with($urlKeyAncestry, 'genre')
-            ->willReturn($dbData);
+            ->with($urlKeyAncestry, 'genre');
 
-        $format = $this->service()->findGenreByUrlKeyAncestry($urlKeyAncestry);
+        $this->service()->findGenreByUrlKeyAncestry($urlKeyAncestry);
+    }
+
+    public function testFindGenreByUrlKeyAncestry()
+    {
+        $this->mockRepository->method('findByUrlKeyAncestryAndType')->willReturn(['pip_id' => 'C0001']);
+
+        $format = $this->service()->findGenreByUrlKeyAncestry(['key1', 'key2']);
 
         $this->assertInstanceOf(Genre::class, $format);
         $this->assertEquals('C0001', $format->getId());
@@ -24,14 +30,10 @@ class FindGenreByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
 
     public function testFindGenreByUrlKeyAncestryEmptyData()
     {
-        $urlKeyAncestry = ['key1', 'key2'];
+        $this->mockRepository->method('findByUrlKeyAncestryAndType')->willReturn(null);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByUrlKeyAncestryAndType')
-            ->with($urlKeyAncestry, 'genre')
-            ->willReturn(null);
+        $genre = $this->service()->findGenreByUrlKeyAncestry(['key1', 'key2']);
 
-        $genre = $this->service()->findGenreByUrlKeyAncestry($urlKeyAncestry);
         $this->assertNull($genre);
     }
 }

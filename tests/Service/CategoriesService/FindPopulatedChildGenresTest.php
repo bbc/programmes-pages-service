@@ -6,22 +6,26 @@ use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 
 class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
 {
-    public function testFindPopulatedChildGenres()
+    public function testFindPopulatedChildGenresUseRepositoryCorrectly()
     {
-        $genreDbId = 999;
+        $stubGenre = $this->createMock(Genre::class);
+        $stubGenre->method('getDbId')->willReturn(999);
 
         $this->mockRepository->expects($this->once())
             ->method('findPopulatedChildCategories')
-            ->with($genreDbId, 'genre')
-            ->willReturn([['pip_id' => 'C0001']]);
+            ->with($stubGenre->getDbId(), 'genre');
 
-        $stubGenre = $this->createMock(Genre::class);
-        $stubGenre->method('getDbId')->willReturn($genreDbId);
+        $this->service()->findPopulatedChildGenres($stubGenre);
+    }
 
-        $stubGenres = $this->service()->findPopulatedChildGenres($stubGenre);
+    public function testFindPopulatedChildGenres()
+    {
+        $this->mockRepository->method('findPopulatedChildCategories')->willReturn([['pip_id' => 'C0001']]);
 
-        $this->assertCount(1, $stubGenres);
+        $dummyGenre = $this->createMock(Genre::class);
+        $stubGenres = $this->service()->findPopulatedChildGenres($dummyGenre);
+
         $this->assertContainsOnly(Genre::class, $stubGenres);
-        $this->assertEquals('C0001', $stubGenres[0]->getId());
+        $this->assertSame(['C0001'], $this->extractIds($stubGenres));
     }
 }
