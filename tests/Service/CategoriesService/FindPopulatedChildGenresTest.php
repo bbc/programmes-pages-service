@@ -18,14 +18,25 @@ class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
         $this->service()->findPopulatedChildGenres($stubGenre);
     }
 
-    public function testFindPopulatedChildGenres()
+    /**
+     * @dataProvider resultsProvider
+     */
+    public function testFindPopulatedChildGenresOneResult(array $expectedIds, array $dbResults)
     {
-        $this->mockRepository->method('findPopulatedChildCategories')->willReturn([['pip_id' => 'C0001']]);
+        $this->mockRepository->method('findPopulatedChildCategories')->willReturn($dbResults);
 
         $dummyGenre = $this->createMock(Genre::class);
         $stubGenres = $this->service()->findPopulatedChildGenres($dummyGenre);
 
         $this->assertContainsOnly(Genre::class, $stubGenres);
-        $this->assertSame(['C0001'], $this->extractIds($stubGenres));
+        $this->assertEquals($expectedIds, $this->extractIds($stubGenres));
+    }
+
+    public function resultsProvider(): array
+    {
+        return[
+            [['C0001', 'C0002'],[['pip_id' => 'C0001'], ['pip_id' => 'C0002']]],
+            [[], []],
+        ];
     }
 }

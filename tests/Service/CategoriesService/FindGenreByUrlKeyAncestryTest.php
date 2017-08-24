@@ -10,8 +10,7 @@ class FindGenreByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
     {
         $urlKeyAncestry = ['key1', 'key2'];
 
-        $this->mockRepository
-            ->expects($this->once())
+        $this->mockRepository->expects($this->once())
             ->method('findByUrlKeyAncestryAndType')
             ->with($urlKeyAncestry, 'genre');
 
