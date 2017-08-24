@@ -2,54 +2,50 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
+
 class FindAvailableTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 {
-    public function testFindAvailableTleosByFirstLetterDefaultPagination()
-    {
-        $dbData = [['title' => 'things']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findTleosByFirstLetter')
-            ->with('t', true, 300, 0)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findAvailableTleosByFirstLetter('t');
-        $this->assertEquals($this->atoZTitlesFromDbData($dbData), $result);
-    }
-
-    public function testFindAvailableTleosByFirstLetterCustomPagination()
-    {
-        $dbData = [['title' => 'things']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findTleosByFirstLetter')
-            ->with('t', true, 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findAvailableTleosByFirstLetter('t', 5, 3);
-        $this->assertEquals($this->atoZTitlesFromDbData($dbData), $result);
-    }
-
-    public function testFindAvailableTleosByFirstLetterWithEmptyResult()
-    {
-         $this->mockRepository->expects($this->once())
-            ->method('findTleosByFirstLetter')
-            ->with('t', true, 300, 0)
-            ->willReturn([]);
-
-        $result = $this->service()->findAvailableTleosByFirstLetter('t');
-        $this->assertEquals([], $result);
-    }
-
-
-    public function testCountAvailableTleosByFirstLetter()
+    /**
+     * @dataProvider providerPagination
+     */
+    public function testFindAvailableTleosByFirstLetterPagination(int $expectedLimit, int $expectedOffset, array $paginationParams)
     {
         $this->mockRepository->expects($this->once())
-            ->method('countTleosByFirstLetter')
-            ->with('t')
-            ->willReturn(10);
+            ->method('findTleosByFirstLetter')
+            ->with('t', true, $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->countAvailableTleosByFirstLetter('t');
-        $this->assertEquals(10, $result);
+        $this->service()->findAvailableTleosByFirstLetter('t', ...$paginationParams);
+    }
+
+    public function providerPagination(): array
+    {
+        return [
+            // expectedLimit, expectedOffset, [limit, page]
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [5, 10, [5, 3]],
+        ];
+    }
+
+    /**
+     * @dataProvider resultsProvider
+     */
+    public function testFindAvailableTleosByFirstLetterReturnRightResults(array $expectations, array $dbResults)
+    {
+        $this->mockRepository->method('findTleosByFirstLetter')->willReturn($dbResults);
+
+        $atozTitles = $this->service()->findAvailableTleosByFirstLetter('t');
+
+        $this->assertContainsOnly(AtozTitle::class, $atozTitles);
+        $this->assertSame($expectations, $this->extractFirstLetter($atozTitles));
+    }
+
+    public function resultsProvider(): array
+    {
+        return [
+            // [expectations], [db data]
+            [['t'], [['firstLetter' => 't']]],
+            [[], []],
+        ];
     }
 }

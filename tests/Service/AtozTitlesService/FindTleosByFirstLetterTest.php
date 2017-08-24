@@ -2,53 +2,49 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
+
 class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
 {
-    public function testFindTleosByFirstLetterDefaultPagination()
-    {
-        $dbData = [['title' => 'things']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findTleosByFirstLetter')
-            ->with('t', false, 300, 0)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findTleosByFirstLetter('t');
-        $this->assertEquals($this->atoZTitlesFromDbData($dbData), $result);
-    }
-
-    public function testFindTleosByFirstLetterCustomPagination()
-    {
-        $dbData = [['title' => 'things']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findTleosByFirstLetter')
-            ->with('t', false, 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findTleosByFirstLetter('t', 5, 3);
-        $this->assertEquals($this->atoZTitlesFromDbData($dbData), $result);
-    }
-
-    public function testFindTleosByFirstLetterWithEmptyResult()
-    {
-         $this->mockRepository->expects($this->once())
-            ->method('findTleosByFirstLetter')
-            ->with('t', false, 300, 0)
-            ->willReturn([]);
-
-        $result = $this->service()->findTleosByFirstLetter('t');
-        $this->assertEquals([], $result);
-    }
-
-    public function testCountTleosByFirstLetter()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testFindTleosByFirstLetterPagination(int $expectedLimit, int $expectedOffset, array $paginationParams)
     {
         $this->mockRepository->expects($this->once())
-            ->method('countTleosByFirstLetter')
-            ->with('t')
-            ->willReturn(10);
+            ->method('findTleosByFirstLetter')
+            ->with('t', false, $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->countTleosByFirstLetter('t');
-        $this->assertEquals(10, $result);
+        $this->service()->findTleosByFirstLetter('t', ...$paginationParams);
+    }
+
+    public function paginationProvider()
+    {
+        return [
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [5, 10, [5, 3]],
+        ];
+    }
+
+    /**
+     * @dataProvider resultsProvider
+     */
+    public function testFindTleosByFirstLetterResults(array $expectations, array $stubResults)
+    {
+        $this->mockRepository->method('findTleosByFirstLetter')->willReturn($stubResults);
+
+        $atozTitles = $this->service()->findTleosByFirstLetter('t');
+
+        $this->assertContainsOnly(AtozTitle::class, $atozTitles);
+        $this->assertEquals($expectations, $this->extractFirstLetter($atozTitles));
+    }
+
+    public function resultsProvider(): array
+    {
+        return [
+            // [expectations], [db data]
+            [['t'], [['firstLetter' => 't']]],
+            [[], []],
+        ];
     }
 }

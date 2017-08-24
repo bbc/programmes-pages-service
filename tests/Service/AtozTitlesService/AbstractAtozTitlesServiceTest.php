@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
 use BBC\ProgrammesPagesService\Service\AtozTitlesService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -11,23 +12,29 @@ abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('AtozTitleRepository');
-        $this->setUpMapper('AtozTitleMapper', 'atoZTitleFromDbData');
+        $this->setUpMapper('AtozTitleMapper', function (array $dbData) {
+            $stubAtozTitle = $this->createMock(AtozTitle::class);
+            $stubAtozTitle->method('getFirstletter')->willReturn($dbData['firstLetter']);
+            return $stubAtozTitle;
+        });
     }
 
-    protected function atoZTitlesFromDbData(array $entities)
-    {
-        return array_map([$this, 'atoZTitleFromDbData'], $entities);
-    }
-
-    protected function atoZTitleFromDbData(array $entity)
-    {
-        $mockAtozTitle = $this->createMock(self::ENTITY_NS . 'AtozTitle');
-        $mockAtozTitle->method('getTitle')->willReturn($entity['title']);
-        return $mockAtozTitle;
-    }
-
-    protected function service()
+    protected function service(): AtozTitlesService
     {
         return new AtozTitlesService($this->mockRepository, $this->mockMapper, $this->mockCache);
+    }
+
+    /**
+     * @param AtozTitle[] $atozTitles any model domain with getPid() function
+     * @return string[] with only the firstLetter property of each object
+     */
+    protected function extractFirstLetter(array $atozTitles): array
+    {
+        return array_map(
+            function ($atozTitle) {
+                return $atozTitle->getFirstletter();
+            },
+            $atozTitles
+        );
     }
 }
