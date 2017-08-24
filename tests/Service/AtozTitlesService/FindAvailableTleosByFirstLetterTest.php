@@ -9,7 +9,7 @@ class FindAvailableTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
     /**
      * @dataProvider providerPagination
      */
-    public function testFindAvailableTleosByFirstLetterPagination($expectedLimit, $expectedOffset, $paginationParams)
+    public function testFindAvailableTleosByFirstLetterPagination(int $expectedLimit, int $expectedOffset, array $paginationParams)
     {
         $this->mockRepository->expects($this->once())
             ->method('findTleosByFirstLetter')
@@ -30,7 +30,7 @@ class FindAvailableTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
     /**
      * @dataProvider resultsProvider
      */
-    public function testFindAvailableTleosByFirstLetterReturnRightResults($expectations, $dbResults)
+    public function testFindAvailableTleosByFirstLetterReturnRightResults(array $expectations, array $dbResults)
     {
         $this->mockRepository->method('findTleosByFirstLetter')->willReturn($dbResults);
 

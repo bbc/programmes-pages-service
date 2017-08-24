@@ -2,9 +2,9 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
 use BBC\ProgrammesPagesService\Service\AtozTitlesService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
-use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
 
 abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
 {
