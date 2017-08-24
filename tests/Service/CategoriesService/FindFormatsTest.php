@@ -2,24 +2,27 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Format;
+
 class FindFormatsTest extends AbstractCategoriesServiceTest
 {
-    public function testFindFormats()
+    public function testFindFormatsUseRepositoryCorrectly()
     {
-        $genre1 = $this->mockEntity('Format');
-        $genre1->method('getId')->willReturn('PT082');
-
-        $genre2 = $this->mockEntity('Format');
-        $genre2->method('getId')->willReturn('PT083');
-
-        $dbData = [['pip_id' => 'PT082'], ['pip_id' => 'PT083']];
-
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('findAllByTypeAndMaxDepth')
-            ->with('format', 2)
-            ->willReturn($dbData);
+            ->with('format', 2);
 
-        $result = $this->service()->findFormats();
-        $this->assertEquals($this->categoriesFromDbData($dbData), $result);
+        $this->service()->findFormats();
+    }
+
+    public function testFindFormatsResults()
+    {
+        $this->mockRepository->method('findAllByTypeAndMaxDepth')->willReturn([['pip_id' => 'PT082'], ['pip_id' => 'PT083']]);
+
+        $formats = $this->service()->findFormats();
+
+        $this->assertContainsOnly(Format::class, $formats);
+        $this->assertSame(['PT082', 'PT083'], $this->extractIds($formats));
     }
 }

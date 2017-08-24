@@ -2,24 +2,27 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Genre;
+
 class FindGenresTest extends AbstractCategoriesServiceTest
 {
-    public function testFindGenres()
+    public function testFindGenresUseRepositoryCorrectly()
     {
-        $genre1 = $this->mockEntity('Genre');
-        $genre1->method('getId')->willReturn('C00082');
-
-        $genre2 = $this->mockEntity('Genre');
-        $genre2->method('getId')->willReturn('C00083');
-
-        $dbData = [['pip_id' => 'C00082'], ['pip_id' => 'C00083']];
-
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('findAllByTypeAndMaxDepth')
-            ->with('genre', 2)
-            ->willReturn($dbData);
+            ->with('genre', 2);
 
-        $result = $this->service()->findGenres();
-        $this->assertEquals($this->categoriesFromDbData($dbData), $result);
+        $this->service()->findGenres();
+    }
+
+    public function testFindGenresResults()
+    {
+        $this->mockRepository->method('findAllByTypeAndMaxDepth')->willReturn([['pip_id' => 'C00082'], ['pip_id' => 'C00083']]);
+
+        $genres = $this->service()->findGenres();
+
+        $this->assertContainsOnly(Genre::class, $genres);
+        $this->assertSame(['C00082', 'C00083'], $this->extractIds($genres));
     }
 }
