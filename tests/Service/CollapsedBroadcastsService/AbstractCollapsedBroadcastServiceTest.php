@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -13,18 +14,10 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('CollapsedBroadcastRepository');
-        $this->setUpMapper('CollapsedBroadcastMapper', 'collapsedBroadcastFromDbData');
+        $this->setUpMapper('CollapsedBroadcastMapper', function () {
+            return $this->createMock(CollapsedBroadcast::class);
+        });
         $this->mockServiceRepository = $this->getRepo('ServiceRepository');
-    }
-
-    protected function collapsedBroadcastsFromDbData(array $entities)
-    {
-        return array_map([$this, 'collapsedBroadcastFromDbData'], $entities);
-    }
-
-    protected function collapsedBroadcastFromDbData(array $entity)
-    {
-        return $this->createMock(self::ENTITY_NS . 'CollapsedBroadcast');
     }
 
     protected function service(): CollapsedBroadcastsService
@@ -34,6 +27,16 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
             $this->mockMapper,
             $this->mockCache,
             $this->mockServiceRepository
+        );
+    }
+
+    protected function extractDbId(array $categories)
+    {
+        return array_map(
+            function ($category) {
+                return $category->getDbId();
+            },
+            $categories
         );
     }
 }
