@@ -25,16 +25,16 @@ abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
     }
 
     /**
-     * @param $tleosTitles[] $tleosTitles any model domain with getPid() function
+     * @param AtozTitle[] $atozTitles any model domain with getPid() function
      * @return string[] with only the firstLetter property of each object
      */
-    protected function extractFirstLetter(array $tleosTitles): array
+    protected function extractFirstLetter(array $atozTitles): array
     {
         return array_map(
-            function ($entity) {
-                return $entity->getFirstletter();
+            function ($atozTitle) {
+                return $atozTitle->getFirstletter();
             },
-            $tleosTitles
+            $atozTitles
         );
     }
 }

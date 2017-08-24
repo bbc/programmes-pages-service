@@ -33,10 +33,10 @@ class FindTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
     {
         $this->mockRepository->method('findTleosByFirstLetter')->willReturn($stubResults);
 
-        $atozTleos = $this->service()->findTleosByFirstLetter('t');
+        $atozTitles = $this->service()->findTleosByFirstLetter('t');
 
-        $this->assertContainsOnly(AtozTitle::class, $atozTleos);
-        $this->assertEquals($expectations, $this->extractFirstLetter($atozTleos));
+        $this->assertContainsOnly(AtozTitle::class, $atozTitles);
+        $this->assertEquals($expectations, $this->extractFirstLetter($atozTitles));
     }
 
     public function resultsProvider(): array
