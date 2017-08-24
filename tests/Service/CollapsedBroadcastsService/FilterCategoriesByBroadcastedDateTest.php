@@ -8,17 +8,8 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
 {
     public function testFilterCategoriesByBroadcastedDateUseRepositoryCorrectly()
     {
-        $stubCat1 = $this->createConfiguredMock(Genre::class, [
-                'getDbId' => 3,
-                'getDbAncestryIds' => [1, 2, 3],
-            ]
-        );
-
-        $stubCat2 = $this->createConfiguredMock(Genre::class, [
-                'getDbId' => 5,
-                'getDbAncestryIds' => [5, 6, 7],
-            ]
-        );
+        $stubCat1 = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1, 2, 3]]);
+        $stubCat2 = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [5, 6, 7]]);
 
         $startDateTime = new DateTimeImmutable();
         $endDateTime = new DateTimeImmutable();
@@ -39,27 +30,19 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
     /**
      * @dataProvider categoriesBroadcastedOnDateProvider
      */
-    public function testFilterCategoriesByBroadcastedDateResults($expectedDbIds, $dbResults)
+    public function testFilterCategoriesByBroadcastedDateResults($expectedCategoriesFoundOnDate, $dbResults)
     {
         $this->mockRepository->method('filterCategoriesByBroadcastedDates')->willReturn($dbResults);
 
-        $stubCat1 = $this->createConfiguredMock(Genre::class, [
-                'getDbId' => 300,
-                'getDbAncestryIds' => [1, 2, 3],
-            ]
-        );
-
-        $stubCat2 = $this->createConfiguredMock(Genre::class, [
-                'getDbId' => 500,
-                'getDbAncestryIds' => [19, 20, 30,40],
-            ]
-        );
+        $stubCat1 = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1, 2, 3]]);
+        $stubCat2 = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [19, 20, 30,40]]);
 
         $categories = $this->service()->filterCategoriesByBroadcastedDate(
             [$stubCat1, $stubCat2], new DateTimeImmutable(), new DateTimeImmutable()
         );
 
-        $this->assertEquals($expectedDbIds, $this->extractDbId($categories));
+        $this->assertContainsOnly(Genre::class, $categories);
+        $this->assertEquals($expectedCategoriesFoundOnDate, $this->extractDbAncestryIds($categories));
     }
 
     public function categoriesBroadcastedOnDateProvider(): array
@@ -74,11 +57,11 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
                 [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,4,']]
             ],
             'one of the specified category was broadcasted on date' => [
-                [300],
+                [[1, 2, 3]],
                 [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,'], ['ancestry' => '1,2,3,4,']]
             ],
             'two of the specified category was broadcasted on date' => [
-                [300, 500],
+                [[1, 2, 3], [19, 20, 30,40]],
                 [['ancestry' => '1,2,'], ['ancestry' => '1,2,3,'], ['ancestry' => '1,2,3,4,'], ['ancestry' => '19,20,30,40,'], ['ancestry' => '5,6,7,']]
             ],
         ];

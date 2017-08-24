@@ -34,11 +34,11 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
      * @param Category[] $categories
      * @return int[]
      */
-    protected function extractDbId(array $categories): array
+    protected function extractDbAncestryIds(array $categories): array
     {
         return array_map(
             function ($category) {
-                return $category->getDbId();
+                return $category->getDbAncestryIds();
             },
             $categories
         );
