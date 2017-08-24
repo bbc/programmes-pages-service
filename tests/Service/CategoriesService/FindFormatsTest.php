@@ -8,14 +8,15 @@ class FindFormatsTest extends AbstractCategoriesServiceTest
 {
     public function testFindFormatsUseRepositoryCorrectly()
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('findAllByTypeAndMaxDepth')
             ->with('format', 2);
 
         $this->service()->findFormats();
     }
 
-    public function testFindFormats()
+    public function testFindFormatsResults()
     {
         $this->mockRepository->method('findAllByTypeAndMaxDepth')->willReturn([['pip_id' => 'PT082'], ['pip_id' => 'PT083']]);
 

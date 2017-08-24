@@ -35,7 +35,7 @@ abstract class AbstractCategoriesServiceTest extends AbstractServiceTest
     protected function extractIds(array $categories): array
     {
         return array_map(
-            function ($category){
+            function ($category) {
                 return $category->getId();
             },
             $categories

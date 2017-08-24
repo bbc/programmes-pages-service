@@ -6,16 +6,17 @@ use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 
 class FindGenresTest extends AbstractCategoriesServiceTest
 {
-    public function testFindGenresUseReposotiryCorrectly()
+    public function testFindGenresUseRepositoryCorrectly()
     {
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
+            ->expects($this->once())
             ->method('findAllByTypeAndMaxDepth')
             ->with('genre', 2);
 
         $this->service()->findGenres();
     }
 
-    public function testFindGenres()
+    public function testFindGenresResults()
     {
         $this->mockRepository->method('findAllByTypeAndMaxDepth')->willReturn([['pip_id' => 'C00082'], ['pip_id' => 'C00083']]);
 

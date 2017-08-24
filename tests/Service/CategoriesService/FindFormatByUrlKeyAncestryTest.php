@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Format;
 
 class FindFormatByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
 {
-    public function testRepositoryIsCalledCorrectly()
+    public function testFindFormatByUrlKeyAncestryUseRepositoryCorrectly()
     {
         $urlKey = 'key1';
 

@@ -10,7 +10,9 @@ class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
     {
         $stubGenre = $this->createConfiguredMock(Genre::class, ['getDbId' => 999]);
 
-        $this->mockRepository->expects($this->once())->method('findPopulatedChildCategories')
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('findPopulatedChildCategories')
             ->with($stubGenre->getDbId(), 'genre');
 
         $this->service()->findPopulatedChildGenres($stubGenre);
@@ -19,7 +21,7 @@ class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
     /**
      * @dataProvider resultsProvider
      */
-    public function testFindPopulatedChildGenresOneResult(array $expectedIds, array $dbResults)
+    public function testFindPopulatedChildGenresResults(array $expectedIds, array $dbResults)
     {
         $this->mockRepository->method('findPopulatedChildCategories')->willReturn($dbResults);
 
@@ -33,7 +35,7 @@ class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
     public function resultsProvider(): array
     {
         return[
-            [['C0001', 'C0002'],[['pip_id' => 'C0001'], ['pip_id' => 'C0002']]],
+            [['C0001', 'C0002'], [['pip_id' => 'C0001'], ['pip_id' => 'C0002']]],
             [[], []],
         ];
     }
