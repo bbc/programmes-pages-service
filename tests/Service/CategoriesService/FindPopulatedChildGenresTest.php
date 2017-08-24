@@ -8,11 +8,9 @@ class FindPopulatedChildGenresTest extends AbstractCategoriesServiceTest
 {
     public function testFindPopulatedChildGenresUseRepositoryCorrectly()
     {
-        $stubGenre = $this->createMock(Genre::class);
-        $stubGenre->method('getDbId')->willReturn(999);
+        $stubGenre = $this->createConfiguredMock(Genre::class, ['getDbId' => 999]);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findPopulatedChildCategories')
+        $this->mockRepository->expects($this->once())->method('findPopulatedChildCategories')
             ->with($stubGenre->getDbId(), 'genre');
 
         $this->service()->findPopulatedChildGenres($stubGenre);

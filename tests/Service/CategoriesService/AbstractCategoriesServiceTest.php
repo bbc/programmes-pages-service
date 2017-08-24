@@ -15,9 +15,10 @@ abstract class AbstractCategoriesServiceTest extends AbstractServiceTest
         $this->setUpRepo('CategoryRepository');
         $this->setUpMapper('CategoryMapper', function ($dbData) {
             $className = substr($dbData['pip_id'], 0, 1) === 'C' ? Genre::class : Format::class;
-            $stubCategory = $this->createMock($className);
-            $stubCategory->method('getId')->willReturn($dbData['pip_id']);
-            return $stubCategory;
+            return $this->createConfiguredMock(
+                $className,
+                ['getId' => $dbData['pip_id']]
+            );
         });
     }
 
