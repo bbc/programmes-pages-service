@@ -14,7 +14,7 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('CollapsedBroadcastRepository');
-        $this->setUpMapper('CollapsedBroadcastMapper', function () {
+        $this->setUpMapper('CollapsedBroadcastMapper', function (array $dbData) {
             return $this->createMock(CollapsedBroadcast::class);
         });
         $this->mockServiceRepository = $this->getRepo('ServiceRepository');
