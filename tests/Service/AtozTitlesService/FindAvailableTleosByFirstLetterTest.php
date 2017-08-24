@@ -45,7 +45,7 @@ class FindAvailableTleosByFirstLetterTest extends AbstractAtozTitlesServiceTest
         return [
             // [expectations], [db data]
             [['t'], [['firstLetter' => 't']]],
-            [[],[]],
+            [[], []],
         ];
     }
 }
