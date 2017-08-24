@@ -13,9 +13,10 @@ abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
         $this->setUpCache();
         $this->setUpRepo('AtozTitleRepository');
         $this->setUpMapper('AtozTitleMapper', function (array $dbData) {
-            $stubAtozTitle = $this->createMock(AtozTitle::class);
-            $stubAtozTitle->method('getFirstletter')->willReturn($dbData['firstLetter']);
-            return $stubAtozTitle;
+            return $this->createConfiguredMock(
+                AtozTitle::class,
+                ['getFirstletter' => $dbData['firstLetter']]
+            );
         });
     }
 

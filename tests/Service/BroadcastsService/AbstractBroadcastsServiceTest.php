@@ -14,9 +14,10 @@ abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
         $this->setUpCache();
         $this->setUpRepo('BroadcastRepository');
         $this->setUpMapper('BroadcastMapper', function (array $dbData) {
-            $stubBroadcast = $this->createMock(Broadcast::class);
-            $stubBroadcast->method('getPid')->willReturn(new Pid($dbData['pid']));
-            return $stubBroadcast;
+            return $this->createConfiguredMock(
+                Broadcast::class,
+                ['getPid' => new Pid($dbData['pid'])]
+            );
         });
     }
 
