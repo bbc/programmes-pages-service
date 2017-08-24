@@ -73,11 +73,11 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
                 [],
                 [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,4,']]
             ],
-            [
+            'one of the specified category was broadcasted on date' => [
                 [300],
                 [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,'], ['ancestry' => '1,2,3,4,']]
             ],
-            [
+            'two of the specified category was broadcasted on date' => [
                 [300, 500],
                 [['ancestry' => '1,2,'], ['ancestry' => '1,2,3,'], ['ancestry' => '1,2,3,4,'], ['ancestry' => '19,20,30,40,'], ['ancestry' => '5,6,7,']]
             ],

@@ -30,7 +30,11 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
         );
     }
 
-    protected function extractDbId(array $categories)
+    /**
+     * @param Category[] $categories
+     * @return int[]
+     */
+    protected function extractDbId(array $categories): array
     {
         return array_map(
             function ($category) {
