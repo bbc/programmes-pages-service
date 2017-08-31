@@ -25,7 +25,7 @@ class FindFormatByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
         $format = $this->service()->findFormatByUrlKeyAncestry('key1');
 
         $this->assertInstanceOf(Format::class, $format);
-        $this->assertEquals('F0001', $format->getId());
+        $this->assertEquals('F0001', $format ? $format->getId() : null);
     }
 
     public function testFindFormatByUrlKeyAncestryNoResults()
