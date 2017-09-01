@@ -25,7 +25,7 @@ class Promotion
     /** @var int */
     private $weighting;
 
-    /** @var  bool */
+    /** @var bool */
     private $isSuperPromotion;
 
     public function __construct(
@@ -59,6 +59,11 @@ class Promotion
     public function getSynopses(): Synopses
     {
         return $this->synopses;
+    }
+
+    public function getShortSynopsis(): string
+    {
+        return $this->synopses->getShortSynopsis();
     }
 
     public function getTitle(): string

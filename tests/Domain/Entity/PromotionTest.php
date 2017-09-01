@@ -13,19 +13,21 @@ class PromotionTest extends TestCase
     public function testConstructorPromoRequiredArgsWorksForImage()
     {
         $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('short synopsis', 'medium', 'long');
         $promo = new Promotion(
             $pid,
             $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Image'),
             'this is a title',
-            $this->createMock('BBC\ProgrammesPagesService\Domain\ValueObject\Synopses'),
+            $synopses,
             'www.something.url',
             3,
             false
         );
 
         $this->assertInstanceOf(PromotableInterface::class, $promo->getPromotedEntity());
-        $this->assertInstanceOf(Synopses::class, $promo->getSynopses());
         $this->assertSame($pid, $promo->getPid());
+        $this->assertSame($synopses, $promo->getSynopses());
+        $this->assertSame('short synopsis', $promo->getShortSynopsis());
         $this->assertSame('this is a title', $promo->getTitle());
         $this->assertSame('www.something.url', $promo->getUrl());
         $this->assertSame(3, $promo->getWeighting());
@@ -35,19 +37,21 @@ class PromotionTest extends TestCase
     public function testConstructorPromoRequiredArgsWorksForCoreEntity()
     {
         $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('short synopsis', 'medium', 'long');
         $promo = new Promotion(
             $pid,
             $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Series'),
             'this is a title',
-            $this->createMock('BBC\ProgrammesPagesService\Domain\ValueObject\Synopses'),
+            $synopses,
             'www.something.url',
             3,
             false
         );
 
         $this->assertInstanceOf(PromotableInterface::class, $promo->getPromotedEntity());
-        $this->assertInstanceOf(Synopses::class, $promo->getSynopses());
         $this->assertSame($pid, $promo->getPid());
+        $this->assertSame($synopses, $promo->getSynopses());
+        $this->assertSame('short synopsis', $promo->getShortSynopsis());
         $this->assertSame('this is a title', $promo->getTitle());
         $this->assertSame('www.something.url', $promo->getUrl());
         $this->assertSame(3, $promo->getWeighting());
