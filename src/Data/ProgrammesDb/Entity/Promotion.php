@@ -120,6 +120,14 @@ class Promotion implements RelatedLinkContextInterface
      */
     private $cascadesToDescendants = false;
 
+    /**
+     * Used in queries only. No getter or setter as creation should be handled
+     * by the RelatedLink entity.
+     *
+     * @ORM\OneToMany(targetEntity="RelatedLink", mappedBy="relatedToPromotion")
+     */
+    private $relatedLinks;
+
     public function __construct(
         string $pid,
         PromotableInterface $promotionOf,

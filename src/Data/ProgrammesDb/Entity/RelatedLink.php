@@ -69,7 +69,7 @@ class RelatedLink
      * One of relatedToCoreEntity, relatedToPromotion or relatedToImage must be
      * set. So even though this is nullable, we do want deleting a Promotion to
      * cascade to delete the relatedLinks attached to the Promotion
-     * @ORM\ManyToOne(targetEntity="Promotion")
+     * @ORM\ManyToOne(targetEntity="Promotion", inversedBy="relatedLinks")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $relatedToPromotion;

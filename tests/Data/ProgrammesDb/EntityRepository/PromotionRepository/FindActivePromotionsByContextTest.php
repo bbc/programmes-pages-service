@@ -40,6 +40,9 @@ class FindActivePromotionsByContextTest extends AbstractDatabaseTest
             $this->getParentTypesRecursively($dbPromotions[0]['promotionOfCoreEntity'])
         );
 
+        $this->assertArrayHasKey('relatedLinks', $dbPromotions[1]);
+        $this->assertEquals(['rl000002', 'rl000001'], array_column($dbPromotions[1]['relatedLinks'], 'pid'));
+
         $this->assertCount(2, $this->getDbQueries());
     }
 

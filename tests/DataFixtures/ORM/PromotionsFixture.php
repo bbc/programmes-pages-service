@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Promotion;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RelatedLink;
 use DateTime;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -31,6 +32,8 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
         Brand (b010t19z)
             promotion b1 a (p0000000h)
             promotion b1 b (p0000001h)
+                related link rl1 (rl000001)
+                related link rl2 (rl000002)
 
             series 1 (b00swyx1)
                 promotion b1.s1 a (p000002h - SUPER PROMOTION)
@@ -52,7 +55,7 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
         $this->manager = $manager;
 
         // promotions in brand
-        $this->buildPromotion(
+        $p000000h = $this->buildPromotion(
             'p000000h',
             'promotion b1 a',
             $this->getReference('b0175lqm'),
@@ -63,6 +66,10 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
             false,
             $this->getReference('b010t19z') // context: brand1
         );
+
+        $this->buildRelatedLink('rl000001', $p000000h, 2);
+        $this->buildRelatedLink('rl000002', $p000000h, 1);
+
         $this->buildPromotion(
             'p000001h',
             'promotion b1 b',
@@ -216,5 +223,28 @@ class PromotionsFixture extends AbstractFixture implements DependentFixtureInter
         $this->manager->persist($promo);
 
         return $promo;
+    }
+
+    private function buildRelatedLink(
+        string $pid,
+        $relatedTo,
+        int $position = null
+    ): RelatedLink {
+        $relatedLink = new RelatedLink(
+            $pid,
+            'Title',
+            'http://example.com/',
+            'related_site',
+            $relatedTo,
+            true
+        );
+
+        if ($position) {
+            $relatedLink->setPosition($position);
+        }
+
+        $this->manager->persist($relatedLink);
+
+        return $relatedLink;
     }
 }

@@ -32,14 +32,12 @@ class PromotionMapper extends AbstractMapper
      */
     private function getCacheKeyForPromotion(array $dbPromotion): string
     {
-        return $this->buildCacheKey(
-            $dbPromotion,
-            'id',
-            [
-                'promotionOfCoreEntity' => 'CoreEntity',
-                'promotionOfImage' => 'Image',
-            ]
-        );
+        return $this->buildCacheKey($dbPromotion, 'id', [
+            'promotionOfCoreEntity' => 'CoreEntity',
+            'promotionOfImage' => 'Image',
+        ], [
+            'relatedLinks' => 'RelatedLink',
+        ]);
     }
 
     /**
@@ -54,12 +52,13 @@ class PromotionMapper extends AbstractMapper
             $this->getSynopses($dbPromotion),
             $dbPromotion['uri'],
             $dbPromotion['weighting'],
-            $dbPromotion['cascadesToDescendants']
+            $dbPromotion['cascadesToDescendants'],
+            $this->getRelatedLinksModels($dbPromotion, 'relatedLinks')
         );
     }
 
     /**
-     * @param array[] $dbPromotion
+     * @param mixed[] $dbPromotion
      * @throws DataNotFetchedException if we get a promotion but there is nothing being
      *     promoted (an image or core entity) associated to the promotion
      */
@@ -78,5 +77,25 @@ class PromotionMapper extends AbstractMapper
         }
 
         throw new DataNotFetchedException('All promotions must be joined to CoreEntity and Image');
+    }
+
+    /**
+     * @param mixed[] $dbPromotion
+     * @param string $key
+     * @return RelatedLink[]|null
+     */
+    private function getRelatedLinksModels(array $dbPromotion, string $key = 'relatedLinks'): ?array
+    {
+        if (!isset($dbPromotion[$key]) || !is_array($dbPromotion[$key])) {
+            return null;
+        }
+
+        $relatedLinkMapper = $this->mapperFactory->getRelatedLinkMapper();
+        $relatedLinks = [];
+        foreach ($dbPromotion[$key] as $dbRelatedLink) {
+            $relatedLinks[] = $relatedLinkMapper->getDomainModel($dbRelatedLink);
+        }
+
+        return $relatedLinks;
     }
 }

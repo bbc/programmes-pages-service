@@ -27,8 +27,18 @@ class PromotionRepository extends EntityRepository
         $contextId = end($ancestryIds);
         $parentIds = array_slice($ancestryIds, 0, -1);
 
+        // YIKES! relatedLinks is a many-to-many join, that could result in an
+        // increased number of rows returned by the DB and the potential for
+        // slow DB queries as per https://ocramius.github.io/blog/doctrine-orm-optimization-hydration/.
+        // Except it doesn't - the vast majority of Promotions have zero or one
+        // RelatedLink. At time of writing this comment (Sept 2017) only 2.85%
+        // of the Promotions in PIPS have 2 or more RelatedLinks and 0.10% have
+        // 5 or more RelatedLinks. Creating an few extra rows in rare cases is
+        // way more efficient that having to do a two-step hydration process.
+
         $qb = $this->createQueryBuilder('promotion')
-            ->addSelect(['promotionOfCoreEntity', 'promotionOfImage', 'imageForPromotionOfCoreEntity', 'IDENTITY(promotion.context) AS context_id'])
+            ->addSelect(['relatedLinks', 'promotionOfCoreEntity', 'promotionOfImage', 'imageForPromotionOfCoreEntity', 'IDENTITY(promotion.context) AS context_id'])
+            ->leftJoin('promotion.relatedLinks', 'relatedLinks')
             ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
             ->leftJoin('promotion.promotionOfImage', 'promotionOfImage')
             ->leftJoin('promotionOfCoreEntity.image', 'imageForPromotionOfCoreEntity')
@@ -37,6 +47,7 @@ class PromotionRepository extends EntityRepository
             ->andWhere('promotion.endDate > :datetime')
             ->andWhere('promotion.promotionOfCoreEntity is not null OR promotion.promotionOfImage is not null')
             ->addOrderBy('promotion.weighting', 'ASC')
+            ->addOrderBy('relatedLinks.position', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->setParameter('datetime', $datetime);
