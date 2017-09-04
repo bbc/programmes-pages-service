@@ -138,6 +138,6 @@ License
 -------
 
 This repository is available under the terms of the Apache 2.0 license.
-View the [LICENSE file](LICENSE.md) for more information.
+View the [LICENSE file](LICENSE) for more information.
 
 Copyright (c) 2017 BBC
