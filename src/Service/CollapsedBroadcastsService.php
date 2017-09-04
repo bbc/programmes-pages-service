@@ -269,8 +269,6 @@ class CollapsedBroadcastsService extends AbstractService
      *       2015 => [12, 11, 6, 5],
      *       2014 => [6],
      *   ]
-     *
-     * @return array
      */
     public function findBroadcastYearsAndMonthsByProgramme(Programme $programme, $ttl = CacheInterface::NORMAL): array
     {
@@ -311,7 +309,6 @@ class CollapsedBroadcastsService extends AbstractService
      *           '2' => [7]
      *       ]
      *  ]
-     * @return array
      */
     public function findDaysByCategoryInDateRange(
         Category $category,
