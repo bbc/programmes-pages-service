@@ -64,4 +64,18 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
             ],
         ];
     }
+
+    /**
+     * @param Category[] $categories
+     * @return int[]
+     */
+    protected function extractDbAncestryIds(array $categories): array
+    {
+        return array_map(
+            function ($category) {
+                return $category->getDbAncestryIds();
+            },
+            $categories
+        );
+    }
 }

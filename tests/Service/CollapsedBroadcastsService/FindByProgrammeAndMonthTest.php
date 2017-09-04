@@ -38,19 +38,14 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
         $this->mockRepository
             ->method('findByProgrammeAndMonth')
             ->willReturn([
-                ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
-                ['areWebcasts' => [true, true], 'serviceIds' => [333, 444], 'broadcastIds' => [3, 4, 56, 67]],
-                ['areWebcasts' => [true, false], 'serviceIds' => [555, 666], 'broadcastIds' => [5, 6, 100]],
-                ['areWebcasts' => [false, false], 'serviceIds' => [false, false], 'broadcastIds' => [7, 8, 20, 48, 23]],
-                ['areWebcasts' => [false, false], 'serviceIds' => [true, true], 'broadcastIds' => [8, 9, 12, 122]],
-                ['areWebcasts' => [false, false], 'serviceIds' => [null, null], 'broadcastIds' => [10, 11]],
-                ['areWebcasts' => ['0', 0], 'serviceIds' => [777, 888], 'broadcastIds' => [14, 15]],
-                ['areWebcasts' => [1, '1'], 'serviceIds' => [999, 1010], 'broadcastIds' => [16, 17]],
+                 ['areWebcasts' => [0, '0'], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
+                 ['areWebcasts' => [1, '1'], 'serviceIds' => [333, 444], 'broadcastIds' => [3, 4, 56, 67]],
+                 ['areWebcasts' => [1, 0], 'serviceIds' => [555, 666], 'broadcastIds' => [5, 6, 100]],
             ]);
 
         $this->mockServiceRepository->expects($this->once())
             ->method('findByIds')
-            ->with([111, 222, 666, 777, 888]);
+            ->with([111, 222, 666]);
 
         $this->service()->findByProgrammeAndMonth($programme, 2007, 12);
     }

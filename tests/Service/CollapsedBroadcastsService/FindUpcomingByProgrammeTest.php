@@ -38,10 +38,9 @@ class FindUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
         $this->mockRepository
             ->method('findUpcomingByProgramme')
             ->willReturn([
-                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
-                 ['areWebcasts' => [true, true], 'serviceIds' => [333, 444], 'broadcastIds' => [3, 4, 56, 67]],
-                 ['areWebcasts' => [true, false], 'serviceIds' => [555, 666], 'broadcastIds' => [5, 6, 100]],
-                 ['areWebcasts' => [false, false], 'serviceIds' => [false, false], 'broadcastIds' => [7, 8, 20, 48, 23]],
+                 ['areWebcasts' => [0, '0'], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
+                 ['areWebcasts' => [1, '1'], 'serviceIds' => [333, 444], 'broadcastIds' => [3, 4, 56, 67]],
+                 ['areWebcasts' => [1, 0], 'serviceIds' => [555, 666], 'broadcastIds' => [5, 6, 100]],
             ]);
 
         $this->mockServiceRepository->expects($this->once())

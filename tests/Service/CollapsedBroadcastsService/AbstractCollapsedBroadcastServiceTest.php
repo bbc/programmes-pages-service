@@ -44,18 +44,4 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
             $this->mockServiceRepository
         );
     }
-
-    /**
-     * @param Category[] $categories
-     * @return int[]
-     */
-    protected function extractDbAncestryIds(array $categories): array
-    {
-        return array_map(
-            function ($category) {
-                return $category->getDbAncestryIds();
-            },
-            $categories
-        );
-    }
 }
