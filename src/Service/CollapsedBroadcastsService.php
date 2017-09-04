@@ -67,6 +67,9 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
+    /**
+     * @return CollapsedBroadcast[]
+     */
     public function findPastByProgramme(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
@@ -95,6 +98,9 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
+    /**
+     * @return CollapsedBroadcast[]
+     */
     public function findUpcomingByProgramme(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
@@ -255,6 +261,17 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
+    /**
+     * Return array looking like:
+     *
+     *   [
+     *       2016 => [8, 6],
+     *       2015 => [12, 11, 6, 5],
+     *       2014 => [6],
+     *   ]
+     *
+     * @return array
+     */
     public function findBroadcastYearsAndMonthsByProgramme(Programme $programme, $ttl = CacheInterface::NORMAL): array
     {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $ttl);
@@ -284,6 +301,18 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
+    /**
+     * Return array looking like:
+     *  [
+     *       '2011' => [
+     *           '8' => [1, 2],
+     *       ],
+     *       '2010' => [
+     *           '2' => [7]
+     *       ]
+     *  ]
+     * @return array
+     */
     public function findDaysByCategoryInDateRange(
         Category $category,
         DateTimeImmutable $start,

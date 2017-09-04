@@ -25,7 +25,7 @@ class FindByCategoryAndStartAtDateRangeTest extends AbstractCollapsedBroadcastSe
         $this->service()->findByCategoryAndStartAtDateRange($category, $fromDate, $toDate, ...$paginationParams);
     }
 
-    public function paginationProvider()
+    public function paginationProvider(): array
     {
         return [
             // [expectedLimit, expectedOffset, [limit, page]]

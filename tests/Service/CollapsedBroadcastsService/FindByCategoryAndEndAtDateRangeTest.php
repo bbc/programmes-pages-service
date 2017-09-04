@@ -25,7 +25,7 @@ class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServ
         $this->service()->findByCategoryAndEndAtDateRange($stubCategory, $fromDate, $toDate, ...$paginationParams);
     }
 
-    public function paginationProvider()
+    public function paginationProvider(): array
     {
         return [
             // [expectedLimit, expectedOffset, [limit, page]]

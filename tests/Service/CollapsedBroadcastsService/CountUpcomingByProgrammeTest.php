@@ -9,24 +9,22 @@ class CountUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
     public function testProperDataToFetchDataFromDb()
     {
-        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
+        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
 
         $this->mockRepository->expects($this->once())
             ->method('countUpcomingByProgramme')
-            ->with($programme->getDbAncestryIds(), false, $this->lessThanOrEqual(new DateTimeImmutable()));
+            ->with($stubProgramme->getDbAncestryIds(), false, $this->lessThanOrEqual(new DateTimeImmutable()));
 
-        $this->service()->countUpcomingByProgramme($programme);
+        $this->service()->countUpcomingByProgramme($stubProgramme);
     }
 
     public function testServiceReturnCountFromDatabase()
     {
-        $dummyProgramme = $this->createMock(Programme::class);
-
         $this->mockRepository->method('countUpcomingByProgramme')->willReturn(12545);
 
         $this->assertEquals(
             12545,
-            $this->service()->countUpcomingByProgramme($dummyProgramme)
+            $this->service()->countUpcomingByProgramme($this->createMock(Programme::class))
         );
     }
 }

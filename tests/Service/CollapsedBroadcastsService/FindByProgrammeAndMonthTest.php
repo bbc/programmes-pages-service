@@ -22,7 +22,7 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
         $this->service()->findByProgrammeAndMonth($programme, 2007, 12, ...$paginationParams);
     }
 
-    public function paginationProvider()
+    public function paginationProvider(): array
     {
         return [
             // expectedLimit, expectedOffset, [limit, page]
