@@ -52,10 +52,6 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
         return [
             'CASE: none of category specified was not broadcasted on date' => [
                 [],
-                [['ancestry' => '1,'], ['ancestry' => '1,2,']],
-            ],
-            'CASE: none of category specified was not broadcasted on date' => [
-                [],
                 [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,4,']],
             ],
             'CASE: one of the specified category was broadcasted on date' => [

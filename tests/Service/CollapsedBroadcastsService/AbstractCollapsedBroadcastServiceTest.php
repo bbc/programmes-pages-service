@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
+use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
@@ -18,10 +19,10 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
         $this->setUpRepo('CollapsedBroadcastRepository');
         $this->setUpMapper('CollapsedBroadcastMapper', function (array $dbDataBroadcast, array $dbDataServices) {
             $stubServices = array_map(
-                function ($dbService) {
+                function ($dbDataService) {
                     return $this->createConfiguredMock(Service::class, [
-                        'getDbId' => $dbService['id'],
-                        'getSid' => new Sid($dbService['sid']),
+                        'getDbId' => $dbDataService['id'],
+                        'getSid' => new Sid($dbDataService['sid']),
                     ]);
                 },
                 $dbDataServices
