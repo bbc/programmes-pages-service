@@ -6,7 +6,6 @@ use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
-use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
 abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
