@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Promotion;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\Traits\SynopsesTrait;
+use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
 
 class PromotionMapper extends AbstractMapper
 {
