@@ -28,7 +28,7 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
             );
 
             return $this->createConfiguredMock(CollapsedBroadcast::class, [
-                'getServices' => $stubServices
+                'getServices' => $stubServices,
             ]);
         });
         $this->mockServiceRepository = $this->getRepo('ServiceRepository');

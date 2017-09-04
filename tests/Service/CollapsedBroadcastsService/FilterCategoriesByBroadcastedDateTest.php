@@ -34,11 +34,13 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
     {
         $this->mockRepository->method('filterCategoriesByBroadcastedDates')->willReturn($dbResults);
 
-        $stubCat1 = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1, 2, 3]]);
-        $stubCat2 = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [19, 20, 30,40]]);
-
         $categories = $this->service()->filterCategoriesByBroadcastedDate(
-            [$stubCat1, $stubCat2], new DateTimeImmutable(), new DateTimeImmutable()
+            [
+                $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1, 2, 3]]),
+                $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [19, 20, 30, 40]]),
+            ],
+            new DateTimeImmutable(),
+            new DateTimeImmutable()
         );
 
         $this->assertContainsOnly(Genre::class, $categories);
@@ -50,19 +52,19 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
         return [
             'CASE: none of category specified was not broadcasted on date' => [
                 [],
-                [['ancestry' => '1,'], ['ancestry' => '1,2,']]
+                [['ancestry' => '1,'], ['ancestry' => '1,2,']],
             ],
             'CASE: none of category specified was not broadcasted on date' => [
                 [],
-                [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,4,']]
+                [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,4,']],
             ],
             'CASE: one of the specified category was broadcasted on date' => [
                 [[1, 2, 3]],
-                [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,'], ['ancestry' => '1,2,3,4,']]
+                [['ancestry' => '1,'], ['ancestry' => '1,2'], ['ancestry' => '1,2,3,'], ['ancestry' => '1,2,3,4,']],
             ],
             'CASE: two of the specified category was broadcasted on date' => [
-                [[1, 2, 3], [19, 20, 30,40]],
-                [['ancestry' => '1,2,'], ['ancestry' => '1,2,3,'], ['ancestry' => '1,2,3,4,'], ['ancestry' => '19,20,30,40,'], ['ancestry' => '5,6,7,']]
+                [[1, 2, 3], [19, 20, 30, 40]],
+                [['ancestry' => '1,2,'], ['ancestry' => '1,2,3,'], ['ancestry' => '1,2,3,4,'], ['ancestry' => '19,20,30,40,'], ['ancestry' => '5,6,7,']],
             ],
         ];
     }

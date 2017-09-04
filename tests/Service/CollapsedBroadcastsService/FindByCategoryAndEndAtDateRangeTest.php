@@ -39,9 +39,9 @@ class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServ
         $this->mockRepository
             ->method('findByCategoryAncestryAndEndAtDateRange')
             ->willReturn([
-                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1,2,3,4]],
-                 ['areWebcasts' => [true, true], 'serviceIds' => [333, 444], 'broadcastIds' => [3,4, 56, 67]],
-                 ['areWebcasts' => [true, false], 'serviceIds' => [555, 666], 'broadcastIds' => [5,6,100]],
+                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
+                 ['areWebcasts' => [true, true], 'serviceIds' => [333, 444], 'broadcastIds' => [3, 4, 56, 67]],
+                 ['areWebcasts' => [true, false], 'serviceIds' => [555, 666], 'broadcastIds' => [5, 6, 100]],
                  ['areWebcasts' => [false, false], 'serviceIds' => [false, false], 'broadcastIds' => [7, 8, 20, 48, 23]],
                  ['areWebcasts' => [false, false], 'serviceIds' => [true, true], 'broadcastIds' => [8, 9, 12, 122]],
                  ['areWebcasts' => [false, false], 'serviceIds' => [null, null], 'broadcastIds' => [10, 11]],
@@ -67,7 +67,7 @@ class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServ
         $this->mockRepository
             ->method('findByCategoryAncestryAndEndAtDateRange')
             ->willReturn([
-                ['areWebcasts' => [false, false, true], 'serviceIds' => [111, 222, 333], 'broadcastIds' => [1,2, 3]],
+                ['areWebcasts' => [false, false, true], 'serviceIds' => [111, 222, 333], 'broadcastIds' => [1, 2, 3]],
             ]);
 
         $this->mockServiceRepository

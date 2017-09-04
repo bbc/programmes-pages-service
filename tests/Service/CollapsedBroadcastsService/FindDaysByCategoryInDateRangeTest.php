@@ -32,7 +32,7 @@ class FindDaysByCategoryInDateRangeTest extends AbstractCollapsedBroadcastServic
                 ['day' => '1', 'month' => '8', 'year' => '2011'],
                 ['day' => '2', 'month' => '8', 'year' => '2011'],
                 ['day' => '2', 'month' => '8', 'year' => '2011'],
-        ]);
+            ]);
 
         $datesThatCategoryIsBroadcasted = $this->service()->findDaysByCategoryInDateRange($stubCategory, new DateTimeImmutable(), new DateTimeImmutable());
 
@@ -41,8 +41,8 @@ class FindDaysByCategoryInDateRangeTest extends AbstractCollapsedBroadcastServic
                 '8' => [1, 2],
             ],
             '2010' => [
-                '2' => [7]
-            ]
+                '2' => [7],
+            ],
         ];
 
         $this->assertEquals($expectedResult, $datesThatCategoryIsBroadcasted);

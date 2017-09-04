@@ -38,9 +38,9 @@ class FindUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
         $this->mockRepository
             ->method('findUpcomingByProgramme')
             ->willReturn([
-                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1,2,3,4]],
-                 ['areWebcasts' => [true, true], 'serviceIds' => [333, 444], 'broadcastIds' => [3,4, 56, 67]],
-                 ['areWebcasts' => [true, false], 'serviceIds' => [555, 666], 'broadcastIds' => [5,6,100]],
+                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
+                 ['areWebcasts' => [true, true], 'serviceIds' => [333, 444], 'broadcastIds' => [3, 4, 56, 67]],
+                 ['areWebcasts' => [true, false], 'serviceIds' => [555, 666], 'broadcastIds' => [5, 6, 100]],
                  ['areWebcasts' => [false, false], 'serviceIds' => [false, false], 'broadcastIds' => [7, 8, 20, 48, 23]],
             ]);
 
@@ -53,19 +53,19 @@ class FindUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 
     public function testCollapsedBroadcastedAreReturnedWithCorrespondingServices()
     {
-        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [997, 998, 999]]);
+        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [997, 998, 999]]);
 
         $this->mockRepository
             ->method('findUpcomingByProgramme')
             ->willReturn([
-                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1,2,3,4]],
+                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
              ]);
 
         $this->mockServiceRepository
             ->method('findByIds')
             ->willReturn([['id' => 111, 'sid' => 'bbc_one'], ['id' => 222, 'sid' => 'bbc_one_hd']]);
 
-        $collapsedBroadcasts = $this->service()->findUpcomingByProgramme($programme);
+        $collapsedBroadcasts = $this->service()->findUpcomingByProgramme($stubProgramme);
 
         $this->assertCount(1, $collapsedBroadcasts);
         $this->assertContainsOnly(CollapsedBroadcast::class, $collapsedBroadcasts);
@@ -86,6 +86,4 @@ class FindUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
         $collapsedBroadcasts = $this->service()->findUpcomingByProgramme($this->createMock(Programme::class));
         $this->assertEquals([], $collapsedBroadcasts);
     }
-
-
 }
