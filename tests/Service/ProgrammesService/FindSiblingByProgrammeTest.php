@@ -43,7 +43,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 
     public function testFindNextSiblingByProgrammePrefersSearchingByPosition()
     {
-        $programme = $this->getMockEpisode(1, 3, new PartialDate('2016'));
+        $programme = $this->getMockEpisode(1, 3, new PartialDate(2016));
         $dbData = ['pid' => 'b010t19z'];
 
         $this->mockRepository->expects($this->once())
@@ -79,7 +79,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 
     public function testFindNextSiblingByProgrammeReturnsNullIfNoResult()
     {
-        $programme = $this->getMockEpisode(1, 3, new PartialDate('2016'));
+        $programme = $this->getMockEpisode(1, 3, new PartialDate(2016));
         $dbData = ['pid' => 'b010t19z'];
 
         $this->mockRepository->expects($this->once())
@@ -93,7 +93,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 
     public function testFindNextSiblingByProgrammeReturnsEarlyIfNoParent()
     {
-        $programme = $this->getMockEpisode(null, 3, new PartialDate('2016'));
+        $programme = $this->getMockEpisode(null, 3, new PartialDate(2016));
         $dbData = ['pid' => 'b010t19z'];
 
         $this->mockRepository->expects($this->never())
@@ -122,7 +122,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 
     public function testFindPreviousSiblingByProgrammeReturnsNullIfNoResult()
     {
-        $programme = $this->getMockEpisode(1, 3, new PartialDate('2016'));
+        $programme = $this->getMockEpisode(1, 3, new PartialDate(2016));
         $dbData = ['pid' => 'b010t19z'];
 
         $this->mockRepository->expects($this->once())
@@ -136,7 +136,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 
     public function testFindPreviousSiblingByProgrammeReturnsEarlyIfNoParent()
     {
-        $programme = $this->getMockEpisode(null, 3, new PartialDate('2016'));
+        $programme = $this->getMockEpisode(null, 3, new PartialDate(2016));
         $dbData = ['pid' => 'b010t19z'];
 
         $this->mockRepository->expects($this->never())

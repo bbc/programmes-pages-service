@@ -395,7 +395,7 @@ class CoreEntityMapper extends AbstractMapper
         return $this->getDomainModelForProgramme($dbEntity[$key]);
     }
 
-    private function getImageModel(array $dbEntity, string $key = 'image'): ?Image
+    private function getImageModel(array $dbEntity, string $key = 'image'): Image
     {
         $imageMapper = $this->mapperFactory->getImageMapper();
 

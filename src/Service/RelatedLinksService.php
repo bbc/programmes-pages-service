@@ -9,6 +9,12 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
 
 class RelatedLinksService extends AbstractService
 {
+    /* @var RelatedLinkMapper */
+    protected $mapper;
+
+    /* @var RelatedLinkRepository */
+    protected $repository;
+
     public function __construct(
         RelatedLinkRepository $repository,
         RelatedLinkMapper $mapper,

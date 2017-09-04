@@ -1,0 +1,21 @@
+parameters:
+    ignoreErrors:
+        - '#BBC\\ProgrammesPagesService\\Domain\\ValueObject\\Null\\Null[A-z]+::__construct\(\) does not call parent constructor from BBC\\ProgrammesPagesService\\Domain\\ValueObject\\[A-z]+.#'
+        - '#Method BBC\\ProgrammesPagesService\\Domain\\ApplicationTime::getLocalTimeZone\(\) should return DateTimeZone but returns DateTimeZone\|null.#'
+        - '#Method BBC\\ProgrammesPagesService\\Domain\\ApplicationTime::getTime\(\) should return DateTimeImmutable but returns DateTimeImmutable\|null.#'
+        - '#Method BBC\\ProgrammesPagesService\\Mapper\\ProgrammesDbToDomain\\CategoryMapper::getGenreParentModel\(\) should return BBC\\ProgrammesPagesService\\Domain\\Entity\\Genre\|null but returns BBC\\ProgrammesPagesService\\Domain\\Entity\\Category.#'
+        - '#Method BBC\\ProgrammesPagesService\\Mapper\\ProgrammesDbToDomain\\MapperFactory::get[A-z]+Mapper\(\) should return BBC\\ProgrammesPagesService\\Mapper\\ProgrammesDbToDomain\\[A-z]+Mapper but returns BBC\\ProgrammesPagesService\\Mapper\\ProgrammesDbToDomain\\AbstractMapper.#'
+        - '#Method BBC\\ProgrammesPagesService\\Service\\ProgrammesAggregationService::findDescendantClips\(\) should return BBC\\ProgrammesPagesService\\Domain\\Entity\\Clip\[\] but returns BBC\\ProgrammesPagesService\\Domain\\Entity\\ProgrammeItem\[\].#'
+        - '#Method BBC\\ProgrammesPagesService\\Service\\ProgrammesAggregationService::findDescendantGalleries\(\) should return BBC\\ProgrammesPagesService\\Domain\\Entity\\Gallery\[\] but returns BBC\\ProgrammesPagesService\\Domain\\Entity\\CoreEntity\[\].#'
+        - '#Parameter \#[0-9]+ \$maxResults of method Doctrine\\ORM\\Query(Builder)?::setMaxResults\(\) expects int, int\|null given.#'
+        - '#Parameter \#3 \$startAt of class BBC\\ProgrammesPagesService\\Domain\\Entity\\CollapsedBroadcast constructor expects DateTimeImmutable, DateTimeImmutable\|null given.#'
+        - '#Parameter \#4 \$endAt of class BBC\\ProgrammesPagesService\\Domain\\Entity\\CollapsedBroadcast constructor expects DateTimeImmutable, DateTimeImmutable\|null given.#'
+        - '#Parameter \#5 \$startAt of class BBC\\ProgrammesPagesService\\Domain\\Entity\\Broadcast constructor expects DateTimeImmutable, DateTimeImmutable\|null given.#'
+        - '#Parameter \#6 \$endAt of class BBC\\ProgrammesPagesService\\Domain\\Entity\\Broadcast constructor expects DateTimeImmutable, DateTimeImmutable\|null given.#'
+        # PHPUnit ignores
+        - '#PHPUnit_Framework_MockObject_MockObject given.#'
+        - '#but returns PHPUnit_Framework_MockObject_MockObject.#'
+        - '#Call to an undefined method PHPUnit_Framework_MockObject_MockObject::#'
+        - '#Parameter \#1 \$entity of method Tests\\BBC\\ProgrammesPagesService\\Service\\ContributorsService\\AbstractContributorsServiceTest::contributorFromDbData\(\) expects mixed\[\], string\[\]\|int given.#'
+        - '#Calling method setTimezone\(\) on possibly null value of type Cake\\Chronos\\Chronos\|null.#'
+        - '#Property Tests\\BBC\\ProgrammesPagesService\\Data\\ProgrammesDb\\Type\\UtcDateTimeTypeTest::\$type \(BBC\\ProgrammesPagesService\\Data\\ProgrammesDb\\Type\\UtcDateTimeType\) does not accept Doctrine\\DBAL\\Types\\Type.#'

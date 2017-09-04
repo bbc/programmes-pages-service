@@ -18,7 +18,7 @@ class Image implements PromotableInterface
     /** @var string */
     protected $longestSynopsis;
 
-    /** @var string|null */
+    /** @var string */
     private $type;
 
     /** @var string */

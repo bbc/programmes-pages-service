@@ -9,6 +9,12 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper;
 
 class NetworksService extends AbstractService
 {
+    /* @var NetworkMapper */
+    protected $mapper;
+
+    /* @var NetworkRepository */
+    protected $repository;
+
     public function __construct(
         NetworkRepository $repository,
         NetworkMapper $mapper,

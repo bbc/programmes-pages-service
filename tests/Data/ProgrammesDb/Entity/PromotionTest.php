@@ -109,35 +109,6 @@ class PromotionTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidPromotedItemThrowsExceptionOnConstruct()
-    {
-        new Promotion(
-            'pid',
-            'wrongwrongwrong',
-            new DateTime(),
-            new DateTime(),
-            1
-        );
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidPromotedItemThrowsExceptionOnSet()
-    {
-        $promotion = new Promotion(
-            'pid',
-            $this->mockCoreEntity(),
-            new DateTime(),
-            new DateTime(),
-            1
-        );
-        $promotion->setPromotionOf('wrongwrongwrong');
-    }
-
     private function mockCoreEntity()
     {
         return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity');

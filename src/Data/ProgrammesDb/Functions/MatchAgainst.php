@@ -17,7 +17,7 @@ class MatchAgainst extends FunctionNode
 
     public $columns = array();
 
-    /** @var InputParameter */
+    /** @var string|InputParameter */
     public $needle;
 
     /** @var Literal */

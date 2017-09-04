@@ -46,7 +46,7 @@ class NetworkMapper extends AbstractMapper
         return $this->cache[$cacheKey];
     }
 
-    private function getImageModel(array $dbMasterBrand, string $key = 'image'): ?Image
+    private function getImageModel(array $dbMasterBrand, string $key = 'image'): Image
     {
         if (!isset($dbMasterBrand[$key])) {
             // Use default Image

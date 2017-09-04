@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Service\CategoriesService;
@@ -29,7 +30,7 @@ abstract class AbstractCategoriesServiceTest extends AbstractServiceTest
     }
 
     /**
-     * @param Categories[] $categories
+     * @param Category[] $categories
      * @return string[] containing only the genres ids
      */
     protected function extractIds(array $categories): array

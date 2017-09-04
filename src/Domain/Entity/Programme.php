@@ -28,7 +28,7 @@ abstract class Programme extends CoreEntity
     /** @var Format[]|null */
     private $formats;
 
-    /** @var DateTimeImmutable */
+    /** @var DateTimeImmutable|null */
     private $firstBroadcastDate;
 
     public function __construct(

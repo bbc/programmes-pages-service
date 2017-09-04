@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\ContributableToInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
@@ -14,7 +15,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *   @ORM\Index(name="version_streamable_idx", columns={"streamable"})
  * })
  */
-class Version
+class Version implements ContributableToInterface
 {
     use TimestampableEntity;
     use Traits\PartnerPidTrait;
@@ -106,7 +107,7 @@ class Version
     private $downloadable = false;
 
     /**
-     * @var array
+     * @var string[]|null
      *
      * @ORM\Column(type="simple_array", nullable=true)
      */

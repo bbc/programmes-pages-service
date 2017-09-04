@@ -163,10 +163,9 @@ class Service
     public function isTv(): bool
     {
         // Network can be null, but unfetched should throw an exception
-        if ($this->network && $this->getNetwork()->isTv()) {
-            return true;
-        }
-        return false;
+        $network = $this->getNetwork();
+
+        return $network && $network->isTv();
     }
 
     /**
@@ -175,17 +174,15 @@ class Service
     public function isRadio(): bool
     {
         // Network can be null, but unfetched should throw an exception
-        if ($this->network && $this->getNetwork()->isRadio()) {
-            return true;
-        }
-        return false;
+        $network = $this->getNetwork();
+
+        return $network && $network->isRadio();
     }
 
     public function isInternational(): bool
     {
-        if ($this->network && $this->getNetwork()->isInternational()) {
-            return true;
-        }
-        return false;
+        $network = $this->getNetwork();
+
+        return $network && $network->isInternational();
     }
 }

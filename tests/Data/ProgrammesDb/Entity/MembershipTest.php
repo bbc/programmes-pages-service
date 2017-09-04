@@ -90,31 +90,6 @@ class MembershipTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidMemberThrowsExceptionOnConstruct()
-    {
-        new Membership(
-            'pid',
-            $this->mockGroup(),
-            'wrongwrongwrong'
-        );
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidMemberThrowsExceptionOnSet()
-    {
-        $contribution = new Membership(
-            'pid',
-            $this->mockGroup(),
-            $this->mockEpisode()
-        );
-        $contribution->setMember('wrongwrongwrong');
-    }
-
     private function mockGroup()
     {
         return $this->createMock('BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Group');

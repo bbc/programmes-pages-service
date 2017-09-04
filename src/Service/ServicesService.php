@@ -12,6 +12,12 @@ use DateTimeImmutable;
 
 class ServicesService extends AbstractService
 {
+    /* @var ServiceMapper */
+    protected $mapper;
+
+    /* @var ServiceRepository */
+    protected $repository;
+
     public function __construct(
         ServiceRepository $repository,
         ServiceMapper $mapper,

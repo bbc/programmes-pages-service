@@ -26,7 +26,7 @@ abstract class Programme extends CoreEntity
     private $position;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */

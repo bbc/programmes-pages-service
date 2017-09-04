@@ -56,7 +56,7 @@ class CountUpcomingByProgrammeTest extends AbstractDatabaseTest
         /** @var CollapsedBroadcastRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
-        $entities = $repo->countUpcomingByProgramme([1], 'Any', new DateTimeImmutable());
+        $entities = $repo->countUpcomingByProgramme([1], true, new DateTimeImmutable());
         $this->assertEquals(0, $entities);
 
         // countUpcomingByProgramme query only

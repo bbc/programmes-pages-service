@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\RelatedLinkContextInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -91,40 +92,32 @@ class RelatedLink
     private $isExternal;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $position;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $startDate;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $endDate;
 
-    /**
-     * @param string $pid
-     * @param string $title
-     * @param string $uri
-     * @param string $type
-     * @param CoreEntity|Promotion|Image $relatedTo
-     * @param bool $isExternal
-     */
     public function __construct(
         string $pid,
         string $title,
         string $uri,
         string $type,
-        $relatedTo,
+        RelatedLinkContextInterface $relatedTo,
         bool $isExternal
     ) {
         $this->pid = $pid;
@@ -203,10 +196,7 @@ class RelatedLink
         return $this->relatedToImage;
     }
 
-    /**
-     * @param CoreEntity|Promotion|Image $relatedTo
-     */
-    public function setRelatedTo($relatedTo)
+    public function setRelatedTo(RelatedLinkContextInterface $relatedTo)
     {
         if ($relatedTo instanceof CoreEntity) {
             $this->setRelatedToBatch($relatedTo, null, null);

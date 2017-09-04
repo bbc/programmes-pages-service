@@ -13,6 +13,12 @@ use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\SegmentEventMapper;
 
 class SegmentEventsService extends AbstractService
 {
+    /* @var SegmentEventMapper */
+    protected $mapper;
+
+    /* @var SegmentEventRepository */
+    protected $repository;
+
     public function __construct(
         SegmentEventRepository $repository,
         SegmentEventMapper $mapper,

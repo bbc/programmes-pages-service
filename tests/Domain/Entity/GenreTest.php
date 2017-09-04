@@ -29,8 +29,11 @@ class GenreTest extends TestCase
         $this->assertEquals('id', $genre->getId());
         $this->assertEquals('Title', $genre->getTitle());
         $this->assertEquals('url_key', $genre->getUrlKey());
-        $this->assertEquals($parentGenre, $genre->getParent());
-        $this->assertEquals(null, $genre->getParent()->getParent());
+        $parent = $genre->getParent();
+        $this->assertEquals($parentGenre, $parent);
+        if ($parent) {
+            $this->assertNull($parent->getParent());
+        }
     }
 
      /**

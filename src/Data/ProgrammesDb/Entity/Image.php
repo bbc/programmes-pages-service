@@ -2,13 +2,16 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\MemberOfGroupInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\PromotableInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\RelatedLinkContextInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity()
  */
-class Image
+class Image implements MemberOfGroupInterface, RelatedLinkContextInterface, PromotableInterface
 {
     use TimestampableEntity;
     use Traits\IsEmbargoedTrait;
@@ -90,7 +93,7 @@ class Image
         return $this->type;
     }
 
-    public function setType(?string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -100,7 +103,7 @@ class Image
         return $this->extension;
     }
 
-    public function setExtension(string $extension)
+    public function setExtension(string $extension): void
     {
         $this->extension = $extension;
     }

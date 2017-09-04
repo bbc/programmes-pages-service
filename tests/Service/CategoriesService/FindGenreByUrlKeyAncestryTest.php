@@ -25,7 +25,7 @@ class FindGenreByUrlKeyAncestryTest extends AbstractCategoriesServiceTest
         $format = $this->service()->findGenreByUrlKeyAncestry(['key1', 'key2']);
 
         $this->assertInstanceOf(Genre::class, $format);
-        $this->assertEquals('C0001', $format->getId());
+        $this->assertEquals('C0001', $format ? $format->getId() : null);
     }
 
     public function testFindGenreByUrlKeyAncestryEmptyData()

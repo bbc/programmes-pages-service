@@ -69,7 +69,7 @@ class Broadcast
     private $endAt;
 
     /**
-     * @var int|null
+     * @var int
      * @ORM\Column(type="integer", nullable=false)
      */
     private $duration;
