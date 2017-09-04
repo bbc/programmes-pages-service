@@ -13,17 +13,16 @@ class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServ
      */
     public function testRepositoryReceivesCorrectParams($expectedLimit, $expectedOffset, array $paginationParams)
     {
-        $ancestry = [3];
         $fromDate = new DateTimeImmutable();
         $toDate = new DateTimeImmutable();
 
-        $category = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => $ancestry]);
+        $stubCategory = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [3]]);
 
         $this->mockRepository->expects($this->once())
             ->method('findByCategoryAncestryAndEndAtDateRange')
-            ->with($ancestry, false, $fromDate, $toDate, $expectedLimit, $expectedOffset);
+            ->with($stubCategory->getDbAncestryIds(), false, $fromDate, $toDate, $expectedLimit, $expectedOffset);
 
-        $this->service()->findByCategoryAndEndAtDateRange($category, $fromDate, $toDate, ...$paginationParams);
+        $this->service()->findByCategoryAndEndAtDateRange($stubCategory, $fromDate, $toDate, ...$paginationParams);
     }
 
     public function paginationProvider()
@@ -50,6 +49,7 @@ class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServ
                  ['areWebcasts' => [1, '1'], 'serviceIds' => [999, 1010], 'broadcastIds' => [16, 17]],
             ]);
 
+        // fetch services for broadcasts no webcasted
         $this->mockServiceRepository->expects($this->once())
             ->method('findByIds')->with([111, 222, 666, 777, 888]);
 
@@ -60,22 +60,9 @@ class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServ
         );
     }
 
-    public function testNoServicesAreFetched()
-    {
-        $this->mockRepository->method('findByCategoryAncestryAndEndAtDateRange')->willReturn([]);
-
-        $this->mockServiceRepository->expects($this->never())->method('findByIds');
-
-        $this->service()->findByCategoryAndEndAtDateRange(
-            $this->createMock(Genre::class),
-            new DateTimeImmutable(),
-            new DateTimeImmutable()
-        );
-    }
-
     public function testFindByCategoryAndEndAtDateRangeResults()
     {
-        $category = $this->createConfiguredMock(Genre::class, ['getDbId' => 3, 'getDbAncestryIds' => [3]]);
+        $stubCategory = $this->createConfiguredMock(Genre::class, ['getDbId' => 3, 'getDbAncestryIds' => [3]]);
 
         $this->mockRepository
             ->method('findByCategoryAncestryAndEndAtDateRange')
@@ -87,7 +74,7 @@ class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServ
             ->method('findByIds')
             ->willReturn([['id' => 111, 'sid' => 'bbc_one'], ['id' => 222, 'sid' => 'bbc_one_hd']]);
 
-        $collapsedBroadcasts = $this->service()->findByCategoryAndEndAtDateRange($category, new DateTimeImmutable(), new DateTimeImmutable());
+        $collapsedBroadcasts = $this->service()->findByCategoryAndEndAtDateRange($stubCategory, new DateTimeImmutable(), new DateTimeImmutable());
 
         $this->assertCount(1, $collapsedBroadcasts);
         $this->assertContainsOnly(CollapsedBroadcast::class, $collapsedBroadcasts);
@@ -96,5 +83,18 @@ class FindByCategoryAndEndAtDateRangeTest extends AbstractCollapsedBroadcastServ
         $this->assertCount(2, $servicesInBroadcast);
         $this->assertSame('bbc_one', (string) $servicesInBroadcast[111]->getSid());
         $this->assertSame('bbc_one_hd', (string) $servicesInBroadcast[222]->getSid());
+    }
+
+    public function testResultIsEmptyWhenTheSpecifiedCategoryHasNotBeenBroadcastedOnThatPerio()
+    {
+        $this->mockRepository->method('findByCategoryAncestryAndEndAtDateRange')->willReturn([]);
+
+        $this->mockServiceRepository->expects($this->never())->method('findByIds');
+
+        $this->service()->findByCategoryAndEndAtDateRange(
+            $this->createMock(Genre::class),
+            new DateTimeImmutable(),
+            new DateTimeImmutable()
+        );
     }
 }

@@ -8,18 +8,16 @@ class FindBroadcastYearsAndMonthsByProgrammeTest extends AbstractCollapsedBroadc
 {
     public function testRepositoryReceivesParamsToFindBroadcasts()
     {
-        $dbAncestry = [1, 2, 3];
-
-        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => $dbAncestry]);
+        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
 
         $this->mockRepository->expects($this->once())
             ->method('FindAllYearsAndMonthsByProgramme')
-            ->with($dbAncestry, false);
+            ->with($stubProgramme->getDbAncestryIds(), false);
 
         $this->service()->findBroadcastYearsAndMonthsByProgramme($stubProgramme);
     }
 
-    public function testFindBroadcastYearsAndMonthsByProgrammeResultsOrderedByTime()
+    public function testReturnDatesForCollapsedBroadcastHasProperStructure()
     {
         $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
 

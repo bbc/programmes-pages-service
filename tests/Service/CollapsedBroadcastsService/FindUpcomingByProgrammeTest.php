@@ -78,14 +78,12 @@ class FindUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 
     public function testNoCollpasedBroadcastsFound()
     {
-        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
-
         $this->mockRepository->method('findUpcomingByProgramme')->willReturn([]);
 
         $this->mockServiceRepository->expects($this->never())
             ->method('findByIds');
 
-        $collapsedBroadcasts = $this->service()->findUpcomingByProgramme($programme);
+        $collapsedBroadcasts = $this->service()->findUpcomingByProgramme($this->createMock(Programme::class));
         $this->assertEquals([], $collapsedBroadcasts);
     }
 

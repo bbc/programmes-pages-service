@@ -55,9 +55,9 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
         $this->service()->findByProgrammeAndMonth($programme, 2007, 12);
     }
 
-    public function testCollapsedBroadcastsEntitiesAreReturnedWithRespectiveServices2()
+    public function testCollapsedBroadcastsEntitiesAreReturnedWithRespectiveServices()
     {
-        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
+        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
 
         $this->mockRepository
             ->method('findByProgrammeAndMonth')
@@ -69,7 +69,7 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
             ->method('findByIds')
             ->willReturn([['id' => 111, 'sid' => 'bbc_one'], ['id' => 222, 'sid' => 'bbc_one_hd']]);
 
-        $collapsedBroadcasts = $this->service()->findByProgrammeAndMonth($programme, 2007, 12);
+        $collapsedBroadcasts = $this->service()->findByProgrammeAndMonth($stubProgramme, 2007, 12);
 
         $this->assertCount(1, $collapsedBroadcasts);
         $this->assertContainsOnly(CollapsedBroadcast::class, $collapsedBroadcasts);
@@ -80,20 +80,15 @@ class FindByProgrammeAndMonthTest extends AbstractCollapsedBroadcastServiceTest
         $this->assertSame('bbc_one_hd', (string) $servicesInBroadcast[222]->getSid());
     }
 
-    public function testFindByProgrammeAndMonthWithNonExistantPid()
+    public function testResultIsEmptyWhenTheSpecifiedCategoryHasNotBeenBroadcastedOnThatPerio()
     {
-        $programme = $this->createConfiguredMock(Programme::class, [
-            'getDbId' => 3,
-            'getDbAncestryIds' => [1, 2, 3],
-        ]);
-
         $this->mockRepository->method('findByProgrammeAndMonth')->willReturn([]);
 
         $this->mockServiceRepository->expects($this->never())->method('findByIds');
 
         $this->assertEquals(
             [],
-            $this->service()->findByProgrammeAndMonth($programme, 2007, 12)
+            $this->service()->findByProgrammeAndMonth($this->createMock(Programme::class), 2007, 12)
         );
     }
 }

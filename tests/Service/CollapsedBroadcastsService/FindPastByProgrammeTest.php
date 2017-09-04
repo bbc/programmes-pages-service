@@ -78,15 +78,13 @@ class FindPastByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 
     public function testFindPastByProgrammeWithNonExistantPid()
     {
-        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [997, 998, 999]]);
-
         $this->mockRepository->method('findPastByProgramme')->willReturn([]);
 
         $this->mockServiceRepository->expects($this->never())->method('findByIds');
 
         $this->assertEquals(
             [],
-            $this->service()->findPastByProgramme($programme)
+            $this->service()->findPastByProgramme($this->createMock(Programme::class))
         );
     }
 }

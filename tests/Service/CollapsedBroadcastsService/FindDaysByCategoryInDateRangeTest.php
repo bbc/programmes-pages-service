@@ -9,21 +9,21 @@ class FindDaysByCategoryInDateRangeTest extends AbstractCollapsedBroadcastServic
 {
     public function testFindUsedDaysByCategoryInDateRange()
     {
-        $category = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1, 2, 3]]);
+        $stubCategory = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1, 2, 3]]);
 
         $start = new DateTimeImmutable();
         $end = new DateTimeImmutable();
 
         $this->mockRepository->expects($this->once())
             ->method('findBroadcastedDatesForCategory')
-            ->with($category->getDbAncestryIds(), false, $start, $end);
+            ->with($stubCategory->getDbAncestryIds(), false, $start, $end);
 
-        $this->service()->findDaysByCategoryInDateRange($category, $start, $end);
+        $this->service()->findDaysByCategoryInDateRange($stubCategory, $start, $end);
     }
 
     public function testResultsHasProperStructureAndIsOrdered()
     {
-        $category = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1, 2, 3]]);
+        $stubCategory = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1, 2, 3]]);
 
         $this->mockRepository
             ->method('findBroadcastedDatesForCategory')
@@ -34,7 +34,7 @@ class FindDaysByCategoryInDateRangeTest extends AbstractCollapsedBroadcastServic
                 ['day' => '2', 'month' => '8', 'year' => '2011'],
         ]);
 
-        $datesThatCategoryIsBroadcasted = $this->service()->findDaysByCategoryInDateRange($category, new DateTimeImmutable(), new DateTimeImmutable());
+        $datesThatCategoryIsBroadcasted = $this->service()->findDaysByCategoryInDateRange($stubCategory, new DateTimeImmutable(), new DateTimeImmutable());
 
         $expectedResult = [
             '2011' => [
@@ -50,13 +50,15 @@ class FindDaysByCategoryInDateRangeTest extends AbstractCollapsedBroadcastServic
 
     public function testResultIsEmptyWhenTheSpecifiedCategoryHasNotBeenBroadcastedOnThatPerio()
     {
-        $category = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1, 2, 3]]);
-
         $this->mockRepository
             ->method('findBroadcastedDatesForCategory')
             ->willReturn([]);
 
-        $datesThatCategoryIsBroadcasted = $this->service()->findDaysByCategoryInDateRange($category, new DateTimeImmutable(), new DateTimeImmutable());
+        $datesThatCategoryIsBroadcasted = $this->service()->findDaysByCategoryInDateRange(
+            $this->createMock(Genre::class),
+            new DateTimeImmutable(),
+            new DateTimeImmutable()
+        );
 
         $this->assertEquals([], $datesThatCategoryIsBroadcasted);
     }
