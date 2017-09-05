@@ -12,6 +12,8 @@ use stdClass;
 class FindAllMostPlayedTest extends AbstractContributorsServiceTest
 {
     /**
+     * @param $expectedDbId int|null
+     *
      * @dataProvider serviceProvider
      */
     public function testInteractionWithRepository($expectedDbId, array $service)
