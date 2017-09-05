@@ -2,61 +2,62 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributionsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
+use BBC\ProgrammesPagesService\Domain\Entity\Segment;
+
 class FindByContributionToSegmentsTest extends AbstractContributionsServiceTest
 {
-    public function testFindByContributionToSegmentsDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testPagination($expectedLimit, $expectedOffset, array $paginationParams)
     {
-        $dbIds = [1, 2, 3];
-        $dbData = [['pid' => 'b0000001']];
         $segments = [
-            $this->mockEntity('Segment', 1),
-            $this->mockEntity('Segment', 2),
-            $this->mockEntity('Segment', 3),
+            $this->createConfiguredMock(Segment::class, ['getDbId' => 111]),
+            $this->createConfiguredMock(Segment::class, ['getDbId' => 222]),
+            $this->createConfiguredMock(Segment::class, ['getDbId' => 333]),
         ];
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with($dbIds, 'segment', true, 300, 0)
-            ->willReturn($dbData);
+            ->with([111, 222, 333], 'segment', true, $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findByContributionToSegments($segments);
-        $this->assertEquals($this->contributionsFromDbData($dbData), $result);
+        $this->service()->findByContributionToSegments($segments, ...$paginationParams);
     }
 
-    public function testFindByContributionToSegmentsCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbIds = [1, 2, 3];
-        $dbData = [['pid' => 'b0000001']];
-        $segments = [
-            $this->mockEntity('Segment', 1),
-            $this->mockEntity('Segment', 2),
-            $this->mockEntity('Segment', 3),
+        return [
+            'CASE: default' => [300, 0, []],
+            'CASE: custom' => [3, 12, [3, 5]],
         ];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findByContributionTo')
-            ->with($dbIds, 'segment', true, 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findByContributionToSegments($segments, 5, 3);
-        $this->assertEquals($this->contributionsFromDbData($dbData), $result);
     }
 
-    public function testFindByContributionToSegmentsWithNonExistantDbId()
+    /**
+     * @dataProvider resultsDbProvider
+     */
+    public function testResultsFromService($fakeDbResults)
     {
-        $dbIds = [1, 2, 3];
         $segments = [
-            $this->mockEntity('Segment', 1),
-            $this->mockEntity('Segment', 2),
-            $this->mockEntity('Segment', 3),
+            $this->createConfiguredMock(Segment::class, ['getDbId' => 111]),
+            $this->createConfiguredMock(Segment::class, ['getDbId' => 222]),
+            $this->createConfiguredMock(Segment::class, ['getDbId' => 333]),
         ];
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByContributionTo')
-            ->with($dbIds, 'segment', true, 5, 10)
-            ->willReturn([]);
+        $this->mockRepository->method('findByContributionTo')->willReturn($fakeDbResults);
+        $contributions = $this->service()->findByContributionToSegments($segments);
 
-        $result = $this->service()->findByContributionToSegments($segments, 5, 3);
-        $this->assertEquals([], $result);
+        $this->assertCount(count($fakeDbResults), $contributions);
+        $this->assertContainsOnly(Contribution::class, $contributions);
+    }
+
+    public function resultsDbProvider(): array
+    {
+        return [
+            'CASE: found results' => [
+                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]
+            ],
+            'CASE: not found results' => [[]],
+        ];
     }
 }
