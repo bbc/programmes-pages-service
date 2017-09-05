@@ -61,8 +61,9 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
     {
         $this->mockRepository->method('findAllMostPlayedWithPlays')->willReturn([]);
 
-        $contributorsAndPlays = $this->service()->findAllMostPlayed(new DateTimeImmutable(), new DateTimeImmutable());
-
-        $this->assertEquals([], $contributorsAndPlays);
+        $this->assertEquals(
+            [],
+            $this->service()->findAllMostPlayed(new DateTimeImmutable(), new DateTimeImmutable())
+        );
     }
 }
