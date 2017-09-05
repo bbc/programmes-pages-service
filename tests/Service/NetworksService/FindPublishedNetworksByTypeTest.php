@@ -27,7 +27,7 @@ class FindPublishedNetworksByTypeTest extends AbstractNetworksServiceTest
         ];
     }
 
-    public function testFoundResults()
+    public function testCanRecievePublishedNetworks()
     {
         $this->mockRepository
             ->method('findPublishedNetworksByType')

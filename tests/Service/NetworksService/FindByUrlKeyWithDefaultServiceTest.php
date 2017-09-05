@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Network;
 
 class FindByUrlKeyWithDefaultServiceTest extends AbstractNetworksServiceTest
 {
-    public function testFindInteraction()
+    public function testFindInteractionWitDbInterface()
     {
         $urlKey = 'radio2';
 
@@ -17,7 +17,7 @@ class FindByUrlKeyWithDefaultServiceTest extends AbstractNetworksServiceTest
         $this->service()->findByUrlKeyWithDefaultService($urlKey);
     }
 
-    public function testFind()
+    public function testNetworksResultsAreReceived()
     {
         $this->mockRepository->method('findByUrlKeyWithDefaultService')->willReturn(['nid' => 'bbc_radio_two']);
 
@@ -27,7 +27,7 @@ class FindByUrlKeyWithDefaultServiceTest extends AbstractNetworksServiceTest
         $this->assertEquals('bbc_radio_two', $network->getNid());
     }
 
-    public function testFindNoResult()
+    public function testNetworksResultsAreNotFound()
     {
         $this->mockRepository->method('findByUrlKeyWithDefaultService')->willReturn(null);
 
