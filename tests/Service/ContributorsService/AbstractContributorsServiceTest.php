@@ -15,11 +15,6 @@ abstract class AbstractContributorsServiceTest extends AbstractServiceTest
         $this->setUpMapper('ContributorMapper', 'contributorFromDbData');
     }
 
-    protected function contributorsFromDbData(array $entities)
-    {
-        return array_map([$this, 'contributorFromDbData'], $entities);
-    }
-
     protected function contributorFromDbData(array $entity)
     {
         $mockContributor = $this->createMock(self::ENTITY_NS . 'Contributor');
