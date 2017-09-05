@@ -48,7 +48,7 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
         return [
             'CASE: found results' => [
                 ['b00swyx1', 'b010t150'],
-                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]
+                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']],
             ],
             'CASE: not found results' => [[], []],
         ];

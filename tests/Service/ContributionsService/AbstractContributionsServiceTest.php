@@ -14,9 +14,7 @@ abstract class AbstractContributionsServiceTest extends AbstractServiceTest
         $this->setUpCache();
         $this->setUpRepo('ContributionRepository');
         $this->setUpMapper('ContributionMapper', function ($dbContribution) {
-            return $this->createConfiguredMock(Contribution::class,
-                ['getPid' => new Pid($dbContribution['pid'])]
-            );
+            return $this->createConfiguredMock(Contribution::class, ['getPid' => new Pid($dbContribution['pid'])]);
         });
     }
 
@@ -28,11 +26,10 @@ abstract class AbstractContributionsServiceTest extends AbstractServiceTest
     protected function extractPids(array $contributions): array
     {
         return array_map(
-            function($contribution) {
+            function ($contribution) {
                 return (string) $contribution->getPid();
             },
             $contributions
         );
     }
-
 }
