@@ -13,7 +13,7 @@ abstract class AbstractNetworksServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('NetworkRepository');
-        $this->setUpMapper('NetworkMapper', function($dbNetwork) {
+        $this->setUpMapper('NetworkMapper', function ($dbNetwork) {
             return $this->createConfiguredMock(Network::class, ['getNid' => new Nid($dbNetwork['nid'])]);
         });
     }
