@@ -36,18 +36,18 @@ class FindByContributionToSegmentsTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider resultsDbProvider
      */
-    public function testResultsFromService($fakeDbResults)
+    public function testResultsFromService($fakeDbContributions)
     {
         $segments = [
-            $this->createConfiguredMock(Segment::class, ['getDbId' => 111]),
-            $this->createConfiguredMock(Segment::class, ['getDbId' => 222]),
-            $this->createConfiguredMock(Segment::class, ['getDbId' => 333]),
+            $this->createMock(Segment::class),
+            $this->createMock(Segment::class),
+            $this->createMock(Segment::class),
         ];
 
-        $this->mockRepository->method('findByContributionTo')->willReturn($fakeDbResults);
+        $this->mockRepository->method('findByContributionTo')->willReturn($fakeDbContributions);
         $contributions = $this->service()->findByContributionToSegments($segments);
 
-        $this->assertCount(count($fakeDbResults), $contributions);
+        $this->assertCount(count($fakeDbContributions), $contributions);
         $this->assertContainsOnly(Contribution::class, $contributions);
     }
 
