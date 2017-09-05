@@ -10,7 +10,7 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testPagination($expectedLimit, $expectedOffset, array $paginationParams)
+    public function testPagination(int $expectedLimit, int $expectedOffset, array $paginationParams)
     {
         $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 
@@ -24,13 +24,14 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
     public function paginationProvider(): array
     {
         return [
-          'CASE: default' => [300, 0, []],
-          'CASE: custom' => [3, 12, [3, 5]],
+            // expected limit, expected offset, user pagination params
+          'CASE: default pagination' => [300, 0, []],
+          'CASE: custom pagination' => [3, 12, [3, 5]],
         ];
     }
 
     /**
-     * @dataProvider resultsDbProvider
+     * @dataProvider dbContributionsProvider
      */
     public function testReturnResultsFound(array $expectedPids, array $fakeDbContributions)
     {
@@ -43,7 +44,7 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
         $this->assertEquals($expectedPids, $this->extractPids($contributions));
     }
 
-    public function resultsDbProvider(): array
+    public function dbContributionsProvider(): array
     {
         return [
             'CASE: found results' => [

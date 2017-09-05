@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ContributionRe
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
+use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributionMapper;
 
 class ContributionsService extends AbstractService

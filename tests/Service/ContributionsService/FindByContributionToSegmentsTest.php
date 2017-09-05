@@ -10,7 +10,7 @@ class FindByContributionToSegmentsTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testPagination($expectedLimit, $expectedOffset, array $paginationParams)
+    public function testPagination(int $expectedLimit, int $expectedOffset, array $paginationParams)
     {
         $segments = [
             $this->createConfiguredMock(Segment::class, ['getDbId' => 111]),
@@ -28,13 +28,14 @@ class FindByContributionToSegmentsTest extends AbstractContributionsServiceTest
     public function paginationProvider(): array
     {
         return [
-            'CASE: default' => [300, 0, []],
-            'CASE: custom' => [3, 12, [3, 5]],
+            // expected limit, expected offset, user pagination params
+            'CASE: default pagination' => [300, 0, []],
+            'CASE: custom pagination' => [3, 12, [3, 5]],
         ];
     }
 
     /**
-     * @dataProvider resultsDbProvider
+     * @dataProvider dbContributionsProvider
      */
     public function testResultsFromService(array $expectedPids, array $fakeDbContributions)
     {
@@ -52,7 +53,7 @@ class FindByContributionToSegmentsTest extends AbstractContributionsServiceTest
         $this->assertEquals($expectedPids, $this->extractPids($contributions));
     }
 
-    public function resultsDbProvider(): array
+    public function dbContributionsProvider(): array
     {
         return [
             'CASE: found results' => [

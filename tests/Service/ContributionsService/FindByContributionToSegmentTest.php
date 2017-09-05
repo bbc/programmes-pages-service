@@ -24,13 +24,14 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
     public function paginationProvider(): array
     {
         return [
-            'CASE: default' => [300, 0, []],
-            'CASE: custom' => [3, 12, [3, 5]],
+            // expected limit, expected offset, user pagination params
+            'CASE: default pagination' => [300, 0, []],
+            'CASE: custom pagination' => [3, 12, [3, 5]],
         ];
     }
 
     /**
-     * @dataProvider resultsDbProvider
+     * @dataProvider dbContributionsProvider
      */
     public function testsResults(array $expectedPids, array $fakeDbContributions)
     {
@@ -43,7 +44,7 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
         $this->assertEquals($expectedPids, $this->extractPids($contributions));
     }
 
-    public function resultsDbProvider(): array
+    public function dbContributionsProvider(): array
     {
         return [
             'CASE: found results' => [
