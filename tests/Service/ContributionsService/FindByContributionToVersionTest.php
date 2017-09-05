@@ -41,7 +41,9 @@ class FindByContributionToVersionTest extends AbstractContributionsServiceTest
 
         $this->assertCount(count($fakeDbContributions), $contributions);
         $this->assertContainsOnly(Contribution::class, $contributions);
-        $this->assertEquals($expectedPids, $this->extractPids($contributions));
+        foreach ($expectedPids as $i => $expectedPid) {
+            $this->assertEquals($expectedPid, $contributions[$i]->getPid());
+        }
     }
 
     public function dbContributionsProvider(): array

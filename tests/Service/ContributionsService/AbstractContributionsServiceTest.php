@@ -22,14 +22,4 @@ abstract class AbstractContributionsServiceTest extends AbstractServiceTest
     {
         return new ContributionsService($this->mockRepository, $this->mockMapper, $this->mockCache);
     }
-
-    protected function extractPids(array $contributions): array
-    {
-        return array_map(
-            function ($contribution) {
-                return (string) $contribution->getPid();
-            },
-            $contributions
-        );
-    }
 }
