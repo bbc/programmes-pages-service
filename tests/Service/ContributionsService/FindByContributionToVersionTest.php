@@ -38,7 +38,7 @@ class FindByContributionToVersionTest extends AbstractContributionsServiceTest
 
         $contributions = $this->service()->findByContributionToVersion($this->createMock(Version::class));
 
-        $this->assertCount(count($fakeDbContributions), $fakeDbContributions);
+        $this->assertCount(count($fakeDbContributions), $contributions);
         $this->assertContainsOnly(Contribution::class, $contributions);
         $this->assertEquals($expectedPids, $this->extractPids($contributions));
     }

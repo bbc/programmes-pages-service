@@ -38,7 +38,7 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
 
         $contributions = $this->service()->findByContributionToSegment($this->createMock(Segment::class));
 
-        $this->assertCount(count($fakeDbContributions), $fakeDbContributions);
+        $this->assertCount(count($fakeDbContributions), $contributions);
         $this->assertContainsOnly(Contribution::class, $contributions);
         $this->assertEquals($expectedPids, $this->extractPids($contributions));
     }
