@@ -13,15 +13,9 @@ abstract class AbstractCoreEntitiesServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('CoreEntityRepository');
-        $this->setUpMapper('CoreEntityMapper', 'coreEntityFromDbData');
-    }
-
-    protected function coreEntityFromDbData(array $entity): CoreEntity
-    {
-        $mockCoreEntity = $this->createMock(CoreEntity::class);
-
-        $mockCoreEntity->method('getPid')->willReturn(new Pid($entity['pid']));
-        return $mockCoreEntity;
+        $this->setUpMapper('CoreEntityMapper', function ($dbCoreEntity) {
+            return $this->createConfiguredMock(CoreEntity::class, ['getPid' => new Pid($dbCoreEntity['pid'])]);
+        });
     }
 
     protected function service()
