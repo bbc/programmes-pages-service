@@ -31,11 +31,11 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
         return [
             'CASE: when passing a service' => [
                 999,
-                [new Service(999, new Sid('sid'), new Pid('b0000001'), 'name')]
+                [new Service(999, new Sid('sid'), new Pid('b0000001'), 'name')],
             ],
             'CASE: when no passing a service' => [
                 null,
-                []
+                [],
             ],
         ];
     }
@@ -46,7 +46,7 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
             ->method('findAllMostPlayedWithPlays')
             ->willReturn([
                     [0 => ['musicBrainzId' => '7746d775-9550-4360-b8d5-c37bd448ce01'], 'contributorPlayCount' => 10],
-                    [0 => ['musicBrainzId' => '9c9f1380-2516-4fc9-a3e6-f9f61941d090'], 'contributorPlayCount' => 5,]
+                    [0 => ['musicBrainzId' => '9c9f1380-2516-4fc9-a3e6-f9f61941d090'], 'contributorPlayCount' => 5],
             ]);
 
         $contributorsAndPlays = $this->service()->findAllMostPlayed(new DateTimeImmutable(), new DateTimeImmutable());
