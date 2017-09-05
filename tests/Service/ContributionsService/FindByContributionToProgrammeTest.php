@@ -2,49 +2,57 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributionsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+
 class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
 {
-    public function testFindByContributionToProgrammeDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testPagination($expectedLimit, $expectedOffset, array $paginationParams)
     {
-        $dbId = 1;
-        $programme = $this->mockEntity('Programme', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'programme', false, 300, 0)
-            ->willReturn($dbData);
+            ->with([$programme->getDbId()], 'programme', false, $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findByContributionToProgramme($programme);
-        $this->assertEquals($this->contributionsFromDbData($dbData), $result);
+        $this->service()->findByContributionToProgramme($programme, ...$paginationParams);
     }
 
-    public function testFindByContributionToProgrammeCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbId = 1;
-        $programme = $this->mockEntity('Programme', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findByContributionTo')
-            ->with([$dbId], 'programme', false, 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findByContributionToProgramme($programme, 5, 3);
-        $this->assertEquals($this->contributionsFromDbData($dbData), $result);
+        return [
+          'CASE: default' => [300, 0, []],
+          'CASE: custom' => [3, 12, [3, 5]],
+        ];
     }
 
-    public function testFindByContributionToProgrammeWithNonExistantDbId()
+    /**
+     * @dataProvider resultsDbProvider
+     */
+    public function testReturnResultsFound($dbResults)
     {
-        $dbId = 999;
-        $programme = $this->mockEntity('Programme', $dbId);
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
             ->method('findByContributionTo')
-            ->with([$dbId], 'programme', false, 5, 10)
-            ->willReturn([]);
+            ->willReturn($dbResults);
 
-        $result = $this->service()->findByContributionToProgramme($programme, 5, 3);
-        $this->assertEquals([], $result);
+        $contributions = $this->service()->findByContributionToProgramme($programme);
+
+        $this->assertCount(count($dbResults), $contributions);
+        $this->assertContainsOnly(Contribution::class, $contributions);
+    }
+
+    public function resultsDbProvider()
+    {
+        return [
+            'CASE: found results' => [
+                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]
+            ],
+            'CASE: not found results' => [[]],
+        ];
     }
 }

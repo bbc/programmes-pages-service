@@ -25,6 +25,9 @@ class ContributionsService extends AbstractService
         parent::__construct($repository, $mapper, $cache);
     }
 
+    /**
+     * @return Contribution[]
+     */
     public function findByContributionToProgramme(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
@@ -50,6 +53,9 @@ class ContributionsService extends AbstractService
         );
     }
 
+    /**
+     * @return Contribution[]
+     */
     public function findByContributionToVersion(
         Version $version,
         ?int $limit = self::DEFAULT_LIMIT,
@@ -75,6 +81,9 @@ class ContributionsService extends AbstractService
         );
     }
 
+    /**
+     * @return Contribution[]
+     */
     public function findByContributionToSegment(
         Segment $segment,
         ?int $limit = self::DEFAULT_LIMIT,
@@ -100,6 +109,9 @@ class ContributionsService extends AbstractService
         );
     }
 
+    /**
+     * @return Contribution[]
+     */
     public function findByContributionToSegments(
         array $segments,
         ?int $limit = self::DEFAULT_LIMIT,
