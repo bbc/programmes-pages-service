@@ -2,32 +2,40 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributorsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
+
 class FindByMusicBrainzIdTest extends AbstractContributorsServiceTest
 {
-    public function testFindByMusicBrainzId()
+    public function testFindByMusicBrainzIdInteraction()
     {
         $mbid = '7746d775-9550-4360-b8d5-c37bd448ce01';
-        $dbData = ['musicBrainzId' => $mbid];
 
         $this->mockRepository->expects($this->once())
-            ->method('findByMusicBrainzId')
-            ->with($mbid)
-            ->willReturn($dbData);
+             ->method('findByMusicBrainzId')
+             ->with($mbid);
 
-        $result = $this->service()->findByMusicBrainzId($mbid);
-        $this->assertEquals($this->contributorFromDbData($dbData), $result);
+        $this->service()->findByMusicBrainzId($mbid);
     }
 
-    public function testFindByMusicBrainzIdEmptyData()
+    public function testFindByMusicBrainzIdResultsFound()
     {
-        $mbid = '7746d775-9550-4360-b8d5-c37bd448ce01';
-
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
             ->method('findByMusicBrainzId')
-            ->with($mbid)
+            ->willReturn(['musicBrainzId' => '7746d775-9550-4360-b8d5-c37bd448ce01']);
+
+        $contributor = $this->service()->findByMusicBrainzId('7746d775-9550-4360-b8d5-c37bd448ce01');
+
+        $this->assertInstanceOf(Contributor::class, $contributor);
+    }
+
+    public function testFindByMusicBrainzIdNoResults()
+    {
+        $this->mockRepository
+            ->method('findByMusicBrainzId')
             ->willReturn(null);
 
-        $result = $this->service()->findByMusicBrainzId($mbid);
-        $this->assertNull($result);
+        $contributor = $this->service()->findByMusicBrainzId('7746d775-9550-4360-b8d5-c37bd448ce01');
+
+        $this->assertNull($contributor);
     }
 }
