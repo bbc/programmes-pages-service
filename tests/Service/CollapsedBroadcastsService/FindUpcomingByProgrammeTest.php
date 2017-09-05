@@ -2,111 +2,87 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use DateTimeImmutable;
 
 class FindUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
-    public function testFindUpcomingByProgrammeDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testPagination($expectedLimit, $expectedOffset, array $paginationParams)
     {
-        $dbAncestry = [1, 2, 3];
-        $programme = $this->mockEntity('Programme', 3);
-        $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
-
-        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
-        $serviceData = [
-            'a' => ['id' => 'bbc_one'],
-            'b' => ['id' => 'bbc_one_hd'],
-        ];
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
 
         $this->mockRepository->expects($this->once())
             ->method('findUpcomingByProgramme')
-            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 300, 0)
-            ->willReturn($broadcastData);
+            ->with($programme->getDbAncestryIds(), false, $this->lessThanOrEqual(new DateTimeImmutable()), $expectedLimit, $expectedOffset);
+
+        $this->service()->findUpcomingByProgramme($programme, ...$paginationParams);
+    }
+
+    public function paginationProvider(): array
+    {
+        return [
+            // expectedLimit, expectedOffset, [limit, page]
+            'CASE: default pagination' => [300, 0, []],
+            'CASE: custom pagination' => [5, 10, [5, 3]],
+        ];
+    }
+
+    public function testWebcastIsStripped()
+    {
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
+
+        $this->mockRepository
+            ->method('findUpcomingByProgramme')
+            ->willReturn([
+                 ['areWebcasts' => [0, '0'], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
+                 ['areWebcasts' => [1, '1'], 'serviceIds' => [333, 444], 'broadcastIds' => [3, 4, 56, 67]],
+                 ['areWebcasts' => [1, 0], 'serviceIds' => [555, 666], 'broadcastIds' => [5, 6, 100]],
+            ]);
 
         $this->mockServiceRepository->expects($this->once())
             ->method('findByIds')
-            ->with(['a', 'b'])
-            ->willReturn($serviceData);
+            ->with([111, 222, 666]);
 
-        $result = $this->service()->findUpcomingByProgramme($programme);
-        $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
+        $this->service()->findUpcomingByProgramme($programme);
     }
 
-    public function testFindUpcomingByProgrammeCustomPagination()
+    public function testCollapsedBroadcastedAreReturnedWithCorrespondingServices()
     {
-        $dbAncestry = [1, 2, 3];
-        $programme = $this->mockEntity('Programme', 3);
-        $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
+        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [997, 998, 999]]);
 
-        $broadcastData = [['areWebcasts' => ['0'], 'serviceIds' => ['a', 'b']]];
-        $serviceData = [
-            'a' => ['id' => 'bbc_one'],
-            'b' => ['id' => 'bbc_one_hd'],
-        ];
-
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
             ->method('findUpcomingByProgramme')
-            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
-            ->willReturn($broadcastData);
+            ->willReturn([
+                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
+             ]);
 
-        $this->mockServiceRepository->expects($this->once())
+        $this->mockServiceRepository
             ->method('findByIds')
-            ->with(['a', 'b'])
-            ->willReturn($serviceData);
+            ->willReturn([['id' => 111, 'sid' => 'bbc_one'], ['id' => 222, 'sid' => 'bbc_one_hd']]);
 
-        $result = $this->service()->findUpcomingByProgramme($programme, 5, 3);
-        $this->assertEquals($this->collapsedBroadcastsFromDbData($broadcastData), $result);
+        $collapsedBroadcasts = $this->service()->findUpcomingByProgramme($stubProgramme);
+
+        $this->assertCount(1, $collapsedBroadcasts);
+        $this->assertContainsOnly(CollapsedBroadcast::class, $collapsedBroadcasts);
+
+        $servicesInBroadcast = $collapsedBroadcasts[0]->getServices();
+        $this->assertCount(2, $servicesInBroadcast);
+        $this->assertSame('bbc_one', (string) $servicesInBroadcast[111]->getSid());
+        $this->assertSame('bbc_one_hd', (string) $servicesInBroadcast[222]->getSid());
     }
 
-    public function testCountUpcomingByProgramme()
+    public function testNoCollpasedBroadcastsFound()
     {
-        $dbAncestry = [1, 2, 3];
-        $programme = $this->mockEntity('Programme');
-        $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
-
-        $this->mockRepository->expects($this->once())
-            ->method('countUpcomingByProgramme')
-            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()))
-            ->willReturn(10);
+        $this->mockRepository->method('findUpcomingByProgramme')->willReturn([]);
 
         $this->mockServiceRepository->expects($this->never())
             ->method('findByIds');
 
-        $this->assertEquals(10, $this->service()->countUpcomingByProgramme($programme));
-    }
-
-    public function testFindUpcomingByProgrammeWithNonExistantPid()
-    {
-        $dbAncestry = [997, 998, 999];
-        $programme = $this->mockEntity('Programme');
-        $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
-
-        $this->mockRepository->expects($this->once())
-            ->method('findUpcomingByProgramme')
-            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()), 5, 10)
-            ->willReturn([]);
-
-        $this->mockServiceRepository->expects($this->never())
-            ->method('findByIds');
-
-        $result = $this->service()->findUpcomingByProgramme($programme, 5, 3);
-        $this->assertEquals([], $result);
-    }
-
-    public function testCountUpcomingByProgrammeWithNonExistantPid()
-    {
-        $dbAncestry = [997, 998, 999];
-        $programme = $this->mockEntity('Programme');
-        $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
-
-        $this->mockRepository->expects($this->once())
-            ->method('countUpcomingByProgramme')
-            ->with($dbAncestry, false, $this->lessThanOrEqual(new DateTimeImmutable()))
-            ->willReturn(0);
-
-        $this->mockServiceRepository->expects($this->never())
-            ->method('findByIds');
-
-        $this->assertEquals(0, $this->service()->countUpcomingByProgramme($programme));
+        $collapsedBroadcasts = $this->service()->findUpcomingByProgramme($this->createMock(Programme::class));
+        $this->assertEquals([], $collapsedBroadcasts);
     }
 }

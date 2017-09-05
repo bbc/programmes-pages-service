@@ -2,23 +2,36 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+
 class FindBroadcastYearsAndMonthsByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
-    public function testFindBroadcastYearsAndMonthsByProgramme()
+    public function testRepositoryReceivesParamsToFindBroadcasts()
     {
-        $dbAncestry = [1, 2, 3];
-        $programme = $this->mockEntity('Programme', 3);
-        $programme->method('getDbAncestryIds')->willReturn($dbAncestry);
+        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
 
-        $dbData = [
-            ['year' => '2016', 'month' => '8'],
-            ['year' => '2016', 'month' => '6'],
-            ['year' => '2015', 'month' => '12'],
-            ['year' => '2015', 'month' => '11'],
-            ['year' => '2015', 'month' => '6'],
-            ['year' => '2015', 'month' => '5'],
-            ['year' => '2014', 'month' => '6'],
-        ];
+        $this->mockRepository->expects($this->once())
+            ->method('FindAllYearsAndMonthsByProgramme')
+            ->with($stubProgramme->getDbAncestryIds(), false);
+
+        $this->service()->findBroadcastYearsAndMonthsByProgramme($stubProgramme);
+    }
+
+    public function testReturnDatesForCollapsedBroadcastHasProperStructure()
+    {
+        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
+
+        $this->mockRepository
+            ->method('FindAllYearsAndMonthsByProgramme')
+            ->willReturn([
+                 ['year' => '2016', 'month' => '8'],
+                 ['year' => '2016', 'month' => '6'],
+                 ['year' => '2015', 'month' => '12'],
+                 ['year' => '2015', 'month' => '11'],
+                 ['year' => '2015', 'month' => '6'],
+                 ['year' => '2015', 'month' => '5'],
+                 ['year' => '2014', 'month' => '6'],
+             ]);
 
         $expectedResult = [
             2016 => [8, 6],
@@ -26,12 +39,9 @@ class FindBroadcastYearsAndMonthsByProgrammeTest extends AbstractCollapsedBroadc
             2014 => [6],
         ];
 
-        $this->mockRepository->expects($this->once())
-            ->method('FindAllYearsAndMonthsByProgramme')
-            ->with($dbAncestry, false)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findBroadcastYearsAndMonthsByProgramme($programme);
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame(
+            $expectedResult,
+            $this->service()->findBroadcastYearsAndMonthsByProgramme($stubProgramme)
+        );
     }
 }
