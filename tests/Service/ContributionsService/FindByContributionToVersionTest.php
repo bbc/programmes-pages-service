@@ -10,7 +10,7 @@ class FindByContributionToVersionTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testPagination2()
+    public function testPagination()
     {
         $version = $this->createConfiguredMock(Version::class, ['getDbId' => 1]);
 
@@ -32,7 +32,7 @@ class FindByContributionToVersionTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider resultsDbProvider
      */
-    public function testFindByContributionToVersionCustomPagination(array $expectedPids, array $fakeDbContributions)
+    public function testResults(array $expectedPids, array $fakeDbContributions)
     {
         $this->mockRepository->method('findByContributionTo')->willReturn($fakeDbContributions);
 

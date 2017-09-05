@@ -32,7 +32,7 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider resultsDbProvider
      */
-    public function testFindByContributionToSegmentCustomPagination(array $expectedPids, array $fakeDbContributions)
+    public function testsResults(array $expectedPids, array $fakeDbContributions)
     {
         $this->mockRepository->method('findByContributionTo')->willReturn($fakeDbContributions);
 
