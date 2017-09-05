@@ -27,7 +27,7 @@ class FindPublishedNetworksByTypeTest extends AbstractNetworksServiceTest
         ];
     }
 
-    public function testFindPublishedNetworksByTypeDefaultPagination()
+    public function testFoundResults()
     {
         $this->mockRepository
             ->method('findPublishedNetworksByType')
@@ -38,5 +38,16 @@ class FindPublishedNetworksByTypeTest extends AbstractNetworksServiceTest
         $this->assertContainsOnly(Network::class, $publishedNetworks);
         $this->assertEquals('bbc_one', (string) $publishedNetworks[0]->getNid());
         $this->assertEquals('bbc_two', (string) $publishedNetworks[1]->getNid());
+    }
+
+    public function testNoFoundResults()
+    {
+        $this->mockRepository
+            ->method('findPublishedNetworksByType')
+            ->willReturn([]);
+
+        $publishedNetworks = $this->service()->findPublishedNetworksByType(['TV']);
+
+        $this->assertEquals([], $publishedNetworks);
     }
 }
