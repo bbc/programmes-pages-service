@@ -42,7 +42,7 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
         ];
     }
 
-    public function testResultsFound()
+    public function testResultsFound33()
     {
         $this->mockRepository
             ->method('findAllMostPlayedWithPlays')
@@ -53,11 +53,15 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
 
         $contributorsAndPlays = $this->service()->findAllMostPlayed(new DateTimeImmutable(), new DateTimeImmutable());
 
+        // test structure
         $this->assertCount(2, $contributorsAndPlays);
         $this->assertContainsOnly(stdClass::class, $contributorsAndPlays);
         $this->assertObjectHasAttribute('contributor', $contributorsAndPlays[0]);
         $this->assertObjectHasAttribute('plays', $contributorsAndPlays[0]);
         $this->assertInstanceOf(Contributor::class, $contributorsAndPlays[0]->contributor);
+        // test data content, order, ...
+        $this->assertEquals('7746d775-9550-4360-b8d5-c37bd448ce01', $contributorsAndPlays[0]->contributor->getMusicBrainzId());
+        $this->assertEquals('9c9f1380-2516-4fc9-a3e6-f9f61941d090', $contributorsAndPlays[1]->contributor->getMusicBrainzId());
     }
 
     public function testResultsEmpty()

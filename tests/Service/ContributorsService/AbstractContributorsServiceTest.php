@@ -13,7 +13,7 @@ abstract class AbstractContributorsServiceTest extends AbstractServiceTest
         $this->setUpCache();
         $this->setUpRepo('ContributorRepository');
         $this->setUpMapper('ContributorMapper', function ($dbContributor) {
-            return $this->createMock(Contributor::class);
+            return $this->createConfiguredMock(Contributor::class, ['getMusicBrainzId' => $dbContributor['musicBrainzId']]);
         });
     }
 
