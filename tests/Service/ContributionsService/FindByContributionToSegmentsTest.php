@@ -36,7 +36,7 @@ class FindByContributionToSegmentsTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider resultsDbProvider
      */
-    public function testResultsFromService($fakeDbContributions)
+    public function testResultsFromService(array $expectedPids, array $fakeDbContributions)
     {
         $segments = [
             $this->createMock(Segment::class),
@@ -49,15 +49,17 @@ class FindByContributionToSegmentsTest extends AbstractContributionsServiceTest
 
         $this->assertCount(count($fakeDbContributions), $contributions);
         $this->assertContainsOnly(Contribution::class, $contributions);
+        $this->assertEquals($expectedPids, $this->extractPids($contributions));
     }
 
     public function resultsDbProvider(): array
     {
         return [
             'CASE: found results' => [
+                ['b00swyx1', 'b010t150'],
                 [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]
             ],
-            'CASE: not found results' => [[]],
+            'CASE: not found results' => [[], []],
         ];
     }
 }

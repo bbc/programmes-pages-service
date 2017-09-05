@@ -32,7 +32,7 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider resultsDbProvider
      */
-    public function testReturnResultsFound($fakeDbContributions)
+    public function testReturnResultsFound(array $expectedPids, array $fakeDbContributions)
     {
         $this->mockRepository->method('findByContributionTo')->willReturn($fakeDbContributions);
 
@@ -40,15 +40,17 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
 
         $this->assertCount(count($fakeDbContributions), $contributions);
         $this->assertContainsOnly(Contribution::class, $contributions);
+        $this->assertEquals($expectedPids, $this->extractPids($contributions));
     }
 
     public function resultsDbProvider(): array
     {
         return [
             'CASE: found results' => [
+                ['b00swyx1', 'b010t150'],
                 [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]
             ],
-            'CASE: not found results' => [[]],
+            'CASE: not found results' => [[], []],
         ];
     }
 }

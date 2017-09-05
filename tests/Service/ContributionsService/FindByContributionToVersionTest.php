@@ -2,49 +2,55 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributionsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
+use BBC\ProgrammesPagesService\Domain\Entity\Version;
+
 class FindByContributionToVersionTest extends AbstractContributionsServiceTest
 {
-    public function testFindByContributionToVersionDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testPagination2()
     {
-        $dbId = 1;
-        $version = $this->mockEntity('Version', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
+        $version = $this->createConfiguredMock(Version::class, ['getDbId' => 1]);
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with([$dbId], 'version', false, 300, 0)
-            ->willReturn($dbData);
+            ->with([$version->getDbId()], 'version', false, 300, 0);
 
-        $result = $this->service()->findByContributionToVersion($version);
-        $this->assertEquals($this->contributionsFromDbData($dbData), $result);
+        $this->service()->findByContributionToVersion($version);
     }
 
-    public function testFindByContributionToVersionCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbId = 1;
-        $version = $this->mockEntity('Version', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findByContributionTo')
-            ->with([$dbId], 'version', false, 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findByContributionToVersion($version, 5, 3);
-        $this->assertEquals($this->contributionsFromDbData($dbData), $result);
+        return [
+            'CASE: default' => [300, 0, []],
+            'CASE: custom' => [3, 12, [3, 5]],
+        ];
     }
 
-    public function testFindByContributionToVersionWithNonExistantDbId()
+    /**
+     * @dataProvider resultsDbProvider
+     */
+    public function testFindByContributionToVersionCustomPagination(array $expectedPids, array $fakeDbContributions)
     {
-        $dbId = 999;
-        $version = $this->mockEntity('Version', $dbId);
+        $this->mockRepository->method('findByContributionTo')->willReturn($fakeDbContributions);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByContributionTo')
-            ->with([$dbId], 'version', false, 5, 10)
-            ->willReturn([]);
+        $contributions = $this->service()->findByContributionToVersion($this->createMock(Version::class));
 
-        $result = $this->service()->findByContributionToVersion($version, 5, 3);
-        $this->assertEquals([], $result);
+        $this->assertCount(count($fakeDbContributions), $fakeDbContributions);
+        $this->assertContainsOnly(Contribution::class, $contributions);
+        $this->assertEquals($expectedPids, $this->extractPids($contributions));
+    }
+
+    public function resultsDbProvider(): array
+    {
+        return [
+            'CASE: found results' => [
+                ['b00swyx1', 'b010t150'],
+                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']]
+            ],
+            'CASE: not found results' => [[], []],
+        ];
     }
 }
