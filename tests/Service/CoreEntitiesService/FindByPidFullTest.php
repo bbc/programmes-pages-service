@@ -30,7 +30,7 @@ class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
     }
 
     /**
-     * @dataProvider entityTypeProvider
+     * @dataProvider entityTypeSelectorProvider
      */
     public function testCoreEntityCanBeReceived(string $entityTypeProvided)
     {
@@ -44,7 +44,7 @@ class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
         $this->assertEquals('b010t19z', (string) $coreEntity->getPid());
     }
 
-    public function entityTypeProvider(): array
+    public function entityTypeSelectorProvider(): array
     {
         return [
             'CASE: CoreEntity' => ['CoreEntity'],
