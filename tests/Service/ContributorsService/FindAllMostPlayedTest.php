@@ -31,11 +31,11 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
     public function serviceProvider(): array
     {
         return [
-            'CASE: when passing a service' => [
+            'CASE: expectations when passing a service' => [
                 999,
                 [new Service(999, new Sid('sid'), new Pid('b0000001'), 'name')],
             ],
-            'CASE: when no passing a service' => [
+            'CASE: expectations when no passing a service' => [
                 null,
                 [],
             ],
