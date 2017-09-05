@@ -10,7 +10,7 @@ class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
     /**
      * @dataProvider entityTypeParamProvider
      */
-    public function testFindByPidFullTryToFetchRightData($expectedEntityType, array $paramEntityType)
+    public function testComunicationWithDbInterface($expectedEntityType, array $paramEntityType)
     {
         $pid = new Pid('b010t19z');
 
@@ -32,7 +32,7 @@ class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
     /**
      * @dataProvider entityTypeProvider
      */
-    public function testResultsForProvidedTypesAreReceived(string $entityTypeProvided)
+    public function testCoreEntityCanBeReceived(string $entityTypeProvided)
     {
         $this->mockRepository->method('findByPidFull')->willReturn(['pid' => 'b010t19z']);
 
@@ -52,7 +52,7 @@ class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
         ];
     }
 
-    public function testFindByPidFullEmptyData()
+    public function testNullValueIsReceivedWhenNoResults()
     {
         $this->mockRepository->method('findByPidFull')->willReturn(null);
 
