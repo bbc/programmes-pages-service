@@ -32,15 +32,15 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider resultsDbProvider
      */
-    public function testReturnResultsFound($dbResults)
+    public function testReturnResultsFound($fakeDbResults)
     {
         $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 
-        $this->mockRepository->method('findByContributionTo')->willReturn($dbResults);
+        $this->mockRepository->method('findByContributionTo')->willReturn($fakeDbResults);
 
         $contributions = $this->service()->findByContributionToProgramme($programme);
 
-        $this->assertCount(count($dbResults), $contributions);
+        $this->assertCount(count($fakeDbResults), $contributions);
         $this->assertContainsOnly(Contribution::class, $contributions);
     }
 
