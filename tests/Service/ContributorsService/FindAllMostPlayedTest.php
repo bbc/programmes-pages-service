@@ -14,7 +14,7 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
     /**
      * @param $expectedDbId int|null
      *
-     * @dataProvider serviceProvider
+     * @dataProvider serviceSelectorProvider
      */
     public function testInteractionWithRepository($expectedDbId, array $service)
     {
@@ -28,7 +28,7 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
         $this->service()->findAllMostPlayed($from, $to, ...$service);
     }
 
-    public function serviceProvider(): array
+    public function serviceSelectorProvider(): array
     {
         return [
             'CASE: expectations when passing a service' => [
@@ -42,7 +42,7 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
         ];
     }
 
-    public function testResultsFound33()
+    public function testContributorsAreReceivedWithCountOfPlays()
     {
         $this->mockRepository
             ->method('findAllMostPlayedWithPlays')
@@ -64,7 +64,7 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
         $this->assertEquals('9c9f1380-2516-4fc9-a3e6-f9f61941d090', $contributorsAndPlays[1]->contributor->getMusicBrainzId());
     }
 
-    public function testResultsEmpty()
+    public function testResultsAreAnEmptyArrayWhenNotFound()
     {
         $this->mockRepository->method('findAllMostPlayedWithPlays')->willReturn([]);
 
