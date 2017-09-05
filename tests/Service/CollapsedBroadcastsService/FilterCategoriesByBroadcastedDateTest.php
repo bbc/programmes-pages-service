@@ -1,6 +1,7 @@
 <?php
 namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use DateTimeImmutable;
 
@@ -67,7 +68,6 @@ class FilterCategoriesByBroadcastedDateTest extends AbstractCollapsedBroadcastSe
 
     /**
      * @param Category[] $categories
-     * @return int[]
      */
     protected function extractDbAncestryIds(array $categories): array
     {
