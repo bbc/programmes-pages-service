@@ -2,31 +2,41 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\NetworksService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Network;
+
 class FindPublishedNetworksByTypeTest extends AbstractNetworksServiceTest
 {
-    public function testFindPublishedNetworksByTypeDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testPagination(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
-        $dbData = [['nid' => 'bbc_one'], ['nid' => 'bbc_two']];
-
         $this->mockRepository->expects($this->once())
-            ->method('findPublishedNetworksByType')
-            ->with(['TV'], 300, 0)
-            ->willReturn($dbData);
+             ->method('findPublishedNetworksByType')
+             ->with(['TV'], $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findPublishedNetworksByType(['TV']);
-        $this->assertEquals($this->networksFromDbData($dbData), $result);
+        $this->service()->findPublishedNetworksByType(['TV'], ...$paramsPagination);
     }
 
-    public function testFindPublishedNetworksByTypeCustomPagination()
+    public function paginationProvider()
     {
-        $dbData = [['nid' => 'bbc_one'], ['nid' => 'bbc_two']];
+        return [
+            // [expectedLimit, expectedOffset, [limit, page]]
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [3, 12, [3, 5]],
+        ];
+    }
 
-        $this->mockRepository->expects($this->once())
+    public function testFindPublishedNetworksByTypeDefaultPagination()
+    {
+        $this->mockRepository
             ->method('findPublishedNetworksByType')
-            ->with(['TV'], 5, 10)
-            ->willReturn($dbData);
+            ->willReturn([['nid' => 'bbc_one'], ['nid' => 'bbc_two']]);
 
-        $result = $this->service()->findPublishedNetworksByType(['TV'], 5, 3);
-        $this->assertEquals($this->networksFromDbData($dbData), $result);
+        $publishedNetworks = $this->service()->findPublishedNetworksByType(['TV']);
+
+        $this->assertContainsOnly(Network::class, $publishedNetworks);
+        $this->assertEquals('bbc_one', (string) $publishedNetworks[0]->getNid());
+        $this->assertEquals('bbc_two', (string) $publishedNetworks[1]->getNid());
     }
 }

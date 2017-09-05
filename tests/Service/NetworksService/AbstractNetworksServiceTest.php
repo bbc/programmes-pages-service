@@ -2,8 +2,10 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\NetworksService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Service\NetworksService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 
 abstract class AbstractNetworksServiceTest extends AbstractServiceTest
 {
@@ -11,18 +13,9 @@ abstract class AbstractNetworksServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('NetworkRepository');
-        $this->setUpMapper('NetworkMapper', 'networkFromDbData');
-    }
-
-    protected function networksFromDbData(array $entities)
-    {
-        return array_map([$this, 'networkFromDbData'], $entities);
-    }
-
-    protected function networkFromDbData(array $entity)
-    {
-        $mockNetwork = $this->createMock(self::ENTITY_NS . 'Network');
-        return $mockNetwork;
+        $this->setUpMapper('NetworkMapper', function($dbNetwork) {
+            return $this->createConfiguredMock(Network::class, ['getNid' => new Nid($dbNetwork['nid'])]);
+        });
     }
 
     protected function service()
