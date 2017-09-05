@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributorsService;
 
-use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Service\ContributorsService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -12,19 +12,10 @@ abstract class AbstractContributorsServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('ContributorRepository');
-        $this->setUpMapper('ContributorMapper', 'contributorFromDbData');
-    }
 
-    protected function contributorFromDbData(array $entity)
-    {
-        $mockContributor = $this->createMock(self::ENTITY_NS . 'Contributor');
-        if (isset($entity['pid'])) {
-            $mockContributor->method('getPid')->willReturn(new Pid($entity['pid']));
-        }
-        if (isset($entity['musicBrainzId'])) {
-            $mockContributor->method('getMusicBrainzId')->willReturn($entity['musicBrainzId']);
-        }
-        return $mockContributor;
+        $this->setUpMapper('ContributorMapper', function ($dbContributor) {
+            return $this->createMock(Contributor::class);
+        });
     }
 
     protected function service()
