@@ -16,6 +16,5 @@ parameters:
         - '#PHPUnit_Framework_MockObject_MockObject given.#'
         - '#but returns PHPUnit_Framework_MockObject_MockObject.#'
         - '#Call to an undefined method PHPUnit_Framework_MockObject_MockObject::#'
-        - '#Parameter \#1 \$entity of method Tests\\BBC\\ProgrammesPagesService\\Service\\ContributorsService\\AbstractContributorsServiceTest::contributorFromDbData\(\) expects mixed\[\], string\[\]\|int given.#'
         - '#Calling method setTimezone\(\) on possibly null value of type Cake\\Chronos\\Chronos\|null.#'
         - '#Property Tests\\BBC\\ProgrammesPagesService\\Data\\ProgrammesDb\\Type\\UtcDateTimeTypeTest::\$type \(BBC\\ProgrammesPagesService\\Data\\ProgrammesDb\\Type\\UtcDateTimeType\) does not accept Doctrine\\DBAL\\Types\\Type.#'
