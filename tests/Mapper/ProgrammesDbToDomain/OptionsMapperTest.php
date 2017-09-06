@@ -118,12 +118,12 @@ class OptionsMapperTest extends BaseMapperTestCase
     {
         $options = [
             'brand_2016_layout' => null,
-            'brand_2016_layout_use_minimap' => false
+            'brand_2016_layout_use_minimap' => false,
         ];
 
         $parentOptions = [
             'brand_2016_layout' => true,
-            'brand_2016_layout_use_minimap' => true
+            'brand_2016_layout_use_minimap' => true,
         ];
 
         $expectedOptions = [
