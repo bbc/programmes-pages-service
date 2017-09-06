@@ -13,34 +13,13 @@ abstract class AbstractPromotionServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('PromotionRepository');
-        // override getDomainModel() in mapper with getDomainModelFromDbData()
-        $this->setUpMapper('PromotionMapper', 'getDomainModelFromDbData');
-    }
-
-    /**
-     * @param mixed[] $dbPromotion
-     */
-    protected function getDomainModelFromDbData(array $dbPromotion): Promotion
-    {
-        $pid = new Pid($dbPromotion['pid']);
-
-        $mockPromotion = $this->createMock(self::ENTITY_NS . 'Promotion');
-        $mockPromotion->method('getPid')->willReturn($pid);
-        if (isset($dbPromotion['cascadesToDescendants'])) {
-            $mockPromotion->method('isSuperPromotion')
-              ->will($this->returnValue($dbPromotion['cascadesToDescendants']));
-        }
-
-        return $mockPromotion;
-    }
-
-    /**
-     * @param array[] $dbPromotions
-     * @return Promotion[]
-     */
-    protected function getDomainModelsFromDbData(array $dbPromotions): array
-    {
-        return array_map([$this, 'getDomainModelFromDbData'], $dbPromotions);
+        // override getDomainModel() in mapper
+        $this->setUpMapper('PromotionMapper', function($dbPromotion) {
+            return $this->createConfiguredMock(Promotion::class, [
+                'getPid' => new Pid($dbPromotion['pid']),
+                'isSuperPromotion' => $dbPromotion['cascadesToDescendants'] ?? false
+            ]);
+        });
     }
 
     protected function service(): PromotionsService

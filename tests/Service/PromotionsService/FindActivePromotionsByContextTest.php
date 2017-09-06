@@ -26,10 +26,14 @@ class FindActivePromotionsByContextTest extends AbstractPromotionServiceTest
      */
     public function testProtocolWithDatabase($expectedLimit, $expectedOffset, array $paramsPagination)
     {
-        $this->mockRepository
-            ->expects($this->once())
+        $this->mockRepository->expects($this->once())
             ->method('findActivePromotionsByContext')
-            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), $expectedLimit, $expectedOffset);
+            ->with(
+                $this->context->getDbAncestryIds(),
+                $this->isInstanceOf(DateTimeImmutable::class),
+                $expectedLimit,
+                $expectedOffset
+            );
 
         $this->service()->findActivePromotionsByContext($this->context, ...$paramsPagination);
     }
