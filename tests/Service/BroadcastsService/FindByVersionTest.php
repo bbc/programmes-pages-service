@@ -45,7 +45,6 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
         foreach ($expectedPids as $i => $expectedPid) {
             $this->assertEquals($expectedPid, $broadcasts[$i]->getPid());
         }
-
     }
 
     public function dbBroadcastsProvider(): array
