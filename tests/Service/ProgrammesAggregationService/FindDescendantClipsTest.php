@@ -5,23 +5,18 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 
-/**
- * @covers BBC\ProgrammesPagesService\Service\ProgrammesAggregationService::findDescendantClips
- */
 class FindDescendantClipsTest extends AbstractProgrammesAggregationTest
 {
     /**
      * @dataProvider paginationProvider
      */
-    public function testProtocolWithRepository(int $expectedLimit, int $expectedOffset, array $paramsPagination)
+    public function testProtocolWithRepositoryCollaborator(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
-        $dbAncestryIds = [11, 12];
+        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [11, 12]]);
 
         $this->mockRepository->expects($this->once())
             ->method('findStreamableDescendantsByType')
-            ->with($dbAncestryIds, 'Clip', $expectedLimit, $expectedOffset);
-
-        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [11, 12]]);
+            ->with($stubProgramme->getDbAncestryIds(), 'Clip', $expectedLimit, $expectedOffset);
 
         $this->service()->findDescendantClips($stubProgramme, ...$paramsPagination);
     }
@@ -38,7 +33,7 @@ class FindDescendantClipsTest extends AbstractProgrammesAggregationTest
     /**
      * @dataProvider dbClipsProvider
      */
-    public function testResultsaaa($expectedClipsPids, $dbClipsProvided)
+    public function testResultsaaa(array $expectedClipsPids, array $dbClipsProvided)
     {
         $this->mockRepository->method('findStreamableDescendantsByType')->willReturn($dbClipsProvided);
 
