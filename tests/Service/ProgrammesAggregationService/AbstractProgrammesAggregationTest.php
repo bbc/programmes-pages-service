@@ -15,6 +15,7 @@ abstract class AbstractProgrammesAggregationTest extends AbstractServiceTest
         $this->setUpCache();
         $this->setUpRepo('CoreEntityRepository');
         $this->setUpMapper('CoreEntityMapper', function ($dbEntity) {
+            $class = '';
             if ($dbEntity['type'] === 'clip') {
                 $class = Clip::class;
             }
