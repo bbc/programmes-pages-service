@@ -51,11 +51,11 @@ class FindByRelatedToProgrammeTest extends AbstractRelatedLinksServiceTest
     public function dbRelatedlinksProvider(): array
     {
         return [
-            'CASE: ' => [
+            'CASE: relatedlinks found results' => [
                 [],
                 [['title' => 'RelatedLink1'], ['title' => 'RelatedLink2']],
             ],
-            'CASE: ' => [
+            'CASE: relatedlinks not results found' => [
                 [],
                 [],
             ],
