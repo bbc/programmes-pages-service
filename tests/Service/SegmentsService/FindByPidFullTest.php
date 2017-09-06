@@ -18,7 +18,7 @@ class FindByPidFullTest extends AbstractSegmentsServiceTest
         $this->service()->findByPidFull($pid);
     }
 
-    public function testResultsFoundaaa()
+    public function testOneSegmentIsReceivedWhenResultsAreFound()
     {
         $this->mockRepository->method('findByPidFull')->willReturn(['pid' => 's1234567']);
 
@@ -29,7 +29,7 @@ class FindByPidFullTest extends AbstractSegmentsServiceTest
     }
 
 
-    public function testFindByPidFullEmptyData()
+    public function testNullResultsWhenNoResultsFound()
     {
         $this->mockRepository->method('findByPidFull')->willReturn(null);
 
