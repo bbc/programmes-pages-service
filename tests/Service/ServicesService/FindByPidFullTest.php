@@ -32,8 +32,8 @@ class FindByPidFullTest extends AbstractServicesServiceTest
     {
         $this->mockRepository->method('findByPidFull')->willReturn(null);
 
-        $result = $this->service()->findByPidFull($this->createMock(Pid::class));
+        $service = $this->service()->findByPidFull($this->createMock(Pid::class));
 
-        $this->assertNull(null, $result);
+        $this->assertNull(null, $service);
     }
 }
