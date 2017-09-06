@@ -33,11 +33,11 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
     }
 
     /**
-     * @dataProvider repositoryResultsProvider
+     * @dataProvider dbBroadcastsProvider
      */
-    public function testFindByServiceAndDateRangeResults($expectedPids, $stubRepositoryResults)
+    public function testFindByServiceAndDateRangeResults($expectedPids, $dbBroadcastsProvided)
     {
-        $this->mockRepository->method('findAllByServiceAndDateRange')->willReturn($stubRepositoryResults);
+        $this->mockRepository->method('findAllByServiceAndDateRange')->willReturn($dbBroadcastsProvided);
 
         $broadcasts = $this->service()->findByServiceAndDateRange(
             $this->createMock(Sid::class),
@@ -46,10 +46,13 @@ class FindByServiceAndDateRangeTest extends AbstractBroadcastsServiceTest
         );
 
         $this->assertContainsOnly(Broadcast::class, $broadcasts);
-        $this->assertSame($expectedPids, $this->extractPids($broadcasts));
+        $this->assertCount(count($dbBroadcastsProvided), $broadcasts);
+        foreach ($expectedPids as $i => $expectedPid) {
+            $this->assertEquals($expectedPid, $broadcasts[$i]->getPid());
+        }
     }
 
-    public function repositoryResultsProvider(): array
+    public function dbBroadcastsProvider(): array
     {
         return [
             // [expectations], [results]

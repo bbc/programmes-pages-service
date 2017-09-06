@@ -60,18 +60,4 @@ abstract class AbstractServiceTest extends TestCase
 
         return $entity;
     }
-
-    /**
-     * @param array $entities any model domain with getPid() function
-     * @return string[]
-     */
-    protected function extractPids(array $entities): array
-    {
-        return array_map(
-            function ($entity) {
-                return (string) $entity->getPid();
-            },
-            $entities
-        );
-    }
 }
