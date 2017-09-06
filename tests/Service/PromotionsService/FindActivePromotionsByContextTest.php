@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\PromotionsService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
+use BBC\ProgrammesPagesService\Domain\Entity\Promotion;
 use DateTimeImmutable;
 
 class FindActivePromotionsByContextTest extends AbstractPromotionServiceTest
@@ -14,56 +15,61 @@ class FindActivePromotionsByContextTest extends AbstractPromotionServiceTest
     {
         parent::setUp();
 
-        $dbId = 1;
-        $context = $this->mockEntity('CoreEntity', $dbId);
-        $context->method('getDbAncestryIds')->willReturn([$dbId]);
-
-        $this->context = $context;
+        $this->context = $this->createConfiguredMock(CoreEntity::class, [
+            'getDbId' => 1,
+            'getDbAncestryIds' => [1]
+        ]);
     }
 
-    public function testFindActivePromotionsByEntityDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testProtocolWithDatabase($expectedLimit, $expectedOffset, array $paramsPagination)
     {
         $this->mockRepository
             ->expects($this->once())
             ->method('findActivePromotionsByContext')
-            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), 300, 0);
+            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), $expectedLimit, $expectedOffset);
 
-        $this->service()->findActivePromotionsByContext($this->context);
+        $this->service()->findActivePromotionsByContext($this->context, ...$paramsPagination);
     }
 
-    public function testFindActivePromotionsByEntityCustomPagination()
+    public function paginationProvider(): array
     {
-        $this->mockRepository
-            ->expects($this->once())
-            ->method('findActivePromotionsByContext')
-            ->with($this->context->getDbAncestryIds(), $this->isInstanceOf(DateTimeImmutable::class), 30, 60);
-
-        $this->service()->findActivePromotionsByContext($this->context, 30, 3);
+        return [
+            // [expectedLimit, expectedOffset, [limit, page]]
+            'CASE: default pagination' => [300, 0, []],
+            'CASE: custom pagination' => [5, 10, [5, 3]],
+        ];
     }
 
-    public function testFindActivePromotionsByEntityNonExistantDbId()
+    /**
+     * @dataProvider dbPromotionsProvider
+     */
+    public function testResults22(array $expectedPids, $dbPromotionsResults)
     {
-        $dbData = [];
-
-        $this->mockRepository
-            ->method('findActivePromotionsByContext')
-            ->willReturn($dbData);
+        $this->mockRepository->method('findActivePromotionsByContext')->willReturn($dbPromotionsResults);
 
         $promotions = $this->service()->findActivePromotionsByContext($this->context);
 
-        $this->assertEquals([], $promotions);
+        $this->assertCount(count($expectedPids), $dbPromotionsResults);
+        $this->assertContainsOnly(Promotion::class, $promotions);
+        foreach ($expectedPids as $i => $expectedPid) {
+            $this->assertEquals($expectedPid, $promotions[$i]->getPid());
+        }
     }
 
-    public function testFindActivePromotionsByEntityReturnCorrectData()
+    public function dbPromotionsProvider()
     {
-        $dbData = [['pid' => 'p000000h']];
-
-        $this->mockRepository
-            ->method('findActivePromotionsByContext')
-            ->willReturn($dbData);
-
-        $promotions = $this->service()->findActivePromotionsByContext($this->context);
-
-        $this->assertEquals($this->getDomainModelsFromDbData($dbData), $promotions);
+        return [
+            'CASE: results found' => [
+                ['p000000h'],
+                [['pid' => 'p000000h']],
+            ],
+            'CASE: results no found' => [
+                [],
+                [],
+            ],
+        ];
     }
 }
