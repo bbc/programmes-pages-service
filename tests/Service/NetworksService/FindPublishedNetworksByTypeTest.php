@@ -9,7 +9,7 @@ class FindPublishedNetworksByTypeTest extends AbstractNetworksServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testPagination(int $expectedLimit, int $expectedOffset, array $paramsPagination)
+    public function testProtocolWithDatabaseInterface(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
         $this->mockRepository->expects($this->once())
              ->method('findPublishedNetworksByType')

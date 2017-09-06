@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Network;
 
 class FindByUrlKeyWithDefaultServiceTest extends AbstractNetworksServiceTest
 {
-    public function testFindInteractionWitDbInterface()
+    public function testProtocolWithDatabaseInterface()
     {
         $urlKey = 'radio2';
 
