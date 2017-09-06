@@ -46,7 +46,7 @@ class FindActivePromotionsByContextTest extends AbstractPromotionServiceTest
     /**
      * @dataProvider dbPromotionsProvider
      */
-    public function testResults22(array $expectedPids, $dbPromotionsResults)
+    public function testResultsCanBeFetchedAndMapped(array $expectedPids, $dbPromotionsResults)
     {
         $this->mockRepository->method('findActivePromotionsByContext')->willReturn($dbPromotionsResults);
 
