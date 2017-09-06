@@ -36,7 +36,7 @@ class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
     {
         $this->mockRepository->method('findByPidFull')->willReturn(['pid' => 'b010t19z']);
 
-        $coreEntity = $this->service()->findByPidFull(new Pid('b010t19z'), $entityTypeProvided);
+        $coreEntity = $this->service()->findByPidFull($this->createMock(Pid::class), $entityTypeProvided);
 
         // we cannot be sure that the type returned is a coreEntity or ProgrammeContainer, that is
         // responssibility of the CoreEntitymapper and Repository. But we can test the PID of it
@@ -56,7 +56,7 @@ class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
     {
         $this->mockRepository->method('findByPidFull')->willReturn(null);
 
-        $coreEntity = $this->service()->findByPidFull(new Pid('b010t19z'));
+        $coreEntity = $this->service()->findByPidFull($this->createMock(Pid::class));
 
         $this->assertNull($coreEntity);
     }
