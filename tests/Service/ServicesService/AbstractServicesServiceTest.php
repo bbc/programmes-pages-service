@@ -11,21 +11,9 @@ abstract class AbstractServicesServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('ServiceRepository');
-        $this->setUpMapper('ServiceMapper', 'serviceFromDbData');
-    }
-
-    protected function servicesFromDbData(array $entities)
-    {
-        return array_map([$this, 'serviceFromDbData'], $entities);
-    }
-
-    protected function serviceFromDbData($entity)
-    {
-        $mockService = $this->createMock(self::ENTITY_NS . 'Service');
-        $mockService->method('getPid')->willReturn(
-            $entity['pid']
-        );
-        return $mockService;
+        $this->setUpMapper('ServiceMapper', function ($dbService) {
+            return $this->createConfiguredMock(Service::class, ['getPid' => $dbService['pid']]);
+        });
     }
 
     protected function service()

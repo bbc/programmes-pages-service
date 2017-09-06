@@ -40,6 +40,9 @@ class ServicesService extends AbstractService
         );
     }
 
+    /**
+     * @return Service[]
+     */
     public function getAllInNetworks($ttl = CacheInterface::NORMAL): array
     {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $ttl);
@@ -54,6 +57,9 @@ class ServicesService extends AbstractService
         );
     }
 
+    /**
+     * @return Service[]
+     */
     public function findAllInNetworkActiveOn(Nid $networkId, DateTimeImmutable $date, $ttl = CacheInterface::NORMAL): array
     {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $networkId, $date->getTimestamp(), $ttl);
