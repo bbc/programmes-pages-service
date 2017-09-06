@@ -10,7 +10,7 @@ class FindByContributionToProgrammeTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testPagination(int $expectedLimit, int $expectedOffset, array $paginationParams)
+    public function testProtocolWithDatabase(int $expectedLimit, int $expectedOffset, array $paginationParams)
     {
         $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 

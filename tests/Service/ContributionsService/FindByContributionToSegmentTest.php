@@ -10,7 +10,7 @@ class FindByContributionToSegmentTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testPagination(int $expectedLimit, int $expectedOffset, array $paginationParams)
+    public function testProtocolWithDatabase(int $expectedLimit, int $expectedOffset, array $paginationParams)
     {
         $segment = $this->createConfiguredMock(Segment::class, ['getDbId' => 1]);
 

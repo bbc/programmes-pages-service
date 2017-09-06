@@ -10,7 +10,7 @@ class FindByContributionToVersionTest extends AbstractContributionsServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testPagination()
+    public function testProtocolWithDatabase()
     {
         $version = $this->createConfiguredMock(Version::class, ['getDbId' => 1]);
 
