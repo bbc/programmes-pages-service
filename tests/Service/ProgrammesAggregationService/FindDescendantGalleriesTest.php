@@ -53,11 +53,11 @@ class FindDescendantGalleriesTest extends AbstractProgrammesAggregationTest
         return [
             'CASE: galleries results found' => [
                 ['p00m16sh', 'p00m172y'],
-                [['pid' => 'p00m16sh', 'type' => 'gallery'], ['pid' => 'p00m172y', 'type' => 'gallery']]
+                [['pid' => 'p00m16sh', 'type' => 'gallery'], ['pid' => 'p00m172y', 'type' => 'gallery']],
             ],
             'CASE: galleries results not found' => [
                 [],
-                []
+                [],
             ],
         ];
     }
