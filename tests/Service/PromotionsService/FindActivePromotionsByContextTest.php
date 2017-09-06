@@ -17,14 +17,14 @@ class FindActivePromotionsByContextTest extends AbstractPromotionServiceTest
 
         $this->context = $this->createConfiguredMock(CoreEntity::class, [
             'getDbId' => 1,
-            'getDbAncestryIds' => [1]
+            'getDbAncestryIds' => [1],
         ]);
     }
 
     /**
      * @dataProvider paginationProvider
      */
-    public function testProtocolWithDatabase($expectedLimit, $expectedOffset, array $paramsPagination)
+    public function testProtocolWithDatabase(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
         $this->mockRepository->expects($this->once())
             ->method('findActivePromotionsByContext')
@@ -50,7 +50,7 @@ class FindActivePromotionsByContextTest extends AbstractPromotionServiceTest
     /**
      * @dataProvider dbPromotionsProvider
      */
-    public function testResultsCanBeFetchedAndMapped(array $expectedPids, $dbPromotionsResults)
+    public function testResultsCanBeFetchedAndMapped(array $expectedPids, array $dbPromotionsResults)
     {
         $this->mockRepository->method('findActivePromotionsByContext')->willReturn($dbPromotionsResults);
 

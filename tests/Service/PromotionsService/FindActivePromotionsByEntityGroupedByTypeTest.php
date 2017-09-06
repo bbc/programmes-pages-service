@@ -16,7 +16,7 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
 
         $this->context = $this->createConfiguredMock(CoreEntity::class, [
             'getDbId' => 1,
-            'getDbAncestryIds' => [1]
+            'getDbAncestryIds' => [1],
         ]);
     }
 

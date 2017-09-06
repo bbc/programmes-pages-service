@@ -14,10 +14,10 @@ abstract class AbstractPromotionServiceTest extends AbstractServiceTest
         $this->setUpCache();
         $this->setUpRepo('PromotionRepository');
         // override getDomainModel() in mapper
-        $this->setUpMapper('PromotionMapper', function($dbPromotion) {
+        $this->setUpMapper('PromotionMapper', function ($dbPromotion) {
             return $this->createConfiguredMock(Promotion::class, [
                 'getPid' => new Pid($dbPromotion['pid']),
-                'isSuperPromotion' => $dbPromotion['cascadesToDescendants'] ?? false
+                'isSuperPromotion' => $dbPromotion['cascadesToDescendants'] ?? false,
             ]);
         });
     }
