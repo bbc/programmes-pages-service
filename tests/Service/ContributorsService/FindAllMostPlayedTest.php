@@ -16,7 +16,7 @@ class FindAllMostPlayedTest extends AbstractContributorsServiceTest
      *
      * @dataProvider serviceSelectorProvider
      */
-    public function testInteractionWithRepository($expectedDbId, array $service)
+    public function testProtocolWithDatabase($expectedDbId, array $service)
     {
         $from = new DateTimeImmutable();
         $to = new DateTimeImmutable();
