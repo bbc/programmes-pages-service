@@ -9,7 +9,7 @@ class FindByPidFullTest extends AbstractServicesServiceTest
 {
     public function testServiceCommunicationWithRepositoryInterface()
     {
-        $pid = new Pid('s1234567');
+        $pid = $this->createMock(Pid::class);
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
