@@ -10,7 +10,7 @@ class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
     /**
      * @dataProvider entityTypeParamProvider
      */
-    public function testComunicationWithDbInterface($expectedEntityType, array $paramEntityType)
+    public function testProtocolWithDb($expectedEntityType, array $paramEntityType)
     {
         $pid = new Pid('b010t19z');
 
