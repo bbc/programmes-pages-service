@@ -10,7 +10,7 @@ class FindAllInNetworkActiveOnTest extends AbstractServicesServiceTest
 {
     public function testCommunicationWithRepository()
     {
-        $nid = new Nid('bbc_radio_two');
+        $nid = $this->createMock(Nid::class);
         $date = new DateTimeImmutable();
 
         $this->mockRepository->expects($this->once())
