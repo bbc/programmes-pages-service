@@ -35,12 +35,11 @@ class FindByRelatedToProgrammeTest extends AbstractRelatedLinksServiceTest
      */
     public function testFindByRelatedToProgrammeWithNonExistantPid(array $expectedTitles, array $relatedLinksProvided)
     {
-        $dbId = 999;
-        $programme = $this->mockEntity('Programme', $dbId);
 
         $this->mockRepository->method('findByRelatedTo')->willReturn($relatedLinksProvided);
 
-        $relatedLinks = $this->service()->findByRelatedToProgramme($programme);
+        $relatedLinks = $this->service()
+            ->findByRelatedToProgramme($this->createMock(Programme::class));
 
         $this->assertCount(count($relatedLinksProvided), $relatedLinks);
         $this->assertContainsOnlyInstancesOf(RelatedLink::class, $relatedLinks);
