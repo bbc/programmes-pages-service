@@ -57,7 +57,7 @@ class FindByRelatedToProgrammeTest extends AbstractRelatedLinksServiceTest
             ],
             'CASE: ' => [
                 [],
-                []
+                [],
             ],
         ];
     }
