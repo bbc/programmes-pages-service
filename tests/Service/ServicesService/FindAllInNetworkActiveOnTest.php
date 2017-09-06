@@ -43,8 +43,8 @@ class FindAllInNetworkActiveOnTest extends AbstractServicesServiceTest
     {
         return [
             'CASE: services are found' => [
-                ['111', '222'],
-                [['pid' => '111'], ['pid' => '222']],
+                ['s1234567', 's2234566'],
+                [['pid' => 's1234567'], ['pid' => 's2234566']],
             ],
             'CASE: services are NOT found' => [
                 [],

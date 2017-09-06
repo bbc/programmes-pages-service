@@ -2,35 +2,38 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ServicesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class FindByPidFullTest extends AbstractServicesServiceTest
 {
-    public function testFindByPidFull()
+    public function testServiceCommunicationWithRepositoryInterface()
     {
         $pid = new Pid('s1234567');
-        $dbData = ['pid' => 's1234567'];
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
-            ->with($pid)
-            ->willReturn($dbData);
+            ->with($pid);
 
-        $result = $this->service()->findByPidFull($pid);
-
-        $this->assertEquals($this->serviceFromDbData($dbData), $result);
+        $this->service()->findByPidFull($pid);
     }
 
-    public function testFindByPidFullEmptyData()
+    public function testServiceIsReceivedWhenFound()
     {
-        $pid = new Pid('s1234567');
+        $this->mockRepository->method('findByPidFull')->willReturn(['pid' => 's1234567']);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByPidFull')
-            ->with($pid)
-            ->willReturn(null);
+        $service = $this->service()->findByPidFull($this->createMock(Pid::class));
 
-        $result = $this->service()->findByPidFull($pid);
-        $this->assertEquals(null, $result);
+        $this->assertInstanceOf(Service::class, $service);
+        $this->assertEquals('s1234567', $service->getPid());
+    }
+
+    public function testNullIsReceivedWhenServiceIsNotFound()
+    {
+        $this->mockRepository->method('findByPidFull')->willReturn(null);
+
+        $result = $this->service()->findByPidFull($this->createMock(Pid::class));
+
+        $this->assertNull(null, $result);
     }
 }
