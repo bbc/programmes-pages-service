@@ -33,13 +33,11 @@ class FindDescendantClipsTest extends AbstractProgrammesAggregationTest
     /**
      * @dataProvider dbClipsProvider
      */
-    public function testResultsaaa(array $expectedClipsPids, array $dbClipsProvided)
+    public function testResults(array $expectedClipsPids, array $dbClipsProvided)
     {
         $this->mockRepository->method('findStreamableDescendantsByType')->willReturn($dbClipsProvided);
 
-        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [11, 12]]);
-
-        $clips = $this->service()->findDescendantClips($stubProgramme, 3, 5);
+        $clips = $this->service()->findDescendantClips($this->createMock(Programme::class));
 
         $this->assertContainsOnlyInstancesOf(Clip::class, $clips);
         $this->assertCount(count($dbClipsProvided), $clips);
