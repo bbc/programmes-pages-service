@@ -48,7 +48,7 @@ class FindAllInNetworkActiveOnTest extends AbstractServicesServiceTest
             ],
             'CASE: services are NOT found' => [
                 [],
-                []
+                [],
             ],
         ];
     }
