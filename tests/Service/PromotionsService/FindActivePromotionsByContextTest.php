@@ -5,10 +5,11 @@ namespace Tests\BBC\ProgrammesPagesService\Service\PromotionsService;
 use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Domain\Entity\Promotion;
 use DateTimeImmutable;
+use PHPUnit_Framework_MockObject_MockObject;
 
 class FindActivePromotionsByContextTest extends AbstractPromotionServiceTest
 {
-    /** @var CoreEntity */
+    /** @var CoreEntity|PHPUnit_Framework_MockObject_MockObject */
     private $context;
 
     public function setUp()
