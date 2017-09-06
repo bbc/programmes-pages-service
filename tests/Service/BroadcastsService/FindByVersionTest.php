@@ -31,20 +31,24 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
     }
 
     /**
-     * @dataProvider repositoryResultsProvider
+     * @dataProvider dbBroadcastsProvider
      */
-    public function testFindByVersionResults(array $expectedPids, array $stubRepositoryResults)
+    public function testFindByVersionResults(array $expectedPids, array $dbBroadcastsProvided)
     {
-        $this->mockRepository->method('findByVersion')->willReturn($stubRepositoryResults);
+        $this->mockRepository->method('findByVersion')->willReturn($dbBroadcastsProvided);
 
         $dummyVersion = $this->createMock(Version::class);
         $broadcasts = $this->service()->findByVersion($dummyVersion);
 
+        $this->assertCount(count($dbBroadcastsProvided), $broadcasts);
         $this->assertContainsOnly(Broadcast::class, $broadcasts);
-        $this->assertSame($expectedPids, $this->extractPids($broadcasts));
+        foreach ($expectedPids as $i => $expectedPid) {
+            $this->assertEquals($expectedPid, $broadcasts[$i]->getPid());
+        }
+
     }
 
-    public function repositoryResultsProvider(): array
+    public function dbBroadcastsProvider(): array
     {
 
         return [
