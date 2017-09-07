@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ServicesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Service;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\ServicesService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -11,21 +13,9 @@ abstract class AbstractServicesServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('ServiceRepository');
-        $this->setUpMapper('ServiceMapper', 'serviceFromDbData');
-    }
-
-    protected function servicesFromDbData(array $entities)
-    {
-        return array_map([$this, 'serviceFromDbData'], $entities);
-    }
-
-    protected function serviceFromDbData($entity)
-    {
-        $mockService = $this->createMock(self::ENTITY_NS . 'Service');
-        $mockService->method('getPid')->willReturn(
-            $entity['pid']
-        );
-        return $mockService;
+        $this->setUpMapper('ServiceMapper', function ($dbService) {
+            return $this->createConfiguredMock(Service::class, ['getPid' => new Pid($dbService['pid'])]);
+        });
     }
 
     protected function service()
