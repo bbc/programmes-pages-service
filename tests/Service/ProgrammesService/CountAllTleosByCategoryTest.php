@@ -2,21 +2,28 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Genre;
+
 class CountAllTleosByCategoryTest extends AbstractProgrammesServiceTest
 {
-    public function testCountAllTleosByCategory()
+    public function testProtocolWithRepository()
     {
-        $dbId = 1;
-        $dbData = 2;
-
-        $category = $this->mockEntity('Genre', $dbId);
+        $category = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1]]);
 
         $this->mockRepository->expects($this->once())
-            ->method('countTleosByCategory')
-            ->with($category->getDbAncestryIds(), false)
-            ->willReturn($dbData);
+             ->method('countTleosByCategory')
+             ->with($category->getDbAncestryIds(), false);
 
-        $result = $this->service()->countAllTleosByCategory($category);
-        $this->assertEquals($dbData, $result);
+        $this->service()->countAllTleosByCategory($category);
+
+    }
+
+    public function testServiceReceiveCountFromDb()
+    {
+        $this->mockRepository->method('countTleosByCategory')->willReturn(2);
+
+        $countTleos = $this->service()->countAllTleosByCategory($this->createMock(Genre::class));
+
+        $this->assertEquals(2, $countTleos);
     }
 }
