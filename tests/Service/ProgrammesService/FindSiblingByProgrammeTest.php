@@ -39,7 +39,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
         return [
             'CASE: default search is by position when also release date is passed' => [3, null, null],
             'CASE: find adjacent programmes by position when this is passed' => [3, new Datetime(), null],
-            'CASE: find adjacent programmes by position when this is passed again' => [3, new Datetime(), new DateTimeImmutable()],
+            'CASE: if search by position has results, then we dont try to search by broadcasted date' => [3, new Datetime(), new DateTimeImmutable()],
         ];
     }
 
@@ -71,8 +71,8 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
     public function firstBroadcastedDateParamProvider(): array
     {
         return [
-            'CASE: default search is by position when also release date is passed' => [3, null, new DateTimeImmutable()],
-            'CASE: find adjacent programmes by position when this is passed' => [3, new Datetime(), new DateTimeImmutable()],
+            'CASE: default search by broadcasted date is attempted after trying by position' => [3, null, new DateTimeImmutable()],
+            'CASE: default search by broadcasted date is attempted after trying by position again' => [3, new Datetime(), new DateTimeImmutable()],
         ];
     }
 
