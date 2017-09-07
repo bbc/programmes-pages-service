@@ -2,34 +2,44 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\VersionsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
+use BBC\ProgrammesPagesService\Domain\Entity\Version;
+
 class FindByProgrammeItemTest extends AbstractVersionsServiceTest
 {
-    public function testFindByProgrammeItem()
+    public function testRepositoryReceiveProperParams()
     {
-        $dbId = 101;
-        $programmeItem = $this->mockEntity('ProgrammeItem', $dbId);
-        $dbData = [['pid' => 'b06tl314'], ['pid' => 'b06ts0v9']];
+        $programmeItem = $this->createConfiguredMock(ProgrammeItem::class, ['getDbId' => 101]);
 
         $this->mockRepository->expects($this->once())
             ->method('findByProgrammeItem')
-            ->with($dbId)
-            ->willReturn($dbData);
+            ->with($programmeItem->getDbId());
 
-        $result = $this->service()->findByProgrammeItem($programmeItem);
-        $this->assertEquals($this->versionsFromDbData($dbData), $result);
+        $this->service()->findByProgrammeItem($programmeItem);
     }
 
-    public function testFindByProgrammeItemDbIdWithNonExistantItem()
+    public function testVersionsAreReturnedWhenFound()
     {
-        $dbId = 999;
-        $programmeItem = $this->mockEntity('ProgrammeItem', $dbId);
+        $programmeItem = $this->createConfiguredMock(ProgrammeItem::class, ['getDbId' => 101]);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByProgrammeItem')
-            ->with($dbId)
-            ->willReturn([]);
+        $this->mockRepository->method('findByProgrammeItem')->willReturn([['pid' => 'b06tl314'], ['pid' => 'b06ts0v9']]);
 
-        $result = $this->service()->findByProgrammeItem($programmeItem);
-        $this->assertEquals([], $result);
+        $versions = $this->service()->findByProgrammeItem($programmeItem);
+
+        $this->assertCount(2, $versions);
+        $this->assertContainsOnly(Version::class, $versions);
+        $this->assertEquals('b06tl314', $versions[0]->getPid());
+        $this->assertEquals('b06ts0v9', $versions[1]->getPid());
+    }
+
+    public function testEmptyArrayIsReceivedWhenNotFound()
+    {
+        $programmeItem = $this->createConfiguredMock(ProgrammeItem::class, ['getDbId' => 101]);
+
+        $this->mockRepository->method('findByProgrammeItem')->willReturn([]);
+
+        $versions = $this->service()->findByProgrammeItem($programmeItem);
+
+        $this->assertEquals([], $versions);
     }
 }
