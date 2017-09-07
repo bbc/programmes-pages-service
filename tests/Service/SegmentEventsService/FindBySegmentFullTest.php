@@ -30,7 +30,7 @@ class FindBySegmentFullTest extends AbstractSegmentEventsServiceTest
         ];
     }
 
-    public function testFindBySegmentFullCustomPaginationaa()
+    public function testArrayOfSegmentsEventsAreReceivedWhenFoundResults()
     {
         $this->mockRepository->method('findBySegmentFull')->willReturn([['pid' => 'sg000001'], ['pid' => 'sg000002'], ['pid' => 'sg000003']]);
 
@@ -43,7 +43,7 @@ class FindBySegmentFullTest extends AbstractSegmentEventsServiceTest
         $this->assertEquals('sg000002', $segmentEvents[1]->getPid());
     }
 
-    public function testFindBySegmentFullWithNonExistentDbId()
+    public function testEmptyArrayIsReceivedWhenNoFoundResults()
     {
         $this->mockRepository->method('findBySegmentFull')->willReturn([]);
 
