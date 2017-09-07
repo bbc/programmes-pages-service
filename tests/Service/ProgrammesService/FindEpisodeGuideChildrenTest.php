@@ -29,16 +29,35 @@ class FindEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
         ];
     }
 
-    public function testFindEpisodeGuideChildrenWithNonExistantPid()
+    /**
+     * @dataProvider dbEpisodesProvider
+     */
+    public function testFindEpisodeGuideChildrenWithNonExistantPid(array $expectedPids, array $dbEpisodesProvided)
     {
-        $dbId = 999;
-        $programme = $this->mockEntity('Programme', $dbId);
-
         $this->mockRepository
             ->method('findEpisodeGuideChildren')
-            ->willReturn([]);
+            ->willReturn($dbEpisodesProvided);
 
-        $result = $this->service()->findEpisodeGuideChildren($programme, 5, 3);
-        $this->assertEquals([], $result);
+        $episodes = $this->service()->findEpisodeGuideChildren($this->createMock(Programme::class));
+
+        $this->assertCount(count($dbEpisodesProvided), $episodes);
+        $this->assertContainsOnlyInstancesOf(Programme::class, $episodes);
+        foreach ($expectedPids as $i => $expectedPid) {
+            $this->assertEquals($expectedPid, $episodes[$i]->getPid());
+        }
+    }
+
+    public function dbEpisodesProvider(): array
+    {
+        return [
+            'CASE: results episodes found' => [
+                ['b010t19z', 'b00swyx1'],
+                [['pid' => 'b010t19z'], ['pid' => 'b00swyx1']]
+            ],
+            'CASE: results episodes NOT found' => [
+                [],
+                []
+            ],
+        ];
     }
 }
