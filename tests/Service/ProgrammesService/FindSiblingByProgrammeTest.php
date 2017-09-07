@@ -4,16 +4,15 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
-use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use DateTime;
 use DateTimeImmutable;
 
 class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 {
     /**
-     * @dataProvider paramsProvider
+     * @dataProvider positionParamProvider
      */
-    public function testWhenPositionPassedIsCalledByPositionFunction($positionProvided, $releaseDateProvided, $firstBroadcastDate)
+    public function testAsLongAsWeCanFindByPositionThenNeverIsSearchedByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDate)
     {
         $episode = $this->getMockEpisode(1, $positionProvided, $releaseDateProvided, $firstBroadcastDate);
 
@@ -29,29 +28,27 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
                 $positionProvided,
                 'Episode',
                 'next'
-            );
+            )
+            ->willReturn(['pid' => 'b010t19z']);
 
         $this->service()->findNextSiblingByProgramme($episode);
     }
 
-    public function paramsProvider(): array
+    public function positionParamProvider(): array
     {
         return [
-          'CASE: find adjacent programmes by position when this is passed' => [3, new Datetime(), null],
-          'CASE: default search is by position when also release date is passed' => [3, null, null],
+            'CASE: default search is by position when also release date is passed' => [3, null, null],
+            'CASE: find adjacent programmes by position when this is passed' => [3, new Datetime(), null],
+            'CASE: find adjacent programmes by position when this is passed again' => [3, new Datetime(), new DateTimeImmutable()],
         ];
     }
 
     /**
-     * @dataProvider byBroadcastedDateParamsProvider
+     * @dataProvider firstBroadcastedDateParamProvider
      */
-    public function testWhenPositionIsNullAndFirstBroadcastedDateIsPassedThenIsSearchedByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDateProvided)
+    public function testWhenNoResultsSearchingByPositionThenWeTryByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDateProvided)
     {
         $episode = $this->getMockEpisode(1, $positionProvided, $releaseDateProvided, $firstBroadcastDateProvided);
-
-        $this->mockRepository
-            ->expects($this->never())
-            ->method('findAdjacentProgrammeByPosition');
 
         $this->mockRepository
             ->expects($this->once())
@@ -63,30 +60,22 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
                 'next'
             );
 
+        $this->mockRepository
+            ->expects($this->once())
+            ->method('findAdjacentProgrammeByPosition')
+            ->willReturn(null);
+
         $this->service()->findNextSiblingByProgramme($episode);
     }
 
-    public function byBroadcastedDateParamsProvider(): array
+    public function firstBroadcastedDateParamProvider(): array
     {
         return [
-            'CASE: find adjacent programmes by position when this is passed' => [null, new Datetime(), new DateTimeImmutable()],
-            'CASE: default search is by position when also release date is passed' => [null, null, new DateTimeImmutable()],
+            'CASE: default search is by position when also release date is passed' => [3, null, new DateTimeImmutable()],
+            'CASE: find adjacent programmes by position when this is passed' => [3, new Datetime(), new DateTimeImmutable()],
         ];
     }
 
-
-    public function testFindNextSiblingByProgrammeReturnsNullIfNoResult()
-    {
-        $position = 3;
-        $releaseDate = new PartialDate(2016);
-        $programme = $this->getMockEpisode(1, $position, $releaseDate);
-
-        $this->mockRepository->method('findAdjacentProgrammeByPosition')->willReturn(null);
-
-        $result = $this->service()->findNextSiblingByProgramme($programme);
-
-        $this->assertNull($result);
-    }
 
     private function getMockEpisode($parentId = null, $position = null, $releaseDate = null, $firstBroadcastDate = null)
     {
@@ -97,8 +86,9 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
         ]);
 
         if ($parentId) {
-            $parent = $this->createConfiguredMock(Series::class,['getDbId' => $parentId]);
-            $episode->method('getParent')->willReturn($parent);
+            $episode->method('getParent')->willReturn(
+                $this->createConfiguredMock(Series::class,['getDbId' => $parentId])
+            );
         }
 
         return $episode;
