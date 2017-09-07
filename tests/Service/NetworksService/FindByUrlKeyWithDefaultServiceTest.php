@@ -2,32 +2,37 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\NetworksService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Network;
+
 class FindByUrlKeyWithDefaultServiceTest extends AbstractNetworksServiceTest
 {
-    public function testFind()
+    public function testProtocolWithDatabaseInterface()
     {
         $urlKey = 'radio2';
 
-        $dbData = ['nid' => 'bbc_radio_two'];
-
         $this->mockRepository->expects($this->once())
             ->method('findByUrlKeyWithDefaultService')
-            ->with($urlKey)
-            ->willReturn($dbData);
+            ->with($urlKey);
 
-        $result = $this->service()->findByUrlKeyWithDefaultService($urlKey);
-        $this->assertEquals($this->networkFromDbData($dbData), $result);
+        $this->service()->findByUrlKeyWithDefaultService($urlKey);
     }
 
-    public function testFindNoResult()
+    public function testNetworksResultsAreReceived()
     {
-        $urlKey = 'radionope';
-        $this->mockRepository->expects($this->once())
-            ->method('findByUrlKeyWithDefaultService')
-            ->with($urlKey)
-            ->willReturn(null);
+        $this->mockRepository->method('findByUrlKeyWithDefaultService')->willReturn(['nid' => 'bbc_radio_two']);
 
-        $result = $this->service()->findByUrlKeyWithDefaultService($urlKey);
+        $network = $this->service()->findByUrlKeyWithDefaultService('radio2');
+
+        $this->assertInstanceOf(Network::class, $network);
+        $this->assertEquals('bbc_radio_two', $network->getNid());
+    }
+
+    public function testNetworksResultsAreNotFound()
+    {
+        $this->mockRepository->method('findByUrlKeyWithDefaultService')->willReturn(null);
+
+        $result = $this->service()->findByUrlKeyWithDefaultService('radionope');
+
         $this->assertNull($result);
     }
 }
