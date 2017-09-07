@@ -52,7 +52,7 @@ class FindByRelatedToProgrammeTest extends AbstractRelatedLinksServiceTest
     {
         return [
             'CASE: relatedlinks found results' => [
-                [],
+                ['RelatedLink1', 'RelatedLink2'],
                 [['title' => 'RelatedLink1'], ['title' => 'RelatedLink2']],
             ],
             'CASE: relatedlinks not results found' => [
