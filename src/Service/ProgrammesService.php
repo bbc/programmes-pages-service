@@ -396,7 +396,7 @@ class ProgrammesService extends AbstractService
             return null;
         }
 
-        return $this->mapper->getDomainModelForProgramme($dbEntity, ...$additionalArgs);
+        return $this->mapper->getDomainModel($dbEntity, ...$additionalArgs);
     }
 
     private function findSiblingByProgramme(Programme $programme, string $direction): ?Programme

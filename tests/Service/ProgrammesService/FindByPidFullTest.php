@@ -2,49 +2,51 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+
 
 class FindByPidFullTest extends AbstractProgrammesServiceTest
 {
-    public function testFindByPidFull()
+    /**
+     * @dataProvider entityTypeParamProvider
+     */
+    public function testCommunicationProtocolWithRepository(string $expectedEntityType, array $entityTypeProvided)
     {
-        $pid = new Pid('b010t19z');
-        $dbData = ['pid' => 'b010t19z'];
+        $pid = $this->createMock(Pid::class);
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
-            ->with($pid)
-            ->willReturn($dbData);
+            ->with($pid, $expectedEntityType);
 
-        $result = $this->service()->findByPidFull($pid);
-        $this->assertEquals($this->programmeFromDbData($dbData), $result);
+        $this->service()->findByPidFull($pid, ...$entityTypeProvided);
     }
 
-    public function testFindByPidFullWithCustomEntityType()
+    public function entityTypeParamProvider()
     {
-        $pid = new Pid('b010t19z');
-        $dbData = ['pid' => 'b010t19z'];
+        return [
+            'CASE: default type' => ['Programme', []],
+            'CASE: custom type' => ['ProgrammeContainer', ['ProgrammeContainer']],
+        ];
+    }
+    
+    public function testResultsAreReceivedByService()
+    {
+        $this->mockRepository->method('findByPidFull')->willReturn(['pid' => 'b010t19z']);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByPidFull')
-            ->with($pid, 'ProgrammeContainer')
-            ->willReturn($dbData);
+        $programme = $this->service()->findByPidFull($this->createMock(Pid::class));
 
-        $result = $this->service()->findByPidFull($pid, 'ProgrammeContainer');
-        $this->assertEquals($this->programmeFromDbData($dbData), $result);
+        $this->assertInstanceOf(Programme::class, $programme);
+        $this->assertEquals('b010t19z', $programme->getPid());
     }
 
-    public function testFindByPidFullEmptyData()
+    public function testResultsAreEmpty()
     {
-        $pid = new Pid('b010t19z');
+        $this->mockRepository->method('findByPidFull')->willReturn(null);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByPidFull')
-            ->with($pid)
-            ->willReturn(null);
+        $programme = $this->service()->findByPidFull($this->createMock(Pid::class));
 
-        $result = $this->service()->findByPidFull($pid);
-        $this->assertNull($result);
+        $this->assertNull($programme);
     }
 
     /**

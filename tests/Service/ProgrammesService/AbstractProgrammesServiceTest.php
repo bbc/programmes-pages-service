@@ -14,7 +14,9 @@ abstract class AbstractProgrammesServiceTest extends AbstractServiceTest
         $this->setUpCache();
         $this->setUpRepo('CoreEntityRepository');
         $this->setUpMapper('CoreEntityMapper', function ($dbEntity) {
-            return $mockProgramme = $this->createConfiguredMock(Programme::class, ['getPid' => new Pid($dbEntity['pid'])]);
+            return $this->createConfiguredMock(Programme::class, [
+                'getPid' => new Pid($dbEntity['pid'])
+            ]);
         });
     }
 
