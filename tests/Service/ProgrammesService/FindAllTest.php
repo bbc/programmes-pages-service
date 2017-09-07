@@ -46,11 +46,11 @@ class FindAllTest extends AbstractProgrammesServiceTest
     public function dbEntitiesProvider(): array
     {
         return [
-            'CASE: ' => [
+            'CASE: results found' => [
                 ['b010t19z', 'b00swyx1'],
                 [['pid' => 'b010t19z'], ['pid' => 'b00swyx1']],
             ],
-            'CASE: ' => [
+            'CASE: no results found' => [
                 [],
                 [],
             ],

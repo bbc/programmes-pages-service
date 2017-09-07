@@ -42,11 +42,11 @@ class FindAvailableTleosByCategoryTest extends AbstractProgrammesServiceTest
     public function dbTleosProvider(): array
     {
         return [
-            'CASE: ' => [
+            'CASE: results found' => [
                 ['b010t19z', 'b00swyx1'],
                 [['pid' => 'b010t19z'], ['pid' => 'b00swyx1']],
             ],
-            'CASE: ' => [
+            'CASE: no results found is an empty array' => [
                 [],
                 [],
             ],

@@ -8,7 +8,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use DateTime;
 use DateTimeImmutable;
 
-class FindPreviousSiblingByProgramme extends AbstractProgrammesServiceTest
+class FindPreviousSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 {
     /**
      * @dataProvider positionParamProvider

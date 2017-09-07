@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+
 class KeywordsTest extends AbstractProgrammesServiceTest
 {
     public function testfindByKeywords()
@@ -15,8 +17,9 @@ class KeywordsTest extends AbstractProgrammesServiceTest
             ->with($keywords, false, 300, 0)
             ->willReturn($dbData);
 
-        $result = $this->service()->searchByKeywords($keywords);
-        $this->assertEquals($this->programmesFromDbData($dbData), $result);
+        $programmes = $this->service()->searchByKeywords($keywords);
+
+        $this->assertContainsOnlyInstancesOf(Programme::class, $programmes);
     }
 
     public function testCountByKeywords()
