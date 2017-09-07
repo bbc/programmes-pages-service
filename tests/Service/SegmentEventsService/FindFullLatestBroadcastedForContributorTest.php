@@ -2,48 +2,53 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\SegmentEventsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
+use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
+
 class FindFullLatestBroadcastedForContributorTest extends AbstractSegmentEventsServiceTest
 {
-    public function testFindLatestBroadcastedForContributor()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testCommunicationWithRepository(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
-        $dbData = [['pid' => 'c000001']];
-        $contributor = $this->mockEntity('Contributor', 1);
+        $contributor = $this->createConfiguredMock(Contributor::class, ['getDbId' => 1]);
 
         $this->mockRepository->expects($this->once())
             ->method('findFullLatestBroadcastedForContributor')
-            ->with(1)
-            ->willReturn($dbData);
+            ->with($contributor->getDbId(), $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findLatestBroadcastedForContributor($contributor);
-        $this->assertEquals($this->segmentEventsFromDbData($dbData), $result);
+        $this->service()->findLatestBroadcastedForContributor($contributor, ...$paramsPagination);
     }
 
-    public function testFindLatestBroadcastedForContributorCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbId = 1;
-        $dbData = [['pid' => 'c000001'], ['pid' => 'c000002'], ['pid' => 'c000003']];
-        $contributor = $this->mockEntity('Contributor', $dbId);
-
-        $this->mockRepository->expects($this->once())
-            ->method('findFullLatestBroadcastedForContributor')
-            ->with($dbId, 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findLatestBroadcastedForContributor($contributor, 5, 3);
-        $this->assertEquals($this->segmentEventsFromDbData($dbData), $result);
+        return [
+            // expected limit, expected offset, user pagination params
+            'CASE: default pagination' => [300, 0, []],
+            'CASE: custom pagination' => [3, 12, [3, 5]],
+        ];
     }
 
-    public function testFindLatestBroadcastedForContributorWithNonExistentDbId()
+
+    public function testArrayOfSegmentEventIsReceivedWhenResultsFound()
     {
-        $dbId = 999;
-        $contributor = $this->mockEntity('Contributor', $dbId);
+        $this->mockRepository->method('findFullLatestBroadcastedForContributor')->willReturn([['pid' => 'sg000001'], ['pid' => 'sg000002']]);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findFullLatestBroadcastedForContributor')
-            ->with($dbId, 5, 10)
-            ->willReturn([]);
+        $segmentEvents = $this->service()->findLatestBroadcastedForContributor($this->createMock(Contributor::class));
 
-        $result = $this->service()->findLatestBroadcastedForContributor($contributor, 5, 3);
+        $this->assertCount(2, $segmentEvents);
+        $this->assertContainsOnly(SegmentEvent::class, $segmentEvents);
+        $this->assertEquals('sg000001', $segmentEvents[0]->getPid());
+        $this->assertEquals('sg000002', $segmentEvents[1]->getPid());
+    }
+
+    public function testEmptyArrayIsReceivedWhenNoResultsFound()
+    {
+        $this->mockRepository->method('findFullLatestBroadcastedForContributor')->willReturn([]);
+
+        $result = $this->service()->findLatestBroadcastedForContributor($this->createMock(Contributor::class));
+
         $this->assertEquals([], $result);
     }
 }
