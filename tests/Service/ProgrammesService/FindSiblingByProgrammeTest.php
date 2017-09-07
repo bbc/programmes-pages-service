@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use DateTime;
 use DateTimeImmutable;
@@ -76,6 +77,29 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
         ];
     }
 
+    public function testProgrammesAreReceivedBySearchByPosition()
+    {
+        $programme = $this->getMockEpisode(1, 3, null, null);
+
+        $this->mockRepository->method('findAdjacentProgrammeByPosition')->willReturn(['pid' => 'b010t19z']);
+
+        $programme = $this->service()->findNextSiblingByProgramme($programme);
+
+        $this->assertInstanceOf(Programme::class, $programme);
+        $this->assertEquals('b010t19z', $programme->getPid());
+    }
+
+    public function testProgrammesAreReceivedBySearchByBroadcastDate()
+    {
+        $programme = $this->getMockEpisode(1, null, null, new DateTimeImmutable());
+
+        $this->mockRepository->method('findAdjacentProgrammeByFirstBroadcastDate')->willReturn(['pid' => 'b010t19z']);
+
+        $programme = $this->service()->findNextSiblingByProgramme($programme);
+
+        $this->assertInstanceOf(Programme::class, $programme);
+        $this->assertEquals('b010t19z', $programme->getPid());
+    }
 
     private function getMockEpisode($parentId = null, $position = null, $releaseDate = null, $firstBroadcastDate = null)
     {
