@@ -2,81 +2,75 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributorsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
+use DateTimeImmutable;
+use stdClass;
 
 class FindAllMostPlayedTest extends AbstractContributorsServiceTest
 {
-    public function testAll()
+    /**
+     * @param $expectedDbId int|null
+     *
+     * @dataProvider serviceSelectorProvider
+     */
+    public function testProtocolWithDatabase($expectedDbId, array $service)
     {
-        $from = new \DateTimeImmutable('2016-06-01');
-        $to = new \DateTimeImmutable('2016-06-07');
-
-        $mbid = '7746d775-9550-4360-b8d5-c37bd448ce01';
-        $mbid2 = '9c9f1380-2516-4fc9-a3e6-f9f61941d090';
-        $dbData = [
-            [
-                0 => ['musicBrainzId' => $mbid],
-                'contributorPlayCount' => 10,
-            ],
-            [
-                0 => ['musicBrainzId' => $mbid2],
-                'contributorPlayCount' => 5,
-            ],
-        ];
+        $from = new DateTimeImmutable();
+        $to = new DateTimeImmutable();
 
         $this->mockRepository->expects($this->once())
             ->method('findAllMostPlayedWithPlays')
-            ->with($from, $to, null)
-            ->willReturn($dbData);
+            ->with($from, $to, $expectedDbId);
 
-        $results = $this->service()->findAllMostPlayed($from, $to);
-        $this->assertSame(2, count($results));
-        $this->assertEquals($this->contributorFromDbData($dbData[0][0]), $results[0]->contributor);
-        $this->assertEquals($this->contributorFromDbData($dbData[1][0]), $results[1]->contributor);
-        $this->assertSame(10, $results[0]->plays);
-        $this->assertSame(5, $results[1]->plays);
+        $this->service()->findAllMostPlayed($from, $to, ...$service);
     }
 
-    public function testAllEmpty()
+    public function serviceSelectorProvider(): array
     {
-        $from = new \DateTimeImmutable('2016-06-01');
-        $to = new \DateTimeImmutable('2016-06-07');
-
-        $dbData = [];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findAllMostPlayedWithPlays')
-            ->with($from, $to, null)
-            ->willReturn($dbData);
-
-        $results = $this->service()->findAllMostPlayed($from, $to);
-        $this->assertEquals([], $results);
-    }
-
-    public function testByService()
-    {
-        $from = new \DateTimeImmutable('2016-06-01');
-        $to = new \DateTimeImmutable('2016-06-07');
-        $service = new Service(1, new Sid('sid'), new Pid('b0000001'), 'name');
-
-        $mbid = '6746d775-9550-4360-b8d5-c37bd448ce01';
-        $dbData = [
-            [
-                0 => ['musicBrainzId' => $mbid],
-                'contributorPlayCount' => 10,
+        return [
+            'CASE: expectations when passing a service' => [
+                999,
+                [new Service(999, new Sid('sid'), new Pid('b0000001'), 'name')],
+            ],
+            'CASE: expectations when no passing a service' => [
+                null,
+                [],
             ],
         ];
+    }
 
-        $this->mockRepository->expects($this->once())
+    public function testContributorsAreReceivedWithCountOfPlays()
+    {
+        $this->mockRepository
             ->method('findAllMostPlayedWithPlays')
-            ->with($from, $to, 1)
-            ->willReturn($dbData);
+            ->willReturn([
+                    [0 => ['musicBrainzId' => '7746d775-9550-4360-b8d5-c37bd448ce01'], 'contributorPlayCount' => 10],
+                    [0 => ['musicBrainzId' => '9c9f1380-2516-4fc9-a3e6-f9f61941d090'], 'contributorPlayCount' => 5],
+            ]);
 
-        $results = $this->service()->findAllMostPlayed($from, $to, $service);
-        $this->assertSame(1, count($results));
-        $this->assertEquals($this->contributorFromDbData($dbData[0][0]), $results[0]->contributor);
-        $this->assertSame(10, $results[0]->plays);
+        $contributorsAndPlays = $this->service()->findAllMostPlayed(new DateTimeImmutable(), new DateTimeImmutable());
+
+        // test structure
+        $this->assertCount(2, $contributorsAndPlays);
+        $this->assertContainsOnly(stdClass::class, $contributorsAndPlays);
+        $this->assertObjectHasAttribute('contributor', $contributorsAndPlays[0]);
+        $this->assertObjectHasAttribute('plays', $contributorsAndPlays[0]);
+        $this->assertInstanceOf(Contributor::class, $contributorsAndPlays[0]->contributor);
+        // test data content, order, ...
+        $this->assertEquals('7746d775-9550-4360-b8d5-c37bd448ce01', $contributorsAndPlays[0]->contributor->getMusicBrainzId());
+        $this->assertEquals('9c9f1380-2516-4fc9-a3e6-f9f61941d090', $contributorsAndPlays[1]->contributor->getMusicBrainzId());
+    }
+
+    public function testResultsAreAnEmptyArrayWhenNotFound()
+    {
+        $this->mockRepository->method('findAllMostPlayedWithPlays')->willReturn([]);
+
+        $this->assertEquals(
+            [],
+            $this->service()->findAllMostPlayed(new DateTimeImmutable(), new DateTimeImmutable())
+        );
     }
 }
