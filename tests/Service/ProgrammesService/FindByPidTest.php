@@ -7,18 +7,30 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class FindByPidTest extends AbstractProgrammesServiceTest
 {
-    public function testCommunicationProtocolWithRepository()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testCommunicationProtocolWithRepository(string $expectedType, array $specifiedType)
     {
         $pid = $this->createMock(Pid::class);
 
-        $this->mockRepository->expects($this->at(0))
-            ->method('findByPid')->with($pid, 'Programme');
+        $this->mockRepository->expects($this->once())
+            ->method('findByPid')
+            ->with($pid, $expectedType);
 
-        $this->mockRepository->expects($this->at(1))
-            ->method('findByPid')->with($pid, 'ProgrammeContainer');
 
-        $this->service()->findByPid($pid);
-        $this->service()->findByPid($pid, 'ProgrammeContainer');
+        $this->service()->findByPid($pid, ...$specifiedType);
+    }
+
+    public function paginationProvider(): array
+    {
+        return [
+            // [expectedLimit, expectedOffset, [limit, page]]
+            'default entity type' => [
+                'Programme', []
+            ],
+            'custom entity type' => ['ProgrammeContainer', ['ProgrammeContainer']],
+        ];
     }
 
     public function testResultsAreReceivedByService()
