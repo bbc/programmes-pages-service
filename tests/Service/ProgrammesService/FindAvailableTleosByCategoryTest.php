@@ -26,7 +26,7 @@ class FindAvailableTleosByCategoryTest extends AbstractProgrammesServiceTest
     /**
      * @dataProvider dbTleosProvider
      */
-    public function testFindAvailableTleosByCategory(array $expectedPids, array $dbTleosProvided)
+    public function testServiceCanReceiveTleosFromRepositoryByCategory(array $expectedPids, array $dbTleosProvided)
     {
         $this->mockRepository->method('findTleosByCategory')->willReturn($dbTleosProvided);
 
