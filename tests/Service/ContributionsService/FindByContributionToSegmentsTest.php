@@ -2,61 +2,67 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributionsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
+use BBC\ProgrammesPagesService\Domain\Entity\Segment;
+
 class FindByContributionToSegmentsTest extends AbstractContributionsServiceTest
 {
-    public function testFindByContributionToSegmentsDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testProtocolWithDatabase(int $expectedLimit, int $expectedOffset, array $paginationParams)
     {
-        $dbIds = [1, 2, 3];
-        $dbData = [['pid' => 'b0000001']];
         $segments = [
-            $this->mockEntity('Segment', 1),
-            $this->mockEntity('Segment', 2),
-            $this->mockEntity('Segment', 3),
+            $this->createConfiguredMock(Segment::class, ['getDbId' => 111]),
+            $this->createConfiguredMock(Segment::class, ['getDbId' => 222]),
+            $this->createConfiguredMock(Segment::class, ['getDbId' => 333]),
         ];
 
         $this->mockRepository->expects($this->once())
             ->method('findByContributionTo')
-            ->with($dbIds, 'segment', true, 300, 0)
-            ->willReturn($dbData);
+            ->with([111, 222, 333], 'segment', true, $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findByContributionToSegments($segments);
-        $this->assertEquals($this->contributionsFromDbData($dbData), $result);
+        $this->service()->findByContributionToSegments($segments, ...$paginationParams);
     }
 
-    public function testFindByContributionToSegmentsCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbIds = [1, 2, 3];
-        $dbData = [['pid' => 'b0000001']];
-        $segments = [
-            $this->mockEntity('Segment', 1),
-            $this->mockEntity('Segment', 2),
-            $this->mockEntity('Segment', 3),
+        return [
+            // expected limit, expected offset, user pagination params
+            'CASE: default pagination' => [300, 0, []],
+            'CASE: custom pagination' => [3, 12, [3, 5]],
         ];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findByContributionTo')
-            ->with($dbIds, 'segment', true, 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findByContributionToSegments($segments, 5, 3);
-        $this->assertEquals($this->contributionsFromDbData($dbData), $result);
     }
 
-    public function testFindByContributionToSegmentsWithNonExistantDbId()
+    /**
+     * @dataProvider dbContributionsProvider
+     */
+    public function testResultsFromService(array $expectedPids, array $fakeDbContributions)
     {
-        $dbIds = [1, 2, 3];
         $segments = [
-            $this->mockEntity('Segment', 1),
-            $this->mockEntity('Segment', 2),
-            $this->mockEntity('Segment', 3),
+            $this->createMock(Segment::class),
+            $this->createMock(Segment::class),
+            $this->createMock(Segment::class),
         ];
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByContributionTo')
-            ->with($dbIds, 'segment', true, 5, 10)
-            ->willReturn([]);
+        $this->mockRepository->method('findByContributionTo')->willReturn($fakeDbContributions);
+        $contributions = $this->service()->findByContributionToSegments($segments);
 
-        $result = $this->service()->findByContributionToSegments($segments, 5, 3);
-        $this->assertEquals([], $result);
+        $this->assertCount(count($fakeDbContributions), $contributions);
+        $this->assertContainsOnly(Contribution::class, $contributions);
+        foreach ($expectedPids as $i => $expectedPid) {
+            $this->assertEquals($expectedPid, $contributions[$i]->getPid());
+        }
+    }
+
+    public function dbContributionsProvider(): array
+    {
+        return [
+            'CASE: found results' => [
+                ['b00swyx1', 'b010t150'],
+                [['pid' => 'b00swyx1'], ['pid' => 'b010t150']],
+            ],
+            'CASE: not found results' => [[], []],
+        ];
     }
 }
