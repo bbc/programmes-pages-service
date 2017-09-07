@@ -2,48 +2,52 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class FindByPidTest extends AbstractProgrammesServiceTest
 {
-    public function testFindByPid()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testCommunicationProtocolWithRepository(string $expectedType, array $specifiedType)
     {
-        $pid = new Pid('b010t19z');
-        $dbData = ['pid' => 'b010t19z'];
+        $pid = $this->createMock(Pid::class);
 
         $this->mockRepository->expects($this->once())
             ->method('findByPid')
-            ->with($pid, 'Programme')
-            ->willReturn($dbData);
+            ->with($pid, $expectedType);
 
-        $result = $this->service()->findByPid($pid);
-        $this->assertEquals($this->programmeFromDbData($dbData), $result);
+        $this->service()->findByPid($pid, ...$specifiedType);
     }
 
-    public function testFindByPidWithCustomEntityType()
+    public function paginationProvider(): array
     {
-        $pid = new Pid('b010t19z');
-        $dbData = ['pid' => 'b010t19z'];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findByPid')
-            ->with($pid, 'ProgrammeContainer')
-            ->willReturn($dbData);
-
-        $result = $this->service()->findByPid($pid, 'ProgrammeContainer');
-        $this->assertEquals($this->programmeFromDbData($dbData), $result);
+        return [
+            // [expectedLimit, expectedOffset, [limit, page]]
+            'default entity type' => [
+                'Programme', [],
+            ],
+            'custom entity type' => ['ProgrammeContainer', ['ProgrammeContainer']],
+        ];
     }
 
-    public function testFindByPidEmptyData()
+    public function testResultsAreReceivedByService()
     {
-        $pid = new Pid('b010t19z');
+        $this->mockRepository->method('findByPid')->willReturn(['pid' => 'b010t19z']);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByPid')
-            ->with($pid)
-            ->willReturn(null);
+        $programme = $this->service()->findByPid($this->createMock(Pid::class));
 
-        $result = $this->service()->findByPid($pid);
+        $this->assertInstanceOf(Programme::class, $programme);
+        $this->assertEquals('b010t19z', $programme->getPid());
+    }
+
+    public function testNullIsReceivedWhenNoDbResultsAreFound()
+    {
+        $this->mockRepository->method('findByPid')->willReturn(null);
+
+        $result = $this->service()->findByPid($this->createMock(Pid::class));
+
         $this->assertNull($result);
     }
 

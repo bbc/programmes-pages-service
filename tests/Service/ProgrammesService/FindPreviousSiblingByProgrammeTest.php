@@ -8,12 +8,12 @@ use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use DateTime;
 use DateTimeImmutable;
 
-class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
+class FindPreviousSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 {
     /**
      * @dataProvider positionParamProvider
      */
-    public function testAsLongAsWeCanFindByPositionThenNeverIsSearchedByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDate)
+    public function testAsLongAsWeCanFindProgrammesByPositionThenNeverIsSearchedByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDate)
     {
         $episode = $this->getMockEpisode(1, $positionProvided, $releaseDateProvided, $firstBroadcastDate);
 
@@ -28,11 +28,11 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
                 $episode->getParent()->getDbId(),
                 $positionProvided,
                 'Episode',
-                'next'
+                'previous'
             )
             ->willReturn(['pid' => 'b010t19z']);
 
-        $this->service()->findNextSiblingByProgramme($episode);
+        $this->service()->findPreviousSiblingByProgramme($episode);
     }
 
     public function positionParamProvider(): array
@@ -47,7 +47,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
     /**
      * @dataProvider firstBroadcastedDateParamProvider
      */
-    public function testWhenNoResultsSearchingByPositionThenWeTryByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDateProvided)
+    public function testWhenNoProgrammesResultsSearchingByPositionThenWeTryByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDateProvided)
     {
         $episode = $this->getMockEpisode(1, $positionProvided, $releaseDateProvided, $firstBroadcastDateProvided);
 
@@ -58,7 +58,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
                 $episode->getParent()->getDbId(),
                 $firstBroadcastDateProvided,
                 'Episode',
-                'next'
+                'previous'
             );
 
         $this->mockRepository
@@ -66,7 +66,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
             ->method('findAdjacentProgrammeByPosition')
             ->willReturn(null);
 
-        $this->service()->findNextSiblingByProgramme($episode);
+        $this->service()->findPreviousSiblingByProgramme($episode);
     }
 
     public function firstBroadcastedDateParamProvider(): array
@@ -83,7 +83,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 
         $this->mockRepository->method('findAdjacentProgrammeByPosition')->willReturn(['pid' => 'b010t19z']);
 
-        $programme = $this->service()->findNextSiblingByProgramme($programme);
+        $programme = $this->service()->findPreviousSiblingByProgramme($programme);
 
         $this->assertInstanceOf(Programme::class, $programme);
         $this->assertEquals('b010t19z', $programme->getPid());
@@ -95,7 +95,7 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
 
         $this->mockRepository->method('findAdjacentProgrammeByFirstBroadcastDate')->willReturn(['pid' => 'b010t19z']);
 
-        $programme = $this->service()->findNextSiblingByProgramme($programme);
+        $programme = $this->service()->findPreviousSiblingByProgramme($programme);
 
         $this->assertInstanceOf(Programme::class, $programme);
         $this->assertEquals('b010t19z', $programme->getPid());

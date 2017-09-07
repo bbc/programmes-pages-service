@@ -2,39 +2,65 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+
 class FindAllTest extends AbstractProgrammesServiceTest
 {
-    public function testFindAllDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testProtocolWithRepository(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
-        $dbData = [['pid' => 'b010t19z'], ['pid' => 'b00swyx1']];
-
         $this->mockRepository->expects($this->once())
             ->method('findAllWithParents')
-            ->with(300, 0)
-            ->willReturn($dbData);
+            ->with($expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findAll();
-        $this->assertEquals($this->programmesFromDbData($dbData), $result);
+        $this->service()->findAll(...$paramsPagination);
     }
 
-    public function testFindAllCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbData = [['pid' => 'b010t19z'], ['pid' => 'b00swyx1']];
+        return [
+            // [expectedLimit, expectedOffset, [limit, page]]
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [3, 12, [3, 5]],
+        ];
+    }
 
-        $this->mockRepository->expects($this->once())
-            ->method('findAllWithParents')
-            ->with(5, 10)
-            ->willReturn($dbData);
+    /**
+     * @dataProvider dbEntitiesProvider
+     */
+    public function testResults($expectedPids, $dbEntitiesProvided)
+    {
+        $this->mockRepository->method('findAllWithParents')->willReturn($dbEntitiesProvided);
 
-        $result = $this->service()->findAll(5, 3);
-        $this->assertEquals($this->programmesFromDbData($dbData), $result);
+        $programmesWithParents = $this->service()->findAll();
+
+        $this->assertContainsOnlyInstancesOf(Programme::class, $programmesWithParents);
+        $this->assertCount(count($dbEntitiesProvided), $programmesWithParents);
+        foreach ($expectedPids as $i => $expectedPid) {
+            $this->assertEquals($expectedPid, $programmesWithParents[$i]->getPid());
+        }
+    }
+
+    public function dbEntitiesProvider(): array
+    {
+        return [
+            'CASE: results found' => [
+                ['b010t19z', 'b00swyx1'],
+                [['pid' => 'b010t19z'], ['pid' => 'b00swyx1']],
+            ],
+            'CASE: no results found' => [
+                [],
+                [],
+            ],
+        ];
     }
 
     public function testCountAll()
     {
         $this->mockRepository->expects($this->once())
-            ->method('countAll')
-            ->willReturn(10);
+            ->method('countAll')->willReturn(10);
 
         $this->assertEquals(10, $this->service()->countAll());
     }

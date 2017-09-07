@@ -2,75 +2,62 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+
 class FindEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
 {
-    public function testFindEpisodeGuideChildrenDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testProtocolWithRepository(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
-        $dbId = 1;
-        $programme = $this->mockEntity('Programme', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 
         $this->mockRepository->expects($this->once())
             ->method('findEpisodeGuideChildren')
-            ->with($dbId, 300, 0)
-            ->willReturn($dbData);
+            ->with($programme->getDbId(), $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findEpisodeGuideChildren($programme);
-        $this->assertEquals($this->programmesFromDbData($dbData), $result);
+        $this->service()->findEpisodeGuideChildren($programme, ...$paramsPagination);
     }
 
-    public function testFindEpisodeGuideChildrenCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbId = 1;
-        $programme = $this->mockEntity('Programme', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
+        return [
+            // [expectedLimit, expectedOffset, [limit, page]]
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [3, 12, [3, 5]],
+        ];
+    }
 
-        $this->mockRepository->expects($this->once())
+    /**
+     * @dataProvider dbEpisodesProvider
+     */
+    public function testFindEpisodeGuideChildrenWithNonExistantPid(array $expectedPids, array $dbEpisodesProvided)
+    {
+        $this->mockRepository
             ->method('findEpisodeGuideChildren')
-            ->with($dbId, 5, 10)
-            ->willReturn($dbData);
+            ->willReturn($dbEpisodesProvided);
 
-        $result = $this->service()->findEpisodeGuideChildren($programme, 5, 3);
-        $this->assertEquals($this->programmesFromDbData($dbData), $result);
+        $episodes = $this->service()->findEpisodeGuideChildren($this->createMock(Programme::class));
+
+        $this->assertCount(count($dbEpisodesProvided), $episodes);
+        $this->assertContainsOnlyInstancesOf(Programme::class, $episodes);
+        foreach ($expectedPids as $i => $expectedPid) {
+            $this->assertEquals($expectedPid, $episodes[$i]->getPid());
+        }
     }
 
-    public function testCountEpisodeGuideChildren()
+    public function dbEpisodesProvider(): array
     {
-        $dbId = 1;
-        $programme = $this->mockEntity('Programme', $dbId);
-
-        $this->mockRepository->expects($this->once())
-            ->method('countEpisodeGuideChildren')
-            ->with($dbId)
-            ->willReturn(10);
-
-        $this->assertEquals(10, $this->service()->countEpisodeGuideChildren($programme));
-    }
-
-    public function testFindEpisodeGuideChildrenWithNonExistantPid()
-    {
-        $dbId = 999;
-        $programme = $this->mockEntity('Programme', $dbId);
-
-        $this->mockRepository->expects($this->once())
-            ->method('findEpisodeGuideChildren')
-            ->with($dbId, 5, 10)
-            ->willReturn([]);
-
-        $result = $this->service()->findEpisodeGuideChildren($programme, 5, 3);
-        $this->assertEquals([], $result);
-    }
-
-    public function testCountEpisodeGuideChildrenWithNonExistantPid()
-    {
-        $dbId = 999;
-        $programme = $this->mockEntity('Programme', $dbId);
-
-        $this->mockRepository->expects($this->once())
-            ->method('countEpisodeGuideChildren')
-            ->with($dbId)
-            ->willReturn(0);
-
-        $this->assertEquals(0, $this->service()->countEpisodeGuideChildren($programme));
+        return [
+            'CASE: results episodes found' => [
+                ['b010t19z', 'b00swyx1'],
+                [['pid' => 'b010t19z'], ['pid' => 'b00swyx1']],
+            ],
+            'CASE: results episodes NOT found' => [
+                [],
+                [],
+            ],
+        ];
     }
 }
