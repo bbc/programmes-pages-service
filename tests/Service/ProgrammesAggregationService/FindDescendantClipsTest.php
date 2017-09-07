@@ -2,31 +2,58 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 
-/**
- * @covers BBC\ProgrammesPagesService\Service\ProgrammesAggregationService::findDescendantClips
- */
 class FindDescendantClipsTest extends AbstractProgrammesAggregationTest
 {
-    public function testFindDescendantClips()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testProtocolWithRepositoryCollaborator(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
-        $dbAncestryIds = [11, 12];
-        $dbData = [
-            ['type' => 'clip', 'pid' => 'p002b7q9'],
-            ['type' => 'clip', 'pid' => 'p002kzxk'],
-        ];
+        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [11, 12]]);
+
         $this->mockRepository->expects($this->once())
-             ->method('findStreamableDescendantsByType')
-             ->with($dbAncestryIds, 'Clip', 3, 12)
-             ->willReturn($dbData);
+            ->method('findStreamableDescendantsByType')
+            ->with($stubProgramme->getDbAncestryIds(), 'Clip', $expectedLimit, $expectedOffset);
 
-        $mockProgramme = $this->createMock(Programme::class);
-        $mockProgramme->method('getDbAncestryIds')->willReturn($dbAncestryIds);
-        $mappedResults = $this->service()->findDescendantClips($mockProgramme, 3, 5);
+        $this->service()->findDescendantClips($stubProgramme, ...$paramsPagination);
+    }
 
-        $this->assertEquals($this->programmesFromDbData($dbData), $mappedResults);
-        $this->assertContainsOnlyInstancesOf('BBC\ProgrammesPagesService\Domain\Entity\Clip', $mappedResults);
-        $this->assertCount(2, $mappedResults);
+    public function paginationProvider(): array
+    {
+        return [
+            // [expectedLimit, expectedOffset, [limit, page]]
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [3, 12, [3, 5]],
+        ];
+    }
+
+    /**
+     * @dataProvider dbClipsProvider
+     */
+    public function testResults(array $expectedClipsPids, array $dbClipsProvided)
+    {
+        $this->mockRepository->method('findStreamableDescendantsByType')->willReturn($dbClipsProvided);
+
+        $clips = $this->service()->findDescendantClips($this->createMock(Programme::class));
+
+        $this->assertContainsOnlyInstancesOf(Clip::class, $clips);
+        $this->assertCount(count($dbClipsProvided), $clips);
+        foreach ($expectedClipsPids as $i => $expectedPid) {
+            $this->assertEquals($expectedPid, $clips[$i]->getPid());
+        }
+    }
+
+    public function dbClipsProvider(): array
+    {
+        return [
+            'CASE: clips results found' => [
+                ['p002b7q9', 'p002kzxk'],
+                [['type' => 'clip', 'pid' => 'p002b7q9'], ['type' => 'clip', 'pid' => 'p002kzxk']],
+            ],
+            'CASE: clips results NOT found' => [[], []],
+        ];
     }
 }
