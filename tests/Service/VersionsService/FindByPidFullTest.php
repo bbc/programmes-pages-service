@@ -2,34 +2,37 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\VersionsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class FindByPidFullTest extends AbstractVersionsServiceTest
 {
-    public function testFindByPidFull()
+    public function testServiceCanReceiveSpecifiedVersion()
     {
-        $pid = new Pid('b06tl314');
-        $dbData = ['pid' => 'b06tl314'];
+        $pid = $this->createMock(Pid::class);
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
             ->with($pid)
-            ->willReturn($dbData);
+            ->willReturn(['pid' => 'b06tl314']);
 
-        $result = $this->service()->findByPidFull($pid);
-        $this->assertEquals($this->versionFromDbData($dbData), $result);
+        $version = $this->service()->findByPidFull($pid);
+
+        $this->assertInstanceOf(Version::class, $version);
+        $this->assertEquals('b06tl314', $version->getPid());
     }
 
-    public function testFindByPidFullEmptyData()
+    public function testNullIsReceivedWhenVersionNotFound()
     {
-        $pid = new Pid('b06tl314');
+        $pid = $this->createMock(Pid::class);
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
             ->with($pid)
             ->willReturn(null);
 
-        $result = $this->service()->findByPidFull($pid);
-        $this->assertEquals(null, $result);
+        $version = $this->service()->findByPidFull($pid);
+
+        $this->assertEquals(null, $version);
     }
 }

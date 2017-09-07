@@ -2,34 +2,37 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\VersionsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
+use BBC\ProgrammesPagesService\Domain\Entity\Version;
+
 class FindByProgrammeItemTest extends AbstractVersionsServiceTest
 {
-    public function testFindByProgrammeItem()
+    public function testVersionsAreReturnedWhenFound()
     {
-        $dbId = 101;
-        $programmeItem = $this->mockEntity('ProgrammeItem', $dbId);
-        $dbData = [['pid' => 'b06tl314'], ['pid' => 'b06ts0v9']];
+        $programmeItem = $this->createConfiguredMock(ProgrammeItem::class, ['getDbId' => 101]);
 
         $this->mockRepository->expects($this->once())
             ->method('findByProgrammeItem')
-            ->with($dbId)
-            ->willReturn($dbData);
+            ->with($programmeItem->getDbId())
+            ->willReturn([['pid' => 'b06tl314'], ['pid' => 'b06ts0v9']]);
 
-        $result = $this->service()->findByProgrammeItem($programmeItem);
-        $this->assertEquals($this->versionsFromDbData($dbData), $result);
+        $versions = $this->service()->findByProgrammeItem($programmeItem);
+
+        $this->assertCount(2, $versions);
+        $this->assertContainsOnly(Version::class, $versions);
     }
 
-    public function testFindByProgrammeItemDbIdWithNonExistantItem()
+    public function testEmptyArrayIsReceivedWhenNotFound()
     {
-        $dbId = 999;
-        $programmeItem = $this->mockEntity('ProgrammeItem', $dbId);
+        $programmeItem = $this->createConfiguredMock(ProgrammeItem::class, ['getDbId' => 101]);
 
         $this->mockRepository->expects($this->once())
             ->method('findByProgrammeItem')
-            ->with($dbId)
+            ->with($programmeItem->getDbId())
             ->willReturn([]);
 
-        $result = $this->service()->findByProgrammeItem($programmeItem);
-        $this->assertEquals([], $result);
+        $versions = $this->service()->findByProgrammeItem($programmeItem);
+
+        $this->assertEquals([], $versions);
     }
 }
