@@ -9,7 +9,7 @@ class FindEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testProtocolWithRepository(int $expectedLimit, int $expectedOffset, array $paginationParams)
+    public function testProtocolWithRepository(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
         $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 
@@ -17,7 +17,7 @@ class FindEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
             ->method('findEpisodeGuideChildren')
             ->with($programme->getDbId(), $expectedLimit, $expectedOffset);
 
-        $this->service()->findEpisodeGuideChildren($programme, ...$paginationParams);
+        $this->service()->findEpisodeGuideChildren($programme, ...$paramsPagination);
     }
 
     public function paginationProvider(): array
@@ -34,9 +34,8 @@ class FindEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
         $dbId = 999;
         $programme = $this->mockEntity('Programme', $dbId);
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
             ->method('findEpisodeGuideChildren')
-            ->with($dbId, 5, 10)
             ->willReturn([]);
 
         $result = $this->service()->findEpisodeGuideChildren($programme, 5, 3);
