@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 
 class CountEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
 {
@@ -9,16 +10,16 @@ class CountEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
     {
         $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 
-        $this->mockRepository
+        $this->mockRepository->expects($this->once())
             ->method('countEpisodeGuideChildren')
             ->with($programme->getDbId());
 
-        $this->service()->countEpisodeGuideChildren($programme));
+        $this->service()->countEpisodeGuideChildren($programme);
     }
 
     public function testCountReturnAnIntegerWithAmountOfEpisodes()
     {
-        $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
+        $programme = $this->createMock(Programme::class);
 
         $this->mockRepository
             ->method('countEpisodeGuideChildren')
