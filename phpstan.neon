@@ -14,7 +14,6 @@ parameters:
         - '#Parameter \#6 \$endAt of class BBC\\ProgrammesPagesService\\Domain\\Entity\\Broadcast constructor expects DateTimeImmutable, DateTimeImmutable\|null given.#'
         # PHPUnit ignores
         - '#PHPUnit_Framework_MockObject_MockObject given.#'
-        - '#but returns PHPUnit_Framework_MockObject_MockObject.#'
         - '#Call to an undefined method PHPUnit_Framework_MockObject_MockObject::#'
         - '#Calling method setTimezone\(\) on possibly null value of type Cake\\Chronos\\Chronos\|null.#'
         - '#Property Tests\\BBC\\ProgrammesPagesService\\Data\\ProgrammesDb\\Type\\UtcDateTimeTypeTest::\$type \(BBC\\ProgrammesPagesService\\Data\\ProgrammesDb\\Type\\UtcDateTimeType\) does not accept Doctrine\\DBAL\\Types\\Type.#'
