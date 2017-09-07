@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\SegmentsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Segment;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\SegmentsService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -11,19 +13,9 @@ abstract class AbstractSegmentsServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('SegmentRepository');
-        $this->setUpMapper('SegmentMapper', 'segmentFromDbData');
-    }
-
-    protected function segmentsFromDbData(array $entities)
-    {
-        return array_map([$this, 'segmentFromDbData'], $entities);
-    }
-
-    protected function segmentFromDbData(array $entity)
-    {
-        $mockVersion = $this->createMock(self::ENTITY_NS . 'Segment');
-        $mockVersion->method('getPid')->willReturn($entity['pid']);
-        return $mockVersion;
+        $this->setUpMapper('SegmentMapper', function ($dbSegment) {
+            return $this->createConfiguredMock(Segment::class, ['getPid' => new Pid($dbSegment['pid'])]);
+        });
     }
 
     protected function service()
