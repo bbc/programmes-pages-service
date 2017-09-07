@@ -2,49 +2,31 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+
 class FindEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
 {
-    public function testFindEpisodeGuideChildrenDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testProtocolWithRepository(int $expectedLimit, int $expectedOffset, array $paginationParams)
     {
-        $dbId = 1;
-        $programme = $this->mockEntity('Programme', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 
         $this->mockRepository->expects($this->once())
             ->method('findEpisodeGuideChildren')
-            ->with($dbId, 300, 0)
-            ->willReturn($dbData);
+            ->with($programme->getDbId(), $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findEpisodeGuideChildren($programme);
-        $this->assertEquals($this->programmesFromDbData($dbData), $result);
+        $this->service()->findEpisodeGuideChildren($programme, ...$paginationParams);
     }
 
-    public function testFindEpisodeGuideChildrenCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbId = 1;
-        $programme = $this->mockEntity('Programme', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findEpisodeGuideChildren')
-            ->with($dbId, 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findEpisodeGuideChildren($programme, 5, 3);
-        $this->assertEquals($this->programmesFromDbData($dbData), $result);
-    }
-
-    public function testCountEpisodeGuideChildren()
-    {
-        $dbId = 1;
-        $programme = $this->mockEntity('Programme', $dbId);
-
-        $this->mockRepository->expects($this->once())
-            ->method('countEpisodeGuideChildren')
-            ->with($dbId)
-            ->willReturn(10);
-
-        $this->assertEquals(10, $this->service()->countEpisodeGuideChildren($programme));
+        return [
+            // [expectedLimit, expectedOffset, [limit, page]]
+            'default pagination' => [300, 0, []],
+            'custom pagination' => [3, 12, [3, 5]],
+        ];
     }
 
     public function testFindEpisodeGuideChildrenWithNonExistantPid()
@@ -61,16 +43,17 @@ class FindEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
         $this->assertEquals([], $result);
     }
 
-    public function testCountEpisodeGuideChildrenWithNonExistantPid()
+    public function testCountReturnAnIntegerWithAmountOfEpisodes()
     {
-        $dbId = 999;
-        $programme = $this->mockEntity('Programme', $dbId);
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 
-        $this->mockRepository->expects($this->once())
+        $this->mockRepository
             ->method('countEpisodeGuideChildren')
-            ->with($dbId)
-            ->willReturn(0);
+            ->with($programme->getDbId())
+            ->will($this->onConsecutiveCalls(0, 1, 10));
 
         $this->assertEquals(0, $this->service()->countEpisodeGuideChildren($programme));
+        $this->assertEquals(1, $this->service()->countEpisodeGuideChildren($programme));
+        $this->assertEquals(10, $this->service()->countEpisodeGuideChildren($programme));
     }
 }
