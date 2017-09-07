@@ -2,34 +2,38 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\SegmentEventsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class FindByPidFullTest extends AbstractSegmentEventsServiceTest
 {
-    public function testFindByPidFull()
+    public function testCommunicationWithRepository()
     {
-        $pid = new Pid('sg000001');
-        $dbData = ['pid' => 'sg000001'];
+        $pid = $this->createMock(Pid::class);
 
         $this->mockRepository->expects($this->once())
             ->method('findByPidFull')
-            ->with($pid)
-            ->willReturn($dbData);
+            ->with($pid);
 
-        $result = $this->service()->findByPidFull($pid);
-        $this->assertEquals($this->segmentEventFromDbData($dbData), $result);
+        $this->service()->findByPidFull($pid);
+    }
+
+    public function testFindByPidFull()
+    {
+        $this->mockRepository->method('findByPidFull')->willReturn(['pid' => 'sg000001']);
+
+        $segmentEvent = $this->service()->findByPidFull($pid = $this->createMock(Pid::class));
+
+        $this->assertInstanceOf(SegmentEvent::class, $segmentEvent);
+        $this->assertEquals('sg000001', $segmentEvent->getPid());
     }
 
     public function testFindByPidFullEmptyData()
     {
-        $pid = new Pid('sg000001');
+        $this->mockRepository->method('findByPidFull')->willReturn(null);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByPidFull')
-            ->with($pid)
-            ->willReturn(null);
+        $segment = $this->service()->findByPidFull($pid = $this->createMock(Pid::class));
 
-        $result = $this->service()->findByPidFull($pid);
-        $this->assertEquals(null, $result);
+        $this->assertEquals(null, $segment);
     }
 }

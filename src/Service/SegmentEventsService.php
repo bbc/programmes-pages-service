@@ -88,6 +88,9 @@ class SegmentEventsService extends AbstractService
         );
     }
 
+    /**
+     * @return SegmentEvent[]
+     */
     public function findBySegmentFull(
         Segment $segment,
         bool $groupByVersionId = false,

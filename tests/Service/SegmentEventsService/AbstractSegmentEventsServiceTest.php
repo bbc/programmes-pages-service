@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\SegmentEventsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\SegmentEventsService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -11,19 +13,9 @@ abstract class AbstractSegmentEventsServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('SegmentEventRepository');
-        $this->setUpMapper('SegmentEventMapper', 'segmentEventFromDbData');
-    }
-
-    protected function segmentEventsFromDbData(array $entities)
-    {
-        return array_map([$this, 'segmentEventFromDbData'], $entities);
-    }
-
-    protected function segmentEventFromDbData(array $entity)
-    {
-        $mockSegmentEvent = $this->createMock(self::ENTITY_NS . 'SegmentEvent');
-        $mockSegmentEvent->method('getPid')->willReturn($entity['pid']);
-        return $mockSegmentEvent;
+        $this->setUpMapper('SegmentEventMapper', function ($dbSegment) {
+            return $this->createConfiguredMock(SegmentEvent::class, ['getpid' => new Pid($dbSegment['pid'])]);
+        });
     }
 
     protected function service()
