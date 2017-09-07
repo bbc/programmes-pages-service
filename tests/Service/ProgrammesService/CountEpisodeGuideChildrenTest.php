@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 
 class CountEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
 {
-    public function testProtocolWithRepository()
+    public function testCommunicationOfServiceWithRepository()
     {
         $programme = $this->createConfiguredMock(Programme::class, ['getDbId' => 1]);
 
@@ -17,16 +17,26 @@ class CountEpisodeGuideChildrenTest extends AbstractProgrammesServiceTest
         $this->service()->countEpisodeGuideChildren($programme);
     }
 
-    public function testCountReturnAnIntegerWithAmountOfEpisodes()
+    /**
+     * @dataProvider dbCountProvider
+     */
+    public function testCountReturnAnIntegerWithAmountOfEpisodes($dbCountProvided)
     {
         $programme = $this->createMock(Programme::class);
 
         $this->mockRepository
             ->method('countEpisodeGuideChildren')
-            ->will($this->onConsecutiveCalls(0, 1, 10));
+            ->willReturn($dbCountProvided);
 
-        $this->assertEquals(0, $this->service()->countEpisodeGuideChildren($programme));
-        $this->assertEquals(1, $this->service()->countEpisodeGuideChildren($programme));
-        $this->assertEquals(10, $this->service()->countEpisodeGuideChildren($programme));
+        $this->assertEquals($dbCountProvided, $this->service()->countEpisodeGuideChildren($programme));
+    }
+
+    public function dbCountProvider(): array
+    {
+        return [
+            [0],
+            [1],
+            [10],
+        ];
     }
 }

@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 
 class CountAllTleosByCategoryTest extends AbstractProgrammesServiceTest
 {
-    public function testProtocolWithRepository()
+    public function testCommunicationParamsWithRepository()
     {
         $category = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1]]);
 
