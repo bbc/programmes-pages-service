@@ -10,7 +10,7 @@ class FindBySegmentTest extends AbstractSegmentEventsServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testFindBySegmentFullDefaultPagination(int $expectedLimit, int $expectedOffset, array $paramsPagination)
+    public function testCommunicationWithRepository(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
         $segment = $this->createConfiguredMock(Segment::class, ['getDbId' => 1]);
 
