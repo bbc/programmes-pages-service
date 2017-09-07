@@ -30,7 +30,6 @@ class FindFullLatestBroadcastedForContributorTest extends AbstractSegmentEventsS
         ];
     }
 
-
     public function testArrayOfSegmentEventIsReceivedWhenResultsFound()
     {
         $this->mockRepository->method('findFullLatestBroadcastedForContributor')->willReturn([['pid' => 'sg000001'], ['pid' => 'sg000002']]);

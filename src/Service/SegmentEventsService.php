@@ -42,6 +42,9 @@ class SegmentEventsService extends AbstractService
         );
     }
 
+    /**
+     * @return SegmentEvent[]
+     */
     public function findLatestBroadcastedForContributor(
         Contributor $contributor,
         ?int $limit = self::DEFAULT_LIMIT,
@@ -118,7 +121,6 @@ class SegmentEventsService extends AbstractService
             }
         );
     }
-
 
     /**
      * @return SegmentEvent[]
