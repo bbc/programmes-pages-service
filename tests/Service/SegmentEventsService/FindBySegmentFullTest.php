@@ -46,7 +46,7 @@ class FindBySegmentFullTest extends AbstractSegmentEventsServiceTest
     {
         $this->mockRepository->method('findBySegmentFull')->willReturn([]);
 
-        $segmentEvents = $this->service()->findBySegmentFull($this->createMock(Segment::class, true));
+        $segmentEvents = $this->service()->findBySegmentFull($this->createMock(Segment::class), true);
 
         $this->assertEquals([], $segmentEvents);
     }
