@@ -2,48 +2,62 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CoreEntitiesService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class FindByPidFullTest extends AbstractCoreEntitiesServiceTest
 {
-    public function testFindByPidFull()
+    /**
+     * @dataProvider entityTypeParamProvider
+     */
+    public function testProtocolWithDb($expectedEntityType, array $paramEntityType)
     {
         $pid = new Pid('b010t19z');
-        $dbData = ['pid' => 'b010t19z'];
 
         $this->mockRepository->expects($this->once())
-            ->method('findByPidFull')
-            ->with($pid, 'CoreEntity')
-            ->willReturn($dbData);
+             ->method('findByPidFull')
+             ->with($pid, $expectedEntityType);
 
-        $result = $this->service()->findByPidFull($pid);
-        $this->assertEquals($this->coreEntityFromDbData($dbData), $result);
+        $this->service()->findByPidFull($pid, ...$paramEntityType);
     }
 
-    public function testFindByPidFullWithCustomEntityType()
+    public function entityTypeParamProvider(): array
     {
-        $pid = new Pid('b010t19z');
-        $dbData = ['pid' => 'b010t19z'];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findByPidFull')
-            ->with($pid, 'ProgrammeContainer')
-            ->willReturn($dbData);
-
-        $result = $this->service()->findByPidFull($pid, 'ProgrammeContainer');
-        $this->assertEquals($this->coreEntityFromDbData($dbData), $result);
+        return [
+            'CASE: default entity type when no indicated' => ['CoreEntity', []],
+            'CASE: explicit entity type' => ['ProgrammeContainer', ['ProgrammeContainer']],
+        ];
     }
 
-    public function testFindByPidFullEmptyData()
+    /**
+     * @dataProvider entityTypeSelectorProvider
+     */
+    public function testCoreEntityCanBeReceived(string $entityTypeProvided)
     {
-        $pid = new Pid('b010t19z');
+        $this->mockRepository->method('findByPidFull')->willReturn(['pid' => 'b010t19z']);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByPidFull')
-            ->with($pid)
-            ->willReturn(null);
+        $coreEntity = $this->service()->findByPidFull($this->createMock(Pid::class), $entityTypeProvided);
 
-        $result = $this->service()->findByPidFull($pid);
-        $this->assertNull($result);
+        // we cannot be sure that the type returned is a coreEntity or ProgrammeContainer, that is
+        // responssibility of the CoreEntitymapper and Repository. But we can test the PID of it
+        $this->assertInstanceOf(CoreEntity::class, $coreEntity);
+        $this->assertEquals('b010t19z', (string) $coreEntity->getPid());
+    }
+
+    public function entityTypeSelectorProvider(): array
+    {
+        return [
+            'CASE: CoreEntity' => ['CoreEntity'],
+            'CASE: ProgrammeContainer' => ['ProgrammeContainer'],
+        ];
+    }
+
+    public function testNullValueIsReceivedWhenNoResults()
+    {
+        $this->mockRepository->method('findByPidFull')->willReturn(null);
+
+        $coreEntity = $this->service()->findByPidFull($this->createMock(Pid::class));
+
+        $this->assertNull($coreEntity);
     }
 }
