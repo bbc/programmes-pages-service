@@ -10,7 +10,7 @@ class FindBySegmentFullTest extends AbstractSegmentEventsServiceTest
     /**
      * @dataProvider paginationProvider
      */
-    public function testFindBySegmentFullDefaultPagination(int $expectedLimit, int $expectedOffset, array $paramsPagination)
+    public function testCommunicationWithRepository(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
         $segment = $this->createConfiguredMock(Segment::class, ['getDbId' => 1]);
 
@@ -32,14 +32,13 @@ class FindBySegmentFullTest extends AbstractSegmentEventsServiceTest
 
     public function testArrayOfSegmentsEventsAreReceivedWhenFoundResults()
     {
-        $this->mockRepository->method('findBySegmentFull')->willReturn([['pid' => 'sg000001'], ['pid' => 'sg000002'], ['pid' => 'sg000003']]);
+        $this->mockRepository->method('findBySegmentFull')->willReturn([['pid' => 'sg000001'], ['pid' => 'sg000002']]);
 
         $segmentEvents = $this->service()->findBySegmentFull($this->createMock(Segment::class), true);
 
-        $this->assertCount(3, $segmentEvents);
+        $this->assertCount(2, $segmentEvents);
         $this->assertContainsOnly(SegmentEvent::class, $segmentEvents);
         $this->assertEquals('sg000001', $segmentEvents[0]->getPid());
-        $this->assertEquals('sg000002', $segmentEvents[1]->getPid());
         $this->assertEquals('sg000002', $segmentEvents[1]->getPid());
     }
 

@@ -65,6 +65,9 @@ class SegmentEventsService extends AbstractService
         );
     }
 
+    /**
+     * @return SegmentEvent[]
+     */
     public function findByVersionWithContributions(
         Version $version,
         ?int $limit = self::DEFAULT_LIMIT,
@@ -117,6 +120,9 @@ class SegmentEventsService extends AbstractService
     }
 
 
+    /**
+     * @return SegmentEvent[]
+     */
     public function findBySegment(
         Segment $segment,
         bool $groupByVersionId = false,
