@@ -29,7 +29,7 @@ class FindByPidFullTest extends AbstractProgrammesServiceTest
             'CASE: custom type' => ['ProgrammeContainer', ['ProgrammeContainer']],
         ];
     }
-    
+
     public function testResultsAreReceivedByService()
     {
         $this->mockRepository->method('findByPidFull')->willReturn(['pid' => 'b010t19z']);
@@ -40,7 +40,7 @@ class FindByPidFullTest extends AbstractProgrammesServiceTest
         $this->assertEquals('b010t19z', $programme->getPid());
     }
 
-    public function testResultsAreEmpty()
+    public function testNullIsReceivedWhenNoDbResultsAreFound()
     {
         $this->mockRepository->method('findByPidFull')->willReturn(null);
 
