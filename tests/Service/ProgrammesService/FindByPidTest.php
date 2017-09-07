@@ -18,7 +18,6 @@ class FindByPidTest extends AbstractProgrammesServiceTest
             ->method('findByPid')
             ->with($pid, $expectedType);
 
-
         $this->service()->findByPid($pid, ...$specifiedType);
     }
 
@@ -27,7 +26,7 @@ class FindByPidTest extends AbstractProgrammesServiceTest
         return [
             // [expectedLimit, expectedOffset, [limit, page]]
             'default entity type' => [
-                'Programme', []
+                'Programme', [],
             ],
             'custom entity type' => ['ProgrammeContainer', ['ProgrammeContainer']],
         ];

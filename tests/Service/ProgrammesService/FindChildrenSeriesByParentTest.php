@@ -49,7 +49,7 @@ class FindChildrenSeriesByParentTest extends AbstractProgrammesServiceTest
             ],
             'CASE: no series found' => [
                 [],
-                []
+                [],
             ],
         ];
     }

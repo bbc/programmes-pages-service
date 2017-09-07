@@ -5,7 +5,6 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
-
 class FindByPidFullTest extends AbstractProgrammesServiceTest
 {
     /**

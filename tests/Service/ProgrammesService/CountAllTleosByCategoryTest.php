@@ -15,7 +15,6 @@ class CountAllTleosByCategoryTest extends AbstractProgrammesServiceTest
              ->with($category->getDbAncestryIds(), false);
 
         $this->service()->countAllTleosByCategory($category);
-
     }
 
     public function testServiceReceiveCountFromDb()

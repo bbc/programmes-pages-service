@@ -106,12 +106,12 @@ class FindSiblingByProgrammeTest extends AbstractProgrammesServiceTest
         $episode = $this->createConfiguredMock(Episode::class, [
             'getPosition' => $position,
             'getReleaseDate' => $releaseDate,
-            'getFirstBroadcastDate' => $firstBroadcastDate
+            'getFirstBroadcastDate' => $firstBroadcastDate,
         ]);
 
         if ($parentId) {
             $episode->method('getParent')->willReturn(
-                $this->createConfiguredMock(Series::class,['getDbId' => $parentId])
+                $this->createConfiguredMock(Series::class, ['getDbId' => $parentId])
             );
         }
 

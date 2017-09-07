@@ -13,7 +13,7 @@ class FindPreviousSiblingByProgramme extends AbstractProgrammesServiceTest
     /**
      * @dataProvider positionParamProvider
      */
-    public function testAsLongAsWeCanFindByPositionThenNeverIsSearchedByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDate)
+    public function testAsLongAsWeCanFindProgrammesByPositionThenNeverIsSearchedByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDate)
     {
         $episode = $this->getMockEpisode(1, $positionProvided, $releaseDateProvided, $firstBroadcastDate);
 
@@ -47,7 +47,7 @@ class FindPreviousSiblingByProgramme extends AbstractProgrammesServiceTest
     /**
      * @dataProvider firstBroadcastedDateParamProvider
      */
-    public function testWhenNoResultsSearchingByPositionThenWeTryByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDateProvided)
+    public function testWhenNoProgrammesResultsSearchingByPositionThenWeTryByBroadcastedDate($positionProvided, $releaseDateProvided, $firstBroadcastDateProvided)
     {
         $episode = $this->getMockEpisode(1, $positionProvided, $releaseDateProvided, $firstBroadcastDateProvided);
 
@@ -106,12 +106,12 @@ class FindPreviousSiblingByProgramme extends AbstractProgrammesServiceTest
         $episode = $this->createConfiguredMock(Episode::class, [
             'getPosition' => $position,
             'getReleaseDate' => $releaseDate,
-            'getFirstBroadcastDate' => $firstBroadcastDate
+            'getFirstBroadcastDate' => $firstBroadcastDate,
         ]);
 
         if ($parentId) {
             $episode->method('getParent')->willReturn(
-                $this->createConfiguredMock(Series::class,['getDbId' => $parentId])
+                $this->createConfiguredMock(Series::class, ['getDbId' => $parentId])
             );
         }
 
