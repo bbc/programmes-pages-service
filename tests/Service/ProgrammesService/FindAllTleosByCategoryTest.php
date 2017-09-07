@@ -8,7 +8,7 @@ use BBC\ProgrammesPagesService\Service\ProgrammesService;
 
 class FindAllTleosByCategoryTest extends AbstractProgrammesServiceTest
 {
-    public function testFind()
+    public function testCommunicationWithDatabase()
     {
         $category = $this->createConfiguredMock(Genre::class, ['getDbId' => 1]);
 
@@ -26,7 +26,7 @@ class FindAllTleosByCategoryTest extends AbstractProgrammesServiceTest
     /**
      * @dataProvider dbTleosProvider
      */
-    public function testFindAllTleosByCategory(array $expectedPids, array $dbTleosProvided)
+    public function testTleosAreReceivedFromRepository(array $expectedPids, array $dbTleosProvided)
     {
         $this->mockRepository->method('findTleosByCategory')->willReturn($dbTleosProvided);
 
