@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\AtozTitlesService;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AtozTitleRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\AtozTitle;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\AtozTitleMapper;
 use BBC\ProgrammesPagesService\Service\AtozTitlesService;
@@ -12,7 +13,7 @@ abstract class AbstractAtozTitlesServiceTest extends AbstractServiceTest
     public function setUp()
     {
         $this->setUpCache();
-        $this->setUpRepo('AtozTitleRepository');
+        $this->setUpRepo(AtozTitleRepository::class);
         $this->setUpMapper(AtozTitleMapper::class, function (array $dbData) {
             return $this->createConfiguredMock(
                 AtozTitle::class,

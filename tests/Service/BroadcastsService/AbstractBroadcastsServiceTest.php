@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\BroadcastsService;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\BroadcastMapper;
@@ -13,7 +14,7 @@ abstract class AbstractBroadcastsServiceTest extends AbstractServiceTest
     public function setUp()
     {
         $this->setUpCache();
-        $this->setUpRepo('BroadcastRepository');
+        $this->setUpRepo(BroadcastRepository::class);
         $this->setUpMapper(BroadcastMapper::class, function (array $dbData) {
             return $this->createConfiguredMock(
                 Broadcast::class,

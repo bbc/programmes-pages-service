@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\PromotionsService;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PromotionRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Promotion;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\PromotionMapper;
@@ -13,7 +14,7 @@ abstract class AbstractPromotionServiceTest extends AbstractServiceTest
     public function setUp()
     {
         $this->setUpCache();
-        $this->setUpRepo('PromotionRepository');
+        $this->setUpRepo(PromotionRepository::class);
         // override getDomainModel() in mapper
         $this->setUpMapper(PromotionMapper::class, function ($dbPromotion) {
             return $this->createConfiguredMock(Promotion::class, [
