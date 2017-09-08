@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\CategoriesService;
 use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CategoryMapper;
 use BBC\ProgrammesPagesService\Service\CategoriesService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -14,7 +15,7 @@ abstract class AbstractCategoriesServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('CategoryRepository');
-        $this->setUpMapper('CategoryMapper', function ($dbData) {
+        $this->setUpMapper(CategoryMapper::class, function ($dbData) {
             $className = substr($dbData['pip_id'], 0, 1) === 'C' ? Genre::class : Format::class;
             return $this->createConfiguredMock(
                 $className,

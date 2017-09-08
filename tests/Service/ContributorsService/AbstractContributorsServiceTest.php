@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\ContributorsService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributorMapper;
 use BBC\ProgrammesPagesService\Service\ContributorsService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -12,7 +13,7 @@ abstract class AbstractContributorsServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('ContributorRepository');
-        $this->setUpMapper('ContributorMapper', function ($dbContributor) {
+        $this->setUpMapper(ContributorMapper::class, function ($dbContributor) {
             return $this->createConfiguredMock(Contributor::class, ['getMusicBrainzId' => $dbContributor['musicBrainzId']]);
         });
     }

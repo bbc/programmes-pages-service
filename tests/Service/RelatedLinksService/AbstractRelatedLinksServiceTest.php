@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Service\RelatedLinksService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
 use BBC\ProgrammesPagesService\Service\RelatedLinksService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -12,7 +13,7 @@ abstract class AbstractRelatedLinksServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('RelatedLinkRepository');
-        $this->setUpMapper('RelatedLinkMapper', function ($dbRelatedLink) {
+        $this->setUpMapper(RelatedLinkMapper::class, function ($dbRelatedLink) {
             return $this->createConfiguredMock(RelatedLink::class, ['getTitle' => $dbRelatedLink['title']]);
         });
     }

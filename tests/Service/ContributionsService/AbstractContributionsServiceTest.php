@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ContributionsService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Contribution;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ContributionMapper;
 use BBC\ProgrammesPagesService\Service\ContributionsService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -13,7 +14,7 @@ abstract class AbstractContributionsServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('ContributionRepository');
-        $this->setUpMapper('ContributionMapper', function ($dbContribution) {
+        $this->setUpMapper(ContributionMapper::class, function ($dbContribution) {
             return $this->createConfiguredMock(Contribution::class, ['getPid' => new Pid($dbContribution['pid'])]);
         });
     }

@@ -8,9 +8,7 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
 
 abstract class AbstractServiceTest extends TestCase
 {
-    const ENTITY_NS = 'BBC\ProgrammesPagesService\Domain\Entity\\';
     const REPOSITORY_NS = 'BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\\';
-    const MAPPER_NS = 'BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\\';
 
     protected $mockRepository;
 
@@ -38,15 +36,7 @@ abstract class AbstractServiceTest extends TestCase
 
     protected function setUpMapper($mapperName, $callback)
     {
-        $this->mockMapper = $this->createMock($this::MAPPER_NS . $mapperName);
-
-        // TODO once we always pass in a callable to this function then add a typehint and remove this check
-        if (!is_callable($callback)) {
-            $callback = function ($entity) use ($callback) {
-                return $this->$callback($entity);
-            };
-        }
-
+        $this->mockMapper = $this->createMock($mapperName);
         $this->mockMapper->method('getDomainModel')->will($this->returnCallback($callback));
     }
 }

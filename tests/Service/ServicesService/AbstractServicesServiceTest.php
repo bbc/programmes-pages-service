@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ServicesService;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ServiceMapper;
 use BBC\ProgrammesPagesService\Service\ServicesService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -13,7 +14,7 @@ abstract class AbstractServicesServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('ServiceRepository');
-        $this->setUpMapper('ServiceMapper', function ($dbService) {
+        $this->setUpMapper(ServiceMapper::class, function ($dbService) {
             return $this->createConfiguredMock(Service::class, ['getPid' => new Pid($dbService['pid'])]);
         });
     }
