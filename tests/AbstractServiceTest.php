@@ -49,29 +49,4 @@ abstract class AbstractServiceTest extends TestCase
 
         $this->mockMapper->method('getDomainModel')->will($this->returnCallback($callback));
     }
-
-    protected function mockEntity($name, $dbId = null)
-    {
-        $entity = $this->createMock(self::ENTITY_NS . $name);
-
-        if ($dbId) {
-            $entity->method('getDbId')->willReturn($dbId);
-        }
-
-        return $entity;
-    }
-
-    /**
-     * @param array $entities any model domain with getPid() function
-     * @return string[]
-     */
-    protected function extractPids(array $entities): array
-    {
-        return array_map(
-            function ($entity) {
-                return (string) $entity->getPid();
-            },
-            $entities
-        );
-    }
 }

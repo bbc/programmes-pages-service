@@ -40,8 +40,11 @@ class FindByVersionTest extends AbstractBroadcastsServiceTest
         $dummyVersion = $this->createMock(Version::class);
         $broadcasts = $this->service()->findByVersion($dummyVersion);
 
+        $this->assertCount(count($stubRepositoryResults), $broadcasts);
         $this->assertContainsOnly(Broadcast::class, $broadcasts);
-        $this->assertSame($expectedPids, $this->extractPids($broadcasts));
+        foreach ($expectedPids as $i => $expectedPid) {
+            $this->assertEquals($expectedPid, $broadcasts[$i]->getPid());
+        }
     }
 
     public function repositoryResultsProvider(): array
