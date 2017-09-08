@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CollapsedBroadcastMapper;
 use BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
 
@@ -16,7 +17,7 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
     {
         $this->setUpCache();
         $this->setUpRepo('CollapsedBroadcastRepository');
-        $this->setUpMapper('CollapsedBroadcastMapper', function (array $dbDataBroadcast, array $dbDataServices) {
+        $this->setUpMapper(CollapsedBroadcastMapper::class, function (array $dbDataBroadcast, array $dbDataServices) {
             $stubServices = array_map(
                 function ($dbDataService) {
                     return $this->createConfiguredMock(Service::class, [
