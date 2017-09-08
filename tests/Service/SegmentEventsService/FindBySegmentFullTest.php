@@ -2,49 +2,52 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\SegmentEventsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\Segment;
+use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
+
 class FindBySegmentFullTest extends AbstractSegmentEventsServiceTest
 {
-    public function testFindBySegmentFullDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testCommunicationWithRepository(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
-        $dbId = 1;
-        $dbData = [['pid' => 'sg000001']];
-        $segment = $this->mockEntity('Segment', $dbId);
+        $segment = $this->createConfiguredMock(Segment::class, ['getDbId' => 1]);
 
         $this->mockRepository->expects($this->once())
             ->method('findBySegmentFull')
-            ->with([$dbId], true, 300, 0)
-            ->willReturn($dbData);
+            ->with([$segment->getDbId()], true, $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findBySegmentFull($segment, true);
-        $this->assertEquals($this->segmentEventsFromDbData($dbData), $result);
+        $this->service()->findBySegmentFull($segment, true, ...$paramsPagination);
     }
 
-    public function testFindBySegmentFullCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbId = 1;
-        $dbData = [['pid' => 'sg000001'], ['pid' => 'sg000002'], ['pid' => 'sg000003']];
-        $segment = $this->mockEntity('Segment', $dbId);
-
-        $this->mockRepository->expects($this->once())
-            ->method('findBySegmentFull')
-            ->with([$dbId], true, 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findBySegmentFull($segment, true, 5, 3);
-        $this->assertEquals($this->segmentEventsFromDbData($dbData), $result);
+        return [
+            // expected limit, expected offset, user pagination params
+            'CASE: default pagination' => [300, 0, []],
+            'CASE: custom pagination' => [3, 12, [3, 5]],
+        ];
     }
 
-    public function testFindBySegmentFullWithNonExistentDbId()
+    public function testArrayOfSegmentsEventsAreReceivedWhenFoundResults()
     {
-        $dbId = 999;
-        $segment = $this->mockEntity('Segment', $dbId);
+        $this->mockRepository->method('findBySegmentFull')->willReturn([['pid' => 'sg000001'], ['pid' => 'sg000002']]);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findBySegmentFull')
-            ->with([$dbId], true, 300, 0)
-            ->willReturn([]);
+        $segmentEvents = $this->service()->findBySegmentFull($this->createMock(Segment::class), true);
 
-        $result = $this->service()->findBySegmentFull($segment, true);
-        $this->assertEquals([], $result);
+        $this->assertCount(2, $segmentEvents);
+        $this->assertContainsOnly(SegmentEvent::class, $segmentEvents);
+        $this->assertEquals('sg000001', $segmentEvents[0]->getPid());
+        $this->assertEquals('sg000002', $segmentEvents[1]->getPid());
+    }
+
+    public function testEmptyArrayIsReceivedWhenNoFoundResults()
+    {
+        $this->mockRepository->method('findBySegmentFull')->willReturn([]);
+
+        $segmentEvents = $this->service()->findBySegmentFull($this->createMock(Segment::class), true);
+
+        $this->assertEquals([], $segmentEvents);
     }
 }

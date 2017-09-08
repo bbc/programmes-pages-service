@@ -2,49 +2,52 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\SegmentEventsService;
 
+use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
+use BBC\ProgrammesPagesService\Domain\Entity\Version;
+
 class FindByVersionWithContributionsTest extends AbstractSegmentEventsServiceTest
 {
-    public function testFindByVersionWithContributionsDefaultPagination()
+    /**
+     * @dataProvider paginationProvider
+     */
+    public function testCommunicationWithRepository(int $expectedLimit, int $expectedOffset, array $paramsPagination)
     {
-        $dbId = 1;
-        $version = $this->mockEntity('Version', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
+        $version = $this->createConfiguredMock(Version::class, ['getDbId' => 1]);
 
         $this->mockRepository->expects($this->once())
             ->method('findByVersionWithContributions')
-            ->with([$dbId], 300, 0)
-            ->willReturn($dbData);
+            ->with([$version->getDbId()], $expectedLimit, $expectedOffset);
 
-        $result = $this->service()->findByVersionWithContributions($version);
-        $this->assertEquals($this->segmentEventsFromDbData($dbData), $result);
+        $this->service()->findByVersionWithContributions($version, ...$paramsPagination);
     }
 
-    public function testFindByVersionWithContributionsCustomPagination()
+    public function paginationProvider(): array
     {
-        $dbId = 1;
-        $version = $this->mockEntity('Version', $dbId);
-        $dbData = [['pid' => 'b00swyx1'], ['pid' => 'b010t150']];
-
-        $this->mockRepository->expects($this->once())
-            ->method('findByVersionWithContributions')
-            ->with([$dbId], 5, 10)
-            ->willReturn($dbData);
-
-        $result = $this->service()->findByVersionWithContributions($version, 5, 3);
-        $this->assertEquals($this->segmentEventsFromDbData($dbData), $result);
+        return [
+            // expected limit, expected offset, user pagination params
+            'CASE: default pagination' => [300, 0, []],
+            'CASE: custom pagination' => [3, 12, [3, 5]],
+        ];
     }
 
-    public function testFindByVersionWithContributionsWithNonExistantDbId()
+    public function testArrayOfSegmentEventIsReceivedWhenResultsFound()
     {
-        $dbId = 999;
-        $version = $this->mockEntity('Version', $dbId);
+        $this->mockRepository->method('findByVersionWithContributions')->willReturn([['pid' => 'sg000001'], ['pid' => 'sg000002']]);
 
-        $this->mockRepository->expects($this->once())
-            ->method('findByVersionWithContributions')
-            ->with([$dbId], 5, 10)
-            ->willReturn([]);
+        $segmentEvents = $this->service()->findByVersionWithContributions($this->createMock(Version::class));
 
-        $result = $this->service()->findByVersionWithContributions($version, 5, 3);
+        $this->assertCount(2, $segmentEvents);
+        $this->assertContainsOnly(SegmentEvent::class, $segmentEvents);
+        $this->assertEquals('sg000001', $segmentEvents[0]->getPid());
+        $this->assertEquals('sg000002', $segmentEvents[1]->getPid());
+    }
+
+    public function testEmptyArrayIsReceivedWhenNoResultsFound()
+    {
+        $this->mockRepository->method('findByVersionWithContributions')->willReturn([]);
+
+        $result = $this->service()->findByVersionWithContributions($this->createMock(Version::class));
+
         $this->assertEquals([], $result);
     }
 }
