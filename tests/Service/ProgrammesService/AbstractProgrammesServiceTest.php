@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesService;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
@@ -13,7 +14,7 @@ abstract class AbstractProgrammesServiceTest extends AbstractServiceTest
     public function setUp()
     {
         $this->setUpCache();
-        $this->setUpRepo('CoreEntityRepository');
+        $this->setUpRepo(CoreEntityRepository::class);
         $this->setUpMapper(CoreEntityMapper::class, function ($dbEntity) {
             return $this->createConfiguredMock(Programme::class, ['getPid' => new Pid($dbEntity['pid'])]);
         });

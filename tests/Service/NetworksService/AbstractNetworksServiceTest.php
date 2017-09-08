@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\NetworksService;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\NetworkRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper;
 use BBC\ProgrammesPagesService\Service\NetworksService;
@@ -13,7 +14,7 @@ abstract class AbstractNetworksServiceTest extends AbstractServiceTest
     public function setUp()
     {
         $this->setUpCache();
-        $this->setUpRepo('NetworkRepository');
+        $this->setUpRepo(NetworkRepository::class);
         $this->setUpMapper(NetworkMapper::class, function ($dbNetwork) {
             return $this->createConfiguredMock(Network::class, ['getNid' => new Nid($dbNetwork['nid'])]);
         });

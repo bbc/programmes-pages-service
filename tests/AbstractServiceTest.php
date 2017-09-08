@@ -8,8 +8,6 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
 
 abstract class AbstractServiceTest extends TestCase
 {
-    const REPOSITORY_NS = 'BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\\';
-
     protected $mockRepository;
 
     protected $mockMapper;
@@ -23,7 +21,7 @@ abstract class AbstractServiceTest extends TestCase
 
     protected function getRepo($repositoryName)
     {
-        return $this->createMock($this::REPOSITORY_NS . $repositoryName);
+        return $this->createMock($repositoryName);
     }
 
     protected function setUpCache()

@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Gallery;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
@@ -14,7 +15,7 @@ abstract class AbstractProgrammesAggregationTest extends AbstractServiceTest
     public function setUp()
     {
         $this->setUpCache();
-        $this->setUpRepo('CoreEntityRepository');
+        $this->setUpRepo(CoreEntityRepository::class);
         $this->setUpMapper(CoreEntityMapper::class, function ($dbEntity) {
             $class = '';
             if ($dbEntity['type'] === 'clip') {

@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\VersionsService;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper;
@@ -13,7 +14,7 @@ abstract class AbstractVersionsServiceTest extends AbstractServiceTest
     public function setUp()
     {
         $this->setUpCache();
-        $this->setUpRepo('VersionRepository');
+        $this->setUpRepo(VersionRepository::class);
         $this->setUpMapper(VersionMapper::class, function ($dbVersion) {
             return $this->createConfiguredMock(Version::class, ['getPid' => new Pid($dbVersion['pid'])]);
         });

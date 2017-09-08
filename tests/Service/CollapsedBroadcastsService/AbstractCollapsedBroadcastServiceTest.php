@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CollapsedBroadcastRepository;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
@@ -16,7 +18,7 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
     public function setUp()
     {
         $this->setUpCache();
-        $this->setUpRepo('CollapsedBroadcastRepository');
+        $this->setUpRepo(CollapsedBroadcastRepository::class);
         $this->setUpMapper(CollapsedBroadcastMapper::class, function (array $dbDataBroadcast, array $dbDataServices) {
             $stubServices = array_map(
                 function ($dbDataService) {
@@ -32,7 +34,7 @@ abstract class AbstractCollapsedBroadcastServiceTest extends AbstractServiceTest
                 'getServices' => $stubServices,
             ]);
         });
-        $this->mockServiceRepository = $this->getRepo('ServiceRepository');
+        $this->mockServiceRepository = $this->getRepo(ServiceRepository::class);
     }
 
     protected function service(): CollapsedBroadcastsService
