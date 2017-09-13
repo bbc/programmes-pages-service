@@ -3,6 +3,7 @@
 /phpunit.xml
 
 /tests/db.sqlite
+/tests/db.sqlite-journal
 
 /composer.phar
 
