@@ -208,7 +208,8 @@ abstract class CoreEntity implements ContributableToInterface, PromotableInterfa
 
     public function getNetwork(): ?Network
     {
-        return $this->masterBrand ? $this->masterBrand->getNetwork() : null;
+        $masterBrand = $this->getMasterBrand();
+        return $masterBrand ? $masterBrand->getNetwork() : null;
     }
 
     public function getTleo(): CoreEntity
