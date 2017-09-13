@@ -43,4 +43,31 @@ class FindByPidTest extends AbstractDatabaseTest
         // findByPid query only
         $this->assertCount(1, $this->getDbQueries());
     }
+
+    public function testFindByPidWhenParentIsEmbargoed()
+    {
+        $this->loadFixtures(['ImagesFixture']);
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Image');
+
+        $entity = $repo->findByPid('mg000004');
+        $this->assertNull($entity);
+
+        // findByPid query only
+        $this->assertCount(1, $this->getDbQueries());
+    }
+
+    public function testFindByPidWhenParentIsEmbargoedAndFilterIsDisabled()
+    {
+        $this->disableEmbargoedFilter();
+
+        $this->loadFixtures(['ImagesFixture']);
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Image');
+        $entity = $repo->findByPid('mg000004');
+
+        $this->assertInternalType('array', $entity);
+        $this->assertEquals('mg000004', $entity['pid']);
+
+        // findByPid query only
+        $this->assertCount(1, $this->getDbQueries());
+    }
 }

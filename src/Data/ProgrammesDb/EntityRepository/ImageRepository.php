@@ -11,7 +11,6 @@ class ImageRepository extends EntityRepository
     {
         $qb = parent::createQueryBuilder('image')
             ->andWhere('image.pid = :pid')
-            ->andWhere('image.isEmbargoed = 0')
             ->setParameter('pid', $pid);
 
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
