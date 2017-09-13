@@ -37,11 +37,14 @@ class PromotionRepository extends EntityRepository
         // way more efficient that having to do a two-step hydration process.
 
         $qb = $this->createQueryBuilder('promotion')
-            ->addSelect(['relatedLinks', 'promotionOfCoreEntity', 'promotionOfImage', 'imageForPromotionOfCoreEntity', 'IDENTITY(promotion.context) AS context_id'])
+            ->addSelect(['relatedLinks', 'promotionOfImage', 'promotionOfCoreEntity', 'pceImage', 'pceMasterBrand', 'pceNetwork', 'pcembImage', 'IDENTITY(promotion.context) AS context_id'])
             ->leftJoin('promotion.relatedLinks', 'relatedLinks')
-            ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
             ->leftJoin('promotion.promotionOfImage', 'promotionOfImage')
-            ->leftJoin('promotionOfCoreEntity.image', 'imageForPromotionOfCoreEntity')
+            ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
+            ->leftJoin('promotionOfCoreEntity.image', 'pceImage')
+            ->leftJoin('promotionOfCoreEntity.masterBrand', 'pceMasterBrand')
+            ->leftJoin('pceMasterBrand.network', 'pceNetwork')
+            ->leftJoin('pceMasterBrand.image', 'pcembImage')
             ->andWhere('promotion.isActive = 1')
             ->andWhere('promotion.startDate <= :datetime')
             ->andWhere('promotion.endDate > :datetime')
