@@ -53,6 +53,7 @@ class ServiceFactoryTest extends TestCase
             ['ContributorsService', ['Contributor'], 'ContributorMapper'],
             ['CoreEntitiesService', ['CoreEntity'], 'CoreEntityMapper'],
             ['GroupsService', ['CoreEntity'], 'CoreEntityMapper'],
+            ['ImagesService', ['Image'], 'ImageMapper'],
             ['NetworksService', ['Network'], 'NetworkMapper'],
             ['ProgrammesService', ['CoreEntity'], 'CoreEntityMapper'],
             ['RelatedLinksService', ['RelatedLink'], 'RelatedLinkMapper'],

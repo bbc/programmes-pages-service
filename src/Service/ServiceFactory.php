@@ -133,6 +133,19 @@ class ServiceFactory
         return $this->instances[GroupsService::class];
     }
 
+    public function getImagesService(): ImagesService
+    {
+        if (!isset($this->instances[ImagesService::class])) {
+            $this->instances[ImagesService::class] = new ImagesService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Image'),
+                $this->mapperFactory->getImageMapper(),
+                $this->cache
+            );
+        }
+
+        return $this->instances[ImagesService::class];
+    }
+
     public function getNetworksService(): NetworksService
     {
         if (!isset($this->instances[NetworksService::class])) {
