@@ -135,6 +135,13 @@ class Network
      */
     private $endDate;
 
+    /**
+     * @var array
+     *
+     * @ORM\OneToMany(targetEntity="Service", mappedBy="network")
+     */
+    private $services;
+
     public function __construct(string $nid, string $name)
     {
         $this->nid = $nid;

@@ -86,7 +86,7 @@ class Service
     /**
      * @var Network|null
      *
-     * @ORM\ManyToOne(targetEntity="Network", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Network", inversedBy="services", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $network;

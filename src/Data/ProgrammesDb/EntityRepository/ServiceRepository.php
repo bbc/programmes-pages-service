@@ -20,6 +20,18 @@ class ServiceRepository extends EntityRepository
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findByIdsWithNetworkServicesList(array $ids): array
+    {
+        return $this->createQueryBuilder('service')
+            ->addSelect(['masterBrand', 'network', 'networkServices'])
+            ->leftJoin('service.masterBrand', 'masterBrand')
+            ->leftJoin('service.network', 'network')
+            ->leftJoin('network.services', 'networkServices')
+            ->andWhere("service.id IN(:ids)")
+            ->setParameter('ids', $ids)
+            ->getQuery()->getResult();
+    }
+
     public function findByPidFull(string $pid): ?array
     {
         $qb = $this->createQueryBuilder('service')
