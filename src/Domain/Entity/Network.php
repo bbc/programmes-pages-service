@@ -79,7 +79,7 @@ class Network
         }
 
         // Validate array of Services
-        if (is_null($services)) {
+        if (!is_null($services)) {
             foreach ($services as $service) {
                 if (!$service instanceof Service) {
                     throw new InvalidArgumentException(sprintf(
