@@ -69,12 +69,25 @@ class Network
         bool $isAllowedAdverts = false,
         ?array $services = null
     ) {
+        // Validate Medium
         if (!in_array($medium, NetworkMediumEnum::validValues(), true)) {
             throw new InvalidArgumentException(sprintf(
                 '$medium has an invalid value. Expected one of %s but got "%s"',
                 '"' . implode('", "', NetworkMediumEnum::validValues()) . '"',
                 $medium
             ));
+        }
+
+        // Validate array of Services
+        if (is_null($services)) {
+            foreach ($services as $service) {
+                if (!$service instanceof Service) {
+                    throw new InvalidArgumentException(sprintf(
+                        'Expected an array of Services but got %s',
+                        (is_object($service) ? get_class($service) : gettype($service))
+                    ));
+                }
+            }
         }
 
         $this->nid = $nid;
