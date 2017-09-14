@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait OptionsTrait
 {
     /**
-     * @var array
+     * @var array|null
      *
      * @ORM\Column(type="json_array", nullable=true)
      */

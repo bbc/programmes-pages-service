@@ -18,6 +18,8 @@ class NetworkMapper extends AbstractMapper
         return $this->buildCacheKey($dbNetwork, 'id', [
             'image' => 'Image',
             'defaultService' => 'Service',
+        ], [
+            'services' => 'Service',
         ]);
     }
 
@@ -39,7 +41,8 @@ class NetworkMapper extends AbstractMapper
                 $dbNetwork['isChildrens'],
                 $dbNetwork['isWorldServiceInternational'],
                 $dbNetwork['isInternational'],
-                $dbNetwork['isAllowedAdverts']
+                $dbNetwork['isAllowedAdverts'],
+                $dbNetwork['services'] ?? null
             );
         }
 

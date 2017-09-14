@@ -29,7 +29,7 @@ class ServiceRepository extends EntityRepository
             ->leftJoin('network.services', 'networkServices')
             ->andWhere("service.id IN(:ids)")
             ->setParameter('ids', $ids)
-            ->getQuery()->getResult();
+            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function findByPidFull(string $pid): ?array

@@ -50,6 +50,9 @@ class Network
     /** @var Options */
     private $options;
 
+    /** @var Service[]|null */
+    private $services;
+
     public function __construct(
         Nid $nid,
         string $name,
@@ -63,7 +66,8 @@ class Network
         bool $isChildrens = false,
         bool $isWorldServiceInternational = false,
         bool $isInternational = false,
-        bool $isAllowedAdverts = false
+        bool $isAllowedAdverts = false,
+        ?array $services = null
     ) {
         if (!in_array($medium, NetworkMediumEnum::validValues(), true)) {
             throw new InvalidArgumentException(sprintf(
@@ -86,6 +90,7 @@ class Network
         $this->isWorldServiceInternational = $isWorldServiceInternational;
         $this->isInternational = $isInternational;
         $this->isAllowedAdverts = $isAllowedAdverts;
+        $this->services = $services;
     }
 
     public function getNid(): Nid
@@ -185,5 +190,19 @@ class Network
     public function getOption(string $key)
     {
         return $this->options->getOption($key);
+    }
+
+    /**
+     * @throws DataNotFetchedException
+     */
+    public function getServices(): array
+    {
+        if (is_null($this->services)) {
+            throw new DataNotFetchedException(
+                'Could not get Services of Network "' . $this->nid . '" as it was not fetched'
+            );
+        }
+
+        return $this->services;
     }
 }

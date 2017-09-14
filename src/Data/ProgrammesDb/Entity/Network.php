@@ -311,4 +311,9 @@ class Network
     {
         $this->endDate = $endDate;
     }
+
+    public function getServices(): array
+    {
+        return $this->services;
+    }
 }
