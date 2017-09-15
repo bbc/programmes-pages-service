@@ -136,8 +136,6 @@ class Network
     private $endDate;
 
     /**
-     * @var array
-     *
      * @ORM\OneToMany(targetEntity="Service", mappedBy="network")
      */
     private $services;
@@ -310,10 +308,5 @@ class Network
     public function setEndDate(?DateTime $endDate): void
     {
         $this->endDate = $endDate;
-    }
-
-    public function getServices(): array
-    {
-        return $this->services;
     }
 }
