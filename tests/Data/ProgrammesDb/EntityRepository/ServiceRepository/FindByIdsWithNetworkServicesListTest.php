@@ -12,7 +12,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindByIdsWithNetworkServicesListTest extends AbstractDatabaseTest
 {
-    /** @var  ServiceRepository */
+    /** @var ServiceRepository */
     private $repo;
 
     public function setUp()
