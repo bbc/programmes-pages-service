@@ -13,7 +13,7 @@ class CountUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('countUpcomingByProgramme')
-            ->with($stubProgramme->getDbAncestryIds(), false, $this->lessThanOrEqual(new DateTimeImmutable()));
+            ->with($stubProgramme->getDbAncestryIds(), false, $this->isInstanceOf(DateTimeImmutable::class));
 
         $this->service()->countUpcomingByProgramme($stubProgramme);
     }

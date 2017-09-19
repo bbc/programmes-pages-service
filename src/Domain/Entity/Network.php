@@ -212,7 +212,7 @@ class Network
     {
         if (is_null($this->services)) {
             throw new DataNotFetchedException(
-                'Could not get Services of Network "' . $this->nid . '" as it was not fetched'
+                'Could not get Services of Network "' . $this->nid . '" as they were not fetched'
             );
         }
 

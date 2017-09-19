@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ServiceRepository;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 /**
@@ -23,8 +22,7 @@ class FindByIdsWithNetworkServicesListTest extends AbstractDatabaseTest
 
     public function testFindServiceBy()
     {
-        $sid = new Sid('bbc_radio_fourlw');
-        $dbId = $this->getDbId($sid);
+        $dbId = $this->getDbIdFromPersistentIdentifier('p00fzl7k', 'Service');
         $service = $this->repo->findByIdsWithNetworkServicesList([$dbId]);
 
         $this->assertInternalType('array', $service);
@@ -36,19 +34,5 @@ class FindByIdsWithNetworkServicesListTest extends AbstractDatabaseTest
 
         // must have only been one query (including the join)
         $this->assertCount(1, $this->getDbQueries());
-    }
-
-    protected function getDbId($sid)
-    {
-        // Disable the logger for this call as we don't want to count it
-        $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = false;
-
-        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Service');
-        $id = $repo->findOneBySid($sid)->getId();
-
-        // Re enable the SQL logger
-        $this->getEntityManager()->getConfiguration()->getSQLLogger()->enabled = true;
-
-        return $id;
     }
 }
