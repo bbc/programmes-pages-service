@@ -35,9 +35,11 @@ class ServiceRepository extends EntityRepository
     public function findByPidFull(string $pid): ?array
     {
         $qb = $this->createQueryBuilder('service')
-            ->addSelect('network')
+            ->addSelect('network', 'networkServices', 'defaultService')
             ->andWhere('service.pid = :pid')
             ->join('service.network', 'network')
+            ->join('network.services', 'networkServices')
+            ->join('network.defaultService', 'defaultService')
             ->setParameter('pid', $pid);
 
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
