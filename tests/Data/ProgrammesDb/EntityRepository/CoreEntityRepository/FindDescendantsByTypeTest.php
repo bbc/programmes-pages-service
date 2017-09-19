@@ -34,7 +34,7 @@ class FindDescendantsByTypeTest extends AbstractDatabaseTest
             ->findStreamableDescendantsByType($dbAncestryId, 'Clip', 100, 0);
         $expectedClipsPids = ['p00h64pq', 'p00hv9yz', 'p008k0l5', 'p008k0jy', 'p008nhl4'];
 
-        $this->assertEquals($expectedClipsPids, array_column($clipsUnderProgramme, 'pid'));
+        $this->assertEmpty(array_diff($expectedClipsPids, array_column($clipsUnderProgramme, 'pid')));
         $this->assertNotContains(false, array_column($clipsUnderProgramme, 'streamable'));
         $this->assertNotContains(true, array_column($clipsUnderProgramme, 'isEmbargoed'));
         $this->assertCount(2, $this->getDbQueries());
@@ -53,7 +53,7 @@ class FindDescendantsByTypeTest extends AbstractDatabaseTest
             ->findDescendantsByType($dbAncestryId, 'Gallery', 100, 0);
         $expectedGalleryPids = ['p008nhl6', 'p008nhl5'];
 
-        $this->assertEquals($expectedGalleryPids, array_column($galleriesUnderProgramme, 'pid'));
+        $this->assertEmpty(array_diff($expectedGalleryPids, array_column($galleriesUnderProgramme, 'pid')));
         $this->assertCount(2, $this->getDbQueries());
     }
 }
