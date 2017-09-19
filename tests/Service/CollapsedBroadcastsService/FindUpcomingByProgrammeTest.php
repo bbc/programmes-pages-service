@@ -17,7 +17,7 @@ class FindUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findUpcomingByProgramme')
-            ->with($programme->getDbAncestryIds(), false, $this->lessThanOrEqual(new DateTimeImmutable()), $expectedLimit, $expectedOffset);
+            ->with($programme->getDbAncestryIds(), false, $this->isInstanceOf(DateTimeImmutable::class), $expectedLimit, $expectedOffset);
 
         $this->service()->findUpcomingByProgramme($programme, ...$paginationParams);
     }

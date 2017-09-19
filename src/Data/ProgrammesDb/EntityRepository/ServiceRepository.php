@@ -15,7 +15,19 @@ class ServiceRepository extends EntityRepository
             ->addSelect(['masterBrand', 'network'])
             ->leftJoin('service.masterBrand', 'masterBrand')
             ->leftJoin('service.network', 'network')
-            ->andWhere("service.id IN(:ids)")
+            ->andWhere("service.id IN (:ids)")
+            ->setParameter('ids', $ids)
+            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
+    public function findByIdsWithNetworkServicesList(array $ids): array
+    {
+        return $this->createQueryBuilder('service')
+            ->addSelect(['masterBrand', 'network', 'networkServices'])
+            ->leftJoin('service.masterBrand', 'masterBrand')
+            ->leftJoin('service.network', 'network')
+            ->leftJoin('network.services', 'networkServices')
+            ->andWhere("service.id IN (:ids)")
             ->setParameter('ids', $ids)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

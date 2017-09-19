@@ -5,6 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use DateTimeImmutable;
+use Nette\Utils\DateTime;
 
 class FindPastByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
@@ -17,7 +18,7 @@ class FindPastByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findPastByProgramme')
-            ->with($programme->getDbAncestryIds(), false, $this->lessThanOrEqual(new DateTimeImmutable()), $expectedLimit, $expectedOffset);
+            ->with($programme->getDbAncestryIds(), false, $this->isInstanceOf(DateTimeImmutable::class), $expectedLimit, $expectedOffset);
 
         $this->service()->findPastByProgramme($programme, ...$paginationParams);
     }

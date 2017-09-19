@@ -18,6 +18,8 @@ class NetworkMapper extends AbstractMapper
         return $this->buildCacheKey($dbNetwork, 'id', [
             'image' => 'Image',
             'defaultService' => 'Service',
+        ], [
+            'services' => 'Service',
         ]);
     }
 
@@ -39,7 +41,8 @@ class NetworkMapper extends AbstractMapper
                 $dbNetwork['isChildrens'],
                 $dbNetwork['isWorldServiceInternational'],
                 $dbNetwork['isInternational'],
-                $dbNetwork['isAllowedAdverts']
+                $dbNetwork['isAllowedAdverts'],
+                $this->getServiceModels($dbNetwork)
             );
         }
 
@@ -67,6 +70,22 @@ class NetworkMapper extends AbstractMapper
         }
 
         return $this->mapperFactory->getServiceMapper()->getDomainModel($dbNetwork[$key]);
+    }
+
+    private function getServiceModels(array $dbProgramme, string $key = 'services'): ?array
+    {
+        if (!isset($dbProgramme[$key]) || !is_array($dbProgramme[$key])) {
+            return null;
+        }
+
+        $serviceMapper = $this->mapperFactory->getServiceMapper();
+        $services = [];
+
+        foreach ($dbProgramme[$key] as $dbService) {
+            $services[] = $serviceMapper->getDomainModel($dbService);
+        }
+
+        return $services;
     }
 
     private function getOptionsModel(array $dbNetwork, string $key = 'options'): Options

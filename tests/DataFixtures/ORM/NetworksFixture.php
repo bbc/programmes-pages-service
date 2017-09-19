@@ -79,7 +79,17 @@ class NetworksFixture extends AbstractFixture implements DependentFixtureInterfa
             1
         );
 
+        $service4 = $this->buildService(
+            'bbc_radio_fourlw',
+            'p00fzl7k',
+            'BBC Radio 4 LW',
+            'National Radio',
+            'audio'
+        );
+
         $service->setNetwork($network1);
+        $service4->setNetwork($network1);
+
         $service2->setNetwork($network2);
 
         $this->buildMasterBrand('bbc_radio_four', 'p01y7bwp', 'BBC Radio 4', 'radio4', $network1);

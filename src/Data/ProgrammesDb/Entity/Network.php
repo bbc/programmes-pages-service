@@ -135,6 +135,12 @@ class Network
      */
     private $endDate;
 
+    /**
+     * Used for joins. Cannot be queried, so there is no getter/setter.
+     * @ORM\OneToMany(targetEntity="Service", mappedBy="network")
+     */
+    private $services;
+
     public function __construct(string $nid, string $name)
     {
         $this->nid = $nid;

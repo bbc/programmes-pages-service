@@ -44,25 +44,51 @@ class CollapsedBroadcastsService extends AbstractService
         int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
     ): array {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $year, $month, $limit, $page, $ttl);
-
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $programme->getDbId(),
+            $year,
+            $month,
+            $limit,
+            $page,
+            $ttl
+        );
         return $this->cache->getOrSet(
             $key,
             $ttl,
             function () use ($programme, $year, $month, $limit, $page) {
-                $broadcasts = $this->repository->findByProgrammeAndMonth(
-                    $programme->getDbAncestryIds(),
-                    false,
-                    $year,
-                    $month,
-                    $limit,
-                    $this->getOffset($limit, $page)
-                );
+                return $this->findByProgrammeAndMonthHelper($programme, $year, $month, $limit, $page, false);
+            }
+        );
+    }
 
-                $broadcasts = $this->stripWebcasts($broadcasts);
-                $services = $this->fetchUsedServices($broadcasts);
-
-                return $this->mapManyEntities($broadcasts, $services);
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    public function findByProgrammeAndMonthWithFullServicesOfNetworksList(
+        Programme $programme,
+        int $year,
+        int $month,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $programme->getDbId(),
+            $year,
+            $month,
+            $limit,
+            $page,
+            $ttl
+        );
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $year, $month, $limit, $page) {
+                return $this->findByProgrammeAndMonthHelper($programme, $year, $month, $limit, $page, true);
             }
         );
     }
@@ -77,23 +103,30 @@ class CollapsedBroadcastsService extends AbstractService
         $ttl = CacheInterface::NORMAL
     ): array {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $limit, $page, $ttl);
-
         return $this->cache->getOrSet(
             $key,
             $ttl,
             function () use ($programme, $limit, $page) {
-                $broadcasts = $this->repository->findPastByProgramme(
-                    $programme->getDbAncestryIds(),
-                    false,
-                    ApplicationTime::getTime(),
-                    $limit,
-                    $this->getOffset($limit, $page)
-                );
+                return $this->findPastByProgrammeHelper($programme, $limit, $page, false);
+            }
+        );
+    }
 
-                $broadcasts = $this->stripWebcasts($broadcasts);
-                $services = $this->fetchUsedServices($broadcasts);
-
-                return $this->mapManyEntities($broadcasts, $services);
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    public function findPastByProgrammeWithFullServicesOfNetworksList(
+        Programme $programme,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $limit, $page, $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $limit, $page) {
+                return $this->findPastByProgrammeHelper($programme, $limit, $page, true);
             }
         );
     }
@@ -108,23 +141,30 @@ class CollapsedBroadcastsService extends AbstractService
         $ttl = CacheInterface::NORMAL
     ): array {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $limit, $page, $ttl);
-
         return $this->cache->getOrSet(
             $key,
             $ttl,
             function () use ($programme, $limit, $page) {
-                $broadcasts = $this->repository->findUpcomingByProgramme(
-                    $programme->getDbAncestryIds(),
-                    false,
-                    ApplicationTime::getTime(),
-                    $limit,
-                    $this->getOffset($limit, $page)
-                );
+                return $this->findUpcomingByProgrammeHelper($programme, $limit, $page, false);
+            }
+        );
+    }
 
-                $broadcasts = $this->stripWebcasts($broadcasts);
-                $services = $this->fetchUsedServices($broadcasts);
-
-                return $this->mapManyEntities($broadcasts, $services);
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    public function findUpcomingByProgrammeWithFullServicesOfNetworksList(
+        Programme $programme,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $limit, $page, $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $limit, $page) {
+                return $this->findUpcomingByProgrammeHelper($programme, $limit, $page, true);
             }
         );
     }
@@ -133,23 +173,38 @@ class CollapsedBroadcastsService extends AbstractService
         Broadcast $broadcast,
         $ttl = CacheInterface::NORMAL
     ): ?CollapsedBroadcast {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $broadcast->getPid(), $broadcast->getProgrammeItem()->getPid(), $ttl);
-
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $broadcast->getPid(),
+            $broadcast->getProgrammeItem()->getPid(),
+            $ttl
+        );
         return $this->cache->getOrSet(
             $key,
             $ttl,
             function () use ($broadcast) {
-                $broadcasts = $this->repository->findByStartAndProgrammeItemId(
-                    $broadcast->getStartAt(),
-                    $broadcast->getProgrammeItem()->getDbId()
-                );
+                return $this->findByBroadcastHelper($broadcast, false);
+            }
+        );
+    }
 
-                $broadcasts = $this->stripWebcasts($broadcasts);
-                $services = $this->fetchUsedServices($broadcasts);
-                if (!empty($broadcasts[0])) {
-                    return $this->mapSingleEntity($broadcasts[0], $services);
-                }
-                return null;
+    public function findByBroadcastWithFullServicesOfNetworksList(
+        Broadcast $broadcast,
+        $ttl = CacheInterface::NORMAL
+    ): ?CollapsedBroadcast {
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $broadcast->getPid(),
+            $broadcast->getProgrammeItem()->getPid(),
+            $ttl
+        );
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($broadcast) {
+                return $this->findByBroadcastHelper($broadcast, true);
             }
         );
     }
@@ -182,25 +237,51 @@ class CollapsedBroadcastsService extends AbstractService
         int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
     ): array {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getDbId(), $startDate->getTimestamp(), $endDate->getTimestamp(), $limit, $page, $ttl);
-
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $category->getDbId(),
+            $startDate->getTimestamp(),
+            $endDate->getTimestamp(),
+            $limit,
+            $page,
+            $ttl
+        );
         return $this->cache->getOrSet(
             $key,
             $ttl,
             function () use ($category, $startDate, $endDate, $limit, $page) {
-                $broadcasts = $this->repository->findByCategoryAncestryAndStartAtDateRange(
-                    $category->getDbAncestryIds(),
-                    false,
-                    $startDate,
-                    $endDate,
-                    $limit,
-                    $this->getOffset($limit, $page)
-                );
+                return $this->findByCategoryAndStartAtDateRangeHelper($category, $startDate, $endDate, $limit, $page, false);
+            }
+        );
+    }
 
-                $broadcasts = $this->stripWebcasts($broadcasts);
-                $services = $this->fetchUsedServices($broadcasts);
-
-                return $this->mapManyEntities($broadcasts, $services);
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    public function findByCategoryAndStartAtDateRangeWithFullServicesOfNetworksList(
+        Category $category,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $category->getDbId(),
+            $startDate->getTimestamp(),
+            $endDate->getTimestamp(),
+            $limit,
+            $page,
+            $ttl
+        );
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category, $startDate, $endDate, $limit, $page) {
+                return $this->findByCategoryAndStartAtDateRangeHelper($category, $startDate, $endDate, $limit, $page, true);
             }
         );
     }
@@ -216,25 +297,51 @@ class CollapsedBroadcastsService extends AbstractService
         int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
     ): array {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $category->getDbId(), $startDate->getTimestamp(), $endDate->getTimestamp(), $limit, $page, $ttl);
-
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $category->getDbId(),
+            $startDate->getTimestamp(),
+            $endDate->getTimestamp(),
+            $limit,
+            $page,
+            $ttl
+        );
         return $this->cache->getOrSet(
             $key,
             $ttl,
             function () use ($category, $startDate, $endDate, $limit, $page) {
-                $broadcasts = $this->repository->findByCategoryAncestryAndEndAtDateRange(
-                    $category->getDbAncestryIds(),
-                    false,
-                    $startDate,
-                    $endDate,
-                    $limit,
-                    $this->getOffset($limit, $page)
-                );
+                return $this->findByCategoryAndEndAtDateRangeHelper($category, $startDate, $endDate, $limit, $page, false);
+            }
+        );
+    }
 
-                $broadcasts = $this->stripWebcasts($broadcasts);
-                $services = $this->fetchUsedServices($broadcasts);
-
-                return $this->mapManyEntities($broadcasts, $services);
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    public function findByCategoryAndEndAtDateRangeWithFullServicesOfNetworksList(
+        Category $category,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $category->getDbId(),
+            $startDate->getTimestamp(),
+            $endDate->getTimestamp(),
+            $limit,
+            $page,
+            $ttl
+        );
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($category, $startDate, $endDate, $limit, $page) {
+                return $this->findByCategoryAndEndAtDateRangeHelper($category, $startDate, $endDate, $limit, $page, true);
             }
         );
     }
@@ -401,6 +508,145 @@ class CollapsedBroadcastsService extends AbstractService
         );
     }
 
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    protected function findByProgrammeAndMonthHelper(
+        Programme $programme,
+        int $year,
+        int $month,
+        ?int $limit,
+        int $page,
+        bool $getFullListOfServicesForNetwork
+    ): array {
+        $broadcasts = $this->repository->findByProgrammeAndMonth(
+            $programme->getDbAncestryIds(),
+            false,
+            $year,
+            $month,
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        $broadcasts = $this->stripWebcasts($broadcasts);
+        $services = $this->fetchUsedServices($broadcasts, $getFullListOfServicesForNetwork);
+
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    protected function findPastByProgrammeHelper(
+        Programme $programme,
+        ?int $limit,
+        int $page,
+        bool $getFullListOfServicesForNetwork
+    ): array {
+        $broadcasts = $this->repository->findPastByProgramme(
+            $programme->getDbAncestryIds(),
+            false,
+            ApplicationTime::getTime(),
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        $broadcasts = $this->stripWebcasts($broadcasts);
+        $services = $this->fetchUsedServices($broadcasts, $getFullListOfServicesForNetwork);
+
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    protected function findUpcomingByProgrammeHelper(
+        Programme $programme,
+        ?int $limit,
+        int $page,
+        bool $getFullListOfServicesForNetwork
+    ): array {
+        $broadcasts = $this->repository->findUpcomingByProgramme(
+            $programme->getDbAncestryIds(),
+            false,
+            ApplicationTime::getTime(),
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        $broadcasts = $this->stripWebcasts($broadcasts);
+        $services = $this->fetchUsedServices($broadcasts, $getFullListOfServicesForNetwork);
+
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    protected function findByBroadcastHelper(Broadcast $broadcast, bool $getFullListOfServicesForNetwork): ?CollapsedBroadcast
+    {
+        $broadcasts = $this->repository->findByStartAndProgrammeItemId(
+            $broadcast->getStartAt(),
+            $broadcast->getProgrammeItem()->getDbId()
+        );
+
+        $broadcasts = $this->stripWebcasts($broadcasts);
+        $services = $this->fetchUsedServices($broadcasts, $getFullListOfServicesForNetwork);
+        if (!empty($broadcasts[0])) {
+            return $this->mapSingleEntity($broadcasts[0], $services);
+        }
+        return null;
+    }
+
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    protected function findByCategoryAndStartAtDateRangeHelper(
+        Category $category,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+        ?int $limit,
+        int $page,
+        bool $getFullListOfServicesForNetwork
+    ): array {
+        $broadcasts = $this->repository->findByCategoryAncestryAndStartAtDateRange(
+            $category->getDbAncestryIds(),
+            false,
+            $startDate,
+            $endDate,
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        $broadcasts = $this->stripWebcasts($broadcasts);
+        $services = $this->fetchUsedServices($broadcasts, $getFullListOfServicesForNetwork);
+
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    protected function findByCategoryAndEndAtDateRangeHelper(
+        Category $category,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+        ?int $limit,
+        int $page,
+        bool $getFullListOfServicesForNetwork
+    ): array {
+        $broadcasts = $this->repository->findByCategoryAncestryAndEndAtDateRange(
+            $category->getDbAncestryIds(),
+            false,
+            $startDate,
+            $endDate,
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        $broadcasts = $this->stripWebcasts($broadcasts);
+        $services = $this->fetchUsedServices($broadcasts, $getFullListOfServicesForNetwork);
+
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
     private function stripWebcasts(array $broadcasts): array
     {
         $withoutWebcasts = [];
@@ -425,7 +671,7 @@ class CollapsedBroadcastsService extends AbstractService
         return $withoutWebcasts;
     }
 
-    private function fetchUsedServices(array $broadcasts): array
+    private function fetchUsedServices(array $broadcasts, bool $getFullListOfServicesForNetwork = false): array
     {
         // Build list of all serviceIds used across all broadcasts
         $serviceIds = array_keys(
@@ -448,7 +694,11 @@ class CollapsedBroadcastsService extends AbstractService
         // If there are no serviceIds to fetch, skip requesting them
         $services = [];
         if ($serviceIds) {
-            $services = $this->serviceRepository->findByIds($serviceIds);
+            if ($getFullListOfServicesForNetwork) {
+                $services = $this->serviceRepository->findByIdsWithNetworkServicesList($serviceIds);
+            } else {
+                $services = $this->serviceRepository->findByIds($serviceIds);
+            }
         }
 
         // Fetch all the used services, keyed by their id

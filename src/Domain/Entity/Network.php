@@ -50,6 +50,9 @@ class Network
     /** @var Options */
     private $options;
 
+    /** @var Service[]|null */
+    private $services;
+
     public function __construct(
         Nid $nid,
         string $name,
@@ -63,14 +66,28 @@ class Network
         bool $isChildrens = false,
         bool $isWorldServiceInternational = false,
         bool $isInternational = false,
-        bool $isAllowedAdverts = false
+        bool $isAllowedAdverts = false,
+        ?array $services = null
     ) {
+        // Validate Medium
         if (!in_array($medium, NetworkMediumEnum::validValues(), true)) {
             throw new InvalidArgumentException(sprintf(
                 '$medium has an invalid value. Expected one of %s but got "%s"',
                 '"' . implode('", "', NetworkMediumEnum::validValues()) . '"',
                 $medium
             ));
+        }
+
+        // Validate array of Services
+        if (!is_null($services)) {
+            foreach ($services as $service) {
+                if (!$service instanceof Service) {
+                    throw new InvalidArgumentException(sprintf(
+                        'Expected an array of Services but got %s',
+                        (is_object($service) ? get_class($service) : gettype($service))
+                    ));
+                }
+            }
         }
 
         $this->nid = $nid;
@@ -86,6 +103,7 @@ class Network
         $this->isWorldServiceInternational = $isWorldServiceInternational;
         $this->isInternational = $isInternational;
         $this->isAllowedAdverts = $isAllowedAdverts;
+        $this->services = $services;
     }
 
     public function getNid(): Nid
@@ -185,5 +203,19 @@ class Network
     public function getOption(string $key)
     {
         return $this->options->getOption($key);
+    }
+
+    /**
+     * @throws DataNotFetchedException
+     */
+    public function getServices(): array
+    {
+        if (is_null($this->services)) {
+            throw new DataNotFetchedException(
+                'Could not get Services of Network "' . $this->nid . '" as they were not fetched'
+            );
+        }
+
+        return $this->services;
     }
 }
