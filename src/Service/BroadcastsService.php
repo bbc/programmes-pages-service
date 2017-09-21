@@ -4,6 +4,9 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
+use BBC\ProgrammesPagesService\Domain\ApplicationTime;
+use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
+use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\BroadcastMapper;
@@ -76,6 +79,43 @@ class BroadcastsService extends AbstractService
                     $serviceId,
                     $startDate,
                     $endDate,
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
+    }
+
+    /**
+     * @return Broadcast[]
+     */
+    public function findUpcomingByService(
+        Service $service,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $service->getDbId(),
+            $limit,
+            $page,
+            $ttl
+        );
+
+        // TODO set the cache time based on the end date of the first returned item, so that the cache expires once the
+        // as soon as the current programme changes to something else
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($service, $limit, $page) {
+                $dbEntities = $this->repository->findUpcomingByService(
+                    $service->getDbId(),
+                    'Broadcast',
+                    ApplicationTime::getTime(),
                     $limit,
                     $this->getOffset($limit, $page)
                 );

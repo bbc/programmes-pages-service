@@ -32,6 +32,34 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findUpcomingByService(int $serviceDbId, string $type, DateTimeImmutable $cutoffTime, ?int $limit, int $offset): array
+    {
+        $qb = $this->createQueryBuilder('broadcast', false)
+            ->addSelect('programmeItem')
+            ->join('broadcast.service', 'service')
+            ->andWhere("IDENTITY(broadcast.service) = :dbId")
+            ->andWhere('broadcast.endAt > :cutoffTime')
+            ->addOrderBy('broadcast.endAt', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('dbId', $serviceDbId)
+            ->setParameter('cutoffTime', $cutoffTime);
+
+        $this->setEntityTypeFilter($qb, $type);
+
+        $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+         return $this->abstractResolveAncestry(
+             $results,
+             [$this, 'programmeAncestryGetter'],
+             ['programmeItem', 'ancestry']
+         );
+    }
+
+    /**
+     * This is used by the Embargo Detector Command in Faucet. It really shouldn't be reaching into the Repository
+     * though as this should be private to PPS.
+     */
     public function findEmbargoedBroadcastsAfter(DateTimeImmutable $from)
     {
         $qb = $this->createQueryBuilder('broadcast')
