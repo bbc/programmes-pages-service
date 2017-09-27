@@ -15,7 +15,7 @@ interface CacheInterface
 
     public function getItem(string $key): CacheItemInterface;
 
-    public function setItem(CacheItemInterface $item, $ttl): bool;
+    public function setItem(CacheItemInterface $item, $value, $ttl): bool;
 
     public function getOrSet(string $key, $ttl, callable $function, array $arguments = []);
 

@@ -88,40 +88,33 @@ class BroadcastsService extends AbstractService
         );
     }
 
-    /**
-     * @return Broadcast[]
-     */
-    public function findUpcomingByService(
+    public function findOnNowByService(
         Service $service,
-        ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
-    ): array {
+    ): ?Broadcast {
         $key = $this->cache->keyHelper(
             __CLASS__,
             __FUNCTION__,
             $service->getDbId(),
-            $limit,
-            $page,
             $ttl
         );
 
-        // TODO set the cache time based on the end date of the first returned item, so that the cache expires once the
-        // as soon as the current programme changes to something else
-        return $this->cache->getOrSet(
-            $key,
-            $ttl,
-            function () use ($service, $limit, $page) {
-                $dbEntities = $this->repository->findUpcomingByService(
-                    $service->getDbId(),
-                    'Broadcast',
-                    ApplicationTime::getTime(),
-                    $limit,
-                    $this->getOffset($limit, $page)
-                );
+        $cacheItem = $this->cache->getItem($key);
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
 
-                return $this->mapManyEntities($dbEntities);
-            }
+        $dbEntity = $this->repository->findOnNowByService(
+            $service->getDbId(),
+            'Broadcast',
+            ApplicationTime::getTime()
         );
+
+        $entity = $this->mapSingleEntity($dbEntity);
+
+        if ($entity) {
+            $this->cache->setItem($cacheItem, $entity, $entity->getEndAt());
+        }
+        return $entity;
     }
 }

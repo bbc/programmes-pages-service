@@ -13,7 +13,7 @@ class BroadcastRepository extends EntityRepository
 {
     use Traits\ParentTreeWalkerTrait;
 
-    public function findByVersion(array $dbIds, string $type, ?int $limit, int $offset): array
+    public function findByVersion(array $dbIds, string $type): array
     {
         $qb = $this->createQueryBuilder('broadcast')
             ->addSelect(['service', 'network'])
@@ -23,8 +23,6 @@ class BroadcastRepository extends EntityRepository
             ->andWhere("broadcast.version IN (:dbIds)")
             ->addOrderBy('broadcast.startAt', 'DESC')
             ->addOrderBy('service.sid', 'DESC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
             ->setParameter('dbIds', $dbIds);
 
         $this->setEntityTypeFilter($qb, $type);
@@ -32,28 +30,31 @@ class BroadcastRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findUpcomingByService(int $serviceDbId, string $type, DateTimeImmutable $cutoffTime, ?int $limit, int $offset): array
+    public function findOnNowByService(int $serviceDbId, string $type, DateTimeImmutable $cutoffDateTime)
     {
         $qb = $this->createQueryBuilder('broadcast', false)
             ->addSelect('programmeItem')
             ->join('broadcast.service', 'service')
             ->andWhere("IDENTITY(broadcast.service) = :dbId")
+            ->andWhere('broadcast.startAt <= :cutoffTime')
             ->andWhere('broadcast.endAt > :cutoffTime')
-            ->addOrderBy('broadcast.endAt', 'ASC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
+            ->setMaxResults(1)
             ->setParameter('dbId', $serviceDbId)
-            ->setParameter('cutoffTime', $cutoffTime);
+            ->setParameter('cutoffTime', $cutoffDateTime);
 
         $this->setEntityTypeFilter($qb, $type);
 
-        $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
 
-         return $this->abstractResolveAncestry(
-             $results,
-             [$this, 'programmeAncestryGetter'],
-             ['programmeItem', 'ancestry']
-         );
+        if ($result) {
+            return $this->abstractResolveAncestry(
+                [$result],
+                [$this, 'programmeAncestryGetter'],
+                ['programmeItem', 'ancestry']
+            )[0];
+        }
+
+        return $result;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Cache;
 
+use DateTimeInterface;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -51,14 +52,20 @@ class Cache implements CacheInterface
 
     /**
      * @param CacheItemInterface $item
-     * @param int|string $ttl
-     *   TTL in seconds, or a constant from CacheInterface
+     * @param mixed $value
+     * @param int|string|DateTimeInterface $ttl
+     *   TTL in seconds, or a constant from CacheInterface, or a DateTime to expire at
      * @return bool
      */
-    public function setItem(CacheItemInterface $item, $ttl): bool
+    public function setItem(CacheItemInterface $item, $value, $ttl): bool
     {
-        $ttl = $this->calculateTtl($ttl);
-        $item->expiresAfter($ttl);
+        $item->set($value);
+        if ($ttl instanceof DateTimeInterface) {
+            $item->expiresAt($ttl);
+        } else {
+            $ttl = $this->calculateTtl($ttl);
+            $item->expiresAfter($ttl);
+        }
         return $this->cachePool->save($item);
     }
 
@@ -75,15 +82,12 @@ class Cache implements CacheInterface
     public function getOrSet(string $key, $ttl, callable $function, array $arguments = [])
     {
         $cacheItem = $this->getItem($key);
-        if ($cacheItem->isHit() && !$this->flushCacheItems) {
+        if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
-        $ttl = $this->calculateTtl($ttl);
-        $result = call_user_func_array($function, $arguments);
+        $result = $function(...$arguments);
         if (!empty($result)) {
-            $cacheItem->set($result);
-            $cacheItem->expiresAfter($ttl);
-            $this->cachePool->save($cacheItem);
+            $this->setItem($cacheItem, $result, $ttl);
         }
         return $result;
     }
