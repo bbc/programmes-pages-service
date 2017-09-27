@@ -4,6 +4,9 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\BroadcastRepository;
+use BBC\ProgrammesPagesService\Domain\ApplicationTime;
+use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
+use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Sid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\BroadcastMapper;
@@ -83,5 +86,35 @@ class BroadcastsService extends AbstractService
                 return $this->mapManyEntities($dbEntities);
             }
         );
+    }
+
+    public function findOnNowByService(
+        Service $service,
+        $ttl = CacheInterface::NORMAL
+    ): ?Broadcast {
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $service->getDbId(),
+            $ttl
+        );
+
+        $cacheItem = $this->cache->getItem($key);
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
+
+        $dbEntity = $this->repository->findOnNowByService(
+            $service->getDbId(),
+            'Broadcast',
+            ApplicationTime::getTime()
+        );
+
+        $entity = $this->mapSingleEntity($dbEntity);
+
+        if ($entity) {
+            $this->cache->setItem($cacheItem, $entity, $entity->getEndAt());
+        }
+        return $entity;
     }
 }
