@@ -7,31 +7,20 @@ use BBC\ProgrammesPagesService\Domain\Entity\Service;
 
 class FindOnNowByServiceTest extends AbstractBroadcastsServiceTest
 {
-    /**
-     * @dataProvider repositoryResultsProvider
-     */
-    public function testFindOnNowByServiceResults($expectedPid, $stubRepositoryResults)
+    public function testFindOnNowByServiceResults()
     {
+        $service = $this->createConfiguredMock(Service::class, ['getDbId' => 1]);
+
         $this->mockRepository
             ->method('findOnNowByService')
-            ->willReturn($stubRepositoryResults);
+            ->with(1)
+            ->willReturn(['pid' => 'b00swyx1']);
 
         /** @var $broadcast Broadcast This mock shall always return a Broadcast, never null */
-        $broadcast = $this->service()->findOnNowByService(
-            $this->createMock(Service::class)
-        );
+        $broadcast = $this->service()->findOnNowByService($service);
 
         $this->assertInstanceOf(Broadcast::class, $broadcast);
-        $this->assertEquals($expectedPid, $broadcast->getPid());
-    }
-
-    public function repositoryResultsProvider(): array
-    {
-        return [
-            // [expectations], [results]
-            ['b00swyx1', ['pid' => 'b00swyx1']],
-            ['b010t150', ['pid' => 'b010t150']],
-        ];
+        $this->assertEquals('b00swyx1', $broadcast->getPid());
     }
 
     public function testFindOnNowByServiceEmptyResults()

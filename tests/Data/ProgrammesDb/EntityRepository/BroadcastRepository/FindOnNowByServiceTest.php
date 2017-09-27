@@ -49,9 +49,9 @@ class FindOnNowByServiceTest extends AbstractDatabaseTest
     {
         return [
             // [cutoffDateTime, expectedPid, expectedProgrammeItemId, expectedTleoId, expectedDbQueries]
-            [DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2011-08-05 15:20:00'), 'b0000003', 'p0000003', 7, 2],
-            [DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2011-09-05 15:00:00'), 'b0000006', 'p0000001', 1, 1],
-            [DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2011-09-05 16:00:00'), 'b0000006', 'p0000001', 1, 1],
+            [new DateTimeImmutable('2011-08-05 15:20:00'), 'b0000003', 'p0000003', 7, 2],
+            [new DateTimeImmutable('2011-09-05 15:00:00'), 'b0000006', 'p0000001', 1, 1],
+            [new DateTimeImmutable('2011-09-05 16:00:00'), 'b0000006', 'p0000001', 1, 1],
         ];
     }
 
