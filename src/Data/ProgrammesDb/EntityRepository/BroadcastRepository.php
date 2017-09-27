@@ -13,7 +13,7 @@ class BroadcastRepository extends EntityRepository
 {
     use Traits\ParentTreeWalkerTrait;
 
-    public function findByVersion(array $dbIds, string $type): array
+    public function findByVersion(array $dbIds, string $type, ?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('broadcast')
             ->addSelect(['service', 'network'])
@@ -23,6 +23,8 @@ class BroadcastRepository extends EntityRepository
             ->andWhere("broadcast.version IN (:dbIds)")
             ->addOrderBy('broadcast.startAt', 'DESC')
             ->addOrderBy('service.sid', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('dbIds', $dbIds);
 
         $this->setEntityTypeFilter($qb, $type);
