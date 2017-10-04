@@ -16,6 +16,7 @@ class OptionsMapperTest extends BaseMapperTestCase
         ];
 
         $expectedOptions = [
+            'projectId' => null,
             'language' => 'cy',
             'branding_id' => 'br-00002',
             'second_option' =>  null,
@@ -73,6 +74,7 @@ class OptionsMapperTest extends BaseMapperTestCase
             'language' => 'languageInGrandParent',
             'live_stream_id' => 'streamIdGrandparent',
             'comments_clips_id' => 'clips-id-grandparent',
+            'projectId' => 'progs-eastenders',
         ];
 
         $expectedOptions = [
@@ -88,6 +90,7 @@ class OptionsMapperTest extends BaseMapperTestCase
             'show_tracklist_timings' => false,
             'show_enhanced_navigation' => false,
             'comments_clips_id' => 'clips-id-grandparent', // cascading option
+            'projectId' => 'progs-eastenders',
             'comments_clips_enabled' => false,
             'comments_episodes_id' => null,
             'comments_episodes_enabled' => false,
