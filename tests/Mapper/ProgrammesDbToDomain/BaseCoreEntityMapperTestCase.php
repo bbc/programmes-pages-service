@@ -106,7 +106,7 @@ abstract class BaseCoreEntityMapperTestCase extends BaseMapperTestCase
             'aggregatedEpisodesCount' => 12,
             'availableClipsCount' => 13,
             'availableEpisodesCount' => 14,
-            'availableGalleriesCount' => 15,
+            'aggregatedGalleriesCount' => 15,
             'isPodcastable' => false,
             'parent' => $parent,
             'position' => 101,

@@ -2,6 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\GalleriesCountableInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedGalleriesCountMethodsTrait;
 use DateTime;
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,8 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\MappedSuperclass()
  */
-abstract class Programme extends CoreEntity
+abstract class Programme extends CoreEntity implements GalleriesCountableInterface
 {
+    use AggregatedGalleriesCountMethodsTrait;
+
     /**
      * @var bool
      *

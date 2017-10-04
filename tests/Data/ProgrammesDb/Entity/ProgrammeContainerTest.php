@@ -16,7 +16,6 @@ class ProgrammeContainerTest extends TestCase
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedEpisodesCountMethodsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountMethodsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableEpisodesCountMethodsTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableGalleriesCountMethodsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsPodcastableMethodsTrait',
         ], $reflection->getTraitNames());
     }
@@ -39,7 +38,6 @@ class ProgrammeContainerTest extends TestCase
         $this->assertEquals(0, $entity->getAvailableEpisodesCount());
         $this->assertEquals(0, $entity->getAvailableClipsCount());
         $this->assertEquals(0, $entity->getAggregatedEpisodesCount());
-        $this->assertEquals(0, $entity->getAvailableGalleriesCount());
         $this->assertEquals(false, $entity->getIsPodcastable());
     }
 

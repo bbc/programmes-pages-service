@@ -39,6 +39,7 @@ class ClipTest extends TestCase
             1103,
             MediaTypeEnum::UNKNOWN,
             1201,
+            1104,
             $options
         );
 
@@ -59,6 +60,7 @@ class ClipTest extends TestCase
         $this->assertEquals(1103, $programme->getContributionsCount());
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
         $this->assertEquals(1201, $programme->getSegmentEventCount());
+        $this->assertEquals(1104, $programme->getAggregatedGalleriesCount());
         $this->assertEquals($options, $programme->getOptions());
         $this->assertSame(2, $programme->getOption('two'));
     }
@@ -95,6 +97,7 @@ class ClipTest extends TestCase
             1103,
             MediaTypeEnum::UNKNOWN,
             1201,
+            1104,
             new Options(),
             $parent,
             2101,
@@ -145,6 +148,7 @@ class ClipTest extends TestCase
             1103,
             'audio',
             1201,
+            1104,
             new UnfetchedOptions()
         );
 

@@ -14,7 +14,6 @@ class EpisodeTest extends TestCase
         $this->assertEquals([
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedBroadcastsCountMethodsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountMethodsTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableGalleriesCountMethodsTrait',
         ], $reflection->getTraitNames());
     }
 
@@ -28,6 +27,5 @@ class EpisodeTest extends TestCase
         );
         $this->assertEquals(0, $entity->getAggregatedBroadcastsCount());
         $this->assertEquals(0, $entity->getAvailableClipsCount());
-        $this->assertEquals(0, $entity->getAvailableGalleriesCount());
     }
 }

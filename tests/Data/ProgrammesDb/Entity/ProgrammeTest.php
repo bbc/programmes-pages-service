@@ -5,9 +5,18 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Programme;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class ProgrammeTest extends TestCase
 {
+    public function testTraits()
+    {
+        $reflection = new ReflectionClass(Programme::class);
+        $this->assertEquals([
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedGalleriesCountMethodsTrait',
+        ], $reflection->getTraitNames());
+    }
+
     public function testDefaults()
     {
         $entity = $this->getMockForAbstractClass(
@@ -26,6 +35,7 @@ class ProgrammeTest extends TestCase
         $this->assertEquals(null, $entity->getPosition());
         $this->assertEquals(new ArrayCollection(), $entity->getDirectCategories());
         $this->assertEquals(new ArrayCollection(), $entity->getCategories());
+        $this->assertEquals(0, $entity->getAggregatedGalleriesCount());
     }
 
     /**
@@ -53,6 +63,7 @@ class ProgrammeTest extends TestCase
             ['Position', 1],
             ['DirectCategories', new ArrayCollection([$genre])],
             ['Categories', new ArrayCollection([$genre])],
+            ['AggregatedGalleriesCount', 1],
         ];
     }
 }

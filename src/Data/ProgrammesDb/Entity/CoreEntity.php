@@ -218,12 +218,12 @@ abstract class CoreEntity implements ContributableToInterface, MemberOfGroupInte
 
     /**
      * @var int
-     * TRAIT_PULLDOWN for AvailableGalleriesCountMethodsTrait
-     * COUNT_PULLDOWN for classes implementing AvailableGalleriesCountMethodsTrait
+     * TRAIT_PULLDOWN for AggregatedGalleriesCountMethodsTrait
+     * COUNT_PULLDOWN for classes implementing AggregatedGalleriesCountMethodsTrait
      *
      * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
      */
-    protected $availableGalleriesCount = 0;
+    protected $aggregatedGalleriesCount = 0;
 
     /**
      * @var bool

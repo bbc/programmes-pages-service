@@ -65,7 +65,7 @@ class EpisodeTest extends TestCase
         $this->assertEquals(1201, $programme->getSegmentEventCount());
         $this->assertEquals(1301, $programme->getAggregatedBroadcastsCount());
         $this->assertEquals(1302, $programme->getAvailableClipsCount());
-        $this->assertEquals(1303, $programme->getAvailableGalleriesCount());
+        $this->assertEquals(1303, $programme->getAggregatedGalleriesCount());
         $this->assertEquals($options, $programme->getOptions());
         $this->assertSame(2, $programme->getOption('two'));
     }

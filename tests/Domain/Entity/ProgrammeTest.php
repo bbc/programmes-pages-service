@@ -106,6 +106,7 @@ class ProgrammeTest extends TestCase
             1103,
             MediaTypeEnum::UNKNOWN,
             1201,
+            1104,
             new Options()
         );
     }

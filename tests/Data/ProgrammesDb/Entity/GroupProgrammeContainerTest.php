@@ -15,7 +15,7 @@ class GroupProgrammeContainerTest extends TestCase
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedEpisodesCountMethodsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableClipsCountMethodsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableEpisodesCountMethodsTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AvailableGalleriesCountMethodsTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\AggregatedGalleriesCountMethodsTrait',
         ], $reflection->getTraitNames());
     }
 
@@ -33,6 +33,6 @@ class GroupProgrammeContainerTest extends TestCase
         $this->assertEquals(0, $entity->getAggregatedEpisodesCount());
         $this->assertEquals(0, $entity->getAvailableClipsCount());
         $this->assertEquals(0, $entity->getAvailableEpisodesCount());
-        $this->assertEquals(0, $entity->getAvailableGalleriesCount());
+        $this->assertEquals(0, $entity->getAggregatedGalleriesCount());
     }
 }

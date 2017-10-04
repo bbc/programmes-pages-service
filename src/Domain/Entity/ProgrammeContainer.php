@@ -20,9 +20,6 @@ abstract class ProgrammeContainer extends Programme
     /** @var int */
     private $availableEpisodesCount;
 
-    /** @var int */
-    private $availableGalleriesCount;
-
     /** @var bool */
     private $isPodcastable;
 
@@ -46,7 +43,7 @@ abstract class ProgrammeContainer extends Programme
         int $aggregatedEpisodesCount,
         int $availableClipsCount,
         int $availableEpisodesCount,
-        int $availableGalleriesCount,
+        int $aggregatedGalleriesCount,
         bool $isPodcastable,
         Options $options,
         ?Programme $parent = null,
@@ -70,6 +67,7 @@ abstract class ProgrammeContainer extends Programme
             $isStreamable,
             $isStreamableAlternate,
             $contributionsCount,
+            $aggregatedGalleriesCount,
             $options,
             $parent,
             $position,
@@ -83,7 +81,6 @@ abstract class ProgrammeContainer extends Programme
         $this->aggregatedEpisodesCount = $aggregatedEpisodesCount;
         $this->availableClipsCount = $availableClipsCount;
         $this->availableEpisodesCount = $availableEpisodesCount;
-        $this->availableGalleriesCount = $availableGalleriesCount;
         $this->isPodcastable = $isPodcastable;
         $this->expectedChildCount = $expectedChildCount;
     }
@@ -106,11 +103,6 @@ abstract class ProgrammeContainer extends Programme
     public function getAvailableEpisodesCount(): int
     {
         return $this->availableEpisodesCount;
-    }
-
-    public function getAvailableGalleriesCount(): int
-    {
-        return $this->availableGalleriesCount;
     }
 
     public function isPodcastable(): bool

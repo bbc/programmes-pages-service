@@ -62,7 +62,7 @@ class SeriesTest extends TestCase
         $this->assertEquals(1202, $programme->getAggregatedEpisodesCount());
         $this->assertEquals(1203, $programme->getAvailableClipsCount());
         $this->assertEquals(1204, $programme->getAvailableEpisodesCount());
-        $this->assertEquals(1205, $programme->getAvailableGalleriesCount());
+        $this->assertEquals(1205, $programme->getAggregatedGalleriesCount());
         $this->assertEquals(false, $programme->isPodcastable());
         $this->assertEquals($options, $programme->getOptions());
         $this->assertSame(2, $programme->getOption('two'));

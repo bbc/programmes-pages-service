@@ -17,9 +17,6 @@ class Episode extends ProgrammeItem
     /** @var int */
     private $availableClipsCount;
 
-    /** @var int */
-    private $availableGalleriesCount;
-
     public function __construct(
         array $dbAncestryIds,
         Pid $pid,
@@ -37,7 +34,7 @@ class Episode extends ProgrammeItem
         int $segmentEventCount,
         int $aggregatedBroadcastsCount,
         int $availableClipsCount,
-        int $availableGalleriesCount,
+        int $aggregatedGalleriesCount,
         Options $options,
         ?Programme $parent = null,
         ?int $position = null,
@@ -65,6 +62,7 @@ class Episode extends ProgrammeItem
             $contributionsCount,
             $mediaType,
             $segmentEventCount,
+            $aggregatedGalleriesCount,
             $options,
             $parent,
             $position,
@@ -80,7 +78,6 @@ class Episode extends ProgrammeItem
 
         $this->aggregatedBroadcastsCount = $aggregatedBroadcastsCount;
         $this->availableClipsCount = $availableClipsCount;
-        $this->availableGalleriesCount = $availableGalleriesCount;
     }
 
     public function getAggregatedBroadcastsCount(): int
@@ -91,10 +88,5 @@ class Episode extends ProgrammeItem
     public function getAvailableClipsCount(): int
     {
         return $this->availableClipsCount;
-    }
-
-    public function getAvailableGalleriesCount(): int
-    {
-        return $this->availableGalleriesCount;
     }
 }

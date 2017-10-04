@@ -31,6 +31,9 @@ abstract class Programme extends CoreEntity
     /** @var DateTimeImmutable|null */
     private $firstBroadcastDate;
 
+    /** @var int */
+    private $aggregatedGalleriesCount;
+
     public function __construct(
         array $dbAncestryIds,
         Pid $pid,
@@ -44,6 +47,7 @@ abstract class Programme extends CoreEntity
         bool $isStreamable,
         bool $isStreamableAlternate,
         int $contributionsCount,
+        int $aggregatedGalleriesCount,
         Options $options,
         ?Programme $parent = null,
         ?int $position = null,
@@ -77,6 +81,7 @@ abstract class Programme extends CoreEntity
         $this->genres = $genres;
         $this->formats = $formats;
         $this->firstBroadcastDate = $firstBroadcastDate;
+        $this->aggregatedGalleriesCount = $aggregatedGalleriesCount;
     }
 
     public function hasSupportingContent(): bool
@@ -127,6 +132,11 @@ abstract class Programme extends CoreEntity
     public function getFirstBroadcastDate(): ?DateTimeImmutable
     {
         return $this->firstBroadcastDate;
+    }
+
+    public function getAggregatedGalleriesCount(): int
+    {
+        return $this->aggregatedGalleriesCount;
     }
 
     /**
