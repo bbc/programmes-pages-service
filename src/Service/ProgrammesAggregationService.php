@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesPagesService\Cache\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ClipRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
+use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
@@ -119,7 +120,8 @@ class ProgrammesAggregationService extends AbstractService
                     $programme->getDbAncestryIds(),
                     $type,
                     $limit,
-                    $this->getOffset($limit, $page)
+                    $this->getOffset($limit, $page),
+                    ApplicationTime::getTime()
                 );
 
                 return $this->mapManyEntities($children);

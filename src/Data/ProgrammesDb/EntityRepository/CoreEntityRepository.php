@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
@@ -257,7 +258,7 @@ QUERY;
      * @param int      $offset
      * @return array
      */
-    public function findUpcomingStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
+    public function findUpcomingStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset, DateTimeImmutable $fromDateTime) : array
     {
         $this->assertEntityType($entityType, ['Clip', 'Episode']);
 
@@ -270,11 +271,12 @@ QUERY;
             ->leftJoin('masterBrand.image', 'mbImage')
             ->andWhere('entity.ancestry LIKE :ancestry')
             ->andWhere('entity.streamable = 0')
-            ->andWhere('entity.streamableFrom IS NOT NULL')
+            ->andWhere('entity.streamableFrom > :from')
             ->orderBy('entity.streamableFrom', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
-            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%')
+            ->setParameter('from', $fromDateTime);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         return $this->resolveParents($result);
