@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
+use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Gallery;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
@@ -20,6 +21,10 @@ abstract class AbstractProgrammesAggregationTest extends AbstractServiceTest
             $class = '';
             if ($dbEntity['type'] === 'clip') {
                 $class = Clip::class;
+            }
+
+            if ($dbEntity['type'] === 'episode') {
+                $class = Episode::class;
             }
 
             if ($dbEntity['type'] === 'gallery') {
