@@ -250,6 +250,36 @@ QUERY;
         return $this->resolveParents($result);
     }
 
+    /**
+     * @param int[]    $ancestryDbIds
+     * @param string   $entityType
+     * @param int|null $limit
+     * @param int      $offset
+     * @return array
+     */
+    public function findUpcomingStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
+    {
+        $this->assertEntityType($entityType, ['Clip', 'Episode']);
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
+            ->from('ProgrammesPagesService:' . $entityType, 'entity')
+            ->leftJoin('entity.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('entity.image', 'image')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->andWhere('entity.ancestry LIKE :ancestry')
+            ->andWhere('entity.streamable = 0')
+            ->andWhere('entity.streamableFrom IS NOT NULL')
+            ->orderBy('entity.streamableFrom', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
+    }
+
     public function findChildrenSeriesByParent(int $id, ?int $limit, int $offset): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
