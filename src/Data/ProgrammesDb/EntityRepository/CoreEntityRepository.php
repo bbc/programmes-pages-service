@@ -31,6 +31,8 @@ class CoreEntityRepository extends MaterializedPathRepository
         'Franchise',
     ];
 
+    private $ancestryCache = [];
+
     public function findTleosByCategory(
         array $ancestryDbIds,
         bool $filterToAvailable,
@@ -186,13 +188,17 @@ QUERY;
             ->setParameter('pid', $pid);
 
         $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
-        $withHydratedParents = $result ? $this->resolveParents([$result])[0] : $result;
-        return $withHydratedParents ? $this->resolveCategories([$withHydratedParents])[0] : $withHydratedParents;
+        if (!$result) {
+            return $result;
+        }
+        $this->addToAncestryCache([$result]);
+        $withHydratedParents = $this->resolveParents([$result]);
+        return $this->resolveCategories($withHydratedParents)[0];
     }
 
     public function findByIds(array $ids): array
     {
-        return $this->createQueryBuilder('programme')
+        $results = $this->createQueryBuilder('programme')
             ->addSelect(['image', 'masterBrand', 'network', 'mbImage'])
             ->leftJoin('programme.image', 'image')
             ->leftJoin('programme.masterBrand', 'masterBrand')
@@ -201,6 +207,9 @@ QUERY;
             ->andWhere("programme.id IN(:ids)")
             ->setParameter('ids', $ids)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $this->addToAncestryCache($results);
+        return $results;
     }
 
     public function findDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
@@ -547,17 +556,31 @@ QUERY;
         return $q->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function clearAncestryCache(): void
+    {
+        $this->ancestryCache = [];
+    }
+
+    public function coreEntityAncestryGetter(array $ids): array
+    {
+        $cached = [];
+        foreach ($ids as $index => $id) {
+            if (!isset($this->ancestryCache[$id])) {
+                // If any of our ancestors is not in the cache, just do the query
+                return $this->findByIds($ids);
+            }
+            $cached[] = $this->ancestryCache[$id];
+        }
+        // Return cached ancestors, saving a query
+        return $cached;
+    }
+
     private function resolveParents(array $programmes): array
     {
         return $this->abstractResolveAncestry(
             $programmes,
-            [$this, 'programmeAncestryGetter']
+            [$this, 'coreEntityAncestryGetter']
         );
-    }
-
-    private function programmeAncestryGetter(array $ids): array
-    {
-        return $this->findByIds($ids);
     }
 
     private function resolveCategories(array $programmes): array
@@ -608,5 +631,21 @@ QUERY;
         }
 
         return " ($alias INSTANCE OF (" . join(',', $entityTypes) . "))";
+    }
+
+    /**
+     * Be very careful what you pass into this. It must be an array
+     * of CoreEntity with all of the joins in findById or bad things
+     * will happen.
+     *
+     * @param array $results
+     */
+    private function addToAncestryCache(array $results)
+    {
+        foreach ($results as $result) {
+            if (isset($result['id'])) {
+                $this->ancestryCache[$result['id']] = $result;
+            }
+        }
     }
 }

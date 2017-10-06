@@ -96,11 +96,7 @@ QUERY;
 
         $result = $this->explodeFields($result);
 
-        return $this->abstractResolveAncestry(
-            $result,
-            [$this, 'programmeAncestryGetter'],
-            ['programmeItem', 'ancestry']
-        );
+        return $this->resolveProgrammeParents($result);
     }
 
     public function findByCategoryAncestryAndStartAtDateRange(
@@ -124,11 +120,7 @@ QUERY;
 
         $result = $this->explodeFields($result);
 
-        return $this->abstractResolveAncestry(
-            $result,
-            [$this, 'programmeAncestryGetter'],
-            ['programmeItem', 'ancestry']
-        );
+        return $this->resolveProgrammeParents($result);
     }
 
     public function findByProgrammeAndMonth(
@@ -152,11 +144,7 @@ QUERY;
 
         $result = $this->explodeFields($result);
 
-        return $this->abstractResolveAncestry(
-            $result,
-            [$this, 'programmeAncestryGetter'],
-            ['programmeItem', 'ancestry']
-        );
+        return $this->resolveProgrammeParents($result);
     }
 
     /**
@@ -185,11 +173,7 @@ QUERY;
 
         $result = $this->explodeFields($result);
 
-        return $this->abstractResolveAncestry(
-            $result,
-            [$this, 'programmeAncestryGetter'],
-            ['programmeItem', 'ancestry']
-        );
+        return $this->resolveProgrammeParents($result);
     }
 
     /**
@@ -218,11 +202,7 @@ QUERY;
 
         $result = $this->explodeFields($result);
 
-        return $this->abstractResolveAncestry(
-            $result,
-            [$this, 'programmeAncestryGetter'],
-            ['programmeItem', 'ancestry']
-        );
+        return $this->resolveProgrammeParents($result);
     }
 
     public function filterCategoriesByBroadcastedDates(
@@ -374,10 +354,13 @@ QUERY;
         return implode(',', $ancestry) . ',';
     }
 
-    private function programmeAncestryGetter(array $ids): array
+    private function resolveProgrammeParents(array $result)
     {
-        /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        return $repo->findByIds($ids);
+        return $this->abstractResolveAncestry(
+            $result,
+            [$repo, 'coreEntityAncestryGetter'],
+            ['programmeItem', 'ancestry']
+        );
     }
 }

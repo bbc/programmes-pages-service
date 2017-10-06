@@ -9,6 +9,11 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindEpisodeGuideChildrenTest extends AbstractDatabaseTest
 {
+    public function tearDown()
+    {
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
+    }
+
     /**
      * @dataProvider findEpisodeGuideChildrenDataProvider
      */

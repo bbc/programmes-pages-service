@@ -11,6 +11,7 @@ class FindPastByProgrammeTest extends AbstractDatabaseTest
     public function tearDown(): void
     {
         $this->disableEmbargoedFilter();
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
     }
 
     public function testFindPastByProgramme(): void

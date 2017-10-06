@@ -10,6 +10,11 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindAdjacentProgrammeItemByReleaseDateTest extends AbstractDatabaseTest
 {
+    public function tearDown()
+    {
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
+    }
+
     public function testfindAdjacentProgrammeItemByReleaseDate()
     {
         $this->loadFixtures(['SiblingsFixture']);

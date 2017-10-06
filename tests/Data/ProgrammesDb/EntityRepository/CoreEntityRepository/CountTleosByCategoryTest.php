@@ -28,6 +28,11 @@ class CountTleosByCategoryTest extends AbstractDatabaseTest
         $this->loadFixtures(['TleosByCategoryFixture']);
     }
 
+    public function tearDown()
+    {
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
+    }
+
     public function testCountTleosByCategoryAll()
     {
         /** @var CoreEntityRepository $repo */

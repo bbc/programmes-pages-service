@@ -9,6 +9,11 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class ParentResolutionTest extends AbstractDatabaseTest
 {
+    public function tearDown()
+    {
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
+    }
+
     public function testSingleEntityRequestWhereNoRootEntityFound()
     {
         $this->loadFixtures(['MongrelsFixture']);
@@ -58,6 +63,26 @@ class ParentResolutionTest extends AbstractDatabaseTest
 
         // Ensure only two queries - the original findByPid and the parent lookup
         $this->assertCount(2, $this->getDbQueries());
+    }
+
+    public function testCaching()
+    {
+        $this->loadFixtures(['MongrelsFixture']);
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+
+        // This is Series 1
+        $entity = $repo->findByPidFull('b00swyx1');
+
+        // Assert parent is the brand
+        $this->assertEquals('b010t19z', $entity['parent']['pid']);
+        $ancestryDbIds = explode(',', $entity['ancestry'], -1);
+
+        $descendants = $repo->findDescendantsByType($ancestryDbIds, 'Episode', null, 0);
+        $this->assertCount(3, $descendants);
+
+        // Ensure only three queries - the original findByPid, the parent lookup, the findByDescendants query,
+        // but not a second parent lookup
+        $this->assertCount(3, $this->getDbQueries());
     }
 
     /**
