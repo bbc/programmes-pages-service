@@ -11,6 +11,7 @@ class FindByStartAndProgrammeItemIdTest extends AbstractDatabaseTest
     public function tearDown(): void
     {
         $this->disableEmbargoedFilter();
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
     }
 
     public function testTwoByProgrammeItemIdAndStart(): void

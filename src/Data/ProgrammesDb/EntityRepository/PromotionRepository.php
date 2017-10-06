@@ -116,21 +116,12 @@ class PromotionRepository extends EntityRepository
      */
     private function resolveParents(array $entities): array
     {
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
         return $this->abstractResolveAncestry(
             $entities,
-            [$this, 'coreEntityAncestryGetter'],
+            [$repo, 'coreEntityAncestryGetter'],
             ['promotionOfCoreEntity', 'ancestry']
         );
-    }
-
-    /**
-     * @param int[] $ids
-     */
-    private function coreEntityAncestryGetter(array $ids): array
-    {
-        /** @var CoreEntityRepository $repo */
-        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        return $repo->findByIds($ids);
     }
 
     /**

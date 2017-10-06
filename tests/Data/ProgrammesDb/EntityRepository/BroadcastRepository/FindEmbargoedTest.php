@@ -11,6 +11,11 @@ use Tests\BBC\ProgrammesPagesService\DataFixtures\ORM\BroadcastsEmbargoFixture;
  */
 class FindEmbargoedTest extends AbstractDatabaseTest
 {
+    public function tearDown()
+    {
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
+    }
+
     public function testFindEmbargoedBroadcastsAfter()
     {
         // I need a fixture which:

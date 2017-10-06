@@ -12,6 +12,7 @@ class FindAllYearsAndMonthsByProgrammeTest extends AbstractDatabaseTest
     public function tearDown()
     {
         $this->disableEmbargoedFilter();
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
     }
 
     public function testFindAllYearsAndMonthsByProgramme()

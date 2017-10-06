@@ -49,11 +49,7 @@ class BroadcastRepository extends EntityRepository
         $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
 
         if ($result) {
-            return $this->abstractResolveAncestry(
-                [$result],
-                [$this, 'programmeAncestryGetter'],
-                ['programmeItem', 'ancestry']
-            )[0];
+            return $this->resolveProgrammeParents([$result])[0];
         }
 
         return $result;
@@ -129,13 +125,7 @@ class BroadcastRepository extends EntityRepository
 
         $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
-        $broadcasts = $this->abstractResolveAncestry(
-            $results,
-            [$this, 'programmeAncestryGetter'],
-            ['programmeItem', 'ancestry']
-        );
-
-        return $broadcasts;
+        return $this->resolveProgrammeParents($results);
     }
 
     private function entityTypeFilterValue(string $type): ?bool
@@ -172,10 +162,13 @@ class BroadcastRepository extends EntityRepository
         return $qb;
     }
 
-    private function programmeAncestryGetter(array $ids): array
+    private function resolveProgrammeParents(array $results)
     {
-        /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        return $repo->findByIds($ids);
+        return $this->abstractResolveAncestry(
+            $results,
+            [$repo, 'coreEntityAncestryGetter'],
+            ['programmeItem', 'ancestry']
+        );
     }
 }

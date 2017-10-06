@@ -21,6 +21,11 @@ class FindAllByServiceAndDateRangeTest extends AbstractDatabaseTest
         $this->repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
     }
 
+    public function tearDown()
+    {
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
+    }
+
     public function testFindAllByServiceAndDateRange()
     {
         $fromDateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2010-01-15 06:00:00');

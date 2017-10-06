@@ -20,6 +20,11 @@ class FindOnNowByServiceTest extends AbstractDatabaseTest
         $this->repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Broadcast');
     }
 
+    public function tearDown()
+    {
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
+    }
+
     /**
      * @dataProvider broadcastDataProvider
      */

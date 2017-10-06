@@ -561,15 +561,7 @@ QUERY;
         $this->ancestryCache = [];
     }
 
-    private function resolveParents(array $programmes): array
-    {
-        return $this->abstractResolveAncestry(
-            $programmes,
-            [$this, 'programmeAncestryGetter']
-        );
-    }
-
-    private function programmeAncestryGetter(array $ids): array
+    public function coreEntityAncestryGetter(array $ids): array
     {
         $cached = [];
         foreach ($ids as $index => $id) {
@@ -581,6 +573,14 @@ QUERY;
         }
         // Return cached ancestors, saving a query
         return $cached;
+    }
+
+    private function resolveParents(array $programmes): array
+    {
+        return $this->abstractResolveAncestry(
+            $programmes,
+            [$this, 'coreEntityAncestryGetter']
+        );
     }
 
     private function resolveCategories(array $programmes): array

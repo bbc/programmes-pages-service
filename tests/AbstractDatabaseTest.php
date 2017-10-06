@@ -45,6 +45,7 @@ abstract class AbstractDatabaseTest extends TestCase
     protected function resetDbQueryLogger()
     {
         $this->getEntityManager()->getConfiguration()->setSQLLogger(new DebugStack());
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
     }
 
     protected function getOrmExecutor()
