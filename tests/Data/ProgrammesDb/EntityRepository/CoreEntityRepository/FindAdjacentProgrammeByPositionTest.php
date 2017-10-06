@@ -11,6 +11,11 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindAdjacentProgrammeByPositionTest extends AbstractDatabaseTest
 {
+    public function tearDown()
+    {
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
+    }
+
     public function testFindAdjacentProgrammeByPosition()
     {
         $this->loadFixtures(['SiblingsFixture']);

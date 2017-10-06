@@ -19,6 +19,7 @@ class FindDescendantsByTypeTest extends AbstractDatabaseTest
     public function tearDown()
     {
         $this->disableEmbargoedFilter();
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
     }
 
     /**

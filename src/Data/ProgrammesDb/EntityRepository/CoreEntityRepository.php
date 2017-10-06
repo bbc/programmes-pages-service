@@ -556,6 +556,11 @@ QUERY;
         return $q->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function clearAncestryCache(): void
+    {
+        $this->ancestryCache = [];
+    }
+
     private function resolveParents(array $programmes): array
     {
         return $this->abstractResolveAncestry(

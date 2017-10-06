@@ -9,6 +9,11 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
  */
 class FindAvailableEpisodesByCategoryAncestryTest extends AbstractDatabaseTest
 {
+    public function tearDown()
+    {
+        $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity')->clearAncestryCache();
+    }
+
     public function testByAvailableEpisodesByAncestryCategoryIds()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
