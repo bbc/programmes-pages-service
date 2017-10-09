@@ -31,8 +31,8 @@ class ServiceRepository extends EntityRepository
             ->setParameter('ids', $ids);
 
         if ($date) {
-            $qb->andWhere('(service.startDate IS NULL OR service.startDate <= :date)');
-            $qb->andWhere('(service.endDate IS NULL OR service.endDate > :date)');
+            $qb->andWhere('(networkServices.startDate IS NULL OR networkServices.startDate <= :date)');
+            $qb->andWhere('(networkServices.endDate IS NULL OR networkServices.endDate > :date)');
             $qb->setParameter('date', $date);
         }
 

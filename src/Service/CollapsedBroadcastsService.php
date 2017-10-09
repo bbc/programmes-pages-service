@@ -703,7 +703,7 @@ class CollapsedBroadcastsService extends AbstractService
                 // so the trade-off is worth it.
                 $services = $this->serviceRepository->findByIdsWithNetworkServicesList(
                     $serviceIds,
-                    $broadcasts[0]->getStartAt()
+                    $broadcasts[0]['startAt']
                 );
             } else {
                 $services = $this->serviceRepository->findByIds($serviceIds);
