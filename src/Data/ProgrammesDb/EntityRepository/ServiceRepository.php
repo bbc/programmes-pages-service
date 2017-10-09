@@ -20,16 +20,23 @@ class ServiceRepository extends EntityRepository
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findByIdsWithNetworkServicesList(array $ids): array
+    public function findByIdsWithNetworkServicesList(array $ids, ?DateTimeImmutable $date = null): array
     {
-        return $this->createQueryBuilder('service')
+        $qb = $this->createQueryBuilder('service')
             ->addSelect(['masterBrand', 'network', 'networkServices'])
             ->leftJoin('service.masterBrand', 'masterBrand')
             ->leftJoin('service.network', 'network')
             ->leftJoin('network.services', 'networkServices')
             ->andWhere("service.id IN (:ids)")
-            ->setParameter('ids', $ids)
-            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+            ->setParameter('ids', $ids);
+
+        if ($date) {
+            $qb->andWhere('(service.startDate IS NULL OR service.startDate <= :date)');
+            $qb->andWhere('(service.endDate IS NULL OR service.endDate > :date)');
+            $qb->setParameter('date', $date);
+        }
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function findByPidFull(string $pid): ?array

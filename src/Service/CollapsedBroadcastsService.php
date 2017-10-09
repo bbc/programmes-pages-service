@@ -671,8 +671,10 @@ class CollapsedBroadcastsService extends AbstractService
         return $withoutWebcasts;
     }
 
-    private function fetchUsedServices(array $broadcasts, bool $getFullListOfServicesForNetwork = false): array
-    {
+    private function fetchUsedServices(
+        array $broadcasts,
+        bool $getListOfServicesForNetwork
+    ): array {
         // Build list of all serviceIds used across all broadcasts
         $serviceIds = array_keys(
             array_reduce(
@@ -694,8 +696,15 @@ class CollapsedBroadcastsService extends AbstractService
         // If there are no serviceIds to fetch, skip requesting them
         $services = [];
         if ($serviceIds) {
-            if ($getFullListOfServicesForNetwork) {
-                $services = $this->serviceRepository->findByIdsWithNetworkServicesList($serviceIds);
+            if ($getListOfServicesForNetwork) {
+                // In some cases (when the first broadcast and the last one have different startAt dates and one service
+                // ends between these two dates) using the startAt date of the first broadcast could lead to an
+                // inaccurate list of active services. However, we'll be saving many date comparisons in the future,
+                // so the trade-off is worth it.
+                $services = $this->serviceRepository->findByIdsWithNetworkServicesList(
+                    $serviceIds,
+                    $broadcasts[0]->getStartAt()
+                );
             } else {
                 $services = $this->serviceRepository->findByIds($serviceIds);
             }
