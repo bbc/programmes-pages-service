@@ -53,7 +53,6 @@ class Genre extends Category
             $ancestry[] = $currentGenre;
         } while ($currentGenre = $currentGenre->getParent());
 
-
         return $ancestry;
     }
 
@@ -61,7 +60,7 @@ class Genre extends Category
      * Given a Genre which has a Parent and GrandParent
      * Will return a urlKeyHierarchy as such:
      *
-     * /GrandParentUrlKey/ParentUrlKey/GenreUrlKey
+     * GrandParentUrlKey/ParentUrlKey/GenreUrlKey
      *
      * @return string
      */
