@@ -261,13 +261,14 @@ QUERY;
     }
 
     /**
-     * @param int[]    $ancestryDbIds
-     * @param string   $entityType
+     * @param int[] $ancestryDbIds
+     * @param string $entityType
      * @param int|null $limit
-     * @param int      $offset
+     * @param int $offset
+     * @param DateTimeImmutable $untilDateTime
      * @return array
      */
-    public function findUpcomingStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset, DateTimeImmutable $fromDateTime) : array
+    public function findUpcomingStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset, DateTimeImmutable $untilDateTime) : array
     {
         $this->assertEntityType($entityType, ['Clip', 'Episode']);
 
@@ -280,12 +281,12 @@ QUERY;
             ->leftJoin('masterBrand.image', 'mbImage')
             ->andWhere('entity.ancestry LIKE :ancestry')
             ->andWhere('entity.streamable = 0')
-            ->andWhere('entity.streamableFrom > :from')
+            ->andWhere('entity.streamableFrom > :until')
             ->orderBy('entity.streamableFrom', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%')
-            ->setParameter('from', $fromDateTime);
+            ->setParameter('until', $untilDateTime);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
         return $this->resolveParents($result);
