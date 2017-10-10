@@ -281,7 +281,7 @@ QUERY;
             ->leftJoin('masterBrand.image', 'mbImage')
             ->andWhere('entity.ancestry LIKE :ancestry')
             ->andWhere('entity.streamable = 0')
-            ->andWhere('entity.streamableFrom > :until')
+            ->andWhere('entity.streamableUntil > :until')
             ->orderBy('entity.streamableFrom', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
