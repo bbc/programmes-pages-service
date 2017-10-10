@@ -35,4 +35,45 @@ class Genre extends Category
 
         return $this->parent;
     }
+
+    /**
+     * Given a Genre which has a Parent and GrandParent
+     * Will return an array of Genres as such:
+     *
+     * [Genre, Parent, Grandparent]
+     *
+     * @return Genre[]
+     */
+    public function getAncestry(): array
+    {
+        $currentGenre = $this;
+        $ancestry = [];
+
+        do {
+            $ancestry[] = $currentGenre;
+        } while ($currentGenre = $currentGenre->getParent());
+
+
+        return $ancestry;
+    }
+
+    /**
+     * Given a Genre which has a Parent and GrandParent
+     * Will return a urlKeyHierarchy as such:
+     *
+     * /GrandParentUrlKey/ParentUrlKey/GenreUrlKey
+     *
+     * @return string
+     */
+    public function getUrlKeyHierarchy(): string
+    {
+        $currentGenre = $this;
+        $urlKeyHierarchy = [];
+
+        do {
+            array_unshift($urlKeyHierarchy, $currentGenre->getUrlKey());
+        } while ($currentGenre = $currentGenre->getParent());
+
+        return implode('/', $urlKeyHierarchy);
+    }
 }

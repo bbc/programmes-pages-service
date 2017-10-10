@@ -221,7 +221,7 @@ abstract class CoreEntity implements ContributableToInterface, MemberOfGroupInte
      * TRAIT_PULLDOWN for AggregatedGalleriesCountMethodsTrait
      * COUNT_PULLDOWN for classes implementing AggregatedGalleriesCountMethodsTrait
      *
-     * @ORM\Column(type="integer", nullable=false, options={"default" = 0})
+     * @ORM\Column(type="integer", name="available_galleries_count", nullable=false, options={"default" = 0})
      */
     protected $aggregatedGalleriesCount = 0;
 
