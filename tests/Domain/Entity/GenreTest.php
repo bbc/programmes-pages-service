@@ -47,4 +47,41 @@ class GenreTest extends TestCase
 
         $genre->getParent();
     }
+
+    public function testGetAncestryWithParent()
+    {
+        $parentGenre = new Genre([0], 'parent_id', 'Parent Title', 'parent_url_key', null);
+        $genre = new Genre([0, 1], 'id', 'Title', 'url_key', $parentGenre);
+
+        $ancestry = $genre->getAncestry();
+
+        $this->assertEquals([$genre, $parentGenre], $ancestry);
+    }
+
+    public function testGetAncestryWithNoParent()
+    {
+        $genre = new Genre([0], 'id', 'Title', 'url_key', null);
+        $ancestry = $genre->getAncestry();
+
+        $this->assertEquals([$genre], $ancestry);
+    }
+
+    public function testGetUrlKeyHierarchyWithParent()
+    {
+        $parentGenre = new Genre([0], 'parent_id', 'Parent Title', 'parent_url_key', null);
+        $genre = new Genre([0, 1], 'id', 'Title', 'url_key', $parentGenre);
+
+        $urlKey = $genre->getUrlKeyHierarchy();
+
+        $this->assertEquals("parent_url_key/url_key", $urlKey);
+    }
+
+    public function testGetUrlKeyHierarchyWithNoParent()
+    {
+        $genre = new Genre([0], 'id', 'Title', 'url_key', null);
+
+        $urlKey = $genre->getUrlKeyHierarchy();
+
+        $this->assertEquals("url_key", $urlKey);
+    }
 }
