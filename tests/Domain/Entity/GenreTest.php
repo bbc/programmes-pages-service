@@ -79,6 +79,7 @@ class GenreTest extends TestCase
     public function testGetUrlKeyHierarchyWithNoParent()
     {
         $genre = new Genre([0], 'id', 'Title', 'url_key', null);
+
         $urlKey = $genre->getUrlKeyHierarchy();
 
         $this->assertEquals($urlKey, "url_key");
