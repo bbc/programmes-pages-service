@@ -54,6 +54,7 @@ class ProgrammesAggregationService extends AbstractService
 
     /**
      * @return Episode[]
+     * @deprecated Not actually needed
      */
     public function findUpcomingStreamableDescendantEpisodes(
         Programme $programme,
@@ -103,6 +104,7 @@ class ProgrammesAggregationService extends AbstractService
 
     /**
      * @return ProgrammeItem[]
+     * @deprecated Not actually needed
      */
     private function findUpcomingStreamableDescendantsByType(
         Programme $programme,
