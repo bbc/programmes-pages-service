@@ -45,26 +45,11 @@ class CollapsedBroadcastsService extends AbstractService
             $key,
             $ttl,
             function () use ($programme) {
-                $result = $this->repository->countUpcomingRepeatsAndDebutsByProgramme(
+                return $this->repository->countUpcomingRepeatsAndDebutsByProgramme(
                     $programme->getDbAncestryIds(),
                     false,
                     ApplicationTime::getTime()
                 );
-
-                $debuts = 0;
-                $repeats = 0;
-
-                if ($result) {
-                    foreach ($result as $r) {
-                        if ($r['isRepeat']) {
-                            $repeats = (int) $r['1'];
-                        } else {
-                            $debuts = (int) $r['1'];
-                        }
-                    }
-                }
-
-                return ['debuts' => $debuts, 'repeats' => $repeats];
             }
         );
     }

@@ -80,8 +80,22 @@ QUERY;
                 ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
         }
 
-        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        return $result;
+        $result = $qb->getQuery()->getArrayResult();
+
+        $debuts = 0;
+        $repeats = 0;
+
+        if ($result) {
+            foreach ($result as $r) {
+                if ($r['isRepeat']) {
+                    $repeats = (int) $r['1'];
+                } else {
+                    $debuts = (int) $r['1'];
+                }
+            }
+        }
+
+        return ['debuts' => $debuts, 'repeats' => $repeats];
     }
 
     public function countUpcomingByProgramme(
