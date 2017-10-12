@@ -52,6 +52,50 @@ QUERY;
         return $q->getSingleScalarResult();
     }
 
+    /**
+     * Count the number of upcoming debuts and repeats. This query will return an associative array with the keys
+     * 'debuts' and 'repeats' containing the pertraining count
+     */
+    public function countUpcomingRepeatsAndDebutsByProgramme(
+        array $ancestry,
+        bool $isWebcastOnly,
+        DateTimeImmutable $from
+    ): array {
+        $qb = $this->createQueryBuilder('collapsedBroadcast', false)
+            ->select('collapsedBroadcast.isRepeat')
+            ->addSelect('COUNT(collapsedBroadcast)')
+            ->andWhere('collapsedBroadcast.endAt > :from')
+            ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
+            ->groupBy('collapsedBroadcast.isRepeat')
+            ->setParameter('isWebcastOnly', $isWebcastOnly)
+            ->setParameter('from', $from);
+
+        if (count($ancestry) === 1) {
+            $qb->andWhere('IDENTITY(collapsedBroadcast.tleo) = :tleoId')
+                ->setParameter('tleoId', $ancestry[0]);
+        } else {
+            $qb->andWhere('programmeItem.ancestry LIKE :ancestryClause')
+                ->setParameter('ancestryClause', $this->ancestryIdsToString($ancestry) . '%');
+        }
+
+        $result = $qb->getQuery()->getArrayResult();
+
+        $debuts = 0;
+        $repeats = 0;
+
+        if ($result) {
+            foreach ($result as $r) {
+                if ($r['isRepeat']) {
+                    $repeats = (int) $r['1'];
+                } else {
+                    $debuts = (int) $r['1'];
+                }
+            }
+        }
+
+        return ['debuts' => $debuts, 'repeats' => $repeats];
+    }
+
     public function countUpcomingByProgramme(
         array $ancestry,
         bool $isWebcastOnly,
@@ -139,6 +183,29 @@ QUERY;
             ->setMaxResults($limit)
             ->setParameter('year', $year)
             ->setParameter('month', $month);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $result = $this->explodeFields($result);
+
+        return $this->resolveProgrammeParents($result);
+    }
+
+    /**
+     * When getting the next broadcast on, we prefer debuts over repeats, hence the order by isRepeat
+     * (debuts are 0, repeats are 1)
+     */
+    public function findNextDebutOrRepeatOnByProgramme(
+        array $ancestry,
+        bool $isWebcastOnly,
+        DateTimeImmutable $cutoffTime
+    ): array {
+        $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $isWebcastOnly)
+            ->andWhere('collapsedBroadcast.endAt > :cutoffTime')
+            ->addOrderBy('collapsedBroadcast.isRepeat', 'ASC')
+            ->addOrderBy('collapsedBroadcast.startAt', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter('cutoffTime', $cutoffTime);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 

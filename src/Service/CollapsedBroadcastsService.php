@@ -33,6 +33,27 @@ class CollapsedBroadcastsService extends AbstractService
         $this->serviceRepository = $serviceRepository;
     }
 
+    public function countUpcomingRepeatsAndDebutsByProgramme(Programme $programme, $ttl = CacheInterface::NORMAL): array
+    {
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            __FUNCTION__,
+            $programme->getDbId(),
+            $ttl
+        );
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme) {
+                return $this->repository->countUpcomingRepeatsAndDebutsByProgramme(
+                    $programme->getDbAncestryIds(),
+                    false,
+                    ApplicationTime::getTime()
+                );
+            }
+        );
+    }
+
     /**
      * @return CollapsedBroadcast[]
      */
@@ -89,6 +110,42 @@ class CollapsedBroadcastsService extends AbstractService
             $ttl,
             function () use ($programme, $year, $month, $limit, $page) {
                 return $this->findByProgrammeAndMonthHelper($programme, $year, $month, $limit, $page, true);
+            }
+        );
+    }
+
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    public function findNextDebutOrRepeatOnByProgramme(
+        Programme $programme,
+        $ttl = CacheInterface::NORMAL
+    ): ?CollapsedBroadcast {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme) {
+                $result = $this->findNextDebutOrRepeatOnByProgrammeHelper($programme, false);
+                return $result ? reset($result) : null;
+            }
+        );
+    }
+
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    public function findNextDebutOrRepeatOnByProgrammeWithFullServicesOfNetworksList(
+        Programme $programme,
+        $ttl = CacheInterface::NORMAL
+    ): ?CollapsedBroadcast {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme) {
+                $result = $this->findNextDebutOrRepeatOnByProgrammeHelper($programme, true);
+                return $result ? reset($result) : null;
             }
         );
     }
@@ -526,6 +583,25 @@ class CollapsedBroadcastsService extends AbstractService
             $month,
             $limit,
             $this->getOffset($limit, $page)
+        );
+
+        $broadcasts = $this->stripWebcasts($broadcasts);
+        $services = $this->fetchUsedServices($broadcasts, $getFullListOfServicesForNetwork);
+
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    protected function findNextDebutOrRepeatOnByProgrammeHelper(
+        Programme $programme,
+        bool $getFullListOfServicesForNetwork
+    ): array {
+        $broadcasts = $this->repository->findNextDebutOrRepeatOnByProgramme(
+            $programme->getDbAncestryIds(),
+            false,
+            ApplicationTime::getTime()
         );
 
         $broadcasts = $this->stripWebcasts($broadcasts);
