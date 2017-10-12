@@ -53,17 +53,6 @@ class ProgrammesAggregationService extends AbstractService
     }
 
     /**
-     * @return Episode[]
-     */
-    public function findUpcomingStreamableDescendantEpisodes(
-        Programme $programme,
-        ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
-    ): array {
-        return $this->findUpcomingStreamableDescendantsByType($programme, 'Episode', $limit, $page);
-    }
-
-    /**
      * @return Gallery[]
      */
     public function findDescendantGalleries(
@@ -94,34 +83,6 @@ class ProgrammesAggregationService extends AbstractService
                     $type,
                     $limit,
                     $this->getOffset($limit, $page)
-                );
-
-                return $this->mapManyEntities($children);
-            }
-        );
-    }
-
-    /**
-     * @return ProgrammeItem[]
-     */
-    private function findUpcomingStreamableDescendantsByType(
-        Programme $programme,
-        string $type,
-        ?int $limit,
-        int $page,
-        $ttl = CacheInterface::NORMAL
-    ): array {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $limit, $page, $ttl);
-        return $this->cache->getOrSet(
-            $key,
-            $ttl,
-            function () use ($programme, $type, $limit, $page) {
-                $children = $this->repository->findUpcomingStreamableDescendantsByType(
-                    $programme->getDbAncestryIds(),
-                    $type,
-                    $limit,
-                    $this->getOffset($limit, $page),
-                    ApplicationTime::getTime()
                 );
 
                 return $this->mapManyEntities($children);
