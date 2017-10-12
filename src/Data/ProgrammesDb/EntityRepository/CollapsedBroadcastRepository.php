@@ -53,9 +53,8 @@ QUERY;
     }
 
     /**
-     * Count the number of upcoming debuts and repeats. This query will return an array where the first element
-     * will contain the number of upcoming debuts and the second element will contain the number of upcoming repeats.
-     * This ordering is ensured by the order by clause
+     * Count the number of upcoming debuts and repeats. This query will return an associative array with the keys
+     * 'debuts' and 'repeats' containing the pertraining count
      */
     public function countUpcomingRepeatsAndDebutsByProgramme(
         array $ancestry,
