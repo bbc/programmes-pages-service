@@ -91,35 +91,6 @@ class ProgrammesAggregationService extends AbstractService
     }
 
     /**
-     * @return ProgrammeItem[]
-     * @deprecated Not actually needed
-     */
-    private function findUpcomingStreamableDescendantsByType(
-        Programme $programme,
-        string $type,
-        ?int $limit,
-        int $page,
-        $ttl = CacheInterface::NORMAL
-    ): array {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $limit, $page, $ttl);
-        return $this->cache->getOrSet(
-            $key,
-            $ttl,
-            function () use ($programme, $type, $limit, $page) {
-                $children = $this->repository->findUpcomingStreamableDescendantsByType(
-                    $programme->getDbAncestryIds(),
-                    $type,
-                    $limit,
-                    $this->getOffset($limit, $page),
-                    ApplicationTime::getTime()
-                );
-
-                return $this->mapManyEntities($children);
-            }
-        );
-    }
-
-    /**
      * @return CoreEntity[]
      */
     private function findDescendantsByType(
