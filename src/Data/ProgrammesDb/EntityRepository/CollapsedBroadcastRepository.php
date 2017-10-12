@@ -67,7 +67,6 @@ QUERY;
             ->andWhere('collapsedBroadcast.endAt > :from')
             ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
             ->groupBy('collapsedBroadcast.isRepeat')
-            ->orderBy('collapsedBroadcast.isRepeat', 'ASC') // ensure debuts come first
             ->setParameter('isWebcastOnly', $isWebcastOnly)
             ->setParameter('from', $from);
 
