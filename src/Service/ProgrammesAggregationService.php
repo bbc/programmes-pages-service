@@ -53,18 +53,6 @@ class ProgrammesAggregationService extends AbstractService
     }
 
     /**
-     * @return Episode[]
-     * @deprecated Not actually needed
-     */
-    public function findUpcomingStreamableDescendantEpisodes(
-        Programme $programme,
-        ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
-    ): array {
-        return $this->findUpcomingStreamableDescendantsByType($programme, 'Episode', $limit, $page);
-    }
-
-    /**
      * @return Gallery[]
      */
     public function findDescendantGalleries(
