@@ -201,7 +201,7 @@ QUERY;
         DateTimeImmutable $cutoffTime
     ): array {
         $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $isWebcastOnly)
-            ->addSelect('CASE WHEN (collapsedBroadcast.startAt < :cutoffTime AND collapsedBroadcast.endAt >= :cutoffTime) THEN 1 ELSE 0 AS HIDDEN isLive')
+            ->addSelect('CASE WHEN collapsedBroadcast.startAt <= :cutoffTime THEN 1 ELSE 0 AS HIDDEN isLive')
             ->andWhere('collapsedBroadcast.endAt > :cutoffTime')
             ->addOrderBy('isLive', 'DESC')
             ->addOrderBy('collapsedBroadcast.isRepeat', 'ASC')
