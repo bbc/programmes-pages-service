@@ -43,8 +43,8 @@ class CoreEntityRepository extends MaterializedPathRepository
     {
         $this->assertEntityType($entityType, ['Clip', 'Episode']);
 
-        $qb = $this->createQueryBuilder('entity')
-            ->select('COUNT(entity)')
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('COUNT(DISTINCT(entity.id))')
             ->from('ProgrammesPagesService:' . $entityType, 'entity')
             ->leftJoin('entity.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
