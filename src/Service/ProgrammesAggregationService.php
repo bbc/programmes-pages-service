@@ -32,7 +32,7 @@ class ProgrammesAggregationService extends AbstractService
 
     public function countUpcomingStreamableDescendantEpisodes(Programme $programme): int
     {
-        return $this->countUpcomingStreamableDescendantsByType($programme, 'Episode');
+        return count($this->findUpcomingStreamableDescendantsByType($programme, 'Episode', 1, 1));
     }
 
     /**
@@ -68,21 +68,30 @@ class ProgrammesAggregationService extends AbstractService
         return $this->findDescendantsByType($programme, 'Gallery', $limit, $page);
     }
 
-    private function countUpcomingStreamableDescendantsByType(
+    /**
+     * @return ProgrammeItem[]
+     */
+    private function findUpcomingStreamableDescendantsByType(
         Programme $programme,
         string $type,
+        ?int $limit,
+        int $page,
         $ttl = CacheInterface::NORMAL
-    ): int {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $ttl);
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $limit, $page, $ttl);
         return $this->cache->getOrSet(
             $key,
             $ttl,
-            function () use ($programme, $type) {
-                return $this->repository->countUpcomingStreamableDescendantsByType(
+            function () use ($programme, $type, $limit, $page) {
+                $children = $this->repository->findUpcomingStreamableDescendantsByType(
                     $programme->getDbAncestryIds(),
                     $type,
+                    $limit,
+                    $this->getOffset($limit, $page),
                     ApplicationTime::getTime()
                 );
+
+                return $this->mapManyEntities($children);
             }
         );
     }

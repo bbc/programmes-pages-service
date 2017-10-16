@@ -36,15 +36,17 @@ class CoreEntityRepository extends MaterializedPathRepository
     /**
      * @param int[] $ancestryDbIds
      * @param string $entityType
+     * @param int|null $limit
+     * @param int $offset
      * @param DateTimeImmutable $fromDateTime
-     * @return int
+     * @return array
      */
-    public function countUpcomingStreamableDescendantsByType(array $ancestryDbIds, string $entityType, DateTimeImmutable $fromDateTime): int
+    public function findUpcomingStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset, DateTimeImmutable $fromDateTime): array
     {
         $this->assertEntityType($entityType, ['Clip', 'Episode']);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('COUNT(DISTINCT(entity.id))')
+            ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
             ->from('ProgrammesPagesService:' . $entityType, 'entity')
             ->leftJoin('entity.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
@@ -54,11 +56,13 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->andWhere('entity.streamable = 0')
             ->andWhere('entity.streamableFrom > :from')
             ->orderBy('entity.streamableFrom', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%')
             ->setParameter('from', $fromDateTime);
 
-        $query = $qb->getQuery();
-        return $query->getSingleScalarResult();
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
     }
 
     public function findTleosByCategory(
