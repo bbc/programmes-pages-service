@@ -192,8 +192,8 @@ QUERY;
     }
 
     /**
-     * When getting the next broadcast on, we prefer debuts over repeats, hence the order by isRepeat
-     * (debuts are 0, repeats are 1)
+     * When getting the next broadcast on, we prefer live now over debuts over repeats, hence the order by isRepeat
+     * (debuts are 0, repeats are 1) and order by isLive
      */
     public function findNextDebutOrRepeatOnByProgramme(
         array $ancestry,
@@ -201,7 +201,9 @@ QUERY;
         DateTimeImmutable $cutoffTime
     ): array {
         $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $isWebcastOnly)
+            ->addSelect('CASE WHEN collapsedBroadcast.startAt <= :cutoffTime THEN 1 ELSE 0 AS HIDDEN isLive')
             ->andWhere('collapsedBroadcast.endAt > :cutoffTime')
+            ->addOrderBy('isLive', 'DESC')
             ->addOrderBy('collapsedBroadcast.isRepeat', 'ASC')
             ->addOrderBy('collapsedBroadcast.startAt', 'ASC')
             ->setMaxResults(1)
