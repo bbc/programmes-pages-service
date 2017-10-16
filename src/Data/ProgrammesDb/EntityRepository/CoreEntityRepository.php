@@ -33,6 +33,34 @@ class CoreEntityRepository extends MaterializedPathRepository
 
     private $ancestryCache = [];
 
+    /**
+     * @param int[] $ancestryDbIds
+     * @param string $entityType
+     * @param DateTimeImmutable $fromDateTime
+     * @return int
+     */
+    public function countUpcomingStreamableDescendantsByType(array $ancestryDbIds, string $entityType, DateTimeImmutable $fromDateTime): int
+    {
+        $this->assertEntityType($entityType, ['Clip', 'Episode']);
+
+        $qb = $this->createQueryBuilder('entity')
+            ->select('COUNT(entity)')
+            ->from('ProgrammesPagesService:' . $entityType, 'entity')
+            ->leftJoin('entity.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('entity.image', 'image')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->andWhere('entity.ancestry LIKE :ancestry')
+            ->andWhere('entity.streamable = 0')
+            ->andWhere('entity.streamableFrom > :from')
+            ->orderBy('entity.streamableFrom', 'ASC')
+            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%')
+            ->setParameter('from', $fromDateTime);
+
+        $query = $qb->getQuery();
+        return $query->getSingleScalarResult();
+    }
+
     public function findTleosByCategory(
         array $ancestryDbIds,
         bool $filterToAvailable,
