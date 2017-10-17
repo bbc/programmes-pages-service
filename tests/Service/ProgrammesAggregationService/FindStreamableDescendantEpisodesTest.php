@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 
+use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 
@@ -16,7 +17,7 @@ class FindStreamableDescendantEpisodesTest extends AbstractProgrammesAggregation
 
         $this->mockRepository->expects($this->once())
             ->method('findStreamableDescendantsByType')
-            ->with($stubProgramme->getDbAncestryIds(), 'Episode', $expectedLimit, $expectedOffset);
+            ->with($stubProgramme->getDbAncestryIds(), 'Episode', ApplicationTime::getTime(), $expectedLimit, $expectedOffset);
 
         $this->service()->findStreamableDescendantEpisodes($stubProgramme, ...$paramsPagination);
     }
