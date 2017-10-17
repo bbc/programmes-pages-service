@@ -47,9 +47,6 @@ class OptionsMapper extends AbstractMapper
 
     public function getDomainModel(array $options, array ...$parentEntities)
     {
-        // Transform options
-        $options = $this->transformOptions($options);
-
         // $parentEntities must start from the bottom of the hierarchy
 
         // now loop through parents and apply the data
