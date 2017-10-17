@@ -232,18 +232,21 @@ QUERY;
     }
 
     /**
-     * @param int[]    $ancestryDbIds
-     * @param string   $entityType
+     * @param int[] $ancestryDbIds
+     * @param string $entityType
+     * @param DateTimeImmutable $now
      * @param int|null $limit
-     * @param int      $offset
+     * @param int $offset
+     * @TODO see if there is a way to remove the sort on the HIDDEN field
      * @return array
      */
-    public function findStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset) : array
+    public function findStreamableDescendantsByType(array $ancestryDbIds, string $entityType, DateTimeImmutable $now, ?int $limit, int $offset) : array
     {
         $this->assertEntityType($entityType, ['Clip', 'Episode']);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
+            ->addSelect('CASE WHEN (entity.firstBroadcastDate >= :sevenDaysAgo) THEN 1 ELSE 0 END as HIDDEN isWithinSevenDays')
             ->from('ProgrammesPagesService:' . $entityType, 'entity')
             ->leftJoin('entity.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
@@ -251,9 +254,11 @@ QUERY;
             ->leftJoin('masterBrand.image', 'mbImage')
             ->andWhere('entity.ancestry LIKE :ancestry')
             ->andWhere('entity.streamable = 1')
-            ->orderBy('entity.streamableFrom', 'DESC')
+            ->addOrderBy('isWithinSevenDays', 'DESC')
+            ->addOrderBy('entity.streamableFrom', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
+            ->setParameter('sevenDaysAgo', $now->modify('-7 days')->format('Y-m-d'))
             ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);

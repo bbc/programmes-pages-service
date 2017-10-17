@@ -2,6 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 
+use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 
@@ -16,7 +17,7 @@ class FindDescendantClipsTest extends AbstractProgrammesAggregationTest
 
         $this->mockRepository->expects($this->once())
             ->method('findStreamableDescendantsByType')
-            ->with($stubProgramme->getDbAncestryIds(), 'Clip', $expectedLimit, $expectedOffset);
+            ->with($stubProgramme->getDbAncestryIds(), 'Clip', ApplicationTime::getTime(), $expectedLimit, $expectedOffset);
 
         $this->service()->findDescendantClips($stubProgramme, ...$paramsPagination);
     }

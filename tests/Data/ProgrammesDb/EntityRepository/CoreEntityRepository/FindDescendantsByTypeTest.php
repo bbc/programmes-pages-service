@@ -2,6 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 
+use BBC\ProgrammesPagesService\Domain\ApplicationTime;
+use DateTimeImmutable;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 /**
@@ -32,7 +34,7 @@ class FindDescendantsByTypeTest extends AbstractDatabaseTest
         $dbAncestryId = $this->getAncestryFromPersistentIdentifier('b010t19z', 'Brand');
         $clipsUnderProgramme = $this->getEntityManager()
             ->getRepository('ProgrammesPagesService:CoreEntity')
-            ->findStreamableDescendantsByType($dbAncestryId, 'Clip', 100, 0);
+            ->findStreamableDescendantsByType($dbAncestryId, 'Clip', new DateTimeImmutable(), 100, 0);
         $expectedClipsPids = ['p00h64pq', 'p00hv9yz', 'p008k0l5', 'p008k0jy', 'p008nhl4'];
 
         $this->assertEmpty(array_diff($expectedClipsPids, array_column($clipsUnderProgramme, 'pid')));
