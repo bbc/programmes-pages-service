@@ -10,6 +10,9 @@ class Genre extends Category
     /** @var Genre|null */
     private $parent;
 
+    /** @var string|null */
+    private $urlKeyHierarchy;
+
     public function __construct(
         array $dbAncestryIds,
         string $id,
@@ -29,7 +32,7 @@ class Genre extends Category
         if ($this->parent instanceof UnfetchedGenre) {
             throw new DataNotFetchedException(
                 'Could not get Parent of Genre "'
-                    . $this->getId() . '" as it was not fetched'
+                . $this->getId() . '" as it was not fetched'
             );
         }
 
@@ -61,18 +64,20 @@ class Genre extends Category
      * Will return a urlKeyHierarchy as such:
      *
      * GrandParentUrlKey/ParentUrlKey/GenreUrlKey
-     *
-     * @return string
      */
     public function getUrlKeyHierarchy(): string
     {
-        $currentGenre = $this;
-        $urlKeyHierarchy = [];
+        if ($this->urlKeyHierarchy === null) {
+            $currentGenre = $this;
+            $urlKeyHierarchy = [];
 
-        do {
-            array_unshift($urlKeyHierarchy, $currentGenre->getUrlKey());
-        } while ($currentGenre = $currentGenre->getParent());
+            do {
+                $urlKeyHierarchy[] = $currentGenre->getUrlKey();
+            } while ($currentGenre = $currentGenre->getParent());
 
-        return implode('/', $urlKeyHierarchy);
+            $this->urlKeyHierarchy = implode('/', array_reverse($urlKeyHierarchy));
+        }
+
+        return $this->urlKeyHierarchy;
     }
 }
