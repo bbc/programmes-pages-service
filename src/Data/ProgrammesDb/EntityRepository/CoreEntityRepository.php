@@ -237,6 +237,7 @@ QUERY;
      * @param DateTimeImmutable $now
      * @param int|null $limit
      * @param int $offset
+     * @TODO see if there is a way to remove the sort on the HIDDEN field
      * @return array
      */
     public function findStreamableDescendantsByType(array $ancestryDbIds, string $entityType, DateTimeImmutable $now, ?int $limit, int $offset) : array
@@ -245,7 +246,7 @@ QUERY;
 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
-            ->addSelect('CASE WHEN (entity.releaseDate >= :sevenDaysAgo) THEN 1 ELSE 0 END as HIDDEN isWithinSevenDays')
+            ->addSelect('CASE WHEN (entity.firstBroadcastDate >= :sevenDaysAgo) THEN 1 ELSE 0 END as HIDDEN isWithinSevenDays')
             ->from('ProgrammesPagesService:' . $entityType, 'entity')
             ->leftJoin('entity.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
