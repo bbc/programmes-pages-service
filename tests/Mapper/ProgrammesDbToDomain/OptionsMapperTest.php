@@ -117,32 +117,6 @@ class OptionsMapperTest extends BaseMapperTestCase
         );
     }
 
-    public function testInheritDependentProperties()
-    {
-        $options = [
-            'brand_2016_layout' => null,
-            'brand_2016_layout_use_minimap' => false,
-        ];
-
-        $parentOptions = [
-            'brand_2016_layout' => true,
-            'brand_2016_layout_use_minimap' => true,
-        ];
-
-        $expectedOptions = [
-            'brand_2016_layout' => true,
-            'brand_2016_layout_use_minimap' => true,
-        ];
-
-        $result = $this->getMapper()->getDomainModel($options, $parentOptions);
-        $relevantResult = [
-            'brand_2016_layout' => $result->getOption('brand_2016_layout'),
-            'brand_2016_layout_use_minimap' => $result->getOption('brand_2016_layout_use_minimap'),
-        ];
-
-        $this->assertEquals(new Options($expectedOptions), new Options($relevantResult));
-    }
-
     private function getMapper(): OptionsMapper
     {
         return new OptionsMapper($this->getMapperFactory());

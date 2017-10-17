@@ -47,17 +47,12 @@ class OptionsMapper extends AbstractMapper
 
     public function getDomainModel(array $options, array ...$parentEntities)
     {
-        // Transform options
-        $options = $this->transformOptions($options);
-
         // $parentEntities must start from the bottom of the hierarchy
 
         // now loop through parents and apply the data
         // ONLY if the key is allowed to cascade AND
         // the key doesn't already exist lower down.
         foreach ($parentEntities as $parentOptions) {
-            $parentOptions = $this->transformOptions($parentOptions);
-
             foreach ($parentOptions as $key => $value) {
                 if (!isset($options[$key]) && (self::OPTIONS_DEFAULT_SCHEMA[$key]['cascades'] ?? false)) {
                     $options[$key] = $value;
@@ -85,19 +80,5 @@ class OptionsMapper extends AbstractMapper
         }
 
         return self::$defaults;
-    }
-
-    private function transformOptions(array $options): array
-    {
-        // If brand_2016_layout is null (inherit), these options that can only be
-        // set when brand_2016_layout is true should also be inherited
-        if (array_key_exists('brand_2016_layout', $options) && is_null($options['brand_2016_layout'])) {
-            $options['brand_2016_layout_use_minimap'] = null;
-            $options['double_width_first_promo'] = null;
-            $options['show_gallery_cards'] = null;
-            $options['show_clip_cards'] = null;
-        }
-
-        return $options;
     }
 }
