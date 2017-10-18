@@ -30,6 +30,11 @@ class ProgrammesAggregationService extends AbstractService
         parent::__construct($repository, $mapper, $cache);
     }
 
+    public function countUpcomingStreamableDescendantEpisodes(Programme $programme): int
+    {
+        return count($this->findUpcomingStreamableDescendantsByType($programme, 'Episode', 1, 1));
+    }
+
     /**
      * @return Clip[]
      */
@@ -61,6 +66,34 @@ class ProgrammesAggregationService extends AbstractService
         int $page = self::DEFAULT_PAGE
     ): array {
         return $this->findDescendantsByType($programme, 'Gallery', $limit, $page);
+    }
+
+    /**
+     * @return ProgrammeItem[]
+     */
+    private function findUpcomingStreamableDescendantsByType(
+        Programme $programme,
+        string $type,
+        ?int $limit,
+        int $page,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $limit, $page, $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $type, $limit, $page) {
+                $children = $this->repository->findUpcomingStreamableDescendantsByType(
+                    $programme->getDbAncestryIds(),
+                    $type,
+                    $limit,
+                    $this->getOffset($limit, $page),
+                    ApplicationTime::getTime()
+                );
+
+                return $this->mapManyEntities($children);
+            }
+        );
     }
 
     /**

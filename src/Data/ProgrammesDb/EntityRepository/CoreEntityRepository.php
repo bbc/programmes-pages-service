@@ -33,6 +33,38 @@ class CoreEntityRepository extends MaterializedPathRepository
 
     private $ancestryCache = [];
 
+    /**
+     * @param int[] $ancestryDbIds
+     * @param string $entityType
+     * @param int|null $limit
+     * @param int $offset
+     * @param DateTimeImmutable $fromDateTime
+     * @return array
+     */
+    public function findUpcomingStreamableDescendantsByType(array $ancestryDbIds, string $entityType, ?int $limit, int $offset, DateTimeImmutable $fromDateTime): array
+    {
+        $this->assertEntityType($entityType, ['Clip', 'Episode']);
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
+            ->from('ProgrammesPagesService:' . $entityType, 'entity')
+            ->leftJoin('entity.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('entity.image', 'image')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->andWhere('entity.ancestry LIKE :ancestry')
+            ->andWhere('entity.streamable = 0')
+            ->andWhere('entity.streamableFrom > :from')
+            ->orderBy('entity.streamableFrom', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%')
+            ->setParameter('from', $fromDateTime);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
+    }
+
     public function findTleosByCategory(
         array $ancestryDbIds,
         bool $filterToAvailable,
