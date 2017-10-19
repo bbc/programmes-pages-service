@@ -41,6 +41,9 @@ class OptionsMapper extends AbstractMapper
         'bbc_site' => [ 'default' => null, 'cascades' => false ],
         'livepromo_block' => [ 'default' => null, 'cascades' => false ],
         'prioritytext_block' => [ 'default' => null, 'cascades' => false ],
+
+        // contact options
+        'contact_details' => [ 'default' => [], 'cascades' => false ],
     ];
 
     private static $defaults = [];
