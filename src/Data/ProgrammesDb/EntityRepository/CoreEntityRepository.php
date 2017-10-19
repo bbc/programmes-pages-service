@@ -196,6 +196,33 @@ QUERY;
         return $this->resolveCategories($withHydratedParents)[0];
     }
 
+    /**
+     * @param string[] $pids
+     * @param string $entityType
+     * @return array|null
+     */
+    public function findByPids(array $pids, string $entityType = 'CoreEntity'): ?array
+    {
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['entity', 'image', 'masterBrand', 'network', 'mbImage', 'category', 'nwImage'])
+            ->from('ProgrammesPagesService:' . $entityType, 'entity') // For filtering on type
+            ->leftJoin('entity.image', 'image')
+            ->leftJoin('entity.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('network.image', 'nwImage')
+            ->leftJoin('entity.categories', 'category')
+            ->andWhere('entity.pid IN (:pids)')
+            ->setParameter('pids', $pids);
+
+        $result = $qb->getQuery()->getResult();
+        if (!$result) {
+            return $result;
+        }
+        return $this->resolveParents([$result]);
+    }
+
     public function findByIds(array $ids): array
     {
         $results = $this->createQueryBuilder('programme')

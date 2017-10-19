@@ -197,6 +197,33 @@ class ProgrammesService extends AbstractService
         );
     }
 
+    /**
+     * @param Pid[] $pids
+     * @param string $entityType
+     * @param string $ttl
+     * @return mixed
+     */
+    public function findByPids(array $pids, string $entityType = 'Programme', $ttl = CacheInterface::NORMAL)
+    {
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+
+        foreach ($pids as &$pid) {
+            // coerce to strings
+            $pid = (string) $pid;
+        }
+
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, implode('/', $pids), $entityType, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($pids, $entityType) {
+                $dbEntities = $this->repository->findByPids($pids, $entityType);
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
+    }
+
     public function findByPidFull(Pid $pid, string $entityType = 'Programme', $ttl = CacheInterface::NORMAL): ?Programme
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
