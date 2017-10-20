@@ -3,6 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
+use BBC\ProgrammesPagesService\Domain\Map\ContactMediaMap;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 
 class CachingTest extends BaseCoreEntityMapperTestCase
@@ -63,6 +64,7 @@ class CachingTest extends BaseCoreEntityMapperTestCase
                     'livepromo_block' => null,
                     'prioritytext_block' => null,
                     'navigation_links' => [],
+                    'contact_details' => new ContactMediaMap(),
                 ]
             )
         );

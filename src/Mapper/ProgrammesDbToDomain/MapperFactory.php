@@ -132,6 +132,15 @@ class MapperFactory
         return $this->instances[OptionsMapper::class];
     }
 
+    public function getContactMapper(): ContactMapper
+    {
+        if (!isset($this->instances[ContactMapper::class])) {
+            $this->instances[ContactMapper::class] = new ContactMapper($this);
+        }
+
+        return $this->instances[ContactMapper::class];
+    }
+
     public function getPromotionMapper(): PromotionMapper
     {
         if (!isset($this->instances[PromotionMapper::class])) {
