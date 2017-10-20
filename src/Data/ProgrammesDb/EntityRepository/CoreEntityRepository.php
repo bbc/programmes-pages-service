@@ -199,9 +199,9 @@ QUERY;
     /**
      * @param string[] $pids
      * @param string $entityType
-     * @return array|null
+     * @return array
      */
-    public function findByPids(array $pids, string $entityType = 'CoreEntity'): ?array
+    public function findByPids(array $pids, string $entityType = 'CoreEntity'): array
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -216,11 +216,8 @@ QUERY;
             ->andWhere('entity.pid IN (:pids)')
             ->setParameter('pids', $pids);
 
-        $result = $qb->getQuery()->getResult();
-        if (!$result) {
-            return $result;
-        }
-        return $this->resolveParents([$result]);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
     }
 
     public function findByIds(array $ids): array

@@ -201,16 +201,13 @@ class ProgrammesService extends AbstractService
      * @param Pid[] $pids
      * @param string $entityType
      * @param string $ttl
-     * @return mixed
+     * @return Programme[]
      */
     public function findByPids(array $pids, string $entityType = 'Programme', $ttl = CacheInterface::NORMAL)
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
-        foreach ($pids as &$pid) {
-            // coerce to strings
-            $pid = (string) $pid;
-        }
+        $pids = array_map('strval', $pids); // convert to strings
 
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, implode('/', $pids), $entityType, $ttl);
 
