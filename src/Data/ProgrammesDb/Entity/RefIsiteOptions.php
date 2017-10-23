@@ -68,7 +68,7 @@ class RefIsiteOptions
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=7, nullable=false)
+     * @ORM\Column(type="string", length=20, nullable=false)
      */
     private $type;
 
