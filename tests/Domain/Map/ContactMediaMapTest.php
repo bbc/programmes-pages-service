@@ -1,6 +1,6 @@
 <?php
 
-use BBC\ProgrammesPagesService\Domain\Map\ContactMediaMap;
+use BBC\ProgrammesPagesService\Domain\Entity\ContactMediaMap;
 use BBC\ProgrammesPagesService\Domain\ValueObject\ContactMedia;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +14,7 @@ class ContactMediaMapTest extends TestCase
         $this->contactMediaMap = new ContactMediaMap();
     }
 
-    public function testCanAddContactsMedia()
+    public function testCanAddOneContactMedia()
     {
         $contactMedia = new ContactMedia('email', 'myemail@something.com', 'a free text');
 
@@ -23,7 +23,7 @@ class ContactMediaMapTest extends TestCase
         $this->assertEquals([$contactMedia], $this->contactMediaMap->getContactsByMedia('email'));
     }
 
-    public function testCanAddMultipleContactsMedia()
+    public function testCanAddMultipleContactMedia()
     {
         $contactMedia1 = new ContactMedia('email', 'myemail@something.com', 'a free text');
         $contactMedia2 = new ContactMedia('email', 'myemail@something.com', 'a free text');
@@ -44,7 +44,6 @@ class ContactMediaMapTest extends TestCase
             $this->contactMediaMap->getContactsByMedia('reddit')
         );
     }
-
 
     public function testCanGetNamesOfUsedMedia()
     {

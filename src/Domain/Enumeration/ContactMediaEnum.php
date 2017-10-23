@@ -22,7 +22,7 @@ class ContactMediaEnum
     const INSTAGRAM = 'instagram';
     const OTHER = 'other';
 
-    public static function validValues(): array
+    public static function validMedia(): array
     {
         return [
             self::EMAIL,

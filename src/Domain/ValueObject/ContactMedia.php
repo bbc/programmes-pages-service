@@ -2,6 +2,8 @@
 
 namespace BBC\ProgrammesPagesService\Domain\ValueObject;
 
+use BBC\ProgrammesPagesService\Domain\Enumeration\ContactMediaEnum;
+
 class ContactMedia
 {
     private $value;
@@ -15,17 +17,24 @@ class ContactMedia
         $this->freetext = $freetext;
     }
 
-    public function getValue()
+    /**
+     * Examples:
+     * Any email, mobile phone, postcode, reddit id, facebook, ...
+     */
+    public function getValue(): string
     {
         return $this->value;
     }
 
-    public function getFreeText()
+    public function getFreeText(): string
     {
         return $this->freeText;
     }
 
-    public function getType()
+    /**
+     * @see ContactMediaEnum::validMedia()
+     */
+    public function getType(): string
     {
         return $this->type;
     }

@@ -3,7 +3,6 @@
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
-use BBC\ProgrammesPagesService\Domain\Map\ContactMediaMap;
 
 class OptionsMapper extends AbstractMapper
 {
@@ -66,15 +65,13 @@ class OptionsMapper extends AbstractMapper
 
         // set default values
         $defaults = $this->getDefaultValues();
-        // complete options with unexistent keys with values from $default
-        foreach ($defaults as $key => $value) {
+        foreach ($defaults as $key => $defaultValue) {
             if (!isset($options[$key])) {
-                $options[$key] = $value;
+                $options[$key] = $defaultValue;
             }
         }
 
         if (isset($options['contact_details'])) {
-            /** @var ContactMediaMap $options['contact_details'] */
             $options['contact_details'] = $this->mapperFactory->getContactMapper()->getDomainModel($options['contact_details']);
         }
 
