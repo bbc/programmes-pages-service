@@ -207,15 +207,23 @@ class ProgrammesService extends AbstractService
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
-        $pids = array_map('strval', $pids); // convert to strings
+        $validPids = [];
 
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, implode('/', $pids), $entityType, $ttl);
+        foreach ($pids as $pid) {
+            if ($pid instanceof Pid) {
+                $validPids[] = (string) $pid;
+            } else {
+                throw new InvalidArgumentException("Called findByPids with an invalid type. Array must contain only Pids.");
+            }
+        }
+
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, implode('|', $validPids), $entityType, $ttl);
 
         return $this->cache->getOrSet(
             $key,
             $ttl,
-            function () use ($pids, $entityType) {
-                $dbEntities = $this->repository->findByPids($pids, $entityType);
+            function () use ($validPids, $entityType) {
+                $dbEntities = $this->repository->findByPids($validPids, $entityType);
                 return $this->mapManyEntities($dbEntities);
             }
         );

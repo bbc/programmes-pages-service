@@ -56,8 +56,17 @@ class FindByPidsTest extends AbstractProgrammesServiceTest
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Called findByPids with an invalid type. Expected one of "Programme", "ProgrammeContainer", "ProgrammeItem", "Brand", "Series", "Episode", "Clip" but got "junk"
      */
-    public function testFindByPidWithInvalidEntityType()
+    public function testFindByPidsWithInvalidEntityType()
     {
         $this->service()->findByPids([new Pid('b010t19z')], 'junk');
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Called findByPids with an invalid type. Array must contain only Pids.
+     */
+    public function testFindByPidsWithInvalidPidsArray()
+    {
+        $this->service()->findByPids([true, 12, new Pid('b010t19z')]);
     }
 }
