@@ -15,7 +15,6 @@ class RefIsiteOptions
 {
     const TYPE_LOCAL = 'local';
     const TYPE_ADMIN = 'admin';
-    const TYPE_CONTACT = 'contact';
 
     use TimestampableEntity;
 
@@ -64,7 +63,7 @@ class RefIsiteOptions
     private $fileId;
 
     /**
-     * local|admin|contact
+     * local|admin
      *
      * @var string
      *
@@ -177,7 +176,7 @@ class RefIsiteOptions
 
     public function setType(string $type): void
     {
-        if (!in_array($type, [self::TYPE_ADMIN, self::TYPE_LOCAL, self::TYPE_CONTACT])) {
+        if (!in_array($type, [self::TYPE_ADMIN, self::TYPE_LOCAL])) {
             throw new InvalidArgumentException('Type document for options not allowed');
         }
 
