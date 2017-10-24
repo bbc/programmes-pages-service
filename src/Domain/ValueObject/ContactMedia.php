@@ -3,24 +3,48 @@
 namespace BBC\ProgrammesPagesService\Domain\ValueObject;
 
 use BBC\ProgrammesPagesService\Domain\Enumeration\ContactMediaEnum;
+use InvalidArgumentException;
 
 class ContactMedia
 {
-    private $value;
-    private $freetext;
+    /**
+     * @see ContactMediaEnum::VALID_MEDIA
+     *
+     * @var string
+     */
     private $type;
-
-    public function __construct($type, $value, $freetext)
-    {
-        $this->type = $type;
-        $this->value = $value;
-        $this->freetext = $freetext;
-    }
 
     /**
      * Examples:
      * Any email, mobile phone, postcode, reddit id, facebook, ...
+     *
+     * @var string
      */
+    private $value;
+
+    /**
+     * @var string
+     */
+    private $freetext;
+
+    public function __construct($mediaType, $value, $freetext)
+    {
+        $validsMedia = ContactMediaEnum::VALID_MEDIA;
+
+        if (!isset($validsMedia[$mediaType])) {
+            throw new InvalidArgumentException('Trying to create an invalid type of contact media');
+        }
+
+        $this->type = $mediaType;
+        $this->value = $value;
+        $this->freetext = $freetext;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
     public function getValue(): string
     {
         return $this->value;
@@ -29,13 +53,5 @@ class ContactMedia
     public function getFreeText(): string
     {
         return $this->freeText;
-    }
-
-    /**
-     * @see ContactMediaEnum::validMedia()
-     */
-    public function getType(): string
-    {
-        return $this->type;
     }
 }
