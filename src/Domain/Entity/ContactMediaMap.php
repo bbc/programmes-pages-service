@@ -45,6 +45,8 @@ class ContactMediaMap
     {
         $validsMedia = ContactMediaEnum::VALID_MEDIA;
 
+        // we don't want to throw any error when trying to add invalid contact types.
+        // so for invalid types we just dont add them to the map
         if (isset($validsMedia[$contactMedia->getType()])) {
             $this->contactsMapByMedia[$contactMedia->getType()][] = $contactMedia;
         }
