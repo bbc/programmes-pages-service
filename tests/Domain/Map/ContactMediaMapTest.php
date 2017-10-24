@@ -68,13 +68,10 @@ class ContactMediaMapTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Trying to create an invalid type of contact media
-     */
-    public function testThrowExceptionForInvalidMediaTypes()
+    public function testInvalidContactMediaAreNotAddedButTheyDontThrowError()
     {
         $this->contactMediaMap->addContactMedia(new ContactMedia('invalid_type', 'myemail@something.com', 'a free text'));
+        $this->assertEquals([], $this->contactMediaMap->getNamesOfUsedMedia());
     }
 
     /**

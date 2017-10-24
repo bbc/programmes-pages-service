@@ -29,12 +29,6 @@ class ContactMedia
 
     public function __construct($mediaType, $value, $freetext)
     {
-        $validsMedia = ContactMediaEnum::VALID_MEDIA;
-
-        if (!isset($validsMedia[$mediaType])) {
-            throw new InvalidArgumentException('Trying to create an invalid type of contact media');
-        }
-
         $this->type = $mediaType;
         $this->value = $value;
         $this->freetext = $freetext;
