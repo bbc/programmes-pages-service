@@ -15,12 +15,14 @@ class ContactMediaMap
      *      'facebook' => [<ContactMedia>],
      *  ]
      *
-     * @var mixed[]
+     * @var ContactMedia[][]
      */
     private $contactsMapByMedia = [];
 
     /**
-     * @return string[]     Example: ['reddit', 'email']
+     * Example: ['reddit', 'email']
+     *
+     * @return string[]
      */
     public function getNamesOfUsedMedia(): array
     {

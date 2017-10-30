@@ -50,7 +50,7 @@ class OptionsMapperTest extends BaseMapperTestCase
             'livepromo_block' => null,
             'prioritytext_block' => null,
             'navigation_links' => [],
-            'contact_details' => new ContactMediaMap()
+            'contact_details' => new ContactMediaMap(),
         ];
 
         $this->assertEquals(
@@ -112,7 +112,7 @@ class OptionsMapperTest extends BaseMapperTestCase
             'livepromo_block' => null,
             'prioritytext_block' => null,
             'navigation_links' => [],
-            'contact_details' => new ContactMediaMap()
+            'contact_details' => new ContactMediaMap(),
         ];
 
         $this->assertEquals(
@@ -130,14 +130,14 @@ class OptionsMapperTest extends BaseMapperTestCase
                 [
                     'detail_type' => 'email',
                     'detail_value' => 'emailAAAA@myemail.com',
-                    'detail_freetext' => 'Free text'
+                    'detail_freetext' => 'Free text',
                 ],
                 [
                     'detail_type' => 'email',
                     'detail_value' => 'emailBBBB@myemail.com',
-                    'detail_freetext' => 'Free text'
-                ]
-            ]
+                    'detail_freetext' => 'Free text',
+                ],
+            ],
         ];
 
         $expectedOptions = [
@@ -175,7 +175,7 @@ class OptionsMapperTest extends BaseMapperTestCase
             'navigation_links' => [],
             'contact_details' => (new ContactMediaMap())
                 ->addContactMedia(new ContactMedia('email', 'emailAAAA@myemail.com', 'Free text'))
-                ->addContactMedia(new ContactMedia('email', 'emailBBBB@myemail.com', 'Free text'))
+                ->addContactMedia(new ContactMedia('email', 'emailBBBB@myemail.com', 'Free text')),
         ];
 
         $this->assertEquals(

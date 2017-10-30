@@ -12,16 +12,16 @@ class ContactMediaMapper extends AbstractMapper
     {
         $contactMediaMap = new ContactMediaMap();
 
-        foreach($contactsMedia as $contactMedia) {
+        foreach ($contactsMedia as $contactMedia) {
             if (!$this->isValidDataToMap($contactMedia)) {
                 throw new InvalidArgumentException('Not possible to map contact media');
             }
 
             $contactMediaMap->addContactMedia(new ContactMedia(
-                    $contactMedia['detail_type'],
-                    $contactMedia['detail_value'],
-                    $contactMedia['detail_freetext']
-             ));
+                $contactMedia['detail_type'],
+                $contactMedia['detail_value'],
+                $contactMedia['detail_freetext']
+            ));
         }
 
         return $contactMediaMap;

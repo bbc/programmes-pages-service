@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\BBC\ProgrammesPagesService\Domain\Map;
+
 use BBC\ProgrammesPagesService\Domain\Entity\ContactMediaMap;
 use BBC\ProgrammesPagesService\Domain\ValueObject\ContactMedia;
 use PHPUnit\Framework\TestCase;
