@@ -44,7 +44,6 @@ class ApplicationTimeTest extends TestCase
         $initialTime = ApplicationTime::getLocalTime();
         $this->assertEquals($currentTime, $initialTime);
         $this->assertEquals('Europe/London', $initialTime->getTimezone()->getName());
-        $this->assertNotEquals($currentTime->format('Y-m-d H:i:s'), $initialTime->format('Y-m-d H:i:s'));
     }
 
     public function testLocalTimeSetTime()
