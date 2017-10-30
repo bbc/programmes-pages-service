@@ -39,12 +39,19 @@ class ApplicationTimeTest extends TestCase
 
     public function testLocalTimeDefaultValue()
     {
+        ApplicationTime::blank();
         $currentTime = DateTimeImmutable::createFromFormat('U', time());
 
         $initialTime = ApplicationTime::getLocalTime();
         $this->assertEquals($currentTime, $initialTime);
         $this->assertEquals('Europe/London', $initialTime->getTimezone()->getName());
-        $this->assertNotEquals($currentTime->format('Y-m-d H:i:s'), $initialTime->format('Y-m-d H:i:s'));
+        if ($initialTime->getOffset() === 0) {
+            // When the test is being run in GMT
+            $this->assertEquals($currentTime->format('Y-m-d H:i:s'), $initialTime->format('Y-m-d H:i:s'));
+        } else {
+            // When the test is being run in BST
+            $this->assertNotEquals($currentTime->format('Y-m-d H:i:s'), $initialTime->format('Y-m-d H:i:s'));
+        }
     }
 
     public function testLocalTimeSetTime()
