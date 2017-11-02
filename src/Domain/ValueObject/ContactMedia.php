@@ -42,7 +42,7 @@ class ContactMedia
         return $this->value;
     }
 
-    public function getFreeText(): string
+    public function getFreetext(): string
     {
         return $this->freetext;
     }
