@@ -22,9 +22,7 @@ class ContactMedia
      */
     private $value;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $freetext;
 
     public function __construct(string $mediaType, string $value, string $freetext)
