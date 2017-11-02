@@ -27,7 +27,7 @@ class ContactMedia
      */
     private $freetext;
 
-    public function __construct($mediaType, $value, $freetext)
+    public function __construct(string $mediaType, string $value, string $freetext)
     {
         $this->type = $mediaType;
         $this->value = $value;
@@ -46,6 +46,6 @@ class ContactMedia
 
     public function getFreeText(): string
     {
-        return $this->freeText;
+        return $this->freetext;
     }
 }
