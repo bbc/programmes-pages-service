@@ -64,7 +64,7 @@ class CachingTest extends BaseCoreEntityMapperTestCase
                     'livepromo_block' => null,
                     'prioritytext_block' => null,
                     'navigation_links' => [],
-                    'contact_details' => new ContactMediaMap(),
+                    'contact_details' => [],
                 ]
             )
         );

@@ -3,7 +3,6 @@
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
-use BBC\ProgrammesPagesService\Domain\Entity\ContactMediaMap;
 use BBC\ProgrammesPagesService\Domain\ValueObject\ContactDetails;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 
@@ -112,7 +111,7 @@ class OptionsMapperTest extends BaseMapperTestCase
             'livepromo_block' => null,
             'prioritytext_block' => null,
             'navigation_links' => [],
-            'contact_details' => new ContactMediaMap(),
+            'contact_details' => [],
         ];
 
         $this->assertEquals(
@@ -128,14 +127,14 @@ class OptionsMapperTest extends BaseMapperTestCase
             'second_option' =>  null,
             'contact_details' => [
                 [
-                    'detail_type' => 'email',
-                    'detail_value' => 'emailAAAA@myemail.com',
-                    'detail_freetext' => 'Free text',
+                    'type' => 'email',
+                    'value' => 'emailAAAA@myemail.com',
+                    'freetext' => 'Free text',
                 ],
                 [
-                    'detail_type' => 'email',
-                    'detail_value' => 'emailBBBB@myemail.com',
-                    'detail_freetext' => 'Free text',
+                    'type' => 'email',
+                    'value' => 'emailBBBB@myemail.com',
+                    'freetext' => 'Free text',
                 ],
             ],
         ];
@@ -173,9 +172,10 @@ class OptionsMapperTest extends BaseMapperTestCase
             'livepromo_block' => null,
             'prioritytext_block' => null,
             'navigation_links' => [],
-            'contact_details' => (new ContactMediaMap())
-                ->addContactMedia(new ContactDetails('email', 'emailAAAA@myemail.com', 'Free text'))
-                ->addContactMedia(new ContactDetails('email', 'emailBBBB@myemail.com', 'Free text')),
+            'contact_details' => [
+                new ContactDetails('email', 'emailAAAA@myemail.com', 'Free text'),
+                new ContactDetails('email', 'emailBBBB@myemail.com', 'Free text'),
+            ],
         ];
 
         $this->assertEquals(

@@ -132,15 +132,6 @@ class MapperFactory
         return $this->instances[OptionsMapper::class];
     }
 
-    public function getContactMapper(): ContactMediaMapper
-    {
-        if (!isset($this->instances[ContactMediaMapper::class])) {
-            $this->instances[ContactMediaMapper::class] = new ContactMediaMapper($this);
-        }
-
-        return $this->instances[ContactMediaMapper::class];
-    }
-
     public function getPromotionMapper(): PromotionMapper
     {
         if (!isset($this->instances[PromotionMapper::class])) {
