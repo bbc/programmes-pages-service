@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
+use BBC\ProgrammesPagesService\Domain\ValueObject\ContactDetails;
 
 class OptionsMapper extends AbstractMapper
 {
@@ -72,10 +73,33 @@ class OptionsMapper extends AbstractMapper
         }
 
         if (isset($options['contact_details'])) {
-            $options['contact_details'] = $this->mapperFactory->getContactMapper()->getDomainModel($options['contact_details']);
+            $contacts = [];
+
+            foreach ($options['contact_details'] as $contactDetails) {
+                if ($this->isValidContactDetails($contactDetails)) {
+                    $contacts[] = new ContactDetails(
+                        $contactDetails['type'],
+                        $contactDetails['value'],
+                        $contactDetails['freetext']
+                    );
+                }
+            }
+
+            if ($contacts) {
+                $options['contact_details'] = $contacts;
+            }
         }
 
         return new Options($options);
+    }
+
+    private function isValidContactDetails(array $contact): bool
+    {
+        return (
+            isset($contact['type']) &&
+            isset($contact['value']) &&
+            isset($contact['freetext'])
+        );
     }
 
     private function getDefaultValues()

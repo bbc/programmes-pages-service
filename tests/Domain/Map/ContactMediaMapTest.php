@@ -3,7 +3,7 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\Map;
 
 use BBC\ProgrammesPagesService\Domain\Entity\ContactMediaMap;
-use BBC\ProgrammesPagesService\Domain\ValueObject\ContactMedia;
+use BBC\ProgrammesPagesService\Domain\ValueObject\ContactDetails;
 use PHPUnit\Framework\TestCase;
 
 class ContactMediaMapTest extends TestCase
@@ -18,7 +18,7 @@ class ContactMediaMapTest extends TestCase
 
     public function testCanAddOneContactMedia()
     {
-        $contactMedia = new ContactMedia('email', 'myemail@something.com', 'a free text');
+        $contactMedia = new ContactDetails('email', 'myemail@something.com', 'a free text');
 
         $this->contactMediaMap->addContactMedia($contactMedia);
 
@@ -27,9 +27,9 @@ class ContactMediaMapTest extends TestCase
 
     public function testCanAddMultipleContactMedia()
     {
-        $contactMedia1 = new ContactMedia('email', 'myemail@something.com', 'a free text');
-        $contactMedia2 = new ContactMedia('email', 'myemail@something.com', 'a free text');
-        $contactMedia3 = new ContactMedia('reddit', 'myredditUser', 'a free text');
+        $contactMedia1 = new ContactDetails('email', 'myemail@something.com', 'a free text');
+        $contactMedia2 = new ContactDetails('email', 'myemail@something.com', 'a free text');
+        $contactMedia3 = new ContactDetails('reddit', 'myredditUser', 'a free text');
 
         $this->contactMediaMap
             ->addContactMedia($contactMedia1)
@@ -49,8 +49,8 @@ class ContactMediaMapTest extends TestCase
 
     public function testCanGetNamesOfUsedMedia()
     {
-        $contactEmail = new ContactMedia('email', 'myemail@something.com', 'a free text');
-        $contactReddit = new ContactMedia('reddit', 'myreddit', 'a free text');
+        $contactEmail = new ContactDetails('email', 'myemail@something.com', 'a free text');
+        $contactReddit = new ContactDetails('reddit', 'myreddit', 'a free text');
 
         $this->contactMediaMap
             ->addContactMedia($contactEmail)
@@ -72,7 +72,7 @@ class ContactMediaMapTest extends TestCase
 
     public function testInvalidContactMediaAreNotAddedButTheyDontThrowError()
     {
-        $this->contactMediaMap->addContactMedia(new ContactMedia('invalid_type', 'myemail@something.com', 'a free text'));
+        $this->contactMediaMap->addContactMedia(new ContactDetails('invalid_type', 'myemail@something.com', 'a free text'));
         $this->assertEquals([], $this->contactMediaMap->getNamesOfUsedMedia());
     }
 

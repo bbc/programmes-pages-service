@@ -4,7 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\ContactMediaMap;
-use BBC\ProgrammesPagesService\Domain\ValueObject\ContactMedia;
+use BBC\ProgrammesPagesService\Domain\ValueObject\ContactDetails;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 
 class OptionsMapperTest extends BaseMapperTestCase
@@ -50,7 +50,7 @@ class OptionsMapperTest extends BaseMapperTestCase
             'livepromo_block' => null,
             'prioritytext_block' => null,
             'navigation_links' => [],
-            'contact_details' => new ContactMediaMap(),
+            'contact_details' => [],
         ];
 
         $this->assertEquals(
@@ -174,8 +174,8 @@ class OptionsMapperTest extends BaseMapperTestCase
             'prioritytext_block' => null,
             'navigation_links' => [],
             'contact_details' => (new ContactMediaMap())
-                ->addContactMedia(new ContactMedia('email', 'emailAAAA@myemail.com', 'Free text'))
-                ->addContactMedia(new ContactMedia('email', 'emailBBBB@myemail.com', 'Free text')),
+                ->addContactMedia(new ContactDetails('email', 'emailAAAA@myemail.com', 'Free text'))
+                ->addContactMedia(new ContactDetails('email', 'emailBBBB@myemail.com', 'Free text')),
         ];
 
         $this->assertEquals(

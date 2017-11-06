@@ -2,24 +2,18 @@
 
 namespace BBC\ProgrammesPagesService\Domain\ValueObject;
 
-use BBC\ProgrammesPagesService\Domain\Enumeration\ContactMediaEnum;
-use InvalidArgumentException;
+use BBC\ProgrammesPagesService\Domain\Enumeration\ContactMediumEnum;
 
-class ContactMedia
+class ContactDetails
 {
     /**
-     * @see ContactMediaEnum::VALID_MEDIA
+     * @see ContactMediumEnum::VALID_MEDIUM
      *
      * @var string
      */
     private $type;
 
-    /**
-     * Examples:
-     * Any email, mobile phone, postcode, reddit id, facebook, ...
-     *
-     * @var string
-     */
+    /** @var string */
     private $value;
 
     /** @var string */
