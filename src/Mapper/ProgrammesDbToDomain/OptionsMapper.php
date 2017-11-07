@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
+use BBC\ProgrammesPagesService\Domain\ValueObject\ContactDetails;
 
 class OptionsMapper extends AbstractMapper
 {
@@ -41,6 +42,9 @@ class OptionsMapper extends AbstractMapper
         'bbc_site' => [ 'default' => null, 'cascades' => false ],
         'livepromo_block' => [ 'default' => null, 'cascades' => false ],
         'prioritytext_block' => [ 'default' => null, 'cascades' => false ],
+
+        // contact options
+        'contact_details' => [ 'default' => [], 'cascades' => false ],
     ];
 
     private static $defaults = [];
@@ -62,13 +66,40 @@ class OptionsMapper extends AbstractMapper
 
         // set default values
         $defaults = $this->getDefaultValues();
-        foreach ($defaults as $key => $value) {
+        foreach ($defaults as $key => $defaultValue) {
             if (!isset($options[$key])) {
-                $options[$key] = $value;
+                $options[$key] = $defaultValue;
+            }
+        }
+
+        if (isset($options['contact_details'])) {
+            $contacts = [];
+
+            foreach ($options['contact_details'] as $contactDetails) {
+                if ($this->isValidContactDetails($contactDetails)) {
+                    $contacts[] = new ContactDetails(
+                        $contactDetails['type'],
+                        $contactDetails['value'],
+                        $contactDetails['freetext']
+                    );
+                }
+            }
+
+            if ($contacts) {
+                $options['contact_details'] = $contacts;
             }
         }
 
         return new Options($options);
+    }
+
+    private function isValidContactDetails(array $contact): bool
+    {
+        return (
+            isset($contact['type']) &&
+            isset($contact['value']) &&
+            isset($contact['freetext'])
+        );
     }
 
     private function getDefaultValues()
