@@ -28,7 +28,9 @@ class ServiceRepository extends EntityRepository
             ->leftJoin('service.network', 'network');
 
         if ($date) {
-            $qb->leftJoin('network.services', 'networkServices',
+            $qb->leftJoin(
+                'network.services',
+                'networkServices',
                 Query\Expr\Join::WITH,
                 '(networkServices.startDate IS NULL OR networkServices.startDate <= :date) AND (networkServices.endDate IS NULL OR networkServices.endDate > :date)'
             );
