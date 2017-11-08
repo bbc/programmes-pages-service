@@ -25,16 +25,19 @@ class ServiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('service')
             ->addSelect(['masterBrand', 'network', 'networkServices'])
             ->leftJoin('service.masterBrand', 'masterBrand')
-            ->leftJoin('service.network', 'network')
-            ->leftJoin('network.services', 'networkServices')
-            ->andWhere("service.id IN (:ids)")
-            ->setParameter('ids', $ids);
+            ->leftJoin('service.network', 'network');
 
         if ($date) {
-            $qb->andWhere('(networkServices.startDate IS NULL OR networkServices.startDate <= :date)');
-            $qb->andWhere('(networkServices.endDate IS NULL OR networkServices.endDate > :date)');
+            $qb->leftJoin('network.services', 'networkServices',
+                Query\Expr\Join::WITH,
+                '(networkServices.startDate IS NULL OR networkServices.startDate <= :date) AND (networkServices.endDate IS NULL OR networkServices.endDate > :date)'
+            );
             $qb->setParameter('date', $date);
+        } else {
+            $qb->leftJoin('network.services', 'networkServices');
         }
+        $qb->andWhere("service.id IN (:ids)")
+            ->setParameter('ids', $ids);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
