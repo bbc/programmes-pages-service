@@ -17,7 +17,7 @@ interface CacheInterface
 
     public function setItem(CacheItemInterface $item, $value, $ttl): bool;
 
-    public function getOrSet(string $key, $ttl, callable $function, array $arguments = []);
+    public function getOrSet(string $key, $ttl, callable $function, array $arguments = [], $nullTtl = CacheInterface::NONE);
 
     public function setFlushCacheItems(bool $flushCacheItems): void;
 

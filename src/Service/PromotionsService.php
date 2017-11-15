@@ -29,7 +29,8 @@ class PromotionsService extends AbstractService
         CoreEntity $context,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
-        $ttl = CacheInterface::NORMAL
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::NORMAL
     ): array {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $context->getDbId(), $limit, $page, $ttl);
 
@@ -45,7 +46,9 @@ class PromotionsService extends AbstractService
                 );
 
                 return $this->mapManyEntities($dbEntities);
-            }
+            },
+            [],
+            $nullTtl
         );
     }
 

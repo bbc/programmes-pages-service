@@ -36,9 +36,11 @@ class ProgrammesAggregationService extends AbstractService
     public function findDescendantClips(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::NORMAL
     ): array {
-        return $this->findStreamableDescendantsByType($programme, 'Clip', $limit, $page);
+        return $this->findStreamableDescendantsByType($programme, 'Clip', $limit, $page, $ttl, $nullTtl);
     }
 
     /**
@@ -47,9 +49,11 @@ class ProgrammesAggregationService extends AbstractService
     public function findStreamableDescendantEpisodes(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::SHORT
     ): array {
-        return $this->findStreamableDescendantsByType($programme, 'Episode', $limit, $page);
+        return $this->findStreamableDescendantsByType($programme, 'Episode', $limit, $page, $ttl, $nullTtl);
     }
 
     /**
@@ -58,9 +62,11 @@ class ProgrammesAggregationService extends AbstractService
     public function findDescendantGalleries(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::NORMAL
     ): array {
-        return $this->findDescendantsByType($programme, 'Gallery', $limit, $page);
+        return $this->findDescendantsByType($programme, 'Gallery', $limit, $page, $ttl, $nullTtl);
     }
 
     /**
@@ -71,7 +77,8 @@ class ProgrammesAggregationService extends AbstractService
         string $type,
         ?int $limit,
         int $page,
-        $ttl = CacheInterface::NORMAL
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::NORMAL
     ): array {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $limit, $page, $ttl);
         return $this->cache->getOrSet(
@@ -87,7 +94,9 @@ class ProgrammesAggregationService extends AbstractService
                 );
 
                 return $this->mapManyEntities($children);
-            }
+            },
+            [],
+            $nullTtl
         );
     }
 
@@ -99,7 +108,8 @@ class ProgrammesAggregationService extends AbstractService
         string $type,
         ?int $limit,
         int $page,
-        $ttl = CacheInterface::NORMAL
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::NORMAL
     ): array {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $limit, $page, $ttl);
         return $this->cache->getOrSet(
@@ -114,7 +124,9 @@ class ProgrammesAggregationService extends AbstractService
                 );
 
                 return $this->mapManyEntities($children);
-            }
+            },
+            [],
+            $nullTtl
         );
     }
 }

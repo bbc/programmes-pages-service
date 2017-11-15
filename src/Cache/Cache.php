@@ -70,7 +70,8 @@ class Cache implements CacheInterface
     }
 
     /**
-     * IF CALLABLE RETURNS SOMETHING THAT EVALUATES TO EMPTY THE RESULT WILL NOT BE CACHED
+     * IF CALLABLE RETURNS SOMETHING THAT EVALUATES TO EMPTY THE RESULT WILL NOT BE CACHED UNLESS $nullTtl IS SET
+     * TO A VALUE DIFFERENT FROM CacheInterface::NONE
      *
      * @param string $key
      * @param int|string $ttl
@@ -79,16 +80,22 @@ class Cache implements CacheInterface
      * @param array|null $arguments
      * @return mixed
      */
-    public function getOrSet(string $key, $ttl, callable $function, array $arguments = [])
+    public function getOrSet(string $key, $ttl, callable $function, array $arguments = [], $nullTtl = CacheInterface::NONE)
     {
         $cacheItem = $this->getItem($key);
+
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
+
         $result = $function(...$arguments);
+
         if (!empty($result)) {
             $this->setItem($cacheItem, $result, $ttl);
+        } elseif ($nullTtl !== CacheInterface::NONE) {
+            $this->setItem($cacheItem, $result, $nullTtl);
         }
+
         return $result;
     }
 
