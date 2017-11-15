@@ -137,7 +137,8 @@ class CollapsedBroadcastsService extends AbstractService
      */
     public function findNextDebutOrRepeatOnByProgrammeWithFullServicesOfNetworksList(
         Programme $programme,
-        $ttl = CacheInterface::NORMAL
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::NORMAL
     ): ?CollapsedBroadcast {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $ttl);
         return $this->cache->getOrSet(
@@ -146,7 +147,9 @@ class CollapsedBroadcastsService extends AbstractService
             function () use ($programme) {
                 $result = $this->findNextDebutOrRepeatOnByProgrammeHelper($programme, true);
                 return $result ? reset($result) : null;
-            }
+            },
+            [],
+            $nullTtl
         );
     }
 
@@ -176,7 +179,8 @@ class CollapsedBroadcastsService extends AbstractService
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
-        $ttl = CacheInterface::NORMAL
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::SHORT
     ): array {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $limit, $page, $ttl);
         return $this->cache->getOrSet(
@@ -184,7 +188,9 @@ class CollapsedBroadcastsService extends AbstractService
             $ttl,
             function () use ($programme, $limit, $page) {
                 return $this->findPastByProgrammeHelper($programme, $limit, $page, true);
-            }
+            },
+            [],
+            $nullTtl
         );
     }
 

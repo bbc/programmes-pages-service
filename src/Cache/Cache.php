@@ -79,16 +79,22 @@ class Cache implements CacheInterface
      * @param array|null $arguments
      * @return mixed
      */
-    public function getOrSet(string $key, $ttl, callable $function, array $arguments = [])
+    public function getOrSet(string $key, $ttl, callable $function, array $arguments = [], $nullTtl = CacheInterface::NONE)
     {
         $cacheItem = $this->getItem($key);
+
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
+
         $result = $function(...$arguments);
+
         if (!empty($result)) {
             $this->setItem($cacheItem, $result, $ttl);
+        } elseif ($nullTtl !== CacheInterface::NONE) {
+            $this->setItem($cacheItem, $result, $nullTtl);
         }
+
         return $result;
     }
 
