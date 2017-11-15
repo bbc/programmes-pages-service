@@ -70,7 +70,8 @@ class Cache implements CacheInterface
     }
 
     /**
-     * IF CALLABLE RETURNS SOMETHING THAT EVALUATES TO EMPTY THE RESULT WILL NOT BE CACHED
+     * IF CALLABLE RETURNS SOMETHING THAT EVALUATES TO EMPTY THE RESULT WILL NOT BE CACHED UNLESS $nullTtl IS SET
+     * TO A VALUE DIFFERENT FROM CacheInterface::NONE
      *
      * @param string $key
      * @param int|string $ttl
