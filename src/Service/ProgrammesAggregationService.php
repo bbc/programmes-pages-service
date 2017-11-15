@@ -37,9 +37,10 @@ class ProgrammesAggregationService extends AbstractService
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL,
         $nullTtl = CacheInterface::NORMAL
     ): array {
-        return $this->findStreamableDescendantsByType($programme, 'Clip', $limit, $page, CacheInterface::NORMAL, $nullTtl);
+        return $this->findStreamableDescendantsByType($programme, 'Clip', $limit, $page, $ttl, $nullTtl);
     }
 
     /**
@@ -49,9 +50,10 @@ class ProgrammesAggregationService extends AbstractService
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL,
         $nullTtl = CacheInterface::SHORT
     ): array {
-        return $this->findStreamableDescendantsByType($programme, 'Episode', $limit, $page, CacheInterface::NORMAL, $nullTtl);
+        return $this->findStreamableDescendantsByType($programme, 'Episode', $limit, $page, $ttl, $nullTtl);
     }
 
     /**
@@ -61,9 +63,10 @@ class ProgrammesAggregationService extends AbstractService
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL,
         $nullTtl = CacheInterface::NORMAL
     ): array {
-        return $this->findDescendantsByType($programme, 'Gallery', $limit, $page, CacheInterface::NORMAL, $nullTtl);
+        return $this->findDescendantsByType($programme, 'Gallery', $limit, $page, $ttl, $nullTtl);
     }
 
     /**

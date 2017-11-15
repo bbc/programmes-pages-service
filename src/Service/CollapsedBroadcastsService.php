@@ -138,7 +138,7 @@ class CollapsedBroadcastsService extends AbstractService
     public function findNextDebutOrRepeatOnByProgrammeWithFullServicesOfNetworksList(
         Programme $programme,
         $ttl = CacheInterface::NORMAL,
-        $nullTtl = CacheInterface::NORMAL
+        $nullTtl = CacheInterface::SHORT
     ): ?CollapsedBroadcast {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $ttl);
         return $this->cache->getOrSet(
