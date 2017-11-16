@@ -4,6 +4,7 @@ namespace Tests\BBC\ProgrammesPagesService\Domain\ValueObject;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use PHPUnit\Framework\TestCase;
+use DateTime;
 
 class PartialDateTest extends TestCase
 {
@@ -42,6 +43,30 @@ class PartialDateTest extends TestCase
     {
         $pd = new PartialDate(2015, 1, 2);
         $this->assertEquals('2015-01-02', $pd->formatMysql());
+    }
+
+    /**
+     * @dataProvider toDateTimeProvider
+     */
+    public function testToDateTime($input, $expectedDateTime)
+    {
+        $partialDate = new PartialDate(...$input);
+        $this->assertEquals($expectedDateTime, $partialDate->asDateTime());
+    }
+
+    public function toDateTimeProvider()
+    {
+        return [
+            [[2015, 1, 2], DateTime::createFromFormat('Y-m-d H:i:s e', '2015-01-02 00:00:00 UTC')],
+            [[2014, 6, 6], DateTime::createFromFormat('Y-m-d H:i:s e', '2014-06-06 00:00:00 UTC')],
+            // Missing Day
+            [[2015, 1 , 0], DateTime::createFromFormat('Y-m-d H:i:s e', '2015-01-01 00:00:00 UTC')],
+            [[2015, 1], DateTime::createFromFormat('Y-m-d H:i:s e', '2015-01-01 00:00:00 UTC')],
+            // Missing Month & Day
+            [[2015], DateTime::createFromFormat('Y-m-d H:i:s e', '2015-01-01 00:00:00 UTC')],
+            [[2015, 0], DateTime::createFromFormat('Y-m-d H:i:s e', '2015-01-01 00:00:00 UTC')],
+            [[2015, 0, 0], DateTime::createFromFormat('Y-m-d H:i:s e', '2015-01-01 00:00:00 UTC')],
+        ];
     }
 
     /**

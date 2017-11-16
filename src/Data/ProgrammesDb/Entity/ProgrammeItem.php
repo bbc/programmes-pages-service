@@ -78,6 +78,18 @@ abstract class ProgrammeItem extends Programme
      */
     private $duration;
 
+    /**
+     * @var DateTime|null
+     *
+     * This is an amalgam of Release Date and First Broadcast Date.
+     * If Release Date is set, that's used. ElseIf First Broadcast Date is set, that's used. Else Null.
+     * It's used in sorting the On Demand column in the MAP. Could also be used elsewhere, but only
+     * if you really, really want to.
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $onDemandSortDate;
+
     public function getMediaType(): string
     {
         return $this->mediaType;
@@ -94,6 +106,16 @@ abstract class ProgrammeItem extends Programme
         }
 
         $this->mediaType = $mediaType;
+    }
+
+    public function getOnDemandSortDate(): ?DateTime
+    {
+        return $this->onDemandSortDate;
+    }
+
+    public function setOnDemandSortDate(?DateTime $onDemandSortDate): void
+    {
+        $this->onDemandSortDate = $onDemandSortDate;
     }
 
     public function getReleaseDate(): ?PartialDate
