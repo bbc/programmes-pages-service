@@ -261,28 +261,35 @@ QUERY;
      * @param DateTimeImmutable $now
      * @param int|null $limit
      * @param int $offset
-     * @TODO see if there is a way to remove the sort on the HIDDEN field
+     * @param bool $useOnDemandSort If true, sort by onDemandSortDate for onDemand column
      * @return array
      */
-    public function findStreamableDescendantsByType(array $ancestryDbIds, string $entityType, DateTimeImmutable $now, ?int $limit, int $offset) : array
+    public function findStreamableDescendantsByType(
+        array $ancestryDbIds,
+        string $entityType,
+        DateTimeImmutable $now,
+        ?int $limit,
+        int $offset,
+        bool $useOnDemandSort = false
+    ) : array
     {
         $this->assertEntityType($entityType, ['Clip', 'Episode']);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->addSelect(['entity', 'masterBrand', 'image', 'mbImage', 'network'])
-            ->addSelect('CASE WHEN (entity.firstBroadcastDate >= :sevenDaysAgo) THEN 1 ELSE 0 END as HIDDEN isWithinSevenDays')
             ->from('ProgrammesPagesService:' . $entityType, 'entity')
             ->leftJoin('entity.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('entity.image', 'image')
             ->leftJoin('masterBrand.image', 'mbImage')
             ->andWhere('entity.ancestry LIKE :ancestry')
-            ->andWhere('entity.streamable = 1')
-            ->addOrderBy('isWithinSevenDays', 'DESC')
-            ->addOrderBy('entity.streamableFrom', 'DESC')
+            ->andWhere('entity.streamable = 1');
+        if ($useOnDemandSort) {
+            $qb->addOrderBy('entity.onDemandSortDate', 'DESC');
+        }
+        $qb->addOrderBy('entity.streamableFrom', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
-            ->setParameter('sevenDaysAgo', $now->modify('-7 days')->format('Y-m-d'))
             ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
