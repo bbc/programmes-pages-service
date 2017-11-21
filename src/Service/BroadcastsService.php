@@ -113,8 +113,30 @@ class BroadcastsService extends AbstractService
         $entity = $this->mapSingleEntity($dbEntity);
 
         if ($entity) {
-            $this->cache->setItem($cacheItem, $entity, $entity->getEndAt());
+            // cache $entity with dynamic TTL
+            $now = ApplicationTime::getTime();
+            $diffInSeconds = $entity->getEndAt()->getTimestamp() - $now->getTimestamp();
+            if ($diffInSeconds > 300) {
+                // limit TTL to 5 minutes max
+                $ttl = 300;
+            } else {
+                $ttl = $diffInSeconds;
+            }
+            $this->cache->setItem($cacheItem, $entity, $ttl);
         }
         return $entity;
+    }
+
+    public function flushOnNowByService(
+        Service $service,
+        $ttl = CacheInterface::NORMAL
+    ): bool {
+        $key = $this->cache->keyHelper(
+            __CLASS__,
+            'findOnNowByService',
+            $service->getDbId(),
+            $ttl
+        );
+        return $this->cache->deleteItem($key);
     }
 }
