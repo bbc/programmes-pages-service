@@ -35,4 +35,11 @@ class FindOnNowByServiceTest extends AbstractBroadcastsServiceTest
 
         $this->assertSame(null, $broadcast);
     }
+
+    public function testFlushOnNowByService()
+    {
+        $service = $this->createConfiguredMock(Service::class, ['getDbId' => 1]);
+        $result = $this->service()->flushOnNowByService($service);
+        $this->assertTrue($result);
+    }
 }

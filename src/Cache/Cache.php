@@ -100,6 +100,16 @@ class Cache implements CacheInterface
     }
 
     /**
+     * @param string $key
+     * @return bool True if the item was successfully removed. False if there was an error.
+     */
+    public function deleteItem(string $key): bool
+    {
+        $key = $this->standardiseKey($key);
+        return $this->cachePool->deleteItem($key);
+    }
+
+    /**
      * Helps you to construct good cache keys by prodding you in the correct direction.
      * Entirely optional but you are encouraged to use it.
      *
