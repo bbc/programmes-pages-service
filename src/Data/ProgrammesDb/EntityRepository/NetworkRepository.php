@@ -11,7 +11,7 @@ class NetworkRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('network')
             ->addSelect('defaultService')
-            ->join('network.defaultService', 'defaultService')
+            ->leftJoin('network.defaultService', 'defaultService')
             ->andWhere('network.urlKey = :urlKey')
             ->setParameter('urlKey', $urlKey);
 
