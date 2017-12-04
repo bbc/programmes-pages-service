@@ -25,25 +25,6 @@ class FindDescendantsByTypeTest extends AbstractDatabaseTest
     }
 
     /**
-     * @cover ::findStremableDescendantsByType
-     */
-    public function testProgrammesChildrenGetCorrectClips()
-    {
-        $this->loadFixtures(['MongrelsFixture']);
-
-        $dbAncestryId = $this->getAncestryFromPersistentIdentifier('b010t19z', 'Brand');
-        $clipsUnderProgramme = $this->getEntityManager()
-            ->getRepository('ProgrammesPagesService:CoreEntity')
-            ->findStreamableDescendantsByType($dbAncestryId, 'Clip', new DateTimeImmutable(), 100, 0);
-        $expectedClipsPids = ['p00h64pq', 'p00hv9yz', 'p008k0l5', 'p008k0jy', 'p008nhl4'];
-
-        $this->assertEmpty(array_diff($expectedClipsPids, array_column($clipsUnderProgramme, 'pid')));
-        $this->assertNotContains(false, array_column($clipsUnderProgramme, 'streamable'));
-        $this->assertNotContains(true, array_column($clipsUnderProgramme, 'isEmbargoed'));
-        $this->assertCount(2, $this->getDbQueries());
-    }
-
-    /**
      * @cover ::findDescendantsByType
      */
     public function testProgrammesChildrenGetCorrectGalleries()

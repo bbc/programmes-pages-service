@@ -89,7 +89,6 @@ class ProgrammesAggregationService extends AbstractService
                 $children = $this->repository->findStreamableDescendantsByType(
                     $programme->getDbAncestryIds(),
                     $type,
-                    ApplicationTime::getTime(),
                     $limit,
                     $this->getOffset($limit, $page),
                     $useOnDemandSort

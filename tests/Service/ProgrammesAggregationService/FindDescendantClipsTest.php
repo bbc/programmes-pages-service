@@ -17,7 +17,7 @@ class FindDescendantClipsTest extends AbstractProgrammesAggregationTest
 
         $this->mockRepository->expects($this->once())
             ->method('findStreamableDescendantsByType')
-            ->with($stubProgramme->getDbAncestryIds(), 'Clip', ApplicationTime::getTime(), $expectedLimit, $expectedOffset);
+            ->with($stubProgramme->getDbAncestryIds(), 'Clip', $expectedLimit, $expectedOffset);
 
         $this->service()->findStreamableDescendantClips($stubProgramme, ...$paramsPagination);
     }

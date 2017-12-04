@@ -258,7 +258,6 @@ QUERY;
     /**
      * @param int[] $ancestryDbIds
      * @param string $entityType
-     * @param DateTimeImmutable $now
      * @param int|null $limit
      * @param int $offset
      * @param bool $useOnDemandSort If true, sort by onDemandSortDate for onDemand column
@@ -267,7 +266,6 @@ QUERY;
     public function findStreamableDescendantsByType(
         array $ancestryDbIds,
         string $entityType,
-        DateTimeImmutable $now,
         ?int $limit,
         int $offset,
         bool $useOnDemandSort = false
