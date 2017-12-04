@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\ValueObject;
 
 use InvalidArgumentException;
 use JsonSerializable;
+use DateTime;
 
 /**
  * A Date that allows the Day or Month to be null so you can specify a
@@ -22,9 +23,10 @@ class PartialDate implements JsonSerializable
      */
     public function __construct(int $year, int $month = 0, int $day = 0)
     {
+        list($checkMonth, $checkDay) = $this->normaliseMonthAndDay($month, $day);
         $check = checkdate(
-            $month == 0 ? 1 : $month,
-            $day == 0 ? 1 : $day,
+            $checkMonth,
+            $checkDay,
             $year
         );
 
@@ -50,6 +52,21 @@ class PartialDate implements JsonSerializable
     public function formatMysql(): string
     {
         return sprintf('%d-%02d-%02d', $this->year, $this->month, $this->day);
+    }
+
+    public function asDateTime(): DateTime
+    {
+        $year = $this->year;
+        list($month, $day) = $this->normaliseMonthAndDay($this->month, $this->day);
+        return DateTime::createFromFormat('Y-m-d H:i:s e', "$year-$month-$day 00:00:00 UTC");
+    }
+
+    private function normaliseMonthAndDay(int $month, int $day): array
+    {
+        return [
+            (($month == 0) ? 1 : $month),
+            (($day == 0) ? 1 : $day),
+        ];
     }
 
     private function throwInvalidConstructionException($year, $month, $day)
