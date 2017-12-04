@@ -19,7 +19,7 @@ class FindDescendantClipsTest extends AbstractProgrammesAggregationTest
             ->method('findStreamableDescendantsByType')
             ->with($stubProgramme->getDbAncestryIds(), 'Clip', ApplicationTime::getTime(), $expectedLimit, $expectedOffset);
 
-        $this->service()->findDescendantClips($stubProgramme, ...$paramsPagination);
+        $this->service()->findStreamableDescendantClips($stubProgramme, ...$paramsPagination);
     }
 
     public function paginationProvider(): array
@@ -38,7 +38,7 @@ class FindDescendantClipsTest extends AbstractProgrammesAggregationTest
     {
         $this->mockRepository->method('findStreamableDescendantsByType')->willReturn($dbClipsProvided);
 
-        $clips = $this->service()->findDescendantClips($this->createMock(Programme::class));
+        $clips = $this->service()->findStreamableDescendantClips($this->createMock(Programme::class));
 
         $this->assertContainsOnlyInstancesOf(Clip::class, $clips);
         $this->assertCount(count($dbClipsProvided), $clips);

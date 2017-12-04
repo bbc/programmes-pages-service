@@ -271,8 +271,7 @@ QUERY;
         ?int $limit,
         int $offset,
         bool $useOnDemandSort = false
-    ) : array
-    {
+    ) : array {
         $this->assertEntityType($entityType, ['Clip', 'Episode']);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
