@@ -33,7 +33,7 @@ class ProgrammesAggregationService extends AbstractService
     /**
      * @return Clip[]
      */
-    public function findDescendantClips(
+    public function findStreamableDescendantClips(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
@@ -46,14 +46,14 @@ class ProgrammesAggregationService extends AbstractService
     /**
      * @return Episode[]
      */
-    public function findStreamableDescendantEpisodes(
+    public function findStreamableOnDemandEpisodes(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL,
         $nullTtl = CacheInterface::SHORT
     ): array {
-        return $this->findStreamableDescendantsByType($programme, 'Episode', $limit, $page, $ttl, $nullTtl);
+        return $this->findStreamableDescendantsByType($programme, 'Episode', $limit, $page, $ttl, $nullTtl, true);
     }
 
     /**
@@ -78,21 +78,21 @@ class ProgrammesAggregationService extends AbstractService
         ?int $limit,
         int $page,
         $ttl = CacheInterface::NORMAL,
-        $nullTtl = CacheInterface::NORMAL
+        $nullTtl = CacheInterface::NORMAL,
+        bool $useOnDemandSort = false
     ): array {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $limit, $page, $ttl);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $limit, $page, $ttl, $useOnDemandSort);
         return $this->cache->getOrSet(
             $key,
             $ttl,
-            function () use ($programme, $type, $limit, $page) {
+            function () use ($programme, $type, $limit, $page, $useOnDemandSort) {
                 $children = $this->repository->findStreamableDescendantsByType(
                     $programme->getDbAncestryIds(),
                     $type,
-                    ApplicationTime::getTime(),
                     $limit,
-                    $this->getOffset($limit, $page)
+                    $this->getOffset($limit, $page),
+                    $useOnDemandSort
                 );
-
                 return $this->mapManyEntities($children);
             },
             [],

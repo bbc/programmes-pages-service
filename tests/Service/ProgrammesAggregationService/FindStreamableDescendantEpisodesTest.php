@@ -17,9 +17,9 @@ class FindStreamableDescendantEpisodesTest extends AbstractProgrammesAggregation
 
         $this->mockRepository->expects($this->once())
             ->method('findStreamableDescendantsByType')
-            ->with($stubProgramme->getDbAncestryIds(), 'Episode', ApplicationTime::getTime(), $expectedLimit, $expectedOffset);
+            ->with($stubProgramme->getDbAncestryIds(), 'Episode', $expectedLimit, $expectedOffset, true);
 
-        $this->service()->findStreamableDescendantEpisodes($stubProgramme, ...$paramsPagination);
+        $this->service()->findStreamableOnDemandEpisodes($stubProgramme, ...$paramsPagination);
     }
 
     public function paginationProvider(): array
@@ -36,9 +36,10 @@ class FindStreamableDescendantEpisodesTest extends AbstractProgrammesAggregation
      */
     public function testResults(array $expectedEpisodesPids, array $dbEpisodesProvided)
     {
-        $this->mockRepository->method('findStreamableDescendantsByType')->willReturn($dbEpisodesProvided);
+        $this->mockRepository->method('findStreamableDescendantsByType')
+            ->willReturn($dbEpisodesProvided);
 
-        $episodes = $this->service()->findStreamableDescendantEpisodes($this->createMock(Programme::class));
+        $episodes = $this->service()->findStreamableOnDemandEpisodes($this->createMock(Programme::class));
 
         $this->assertContainsOnlyInstancesOf(Episode::class, $episodes);
         $this->assertCount(count($dbEpisodesProvided), $episodes);
