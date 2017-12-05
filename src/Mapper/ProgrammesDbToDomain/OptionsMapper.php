@@ -39,7 +39,7 @@ class OptionsMapper extends AbstractMapper
         'comingsoon_block' => [ 'default' => null, 'cascades' => false ],
         'comingsoon_textonly' => [ 'default' => null, 'cascades' => false ],
         'navigation_links' => [ 'default' => [], 'cascades' => false ],
-        'bbc_site' => [ 'default' => null, 'cascades' => false ],
+        'bbc_site' => [ 'default' => null, 'cascades' => true ],
         'livepromo_block' => [ 'default' => null, 'cascades' => false ],
         'prioritytext_block' => [ 'default' => null, 'cascades' => false ],
 
