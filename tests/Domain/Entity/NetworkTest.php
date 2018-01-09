@@ -79,6 +79,33 @@ class NetworkTest extends TestCase
     }
 
     /**
+     * @dataProvider isWorldNewsDataProvider
+     */
+    public function testIsWorldNews(string $nid, bool $expected)
+    {
+        $nid = new Nid($nid);
+        $image = new Image(new Pid('p01m5mss'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $options = new Options(['one' => 1]);
+
+        $network = new Network(
+            $nid,
+            'Name',
+            $image,
+            $options
+        );
+
+        $this->assertEquals($network->isWorldNews(), $expected);
+    }
+
+    public function isWorldNewsDataProvider(): array
+    {
+        return [
+            'Is World News' => ['bbc_world_news', true],
+            "Isn't World News" => ['not_bbc_world_news', false],
+        ];
+    }
+
+    /**
      * @expectedException \InvalidArgumentException
      */
     public function testInvalidMedium()
