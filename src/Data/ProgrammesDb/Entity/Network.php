@@ -310,4 +310,9 @@ class Network
     {
         $this->endDate = $endDate;
     }
+
+    public function isWorldNews(): bool
+    {
+        return ((string) $this->getNid()) === 'bbc_world_news';
+    }
 }
