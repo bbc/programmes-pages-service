@@ -7,7 +7,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedService;
 use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use DateTimeImmutable;
 
-class BroadcastGap implements BroadcastInfoInterface
+class BroadcastGap implements SingleServiceBroadcastInfoInterface
 {
     /** @var Service */
     private $service;
