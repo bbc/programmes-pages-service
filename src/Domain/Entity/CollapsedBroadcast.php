@@ -8,7 +8,7 @@ use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
-class CollapsedBroadcast
+class CollapsedBroadcast implements BroadcastInfoInterface
 {
     /** @var ProgrammeItem */
     private $programmeItem;

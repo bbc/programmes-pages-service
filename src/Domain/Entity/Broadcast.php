@@ -10,7 +10,7 @@ use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use DateTimeImmutable;
 
-class Broadcast implements BroadcastInfoInterface
+class Broadcast implements SingleServiceBroadcastInfoInterface
 {
     /** @var Pid */
     private $pid;
