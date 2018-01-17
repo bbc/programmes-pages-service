@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService;
 
-use BBC\ProgrammesPagesService\Cache\Cache;
+use BBC\ProgrammesCachingLibrary\Cache;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 

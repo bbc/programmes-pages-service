@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "62a7868b4c7132dbbf7c5c176e3dc449",
+    "content-hash": "fb7d5a685bdfc2a332b9eca2f6eae336",
     "packages": [
         {
             "name": "bbc/doctrine-extensions",
@@ -90,6 +90,42 @@
                 "source": "https://github.com/bbc/DoctrineExtensions/tree/v2.4.137"
             },
             "time": "2017-02-16T18:26:32+00:00"
+        },
+        {
+            "name": "bbc/programmes-caching-library",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bbc/programmes-caching-library.git",
+                "reference": "746e05d76bca3dcc430b270212d2c7c21415a9b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bbc/programmes-caching-library/zipball/746e05d76bca3dcc430b270212d2c7c21415a9b1",
+                "reference": "746e05d76bca3dcc430b270212d2c7c21415a9b1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "psr/cache": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BBC\\ProgrammesCachingLibrary\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\BBC\\ProgrammesCachingLibrary\\": "tests/"
+                }
+            },
+            "description": "Caching for /programmes projects",
+            "support": {
+                "source": "https://github.com/bbc/programmes-caching-library/tree/master",
+                "issues": "https://github.com/bbc/programmes-caching-library/issues"
+            },
+            "time": "2018-01-17T11:56:39+00:00"
         },
         {
             "name": "behat/transliterator",

@@ -2,7 +2,7 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service;
 
-use BBC\ProgrammesPagesService\Cache\Cache;
+use BBC\ProgrammesCachingLibrary\Cache;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Service\LoggingServiceFactory;
 use BBC\ProgrammesPagesService\Service\VersionsService;

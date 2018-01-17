@@ -13,11 +13,16 @@
         {
             "type": "vcs",
             "url": "git@github.com:bbc/DoctrineExtensions.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:bbc/programmes-caching-library.git"
         }
     ],
     "require": {
         "php": ">=7.1.0",
         "bbc/doctrine-extensions": "^2.4.137",
+        "bbc/programmes-caching-library": "^1.0",
         "doctrine/orm": "^2.5",
         "psr/cache": "^1.0",
         "psr/log": "^1.0",
