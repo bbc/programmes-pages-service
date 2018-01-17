@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ef3cf3fa7803ee298728b23b3add21a",
+    "content-hash": "fb7d5a685bdfc2a332b9eca2f6eae336",
     "packages": [
         {
             "name": "bbc/doctrine-extensions",
@@ -93,28 +93,21 @@
         },
         {
             "name": "bbc/programmes-caching-library",
-            "version": "dev-getting-started",
+            "version": "v1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bbc/programmes-caching-library.git",
-                "reference": "ce59a5683d5230393e0e3a2fd9e475edc63e005f"
+                "reference": "746e05d76bca3dcc430b270212d2c7c21415a9b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bbc/programmes-caching-library/zipball/ce59a5683d5230393e0e3a2fd9e475edc63e005f",
-                "reference": "ce59a5683d5230393e0e3a2fd9e475edc63e005f",
+                "url": "https://api.github.com/repos/bbc/programmes-caching-library/zipball/746e05d76bca3dcc430b270212d2c7c21415a9b1",
+                "reference": "746e05d76bca3dcc430b270212d2c7c21415a9b1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1.0",
                 "psr/cache": "^1.0"
-            },
-            "require-dev": {
-                "escapestudios/symfony2-coding-standard": "^3.0",
-                "phpstan/phpstan": "^0.9",
-                "phpstan/phpstan-phpunit": "^0.9",
-                "phpunit/phpunit": "^6.0",
-                "squizlabs/php_codesniffer": "^3.1"
             },
             "type": "library",
             "autoload": {
@@ -127,18 +120,12 @@
                     "Tests\\BBC\\ProgrammesCachingLibrary\\": "tests/"
                 }
             },
-            "authors": [
-                {
-                    "name": "Felipe Araujo",
-                    "email": "felipe.peixotodearaujo@bbc.co.uk"
-                }
-            ],
             "description": "Caching for /programmes projects",
             "support": {
-                "source": "https://github.com/bbc/programmes-caching-library/tree/getting-started",
+                "source": "https://github.com/bbc/programmes-caching-library/tree/master",
                 "issues": "https://github.com/bbc/programmes-caching-library/issues"
             },
-            "time": "2018-01-16T12:21:48+00:00"
+            "time": "2018-01-17T11:56:39+00:00"
         },
         {
             "name": "behat/transliterator",
@@ -3548,9 +3535,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "bbc/programmes-caching-library": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
