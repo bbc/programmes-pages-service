@@ -93,16 +93,16 @@
         },
         {
             "name": "bbc/programmes-caching-library",
-            "version": "v1.0",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bbc/programmes-caching-library.git",
-                "reference": "746e05d76bca3dcc430b270212d2c7c21415a9b1"
+                "reference": "68a7cbf53f6d48b5dde14e4350b297cce5c2e39f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bbc/programmes-caching-library/zipball/746e05d76bca3dcc430b270212d2c7c21415a9b1",
-                "reference": "746e05d76bca3dcc430b270212d2c7c21415a9b1",
+                "url": "https://api.github.com/repos/bbc/programmes-caching-library/zipball/68a7cbf53f6d48b5dde14e4350b297cce5c2e39f",
+                "reference": "68a7cbf53f6d48b5dde14e4350b297cce5c2e39f",
                 "shasum": ""
             },
             "require": {
@@ -122,10 +122,10 @@
             },
             "description": "Caching for /programmes projects",
             "support": {
-                "source": "https://github.com/bbc/programmes-caching-library/tree/master",
+                "source": "https://github.com/bbc/programmes-caching-library/tree/v1.0.2",
                 "issues": "https://github.com/bbc/programmes-caching-library/issues"
             },
-            "time": "2018-01-17T11:56:39+00:00"
+            "time": "2018-01-18T12:10:28+00:00"
         },
         {
             "name": "behat/transliterator",
