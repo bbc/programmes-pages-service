@@ -87,4 +87,29 @@ class FindPastByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
             $this->service()->findPastByProgramme($this->createMock(Programme::class))
         );
     }
+
+    public function testServiceListCaching()
+    {
+        $stubProgramme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [997, 998, 999]]);
+
+        $this->mockRepository
+            ->method('findPastByProgramme')
+            ->willReturn([
+                ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
+            ]);
+
+        $this->mockServiceRepository
+            ->expects($this->once())
+            ->method('findByIds')
+            ->willReturn([['id' => 111, 'sid' => 'bbc_one'], ['id' => 222, 'sid' => 'bbc_one_hd']]);
+        $service = $this->service();
+
+        $collapsedBroadcasts = $service->findPastByProgramme($stubProgramme);
+        $collapsedBroadcasts = $service->findPastByProgramme($stubProgramme);
+
+        $servicesInBroadcast = $collapsedBroadcasts[0]->getServices();
+        $this->assertCount(2, $servicesInBroadcast);
+        $this->assertSame('bbc_one', (string) $servicesInBroadcast[111]->getSid());
+        $this->assertSame('bbc_one_hd', (string) $servicesInBroadcast[222]->getSid());
+    }
 }
