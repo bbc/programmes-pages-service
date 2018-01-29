@@ -30,6 +30,14 @@ class ProgrammesAggregationService extends AbstractService
         parent::__construct($repository, $mapper, $cache);
     }
 
+    public function countStreamableOnDemandEpisodes(
+        Programme $programme,
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::SHORT
+    ): int {
+        return $this->countStreamableDescendantsByType($programme, 'Episode', $ttl, $nullTtl);
+    }
+
     /**
      * @return Clip[]
      */
@@ -67,6 +75,27 @@ class ProgrammesAggregationService extends AbstractService
         $nullTtl = CacheInterface::NORMAL
     ): array {
         return $this->findDescendantsByType($programme, 'Gallery', $limit, $page, $ttl, $nullTtl);
+    }
+
+    private function countStreamableDescendantsByType(
+        Programme $programme,
+        string $type,
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::NORMAL
+    ): int {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $type, $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $type) {
+                return $this->repository->countStreamableDescendantsByType(
+                    $programme->getDbAncestryIds(),
+                    $type
+                );
+            },
+            [],
+            $nullTtl
+        );
     }
 
     /**
