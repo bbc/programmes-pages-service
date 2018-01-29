@@ -97,12 +97,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bbc/programmes-caching-library.git",
-                "reference": "68a7cbf53f6d48b5dde14e4350b297cce5c2e39f"
+                "reference": "2dfe8e24a9525c6f69a4e00510234442c2a0d58d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bbc/programmes-caching-library/zipball/68a7cbf53f6d48b5dde14e4350b297cce5c2e39f",
-                "reference": "68a7cbf53f6d48b5dde14e4350b297cce5c2e39f",
+                "url": "https://api.github.com/repos/bbc/programmes-caching-library/zipball/2dfe8e24a9525c6f69a4e00510234442c2a0d58d",
+                "reference": "2dfe8e24a9525c6f69a4e00510234442c2a0d58d",
                 "shasum": ""
             },
             "require": {
