@@ -19,14 +19,22 @@ class FindByPidsTest extends AbstractDatabaseTest
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $entity = $repo->findByPids(['b00swyx1', 'b010t150']);
-        $this->assertInternalType('array', $entity);
+        $pids = ['b00tf1zy', 'b010t150', 'b00swyx1'];
 
-        $this->assertSame('b00swyx1', $entity[0]['pid']);
-        $this->assertSame('b010t150', $entity[1]['pid']);
+        $entity = $repo->findByPids($pids);
+        $this->assertInternalType('array', $entity);
+        $this->assertSame($pids, array_column($entity, 'pid'));
 
         // findByPids query and parent lookup query only
         $this->assertCount(2, $this->getDbQueries());
+
+        // A similar query but with a different order. This asserts that the
+        // entities that are returned are in the same order as the $pids array
+        $pids = ['b010t150', 'b00swyx1', 'b00tf1zy'];
+
+        $entity = $repo->findByPids($pids);
+        $this->assertInternalType('array', $entity);
+        $this->assertSame($pids, array_column($entity, 'pid'));
     }
 
     public function testFindByPidsFilteringByEntityType()

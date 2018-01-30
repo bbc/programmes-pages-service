@@ -217,7 +217,27 @@ QUERY;
             ->setParameter('pids', $pids);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        return $this->resolveParents($result);
+
+        // SQL makes no claims about ordering. This means it might return
+        // entities in a different order to the list of PIDs that was passed in.
+        // We want to force the ordering to be the same. e.g if you request pids
+        // b0000003, b0000001, b0000002, you'll get back those enties in that
+        // order (without this, SQL would probably go for alphanumeric ordering)
+        $keyedResults = [];
+        foreach ($result as $entity) {
+            $keyedResults[$entity['pid']] = $entity;
+        }
+
+        $orderedResults = [];
+        foreach ($pids as $pid) {
+            // The entity for a pid may not be found if it doesn't exist, or if
+            // it refers to an embargoed entity
+            if (isset($keyedResults[$pid])) {
+                $orderedResults[] = $keyedResults[$pid];
+            }
+        }
+
+        return $this->resolveParents($orderedResults);
     }
 
     public function findByIds(array $ids): array
