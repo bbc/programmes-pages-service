@@ -16,9 +16,9 @@ class FindByRelatedToProgrammeTest extends AbstractRelatedLinksServiceTest
 
         $this->mockRepository->expects($this->once())
             ->method('findByRelatedTo')
-            ->with([$programme->getDbId()], 'programme', $expectedLimit, $expectedOffset);
+            ->with([$programme->getDbId()], 'programme', ['related_site'], $expectedLimit, $expectedOffset);
 
-        $this->service()->findByRelatedToProgramme($programme, ...$paramsPagination);
+        $this->service()->findByRelatedToProgramme($programme, ['related_site'], ...$paramsPagination);
     }
 
     public function paginationProvider(): array

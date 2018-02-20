@@ -25,19 +25,21 @@ class RelatedLinksService extends AbstractService
 
     public function findByRelatedToProgramme(
         Programme $programme,
+        array $linkTypes = [],
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
     ): array {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $limit, $page, $ttl);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), implode('|', $linkTypes), $limit, $page, $ttl);
 
         return $this->cache->getOrSet(
             $key,
             $ttl,
-            function () use ($programme, $limit, $page) {
+            function () use ($programme, $linkTypes, $limit, $page) {
                 $dbEntities = $this->repository->findByRelatedTo(
                     [$programme->getDbId()],
                     'programme',
+                    $linkTypes,
                     $limit,
                     $this->getOffset($limit, $page)
                 );
