@@ -36,12 +36,16 @@ class TleosByCategoryFixture extends AbstractFixture
         $brand1 = $this->buildBrand('11111111', 'Brand1');
         $brand2 = $this->buildBrand('22222222', 'Brand2');
 
+        $manager->flush();
+
         $e12 = $this->buildEpisode('b01777fa', 'Brand1 Ep 1/2', $brand1);
         $e22 = $this->buildEpisode('b01777fb', 'Brand1 Ep 2/2', $brand1);
 
         $e13 = $this->buildEpisode('b017j555', 'Brand2 Ep 1/3', $brand2);
         $e23 = $this->buildEpisode('b017j556', 'Brand2 Ep 2/3', $brand2);
         $e33 = $this->buildEpisode('b017j557', 'Brand2 Ep 3/3', $brand2);
+
+        $manager->flush();
 
         // build categories
         $cat1 = $this->buildGenre('C00123', 'Cat.1', 'cat1');
