@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesCachingLibrary\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ClipRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
+use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
@@ -27,14 +28,6 @@ class ProgrammesAggregationService extends AbstractService
         CacheInterface $cache
     ) {
         parent::__construct($repository, $mapper, $cache);
-    }
-
-    public function countStreamableDescendantClips(
-        Programme $programme,
-        $ttl = CacheInterface::NORMAL,
-        $nullTtl = CacheInterface::SHORT
-    ): int {
-        return $this->countStreamableDescendantsByType($programme, 'Clip', $ttl, $nullTtl);
     }
 
     public function countStreamableOnDemandEpisodes(
