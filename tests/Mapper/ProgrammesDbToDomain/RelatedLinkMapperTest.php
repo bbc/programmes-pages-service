@@ -18,7 +18,6 @@ class RelatedLinkMapperTest extends BaseMapperTestCase
             'mediumSynopsis' => 'MediumSynopsis',
             'longSynopsis' => 'LongestSynopsis',
             'type' => 'standard',
-            'isExternal' => true,
             'position' => 1,
         ];
 
@@ -27,8 +26,7 @@ class RelatedLinkMapperTest extends BaseMapperTestCase
             'http://example.com/',
             'ShortSynopsis',
             'LongestSynopsis',
-            'standard',
-            true
+            'standard'
         );
 
         $mapper = $this->getMapper();

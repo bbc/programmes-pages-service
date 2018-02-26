@@ -14,8 +14,7 @@ class RelatedLinkTest extends TestCase
             'http://example.com',
             'Short Synopsis',
             'Longest Synopsis',
-            'standard',
-            true
+            'standard'
         );
 
         $this->assertEquals('Title', $relatedLink->getTitle());
@@ -24,5 +23,43 @@ class RelatedLinkTest extends TestCase
         $this->assertEquals('Longest Synopsis', $relatedLink->getLongestSynopsis());
         $this->assertEquals('standard', $relatedLink->getType());
         $this->assertEquals(true, $relatedLink->isExternal());
+        $this->assertEquals('example.com', $relatedLink->getHost());
+    }
+
+    /**
+     * @dataProvider isExternalDataProvider
+     */
+    public function testIsExternal($uri, $expectedHost, $expectedIsExternal)
+    {
+        $relatedLink = new RelatedLink(
+            'Title',
+            $uri,
+            'Short Synopsis',
+            'Longest Synopsis',
+            'standard'
+        );
+
+        $this->assertEquals($expectedIsExternal, $relatedLink->isExternal());
+        $this->assertEquals($expectedHost, $relatedLink->getHost());
+    }
+
+    public function isExternalDataProvider()
+    {
+        return [
+            ['https://e.co/foo', 'e.co', true],
+            ['https://e.co?bar', 'e.co', true],
+            ['http://bbc.co.uk/foo', 'bbc.co.uk', false],
+            ['http://bbc.co.uk?foo', 'bbc.co.uk', false],
+            ['http://bbc.com/foo', 'bbc.com', false],
+            ['http://bbc.com?foo', 'bbc.com', false],
+
+            // Subdomains of bbc.co.uk / bbc.com count as internal links
+            ['http://www.bbc.co.uk/foo', 'www.bbc.co.uk', false],
+            ['http://brap.bbc.co.uk/foo', 'brap.bbc.co.uk', false],
+
+            // bbc.co.uk / bbc.com must be appear at the end
+            ['http://www.bbc.co.uk.nope/foo', 'www.bbc.co.uk.nope', true],
+            ['http://brap.bbc.co.uk.fake/foo', 'brap.bbc.co.uk.fake', true],
+        ];
     }
 }

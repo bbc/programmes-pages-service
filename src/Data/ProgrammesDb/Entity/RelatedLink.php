@@ -69,6 +69,7 @@ class RelatedLink
      * One of relatedToCoreEntity, relatedToPromotion or relatedToImage must be
      * set. So even though this is nullable, we do want deleting a Promotion to
      * cascade to delete the relatedLinks attached to the Promotion
+     *
      * @ORM\ManyToOne(targetEntity="Promotion", inversedBy="relatedLinks")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
@@ -85,6 +86,9 @@ class RelatedLink
     private $relatedToImage;
 
     /**
+     * If a link is external or not exists in the PIPs API but it is not
+     * consistently set, so we tend to work it out ourselves at runtime
+     *
      * @var bool
      *
      * @ORM\Column(type="boolean", nullable=false)

@@ -26,8 +26,7 @@ class RelatedLinkMapper extends AbstractMapper
                 $dbRelatedLink['uri'],
                 $dbRelatedLink['shortSynopsis'],
                 $this->getSynopses($dbRelatedLink)->getLongestSynopsis(),
-                $dbRelatedLink['type'],
-                $dbRelatedLink['isExternal']
+                $dbRelatedLink['type']
             );
         }
 
