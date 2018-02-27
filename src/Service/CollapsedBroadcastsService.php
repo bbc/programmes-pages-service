@@ -10,6 +10,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+use BBC\ProgrammesPagesService\Domain\Entity\Service;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use DateTimeImmutable;
 
@@ -18,10 +19,11 @@ class CollapsedBroadcastsService extends AbstractService
     /* @var CollapsedBroadcastRepository */
     protected $repository;
 
-    /**
-     * @var ServiceRepository
-     */
+    /** @var ServiceRepository */
     protected $serviceRepository;
+
+    /** @var Service[] */
+    private $servicesCache = [];
 
     public function __construct(
         CollapsedBroadcastRepository $repository,
@@ -783,16 +785,61 @@ class CollapsedBroadcastsService extends AbstractService
                 // ends between these two dates) using the startAt date of the first broadcast could lead to an
                 // inaccurate list of active services. However, we'll be saving many date comparisons in the future,
                 // so the trade-off is worth it.
-                $services = $this->serviceRepository->findByIdsWithNetworkServicesList(
-                    $serviceIds,
-                    $broadcasts[0]['startAt']
-                );
+                $services = $this->findByIdsWithNetworkServicesList($serviceIds, $broadcasts[0]['startAt']);
             } else {
-                $services = $this->serviceRepository->findByIds($serviceIds);
+                $services = $this->findServicesByIds($serviceIds);
             }
         }
+        return $services;
+    }
 
-        // Fetch all the used services, keyed by their id
+    private function findServicesByIds(array $serviceIds)
+    {
+        $joinedServiceIds = $this->joinServiceIds($serviceIds);
+        // We keep an array of already requested services in this class to save a few duplicate queries
+        if (isset($this->servicesCache[$joinedServiceIds])) {
+            return $this->servicesCache[$joinedServiceIds];
+        }
+        // Many queries for different collapsed broadcasts will return the same list of services.
+        // e.g. everything on BBC One. So it's worth caching this separately.
+        $cacheKey = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $joinedServiceIds);
+        $servicesById = $this->cache->getOrSet(
+            $cacheKey,
+            CacheInterface::NORMAL,
+            function () use ($serviceIds) {
+                $services = $this->serviceRepository->findByIds($serviceIds);
+                return $this->keyServiceArrayById($services);
+            }
+        );
+        $this->servicesCache[$joinedServiceIds] = $servicesById;
+        return $servicesById;
+    }
+
+    private function findByIdsWithNetworkServicesList(array $serviceIds, DateTimeImmutable $startAt)
+    {
+        $services = $this->serviceRepository->findByIdsWithNetworkServicesList(
+            $serviceIds,
+            $startAt
+        );
+        $servicesById = $this->keyServiceArrayById($services);
+        // The results of this DB query can be used by anything requesting findServicesById. It has a bit more data
+        // than is returned by that. So cache it and save a query on the brand page.
+        $this->servicesCache[$this->joinServiceIds($serviceIds)] = $servicesById;
+        return $servicesById;
+    }
+
+    private function joinServiceIds(array $serviceIds)
+    {
+        sort($serviceIds, SORT_NUMERIC);
+        return join(",", $serviceIds);
+    }
+
+    /**
+     * @param Service[] $services
+     * @return Service[]
+     */
+    private function keyServiceArrayById(array $services)
+    {
         return array_reduce($services, function ($memo, $service) {
             $memo[$service['id']] = $service;
             return $memo;
