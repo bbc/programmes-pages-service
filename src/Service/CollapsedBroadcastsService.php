@@ -834,6 +834,10 @@ class CollapsedBroadcastsService extends AbstractService
         return join(",", $serviceIds);
     }
 
+    /**
+     * @param Service[] $services
+     * @return Service[]
+     */
     private function keyServiceArrayById(array $services)
     {
         return array_reduce($services, function ($memo, $service) {
