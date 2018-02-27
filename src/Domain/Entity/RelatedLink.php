@@ -70,11 +70,6 @@ class RelatedLink
             $this->setUriMetadata();
         }
 
-        // Assert to make PHPStan confident that setUriMetadata sets isExternal
-        // to a not-null value. Without this PHPStan raises a wanring
-        // See https://github.com/phpstan/phpstan/issues/856
-        assert($this->isExternal !== null);
-
         return $this->isExternal;
     }
 
@@ -84,25 +79,21 @@ class RelatedLink
             $this->setUriMetadata();
         }
 
-        // Assert to make PHPStan confident that setUriMetadata sets host
-        // to a not-null value. Without this PHPStan raises a wanring
-        // See https://github.com/phpstan/phpstan/issues/856
-        assert($this->host !== null);
-
         return $this->host;
     }
 
     private function setUriMetadata(): void
     {
         $matches = [];
-        preg_match('@^(?:http[s]*://)?([^/?]+)@i', $this->uri, $matches);
+        preg_match('@^(?:https?://)([^/?]+)@i', $this->uri, $matches);
         $this->host = $matches[1] ?? '';
 
-        // A link is external if the hostname does not end with 'bbc.co.uk' or 'bbc.com'
+        // A link is external if the hostname is not empty and does not end with 'bbc.co.uk' or 'bbc.com'
         // Check the lengths, as strpos raises a warning if you try and use it
         // with a string shorter than the needle you're looking for
         $hostLength = strlen($this->host);
         $this->isExternal = !(
+            ($hostLength == 0) ||
             ($hostLength >= 9 && (strpos($this->host, 'bbc.co.uk', -9) !== false)) ||
             ($hostLength >= 7 && (strpos($this->host, 'bbc.com', -7) !== false))
         );

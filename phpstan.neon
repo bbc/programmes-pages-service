@@ -3,6 +3,8 @@ parameters:
         - '#BBC\\ProgrammesPagesService\\Domain\\ValueObject\\Null\\Null[A-z]+::__construct\(\) does not call parent constructor from BBC\\ProgrammesPagesService\\Domain\\ValueObject\\[A-z]+.#'
         - '#Method BBC\\ProgrammesPagesService\\Domain\\ApplicationTime::getLocalTimeZone\(\) should return DateTimeZone but returns DateTimeZone\|null.#'
         - '#Method BBC\\ProgrammesPagesService\\Domain\\ApplicationTime::getTime\(\) should return DateTimeImmutable but returns DateTimeImmutable\|null.#'
+        - '#Method BBC\\ProgrammesPagesService\\Domain\\Entity\\RelatedLink::isExternal\(\) should return bool but returns bool\|null.#'
+        - '#Method BBC\\ProgrammesPagesService\\Domain\\Entity\\RelatedLink::getHost\(\) should return string but returns string\|null.#'
         - '#Method BBC\\ProgrammesPagesService\\Mapper\\ProgrammesDbToDomain\\CategoryMapper::getGenreParentModel\(\) should return BBC\\ProgrammesPagesService\\Domain\\Entity\\Genre\|null but returns BBC\\ProgrammesPagesService\\Domain\\Entity\\Category.#'
         - '#Method BBC\\ProgrammesPagesService\\Mapper\\ProgrammesDbToDomain\\MapperFactory::get[A-z]+Mapper\(\) should return BBC\\ProgrammesPagesService\\Mapper\\ProgrammesDbToDomain\\[A-z]+Mapper but returns BBC\\ProgrammesPagesService\\Mapper\\ProgrammesDbToDomain\\AbstractMapper.#'
         - '#Method BBC\\ProgrammesPagesService\\Service\\ProgrammesAggregationService::findDescendantGalleries\(\) should return BBC\\ProgrammesPagesService\\Domain\\Entity\\Gallery\[\] but returns BBC\\ProgrammesPagesService\\Domain\\Entity\\CoreEntity\[\].#'

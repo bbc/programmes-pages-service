@@ -55,11 +55,20 @@ class RelatedLinkTest extends TestCase
 
             // Subdomains of bbc.co.uk / bbc.com count as internal links
             ['http://www.bbc.co.uk/foo', 'www.bbc.co.uk', false],
-            ['http://brap.bbc.co.uk/foo', 'brap.bbc.co.uk', false],
+            ['https://brap.bbc.co.uk/foo', 'brap.bbc.co.uk', false],
 
-            // bbc.co.uk / bbc.com must be appear at the end
+            // It should match the host, not things that look like a host in
+            // the path or querystring
+            ['http://bbc.com/http://e.co', 'bbc.com', false],
+            ['https://bbc.co.uk?https://e.co', 'bbc.co.uk', false],
+
+            // bbc.co.uk / bbc.com must be appear at the end of the host
             ['http://www.bbc.co.uk.nope/foo', 'www.bbc.co.uk.nope', true],
-            ['http://brap.bbc.co.uk.fake/foo', 'brap.bbc.co.uk.fake', true],
+            ['https://brap.bbc.co.uk.fake/foo', 'brap.bbc.co.uk.fake', true],
+
+            // Invalid hosts should be considered internal
+            ['' , '', false],
+            ['foo', '', false],
         ];
     }
 }

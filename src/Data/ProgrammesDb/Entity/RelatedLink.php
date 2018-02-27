@@ -86,8 +86,10 @@ class RelatedLink
     private $relatedToImage;
 
     /**
-     * If a link is external or not exists in the PIPs API but it is not
-     * consistently set, so we tend to work it out ourselves at runtime
+     * If a link is external or not exists in the PIPs API but as of Feb 2018
+     * it is not reliably set, so we shall work it out ourselves at runtime.
+     * This field is present in the vague hope that it gets used at some point
+     * in the future.
      *
      * @var bool
      *
