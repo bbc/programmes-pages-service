@@ -22,7 +22,7 @@ class CollapsedBroadcastsService extends AbstractService
     /** @var ServiceRepository */
     protected $serviceRepository;
 
-    /** @var Service[] */
+    /** @var array[] */
     private $servicesCache = [];
 
     public function __construct(
@@ -835,8 +835,8 @@ class CollapsedBroadcastsService extends AbstractService
     }
 
     /**
-     * @param Service[] $services
-     * @return Service[]
+     * @param array $services
+     * @return array - The input array keyed by service ID
      */
     private function keyServiceArrayById(array $services)
     {
