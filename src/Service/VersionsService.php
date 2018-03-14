@@ -69,4 +69,19 @@ class VersionsService extends AbstractService
             }
         );
     }
+
+    public function findStreamableByProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL): array
+    {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programmeItem) {
+                $dbEntities = $this->repository->findStreamableByProgrammeItem($programmeItem->getDbId());
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
+    }
 }
