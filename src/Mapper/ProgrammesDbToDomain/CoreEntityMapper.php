@@ -279,7 +279,8 @@ class CoreEntityMapper extends AbstractMapper
             $dbProgramme['releaseDate'],
             $dbProgramme['duration'] ?? null,
             $this->castDateTime($dbProgramme['streamableFrom']),
-            $this->castDateTime($dbProgramme['streamableUntil'])
+            $this->castDateTime($dbProgramme['streamableUntil']),
+            $dbProgramme['downloadableMediaSets'] ?? []
         );
     }
 
@@ -311,7 +312,8 @@ class CoreEntityMapper extends AbstractMapper
             $dbProgramme['releaseDate'],
             $dbProgramme['duration'] ?? null,
             $this->castDateTime($dbProgramme['streamableFrom']),
-            $this->castDateTime($dbProgramme['streamableUntil'])
+            $this->castDateTime($dbProgramme['streamableUntil']),
+            $dbProgramme['downloadableMediaSets'] ?? []
         );
     }
 
