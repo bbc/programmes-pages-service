@@ -39,21 +39,24 @@ class VersionFixture extends AbstractFixture implements DependentFixtureInterfac
         $brand = $this->buildBrand('b0000022', 'Brand 1');
         $episode3->setParent($brand);
 
-        $this->buildVersion('v0000001', $episode, [$originalType, $otherType]);
-        $this->buildVersion('v0000002', $embargoedEpisode, [$originalType, $otherType]);
-        $this->buildVersion('v0000003', $episode, [$originalType, $otherType]);
-        $this->buildVersion('v0000004', $episode);
-        $this->buildVersion('v0000005', $episode3);
-        $this->buildVersion('v0000006', $episode4);
-        $this->buildVersion('v0000007', $episode5);
-        $this->buildVersion('v0000008', $episode6);
+        $this->buildVersion('v0000001', $episode, false, false, [$originalType, $otherType]);
+        $this->buildVersion('v0000002', $embargoedEpisode, true, false, [$originalType, $otherType]);
+        $this->buildVersion('v0000003', $episode, true, false, [$originalType, $otherType]);
+        $this->buildVersion('v0000004', $episode, false, true);
+        $this->buildVersion('v0000005', $episode3, false, false);
+        $this->buildVersion('v0000006', $episode4, false, false);
+        $this->buildVersion('v0000007', $episode5, false, false);
+        $this->buildVersion('v0000008', $episode6, false, false);
 
         $manager->flush();
     }
 
-    private function buildVersion($pid, $parent, array $types = [])
+    private function buildVersion($pid, $parent, bool $isStreamable, bool $isDownloadable, array $types = [])
     {
         $entity = new Version($pid, $parent);
+        $entity->setStreamable($isStreamable);
+        $entity->setDownloadable($isDownloadable);
+
         if (!empty($types)) {
             $entity->setVersionTypes(new ArrayCollection($types));
         }

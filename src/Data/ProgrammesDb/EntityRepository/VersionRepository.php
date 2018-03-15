@@ -83,7 +83,7 @@ class VersionRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY)[0] ?? null;
     }
 
-    public function findStreamableByProgrammeItem(string $programmeDbId): array
+    public function findAvailableByProgrammeItem(string $programmeDbId): array
     {
         // YIKES! versionTypes is a many-to-many join, that could result in
         // an increase of rows returned by the DB and the potential for slow DB
@@ -99,7 +99,7 @@ class VersionRepository extends EntityRepository
             ->addSelect(['versionTypes'])
             ->leftJoin('version.versionTypes', 'versionTypes')
             ->andWhere('version.programmeItem = :dbId')
-            ->andWhere('version.streamable = 1')
+            ->andWhere('version.streamable = 1 OR version.downloadable = 1')
             ->addOrderBy('version.pid', 'ASC')
             ->setParameter('dbId', $programmeDbId);
 

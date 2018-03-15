@@ -45,7 +45,8 @@ class Episode extends ProgrammeItem
         ?PartialDate $releaseDate = null,
         ?int $duration = null,
         ?DateTimeImmutable $streamableFrom = null,
-        ?DateTimeImmutable $streamableUntil = null
+        ?DateTimeImmutable $streamableUntil = null,
+        array $downloadableMediaSets = []
     ) {
         parent::__construct(
             $dbAncestryIds,
@@ -73,7 +74,8 @@ class Episode extends ProgrammeItem
             $releaseDate,
             $duration,
             $streamableFrom,
-            $streamableUntil
+            $streamableUntil,
+            $downloadableMediaSets
         );
 
         $this->aggregatedBroadcastsCount = $aggregatedBroadcastsCount;

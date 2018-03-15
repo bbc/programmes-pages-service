@@ -29,6 +29,9 @@ abstract class ProgrammeItem extends Programme
     /** @var DateTimeImmutable|null */
     private $streamableUntil;
 
+    /** @var string[] */
+    private $downloadableMediaSets;
+
     public function __construct(
         array $dbAncestryIds,
         Pid $pid,
@@ -55,7 +58,8 @@ abstract class ProgrammeItem extends Programme
         ?PartialDate $releaseDate = null,
         ?int $duration = null,
         ?DateTimeImmutable $streamableFrom = null,
-        ?DateTimeImmutable $streamableUntil = null
+        ?DateTimeImmutable $streamableUntil = null,
+        array $downloadableMediaSets = []
     ) {
         if (!in_array($mediaType, MediaTypeEnum::validValues())) {
             throw new InvalidArgumentException(sprintf(
@@ -94,6 +98,7 @@ abstract class ProgrammeItem extends Programme
         $this->duration = $duration;
         $this->streamableFrom = $streamableFrom;
         $this->streamableUntil = $streamableUntil;
+        $this->downloadableMediaSets = $downloadableMediaSets;
     }
 
     public function getMediaType(): string
@@ -134,5 +139,22 @@ abstract class ProgrammeItem extends Programme
     public function isVideo(): bool
     {
         return ($this->mediaType === MediaTypeEnum::VIDEO);
+    }
+
+    public function getDownloadableMediaSets(): array
+    {
+        return $this->downloadableMediaSets;
+    }
+
+    public function isDownloadable(): bool
+    {
+        return !empty($this->downloadableMediaSets);
+    }
+
+    public function hasFutureAvailability(): bool
+    {
+        // We don't need to check if the streamableFrom date is in the future or if the streamableUntil
+        // date is in the past because these fields get cleared when something stops being streamable
+        return !$this->isStreamable() && $this->getStreamableFrom();
     }
 }
