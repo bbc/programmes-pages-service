@@ -153,6 +153,8 @@ abstract class ProgrammeItem extends Programme
 
     public function hasFutureAvailability(): bool
     {
+        // We don't need to check if the streamableFrom date is in the future or if the streamableUntil
+        // date is in the past because these fields get cleared when something stops being streamable
         return !$this->isStreamable() && $this->getStreamableFrom();
     }
 }
