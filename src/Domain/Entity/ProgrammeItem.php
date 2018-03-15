@@ -150,4 +150,9 @@ abstract class ProgrammeItem extends Programme
     {
         return !empty($this->downloadableMediaSets);
     }
+
+    public function hasFutureAvailability(): bool
+    {
+        return !$this->isStreamable() && $this->getStreamableFrom();
+    }
 }
