@@ -108,7 +108,8 @@ class ClipTest extends TestCase
             $releaseDate,
             2201,
             $streamableFrom,
-            $streamableUntil
+            $streamableUntil,
+            ['media_set_1', 'media_set_2']
         );
 
         $this->assertEquals($parent, $programme->getParent());
@@ -121,6 +122,100 @@ class ClipTest extends TestCase
         $this->assertEquals(2201, $programme->getDuration());
         $this->assertEquals($streamableFrom, $programme->getStreamableFrom());
         $this->assertEquals($streamableUntil, $programme->getStreamableUntil());
+        $this->assertEquals(true, $programme->isDownloadable());
+    }
+
+    public function testHasFutureAvailability()
+    {
+        $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Series');
+        $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
+        $releaseDate = new PartialDate(2015, 01, 02);
+
+        $genre = new Genre([0], 'id', 'Title', 'url_key');
+        $format = new Format([1], 'id2', 'Title', 'url_key');
+
+        $streamableFrom = new DateTimeImmutable();
+        $streamableUntil = new DateTimeImmutable();
+
+        $firstBroadcastDate = new \DateTimeImmutable();
+
+        $programme = new Clip(
+            [0],
+            $pid,
+            'Title',
+            'Search Title',
+            $synopses,
+            $image,
+            1101,
+            1102,
+            true,
+            false,
+            true,
+            1103,
+            MediaTypeEnum::UNKNOWN,
+            1201,
+            1104,
+            new Options(),
+            $parent,
+            2101,
+            $masterBrand,
+            [$genre],
+            [$format],
+            $firstBroadcastDate,
+            $releaseDate,
+            2201,
+            $streamableFrom,
+            $streamableUntil
+        );
+
+        $this->assertEquals(true, $programme->hasFutureAvailability());
+    }
+
+    public function testDoesntHaveFutureAvailability()
+    {
+        $pid = new Pid('p01m5mss');
+        $synopses = new Synopses('Short Synopsis', 'Longest Synopsis', '');
+        $image = new Image($pid, 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg');
+        $parent = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\Series');
+        $masterBrand = $this->createMock('BBC\ProgrammesPagesService\Domain\Entity\MasterBrand');
+        $releaseDate = new PartialDate(2015, 01, 02);
+
+        $genre = new Genre([0], 'id', 'Title', 'url_key');
+        $format = new Format([1], 'id2', 'Title', 'url_key');
+
+        $firstBroadcastDate = new \DateTimeImmutable();
+
+        $programme = new Clip(
+            [0],
+            $pid,
+            'Title',
+            'Search Title',
+            $synopses,
+            $image,
+            1101,
+            1102,
+            true,
+            false,
+            true,
+            1103,
+            MediaTypeEnum::UNKNOWN,
+            1201,
+            1104,
+            new Options(),
+            $parent,
+            2101,
+            $masterBrand,
+            [$genre],
+            [$format],
+            $firstBroadcastDate,
+            $releaseDate,
+            2201
+        );
+
+        $this->assertEquals(false, $programme->hasFutureAvailability());
     }
 
     /**
