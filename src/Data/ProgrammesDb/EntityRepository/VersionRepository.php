@@ -99,7 +99,7 @@ class VersionRepository extends EntityRepository
             ->addSelect(['versionTypes'])
             ->leftJoin('version.versionTypes', 'versionTypes')
             ->andWhere('version.programmeItem = :dbId')
-            ->andWhere('(version.streamable = 1 OR version.downloadable = 1)')
+            ->andWhere('version.streamable = 1 OR version.downloadable = 1')
             ->addOrderBy('version.pid', 'ASC')
             ->setParameter('dbId', $programmeDbId);
 

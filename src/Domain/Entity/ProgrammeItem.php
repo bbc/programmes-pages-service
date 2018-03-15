@@ -145,4 +145,9 @@ abstract class ProgrammeItem extends Programme
     {
         return $this->downloadableMediaSets;
     }
+
+    public function isDownloadable(): bool
+    {
+        return !empty($this->downloadableMediaSets);
+    }
 }
