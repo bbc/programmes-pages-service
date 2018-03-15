@@ -5,26 +5,26 @@ namespace Tests\BBC\ProgrammesPagesService\Service\VersionsService;
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
 
-class FindStreamableByProgrammeItemTest extends AbstractVersionsServiceTest
+class FindAvailableByProgrammeItemTest extends AbstractVersionsServiceTest
 {
     public function testRepositoryReceiveProperParams()
     {
         $programmeItem = $this->createConfiguredMock(ProgrammeItem::class, ['getDbId' => 101]);
 
         $this->mockRepository->expects($this->once())
-            ->method('findByProgrammeItem')
+            ->method('findAvailableByProgrammeItem')
             ->with($programmeItem->getDbId());
 
-        $this->service()->findByProgrammeItem($programmeItem);
+        $this->service()->findAvailableByProgrammeItem($programmeItem);
     }
 
     public function testVersionsAreReturnedWhenFound()
     {
         $programmeItem = $this->createConfiguredMock(ProgrammeItem::class, ['getDbId' => 101]);
 
-        $this->mockRepository->method('findByProgrammeItem')->willReturn([['pid' => 'b06tl314'], ['pid' => 'b06ts0v9']]);
+        $this->mockRepository->method('findAvailableByProgrammeItem')->willReturn([['pid' => 'b06tl314'], ['pid' => 'b06ts0v9']]);
 
-        $versions = $this->service()->findByProgrammeItem($programmeItem);
+        $versions = $this->service()->findAvailableByProgrammeItem($programmeItem);
 
         $this->assertCount(2, $versions);
         $this->assertContainsOnly(Version::class, $versions);
@@ -36,9 +36,9 @@ class FindStreamableByProgrammeItemTest extends AbstractVersionsServiceTest
     {
         $programmeItem = $this->createConfiguredMock(ProgrammeItem::class, ['getDbId' => 101]);
 
-        $this->mockRepository->method('findByProgrammeItem')->willReturn([]);
+        $this->mockRepository->method('findAvailableByProgrammeItem')->willReturn([]);
 
-        $versions = $this->service()->findByProgrammeItem($programmeItem);
+        $versions = $this->service()->findAvailableByProgrammeItem($programmeItem);
 
         $this->assertEquals([], $versions);
     }

@@ -7,7 +7,7 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers \BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository::<public>
  */
-class FindStreamableByProgrammeItemTest extends AbstractDatabaseTest
+class FindAvailableByProgrammeItemTest extends AbstractDatabaseTest
 {
     public function setUp()
     {
@@ -26,11 +26,10 @@ class FindStreamableByProgrammeItemTest extends AbstractDatabaseTest
 
         $programmeDbId = $this->getCoreEntityDbId('p0000001');
 
-        $list = $repo->findByProgrammeItem($programmeDbId);
-        $this->assertCount(3, $list);
-        $this->assertEquals('v0000001', $list[0]['pid']);
-        $this->assertEquals('v0000003', $list[1]['pid']);
-        $this->assertEquals('v0000004', $list[2]['pid']);
+        $list = $repo->findAvailableByProgrammeItem($programmeDbId);
+        $this->assertCount(2, $list);
+        $this->assertEquals('v0000003', $list[0]['pid']);
+        $this->assertEquals('v0000004', $list[1]['pid']);
 
         // must have only been one query (including the join)
         $this->assertCount(1, $this->getDbQueries());
@@ -41,7 +40,7 @@ class FindStreamableByProgrammeItemTest extends AbstractDatabaseTest
         $this->loadFixtures(['VersionFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
 
-        $list = $repo->findByProgrammeItem(999);
+        $list = $repo->findAvailableByProgrammeItem(999);
         $this->assertSame([], $list);
 
         // findByProgrammeItem query only
@@ -54,7 +53,7 @@ class FindStreamableByProgrammeItemTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
         $programmeDbId = $this->getCoreEntityDbId('p0000002');
 
-        $list = $repo->findByProgrammeItem($programmeDbId);
+        $list = $repo->findAvailableByProgrammeItem($programmeDbId);
         $this->assertSame([], $list);
 
         // findByProgrammeItem query only
@@ -69,7 +68,7 @@ class FindStreamableByProgrammeItemTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
         $programmeDbId = $this->getCoreEntityDbId('p0000002');
 
-        $list = $repo->findByProgrammeItem($programmeDbId);
+        $list = $repo->findAvailableByProgrammeItem($programmeDbId);
         $this->assertCount(1, $list);
         $this->assertEquals('v0000002', $list[0]['pid']);
 

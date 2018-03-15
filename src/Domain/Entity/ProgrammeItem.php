@@ -29,7 +29,7 @@ abstract class ProgrammeItem extends Programme
     /** @var DateTimeImmutable|null */
     private $streamableUntil;
 
-    /** @var array */
+    /** @var string[] */
     private $downloadableMediaSets;
 
     public function __construct(

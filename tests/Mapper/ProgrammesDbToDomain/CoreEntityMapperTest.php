@@ -198,7 +198,7 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
             'options' => [],
-            'downloadableMediaSets' => ['media_set_a', 'media_set_b']
+            'downloadableMediaSets' => ['media_set_a', 'media_set_b'],
         ];
 
         $expectedEntity = new Episode(
