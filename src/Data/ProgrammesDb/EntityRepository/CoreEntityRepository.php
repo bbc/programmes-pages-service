@@ -423,8 +423,10 @@ QUERY;
         $filterOperation = $isNext ? '>' : '<' ;
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select(['programme'])
+            ->select(['programme', 'masterbrand', 'network'])
             ->from('ProgrammesPagesService:' . $entityType, 'programme')
+            ->leftJoin('programme.masterBrand', 'masterbrand')
+            ->leftJoin('masterbrand.network', 'network')
             ->andWhere('programme.parent = :parentDbId')
             ->andWhere('programme.position ' . $filterOperation . ' :originalPosition')
             ->orderBy('programme.position', $orderDirection)
@@ -433,7 +435,13 @@ QUERY;
             ->setParameter('parentDbId', $parentDbId)
             ->setParameter('originalPosition', $position);
 
-        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+
+        if (!$result) {
+            return $result;
+        }
+        $this->addToAncestryCache([$result]);
+        return $this->resolveParents([$result])[0];
     }
 
     public function findAdjacentProgrammeItemByReleaseDate(
