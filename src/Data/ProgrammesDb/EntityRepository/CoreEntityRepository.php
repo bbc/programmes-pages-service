@@ -440,7 +440,7 @@ QUERY;
         if (!$result) {
             return $result;
         }
-        $this->addToAncestryCache([$result]);
+
         return $this->resolveParents([$result])[0];
     }
 
