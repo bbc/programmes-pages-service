@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesCachingLibrary\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\SegmentEventRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Contributor;
+use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Entity\Segment;
 use BBC\ProgrammesPagesService\Domain\Entity\SegmentEvent;
 use BBC\ProgrammesPagesService\Domain\Entity\Version;
@@ -85,6 +86,29 @@ class SegmentEventsService extends AbstractService
             function () use ($version, $limit, $page) {
                 $dbEntities = $this->repository->findByVersionWithContributions(
                     [$version->getDbId()],
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
+    }
+
+    public function findByProgrammeItemUsingOriginalVersion(
+        ProgrammeItem $programmeItem,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $programmeItem->getPid(), $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programmeItem, $limit, $page) {
+                $dbEntities = $this->repository->findByProgrammeItemUsingOriginalVersion(
+                    $programmeItem->getDbId(),
                     $limit,
                     $this->getOffset($limit, $page)
                 );
