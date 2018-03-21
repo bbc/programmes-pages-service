@@ -43,8 +43,8 @@ class VersionFixture extends AbstractFixture implements DependentFixtureInterfac
         $this->buildVersion('v0000002', $embargoedEpisode, true, false, [$originalType, $otherType]);
         $this->buildVersion('v0000003', $episode, true, false, [$originalType, $otherType]);
         $this->buildVersion('v0000004', $episode, false, true);
-        $this->buildVersion('v0000005', $episode3, false, false);
-        $this->buildVersion('v0000006', $episode4, false, false);
+        $this->buildVersion('v0000005', $episode3, false, false, [$otherType]);
+        $this->buildVersion('v0000006', $episode4, false, false, [$originalType]);
         $this->buildVersion('v0000007', $episode5, false, false);
         $this->buildVersion('v0000008', $episode6, false, false);
 
