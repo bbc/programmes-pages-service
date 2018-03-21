@@ -71,6 +71,32 @@ class SegmentEventRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findByProgrammeItemUsingOriginalVersion(int $dbId, ?int $limit, int $offset): array
+    {
+        $qb = $this->createQueryBuilder('segmentEvent')
+            ->addSelect([
+                'segment',
+                'contributions',
+                'contributor',
+                'creditRole',
+            ])
+            ->join('version.versionTypes', 'versionTypes')
+            ->join('segmentEvent.segment', 'segment')
+            ->leftJoin('segment.contributions', 'contributions')
+            ->leftJoin('contributions.contributor', 'contributor')
+            ->leftJoin('contributions.creditRole', 'creditRole')
+            ->andWhere("versionTypes.type = 'Original'")
+            ->andWhere('version.programmeItem = :dbId')
+            ->addOrderBy('segmentEvent.position', 'ASC')
+            ->addOrderBy('contributions.position', 'ASC')
+            ->addOrderBy('contributor.sortName', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('dbId', $dbId);
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
     public function findFullLatestBroadcastedForContributor(int $contributorId, ?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('segmentEvent')

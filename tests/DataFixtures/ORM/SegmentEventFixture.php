@@ -29,6 +29,7 @@ class SegmentEventFixture extends AbstractFixture implements DependentFixtureInt
         $version3 = $this->getReference('v0000003');
         $version4 = $this->getReference('v0000004');
         $version5 = $this->getReference('v0000005');
+        $version6 = $this->getReference('v0000006');
 
         $this->buildSegmentEvent('sv000001', $version, $segment);
         $this->buildSegmentEvent('sv000002', $embargoedVersion, $segment);
@@ -49,6 +50,9 @@ class SegmentEventFixture extends AbstractFixture implements DependentFixtureInt
         $this->buildSegmentEvent('sv000010', $embargoedVersion, $segment3);
         $this->buildSegmentEvent('sv000011', $version3, $segment3);
 
+        $this->buildSegmentEvent('sv000012', $version6, $segment, 1);
+        $this->buildSegmentEvent('sv000013', $version6, $segment, 2);
+
         $manager->flush();
     }
 
@@ -59,9 +63,10 @@ class SegmentEventFixture extends AbstractFixture implements DependentFixtureInt
         return $entity;
     }
 
-    private function buildSegmentEvent($pid, $version, $segment)
+    private function buildSegmentEvent($pid, $version, $segment, $position = 0)
     {
         $entity = new SegmentEvent($pid, $version, $segment);
+        $entity->setPosition($position);
         $this->manager->persist($entity);
         return $entity;
     }

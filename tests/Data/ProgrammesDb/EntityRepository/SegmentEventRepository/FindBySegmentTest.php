@@ -46,7 +46,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
     public function findBySegmentData()
     {
         return [
-            [['s0000001'], 50, 0, true, ['sv000001', 'sv000003', 'sv000004', 'sv000005'], 2], // Implicitly testing enabled embargoed filter
+            [['s0000001'], 50, 0, true, ['sv000001', 'sv000003', 'sv000004', 'sv000005', 'sv000013'], 2], // Implicitly testing enabled embargoed filter
             [['s0000001'], 2, 1, true, ['sv000003', 'sv000004'], 1],
             [['s0000002'], 50, 0, true, ['sv000007', 'sv000008'], 1], // Test Distinct Version
             [['s0000002'], 50, 0, false, ['sv000006', 'sv000007', 'sv000008'], 1], // Test not group by version_id
