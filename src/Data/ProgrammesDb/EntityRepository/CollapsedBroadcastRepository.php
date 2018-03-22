@@ -168,21 +168,27 @@ QUERY;
     }
 
     public function findByProgramme(
-        array $ancestry,
+        int $programmeId,
         bool $isWebcastOnly,
         ?int $limit,
         int $offset
     ): array {
-        $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $isWebcastOnly)
+        $qb = $this->createQueryBuilder('collapsedBroadcast', false)
+            ->addSelect(['programmeItem', 'image', 'masterBrand', 'mbNetwork'])
+            ->leftJoin('programmeItem.image', 'image')
+            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'mbNetwork')
+            ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
+            ->andWhere('programmeItem.id = :programmeItemId')
+            ->setParameter('programmeItemId', $programmeId)
+            ->setParameter('isWebcastOnly', $isWebcastOnly)
             ->addOrderBy('collapsedBroadcast.endAt', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
-        $result = $this->explodeFields($result);
-
-        return $this->resolveProgrammeParents($result);
+        return $this->explodeFields($result);
     }
 
     public function findByProgrammeAndMonth(

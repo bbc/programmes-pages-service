@@ -631,7 +631,7 @@ class CollapsedBroadcastsService extends AbstractService
         bool $getFullListOfServicesForNetwork
     ): array {
         $broadcasts = $this->repository->findByProgramme(
-            $programme->getDbAncestryIds(),
+            $programme->getDbId(),
             false,
             $limit,
             $this->getOffset($limit, $page)

@@ -23,20 +23,17 @@ class FindByProgrammeTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CollapsedBroadcast');
 
         foreach ($this->findByProgrammeData() as $test) {
-            [$pid, $isWebcastOnly, $limit, $offset, $expectedOutput, $numQueries] = $test;
+            [$pid, $isWebcastOnly, $limit, $offset, $expectedOutput] = $test;
 
             $ancestry = $this->getAncestryFromPersistentIdentifier($pid, 'CoreEntity');
 
-            $data = $repo->findByProgramme($ancestry, $isWebcastOnly, $limit, $offset);
+            $data = $repo->findByProgramme(end($ancestry), $isWebcastOnly, $limit, $offset);
 
             $this->assertSame(count($expectedOutput), count($data));
             $this->assertEquals(array_column($expectedOutput, 'startAt'), array_column($data, 'startAt'));
             $this->assertEquals(array_column($expectedOutput, 'endAt'), array_column($data, 'endAt'));
             $this->assertSame(array_column($expectedOutput, 'programmePid'), array_column(array_column($data, 'programmeItem'), 'pid'));
             $this->assertSame(array_column($expectedOutput, 'serviceIds'), array_column($data, 'serviceIds'));
-
-            // findByProgrammeAndMonth and ancestry hydration queries
-            $this->assertCount($numQueries, $this->getDbQueries());
 
             $this->resetDbQueryLogger();
         }
@@ -59,7 +56,6 @@ class FindByProgrammeTest extends AbstractDatabaseTest
                         'serviceIds' => ['27', '28'],
                     ],
                 ],
-                2,
             ],
             // limit
             [
@@ -75,7 +71,6 @@ class FindByProgrammeTest extends AbstractDatabaseTest
                         'serviceIds' => ['7', '8'],
                     ],
                 ],
-                1,
             ],
             // offset
             [
@@ -91,7 +86,6 @@ class FindByProgrammeTest extends AbstractDatabaseTest
                         'serviceIds' => ['3', '4'],
                     ],
                 ],
-                1,
             ],
         ];
     }

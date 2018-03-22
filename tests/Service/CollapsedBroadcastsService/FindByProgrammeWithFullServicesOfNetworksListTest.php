@@ -17,7 +17,7 @@ class FindByProgrammeWithFullServicesOfNetworksListTest extends AbstractCollapse
 
         $this->mockRepository->expects($this->once())
             ->method('findByProgramme')
-            ->with($programme->getDbAncestryIds(), false, $expectedLimit, $expectedOffset);
+            ->with($programme->getDbId(), false, $expectedLimit, $expectedOffset);
 
         $this->service()->findByProgrammeWithFullServicesOfNetworksList($programme, ...$paginationParams);
     }
