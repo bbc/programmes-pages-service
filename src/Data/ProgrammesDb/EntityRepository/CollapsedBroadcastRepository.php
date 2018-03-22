@@ -167,6 +167,24 @@ QUERY;
         return $this->resolveProgrammeParents($result);
     }
 
+    public function findByProgramme(
+        array $ancestry,
+        bool $isWebcastOnly,
+        ?int $limit,
+        int $offset
+    ): array {
+        $qb = $this->createCollapsedBroadcastsOfProgrammeQueryBuilder($ancestry, $isWebcastOnly)
+            ->addOrderBy('collapsedBroadcast.endAt', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $result = $this->explodeFields($result);
+
+        return $this->resolveProgrammeParents($result);
+    }
+
     public function findByProgrammeAndMonth(
         array $ancestry,
         bool $isWebcastOnly,

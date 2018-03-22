@@ -576,6 +576,28 @@ class CollapsedBroadcastsService extends AbstractService
     /**
      * @return CollapsedBroadcast[]
      */
+    public function findByProgrammeWithFullServicesOfNetworksList(
+        Programme $programme,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::SHORT
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), $limit, $page, $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme, $limit, $page) {
+                return $this->findByProgrammeHelper($programme, $limit, $page, true);
+            },
+            [],
+            $nullTtl
+        );
+    }
+
+    /**
+     * @return CollapsedBroadcast[]
+     */
     protected function findByProgrammeAndMonthHelper(
         Programme $programme,
         int $year,
@@ -589,6 +611,28 @@ class CollapsedBroadcastsService extends AbstractService
             false,
             $year,
             $month,
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        $broadcasts = $this->stripWebcasts($broadcasts);
+        $services = $this->fetchUsedServices($broadcasts, $getFullListOfServicesForNetwork);
+
+        return $this->mapManyEntities($broadcasts, $services);
+    }
+
+    /**
+     * @return CollapsedBroadcast[]
+     */
+    protected function findByProgrammeHelper(
+        Programme $programme,
+        ?int $limit,
+        int $page,
+        bool $getFullListOfServicesForNetwork
+    ): array {
+        $broadcasts = $this->repository->findByProgramme(
+            $programme->getDbAncestryIds(),
+            false,
             $limit,
             $this->getOffset($limit, $page)
         );
