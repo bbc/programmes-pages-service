@@ -498,8 +498,10 @@ QUERY;
         $filterOperation = $isNext ? '>' : '<' ;
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select(['programme'])
+            ->select(['programme', 'masterbrand', 'network'])
             ->from('ProgrammesPagesService:' . $entityType, 'programme')
+            ->leftJoin('programme.masterBrand', 'masterbrand')
+            ->leftJoin('masterbrand.network', 'network')
             ->andWhere('programme.parent = :parentDbId')
             ->andWhere('programme.firstBroadcastDate ' . $filterOperation . ' :firstBroadcastDate')
             ->orderBy('programme.firstBroadcastDate', $orderDirection)
@@ -507,7 +509,13 @@ QUERY;
             ->setParameter('parentDbId', $parentDbId)
             ->setParameter('firstBroadcastDate', $firstBroadcastDate);
 
-        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+
+        if (!$result) {
+            return $result;
+        }
+
+        return $this->resolveParents([$result])[0];
     }
 
     public function countByKeywords(
