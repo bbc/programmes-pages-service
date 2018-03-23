@@ -32,7 +32,6 @@ class FindByProgrammeTest extends AbstractDatabaseTest
             $this->assertSame(count($expectedOutput), count($data));
             $this->assertEquals(array_column($expectedOutput, 'startAt'), array_column($data, 'startAt'));
             $this->assertEquals(array_column($expectedOutput, 'endAt'), array_column($data, 'endAt'));
-            $this->assertSame(array_column($expectedOutput, 'programmePid'), array_column(array_column($data, 'programmeItem'), 'pid'));
             $this->assertSame(array_column($expectedOutput, 'serviceIds'), array_column($data, 'serviceIds'));
 
             $this->resetDbQueryLogger();
@@ -52,7 +51,6 @@ class FindByProgrammeTest extends AbstractDatabaseTest
                     [
                         'startAt' => new DateTimeImmutable('2017-02-06 09:31'),
                         'endAt' => new DateTimeImmutable('2017-02-06 10:30'),
-                        'programmePid' => 'p0000003',
                         'serviceIds' => ['27', '28'],
                     ],
                 ],
@@ -67,7 +65,6 @@ class FindByProgrammeTest extends AbstractDatabaseTest
                     [
                         'startAt' => new DateTimeImmutable('2017-01-04 09:30'),
                         'endAt' => new DateTimeImmutable('2017-01-04 10:30'),
-                        'programmePid' => 'p0000001',
                         'serviceIds' => ['7', '8'],
                     ],
                 ],
@@ -82,7 +79,6 @@ class FindByProgrammeTest extends AbstractDatabaseTest
                     [
                         'startAt' => new DateTimeImmutable('2017-01-05 09:30'),
                         'endAt' => new DateTimeImmutable('2017-01-05 10:30'),
-                        'programmePid' => 'p0000001',
                         'serviceIds' => ['3', '4'],
                     ],
                 ],
