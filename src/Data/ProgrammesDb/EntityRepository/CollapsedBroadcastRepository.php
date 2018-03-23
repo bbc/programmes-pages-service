@@ -174,15 +174,11 @@ QUERY;
         int $offset
     ): array {
         $qb = $this->createQueryBuilder('collapsedBroadcast', false)
-            ->addSelect(['programmeItem', 'image', 'masterBrand', 'mbNetwork'])
-            ->leftJoin('programmeItem.image', 'image')
-            ->leftJoin('programmeItem.masterBrand', 'masterBrand')
-            ->leftJoin('masterBrand.network', 'mbNetwork')
             ->andWhere('collapsedBroadcast.isWebcastOnly = :isWebcastOnly')
             ->andWhere('programmeItem.id = :programmeItemId')
             ->setParameter('programmeItemId', $programmeId)
             ->setParameter('isWebcastOnly', $isWebcastOnly)
-            ->addOrderBy('collapsedBroadcast.endAt', 'ASC')
+            ->addOrderBy('collapsedBroadcast.startAt', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
