@@ -249,6 +249,18 @@ abstract class CoreEntity implements ContributableToInterface, PromotableInterfa
     }
 
     /**
+     * Returns the ancestry of the current programme up the context provided.
+     * The current item is at the start of the array, and the TLEO is at the end
+     * of the array. If the context is the current item, then an array
+     * containing only the current item is returned.
+     *
+     * E.g. Given an hierarchy: TLEO Brand -> Parent Series -> Current Episode,
+     * the following values will be returned:
+     * $episode->getAncestry() // => [$episode, $series, $tleo]
+     * $episode->getAncestry($tleo) // => [$episode, $series]
+     * $episode->getAncestry($parent) // => [$episode]
+     * $episode->getAncestry($episode) // => [$episode]
+     *
      * @param CoreEntity|null $context
      * @return CoreEntity[]
      */
