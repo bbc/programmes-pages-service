@@ -132,17 +132,18 @@ class CoreEntityRepository extends MaterializedPathRepository
         return $this->resolveParents($result);
     }
 
-    public function findByCoreEntityMembership(int $entityId, ?string $groupType, ?int $limit, int $offset)
+    public function findByCoreEntityMembership(int $entityId, string $groupType = 'Group', ?int $limit, int $offset): array
     {
-        if ($groupType === null) {
-            $groupType = 'Group';
-        }
+        $this->assertEntityType($groupType, ['Group', 'Collection', 'Franchise', 'Gallery', 'Season']);
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select(['groupEntity', 'image'])
+            ->select(['groupEntity', 'image', 'masterBrand', 'network', 'mbImage'])
             ->from('ProgrammesPagesService:' . $groupType, 'groupEntity')
             ->join('ProgrammesPagesService:Membership', 'membership', Query\Expr\Join::WITH, 'membership.group = groupEntity')
             ->leftJoin('groupEntity.image', 'image')
+            ->leftJoin('groupEntity.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('masterBrand.image', 'mbImage')
             ->where('IDENTITY(membership.memberCoreEntity) = :programmeId')
             ->groupBy('groupEntity.id')
             ->setFirstResult($offset)
