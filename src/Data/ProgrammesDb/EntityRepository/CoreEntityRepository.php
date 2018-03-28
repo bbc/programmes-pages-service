@@ -132,6 +132,29 @@ class CoreEntityRepository extends MaterializedPathRepository
         return $this->resolveParents($result);
     }
 
+    public function findByCoreEntityMembership(int $entityId, string $groupType, ?int $limit, int $offset): array
+    {
+        $this->assertEntityType($groupType, ['Group', 'Collection', 'Franchise', 'Gallery', 'Season']);
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['groupEntity', 'image', 'masterBrand', 'network', 'mbImage'])
+            ->from('ProgrammesPagesService:' . $groupType, 'groupEntity')
+            ->join('ProgrammesPagesService:Membership', 'membership', Query\Expr\Join::WITH, 'membership.group = groupEntity')
+            ->leftJoin('groupEntity.image', 'image')
+            ->leftJoin('groupEntity.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->where('IDENTITY(membership.memberCoreEntity) = :programmeId')
+            ->groupBy('groupEntity.id')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('programmeId', $entityId);
+
+        $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        return $this->resolveParents($results);
+    }
+
     /**
      * Get an entity, based upon its PID
      * Used when a page wants to find out about data related to an entity, but
