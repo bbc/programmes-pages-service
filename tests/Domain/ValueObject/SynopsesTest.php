@@ -26,4 +26,16 @@ class SynopsesTest extends TestCase
         $synopses = new Synopses('short', '', '');
         $this->assertEquals('short', $synopses->getLongestSynopsis());
     }
+
+    public function testShortestSynopsis()
+    {
+        $synopses = new Synopses('short', 'medium', 'long');
+        $this->assertEquals('short', $synopses->getShortestSynopsis());
+
+        $synopses = new Synopses('', 'medium', 'long');
+        $this->assertEquals('medium', $synopses->getShortestSynopsis());
+
+        $synopses = new Synopses('', '', 'long');
+        $this->assertEquals('long', $synopses->getShortestSynopsis());
+    }
 }
