@@ -39,7 +39,7 @@ class GroupsService extends AbstractService
 
     /**
      * @param CoreEntity $coreEntity
-     * @param null|string $groupType
+     * @param string $groupType
      * @param int|null $limit
      * @param int $page
      * @param string $ttl

@@ -132,7 +132,7 @@ class CoreEntityRepository extends MaterializedPathRepository
         return $this->resolveParents($result);
     }
 
-    public function findByCoreEntityMembership(int $entityId, string $groupType = 'Group', ?int $limit, int $offset): array
+    public function findByCoreEntityMembership(int $entityId, string $groupType, ?int $limit, int $offset): array
     {
         $this->assertEntityType($groupType, ['Group', 'Collection', 'Franchise', 'Gallery', 'Season']);
 
