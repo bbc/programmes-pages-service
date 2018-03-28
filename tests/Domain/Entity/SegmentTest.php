@@ -29,6 +29,7 @@ class SegmentTest extends TestCase
         $this->assertSame(22, $segment->getContributionsCount());
         $this->assertSame('Title', $segment->getTitle());
         $this->assertSame($synopses, $segment->getSynopses());
+        $this->assertSame('Longest Synopsis', $segment->getLongestSynopsis());
         $this->assertNull($segment->getDuration());
     }
 

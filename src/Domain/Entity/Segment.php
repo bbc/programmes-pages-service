@@ -83,6 +83,11 @@ class Segment implements ContributableToInterface
         return $this->synopses;
     }
 
+    public function getLongestSynopsis(): string
+    {
+        return $this->synopses->getLongestSynopsis();
+    }
+
     public function getContributionsCount(): int
     {
         return $this->contributionsCount;
