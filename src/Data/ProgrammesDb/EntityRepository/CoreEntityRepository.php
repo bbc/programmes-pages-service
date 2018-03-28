@@ -148,6 +148,7 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->groupBy('groupEntity.id')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
+            ->addOrderBy('groupEntity.pid', 'DESC')
             ->setParameter('programmeId', $entityId);
 
         $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
