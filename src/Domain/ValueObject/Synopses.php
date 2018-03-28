@@ -4,6 +4,8 @@ namespace BBC\ProgrammesPagesService\Domain\ValueObject;
 
 class Synopses
 {
+    private $shortestSynopsis;
+
     private $shortSynopsis;
 
     private $mediumSynopsis;
@@ -28,6 +30,19 @@ class Synopses
         } else {
             $this->longestSynopsis = $shortSynopsis;
         }
+
+        if (!empty($shortSynopsis)) {
+            $this->shortestSynopsis = $shortSynopsis;
+        } elseif (!empty($mediumSynopsis)) {
+            $this->shortestSynopsis = $mediumSynopsis;
+        } else {
+            $this->shortestSynopsis = $longSynopsis;
+        }
+    }
+
+    public function getShortestSynopsis(): string
+    {
+        return $this->shortestSynopsis;
     }
 
     public function getShortSynopsis(): string
