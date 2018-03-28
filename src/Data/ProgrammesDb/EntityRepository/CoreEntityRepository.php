@@ -149,7 +149,9 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->setMaxResults($limit)
             ->setParameter('programmeId', $entityId);
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $results = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        return $this->resolveParents($results);
     }
 
     /**
