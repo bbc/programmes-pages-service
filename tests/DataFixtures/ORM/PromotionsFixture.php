@@ -2,7 +2,6 @@
 
 namespace Tests\BBC\ProgrammesPagesService\DataFixtures\ORM;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Brand;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Promotion;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\RelatedLink;

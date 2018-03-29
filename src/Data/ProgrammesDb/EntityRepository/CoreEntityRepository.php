@@ -4,7 +4,6 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
-use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;

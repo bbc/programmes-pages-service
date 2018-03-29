@@ -2,8 +2,8 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
-use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\ContactMediaMap;
+use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory;
 
 class CachingTest extends BaseCoreEntityMapperTestCase

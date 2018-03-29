@@ -3,8 +3,8 @@
 namespace Tests\BBC\ProgrammesPagesService\Domain\ValueObject;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
-use PHPUnit\Framework\TestCase;
 use DateTime;
+use PHPUnit\Framework\TestCase;
 
 class PartialDateTest extends TestCase
 {
