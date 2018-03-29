@@ -2,9 +2,9 @@
 
 namespace BBC\ProgrammesPagesService\Domain\ValueObject;
 
+use DateTime;
 use InvalidArgumentException;
 use JsonSerializable;
-use DateTime;
 
 /**
  * A Date that allows the Day or Month to be null so you can specify a

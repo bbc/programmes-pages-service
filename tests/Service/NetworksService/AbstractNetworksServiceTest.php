@@ -4,10 +4,10 @@ namespace Tests\BBC\ProgrammesPagesService\Service\NetworksService;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\NetworkRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\Network;
+use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\NetworkMapper;
 use BBC\ProgrammesPagesService\Service\NetworksService;
 use Tests\BBC\ProgrammesPagesService\AbstractServiceTest;
-use BBC\ProgrammesPagesService\Domain\ValueObject\Nid;
 
 abstract class AbstractNetworksServiceTest extends AbstractServiceTest
 {

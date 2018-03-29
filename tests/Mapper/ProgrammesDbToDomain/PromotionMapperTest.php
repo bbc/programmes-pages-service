@@ -8,8 +8,8 @@ use BBC\ProgrammesPagesService\Domain\Entity\Promotion;
 use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
-use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\ImageMapper;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\PromotionMapper;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
 

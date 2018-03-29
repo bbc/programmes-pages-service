@@ -4,8 +4,8 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\ContributableToInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\MemberOfGroupInterface;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\RelatedLinkContextInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\PromotableInterface;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\RelatedLinkContextInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;

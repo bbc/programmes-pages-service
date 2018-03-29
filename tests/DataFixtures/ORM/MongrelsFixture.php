@@ -7,9 +7,9 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Clip;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Gallery;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Series;
+use DateTime;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use DateTime;
 
 class MongrelsFixture extends AbstractFixture
 {

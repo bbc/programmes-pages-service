@@ -2,7 +2,6 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Service\ProgrammesAggregationService;
 
-use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 

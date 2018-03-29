@@ -2,8 +2,6 @@
 
 namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 
-use BBC\ProgrammesPagesService\Domain\ApplicationTime;
-use DateTimeImmutable;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
 /**

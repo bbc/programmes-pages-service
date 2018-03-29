@@ -5,7 +5,6 @@ namespace Tests\BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService;
 use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use DateTimeImmutable;
-use Nette\Utils\DateTime;
 
 class FindPastByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
 {
