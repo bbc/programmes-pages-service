@@ -54,19 +54,10 @@ class GroupsService extends AbstractService
         $ttl = CacheInterface::NORMAL,
         $nullTtl = CacheInterface::NORMAL
     ): array {
-        if (!($coreEntity instanceof Programme || $coreEntity instanceof Collection || $coreEntity instanceof Gallery)) {
-            throw new InvalidArgumentException(sprintf(
-                'Called %s with an invalid type. Expected a Programme, Collection or Gallery but got "%s"',
-                debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'],
-                \get_class($coreEntity)
-            ));
-        }
-
         if (!\in_array($groupType, ['Group', 'Collection', 'Franchise', 'Gallery', 'Season'])) {
             throw new InvalidArgumentException(sprintf(
-                'Called %s with an invalid type. Expected Group, Collection, Franchise, Gallery or Season but got "%s"',
-                debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'],
-                \get_class($coreEntity)
+                'Called findByCoreEntityMembership with an invalid groupType. Expected Group, Collection, Franchise, Gallery or Season but got "%s"',
+                \get_class($groupType)
             ));
         }
 
