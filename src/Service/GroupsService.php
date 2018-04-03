@@ -57,7 +57,7 @@ class GroupsService extends AbstractService
         if (!\in_array($groupType, ['Group', 'Collection', 'Franchise', 'Gallery', 'Season'])) {
             throw new InvalidArgumentException(sprintf(
                 'Called findByCoreEntityMembership with an invalid groupType. Expected Group, Collection, Franchise, Gallery or Season but got "%s"',
-                \get_class($groupType)
+                $groupType
             ));
         }
 
