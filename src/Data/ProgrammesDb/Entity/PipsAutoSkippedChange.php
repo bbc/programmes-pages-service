@@ -12,9 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * We do this because there's really no sane way to deal with that case other than "ingest everything in all
  * partner_pids", which would require a massive rewrite of our queries and reingest of all data.
  *
- * @ORM\Table(indexes={
- *     @ORM\Index(name="processed_time_idx", columns={"processed_time"}),
- * })
+ * @ORM\Table()
  * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PipsAutoSkippedChangeRepository")
  */
 class PipsAutoSkippedChange extends PipsChangeBase
