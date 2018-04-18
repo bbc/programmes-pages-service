@@ -4,8 +4,6 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\PipsAutoSkippedChange;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NoResultException;
-use DateTime;
 
 class PipsAutoSkippedChangeRepository extends EntityRepository
 {
