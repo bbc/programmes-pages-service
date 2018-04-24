@@ -36,6 +36,7 @@ class OptionsMapper extends AbstractMapper
         'live_stream_id' => [ 'default' => null, 'cascades' => false ],
         'live_stream_heading' => [ 'default' => null, 'cascades' => false ],
         'ivote_block' => [ 'default' => null, 'cascades' => false ],
+        'telescope_block' => [ 'default' => null, 'cascades' => false ],
         'comingsoon_block' => [ 'default' => null, 'cascades' => false ],
         'comingsoon_textonly' => [ 'default' => null, 'cascades' => false ],
         'navigation_links' => [ 'default' => [], 'cascades' => false ],

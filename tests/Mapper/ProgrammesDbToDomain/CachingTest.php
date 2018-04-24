@@ -58,6 +58,7 @@ class CachingTest extends BaseCoreEntityMapperTestCase
                     'pid_override_url' => null,
                     'pid_override_code' => null,
                     'ivote_block' => null,
+                    'telescope_block' => null,
                     'comingsoon_block' => null,
                     'comingsoon_textonly' => null,
                     'bbc_site' => null,
