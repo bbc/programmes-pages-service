@@ -70,6 +70,13 @@ abstract class ProgrammeItem extends Programme
     private $downloadableMediaSets;
 
     /**
+     * @var Version|null
+     * @ORM\OneToOne(targetEntity="Version", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $canonicalVersion;
+
+    /**
      * Duration - taken from the streamable version
      *
      * @var int|null
@@ -166,6 +173,16 @@ abstract class ProgrammeItem extends Programme
     public function setDownloadableVersion(?Version $downloadableVersion): void
     {
         $this->downloadableVersion = $downloadableVersion;
+    }
+
+    public function getCanonicalVersion(): ?Version
+    {
+        return $this->canonicalVersion;
+    }
+
+    public function setCanonicalVersion(?Version $canonicalVersion): void
+    {
+        $this->canonicalVersion = $canonicalVersion;
     }
 
     public function getDownloadableMediaSets(): ?array
