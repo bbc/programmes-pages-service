@@ -32,6 +32,9 @@ abstract class ProgrammeItem extends Programme
     /** @var string[] */
     private $downloadableMediaSets;
 
+    /** @var bool */
+    private $isEmbeddable;
+
     public function __construct(
         array $dbAncestryIds,
         Pid $pid,
@@ -48,6 +51,7 @@ abstract class ProgrammeItem extends Programme
         string $mediaType,
         int $segmentEventCount,
         int $aggregatedGalleriesCount,
+        bool $isEmbeddable,
         Options $options,
         ?Programme $parent = null,
         ?int $position = null,
@@ -94,6 +98,7 @@ abstract class ProgrammeItem extends Programme
 
         $this->mediaType = $mediaType;
         $this->segmentEventCount = $segmentEventCount;
+        $this->isEmbeddable = $isEmbeddable;
         $this->releaseDate = $releaseDate;
         $this->duration = $duration;
         $this->streamableFrom = $streamableFrom;
@@ -156,5 +161,10 @@ abstract class ProgrammeItem extends Programme
         // We don't need to check if the streamableFrom date is in the future or if the streamableUntil
         // date is in the past because these fields get cleared when something stops being streamable
         return !$this->isStreamable() && $this->getStreamableFrom();
+    }
+
+    public function isEmbeddable(): bool
+    {
+        return $this->isEmbeddable;
     }
 }

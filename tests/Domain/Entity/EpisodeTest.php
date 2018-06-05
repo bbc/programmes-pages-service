@@ -43,6 +43,7 @@ class EpisodeTest extends TestCase
             1301,
             1302,
             1303,
+            true,
             $options
         );
 
@@ -66,6 +67,7 @@ class EpisodeTest extends TestCase
         $this->assertEquals(1301, $programme->getAggregatedBroadcastsCount());
         $this->assertEquals(1302, $programme->getAvailableClipsCount());
         $this->assertEquals(1303, $programme->getAggregatedGalleriesCount());
+        $this->assertEquals(true, $programme->isEmbeddable());
         $this->assertEquals($options, $programme->getOptions());
         $this->assertSame(2, $programme->getOption('two'));
     }
@@ -105,6 +107,7 @@ class EpisodeTest extends TestCase
             1301,
             1302,
             1303,
+            false,
             new Options(),
             $parent,
             2101,
@@ -167,6 +170,7 @@ class EpisodeTest extends TestCase
             1301,
             1302,
             1303,
+            false,
             new Options(),
             $parent,
             2101,
@@ -216,6 +220,7 @@ class EpisodeTest extends TestCase
             1301,
             1302,
             1303,
+            false,
             new Options(),
             $parent,
             2101,
@@ -257,6 +262,7 @@ class EpisodeTest extends TestCase
             1301,
             1302,
             1303,
+            false,
             new Options()
         );
     }
@@ -288,6 +294,7 @@ class EpisodeTest extends TestCase
             1301,
             1302,
             1303,
+            false,
             new Options(),
             new UnfetchedProgramme()
         );
@@ -323,6 +330,7 @@ class EpisodeTest extends TestCase
             1202,
             1203,
             1204,
+            false,
             new UnfetchedOptions()
         );
 
