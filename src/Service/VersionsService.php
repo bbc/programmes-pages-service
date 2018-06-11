@@ -70,6 +70,28 @@ class VersionsService extends AbstractService
         );
     }
 
+    /**
+     * Returns all streamable versions for a programme item. The canonical streamable version first.
+     *
+     * @param ProgrammeItem $programmeItem
+     * @param string $ttl
+     * @return Version[]
+     */
+    public function findStreamableByProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL): array
+    {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programmeItem) {
+                $dbEntity = $this->repository->findStreamableByProgrammeItem((string) $programmeItem->getDbId());
+
+                return $this->mapManyEntities($dbEntity);
+            }
+        );
+    }
+
     public function findAvailableByProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL): array
     {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);

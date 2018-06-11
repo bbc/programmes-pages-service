@@ -197,7 +197,7 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
-            'isEmbeddable' => true,
+            'embeddable' => true,
             'options' => [],
             'downloadableMediaSets' => ['media_set_a', 'media_set_b'],
         ];
@@ -276,7 +276,7 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
-            'isEmbeddable' => false,
+            'embeddable' => false,
             'options' => [],
         ];
 
