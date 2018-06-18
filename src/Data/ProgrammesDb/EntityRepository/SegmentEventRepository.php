@@ -156,6 +156,32 @@ class SegmentEventRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findByProgrammeForCanonicalVersion(string $programmeDbId, ?int $limit, int $offset) : array
+    {
+        $qb = $this->createQueryBuilder('segmentEvent')
+            ->addSelect([
+                'segment',
+                'contributions',
+                'contributor',
+                'creditRole',
+                'version',
+                'programmeItem',
+            ])
+            ->join('segmentEvent.segment', 'segment')
+            ->leftJoin('segment.contributions', 'contributions')
+            ->leftJoin('contributions.contributor', 'contributor')
+            ->leftJoin('contributions.creditRole', 'creditRole')
+            ->where('IDENTITY(programmeItem.canonicalVersion) = version.id')
+            ->andWhere('programmeItem.id = :dbId')
+            ->addOrderBy('segmentEvent.position', 'ASC')
+            ->addOrderBy('contributions.position', 'ASC')
+            ->addOrderBy('contributor.sortName', 'ASC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->setParameter('dbId', $programmeDbId);
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
     public function createQueryBuilder($alias, $indexBy = null)
     {
         // Any time SegmentEvents are fetched here they must be inner joined to
