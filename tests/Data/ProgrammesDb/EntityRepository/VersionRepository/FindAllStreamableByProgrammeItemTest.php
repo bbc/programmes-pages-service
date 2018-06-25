@@ -5,7 +5,7 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\Ve
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository;
 use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 
-class FindStreamableByProgrammeItemTest extends AbstractDatabaseTest
+class FindAllStreamableByProgrammeItemTest extends AbstractDatabaseTest
 {
     public function setUp()
     {
@@ -25,7 +25,7 @@ class FindStreamableByProgrammeItemTest extends AbstractDatabaseTest
 
         $programmeDbId = $this->getCoreEntityDbId('p0000007');
 
-        $list = $repo->findStreamableByProgrammeItem((string) $programmeDbId);
+        $list = $repo->findAllStreamableByProgrammeItem((string) $programmeDbId);
         $this->assertCount(2, $list);
         $this->assertEquals('v0000010', $list[0]['pid']);
         $this->assertEquals('v0000009', $list[1]['pid']);
@@ -39,7 +39,7 @@ class FindStreamableByProgrammeItemTest extends AbstractDatabaseTest
         $this->loadFixtures(['VersionFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
 
-        $list = $repo->findStreamableByProgrammeItem(999);
+        $list = $repo->findAllStreamableByProgrammeItem(999);
         $this->assertSame([], $list);
 
         // findByProgrammeItem query only
@@ -52,7 +52,7 @@ class FindStreamableByProgrammeItemTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
         $programmeDbId = $this->getCoreEntityDbId('p0000002');
 
-        $list = $repo->findStreamableByProgrammeItem($programmeDbId);
+        $list = $repo->findAllStreamableByProgrammeItem($programmeDbId);
         $this->assertSame([], $list);
 
         // findByProgrammeItem query only

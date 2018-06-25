@@ -77,7 +77,7 @@ class VersionsService extends AbstractService
      * @param string $ttl
      * @return Version[]
      */
-    public function findStreamableByProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL): array
+    public function findAllStreamableByProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL): array
     {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);
 
@@ -85,7 +85,7 @@ class VersionsService extends AbstractService
             $key,
             $ttl,
             function () use ($programmeItem) {
-                $dbEntity = $this->repository->findStreamableByProgrammeItem((string) $programmeItem->getDbId());
+                $dbEntity = $this->repository->findAllStreamableByProgrammeItem((string) $programmeItem->getDbId());
 
                 return $this->mapManyEntities($dbEntity);
             }

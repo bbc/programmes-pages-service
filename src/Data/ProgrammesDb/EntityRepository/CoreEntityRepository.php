@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use DateTimeInterface;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use InvalidArgumentException;
 
@@ -183,32 +184,26 @@ QUERY;
      */
     public function findByPidFull(string $pid, string $entityType = 'CoreEntity'): ?array
     {
-        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+        $qb = $this->findByPidFullCommon($pid, $entityType);
 
-        // YIKES! categories is a many-to-many join, that could result in
-        // an increase of rows returned by the DB and the potential for slow DB
-        // queries as per https://ocramius.github.io/blog/doctrine-orm-optimization-hydration/.
-        // Except it doesn't - the majority of Programmes have less than 3
-        // categories. At time of writing this comment (June 2016) only 9% of
-        // the Programmes in PIPS have 3 or more Categories and the most
-        // Categories a Programme has is 12. Creating an few extra rows in
-        // rare-ish cases is way more efficient that having to do a two-step
-        // hydration process.
-        // We need to JOIN to masterBrand's image as the image hierarchy can
-        // fall back to the masterbrand's image if no masterbrand exists in the
-        // existing image hierarchy
+        $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        if (!$result) {
+            return $result;
+        }
+        $this->addToAncestryCache([$result]);
+        $withHydratedParents = $this->resolveParents([$result]);
+        return $this->resolveCategories($withHydratedParents)[0];
+    }
 
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select(['entity', 'image', 'masterBrand', 'network', 'mbImage', 'category', 'nwImage'])
-            ->from('ProgrammesPagesService:' . $entityType, 'entity') // For filtering on type
-            ->leftJoin('entity.image', 'image')
-            ->leftJoin('entity.masterBrand', 'masterBrand')
-            ->leftJoin('masterBrand.image', 'mbImage')
-            ->leftJoin('masterBrand.network', 'network')
-            ->leftJoin('network.image', 'nwImage')
-            ->leftJoin('entity.categories', 'category')
-            ->andWhere('entity.pid = :pid')
-            ->setParameter('pid', $pid);
+    /**
+     * Full Find By Pid - with extras for playout pages
+     */
+    public function findProgrammeItemByPidForPlayout(string $pid): ?array
+    {
+        $qb = $this->findByPidFullCommon($pid, 'ProgrammeItem');
+        $qb->addSelect(['competitionWarning', 'competitionWarningProgrammeItem'])
+            ->leftJoin('masterBrand.competitionWarning', 'competitionWarning')
+            ->leftJoin('competitionWarning.programmeItem', 'competitionWarningProgrammeItem');
 
         $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
         if (!$result) {
@@ -634,6 +629,36 @@ QUERY;
         }
         // Return cached ancestors, saving a query
         return $cached;
+    }
+
+    private function findByPidFullCommon(string $pid, string $entityType = 'CoreEntity'): QueryBuilder
+    {
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+
+        // YIKES! categories is a many-to-many join, that could result in
+        // an increase of rows returned by the DB and the potential for slow DB
+        // queries as per https://ocramius.github.io/blog/doctrine-orm-optimization-hydration/.
+        // Except it doesn't - the majority of Programmes have less than 3
+        // categories. At time of writing this comment (June 2016) only 9% of
+        // the Programmes in PIPS have 3 or more Categories and the most
+        // Categories a Programme has is 12. Creating an few extra rows in
+        // rare-ish cases is way more efficient that having to do a two-step
+        // hydration process.
+        // We need to JOIN to masterBrand's image as the image hierarchy can
+        // fall back to the masterbrand's image if no masterbrand exists in the
+        // existing image hierarchy
+
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select(['entity', 'image', 'masterBrand', 'network', 'mbImage', 'category', 'nwImage'])
+            ->from('ProgrammesPagesService:' . $entityType, 'entity')// For filtering on type
+            ->leftJoin('entity.image', 'image')
+            ->leftJoin('entity.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('network.image', 'nwImage')
+            ->leftJoin('entity.categories', 'category')
+            ->andWhere('entity.pid = :pid')
+            ->setParameter('pid', $pid);
     }
 
     private function resolveParents(array $programmes): array

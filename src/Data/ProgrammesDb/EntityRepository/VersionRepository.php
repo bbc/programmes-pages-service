@@ -95,17 +95,20 @@ class VersionRepository extends EntityRepository
      * @param string $programmeDbId
      * @return array
      */
-    public function findStreamableByProgrammeItem(string $programmeDbId): array
+    public function findAllStreamableByProgrammeItem(string $programmeDbId): array
     {
         $qb = $this->createQueryBuilder('version')
             ->addSelect([
                 'versionTypes',
                 'CASE WHEN (IDENTITY(p.streamableVersion) = version.id) THEN 1 ELSE 0 AS HIDDEN isStreamable',
             ])
-            ->leftJoin('version.versionTypes', 'versionTypes')
+            ->innerJoin('version.versionTypes', 'versionTypes')
+            // This second join is a hack. We need to retrieve all the version types, but filter out
+            // any versions with only alternate types
+            ->innerJoin('version.versionTypes', 'versionTypesSelect')
             ->where('p.id = :dbId')
             ->andWhere('version.streamable = 1')
-            ->andWhere('versionTypes.type NOT IN (:alternateVersionTypes)')
+            ->andWhere('versionTypesSelect.type NOT IN (:alternateVersionTypes)')
             ->orderBy('isStreamable', 'DESC')
             ->addOrderBy('version.pid', 'ASC')
             ->setParameter('dbId', $programmeDbId)

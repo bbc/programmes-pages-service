@@ -70,7 +70,7 @@ class FindByPidFullTest extends AbstractDatabaseTest
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Called findByPidFull with an invalid type. Expected one of "CoreEntity", "Programme", "ProgrammeContainer", "ProgrammeItem", "Brand", "Series", "Episode", "Clip", "Group", "Collection", "Gallery", "Season", "Franchise" but got "junk"
+     * @expectedExceptionMessage Called findByPidFullCommon with an invalid type. Expected one of "CoreEntity", "Programme", "ProgrammeContainer", "ProgrammeItem", "Brand", "Series", "Episode", "Clip", "Group", "Collection", "Gallery", "Season", "Franchise" but got "junk"
      */
     public function testFindByPidWithInvalidEntityType()
     {
