@@ -67,7 +67,7 @@ class EpisodeTest extends TestCase
         $this->assertEquals(1301, $programme->getAggregatedBroadcastsCount());
         $this->assertEquals(1302, $programme->getAvailableClipsCount());
         $this->assertEquals(1303, $programme->getAggregatedGalleriesCount());
-        $this->assertEquals(true, $programme->isEmbeddable());
+        $this->assertEquals(true, $programme->isExternallyEmbeddable());
         $this->assertEquals($options, $programme->getOptions());
         $this->assertSame(2, $programme->getOption('two'));
     }

@@ -70,6 +70,8 @@ class Image implements PromotableInterface
 
     public function getRecipeUrl(): string
     {
+        // Note: This is actually meant to output the string literal $recipe as part of the URL
+        // it's needed by certain things we call that dynamically replace that client side
         return self::BASE_URL . '/$recipe/' . $this->filename;
     }
 

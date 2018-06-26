@@ -631,7 +631,7 @@ QUERY;
         return $cached;
     }
 
-    private function findByPidFullCommon(string $pid, string $entityType = 'CoreEntity'): QueryBuilder
+    private function findByPidFullCommon(string $pid, string $entityType): QueryBuilder
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 

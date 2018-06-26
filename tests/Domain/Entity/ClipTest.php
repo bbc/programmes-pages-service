@@ -62,7 +62,7 @@ class ClipTest extends TestCase
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
         $this->assertEquals(1201, $programme->getSegmentEventCount());
         $this->assertEquals(1104, $programme->getAggregatedGalleriesCount());
-        $this->assertEquals(true, $programme->isEmbeddable());
+        $this->assertEquals(true, $programme->isExternallyEmbeddable());
         $this->assertEquals($options, $programme->getOptions());
         $this->assertSame(2, $programme->getOption('two'));
     }

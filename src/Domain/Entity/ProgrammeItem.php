@@ -33,7 +33,7 @@ abstract class ProgrammeItem extends Programme
     private $downloadableMediaSets;
 
     /** @var bool */
-    private $isEmbeddable;
+    private $isExternallyEmbeddable;
 
     public function __construct(
         array $dbAncestryIds,
@@ -51,7 +51,7 @@ abstract class ProgrammeItem extends Programme
         string $mediaType,
         int $segmentEventCount,
         int $aggregatedGalleriesCount,
-        bool $isEmbeddable,
+        bool $isExternallyEmbeddable,
         Options $options,
         ?Programme $parent = null,
         ?int $position = null,
@@ -98,7 +98,7 @@ abstract class ProgrammeItem extends Programme
 
         $this->mediaType = $mediaType;
         $this->segmentEventCount = $segmentEventCount;
-        $this->isEmbeddable = $isEmbeddable;
+        $this->isExternallyEmbeddable = $isExternallyEmbeddable;
         $this->releaseDate = $releaseDate;
         $this->duration = $duration;
         $this->streamableFrom = $streamableFrom;
@@ -163,8 +163,8 @@ abstract class ProgrammeItem extends Programme
         return !$this->isStreamable() && $this->getStreamableFrom();
     }
 
-    public function isEmbeddable(): bool
+    public function isExternallyEmbeddable(): bool
     {
-        return $this->isEmbeddable;
+        return $this->isExternallyEmbeddable;
     }
 }
