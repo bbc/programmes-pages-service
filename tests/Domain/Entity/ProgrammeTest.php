@@ -107,6 +107,7 @@ class ProgrammeTest extends TestCase
             MediaTypeEnum::UNKNOWN,
             1201,
             1104,
+            true,
             new Options()
         );
     }
@@ -135,6 +136,7 @@ class ProgrammeTest extends TestCase
             1301,
             1302,
             1303,
+            false,
             new Options(),
             $this->getSeries()
         );

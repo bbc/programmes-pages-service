@@ -19,7 +19,7 @@ class FindAvailableByProgrammeItemTest extends AbstractDatabaseTest
         $this->disableEmbargoedFilter();
     }
 
-    public function testFindStreamableByProgrammeItem()
+    public function testFindAvailableByProgrammeItem()
     {
         $this->loadFixtures(['VersionFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
@@ -35,7 +35,7 @@ class FindAvailableByProgrammeItemTest extends AbstractDatabaseTest
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindStreamableByProgrammeItemWhenEmptyResult()
+    public function testFindAvailableByProgrammeItemWhenEmptyResult()
     {
         $this->loadFixtures(['VersionFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
@@ -47,7 +47,7 @@ class FindAvailableByProgrammeItemTest extends AbstractDatabaseTest
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindStreamableByProgrammeItemWhenParentIsEmbargoed()
+    public function testFindAvailableByProgrammeItemWhenParentIsEmbargoed()
     {
         $this->loadFixtures(['VersionFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
@@ -60,7 +60,7 @@ class FindAvailableByProgrammeItemTest extends AbstractDatabaseTest
         $this->assertCount(1, $this->getDbQueries());
     }
 
-    public function testFindStreamableByProgrammeItemWhenParentIsEmbargoedAndFilterIsDisabled()
+    public function testFindAvailableByProgrammeItemWhenParentIsEmbargoedAndFilterIsDisabled()
     {
         $this->disableEmbargoedFilter();
 

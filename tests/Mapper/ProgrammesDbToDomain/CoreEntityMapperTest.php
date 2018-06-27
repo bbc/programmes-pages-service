@@ -197,6 +197,7 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
+            'embeddable' => true,
             'options' => [],
             'downloadableMediaSets' => ['media_set_a', 'media_set_b'],
         ];
@@ -219,6 +220,7 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
             101,
             102,
             103,
+            true,
             $this->mockOptions,
             null,
             1001,
@@ -274,6 +276,7 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
             'duration' => 1002,
             'streamableFrom' => new DateTime('2015-01-03'),
             'streamableUntil' => new DateTime('2015-01-04'),
+            'embeddable' => false,
             'options' => [],
         ];
 
@@ -293,6 +296,7 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
             MediaTypeEnum::UNKNOWN,
             11,
             12,
+            false,
             $this->mockOptions,
             null,
             1001,

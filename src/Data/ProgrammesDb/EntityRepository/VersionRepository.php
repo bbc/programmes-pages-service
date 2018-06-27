@@ -7,6 +7,13 @@ use Doctrine\ORM\Query;
 
 class VersionRepository extends EntityRepository
 {
+    public const ALTERNATE_VERSION_TYPES = [
+        'AudioDescribed',
+        'DubbedAudioDescribed',
+        'OpenSubtitled',
+        'Signed',
+    ];
+
     public function findByPid(string $pid): ?array
     {
         $qb = $this->createQueryBuilder('version')
@@ -81,6 +88,33 @@ class VersionRepository extends EntityRepository
         // In some cases, an episode can have more than one Original version.
         // We account for that by returning only the first Original version we find.
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY)[0] ?? null;
+    }
+
+    /**
+     * Returns the programme item's canonical streamable version (p.streamableVersion) FIRST.
+     * @param string $programmeDbId
+     * @return array
+     */
+    public function findAllStreamableByProgrammeItem(string $programmeDbId): array
+    {
+        $qb = $this->createQueryBuilder('version')
+            ->addSelect([
+                'versionTypes',
+                'CASE WHEN (IDENTITY(p.streamableVersion) = version.id) THEN 1 ELSE 0 AS HIDDEN isStreamable',
+            ])
+            ->innerJoin('version.versionTypes', 'versionTypes')
+            // This second join is a hack. We need to retrieve all the version types, but filter out
+            // any versions with only alternate types
+            ->innerJoin('version.versionTypes', 'versionTypesSelect')
+            ->where('p.id = :dbId')
+            ->andWhere('version.streamable = 1')
+            ->andWhere('versionTypesSelect.type NOT IN (:alternateVersionTypes)')
+            ->orderBy('isStreamable', 'DESC')
+            ->addOrderBy('version.pid', 'ASC')
+            ->setParameter('dbId', $programmeDbId)
+            ->setParameter('alternateVersionTypes', self::ALTERNATE_VERSION_TYPES);
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function findAvailableByProgrammeItem(string $programmeDbId): array

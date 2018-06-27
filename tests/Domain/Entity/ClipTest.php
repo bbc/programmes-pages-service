@@ -40,6 +40,7 @@ class ClipTest extends TestCase
             MediaTypeEnum::UNKNOWN,
             1201,
             1104,
+            true,
             $options
         );
 
@@ -61,6 +62,7 @@ class ClipTest extends TestCase
         $this->assertEquals(MediaTypeEnum::UNKNOWN, $programme->getMediaType());
         $this->assertEquals(1201, $programme->getSegmentEventCount());
         $this->assertEquals(1104, $programme->getAggregatedGalleriesCount());
+        $this->assertEquals(true, $programme->isExternallyEmbeddable());
         $this->assertEquals($options, $programme->getOptions());
         $this->assertSame(2, $programme->getOption('two'));
     }
@@ -98,6 +100,7 @@ class ClipTest extends TestCase
             MediaTypeEnum::UNKNOWN,
             1201,
             1104,
+            false,
             new Options(),
             $parent,
             2101,
@@ -158,6 +161,7 @@ class ClipTest extends TestCase
             MediaTypeEnum::UNKNOWN,
             1201,
             1104,
+            true,
             new Options(),
             $parent,
             2101,
@@ -204,6 +208,7 @@ class ClipTest extends TestCase
             MediaTypeEnum::UNKNOWN,
             1201,
             1104,
+            false,
             new Options(),
             $parent,
             2101,
@@ -244,6 +249,7 @@ class ClipTest extends TestCase
             'audio',
             1201,
             1104,
+            true,
             new UnfetchedOptions()
         );
 

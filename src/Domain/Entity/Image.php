@@ -6,6 +6,8 @@ use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 
 class Image implements PromotableInterface
 {
+    private const BASE_URL = 'https://ichef.bbci.co.uk/images/ic';
+
     /** @var Pid */
     private $pid;
 
@@ -63,7 +65,14 @@ class Image implements PromotableInterface
     public function getUrl($width, $height = 'n'): string
     {
         $recipe = $width . 'x' . $height;
-        return 'https://ichef.bbci.co.uk/images/ic/' . $recipe . '/' . $this->filename;
+        return self::BASE_URL . '/' . $recipe . '/' . $this->filename;
+    }
+
+    public function getRecipeUrl(): string
+    {
+        // Note: This is actually meant to output the string literal $recipe as part of the URL
+        // it's needed by certain things we call that dynamically replace that client side
+        return self::BASE_URL . '/$recipe/' . $this->filename;
     }
 
     public function isLetterBox(): bool

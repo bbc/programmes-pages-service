@@ -10,6 +10,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Clip;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeContainer;
+use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
@@ -240,6 +241,23 @@ class ProgrammesService extends AbstractService
             $ttl,
             function () use ($pid, $entityType) {
                 $dbEntity = $this->repository->findByPidFull($pid, $entityType);
+                return $this->mapSingleEntity($dbEntity);
+            }
+        );
+    }
+
+    /**
+     * Full Find By Pid - with extras for playout pages
+     */
+    public function findProgrammeItemByPidForPlayout(Pid $pid, $ttl = CacheInterface::NORMAL): ?ProgrammeItem
+    {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($pid) {
+                $dbEntity = $this->repository->findProgrammeItemByPidForPlayout($pid);
                 return $this->mapSingleEntity($dbEntity);
             }
         );
