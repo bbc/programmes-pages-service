@@ -13,7 +13,7 @@ class Podcast
     use TimestampableEntity;
 
     /**
-     * @var int|null
+     * @var int
      *
      * @ORM\Id()
      * @ORM\Column(type="integer", nullable=false)
@@ -44,20 +44,20 @@ class Podcast
     private $availability;
 
     /**
-     * @var bool|null
+     * @var bool
      *
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean", nullable=false)
      */
     private $isUkOnly = false;
 
     /**
-     * @var bool|null
+     * @var bool
      *
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean", nullable=false)
      */
     private $isLowBitrate = false;
 
-    public function __construct(CoreEntity $coreEntity, string $frequency, int $availability, ?bool $isUkOnly, ?bool $isLowBitrate)
+    public function __construct(CoreEntity $coreEntity, string $frequency, int $availability, bool $isUkOnly, bool $isLowBitrate)
     {
         $this->coreEntity = $coreEntity;
         $this->frequency = $frequency;
@@ -66,7 +66,7 @@ class Podcast
         $this->isLowBitrate = $isLowBitrate;
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -105,22 +105,22 @@ class Podcast
         $this->availability = $availability;
     }
 
-    public function getIsUkOnly(): ?bool
+    public function getIsUkOnly(): bool
     {
         return $this->isUkOnly;
     }
 
-    public function setIsUkOnly(?bool $isUkOnly): void
+    public function setIsUkOnly(bool $isUkOnly): void
     {
         $this->isUkOnly = $isUkOnly;
     }
 
-    public function getIsLowBitrate(): ?bool
+    public function getIsLowBitrate(): bool
     {
         return $this->isLowBitrate;
     }
 
-    public function setIsLowBitrate(?bool $isLowBitrate): void
+    public function setIsLowBitrate(bool $isLowBitrate): void
     {
         $this->isLowBitrate = $isLowBitrate;
     }
