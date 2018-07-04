@@ -140,6 +140,30 @@ class VersionRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findLinkedVersionsForProgrammeItem(string $programmeItemDbId): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select([
+                'p', 'streamableVersion', 'streamableVersionTypes', 'downloadableVersion', 'downloadableVersionTypes',
+                'canonicalVersion', 'canonicalVersionTypes',
+                'masterBrand', 'competitionWarning', 'competitionWarningProgrammeItem',
+            ])
+            ->from('ProgrammesPagesService:ProgrammeItem', 'p')
+            ->leftJoin('p.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.competitionWarning', 'competitionWarning')
+            ->leftJoin('competitionWarning.programmeItem', 'competitionWarningProgrammeItem')
+            ->leftJoin('p.downloadableVersion', 'downloadableVersion')
+            ->leftJoin('downloadableVersion.versionTypes', 'downloadableVersionTypes')
+            ->leftJoin('p.streamableVersion', 'streamableVersion')
+            ->leftJoin('streamableVersion.versionTypes', 'streamableVersionTypes')
+            ->leftJoin('p.canonicalVersion', 'canonicalVersion')
+            ->leftJoin('canonicalVersion.versionTypes', 'canonicalVersionTypes')
+            ->where('p.id = :dbId')
+            ->setParameter('dbId', $programmeItemDbId);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
+
     public function createQueryBuilder($alias, $indexBy = null)
     {
         // Any time versions are fetched here they must be inner joined to

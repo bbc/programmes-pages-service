@@ -106,4 +106,38 @@ class VersionsService extends AbstractService
             }
         );
     }
+
+    public function findLinkedVersionsForProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL)
+    {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programmeItem) {
+                $programmeEntity = $this->repository->findLinkedVersionsForProgrammeItem($programmeItem->getDbId());
+                $dataArray = [
+                    'streamableVersion' => null,
+                    'downloadableVersion' => null,
+                    'canonicalVersion' => null,
+                ];
+
+                if (!empty($programmeEntity['streamableVersion'])) {
+                    // What could possibly go wrong?
+                    $programmeEntity['streamableVersion']['programmeItem'] = $programmeEntity;
+                    $dataArray['streamableVersion'] = $this->mapSingleEntity($programmeEntity['streamableVersion']);
+                }
+
+                if (!empty($programmeEntity['downloadableVersion'])) {
+                    $programmeEntity['downloadableVersion']['programmeItem'] = $programmeEntity;
+                    $dataArray['downloadableVersion'] = $this->mapSingleEntity($programmeEntity['downloadableVersion']);
+                }
+
+                if (!empty($programmeEntity['canonicalVersion'])) {
+                    $programmeEntity['canonicalVersion']['programmeItem'] = $programmeEntity;
+                    $dataArray['canonicalVersion'] = $this->mapSingleEntity($programmeEntity['canonicalVersion']);
+                }
+                return $dataArray;
+            }
+        );
+    }
 }

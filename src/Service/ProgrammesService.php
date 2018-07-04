@@ -14,6 +14,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
 use BBC\ProgrammesPagesService\Domain\Entity\Series;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
+use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\VersionMapper;
 use InvalidArgumentException;
 
 class ProgrammesService extends AbstractService
