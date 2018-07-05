@@ -349,16 +349,6 @@ abstract class CoreEntity implements ContributableToInterface, MemberOfGroupInte
         $this->image = $image;
     }
 
-    public function getIsPodcastable(): bool
-    {
-        return $this->isPodcastable;
-    }
-
-    public function setIsPodcastable(bool $isPodcastable): void
-    {
-        $this->isPodcastable = $isPodcastable;
-    }
-
     public function getMasterBrand(): ?MasterBrand
     {
         return $this->masterBrand;
