@@ -132,6 +132,15 @@ class MapperFactory
         return $this->instances[OptionsMapper::class];
     }
 
+    public function getPodcastMapper(): PodcastMapper
+    {
+        if (!isset($this->instances[PodcastMapper::class])) {
+            $this->instances[PodcastMapper::class] = new PodcastMapper($this);
+        }
+
+        return $this->instances[PodcastMapper::class];
+    }
+
     public function getPromotionMapper(): PromotionMapper
     {
         if (!isset($this->instances[PromotionMapper::class])) {

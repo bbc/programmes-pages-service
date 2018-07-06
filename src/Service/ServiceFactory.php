@@ -159,6 +159,19 @@ class ServiceFactory
         return $this->instances[NetworksService::class];
     }
 
+    public function getPodcastsServiceService(): PodcastsService
+    {
+        if (!isset($this->instances[PodcastsService::class])) {
+            $this->instances[PodcastsService::class] = new PodcastsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Podcast'),
+                $this->mapperFactory->getPodcastMapper(),
+                $this->cache
+            );
+        }
+
+        return $this->instances[ProgrammesAggregationService::class];
+    }
+
     public function getProgrammesAggregationService(): ProgrammesAggregationService
     {
         if (!isset($this->instances[ProgrammesAggregationService::class])) {
