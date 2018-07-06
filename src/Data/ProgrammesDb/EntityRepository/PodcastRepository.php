@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 
 class PodcastRepository extends EntityRepository
 {
-    public function findByCoreEntityId(int $coreEntityId, ?int $limit, ?int $offset): array
+    public function findByCoreEntityId(int $coreEntityId, ?int $limit, ?int $offset): ?array
     {
         $qb = $this->createQueryBuilder('podcast')
             ->andWhere('coreEntityId = :coreEntityId')
@@ -15,6 +15,6 @@ class PodcastRepository extends EntityRepository
             ->setMaxResults($limit)
             ->setParameter('coreEntityId', $coreEntityId);
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 }
