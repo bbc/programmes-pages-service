@@ -169,7 +169,7 @@ class ServiceFactory
             );
         }
 
-        return $this->instances[ProgrammesAggregationService::class];
+        return $this->instances[PodcastsService::class];
     }
 
     public function getProgrammesAggregationService(): ProgrammesAggregationService
