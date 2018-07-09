@@ -10,7 +10,9 @@ class PodcastRepository extends EntityRepository
     public function findByCoreEntityId(int $coreEntityId, ?int $limit, int $offset): ?array
     {
         $qb = $this->createQueryBuilder('podcast')
-            ->andWhere('coreEntityId = :coreEntityId')
+            ->addSelect('coreEntity')
+            ->join('podcast.coreEntity', 'coreEntity')
+            ->where('coreEntity.id = :coreEntityId')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->setParameter('coreEntityId', $coreEntityId);

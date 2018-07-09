@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesCachingLibrary\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\PodcastRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\Podcast;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\PodcastMapper;
 
 class PodcastsService extends AbstractService
@@ -27,7 +28,7 @@ class PodcastsService extends AbstractService
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
-    ): array {
+    ): Podcast {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $coreEntityId, $limit, $page, $ttl);
 
         return $this->cache->getOrSet(
@@ -40,7 +41,7 @@ class PodcastsService extends AbstractService
                     $this->getOffset($limit, $page)
                 );
 
-                return $this->mapManyEntities($dbEntities);
+                return $this->mapSingleEntity($dbEntities);
             }
         );
     }
