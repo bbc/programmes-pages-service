@@ -19,6 +19,14 @@ class Podcast
     /** @var bool */
     private $isUkOnly;
 
+    /**
+     * Podcast constructor.
+     * @param ProgrammeItem|Collection $coreEntity
+     * @param string $frequency
+     * @param int $availability
+     * @param bool $isUkOnly
+     * @param bool $isLowBitrate
+     */
     public function __construct(CoreEntity $coreEntity, string $frequency, int $availability, bool $isUkOnly, bool $isLowBitrate)
     {
         $this->coreEntity = $coreEntity;

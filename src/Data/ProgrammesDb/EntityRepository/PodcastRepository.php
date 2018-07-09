@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 
 class PodcastRepository extends EntityRepository
 {
-    public function findByCoreEntityId(int $coreEntityId, ?int $limit, ?int $offset): ?array
+    public function findByCoreEntityId(int $coreEntityId, ?int $limit, int $offset): ?array
     {
         $qb = $this->createQueryBuilder('podcast')
             ->andWhere('coreEntityId = :coreEntityId')

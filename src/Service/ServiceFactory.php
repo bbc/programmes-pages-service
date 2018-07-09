@@ -159,7 +159,7 @@ class ServiceFactory
         return $this->instances[NetworksService::class];
     }
 
-    public function getPodcastsServiceService(): PodcastsService
+    public function getPodcastsService(): PodcastsService
     {
         if (!isset($this->instances[PodcastsService::class])) {
             $this->instances[PodcastsService::class] = new PodcastsService(
