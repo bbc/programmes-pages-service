@@ -100,7 +100,7 @@ class VersionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('version')
             ->addSelect([
                 'versionTypes',
-                'CASE WHEN (IDENTITY(p.streamableVersion) = version.id) THEN 1 ELSE 0 AS HIDDEN isStreamable',
+                'CASE WHEN (IDENTITY(p.streamableVersion) = version.id) THEN 1 ELSE 0 END AS HIDDEN isStreamable',
             ])
             ->innerJoin('version.versionTypes', 'versionTypes')
             // This second join is a hack. We need to retrieve all the version types, but filter out

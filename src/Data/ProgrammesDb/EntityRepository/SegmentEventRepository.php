@@ -121,7 +121,7 @@ class SegmentEventRepository extends EntityRepository
             ->leftJoin('version.broadcasts', 'broadcast')
             ->andWhere('segmentEvent.segment IN (:dbIds)')
             // versions that have been broadcast come first
-            ->addSelect('CASE WHEN broadcast.startAt IS NULL THEN 1 ELSE 0 AS HIDDEN hasBroadcast')
+            ->addSelect('CASE WHEN broadcast.startAt IS NULL THEN 1 ELSE 0 END AS HIDDEN hasBroadcast')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->addOrderBy('hasBroadcast', 'ASC')
