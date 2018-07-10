@@ -62,7 +62,7 @@ class ServiceRepository extends EntityRepository
         $alias = 's';
         $qb = $this->createQueryBuilder($alias)
             ->select($alias, 'network')
-            ->addSelect('CASE WHEN network.position IS NULL THEN 1 ELSE 0 AS HIDDEN hasPosition')
+            ->addSelect('CASE WHEN network.position IS NULL THEN 1 ELSE 0 END AS HIDDEN hasPosition')
             ->join($alias . '.network', 'network')
             ->addOrderBy('hasPosition', 'ASC')
             ->addOrderBy('network.position', 'ASC')
