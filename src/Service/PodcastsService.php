@@ -26,20 +26,16 @@ class PodcastsService extends AbstractService
 
     public function findByCoreEntity(
         CoreEntity $coreEntity,
-        ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
     ): ?Podcast {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $coreEntity->getDbId(), $limit, $page, $ttl);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $coreEntity->getDbId(), $ttl);
 
         return $this->cache->getOrSet(
             $key,
             $ttl,
-            function () use ($coreEntity, $limit, $page) {
+            function () use ($coreEntity) {
                 $dbEntities = $this->repository->findByCoreEntityId(
-                    $coreEntity->getDbId(),
-                    $limit,
-                    $this->getOffset($limit, $page)
+                    $coreEntity->getDbId()
                 );
 
                 return $this->mapSingleEntity($dbEntities);
