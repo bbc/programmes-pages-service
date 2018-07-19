@@ -107,7 +107,7 @@ class VersionsService extends AbstractService
         );
     }
 
-    public function findLinkedVersionsForProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL)
+    public function findLinkedVersionsForProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL): array
     {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);
         return $this->cache->getOrSet(
