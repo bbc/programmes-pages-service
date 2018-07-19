@@ -140,6 +140,16 @@ class VersionRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
+    /**
+     * This method gets all of the special versions Faucet links against a ProgrammeItem. That is,
+     * the streamableVersion (the version that should be played out/linked to in playout), the
+     * canonicalVersion (the version that should be used to display segment events), and the
+     * downloadableVersion (the version that should be linked to for downloads/podcasts)
+     *
+     * @param string $programmeItemDbId
+     * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findLinkedVersionsForProgrammeItem(string $programmeItemDbId): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()

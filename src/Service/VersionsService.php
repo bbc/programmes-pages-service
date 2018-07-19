@@ -107,6 +107,22 @@ class VersionsService extends AbstractService
         );
     }
 
+    /**
+     * This method gets all of the special versions Faucet links against a ProgrammeItem. That is,
+     * the streamableVersion (the version that should be played out/linked to in playout), the
+     * canonicalVersion (the version that should be used to display segment events), and the
+     * downloadableVersion (the version that should be linked to for downloads/podcasts)
+     *
+     * It returns an array of those in the format below
+     *
+     * @param ProgrammeItem $programmeItem
+     * @param string $ttl
+     * @return array [
+     *      'streamableVersion' => Linked Streamable Version,
+     *      'downloadableVersion' => Linked Downloadable Version,
+     *      'canonicalVersion' => Linked version for Segment Events,
+     * ]
+     */
     public function findLinkedVersionsForProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL): array
     {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);
