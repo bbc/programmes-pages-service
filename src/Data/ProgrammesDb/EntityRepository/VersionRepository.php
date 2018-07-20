@@ -16,7 +16,7 @@ class VersionRepository extends EntityRepository
      * @var string[]
      */
     public const ALTERNATE_VERSION_TYPES = [
-        'AudioDescribed',
+        'DubbedAudioDescribed',
         'Signed',
     ];
 
