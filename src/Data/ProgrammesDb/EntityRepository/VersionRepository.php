@@ -7,10 +7,16 @@ use Doctrine\ORM\Query;
 
 class VersionRepository extends EntityRepository
 {
+    /**
+     * This is the list of versions that iPlayer does not playout at
+     * https://www.bbc.co.uk/iplayer/episode/{pid} but instead either
+     * https://www.bbc.co.uk/iplayer/episode/{pid}/sign or
+     * https://www.bbc.co.uk/iplayer/episode/{pid}/ad
+     *
+     * @var string[]
+     */
     public const ALTERNATE_VERSION_TYPES = [
         'AudioDescribed',
-        'DubbedAudioDescribed',
-        'OpenSubtitled',
         'Signed',
     ];
 
