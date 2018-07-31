@@ -174,6 +174,7 @@ class SegmentEventRepository extends EntityRepository
             ->where('IDENTITY(programmeItem.canonicalVersion) = version.id')
             ->andWhere('programmeItem.id = :dbId')
             ->addOrderBy('segmentEvent.position', 'ASC')
+            ->addOrderBy('segmentEvent.offset', 'ASC')
             ->addOrderBy('contributions.position', 'ASC')
             ->addOrderBy('contributor.sortName', 'ASC')
             ->setMaxResults($limit)
