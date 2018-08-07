@@ -25,7 +25,7 @@ class Podcast
      * @var CoreEntity
      *
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE", unique=true)
      */
     private $coreEntity;
 
