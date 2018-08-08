@@ -26,7 +26,7 @@ class OptionsMapper extends AbstractMapper
         'show_enhanced_navigation' => [ 'default' => false, 'cascades' => true ],
 
         // local options
-        'projectId' => [ 'default' => null, 'cascades' => true ],
+        'project_space' => [ 'default' => null, 'cascades' => true ],
         'comments_clips_id' => [ 'default' => null, 'cascades' => true ],
         'comments_clips_enabled' => [ 'default' => false, 'cascades' => true ],
         'comments_episodes_id' => [ 'default' => null, 'cascades' => true ],
