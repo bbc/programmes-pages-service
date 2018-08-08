@@ -224,4 +224,11 @@ abstract class ProgrammeItem extends Programme
     {
         $this->segmentEventCount = $segmentEventCount;
     }
+
+    public function clearVersionAssociations(): void
+    {
+        $this->setDownloadableVersion(null);
+        $this->setCanonicalVersion(null);
+        $this->setStreamableVersion(null);
+    }
 }
