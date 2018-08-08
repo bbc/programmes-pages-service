@@ -33,7 +33,7 @@ class CachingTest extends BaseCoreEntityMapperTestCase
             1,
             new Options(
                 [
-                    'projectId' => null,
+                    'project_space' => null,
                     'branding_id' => 'br-00002',
                     'language' => 'en',
                     'pulse_survey' => null,
