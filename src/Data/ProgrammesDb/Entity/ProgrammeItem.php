@@ -224,4 +224,17 @@ abstract class ProgrammeItem extends Programme
     {
         $this->segmentEventCount = $segmentEventCount;
     }
+
+    /**
+     * This method removes all linked versions from a ProgrammeItem
+     * It's used in a hack in faucet in order to work around a doctrine bug
+     * you won't generally need it.
+     * Please update this if adding new links to versions in this class
+     */
+    public function clearVersionAssociations(): void
+    {
+        $this->setDownloadableVersion(null);
+        $this->setCanonicalVersion(null);
+        $this->setStreamableVersion(null);
+    }
 }
