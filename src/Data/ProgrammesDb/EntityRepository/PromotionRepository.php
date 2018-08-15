@@ -59,8 +59,7 @@ class PromotionRepository extends EntityRepository
             // If the context has parents, get all promos relating to the current context and all superpromos of its
             // ancestors
             $qb->andWhere('promotion.context = :contextId OR (promotion.context IN (:parentIds) AND promotion.cascadesToDescendants = 1)')
-               ->andWhere('(promotionOfCoreEntity.id IS NULL OR promotionOfCoreEntity.id != :contextId)')
-               ->andWhere('(promotionOfImage.id IS NULL OR promotionOfImage.id != :contextId)')
+               ->andWhere('promotionOfCoreEntity.id IS NULL OR promotionOfCoreEntity.id != :contextId')
                ->setParameter('contextId', $contextId)
                ->setParameter('parentIds', $parentIds);
         } else {
