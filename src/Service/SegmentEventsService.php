@@ -47,7 +47,7 @@ class SegmentEventsService extends AbstractService
         ProgrammeItem $programmeItem,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
-        $ttl = CacheInterface::NORMAL
+        $ttl = CacheInterface::SHORT
     ): array {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $limit, $page, $ttl);
         return $this->cache->getOrSet(
