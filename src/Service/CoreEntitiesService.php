@@ -54,6 +54,38 @@ class CoreEntitiesService extends AbstractService
         );
     }
 
+    /**
+     * @param Pid[] $pids
+     * @param string $entityType
+     * @param string $ttl
+     * @return CoreEntity[]
+     */
+    public function findByPids(array $pids, string $entityType = 'CoreEntity', $ttl = CacheInterface::NORMAL): array
+    {
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+
+        $validPids = [];
+
+        foreach ($pids as $pid) {
+            if ($pid instanceof Pid) {
+                $validPids[] = (string) $pid;
+            } else {
+                throw new InvalidArgumentException('Called findByPids with an invalid type. Array must contain only Pids.');
+            }
+        }
+
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, implode('|', $validPids), $entityType, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($validPids, $entityType) {
+                $dbEntities = $this->repository->findByPids($validPids, $entityType);
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
+    }
+
     private function assertEntityType($entityType, $validEntityTypes)
     {
         if (!in_array($entityType, $validEntityTypes)) {
