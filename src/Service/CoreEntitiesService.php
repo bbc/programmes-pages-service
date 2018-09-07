@@ -60,7 +60,7 @@ class CoreEntitiesService extends AbstractService
      * @param string $ttl
      * @return CoreEntity[]
      */
-    public function findByPids(array $pids, string $entityType = 'CoreEntity', $ttl = CacheInterface::NORMAL)
+    public function findByPids(array $pids, string $entityType = 'CoreEntity', $ttl = CacheInterface::NORMAL): array
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
