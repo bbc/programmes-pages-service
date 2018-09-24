@@ -54,7 +54,7 @@ class FindOnNowByServiceTest extends AbstractDatabaseTest
     {
         return [
             // [cutoffDateTime, expectedPid, expectedProgrammeItemId, expectedTleoId, expectedDbQueries]
-            [new DateTimeImmutable('2011-08-05 15:20:00'), 'b0000003', 'p0000003', 8, 2],
+            [new DateTimeImmutable('2011-08-05 15:20:00'), 'b0000003', 'p0000003', 9, 2],
             [new DateTimeImmutable('2011-09-05 15:00:00'), 'b0000006', 'p0000001', 1, 1],
             [new DateTimeImmutable('2011-09-05 16:00:00'), 'b0000006', 'p0000001', 1, 1],
         ];

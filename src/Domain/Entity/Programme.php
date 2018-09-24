@@ -17,7 +17,7 @@ abstract class Programme extends CoreEntity
     private $isStreamable;
 
     /** @var bool */
-    private $isStreamableAlternatate;
+    private $isStreamableAlternate;
 
     /** @var int|null */
     private $position;
@@ -75,7 +75,7 @@ abstract class Programme extends CoreEntity
 
         $this->hasSupportingContent = $hasSupportingContent;
         $this->isStreamable = $isStreamable;
-        $this->isStreamableAlternatate = $isStreamableAlternate;
+        $this->isStreamableAlternate = $isStreamableAlternate;
         $this->parent = $parent;
         $this->position = $position;
         $this->genres = $genres;
@@ -94,9 +94,9 @@ abstract class Programme extends CoreEntity
         return $this->isStreamable;
     }
 
-    public function isStreamableAlternatate(): bool
+    public function isStreamableAlternate(): bool
     {
-        return $this->isStreamableAlternatate;
+        return $this->isStreamableAlternate;
     }
 
     public function getPosition(): ?int

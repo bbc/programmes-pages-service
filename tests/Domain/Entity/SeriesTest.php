@@ -56,7 +56,7 @@ class SeriesTest extends TestCase
         $this->assertEquals(1102, $programme->getRelatedLinksCount());
         $this->assertEquals(true, $programme->hasSupportingContent());
         $this->assertEquals(true, $programme->isStreamable());
-        $this->assertEquals(true, $programme->isStreamableAlternatate());
+        $this->assertEquals(true, $programme->isStreamableAlternate());
         $this->assertEquals(1103, $programme->getContributionsCount());
         $this->assertEquals(1201, $programme->getAggregatedBroadcastsCount());
         $this->assertEquals(1202, $programme->getAggregatedEpisodesCount());
