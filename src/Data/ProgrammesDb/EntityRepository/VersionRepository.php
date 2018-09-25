@@ -190,8 +190,8 @@ class VersionRepository extends EntityRepository
             ->leftJoin('p.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.competitionWarning', 'competitionWarning')
             ->leftJoin('competitionWarning.programmeItem', 'competitionWarningProgrammeItem')
-            ->leftJoin('p.streamableVersion', 'streamableVersion')
-            ->leftJoin('streamableVersion.versionTypes', 'streamableVersionTypes')
+            ->innerJoin('p.streamableVersion', 'streamableVersion')
+            ->innerJoin('streamableVersion.versionTypes', 'streamableVersionTypes')
             ->where('p.id IN (:dbId)')
             ->setParameter('dbId', $programmeItemsDbId);
 
