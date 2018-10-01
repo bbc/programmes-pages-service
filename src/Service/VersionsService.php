@@ -92,21 +92,6 @@ class VersionsService extends AbstractService
         );
     }
 
-    public function findAvailableByProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL): array
-    {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);
-
-        return $this->cache->getOrSet(
-            $key,
-            $ttl,
-            function () use ($programmeItem) {
-                $dbEntities = $this->repository->findAvailableByProgrammeItem($programmeItem->getDbId());
-
-                return $this->mapManyEntities($dbEntities);
-            }
-        );
-    }
-
     /**
      * This method gets all of the special versions Faucet links against a ProgrammeItem. That is,
      * the streamableVersion (the version that should be played out/linked to in playout), the
@@ -153,6 +138,24 @@ class VersionsService extends AbstractService
                     $dataArray['canonicalVersion'] = $this->mapSingleEntity($programmeEntity['canonicalVersion']);
                 }
                 return $dataArray;
+            }
+        );
+    }
+
+    /**
+     * @param ProgrammeItem $programmeItem
+     * @param string $ttl
+     * @return mixed
+     */
+    public function findAlternateVersionsForProgrammeItem(ProgrammeItem $programmeItem, $ttl = CacheInterface::NORMAL)
+    {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeItem->getDbId(), $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programmeItem) {
+                $dbEntity = $this->repository->findAlternateVersionsForProgrammeItem((string) $programmeItem->getDbId());
+                return $this->mapManyEntities($dbEntity);
             }
         );
     }

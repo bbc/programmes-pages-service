@@ -123,25 +123,18 @@ class VersionRepository extends EntityRepository
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findAvailableByProgrammeItem(string $programmeDbId): array
+    public function findAlternateVersionsForProgrammeItem(string $programmeDbId): array
     {
-        // YIKES! versionTypes is a many-to-many join, that could result in
-        // an increase of rows returned by the DB and the potential for slow DB
-        // queries as per https://ocramius.github.io/blog/doctrine-orm-optimization-hydration/.
-        // Except it doesn't - the vast majority of Versions only have one
-        // versionType. At time of writing this comment (June 2016) only 0.5% of
-        // the Versions in PIPS have 2 or more VersionTypes and the most
-        // VersionTypes a version has is 4. Creating an few extra rows in very
-        // rare cases is way more efficient that having to do a two-step
-        // hydration process.
-
         $qb = $this->createQueryBuilder('version')
-            ->addSelect(['versionTypes'])
-            ->leftJoin('version.versionTypes', 'versionTypes')
-            ->andWhere('version.programmeItem = :dbId')
-            ->andWhere('version.streamable = 1 OR version.downloadable = 1')
-            ->addOrderBy('version.pid', 'ASC')
-            ->setParameter('dbId', $programmeDbId);
+            ->addSelect([
+                'versionTypes',
+            ])
+            ->innerJoin('version.versionTypes', 'versionTypes')
+            ->where('p.id = :dbId')
+            ->andWhere('version.streamable = 1')
+            ->andWhere('versionTypes.type IN (:alternateVersionTypes)')
+            ->setParameter('dbId', $programmeDbId)
+            ->setParameter('alternateVersionTypes', self::ALTERNATE_VERSION_TYPES);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

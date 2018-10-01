@@ -57,6 +57,13 @@ class VersionFixture extends AbstractFixture implements DependentFixtureInterfac
         $streamableEpisode->setStreamableVersion($streamableVersion);
         $streamableEpisode->setStreamable(true);
 
+        // Alternate versions
+        $alternateEpisode = $this->buildEpisode('p0000008', 'Alternate Episode', false, false);
+        $signedType = $this->buildVersionType('Signed', 'Signed');
+        $this->buildVersion('v0000012', $alternateEpisode, true, false, [$alternateType]);
+        $this->buildVersion('v0000013', $alternateEpisode, true, false, [$signedType]);
+        $this->buildVersion('v0000014', $alternateEpisode, true, false, [$originalType]);
+
         $manager->flush();
     }
 
