@@ -192,8 +192,8 @@ class VersionRepository extends EntityRepository
             ->leftJoin('competitionWarning.programmeItem', 'competitionWarningProgrammeItem')
             ->innerJoin('p.streamableVersion', 'streamableVersion')
             ->innerJoin('streamableVersion.versionTypes', 'streamableVersionTypes')
-            ->where('p.id IN (:dbId)')
-            ->setParameter('dbId', $programmeItemsDbId);
+            ->where('p.id IN (:dbIds)')
+            ->setParameter('dbIds', $programmeItemsDbId);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
