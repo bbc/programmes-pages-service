@@ -185,7 +185,7 @@ class VersionsService extends AbstractService
                 foreach ($programmeEntities as $programmeEntity) {
                     if (!empty($programmeEntity['streamableVersion'])) {
                         $programmeEntity['streamableVersion']['programmeItem'] = $programmeEntity;
-                        $dataArray[] = $this->mapSingleEntity($programmeEntity['streamableVersion']);
+                        $dataArray[$programmeEntity['pid']] = $this->mapSingleEntity($programmeEntity['streamableVersion']);
                     }
                 }
 
