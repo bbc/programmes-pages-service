@@ -169,9 +169,10 @@ class VersionsService extends AbstractService
      */
     public function findStreamableVersionForProgrammeItems(array $programmeItems, $ttl = CacheInterface::NORMAL): array
     {
-        $programmeItemsIds = array_map(function ($item) {
-            return $item->getDbId();
-        }, $programmeItems);
+        $programmeItemsIds = [];
+        foreach ($programmeItems as $programmeItem) {
+            $programmeItemsIds[] = $programmeItem->getDbId();
+        }
 
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, implode('|', $programmeItemsIds), $ttl);
         return $this->cache->getOrSet(
