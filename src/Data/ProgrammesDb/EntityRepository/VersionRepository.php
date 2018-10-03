@@ -173,6 +173,31 @@ class VersionRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
+    /**
+     * Find for each clip the version that should be played out/linked to in playout
+     *
+     * @param int[] $programmeItemsDbId
+     * @return array
+     */
+    public function findStreamableVersionForProgrammeItems(array $programmeItemsDbId): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select([
+                'p', 'streamableVersion', 'streamableVersionTypes',
+                'masterBrand', 'competitionWarning', 'competitionWarningProgrammeItem',
+            ])
+            ->from('ProgrammesPagesService:ProgrammeItem', 'p')
+            ->leftJoin('p.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.competitionWarning', 'competitionWarning')
+            ->leftJoin('competitionWarning.programmeItem', 'competitionWarningProgrammeItem')
+            ->innerJoin('p.streamableVersion', 'streamableVersion')
+            ->innerJoin('streamableVersion.versionTypes', 'streamableVersionTypes')
+            ->where('p.id IN (:dbIds)')
+            ->setParameter('dbIds', $programmeItemsDbId);
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+    }
+
     public function createQueryBuilder($alias, $indexBy = null)
     {
         // Any time versions are fetched here they must be inner joined to

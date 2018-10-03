@@ -159,4 +159,38 @@ class VersionsService extends AbstractService
             }
         );
     }
+
+    /**
+     * Find for each clip the version that should be played out/linked to in playout
+     *
+     * @param ProgrammeItem[] $programmeItems
+     * @param string $ttl
+     * @return Version[]
+     */
+    public function findStreamableVersionForProgrammeItems(array $programmeItems, $ttl = CacheInterface::NORMAL): array
+    {
+        $programmeItemsIds = [];
+        foreach ($programmeItems as $programmeItem) {
+            $programmeItemsIds[] = $programmeItem->getDbId();
+        }
+
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, implode('|', $programmeItemsIds), $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programmeItemsIds) {
+                $programmeEntities = $this->repository->findStreamableVersionForProgrammeItems($programmeItemsIds);
+                $dataArray = [];
+
+                foreach ($programmeEntities as $programmeEntity) {
+                    if (!empty($programmeEntity['streamableVersion'])) {
+                        $programmeEntity['streamableVersion']['programmeItem'] = $programmeEntity;
+                        $dataArray[$programmeEntity['pid']] = $this->mapSingleEntity($programmeEntity['streamableVersion']);
+                    }
+                }
+
+                return $dataArray;
+            }
+        );
+    }
 }

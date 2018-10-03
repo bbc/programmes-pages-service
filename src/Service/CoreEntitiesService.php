@@ -81,7 +81,12 @@ class CoreEntitiesService extends AbstractService
             $ttl,
             function () use ($validPids, $entityType) {
                 $dbEntities = $this->repository->findByPids($validPids, $entityType);
-                return $this->mapManyEntities($dbEntities);
+                $mapEntities = $this->mapManyEntities($dbEntities);
+                $indexedEntities = [];
+                foreach ($mapEntities as $entity) {
+                    $indexedEntities[(string)$entity->getPid()] = $entity;
+                }
+                return $indexedEntities;
             }
         );
     }
