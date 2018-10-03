@@ -84,7 +84,7 @@ class CoreEntitiesService extends AbstractService
                 $mapEntities = $this->mapManyEntities($dbEntities);
                 $indexedEntities = [];
                 foreach ($mapEntities as $entity) {
-                    $indexedEntities[(string)$entity->getPid()] = $entity;
+                    $indexedEntities[(string) $entity->getPid()] = $entity;
                 }
                 return $indexedEntities;
             }
