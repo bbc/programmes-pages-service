@@ -58,11 +58,12 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'mid' => 'bbc_three',
             'name' => 'Three',
             'network' => $networkDbEntity,
+            'streamableInPlayspace' => true,
             'competitionWarning' => null,
         ];
 
         $mid = new Mid('bbc_three');
-        $expectedEntity = new MasterBrand($mid, 'Three', $this->mockDefaultImage, $this->mockNetwork);
+        $expectedEntity = new MasterBrand($mid, 'Three', $this->mockDefaultImage, $this->mockNetwork, true);
 
         $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
@@ -81,11 +82,12 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'id' => 1,
             'mid' => 'bbc_three',
             'name' => 'Three',
+            'streamableInPlayspace' => true,
             'competitionWarning' => null,
         ];
 
         $mid = new Mid('bbc_three');
-        $expectedEntity = new MasterBrand($mid, 'Three', $this->mockDefaultImage, new UnfetchedNetwork());
+        $expectedEntity = new MasterBrand($mid, 'Three', $this->mockDefaultImage, new UnfetchedNetwork(), true);
 
         $mapper = $this->getMapper();
         $this->assertEquals($expectedEntity, $mapper->getDomainModel($dbEntityArray));
@@ -98,6 +100,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'mid' => 'bbc_three',
             'name' => 'Three',
             'network' => null,
+            'streamableInPlayspace' => true,
             'competitionWarning' => null,
         ];
 
@@ -125,12 +128,13 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'mid' => 'bbc_three',
             'name' => 'Three',
             'network' => $networkDbEntity,
+            'streamableInPlayspace' => true,
             'image' => $imageDbEntity,
             'competitionWarning' => null,
         ];
 
         $mid = new Mid('bbc_three');
-        $expectedEntity = new MasterBrand($mid, 'Three', $expectedImageDomainEntity, $this->mockNetwork);
+        $expectedEntity = new MasterBrand($mid, 'Three', $expectedImageDomainEntity, $this->mockNetwork, true);
 
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
@@ -156,6 +160,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'mid' => 'bbc_three',
             'name' => 'Three',
             'network' => $networkDbEntity,
+            'streamableInPlayspace' => true,
             'competitionWarning' => $versionDbEntity,
         ];
 
@@ -164,6 +169,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'Three',
             $this->mockDefaultImage,
             $this->mockNetwork,
+            true,
             $expectedVersionDomainEntity
         );
 
@@ -185,6 +191,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'mid' => 'bbc_three',
             'name' => 'Three',
             'network' => $networkDbEntity,
+            'streamableInPlayspace' => false,
             'competitionWarning' => $versionDbEntity,
         ];
 
@@ -193,6 +200,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'Three',
             $this->mockDefaultImage,
             $this->mockNetwork,
+            false,
             null
         );
 
@@ -211,6 +219,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'id' => 1,
             'mid' => 'bbc_three',
             'name' => 'Three',
+            'streamableInPlayspace' => false,
             'network' => $networkDbEntity,
         ];
 
@@ -219,6 +228,7 @@ class MasterBrandMapperTest extends BaseMapperTestCase
             'Three',
             $this->mockDefaultImage,
             $this->mockNetwork,
+            false,
             $expectedVersionDomainEntity
         );
 

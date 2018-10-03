@@ -13,7 +13,8 @@ class UnfetchedMasterBrand extends MasterBrand
             new NullMid(),
             '',
             new UnfetchedImage(),
-            new UnfetchedNetwork()
+            new UnfetchedNetwork(),
+            false
         );
     }
 }

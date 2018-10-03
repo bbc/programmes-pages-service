@@ -103,6 +103,13 @@ class MasterBrand
      */
     private $endDate;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $streamableInPlayspace = false;
+
     public function __construct(string $mid, string $pid, string $name)
     {
         $this->mid = $mid;
@@ -225,5 +232,15 @@ class MasterBrand
     public function setEndDate(?DateTime $endDate): void
     {
         $this->endDate = $endDate;
+    }
+
+    public function getStreamableInPlayspace(): bool
+    {
+        return $this->streamableInPlayspace;
+    }
+
+    public function setStreamableInPlayspace(bool $streamableInPlayspace)
+    {
+        $this->streamableInPlayspace = $streamableInPlayspace;
     }
 }

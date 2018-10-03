@@ -44,6 +44,7 @@ class MasterBrandMapper extends AbstractMapper
                     $dbMasterBrand['name'],
                     $this->getImageModel($dbMasterBrand),
                     $network,
+                    $dbMasterBrand['streamableInPlayspace'],
                     $this->getCompetitionWarningModel($dbMasterBrand)
                 );
             }

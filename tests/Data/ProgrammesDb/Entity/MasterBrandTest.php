@@ -64,6 +64,7 @@ class MasterBrandTest extends TestCase
             ['Position', 1],
             ['StartDate', new DateTime()],
             ['EndDate', new DateTime()],
+            ['StreamableInPlayspace', true],
         ];
     }
 }
