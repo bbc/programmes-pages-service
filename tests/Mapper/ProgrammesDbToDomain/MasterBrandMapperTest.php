@@ -170,6 +170,35 @@ class MasterBrandMapperTest extends BaseMapperTestCase
         $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
     }
 
+    public function testGetDomainModelWithEmbargoedCompetitionWarning()
+    {
+        $networkDbEntity = ['nid' => 'bbc_one'];
+        $versionDbEntity = ['pid' => 'p01m5mss', 'programmeItem' => null];
+
+        $this->setupNetworkMapper($networkDbEntity, $this->mockNetwork);
+
+        $this->mockVersionMapper->expects($this->never())
+            ->method('getDomainModel');
+
+        $dbEntityArray = [
+            'id' => 1,
+            'mid' => 'bbc_three',
+            'name' => 'Three',
+            'network' => $networkDbEntity,
+            'competitionWarning' => $versionDbEntity,
+        ];
+
+        $expectedEntity = new MasterBrand(
+            new Mid('bbc_three'),
+            'Three',
+            $this->mockDefaultImage,
+            $this->mockNetwork,
+            null
+        );
+
+        $this->assertEquals($expectedEntity, $this->getMapper()->getDomainModel($dbEntityArray));
+    }
+
     public function testGetDomainModelWithoutFetchingCompetitionWarning()
     {
         $networkDbEntity = ['nid' => 'bbc_one'];
