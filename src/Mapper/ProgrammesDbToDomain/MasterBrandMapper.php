@@ -91,6 +91,12 @@ class MasterBrandMapper extends AbstractMapper
             return null;
         }
 
+        if (array_key_exists('programmeItem', $dbMasterBrand[$key]) && is_null($dbMasterBrand[$key]['programmeItem'])) {
+            // This can happen when programmeItems attached to competition warnings
+            // get embargoed.
+            return null;
+        }
+
         return $this->mapperFactory->getVersionMapper()->getDomainModel($dbMasterBrand[$key]);
     }
 }
