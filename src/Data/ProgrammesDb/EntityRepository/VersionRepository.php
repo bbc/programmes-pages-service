@@ -179,7 +179,7 @@ class VersionRepository extends EntityRepository
      * @param int[] $programmeItemsDbId
      * @return array
      */
-    public function findStreamableVersionsForProgrammeItems(array $programmeItemsDbId): array
+    public function findStreamableVersionForProgrammeItems(array $programmeItemsDbId): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select([

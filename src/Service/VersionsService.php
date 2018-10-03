@@ -179,7 +179,7 @@ class VersionsService extends AbstractService
             $key,
             $ttl,
             function () use ($programmeItemsIds) {
-                $programmeEntities = $this->repository->findStreamableVersionsForProgrammeItems($programmeItemsIds);
+                $programmeEntities = $this->repository->findStreamableVersionForProgrammeItems($programmeItemsIds);
                 $dataArray = [];
 
                 foreach ($programmeEntities as $programmeEntity) {
