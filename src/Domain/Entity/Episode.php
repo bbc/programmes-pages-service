@@ -96,7 +96,7 @@ class Episode extends ProgrammeItem
 
     public function isPlayable(): bool
     {
-        if ($this->isAudio() && $this->getMasterBrand() && ! $this->getMasterBrand()->isStreamableInPlayspace()) {
+        if ($this->isAudio() && !($this->getMasterBrand() && $this->getMasterBrand()->isStreamableInPlayspace())) {
             return false;
         }
         return $this->isStreamable();
