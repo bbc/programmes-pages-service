@@ -93,4 +93,12 @@ class Episode extends ProgrammeItem
     {
         return $this->availableClipsCount;
     }
+
+    public function isPlayable(): bool
+    {
+        if ($this->isAudio() && $this->getMasterBrand() && ! $this->getMasterBrand()->isStreamableInPlayspace()) {
+            return false;
+        }
+        return $this->isStreamable();
+    }
 }

@@ -22,7 +22,7 @@ class MasterBrand
     private $network;
 
     /** @var bool */
-    private $isStreamableInPlayspace;
+    private $streamableInPlayspace;
 
     /** @var Version|null */
     private $competitionWarning;
@@ -32,14 +32,14 @@ class MasterBrand
         string $name,
         Image $image,
         Network $network,
-        bool $isStreamableInPlayspace,
+        bool $streamableInPlayspace,
         ?Version $competitionWarning = null
     ) {
         $this->mid = $mid;
         $this->name = $name;
         $this->image = $image;
         $this->network = $network;
-        $this->isStreamableInPlayspace = $isStreamableInPlayspace;
+        $this->streamableInPlayspace = $streamableInPlayspace;
         $this->competitionWarning = $competitionWarning;
     }
 
@@ -60,7 +60,7 @@ class MasterBrand
 
     public function isStreamableInPlayspace(): bool
     {
-        return $this->isStreamableInPlayspace;
+        return $this->streamableInPlayspace;
     }
 
     /**
