@@ -25,12 +25,14 @@ class MasterBrandTest extends TestCase
             $mid,
             'Name',
             $image,
-            $network
+            $network,
+            true
         );
 
         $this->assertEquals($mid, $masterBrand->getMid());
         $this->assertEquals('Name', $masterBrand->getName());
         $this->assertEquals($image, $masterBrand->getImage());
+        $this->assertEquals(true, $masterBrand->isStreamableInPlayspace());
         $this->assertEquals($network, $masterBrand->getNetwork());
     }
 
@@ -47,6 +49,7 @@ class MasterBrandTest extends TestCase
             'Name',
             $image,
             $network,
+            true,
             $version
         );
 
@@ -71,6 +74,7 @@ class MasterBrandTest extends TestCase
             'Name',
             $image,
             $network,
+            true,
             new UnfetchedVersion()
         );
 
@@ -94,7 +98,8 @@ class MasterBrandTest extends TestCase
             $mid,
             'Name',
             $image,
-            $network
+            $network,
+            true
         );
 
         $masterBrand->getNetwork();

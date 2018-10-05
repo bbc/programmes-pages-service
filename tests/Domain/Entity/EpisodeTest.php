@@ -6,6 +6,7 @@ use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Image;
+use BBC\ProgrammesPagesService\Domain\Entity\MasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
@@ -335,5 +336,59 @@ class EpisodeTest extends TestCase
         );
 
         $programme->getOptions();
+    }
+
+    /**
+     * @dataProvider playableCasesDataProvider
+     */
+    public function testPlayableCases($mediaType, $masterbrand, $streamable, $expectedPlayable)
+    {
+
+        $programme = new Episode(
+            [0],
+            new Pid('p01m5mss'),
+            'Title',
+            'Search Title',
+            new Synopses('Short Synopsis', 'Longest Synopsis', ''),
+            new Image(new Pid('p0000001'), 'Title', 'ShortSynopsis', 'LongestSynopsis', 'standard', 'jpg'),
+            0,
+            0,
+            true,
+            $streamable,
+            false,
+            3,
+            $mediaType,
+            0,
+            0,
+            0,
+            0,
+            false,
+            new UnfetchedOptions(),
+            null,
+            null,
+            $masterbrand
+        );
+
+        $this->assertEquals($expectedPlayable, $programme->isPlayable());
+    }
+
+    public function playableCasesDataProvider()
+    {
+        return [
+            [MediaTypeEnum::AUDIO, $this->mockMasterBrand(true), true, true],
+            [MediaTypeEnum::VIDEO, $this->mockMasterBrand(false), true, true],
+            [MediaTypeEnum::AUDIO, $this->mockMasterBrand(false), true, false],
+            [MediaTypeEnum::UNKNOWN, $this->mockMasterBrand(false), true, true],
+            [MediaTypeEnum::AUDIO, $this->mockMasterBrand(true), false, false],
+            [MediaTypeEnum::AUDIO, null, true, false],
+            [MediaTypeEnum::VIDEO, $this->mockMasterBrand(true), false, false],
+        ];
+    }
+
+    private function mockMasterBrand($isStreamableInPlayspace)
+    {
+        return $this->createConfiguredMock(MasterBrand::class, [
+            'isStreamableInPlayspace' => $isStreamableInPlayspace,
+        ]);
     }
 }

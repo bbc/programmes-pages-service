@@ -167,4 +167,9 @@ abstract class ProgrammeItem extends Programme
     {
         return $this->isExternallyEmbeddable;
     }
+
+    public function isPlayable(): bool
+    {
+        return $this->isStreamable();
+    }
 }
