@@ -96,7 +96,15 @@ class Episode extends ProgrammeItem
 
     public function hasPlayableDestination(): bool
     {
-        if ($this->isAudio() && !($this->getMasterBrand() && $this->getMasterBrand()->isStreamableInPlayspace())) {
+        $isAudio = $this->isAudio();
+        $isVideo = $this->isVideo();
+        $isPlayspaceMasterbrand = ($this->getMasterBrand() && $this->getMasterBrand()->isStreamableInPlayspace());
+        if (!$isAudio && !$isVideo) {
+            // Episodes with no media type will not play out anywhere
+            return false;
+        }
+        if ($isAudio && !$isPlayspaceMasterbrand) {
+            // Audio episodes not supported by Playspace will not playout anywhere
             return false;
         }
         return $this->isStreamable();
