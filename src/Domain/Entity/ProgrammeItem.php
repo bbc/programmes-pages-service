@@ -168,7 +168,19 @@ abstract class ProgrammeItem extends Programme
         return $this->isExternallyEmbeddable;
     }
 
-    public function isPlayable(): bool
+    /**
+     * This function checks whether a programmeItem is
+     * a) streamable
+     * b) has an actual place it can be played out (sounds or iPlayer)
+     *
+     * It is possible for something to be streamable (available in the data model)
+     * but for sounds/iPlayer/programmes not to want to play it out.
+     *
+     * This function covers that case.
+     *
+     * @return bool
+     */
+    public function hasPlayableDestination(): bool
     {
         return $this->isStreamable();
     }

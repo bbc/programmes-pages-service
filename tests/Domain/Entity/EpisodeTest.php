@@ -369,7 +369,7 @@ class EpisodeTest extends TestCase
             $masterbrand
         );
 
-        $this->assertEquals($expectedPlayable, $programme->isPlayable());
+        $this->assertEquals($expectedPlayable, $programme->hasPlayableDestination());
     }
 
     public function playableCasesDataProvider()
