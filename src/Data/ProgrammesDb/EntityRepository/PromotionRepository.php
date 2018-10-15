@@ -49,6 +49,7 @@ class PromotionRepository extends EntityRepository
             ->andWhere('promotion.startDate <= :datetime')
             ->andWhere('promotion.endDate > :datetime')
             ->andWhere('promotion.promotionOfCoreEntity is not null OR promotion.promotionOfImage is not null')
+            ->andWhere('promotionOfCoreEntity.isEmbargoed = 0 OR promotionOfImage.isEmbargoed = 0')
             ->addOrderBy('promotion.weighting', 'ASC')
             ->addOrderBy('relatedLinks.position', 'ASC')
             ->setFirstResult($offset)
