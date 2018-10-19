@@ -378,7 +378,7 @@ class EpisodeTest extends TestCase
             [MediaTypeEnum::AUDIO, $this->mockMasterBrand(true), true, true],
             [MediaTypeEnum::VIDEO, $this->mockMasterBrand(false), true, true],
             [MediaTypeEnum::AUDIO, $this->mockMasterBrand(false), true, false],
-            [MediaTypeEnum::UNKNOWN, $this->mockMasterBrand(false), true, true],
+            [MediaTypeEnum::UNKNOWN, $this->mockMasterBrand(true), true, false],
             [MediaTypeEnum::AUDIO, $this->mockMasterBrand(true), false, false],
             [MediaTypeEnum::AUDIO, null, true, false],
             [MediaTypeEnum::VIDEO, $this->mockMasterBrand(true), false, false],
