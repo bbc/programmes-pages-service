@@ -123,18 +123,14 @@ class VersionsService extends AbstractService
                 ];
 
                 if (!empty($programmeEntity['streamableVersion'])) {
-                    // What could possibly go wrong?
-                    $programmeEntity['streamableVersion']['programmeItem'] = $programmeEntity;
                     $dataArray['streamableVersion'] = $this->mapSingleEntity($programmeEntity['streamableVersion']);
                 }
 
                 if (!empty($programmeEntity['downloadableVersion'])) {
-                    $programmeEntity['downloadableVersion']['programmeItem'] = $programmeEntity;
                     $dataArray['downloadableVersion'] = $this->mapSingleEntity($programmeEntity['downloadableVersion']);
                 }
 
                 if (!empty($programmeEntity['canonicalVersion'])) {
-                    $programmeEntity['canonicalVersion']['programmeItem'] = $programmeEntity;
                     $dataArray['canonicalVersion'] = $this->mapSingleEntity($programmeEntity['canonicalVersion']);
                 }
                 return $dataArray;
@@ -184,11 +180,9 @@ class VersionsService extends AbstractService
 
                 foreach ($programmeEntities as $programmeEntity) {
                     if (!empty($programmeEntity['streamableVersion'])) {
-                        $programmeEntity['streamableVersion']['programmeItem'] = $programmeEntity;
                         $dataArray[$programmeEntity['pid']] = $this->mapSingleEntity($programmeEntity['streamableVersion']);
                     }
                 }
-
                 return $dataArray;
             }
         );

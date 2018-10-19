@@ -246,23 +246,6 @@ class ProgrammesService extends AbstractService
         );
     }
 
-    /**
-     * Full Find By Pid - with extras for playout pages
-     */
-    public function findProgrammeItemByPidForPlayout(Pid $pid, $ttl = CacheInterface::NORMAL): ?ProgrammeItem
-    {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $pid, $ttl);
-
-        return $this->cache->getOrSet(
-            $key,
-            $ttl,
-            function () use ($pid) {
-                $dbEntity = $this->repository->findProgrammeItemByPidForPlayout($pid);
-                return $this->mapSingleEntity($dbEntity);
-            }
-        );
-    }
-
     public function findEpisodeGuideChildren(
         Programme $programme,
         ?int $limit = self::DEFAULT_LIMIT,

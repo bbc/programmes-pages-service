@@ -196,25 +196,6 @@ QUERY;
     }
 
     /**
-     * Full Find By Pid - with extras for playout pages
-     */
-    public function findProgrammeItemByPidForPlayout(string $pid): ?array
-    {
-        $qb = $this->findByPidFullCommon($pid, 'ProgrammeItem');
-        $qb->addSelect(['competitionWarning', 'competitionWarningProgrammeItem'])
-            ->leftJoin('masterBrand.competitionWarning', 'competitionWarning')
-            ->leftJoin('competitionWarning.programmeItem', 'competitionWarningProgrammeItem');
-
-        $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
-        if (!$result) {
-            return $result;
-        }
-        $this->addToAncestryCache([$result]);
-        $withHydratedParents = $this->resolveParents([$result]);
-        return $this->resolveCategories($withHydratedParents)[0];
-    }
-
-    /**
      * @param string[] $pids
      * @param string $entityType
      * @return array
@@ -266,6 +247,24 @@ QUERY;
             ->leftJoin('programme.masterBrand', 'masterBrand')
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('masterBrand.image', 'mbImage')
+            ->andWhere("programme.id IN(:ids)")
+            ->setParameter('ids', $ids)
+            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $this->addToAncestryCache($results);
+        return $results;
+    }
+
+    public function findByIdsForPlayout(array $ids): array
+    {
+        $results = $this->createQueryBuilder('programme')
+            ->addSelect(['image', 'masterBrand', 'network', 'mbImage', 'competitionWarning', 'competitionWarningProgrammeItem'])
+            ->leftJoin('programme.image', 'image')
+            ->leftJoin('programme.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->leftJoin('masterBrand.competitionWarning', 'competitionWarning')
+            ->leftJoin('competitionWarning.programmeItem', 'competitionWarningProgrammeItem')
             ->andWhere("programme.id IN(:ids)")
             ->setParameter('ids', $ids)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
