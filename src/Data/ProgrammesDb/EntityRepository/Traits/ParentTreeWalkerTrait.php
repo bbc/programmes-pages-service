@@ -111,6 +111,21 @@ trait ParentTreeWalkerTrait
         return $entities;
     }
 
+    protected function ancestryIdsToString(array $ancestry): string
+    {
+        return implode(',', $ancestry) . ',';
+    }
+
+    protected function getParentIdsFromAncestry(string $ancestry): array
+    {
+        // $ancestry contains a string of all IDs including the current one with
+        // a trailing comma at the end (which makes it an empty item when exploding)
+        // Thus for parent ids we want an array of all but the two items (which
+        // is the current id and null)
+        $ancestors = explode(',', $ancestry, -2);
+        return $ancestors ?? [];
+    }
+
     /**
      * Using the potential ancestors as a source, recursively set the parents into place
      *
@@ -206,15 +221,5 @@ trait ParentTreeWalkerTrait
         }
         $entity[$key] = $this->setDeepKey($entity[$key], $valueToSet, $keyPath);
         return $entity;
-    }
-
-    private function getParentIdsFromAncestry(string $ancestry): array
-    {
-        // $ancestry contains a string of all IDs including the current one with
-        // a trailing comma at the end (which makes it an empty item when exploding)
-        // Thus for parent ids we want an array of all but the two items (which
-        // is the current id and null)
-        $ancestors = explode(',', $ancestry, -2);
-        return $ancestors ?? [];
     }
 }
