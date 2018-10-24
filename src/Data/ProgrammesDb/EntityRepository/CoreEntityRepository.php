@@ -31,6 +31,8 @@ class CoreEntityRepository extends MaterializedPathRepository
         'Franchise',
     ];
 
+    const DB_GROUP_TYPES = ['collection', 'season', 'franchise', 'gallery'];
+
     private $ancestryCache = [];
 
     public function findTleosByCategory(
@@ -184,7 +186,36 @@ QUERY;
      */
     public function findByPidFull(string $pid, string $entityType = 'CoreEntity'): ?array
     {
-        $qb = $this->findByPidFullCommon($pid, $entityType);
+        $qb = $this->findFullCommon($entityType);
+        $qb->andWhere('entity.pid = :pid')
+            ->setParameter('pid', $pid);
+
+        $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        if (!$result) {
+            return $result;
+        }
+        $this->addToAncestryCache([$result]);
+
+        if (in_array($result['type'], self::DB_GROUP_TYPES)) {
+            // If we have a group, we need to do something slightly different to hydrate the right info
+            // Basically we do a findByPidFull on the parent (if set) and get the categories
+            // etc on that.
+            return $this->resolveGroupAncestry($result);
+        }
+        $withHydratedParents = $this->resolveParents([$result]);
+        return $this->resolveCategories($withHydratedParents)[0];
+    }
+
+    /**
+     * Full Find By Pid
+     *
+     * This resolves all parents
+     */
+    public function findByIdFull(int $dbId, string $entityType = 'CoreEntity'): ?array
+    {
+        $qb = $this->findFullCommon($entityType);
+        $qb->andWhere('entity.id = :id')
+            ->setParameter('id', $dbId);
 
         $result = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
         if (!$result) {
@@ -630,7 +661,7 @@ QUERY;
         return $cached;
     }
 
-    private function findByPidFullCommon(string $pid, string $entityType): QueryBuilder
+    private function findFullCommon(string $entityType): QueryBuilder
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
 
@@ -655,9 +686,7 @@ QUERY;
             ->leftJoin('masterBrand.image', 'mbImage')
             ->leftJoin('masterBrand.network', 'network')
             ->leftJoin('network.image', 'nwImage')
-            ->leftJoin('entity.categories', 'category')
-            ->andWhere('entity.pid = :pid')
-            ->setParameter('pid', $pid);
+            ->leftJoin('entity.categories', 'category');
     }
 
     private function resolveParents(array $programmes): array
@@ -677,16 +706,22 @@ QUERY;
         );
     }
 
+    private function resolveGroupAncestry(array $group): array
+    {
+        $ancestorIds = $this->getParentIdsFromAncestry($group['ancestry']);
+        $group['parent'] = null;
+        $parentId = end($ancestorIds);
+        if ($parentId) {
+            $group['parent'] = $this->findByIdFull($parentId, 'Programme');
+        }
+        return $group;
+    }
+
     private function categoryAncestryGetter(array $ids): array
     {
         /** @var CategoryRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
         return $repo->findByIds($ids);
-    }
-
-    private function ancestryIdsToString(array $ancestry): string
-    {
-        return implode(',', $ancestry) . ',';
     }
 
     private function assertEntityType(?string $entityType, array $validEntityTypes): void

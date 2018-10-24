@@ -438,11 +438,6 @@ QUERY;
         );
     }
 
-    private function ancestryIdsToString(array $ancestry): string
-    {
-        return implode(',', $ancestry) . ',';
-    }
-
     private function resolveProgrammeParents(array $result)
     {
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
