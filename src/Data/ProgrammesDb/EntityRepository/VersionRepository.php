@@ -240,7 +240,7 @@ class VersionRepository extends EntityRepository
      * @param array $versions
      * @return array $versions
      */
-    private function hydrateCompetitionWarnings(array $versions)
+    private function hydrateCompetitionWarnings(array $versions): array
     {
         $versionsToFetchFor = [];
 
@@ -270,7 +270,7 @@ class VersionRepository extends EntityRepository
      * @param array $programmeItems
      * @return array $programmeItems
      */
-    private function hydrateProgrammeItems(array $programmeItems)
+    private function hydrateProgrammeItems(array $programmeItems): array
     {
         $streamableVersions = [];
         foreach ($programmeItems as $index => &$programmeArray) {

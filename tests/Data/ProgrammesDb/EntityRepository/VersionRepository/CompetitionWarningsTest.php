@@ -157,10 +157,10 @@ class CompetitionWarningsTest extends AbstractDatabaseTest
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Version');
 
         $programmeDbIds = [
-            (string) $this->getCoreEntityDbId('p0000016'),
-            (string) $this->getCoreEntityDbId('p0000011'),
-            (string) $this->getCoreEntityDbId('p0000012'),
-            (string) $this->getCoreEntityDbId('p0000015'),
+            $this->getCoreEntityDbId('p0000016'),
+            $this->getCoreEntityDbId('p0000011'),
+            $this->getCoreEntityDbId('p0000012'),
+            $this->getCoreEntityDbId('p0000015'),
         ];
 
         $programmeItems = $repo->findStreamableVersionForProgrammeItems($programmeDbIds);
