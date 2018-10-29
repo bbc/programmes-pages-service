@@ -7,6 +7,7 @@ use Doctrine\ORM\Query;
 
 class VersionRepository extends EntityRepository
 {
+    use Traits\ParentTreeWalkerTrait;
     /**
      * This is the list of versions that iPlayer does not playout at
      * https://www.bbc.co.uk/iplayer/episode/{pid} but instead either
@@ -107,11 +108,17 @@ class VersionRepository extends EntityRepository
             ->addSelect([
                 'versionTypes',
                 'CASE WHEN (IDENTITY(p.streamableVersion) = version.id) THEN 1 ELSE 0 END AS HIDDEN isStreamable',
+                'masterBrand',
+                'competitionWarning',
+                'competitionWarningProgrammeItem',
             ])
             ->innerJoin('version.versionTypes', 'versionTypes')
             // This second join is a hack. We need to retrieve all the version types, but filter out
             // any versions with only alternate types
             ->innerJoin('version.versionTypes', 'versionTypesSelect')
+            ->leftJoin('p.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.competitionWarning', 'competitionWarning')
+            ->leftJoin('competitionWarning.programmeItem', 'competitionWarningProgrammeItem')
             ->where('p.id = :dbId')
             ->andWhere('version.streamable = 1')
             ->andWhere('versionTypesSelect.type NOT IN (:alternateVersionTypes)')
@@ -120,7 +127,8 @@ class VersionRepository extends EntityRepository
             ->setParameter('dbId', $programmeDbId)
             ->setParameter('alternateVersionTypes', self::ALTERNATE_VERSION_TYPES);
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->hydrateCompetitionWarnings($result);
     }
 
     public function findAlternateVersionsForProgrammeItem(string $programmeDbId): array
@@ -149,7 +157,7 @@ class VersionRepository extends EntityRepository
      * @return array
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findLinkedVersionsForProgrammeItem(string $programmeItemDbId): array
+    public function findLinkedVersionsForProgrammeItem(string $programmeItemDbId): ?array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select([
@@ -170,7 +178,11 @@ class VersionRepository extends EntityRepository
             ->where('p.id = :dbId')
             ->setParameter('dbId', $programmeItemDbId);
 
-        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        $programmeArray = $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        if (empty($programmeArray)) {
+            return $programmeArray;
+        }
+        return $this->hydrateProgrammeItems([$programmeArray])[0];
     }
 
     /**
@@ -195,7 +207,8 @@ class VersionRepository extends EntityRepository
             ->where('p.id IN (:dbIds)')
             ->setParameter('dbIds', $programmeItemsDbId);
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->hydrateProgrammeItems($result);
     }
 
     public function createQueryBuilder($alias, $indexBy = null)
@@ -208,5 +221,87 @@ class VersionRepository extends EntityRepository
         return parent::createQueryBuilder($alias)
             ->addSelect('p')
             ->join($alias . '.programmeItem', 'p');
+    }
+
+    /**
+     * This deals with the case where we want to query competition warnings
+     * for a version where...
+     * a) the version's programmeItem is not directly linked to a masterbrand, but
+     * b) the programmeItem's ancestor is directly linked to a masterbrand.
+     *
+     * It ensures those things get the correct competition warning.
+     *
+     * In 90% of cases, this will just return the input array.
+     *
+     * In the other cases it queries all the programme's parents, and their masterbrands
+     * joined to their competition warnings, adds them to the version, and returns that
+     * whole mess.
+     *
+     * @param array $versions
+     * @return array $versions
+     */
+    private function hydrateCompetitionWarnings(array $versions): array
+    {
+        $versionsToFetchFor = [];
+
+        foreach ($versions as $index => $version) {
+            if (isset($version['id']) && empty($version['programmeItem']['masterBrand'])) {
+                $versionsToFetchFor[$index] = $version;
+            }
+        }
+        if (empty($versionsToFetchFor)) {
+            return $versions;
+        }
+        $versionsToFetchFor = $this->resolveProgrammeParentsForPlayout($versionsToFetchFor);
+        foreach ($versionsToFetchFor as $index => $version) {
+            $versions[$index] = $version;
+        }
+        return $versions;
+    }
+
+    /**
+     *
+     * This takes an array of programmeItems retrieved from the database, and
+     * a) makes sure that the attached versions have the parent programmeItem as their explicit programmeItem (this
+     *    ensures that all joins from that table to masterBrand and so forth are carried into the mappers and domain
+     *    objects without extra queries/joins )
+     * b) Makes sure that any streamableVersions get their competition warnings correctly set on any parent programmes
+     *
+     * @param array $programmeItems
+     * @return array $programmeItems
+     */
+    private function hydrateProgrammeItems(array $programmeItems): array
+    {
+        $streamableVersions = [];
+        foreach ($programmeItems as $index => &$programmeArray) {
+            foreach (['streamableVersion', 'downloadableVersion', 'canonicalVersion'] as $key) {
+                if (isset($programmeArray[$key])) {
+                    // Mapping fails without this step. Creating more joins in SQL would be pointless, as we
+                    // already know the programmeItem, so just hack it in here. Circular references never hurt anybody :-D
+                    $programmeArray[$key]['programmeItem'] = $programmeArray;
+                }
+            }
+            if (isset($programmeArray['streamableVersion'])) {
+                $streamableVersions[$index] = $programmeArray['streamableVersion'];
+            }
+        }
+        if (empty($streamableVersions)) {
+            return $programmeItems;
+        }
+        $streamableVersions = $this->hydrateCompetitionWarnings($streamableVersions);
+        foreach ($streamableVersions as $index => $streamableVersion) {
+            $programmeItems[$index]['streamableVersion'] = $streamableVersions[$index];
+        }
+        return $programmeItems;
+    }
+
+    private function resolveProgrammeParentsForPlayout(array $result)
+    {
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+        return $this->abstractResolveAncestry(
+            $result,
+            [$repo, 'findByIdsForPlayout'],
+            ['programmeItem', 'ancestry']
+        );
     }
 }
