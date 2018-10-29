@@ -235,6 +235,31 @@ class VersionRepository extends EntityRepository
         return $this->hydrateProgrammeItems($withParents);
     }
 
+    public function findDownloadableDescendantEpisodesForGroup(int $programmeItemDbId, ?int $limit, int $offset): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select([
+                'p', 'downloadableVersion', 'masterBrand', 'image', 'mbImage', 'network',
+            ])
+            ->from('ProgrammesPagesService:Episode', 'p')
+            ->innerJoin('ProgrammesPagesService:Membership', 'membership', Query\Expr\Join::WITH, 'membership.memberCoreEntity = p')
+            ->innerJoin('p.downloadableVersion', 'downloadableVersion')
+            ->leftJoin('p.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('p.image', 'image')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->where('IDENTITY(membership.group) = :programmeItemDbId')
+            ->addOrderBy('p.onDemandSortDate', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('programmeItemDbId', $programmeItemDbId);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $withParents = $this->resolveProgrammeParents($result);
+        return $this->hydrateProgrammeItems($withParents);
+    }
+
     public function createQueryBuilder($alias, $indexBy = null)
     {
         // Any time versions are fetched here they must be inner joined to

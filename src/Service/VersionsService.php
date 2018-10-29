@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesCachingLibrary\CacheInterface;
+use BBC\ProgrammesPagesService\Domain\Entity\Group;
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeContainer;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\VersionRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\ProgrammeItem;
@@ -171,6 +172,36 @@ class VersionsService extends AbstractService
             function () use ($programmeContainer, $limit, $page) {
                 $programmes = $this->repository->findDownloadableDescendantEpisodesForProgramme(
                     $programmeContainer->getDbAncestryIds(),
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+                $versions = [];
+                foreach ($programmes as $programme) {
+                    if (isset($programme['downloadableVersion'])) {
+                        $versions[] = $programme['downloadableVersion'];
+                    }
+                }
+                return $this->mapManyEntities($versions);
+            },
+            [],
+            $nullTtl
+        );
+    }
+
+    public function findDownloadableDescendantEpisodesForGroup(
+        Group $group,
+        ?int $limit,
+        int $page,
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $group->getPid(), $limit, $page, $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($group, $limit, $page) {
+                $programmes = $this->repository->findDownloadableDescendantEpisodesForGroup(
+                    $group->getDbId(),
                     $limit,
                     $this->getOffset($limit, $page)
                 );
