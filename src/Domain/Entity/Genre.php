@@ -59,6 +59,18 @@ class Genre extends Category
         return $ancestry;
     }
 
+    public function getTopLevel(): Genre
+    {
+        $currentGenre = $this;
+        $topLevelGenre = null;
+
+        do {
+            $topLevelGenre = $currentGenre;
+        } while ($currentGenre = $currentGenre->getParent());
+
+        return $topLevelGenre;
+    }
+
     /**
      * Given a Genre which has a Parent and GrandParent
      * Will return a urlKeyHierarchy as such:
