@@ -16,7 +16,6 @@ class ClipRepository extends EntityRepository
      */
     public function findClipsByParentPid(string $parentPid): array
     {
-        //b006q2x0
         $queryBuilder = $this->createQueryBuilder('c');
         $queryBuilder
             ->select('c')

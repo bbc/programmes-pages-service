@@ -287,6 +287,5 @@ class ServiceFactory
         }
 
         return $this->instances[ClipsService::class];
-
     }
 }
