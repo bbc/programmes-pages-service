@@ -275,4 +275,18 @@ class ServiceFactory
 
         return $this->instances[VersionsService::class];
     }
+
+    public function getClipsService(): ClipsService
+    {
+        if (!isset($this->instances[ClipsService::class])) {
+            $this->instances[ClipsService::class] = new ClipsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Clip'),
+                $this->mapperFactory->getCoreEntityMapper(),
+                $this->cache
+            );
+        }
+
+        return $this->instances[ClipsService::class];
+
+    }
 }
