@@ -330,6 +330,18 @@ QUERY;
         return $this->resolveParents($result);
     }
 
+    public function countStreamableDescendantClips(array $ancestryDbIds)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('count(clip.id)')
+            ->from('ProgrammesPagesService:Clip', 'clip')
+            ->andWhere('clip.ancestry LIKE :ancestry')
+            ->andWhere('clip.streamable = 1')
+            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function findChildrenSeriesByParent(int $id, ?int $limit, int $offset): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
