@@ -47,7 +47,7 @@ class ProgrammesAggregationService extends AbstractService
         $ttl = CacheInterface::NORMAL,
         $nullTtl = CacheInterface::NORMAL
     ) : int {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), 'ClipsCount', null, null, $ttl);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid());
 
         return $this->cache->getOrSet(
             $key,
