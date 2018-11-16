@@ -105,8 +105,8 @@ class PartialDateTest extends TestCase
     public function hasMonthDataProvider()
     {
         return [
-            [[2018, 0, 16], false],
-            [[2018, 11, 16], true],
+            'month_missing' => [[2018, 0, 16], false],
+            'nothing_missing' => [[2018, 11, 16], true],
         ];
     }
 
@@ -122,8 +122,8 @@ class PartialDateTest extends TestCase
     public function hasDayDataProvider()
     {
         return [
-            [[2018, 11, 0], false],
-            [[2018, 11, 16], true],
+            'day_missing' => [[2018, 11, 0], false],
+            'nothing_missing' => [[2018, 11, 16], true],
         ];
     }
 }
