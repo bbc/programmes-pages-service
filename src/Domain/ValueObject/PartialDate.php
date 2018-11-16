@@ -61,6 +61,16 @@ class PartialDate implements JsonSerializable
         return DateTime::createFromFormat('Y-m-d H:i:s e', "$year-$month-$day 00:00:00 UTC");
     }
 
+    public function hasMonth(): bool
+    {
+        return $this->month != 0;
+    }
+
+    public function hasDay(): bool
+    {
+        return $this->day != 0;
+    }
+
     private function normaliseMonthAndDay(int $month, int $day): array
     {
         return [
