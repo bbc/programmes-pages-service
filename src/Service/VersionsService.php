@@ -158,7 +158,7 @@ class VersionsService extends AbstractService
         );
     }
 
-    public function findDownloadableDescendantEpisodesForProgramme(
+    public function findDownloadableForProgrammesDescendantEpisodes(
         ProgrammeContainer $programmeContainer,
         ?int $limit,
         int $page,
@@ -170,7 +170,7 @@ class VersionsService extends AbstractService
             $key,
             $ttl,
             function () use ($programmeContainer, $limit, $page) {
-                $programmes = $this->repository->findDownloadableDescendantEpisodesForProgramme(
+                $programmes = $this->repository->findDownloadableForProgrammesDescendantEpisodes(
                     $programmeContainer->getDbAncestryIds(),
                     $limit,
                     $this->getOffset($limit, $page)
@@ -188,7 +188,24 @@ class VersionsService extends AbstractService
         );
     }
 
-    public function findDownloadableDescendantEpisodesForGroup(
+    public function countDownloadableForProgrammesDescendantEpisodes(
+        ProgrammeContainer $programmeContainer,
+        $ttl = CacheInterface::NORMAL
+    ): int {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeContainer->getPid(), $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programmeContainer) {
+                return $this->repository->countDownloadableForProgrammesDescendantEpisodes(
+                    $programmeContainer->getDbAncestryIds()
+                );
+            },
+            []
+        );
+    }
+
+    public function findDownloadableForGroupsDescendantEpisodes(
         Group $group,
         ?int $limit,
         int $page,
@@ -200,7 +217,7 @@ class VersionsService extends AbstractService
             $key,
             $ttl,
             function () use ($group, $limit, $page) {
-                $programmes = $this->repository->findDownloadableDescendantEpisodesForGroup(
+                $programmes = $this->repository->findDownloadableForGroupsDescendantEpisodes(
                     $group->getDbId(),
                     $limit,
                     $this->getOffset($limit, $page)
@@ -215,6 +232,23 @@ class VersionsService extends AbstractService
             },
             [],
             $nullTtl
+        );
+    }
+
+    public function countDownloadableForGroupsDescendantEpisodes(
+        ProgrammeContainer $programmeContainer,
+        $ttl = CacheInterface::NORMAL
+    ): int {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeContainer->getPid(), $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programmeContainer) {
+                return $this->repository->countDownloadableForGroupsDescendantEpisodes(
+                    $programmeContainer->getDbAncestryIds()
+                );
+            },
+            []
         );
     }
 

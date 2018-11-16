@@ -211,7 +211,7 @@ class VersionRepository extends EntityRepository
         return $this->hydrateProgrammeItems($result);
     }
 
-    public function findDownloadableDescendantEpisodesForProgramme(array $programmeItemsDbId, ?int $limit, int $offset): array
+    public function findDownloadableForProgrammesDescendantEpisodes(array $programmeItemsDbId, ?int $limit, int $offset): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select([
@@ -235,7 +235,19 @@ class VersionRepository extends EntityRepository
         return $this->hydrateProgrammeItems($withParents);
     }
 
-    public function findDownloadableDescendantEpisodesForGroup(int $programmeItemDbId, ?int $limit, int $offset): array
+    public function countDownloadableForProgrammesDescendantEpisodes(array $programmeItemsDbId): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['COUNT(p)'])
+            ->from('ProgrammesPagesService:Episode', 'p')
+            ->where('p.ancestry LIKE :ancestry')
+            ->andWhere('p.downloadableVersion IS NOT NULL')
+            ->setParameter('ancestry', $this->ancestryIdsToString($programmeItemsDbId) . '%');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function findDownloadableForGroupsDescendantEpisodes(int $programmeItemDbId, ?int $limit, int $offset): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select([
@@ -258,6 +270,20 @@ class VersionRepository extends EntityRepository
 
         $withParents = $this->resolveProgrammeParents($result);
         return $this->hydrateProgrammeItems($withParents);
+    }
+
+    public function countDownloadableForGroupsDescendantEpisodes(array $programmeItemsDbId): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['COUNT(p)'])
+            ->from('ProgrammesPagesService:Episode', 'p')
+            ->from('ProgrammesPagesService:Episode', 'p')
+            ->innerJoin('ProgrammesPagesService:Membership', 'membership', Query\Expr\Join::WITH, 'membership.memberCoreEntity = p')
+            ->where('IDENTITY(membership.group) = :programmeItemDbId')
+            ->andWhere('p.downloadableVersion IS NOT NULL')
+            ->setParameter('ancestry', $this->ancestryIdsToString($programmeItemsDbId) . '%');
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     public function createQueryBuilder($alias, $indexBy = null)
