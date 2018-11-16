@@ -92,4 +92,38 @@ class PartialDateTest extends TestCase
             [[2015, 2, 29]],
         ];
     }
+
+    /**
+     * @dataProvider hasMonthDataProvider
+     */
+    public function testHasMonth($input, $expected)
+    {
+        $partialDate = new PartialDate(...$input);
+        $this->assertEquals($expected, $partialDate->hasMonth());
+    }
+
+    public function hasMonthDataProvider()
+    {
+        return [
+            [[2018, 0, 16], false],
+            [[2018, 11, 16], true],
+        ];
+    }
+
+    /**
+     * @dataProvider hasDayDataProvider
+     */
+    public function testHasDay($input, $expected)
+    {
+        $partialDate = new PartialDate(...$input);
+        $this->assertEquals($expected, $partialDate->hasDay());
+    }
+
+    public function hasDayDataProvider()
+    {
+        return [
+            [[2018, 11, 0], false],
+            [[2018, 11, 16], true],
+        ];
+    }
 }
