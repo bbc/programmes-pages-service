@@ -42,6 +42,24 @@ class ProgrammesAggregationService extends AbstractService
         return $this->findStreamableDescendantsByType($programme, 'Clip', $limit, $page, $ttl, $nullTtl);
     }
 
+    public function countStreamableDescendantClips(
+        Programme $programme,
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::NORMAL
+    ) : int {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getPid(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($programme) {
+                return $this->repository->countStreamableDescendantClips($programme->getDbAncestryIds());
+            },
+            [],
+            $nullTtl
+        );
+    }
+
     /**
      * @return Episode[]
      */
