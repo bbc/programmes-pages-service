@@ -211,6 +211,81 @@ class VersionRepository extends EntityRepository
         return $this->hydrateProgrammeItems($result);
     }
 
+    public function findDownloadableForProgrammesDescendantEpisodes(array $programmeItemsDbId, ?int $limit, int $offset): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select([
+                'p', 'downloadableVersion', 'masterBrand', 'image', 'mbImage', 'network',
+            ])
+            ->from('ProgrammesPagesService:Episode', 'p')
+            ->leftJoin('p.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('p.image', 'image')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->innerJoin('p.downloadableVersion', 'downloadableVersion')
+            ->where('p.ancestry LIKE :ancestry')
+            ->setParameter('ancestry', $this->ancestryIdsToString($programmeItemsDbId) . '%')
+            ->addOrderBy('p.onDemandSortDate', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $withParents = $this->resolveProgrammeParents($result);
+        return $this->hydrateProgrammeItems($withParents);
+    }
+
+    public function countDownloadableForProgrammesDescendantEpisodes(array $programmeItemsDbId): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['COUNT(p)'])
+            ->from('ProgrammesPagesService:Episode', 'p')
+            ->where('p.ancestry LIKE :ancestry')
+            ->andWhere('p.downloadableVersion IS NOT NULL')
+            ->setParameter('ancestry', $this->ancestryIdsToString($programmeItemsDbId) . '%');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function findDownloadableForGroupsDescendantEpisodes(int $programmeItemDbId, ?int $limit, int $offset): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select([
+                'p', 'downloadableVersion', 'masterBrand', 'image', 'mbImage', 'network',
+            ])
+            ->from('ProgrammesPagesService:Episode', 'p')
+            ->innerJoin('ProgrammesPagesService:Membership', 'membership', Query\Expr\Join::WITH, 'membership.memberCoreEntity = p')
+            ->innerJoin('p.downloadableVersion', 'downloadableVersion')
+            ->leftJoin('p.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('p.image', 'image')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->where('IDENTITY(membership.group) = :programmeItemDbId')
+            ->addOrderBy('p.onDemandSortDate', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('programmeItemDbId', $programmeItemDbId);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $withParents = $this->resolveProgrammeParents($result);
+        return $this->hydrateProgrammeItems($withParents);
+    }
+
+    public function countDownloadableForGroupsDescendantEpisodes(array $programmeItemsDbId): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(['COUNT(p)'])
+            ->from('ProgrammesPagesService:Episode', 'p')
+            ->from('ProgrammesPagesService:Episode', 'p')
+            ->innerJoin('ProgrammesPagesService:Membership', 'membership', Query\Expr\Join::WITH, 'membership.memberCoreEntity = p')
+            ->where('IDENTITY(membership.group) = :programmeItemDbId')
+            ->andWhere('p.downloadableVersion IS NOT NULL')
+            ->setParameter('ancestry', $this->ancestryIdsToString($programmeItemsDbId) . '%');
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function createQueryBuilder($alias, $indexBy = null)
     {
         // Any time versions are fetched here they must be inner joined to
@@ -221,6 +296,15 @@ class VersionRepository extends EntityRepository
         return parent::createQueryBuilder($alias)
             ->addSelect('p')
             ->join($alias . '.programmeItem', 'p');
+    }
+
+    private function resolveProgrammeParents(array $result)
+    {
+        $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
+        return $this->abstractResolveAncestry(
+            $result,
+            [$repo, 'coreEntityAncestryGetter']
+        );
     }
 
     /**
