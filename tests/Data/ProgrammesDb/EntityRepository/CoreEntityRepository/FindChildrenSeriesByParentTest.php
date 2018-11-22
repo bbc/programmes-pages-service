@@ -21,7 +21,7 @@ class FindChildrenSeriesByParentTest extends AbstractDatabaseTest
 
         $dbid = $this->getDbIdFromPersistentIdentifier('b010t19z', 'Brand');
 
-        $entities = $repo->findChildrenSeriesByParent($dbid, 50, 0);
+        $entities = $repo->findChildrenSeriesByParent($dbid, 50, 0, false);
 
         $expectedPids = ['b00swyx1', 'b010t150'];
         $this->assertEquals($expectedPids, array_column($entities, 'pid'));
@@ -36,7 +36,7 @@ class FindChildrenSeriesByParentTest extends AbstractDatabaseTest
 
         $dbid = $this->getDbIdFromPersistentIdentifier('b010t19z', 'Brand');
 
-        $entities = $repo->findChildrenSeriesByParent($dbid, 1, 0);
+        $entities = $repo->findChildrenSeriesByParent($dbid, 1, 0, false);
 
         $expectedPids = ['b00swyx1'];
         $this->assertEquals($expectedPids, array_column($entities, 'pid'));
@@ -51,7 +51,7 @@ class FindChildrenSeriesByParentTest extends AbstractDatabaseTest
 
         $dbid = $this->getDbIdFromPersistentIdentifier('b010t19z', 'Brand');
 
-        $entities = $repo->findChildrenSeriesByParent($dbid, 50, 1);
+        $entities = $repo->findChildrenSeriesByParent($dbid, 50, 1, false);
 
         $expectedPids = ['b010t150'];
         $this->assertEquals($expectedPids, array_column($entities, 'pid'));

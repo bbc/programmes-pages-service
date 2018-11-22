@@ -373,17 +373,27 @@ QUERY;
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function findChildrenSeriesByParent(int $id, ?int $limit, int $offset): array
-    {
+    public function findChildrenSeriesByParent(
+        int $id,
+        ?int $limit,
+        int $offset,
+        bool $useDescendingOrder
+    ): array {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->addSelect(['programme', 'image'])
             ->from('ProgrammesPagesService:Series', 'programme')
             ->leftJoin('programme.image', 'image')
             ->andWhere('programme.parent = :parentDbId')
-            ->addOrderBy('programme.position', 'ASC')
-            ->addOrderBy('programme.title', 'ASC')
             ->setFirstResult($offset)
-            ->setMaxResults($limit)
+            ->setMaxResults($limit);
+
+        $order = 'ASC';
+        if ($useDescendingOrder) {
+            $order = 'DESC';
+        }
+
+        $qb->addOrderBy('programme.position', $order)
+            ->addOrderBy('programme.title', $order)
             ->setParameter('parentDbId', $id);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);

@@ -149,18 +149,20 @@ class ProgrammesService extends AbstractService
         ProgrammeContainer $container,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
-        $ttl = CacheInterface::NORMAL
+        $ttl = CacheInterface::NORMAL,
+        bool $useDescendingOrder = false
     ): array {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $container->getDbId(), $limit, $page, $ttl);
 
         return $this->cache->getOrSet(
             $key,
             $ttl,
-            function () use ($container, $limit, $page) {
+            function () use ($container, $limit, $page, $useDescendingOrder) {
                 $dbEntities = $this->repository->findChildrenSeriesByParent(
                     $container->getDbId(),
                     $limit,
-                    $this->getOffset($limit, $page)
+                    $this->getOffset($limit, $page),
+                    $useDescendingOrder
                 );
                 return $this->mapManyEntities($dbEntities);
             }
