@@ -36,6 +36,13 @@ abstract class Programme extends CoreEntity implements GalleriesCountableInterfa
      */
     private $firstBroadcastDate;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $isGap = false;
+
     public function getPromotionsCount(): int
     {
         return $this->promotionsCount;
@@ -128,5 +135,15 @@ abstract class Programme extends CoreEntity implements GalleriesCountableInterfa
     public function setFirstBroadcastDate(?DateTime $firstBroadcastDate): void
     {
         $this->firstBroadcastDate = $firstBroadcastDate;
+    }
+
+    public function getIsGap(): bool
+    {
+        return $this->isGap;
+    }
+
+    public function setIsGap(bool $isGap): void
+    {
+        $this->isGap = $isGap;
     }
 }
