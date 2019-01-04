@@ -119,6 +119,7 @@ class BroadcastRepository extends EntityRepository
             ->andWhere('broadcast.startAt >= :startDate')
             ->andWhere('broadcast.startAt < :endDate')
             ->andWhere('service.sid = :sid')
+            ->andWhere('programmeItem.isGap = 0')
             ->addOrderBy('broadcast.startAt', 'ASC')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
