@@ -236,16 +236,16 @@ class VersionsService extends AbstractService
     }
 
     public function countDownloadableForGroupsDescendantEpisodes(
-        ProgrammeContainer $programmeContainer,
+        Group $group,
         $ttl = CacheInterface::NORMAL
     ): int {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programmeContainer->getPid(), $ttl);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $group->getPid(), $ttl);
         return $this->cache->getOrSet(
             $key,
             $ttl,
-            function () use ($programmeContainer) {
+            function () use ($group) {
                 return $this->repository->countDownloadableForGroupsDescendantEpisodes(
-                    $programmeContainer->getDbAncestryIds()
+                    $group->getDbId()
                 );
             },
             []

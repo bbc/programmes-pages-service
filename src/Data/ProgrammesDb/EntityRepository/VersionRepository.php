@@ -272,16 +272,15 @@ class VersionRepository extends EntityRepository
         return $this->hydrateProgrammeItems($withParents);
     }
 
-    public function countDownloadableForGroupsDescendantEpisodes(array $programmeItemsDbId): int
+    public function countDownloadableForGroupsDescendantEpisodes(int $programmeItemDbId): int
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(['COUNT(p)'])
             ->from('ProgrammesPagesService:Episode', 'p')
-            ->from('ProgrammesPagesService:Episode', 'p')
             ->innerJoin('ProgrammesPagesService:Membership', 'membership', Query\Expr\Join::WITH, 'membership.memberCoreEntity = p')
             ->where('IDENTITY(membership.group) = :programmeItemDbId')
             ->andWhere('p.downloadableVersion IS NOT NULL')
-            ->setParameter('ancestry', $this->ancestryIdsToString($programmeItemsDbId) . '%');
+            ->setParameter('programmeItemDbId', $programmeItemDbId);
 
         return $qb->getQuery()->getSingleScalarResult();
     }
