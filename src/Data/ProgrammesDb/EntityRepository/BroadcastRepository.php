@@ -46,6 +46,7 @@ class BroadcastRepository extends EntityRepository
             ->andWhere("IDENTITY(broadcast.service) = :dbId")
             ->andWhere('broadcast.startAt <= :cutoffTime')
             ->andWhere('broadcast.endAt > :cutoffTime')
+            ->andWhere('programmeItem.isGap = 0')
             ->setMaxResults(1)
             ->setParameter('dbId', $serviceDbId)
             ->setParameter('cutoffTime', $cutoffDateTime);
