@@ -226,6 +226,7 @@ class VersionRepository extends EntityRepository
             ->where('p.ancestry LIKE :ancestry')
             ->setParameter('ancestry', $this->ancestryIdsToString($programmeItemsDbId) . '%')
             ->addOrderBy('p.onDemandSortDate', 'DESC')
+            ->addOrderBy('p.streamableFrom', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
@@ -262,6 +263,7 @@ class VersionRepository extends EntityRepository
             ->leftJoin('masterBrand.image', 'mbImage')
             ->where('IDENTITY(membership.group) = :programmeItemDbId')
             ->addOrderBy('p.onDemandSortDate', 'DESC')
+            ->addOrderBy('p.streamableFrom', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->setParameter('programmeItemDbId', $programmeItemDbId);
