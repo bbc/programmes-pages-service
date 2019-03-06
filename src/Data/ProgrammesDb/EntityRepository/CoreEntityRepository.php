@@ -661,7 +661,7 @@ QUERY;
             ->setParameter('booleanKeywords', $booleanKeywords)
             ->setParameter('quotedKeywords', '"' . $keywords . '"');
 
-        return $q->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($q->getResult(Query::HYDRATE_ARRAY));
     }
 
     public function clearAncestryCache(): void
