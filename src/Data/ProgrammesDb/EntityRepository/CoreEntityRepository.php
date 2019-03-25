@@ -409,6 +409,43 @@ QUERY;
         return $result;
     }
 
+    public function findChildrenSeriesWithClipsByParent(
+        int $id,
+        ?int $limit,
+        int $offset,
+        bool $useDescendingOrder
+    ): array {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->addSelect(['programme', 'image'])
+            ->from('ProgrammesPagesService:Series', 'programme')
+            ->leftJoin('programme.image', 'image')
+            ->andWhere('programme.parent = :parentDbId')
+            ->andWhere('programme.availableClipsCount > 0')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        $order = 'ASC';
+        if ($useDescendingOrder) {
+            $order = 'DESC';
+        }
+
+        $qb->addOrderBy('programme.position', $order)
+            ->addOrderBy('programme.title', $order)
+            ->setParameter('parentDbId', $id);
+
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        if (!empty($result)) {
+            $resolvedParent = $this->resolveParents([$result[0]]);
+
+            foreach ($result as &$res) {
+                $res['parent'] = $resolvedParent[0]['parent'];
+            }
+        }
+
+        return $result;
+    }
+
     public function findAllWithParents(?int $limit, int $offset): array
     {
         $qb = $this->createQueryBuilder('programme')

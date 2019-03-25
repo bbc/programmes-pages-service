@@ -169,6 +169,30 @@ class ProgrammesService extends AbstractService
         );
     }
 
+    public function findChildrenSeriesWithClipsByParent(
+        ProgrammeContainer $container,
+        ?int $limit = null,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL,
+        bool $useDescendingOrder = true
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $container->getDbId(), $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($container, $limit, $page, $useDescendingOrder) {
+                $dbEntities = $this->repository->findChildrenSeriesWithClipsByParent(
+                    $container->getDbId(),
+                    $limit,
+                    $this->getOffset($limit, $page),
+                    $useDescendingOrder
+                );
+                return $this->mapManyEntities($dbEntities);
+            }
+        );
+    }
+
     public function countAll(string $entityType = 'Programme', $ttl = CacheInterface::NORMAL): int
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
