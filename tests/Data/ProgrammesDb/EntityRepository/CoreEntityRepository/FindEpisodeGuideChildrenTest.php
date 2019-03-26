@@ -34,8 +34,8 @@ class FindEpisodeGuideChildrenTest extends AbstractDatabaseTest
     {
 
         return [
-            ['b010t19z', 50, 0, ['b00tf1zy', 'b010t150', 'b00swyx1']],
-            ['b010t19z', 2, 1, ['b010t150', 'b00swyx1']],
+            ['b010t19z', 50, 0, ['b006x3cd', 'b00tf1zy', 'b010t150', 'b00swyx1']],
+            ['b010t19z', 2, 1, ['b00tf1zy', 'b010t150']],
         ];
     }
 
@@ -58,7 +58,7 @@ class FindEpisodeGuideChildrenTest extends AbstractDatabaseTest
 
         $id = $this->getCoreEntityDbId('b010t19z');
 
-        $this->assertEquals(3, $repo->countEpisodeGuideChildren($id));
+        $this->assertEquals(4, $repo->countEpisodeGuideChildren($id));
 
         // count query only
         $this->assertCount(1, $this->getDbQueries());

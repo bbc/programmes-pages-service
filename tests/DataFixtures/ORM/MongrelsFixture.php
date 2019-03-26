@@ -23,6 +23,7 @@ class MongrelsFixture extends AbstractFixture
 
         $series1 = $this->buildSeries('b00swyx1', 'Series 1', 1, $brand);
         $series2 = $this->buildSeries('b010t150', 'Series 2', 2, $brand);
+        $series3 = $this->buildSeries('b006x3cd', 'Series 3', 3, $brand, 0);
         $episodeUnderBrand = $this->buildEpisode('b00tf1zy', 'Mongrels Uncovered', 3, $brand);
         // OK strictly speaking this clip doesn't live under the brand
         // but Mongrels doesn't have an actual clip that lives here in the
@@ -60,11 +61,12 @@ class MongrelsFixture extends AbstractFixture
         return $entity;
     }
 
-    private function buildSeries($pid, $title, $position, $parent = null)
+    private function buildSeries($pid, $title, $position, $parent = null, $availableClipsCount = 1)
     {
         $entity = new Series($pid, $title);
         $entity->setPosition($position);
         $entity->setParent($parent);
+        $entity->setAvailableClipsCount($availableClipsCount);
         $this->manager->persist($entity);
         $this->addReference($pid, $entity);
         return $entity;

@@ -40,7 +40,7 @@ class FindAllTest extends AbstractDatabaseTest
     public function findAllWithParentsDataProvider()
     {
         return [
-            [50, 0, ['b010t19z', 'p00hv9yz', 'p008k0l5', 'p008k0jy', 'p008nhl4', 'p00h64pq', 'b00tf1zy', 'b00swgkn', 'b00syxx6', 'b00t0ycf', 'b0175lqm', 'b0176rgj', 'b0177ffr', 'p008nhl5', 'p008nhl6',  'b00swyx1', 'b010t150']],
+            [50, 0, ['b010t19z', 'p00hv9yz', 'p008k0l5', 'p008k0jy', 'p008nhl4', 'p00h64pq', 'b00tf1zy', 'b00swgkn', 'b00syxx6', 'b00t0ycf', 'b0175lqm', 'b0176rgj', 'b0177ffr', 'p008nhl5', 'p008nhl6',  'b00swyx1', 'b010t150', 'b006x3cd']],
             [2, 3, ['p008k0jy', 'p008nhl4']],
         ];
     }
@@ -62,7 +62,7 @@ class FindAllTest extends AbstractDatabaseTest
         $this->loadFixtures(['MongrelsFixture']);
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $this->assertEquals(17, $repo->countAll());
+        $this->assertEquals(18, $repo->countAll());
 
         // count query only
         $this->assertCount(1, $this->getDbQueries());
