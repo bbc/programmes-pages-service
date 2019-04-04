@@ -19,7 +19,7 @@ class CoreEntityTest extends TestCase
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\OptionsTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
             'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait',
+            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\SearchUtilitiesTrait',
         ], $reflection->getTraitNames());
     }
 
