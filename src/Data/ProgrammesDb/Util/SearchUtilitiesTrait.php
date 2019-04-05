@@ -25,7 +25,7 @@ trait SearchUtilitiesTrait
         });
         if (!empty($validWords)) {
             // Join into MySQL compatible boolean query string
-            $booleanKeywords = join(' +', $validWords);
+            $booleanKeywords = implode(' +', $validWords);
             return '+' . $booleanKeywords;
         }
         return null;
