@@ -6,7 +6,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\Contrib
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\MemberOfGroupInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\PromotableInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\EntityInterfaces\RelatedLinkContextInterface;
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\SearchUtilitiesTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -50,7 +50,7 @@ abstract class CoreEntity implements ContributableToInterface, MemberOfGroupInte
     use Traits\OptionsTrait;
     use Traits\PartnerPidTrait;
     use Traits\SynopsesTrait;
-    use StripPunctuationTrait;
+    use SearchUtilitiesTrait;
 
     /**
      * @var int|null

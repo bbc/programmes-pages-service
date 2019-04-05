@@ -2,7 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
-use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\StripPunctuationTrait;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\SearchUtilitiesTrait;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use DateTimeInterface;
 use Doctrine\ORM\Query;
@@ -13,7 +13,7 @@ use InvalidArgumentException;
 class CoreEntityRepository extends MaterializedPathRepository
 {
     use Traits\ParentTreeWalkerTrait;
-    use StripPunctuationTrait;
+    use SearchUtilitiesTrait;
 
     const ALL_VALID_ENTITY_TYPES = [
         'CoreEntity',
@@ -630,9 +630,11 @@ QUERY;
         bool $filterAvailable,
         ?array $entityTypes
     ): int {
-        $keywords = $this->stripPunctuation($keywords);
-        $booleanKeywords = join(' +', explode(' ', $keywords));
-        $booleanKeywords = '+' . $booleanKeywords;
+        $booleanKeywords = $this->makeBooleanSearchQuery($keywords);
+        if (!$booleanKeywords) {
+            // Don't bother searching empty/invalid terms
+            return 0;
+        }
 
         $qText = <<<QUERY
 SELECT COUNT(coreEntity.id)
@@ -655,15 +657,18 @@ QUERY;
     }
 
     public function findByKeywords(
-        string $keywords,
+        string $inputKeywords,
         bool $filterAvailable,
         ?int $limit,
         int $offset,
         ?array $entityTypes
     ): array {
-        $keywords = $this->stripPunctuation($keywords);
-        $booleanKeywords = join(' +', explode(' ', $keywords));
-        $booleanKeywords = '+' . $booleanKeywords;
+        $keywords = $this->stripPunctuation($inputKeywords);
+        $booleanKeywords = $this->makeBooleanSearchQuery($inputKeywords);
+        if (!$booleanKeywords) {
+            // Don't bother searching empty/invalid terms
+            return [];
+        }
 
         $qText = <<<QUERY
 SELECT coreEntity, image, masterBrand, network, mbImage,
