@@ -19,7 +19,7 @@ class SearchUtilitiesTraitTest extends TestCase
     /**
      * @dataProvider stripPunctuationDataProvider
      */
-    public function testStripPunctuation(string $string, string $expectedString)
+    public function testStripPunctuation(string $string, string $expectedString): void
     {
         $actualString = $this->invokePrivateMethod($this->searchUtilityObject, 'stripPunctuation', [$string]);
         $this->assertEquals($expectedString, $actualString);
@@ -46,13 +46,13 @@ class SearchUtilitiesTraitTest extends TestCase
     /**
      * @dataProvider makeBooleanSearchQueryDataProvider
      */
-    public function testMakeBooleanSearchQuery(string $string, ?string $expectedString)
+    public function testMakeBooleanSearchQuery(string $string, ?string $expectedString): void
     {
         $actualString = $this->invokePrivateMethod($this->searchUtilityObject, 'makeBooleanSearchQuery', [$string]);
         $this->assertEquals($expectedString, $actualString);
     }
 
-    public function makeBooleanSearchQueryDataProvider()
+    public function makeBooleanSearchQueryDataProvider(): array
     {
         return [
             'A single Word' => [
