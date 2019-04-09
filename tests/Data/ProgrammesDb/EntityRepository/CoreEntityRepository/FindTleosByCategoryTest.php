@@ -72,8 +72,8 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         $this->assertInternalType('array', $tleos);
         $this->assertCount(2, $tleos);
 
-        $this->assertEquals('Brand1', $tleos[0]['title']);
-        $this->assertEquals('Brand2', $tleos[1]['title']);
+        $this->assertEquals('Brand2', $tleos[0]['title']);
+        $this->assertEquals('Brand1', $tleos[1]['title']);
     }
 
     public function testFindTleosByCategoryPlayerAvailability()
