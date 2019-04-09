@@ -51,8 +51,7 @@ class CoreEntityRepository extends MaterializedPathRepository
                    ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
                    ->andWhere('programme.parent IS NULL')
                    ->andWhere('category.ancestry LIKE :ancestry')
-                   ->orderBy('programme.title', 'ASC')
-                   ->addOrderBy('programme.pid', 'ASC')
+                   ->orderBy('programme.firstBroadcastDate', 'DESC')
                    ->setFirstResult($offset)
                    ->setMaxResults($limit)
                    ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
