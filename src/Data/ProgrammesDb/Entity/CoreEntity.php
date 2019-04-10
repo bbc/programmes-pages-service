@@ -23,6 +23,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *   @ORM\Index(name="core_entity_type_embargoed_ancestry_cover_idx", columns={"type", "is_embargoed", "ancestry"}),
  *   @ORM\Index(name="core_entity_type_streamable_ancestry_cover_idx", columns={"type", "streamable", "ancestry"}),
  *   @ORM\Index(name="core_entity_sibling_by_first_broadcast_idx", columns={"parent_id", "first_broadcast_date"}),
+ *   @ORM\Index(name="core_entity_available_category_cover_idx", columns={"parent_id", "type", "streamable", "is_embargoed"}),
  *   @ORM\Index(name="core_entity_ft_all", columns={"search_title","short_synopsis"}, flags={"fulltext"}),
  *   @ORM\Index(name="core_entity_ft_search_title", columns={"search_title"}, flags={"fulltext"}),
  *   @ORM\Index(name="core_entity_ft_short_synopsis", columns={"short_synopsis"}, flags={"fulltext"}),
