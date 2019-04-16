@@ -53,7 +53,7 @@ class CategoryRepository extends MaterializedPathRepository
         $category = $result;
         do {
             $categories[] = $category;
-        } while(isset($category['parent']) && $category = $category['parent']);
+        } while (isset($category['parent']) && $category = $category['parent']);
         $this->addToAncestryCache($categories);
         return $result;
     }
