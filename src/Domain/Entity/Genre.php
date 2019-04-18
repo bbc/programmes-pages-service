@@ -13,7 +13,7 @@ class Genre extends Category
     /** @var Genre|null */
     private $parent;
 
-    /** @var array|null */
+    /** @var Genre[] */
     private $ancestry;
 
     /** @var string|null */

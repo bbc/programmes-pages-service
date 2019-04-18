@@ -28,12 +28,6 @@ abstract class Category
         $this->urlKey = $urlKey;
     }
 
-    abstract protected function getAncestry(): array;
-
-    abstract protected function getHierarchicalTitle(): string;
-
-    abstract protected function getUrlKeyHierarchy(): string;
-
     public function getId(): string
     {
         return $this->id;
@@ -76,4 +70,10 @@ abstract class Category
     {
         return $this->dbAncestryIds;
     }
+
+    abstract protected function getAncestry(): array;
+
+    abstract protected function getHierarchicalTitle(): string;
+
+    abstract protected function getUrlKeyHierarchy(): string;
 }
