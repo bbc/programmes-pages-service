@@ -74,6 +74,8 @@ class Genre extends Category
     public function getHierarchicalTitle(): string
     {
         if ($this->hierarchicalTitle === null) {
+            $this->hierarchicalTitle = '';
+
             $ancestry = $this->getAncestry();
             for ($i = 0, $l = count($ancestry); $i < $l; $i++) {
                 $this->hierarchicalTitle .= ($i === 0 ? '' : ': ') . $ancestry[$i]->getTitle();
@@ -92,6 +94,8 @@ class Genre extends Category
     public function getUrlKeyHierarchy(): string
     {
         if ($this->urlKeyHierarchy === null) {
+            $this->urlKeyHierarchy = '';
+
             $ancestry = $this->getAncestry();
             for ($i = 0, $l = count($ancestry); $i < $l; $i++) {
                 $this->urlKeyHierarchy .= ($i === 0 ? '' : '/') . $ancestry[$i]->getUrlKey();

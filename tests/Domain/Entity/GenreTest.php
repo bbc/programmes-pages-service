@@ -55,7 +55,7 @@ class GenreTest extends TestCase
 
         $ancestry = $genre->getAncestry();
 
-        $this->assertEquals([$genre, $parentGenre], $ancestry);
+        $this->assertEquals([$parentGenre, $genre], $ancestry);
     }
 
     public function testGetAncestryWithNoParent()

@@ -14,6 +14,7 @@ parameters:
         - '#Parameter \#4 \$endAt of class BBC\\ProgrammesPagesService\\Domain\\Entity\\CollapsedBroadcast constructor expects DateTimeImmutable, DateTimeImmutable\|null given.#'
         - '#Parameter \#5 \$startAt of class BBC\\ProgrammesPagesService\\Domain\\Entity\\Broadcast constructor expects DateTimeImmutable, DateTimeImmutable\|null given.#'
         - '#Parameter \#6 \$endAt of class BBC\\ProgrammesPagesService\\Domain\\Entity\\Broadcast constructor expects DateTimeImmutable, DateTimeImmutable\|null given.#'
+        - '#Calling method getParent\(\) on possibly null value of type BBC\\ProgrammesPagesService\\Domain\\Entity\\Genre\|null.#'
         # PHPUnit ignores
         - '#PHPUnit_Framework_MockObject_MockObject given.#'
         - '#Call to an undefined method PHPUnit_Framework_MockObject_MockObject::#'
