@@ -70,4 +70,10 @@ abstract class Category
     {
         return $this->dbAncestryIds;
     }
+
+    abstract protected function getAncestry(): array;
+
+    abstract protected function getHierarchicalTitle(): string;
+
+    abstract protected function getUrlKeyHierarchy(): string;
 }

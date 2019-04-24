@@ -9,12 +9,16 @@ class CategoryRepository extends MaterializedPathRepository
 {
     use Traits\ParentTreeWalkerTrait;
 
+    private $ancestryCache = [];
+
     public function findByIds(array $dbIds): array
     {
-        return $this->createQueryBuilder('category')
+        $results = $this->createQueryBuilder('category')
             ->andWhere("category.id IN(:ids)")
             ->setParameter('ids', $dbIds)
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $this->addToAncestryCache($results);
+        return $results;
     }
 
     public function findByUrlKeyAncestryAndType(array $urlKeys, string $type): ?array
@@ -43,7 +47,15 @@ class CategoryRepository extends MaterializedPathRepository
             ->leftJoin('category' . ($finalI - 1) . '.parent', 'category' . $finalI)
             ->andWhere('category' . $finalI . '.id IS NULL');
 
-        return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        $result = $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        // Get parent categories as array to cache them. Don't laugh.
+        $categories = [];
+        $category = $result;
+        do {
+            $categories[] = $category;
+        } while (isset($category['parent']) && $category = $category['parent']);
+        $this->addToAncestryCache($categories);
+        return $result;
     }
 
     public function findPopulatedChildCategories(
@@ -61,7 +73,8 @@ class CategoryRepository extends MaterializedPathRepository
             ->setParameter('parentId', $categoryId)
             ->setParameter('type', $categoryType);
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
     }
 
     public function findAllByTypeAndMaxDepth(string $type, int $maxDepth): array
@@ -77,8 +90,41 @@ class CategoryRepository extends MaterializedPathRepository
         return $this->resolveParents($result);
     }
 
+    public function clearAncestryCache(): void
+    {
+        $this->ancestryCache = [];
+    }
+
+    public function categoryAncestryGetter(array $ids): array
+    {
+        $cached = [];
+        foreach ($ids as $index => $id) {
+            if (!isset($this->ancestryCache[$id])) {
+                // If any of our ancestors is not in the cache, just do the query
+                return $this->findByIds($ids);
+            }
+            $cached[] = $this->ancestryCache[$id];
+        }
+        // Return cached ancestors, saving a query
+        return $cached;
+    }
+
     protected function resolveParents(array $categories): array
     {
-        return $this->abstractResolveAncestry($categories, [$this, 'findByIds']);
+        return $this->abstractResolveAncestry($categories, [$this, 'categoryAncestryGetter']);
+    }
+
+    /**
+     * This needs to be an array of categories.
+     *
+     * @param array $results
+     */
+    private function addToAncestryCache(array $results)
+    {
+        foreach ($results as $result) {
+            if (isset($result['id'])) {
+                $this->ancestryCache[$result['id']] = $result;
+            }
+        }
     }
 }

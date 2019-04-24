@@ -7,10 +7,16 @@ use BBC\ProgrammesPagesService\Domain\Exception\DataNotFetchedException;
 
 class Genre extends Category
 {
+    /** @var string */
+    private $hierarchicalTitle;
+
     /** @var Genre|null */
     private $parent;
 
-    /** @var string|null */
+    /** @var Genre[] */
+    private $ancestry;
+
+    /** @var string */
     private $urlKeyHierarchy;
 
     public function __construct(
@@ -43,32 +49,40 @@ class Genre extends Category
      * Given a Genre which has a Parent and GrandParent
      * Will return an array of Genres as such:
      *
-     * [Genre, Parent, Grandparent]
+     * [Grandparent, Parent, Genre]
      *
      * @return Genre[]
      */
     public function getAncestry(): array
     {
-        $currentGenre = $this;
-        $ancestry = [];
+        if ($this->ancestry === null) {
+            $this->ancestry = [$currentGenre = $this];
 
-        do {
-            $ancestry[] = $currentGenre;
-        } while ($currentGenre = $currentGenre->getParent());
+            while ($currentGenre = $currentGenre->getParent()) {
+                array_unshift($this->ancestry, $currentGenre);
+            }
+        }
 
-        return $ancestry;
+        return $this->ancestry;
     }
 
     public function getTopLevel(): Genre
     {
-        $currentGenre = $this;
-        $topLevelGenre = null;
+        return $this->getAncestry()[0];
+    }
 
-        do {
-            $topLevelGenre = $currentGenre;
-        } while ($currentGenre = $currentGenre->getParent());
+    public function getHierarchicalTitle(): string
+    {
+        if ($this->hierarchicalTitle === null) {
+            $this->hierarchicalTitle = '';
 
-        return $topLevelGenre;
+            $ancestry = $this->getAncestry();
+            for ($i = 0, $l = count($ancestry); $i < $l; $i++) {
+                $this->hierarchicalTitle .= ($i === 0 ? '' : ': ') . $ancestry[$i]->getTitle();
+            }
+        }
+
+        return $this->hierarchicalTitle;
     }
 
     /**
@@ -80,14 +94,12 @@ class Genre extends Category
     public function getUrlKeyHierarchy(): string
     {
         if ($this->urlKeyHierarchy === null) {
-            $currentGenre = $this;
-            $urlKeyHierarchy = [];
+            $this->urlKeyHierarchy = '';
 
-            do {
-                $urlKeyHierarchy[] = $currentGenre->getUrlKey();
-            } while ($currentGenre = $currentGenre->getParent());
-
-            $this->urlKeyHierarchy = implode('/', array_reverse($urlKeyHierarchy));
+            $ancestry = $this->getAncestry();
+            for ($i = 0, $l = count($ancestry); $i < $l; $i++) {
+                $this->urlKeyHierarchy .= ($i === 0 ? '' : '/') . $ancestry[$i]->getUrlKey();
+            }
         }
 
         return $this->urlKeyHierarchy;
