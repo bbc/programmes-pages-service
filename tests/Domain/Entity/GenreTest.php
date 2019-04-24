@@ -84,4 +84,23 @@ class GenreTest extends TestCase
 
         $this->assertEquals("url_key", $urlKey);
     }
+
+    public function testGetHierarchicalTitleWithParent()
+    {
+        $parentGenre = new Genre([0], 'parent_id', 'Parent Title', 'parent_url_key', null);
+        $genre = new Genre([0, 1], 'id', 'Title', 'url_key', $parentGenre);
+
+        $title = $genre->getHierarchicalTitle();
+
+        $this->assertEquals('Parent Title: Title', $title);
+    }
+
+    public function testGetHierarchicalTitleWithNoParent()
+    {
+        $genre = new Genre([0], 'id', 'Title', 'url_key', null);
+
+        $title = $genre->getHierarchicalTitle();
+
+        $this->assertEquals('Title', $title);
+    }
 }
