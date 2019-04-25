@@ -98,6 +98,7 @@ class CategoryRepository extends MaterializedPathRepository
             ->andWhere('category INSTANCE OF ProgrammesPagesService:Genre')
             ->andWhere('category.depth = 1')
             ->addOrderBy('category.urlKey')
+            ->addOrderBy('children.urlKey')
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
         return $this->resolveParents($result);
