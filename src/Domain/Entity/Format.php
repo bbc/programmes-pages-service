@@ -9,7 +9,7 @@ class Format extends Category
         return [];
     }
 
-    public function getChildren(): ?array
+    public function getChildren(): array
     {
         return [];
     }

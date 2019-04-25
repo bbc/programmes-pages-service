@@ -71,8 +71,18 @@ class Genre extends Category
         return $this->ancestry;
     }
 
-    public function getChildren(): ?array
+    /**
+     * @throws DataNotFetchedException
+     */
+    public function getChildren(): array
     {
+        if ($this->children === null) {
+            throw new DataNotFetchedException(
+                'Could not get children of Genre "'
+                . $this->getId() . '" as they were not fetched'
+            );
+        }
+
         return $this->children;
     }
 

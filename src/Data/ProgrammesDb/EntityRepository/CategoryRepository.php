@@ -94,7 +94,7 @@ class CategoryRepository extends MaterializedPathRepository
     {
         $result = $this->createQueryBuilder('category')
             ->addSelect('children')
-            ->innerJoin('category.children', 'children')
+            ->leftJoin('category.children', 'children')
             ->andWhere('category INSTANCE OF ProgrammesPagesService:Genre')
             ->andWhere('category.depth = 1')
             ->addOrderBy('category.urlKey')
