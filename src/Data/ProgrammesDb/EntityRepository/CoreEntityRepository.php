@@ -38,29 +38,35 @@ class CoreEntityRepository extends MaterializedPathRepository
     public function findTleosByCategory(
         array $ancestryDbIds,
         bool $filterToAvailable,
+        bool $orderByFirstBroadcast,
         ?int $limit,
         int $offset
     ): array {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select(['DISTINCT programme', 'image', 'masterbrand', 'mbImage'])
-                   ->from('ProgrammesPagesService:Programme', 'programme')
-                   ->leftJoin('programme.image', 'image')
-                   ->leftJoin('programme.masterBrand', 'masterbrand')
-                   ->leftJoin('masterbrand.image', 'mbImage')
-                   ->innerJoin('programme.categories', 'category')
-                   ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
-                   ->andWhere('programme.parent IS NULL')
-                   ->andWhere('category.ancestry LIKE :ancestry')
-                   ->orderBy('programme.firstBroadcastDate', 'DESC')
-                   ->setFirstResult($offset)
-                   ->setMaxResults($limit)
-                   ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+            ->select(['DISTINCT programme', 'image', 'masterBrand', 'mbImage', 'network', 'nwImage'])
+            ->from('ProgrammesPagesService:Programme', 'programme')
+            ->leftJoin('programme.image', 'image')
+            ->leftJoin('programme.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('network.image', 'nwImage')
+            ->innerJoin('programme.categories', 'category')
+            ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
+            ->andWhere('programme.parent IS NULL')
+            ->andWhere('category.ancestry LIKE :ancestry')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
 
+        if ($orderByFirstBroadcast) {
+            $qb->orderBy('programme.firstBroadcastDate', 'DESC');
+        }
         if ($filterToAvailable) {
             $qb->andWhere('programme.streamable = 1');
         }
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
     }
 
     public function countTleosByCategory(

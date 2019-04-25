@@ -74,6 +74,7 @@ class ProgrammesService extends AbstractService
                 $programmesInSlice = $this->repository->findTleosByCategory(
                     $category->getDbAncestryIds(),
                     false,
+                    false,
                     $limit,
                     $offset
                 );
@@ -114,6 +115,7 @@ class ProgrammesService extends AbstractService
                 $offset = $this->getOffset($limit, $page);
                 $programmesInSlice = $this->repository->findTleosByCategory(
                     $category->getDbAncestryIds(),
+                    true,
                     true,
                     $limit,
                     $offset

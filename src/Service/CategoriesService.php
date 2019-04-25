@@ -65,7 +65,7 @@ class CategoriesService extends AbstractService
         );
     }
 
-    public function findGenreByUrlKeyAncestry(array $urlHierarchy, $ttl = CacheInterface::NORMAL): ?Genre
+    public function findGenreByUrlKeyAncestryWithChildren(array $urlHierarchy, $ttl = CacheInterface::NORMAL): ?Genre
     {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, implode('|', $urlHierarchy), $ttl);
 
@@ -74,6 +74,9 @@ class CategoriesService extends AbstractService
             $ttl,
             function () use ($urlHierarchy) {
                 $genre = $this->repository->findByUrlKeyAncestryAndType($urlHierarchy, 'genre');
+                if (isset($genre['id'])) {
+                    $genre['children'] = $this->repository->findPopulatedChildCategories($genre['id'], 'genre');
+                }
                 return $this->mapSingleEntity($genre);
             }
         );
