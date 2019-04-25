@@ -10,14 +10,14 @@ class FindGenresTest extends AbstractCategoriesServiceTest
     {
         $this->mockRepository
             ->expects($this->once())
-            ->method('findGenresAndChildren');
+            ->method('findTopLevelGenresAndChildren');
 
         $this->service()->findGenres();
     }
 
     public function testFindGenresResults()
     {
-        $this->mockRepository->method('findGenresAndChildren')->willReturn([['pip_id' => 'C00082'], ['pip_id' => 'C00083']]);
+        $this->mockRepository->method('findTopLevelGenresAndChildren')->willReturn([['pip_id' => 'C00082'], ['pip_id' => 'C00083']]);
 
         $genres = $this->service()->findGenres();
 

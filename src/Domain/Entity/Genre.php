@@ -19,7 +19,7 @@ class Genre extends Category
     /** @var string */
     private $urlKeyHierarchy;
 
-    /** @var array */
+    /** @var array|null */
     private $children;
 
     public function __construct(
@@ -28,7 +28,7 @@ class Genre extends Category
         string $title,
         string $urlKey,
         ?Genre $parent = null,
-        array $children = []
+        ?array $children = null
     ) {
         parent::__construct($dbAncestryIds, $id, $title, $urlKey);
         $this->parent = $parent;
@@ -71,7 +71,7 @@ class Genre extends Category
         return $this->ancestry;
     }
 
-    public function getChildren(): array
+    public function getChildren(): ?array
     {
         return $this->children;
     }

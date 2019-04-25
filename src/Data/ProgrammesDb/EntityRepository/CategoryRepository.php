@@ -90,15 +90,14 @@ class CategoryRepository extends MaterializedPathRepository
         return $this->resolveParents($result);
     }
 
-    public function findGenresAndChildren(): array
+    public function findTopLevelGenresAndChildren(): array
     {
         $result = $this->createQueryBuilder('category')
             ->addSelect('children')
             ->innerJoin('category.children', 'children')
-            ->andWhere('category INSTANCE OF :type')
+            ->andWhere('category INSTANCE OF ProgrammesPagesService:Genre')
             ->andWhere('category.depth = 1')
             ->addOrderBy('category.urlKey')
-            ->setParameter('type', 'genre')
             ->getQuery()->getResult(Query::HYDRATE_ARRAY);
 
         return $this->resolveParents($result);

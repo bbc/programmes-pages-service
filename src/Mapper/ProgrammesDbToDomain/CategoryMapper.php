@@ -79,17 +79,19 @@ class CategoryMapper extends AbstractMapper
         return $this->getDomainModel($dbCategory[$key]);
     }
 
-    private function getGenreChildrenModel(array $dbCategory, string $key = 'children'): array
+    private function getGenreChildrenModel(array $dbCategory, string $key = 'children'): ?array
     {
+        if (!array_key_exists($key, $dbCategory) || $dbCategory[$key] === null) {
+            return null;
+        }
+
         $children = [];
-        if (array_key_exists($key, $dbCategory)) {
-            foreach ($dbCategory[$key] as $child) {
-                // Circular references are fun for the whole family
-                // (except grandma and grandpa)
-                $child['parent'] = $dbCategory;
-                unset($child['parent']['children']);
-                $children[] = $this->getDomainModel($child);
-            }
+        foreach ($dbCategory[$key] as $child) {
+            // Circular references are fun for the whole family
+            // (except grandma and grandpa)
+            $child['parent'] = $dbCategory;
+            unset($child['parent']['children']);
+            $children[] = $this->getDomainModel($child);
         }
 
         return $children;

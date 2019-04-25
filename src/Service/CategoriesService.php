@@ -46,7 +46,7 @@ class CategoriesService extends AbstractService
             $key,
             $ttl,
             function () {
-                return $this->mapManyEntities($this->repository->findGenresAndChildren());
+                return $this->mapManyEntities($this->repository->findTopLevelGenresAndChildren());
             }
         );
     }
