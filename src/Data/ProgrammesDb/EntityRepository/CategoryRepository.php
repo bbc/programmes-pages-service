@@ -90,6 +90,20 @@ class CategoryRepository extends MaterializedPathRepository
         return $this->resolveParents($result);
     }
 
+    public function findTopLevelGenresAndChildren(): array
+    {
+        $result = $this->createQueryBuilder('category')
+            ->addSelect('children')
+            ->leftJoin('category.children', 'children')
+            ->andWhere('category INSTANCE OF ProgrammesPagesService:Genre')
+            ->andWhere('category.depth = 1')
+            ->addOrderBy('category.urlKey')
+            ->addOrderBy('children.urlKey')
+            ->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        return $this->resolveParents($result);
+    }
+
     public function clearAncestryCache(): void
     {
         $this->ancestryCache = [];

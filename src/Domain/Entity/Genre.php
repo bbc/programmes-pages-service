@@ -19,15 +19,20 @@ class Genre extends Category
     /** @var string */
     private $urlKeyHierarchy;
 
+    /** @var array|null */
+    private $children;
+
     public function __construct(
         array $dbAncestryIds,
         string $id,
         string $title,
         string $urlKey,
-        ?Genre $parent = null
+        ?Genre $parent = null,
+        ?array $children = null
     ) {
         parent::__construct($dbAncestryIds, $id, $title, $urlKey);
         $this->parent = $parent;
+        $this->children = $children;
     }
 
     /**
@@ -64,6 +69,21 @@ class Genre extends Category
         }
 
         return $this->ancestry;
+    }
+
+    /**
+     * @throws DataNotFetchedException
+     */
+    public function getChildren(): array
+    {
+        if ($this->children === null) {
+            throw new DataNotFetchedException(
+                'Could not get children of Genre "'
+                . $this->getId() . '" as they were not fetched'
+            );
+        }
+
+        return $this->children;
     }
 
     public function getTopLevel(): Genre

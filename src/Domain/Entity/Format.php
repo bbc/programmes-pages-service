@@ -9,6 +9,11 @@ class Format extends Category
         return [];
     }
 
+    public function getChildren(): array
+    {
+        return [];
+    }
+
     public function getHierarchicalTitle(): string
     {
         return $this->getTitle();
