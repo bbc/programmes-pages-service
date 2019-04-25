@@ -73,6 +73,8 @@ abstract class Category
 
     abstract protected function getAncestry(): array;
 
+    abstract protected function getChildren(): array;
+
     abstract protected function getHierarchicalTitle(): string;
 
     abstract protected function getUrlKeyHierarchy(): string;
