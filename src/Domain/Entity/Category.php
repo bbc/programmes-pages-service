@@ -28,6 +28,9 @@ abstract class Category
         $this->urlKey = $urlKey;
     }
 
+    /**
+     * @return Category[]
+     */
     abstract public function getChildren(): array;
 
     public function getId(): string

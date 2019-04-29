@@ -35,8 +35,8 @@ class CoreEntityRepository extends MaterializedPathRepository
 
     private $ancestryCache = [];
 
-    public function findTleosByCategory(
-        array $ancestryDbIds,
+    public function findTleosByCategories(
+        array $categoryDbIds,
         bool $filterToAvailable,
         bool $orderByFirstBroadcast,
         ?int $limit,
@@ -53,10 +53,10 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->innerJoin('programme.categories', 'category')
             ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
             ->andWhere('programme.parent IS NULL')
-            ->andWhere('category.ancestry LIKE :ancestry')
+            ->andWhere('category.id IN (:dbids)')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
-            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+            ->setParameter('dbids', $categoryDbIds);
 
         if ($orderByFirstBroadcast) {
             $qb->orderBy('programme.firstBroadcastDate', 'DESC');
@@ -69,8 +69,8 @@ class CoreEntityRepository extends MaterializedPathRepository
         return $this->resolveParents($result);
     }
 
-    public function countTleosByCategory(
-        array $ancestryDbIds,
+    public function countTleosByCategories(
+        array $categoryDbIds,
         bool $filterToAvailable
     ): int {
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -79,8 +79,8 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->innerJoin('programme.categories', 'category')
             ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
             ->andWhere('programme.parent IS NULL')
-            ->andWhere('category.ancestry LIKE :ancestry')
-            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+            ->andWhere('category.id IN (:dbids)')
+            ->setParameter('dbids', $categoryDbIds);
 
         if ($filterToAvailable) {
             $qb->andWhere('programme.streamable = 1');

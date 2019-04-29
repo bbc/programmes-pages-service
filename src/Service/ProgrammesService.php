@@ -50,7 +50,10 @@ class ProgrammesService extends AbstractService
             $key,
             $ttl,
             function () use ($category) {
-                return $this->repository->countTleosByCategory($category->getDbAncestryIds(), false);
+                return $this->repository->countTleosByCategories(
+                    $this->getCategoryIdsWithChildren($category),
+                    false
+                );
             }
         );
     }
@@ -71,8 +74,8 @@ class ProgrammesService extends AbstractService
             $ttl,
             function () use ($category, $limit, $page) {
                 $offset = $this->getOffset($limit, $page);
-                $programmesInSlice = $this->repository->findTleosByCategory(
-                    $category->getDbAncestryIds(),
+                $programmesInSlice = $this->repository->findTleosByCategories(
+                    $this->getCategoryIdsWithChildren($category),
                     false,
                     false,
                     $limit,
@@ -92,7 +95,10 @@ class ProgrammesService extends AbstractService
             $key,
             $ttl,
             function () use ($category) {
-                return $this->repository->countTleosByCategory($category->getDbAncestryIds(), true);
+                return $this->repository->countTleosByCategories(
+                    $this->getCategoryIdsWithChildren($category),
+                    true
+                );
             }
         );
     }
@@ -113,8 +119,8 @@ class ProgrammesService extends AbstractService
             $ttl,
             function () use ($category, $limit, $page) {
                 $offset = $this->getOffset($limit, $page);
-                $programmesInSlice = $this->repository->findTleosByCategory(
-                    $category->getDbAncestryIds(),
+                $programmesInSlice = $this->repository->findTleosByCategories(
+                    $this->getCategoryIdsWithChildren($category),
                     true,
                     true,
                     $limit,
@@ -524,5 +530,14 @@ class ProgrammesService extends AbstractService
                 $entityType
             ));
         }
+    }
+
+    private function getCategoryIdsWithChildren(Category $category): array
+    {
+        $categoriesList = [$category->getDbId()];
+        foreach ($category->getChildren() as $child) {
+            $categoriesList[] = $child->getDbId();
+        }
+        return $categoriesList;
     }
 }

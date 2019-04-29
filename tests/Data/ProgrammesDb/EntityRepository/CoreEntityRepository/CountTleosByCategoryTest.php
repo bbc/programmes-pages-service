@@ -37,7 +37,7 @@ class CountTleosByCategoryTest extends AbstractDatabaseTest
     {
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        $tleos = $repo->countTleosByCategory([1, 2], false);
+        $tleos = $repo->countTleosByCategories([1, 2], false);
         $this->assertSame(2, $tleos);
     }
 
@@ -45,7 +45,7 @@ class CountTleosByCategoryTest extends AbstractDatabaseTest
     {
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        $tleos = $repo->countTleosByCategory([1, 2], true);
+        $tleos = $repo->countTleosByCategories([1, 2], true);
         $this->assertEquals(1, $tleos);
     }
 
@@ -53,7 +53,7 @@ class CountTleosByCategoryTest extends AbstractDatabaseTest
     {
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
-        $tleos = $repo->countTleosByCategory([99], false);
+        $tleos = $repo->countTleosByCategories([99], false);
         $this->assertEquals(0, $tleos);
     }
 }
