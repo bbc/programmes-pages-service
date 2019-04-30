@@ -35,14 +35,15 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
 
     public function testFindTleosByCategoryAllAvailabilityInCategory()
     {
+        $ids = $this->findCategoryAndChildIds(['cat111', 'cat11', 'cat1'], 'genre');
+
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $selectedCategoryForTleos = [1, 2, 3]; // /cat1/cat11
         $selectedAvailabilityForTleos = false;
 
         $tleos = $repo->findTleosByCategories(
-            $selectedCategoryForTleos,
+            $ids,
             $selectedAvailabilityForTleos,
             true,
             null,
@@ -60,7 +61,7 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $selectedCategoryForTleos = [1, 2]; // /cat1/cat11
+        $selectedCategoryForTleos = $this->findCategoryAndChildIds(['cat11', 'cat1'], 'genre'); // /cat1/cat11
         $selectSpecificAvailavility = false;
 
         $tleos = $repo->findTleosByCategories(
@@ -83,7 +84,7 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $selectedCategoryForTleos = [1, 2]; // /cat1/cat11
+        $selectedCategoryForTleos = $this->findCategoryAndChildIds(['cat11', 'cat1'], 'genre'); // /cat1/cat11
         $selectedAvailabilityForTleos = true;
 
         $tleos = $repo->findTleosByCategories(
@@ -98,5 +99,18 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         $this->assertCount(1, $tleos);
 
         $this->assertEquals('Brand1', $tleos[0]['title']);
+    }
+
+    private function findCategoryAndChildIds(array $urlKeys, string $type)
+    {
+        $categoryRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
+        $category = $categoryRepo->findByUrlKeyAncestryAndType($urlKeys, $type);
+        $childCategories = $categoryRepo->findPopulatedChildCategories($category['id'], $type);
+
+        $ids = [$category['id']];
+        foreach ($childCategories as $childCategory) {
+            $ids[] = $childCategory['id'];
+        }
+        return $ids;
     }
 }

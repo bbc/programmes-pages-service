@@ -10,12 +10,18 @@ class FindAvailableTleosByCategoryTest extends AbstractProgrammesServiceTest
 {
     public function testServiceCommunicationWithRepository()
     {
-        $category = $this->createConfiguredMock(Genre::class, ['getDbAncestryIds' => [1]]);
+        $category = $this->createConfiguredMock(Genre::class, [
+            'getDbId' => 1,
+            'getChildren' => [
+                $this->createConfiguredMock(Genre::class, ['getDbId' => 5]),
+            ],
+        ]);
 
         $this->mockRepository->expects($this->once())
-        ->method('findTleosByCategory')
+        ->method('findTleosByCategories')
         ->with(
-            $category->getDbAncestryIds(),
+            [1, 5],
+            true,
             true,
             ProgrammesService::DEFAULT_LIMIT
         );
@@ -28,7 +34,7 @@ class FindAvailableTleosByCategoryTest extends AbstractProgrammesServiceTest
      */
     public function testServiceCanReceiveTleosFromRepositoryByCategory(array $expectedPids, array $dbTleosProvided)
     {
-        $this->mockRepository->method('findTleosByCategory')->willReturn($dbTleosProvided);
+        $this->mockRepository->method('findTleosByCategories')->willReturn($dbTleosProvided);
 
         $tleos = $this->service()->findAvailableTleosByCategory($this->createMock(Genre::class));
 

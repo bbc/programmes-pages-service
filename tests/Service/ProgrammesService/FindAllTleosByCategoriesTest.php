@@ -6,16 +6,23 @@ use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Service\ProgrammesService;
 
-class FindAllTleosByCategoryTest extends AbstractProgrammesServiceTest
+class FindAllTleosByCategoriesTest extends AbstractProgrammesServiceTest
 {
     public function testCommunicationWithDatabase()
     {
-        $category = $this->createConfiguredMock(Genre::class, ['getDbId' => 1]);
+        $category = $this->createConfiguredMock(Genre::class, [
+            'getDbId' => 1,
+            'getChildren' => [
+                $this->createConfiguredMock(Genre::class, ['getDbId' => 2]),
+                $this->createConfiguredMock(Genre::class, ['getDbId' => 3]),
+            ],
+        ]);
 
         $this->mockRepository->expects($this->once())
-            ->method('findTleosByCategory')
+            ->method('findTleosByCategories')
             ->with(
-                $category->getDbAncestryIds(),
+                [1, 2, 3],
+                false,
                 false,
                 ProgrammesService::DEFAULT_LIMIT
             );
@@ -28,7 +35,7 @@ class FindAllTleosByCategoryTest extends AbstractProgrammesServiceTest
      */
     public function testTleosAreReceivedFromRepository(array $expectedPids, array $dbTleosProvided)
     {
-        $this->mockRepository->method('findTleosByCategory')->willReturn($dbTleosProvided);
+        $this->mockRepository->method('findTleosByCategories')->willReturn($dbTleosProvided);
 
         $tleos = $this->service()->findAllTleosByCategory($this->createMock(Genre::class));
 
