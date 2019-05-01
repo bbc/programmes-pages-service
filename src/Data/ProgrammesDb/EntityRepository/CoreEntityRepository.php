@@ -53,6 +53,9 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->innerJoin('programme.categories', 'category')
             ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
             ->andWhere('programme.parent IS NULL')
+            // We use a list of categories obtained from a previous query rather than a simple WHERE clause
+            // on the ancestry because the MySQL DB optimiser handles this much better, reducing this query's
+            // execution time by an order of magnitude in some pathological cases
             ->andWhere('category.id IN (:dbids)')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
