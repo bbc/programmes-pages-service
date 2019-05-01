@@ -105,10 +105,10 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
     {
         $id = $this->getDbIdFromPersistentIdentifier($pipId, 'Category', 'pipId');
         $categoryRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
-        $category = $categoryRepo->findByIdWithAllDescendants($id, $type);
+        $children = $categoryRepo->findAllDescendantsByParentId($id, $type);
 
-        $ids = [$category['id']];
-        foreach ($category['children'] as $childCategory) {
+        $ids = [$id];
+        foreach ($children as $childCategory) {
             $ids[] = $childCategory['id'];
         }
         return $ids;

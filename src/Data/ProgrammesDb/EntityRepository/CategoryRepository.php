@@ -46,22 +46,21 @@ class CategoryRepository extends MaterializedPathRepository
         return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    public function findByIdWithAllDescendants(
-        int $dbId,
+    public function findAllDescendantsByParentId(
+        int $parentId,
         string $categoryType
     ): array {
         $qb = $this->createQueryBuilder('category')
             ->select(['category'])
-            ->addSelect('children', 'grandchildren')
+            ->addSelect('children')
             ->leftJoin('category.children', 'children')
-            ->leftJoin('children.children', 'grandchildren')
-            ->andWhere('category.id = :id')
+            ->andWhere('category.parent = :parentid')
             ->andWhere('category INSTANCE OF :type')
             ->addOrderBy('category.title')
-            ->setParameter('id', $dbId)
+            ->setParameter('parentid', $parentId)
             ->setParameter('type', $categoryType);
 
-        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function findAllByTypeAndMaxDepth(string $type, int $maxDepth): array

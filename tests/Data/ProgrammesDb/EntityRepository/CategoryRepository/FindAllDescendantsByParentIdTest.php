@@ -7,21 +7,20 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository::<public>
  */
-class FindByIdWithAllDescendantsTest extends AbstractDatabaseTest
+class FindAllDescendantsByParentIdTest extends AbstractDatabaseTest
 {
     public function testFindPopulatedChildCategories()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');
 
-        $category = $repo->findByIdWithAllDescendants(
+        $children = $repo->findAllDescendantsByParentId(
             $dbId = $this->getDbIdFromPersistentIdentifier('C00193', 'Category', 'pipId'),
             'genre'
         );
-        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00193', 'Category', 'pipId'), $category['id']);
-        $this->assertCount(1, $category['children']);
+        $this->assertCount(1, $children);
 
-        $childCategory = $category['children'][0];
+        $childCategory = $children[0];
         $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00196', 'Category', 'pipId'), $childCategory['id']);
         $this->assertEquals('sitcoms', $childCategory['urlKey']);
 

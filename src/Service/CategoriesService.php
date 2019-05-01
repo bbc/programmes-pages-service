@@ -80,11 +80,10 @@ class CategoriesService extends AbstractService
                     return $result;
                 }
                 // get descendants
-                $childResult = $this->repository->findByIdWithAllDescendants(
+                $result['children'] = $this->repository->findAllDescendantsByParentId(
                     $result['id'],
                     'genre'
                 );
-                $result['children'] = $childResult['children'];
                 return $this->mapSingleEntity($result);
             }
         );
