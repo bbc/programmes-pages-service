@@ -537,6 +537,11 @@ class ProgrammesService extends AbstractService
         $categoriesList = [$category->getDbId()];
         foreach ($category->getChildren() as $child) {
             $categoriesList[] = $child->getDbId();
+            foreach ($child->getChildren() as $grandChild) {
+                // Before somebody shouts at me about not understanding recursion, we will get
+                // DataNotFetchedExceptions if we attempt to fetch to arbitrary depth
+                $categoriesList[] = $grandChild->getDbId();
+            }
         }
         return $categoriesList;
     }

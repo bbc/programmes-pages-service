@@ -7,20 +7,26 @@ use Tests\BBC\ProgrammesPagesService\AbstractDatabaseTest;
 /**
  * @covers BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CategoryRepository::<public>
  */
-class FindPopulatedChildCategoriesTest extends AbstractDatabaseTest
+class FindByIdWithAllDescendantsTest extends AbstractDatabaseTest
 {
     public function testFindPopulatedChildCategories()
     {
         $this->loadFixtures(['MongrelsWithCategoriesFixture']);
         $repo = $this->getRepository('ProgrammesPagesService:Category');
 
-        $entity = $repo->findPopulatedChildCategories(
+        $category = $repo->findByIdWithAllDescendants(
             $dbId = $this->getDbIdFromPersistentIdentifier('C00193', 'Category', 'pipId'),
             'genre'
         );
+        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00193', 'Category', 'pipId'), $category['id']);
+        $this->assertCount(1, $category['children']);
 
-        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00196', 'Category', 'pipId'), $entity[0]['id']);
-        $this->assertEquals('sitcoms', $entity[0]['urlKey']);
+        $childCategory = $category['children'][0];
+        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00196', 'Category', 'pipId'), $childCategory['id']);
+        $this->assertEquals('sitcoms', $childCategory['urlKey']);
+
+        $this->assertCount(1, $childCategory['children']);
+        $this->assertEquals($this->getDbIdFromPersistentIdentifier('C00999', 'Category', 'pipId'), $childCategory['children'][0]['id']);
 
         // findChildCategoriesUsedByTleosByParentIdAndType query only
         $this->assertCount(1, $this->getDbQueries());
