@@ -35,15 +35,17 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
 
     public function testFindTleosByCategoryAllAvailabilityInCategory()
     {
+        $ids = $this->findCategoryAndChildIds('C00925', 'genre');
+
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $selectedCategoryForTleos = [1, 2, 3]; // /cat1/cat11
         $selectedAvailabilityForTleos = false;
 
-        $tleos = $repo->findTleosByCategory(
-            $selectedCategoryForTleos,
+        $tleos = $repo->findTleosByCategories(
+            $ids,
             $selectedAvailabilityForTleos,
+            true,
             null,
             0
         );
@@ -59,12 +61,13 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $selectedCategoryForTleos = [1, 2]; // /cat1/cat11
+        $selectedCategoryForTleos = $this->findCategoryAndChildIds('C00124', 'genre'); // /cat1/cat11
         $selectSpecificAvailavility = false;
 
-        $tleos = $repo->findTleosByCategory(
+        $tleos = $repo->findTleosByCategories(
             $selectedCategoryForTleos,
             $selectSpecificAvailavility,
+            true,
             null,
             0
         );
@@ -81,12 +84,13 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
 
-        $selectedCategoryForTleos = [1, 2]; // /cat1/cat11
+        $selectedCategoryForTleos = $this->findCategoryAndChildIds('C00124', 'genre'); // /cat1/cat11
         $selectedAvailabilityForTleos = true;
 
-        $tleos = $repo->findTleosByCategory(
+        $tleos = $repo->findTleosByCategories(
             $selectedCategoryForTleos,
             $selectedAvailabilityForTleos,
+            true,
             null,
             0
         );
@@ -95,5 +99,18 @@ class FindTleosByCategoryTest extends AbstractDatabaseTest
         $this->assertCount(1, $tleos);
 
         $this->assertEquals('Brand1', $tleos[0]['title']);
+    }
+
+    private function findCategoryAndChildIds(string $pipId, string $type)
+    {
+        $id = $this->getDbIdFromPersistentIdentifier($pipId, 'Category', 'pipId');
+        $categoryRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Category');
+        $children = $categoryRepo->findAllDescendantsByParentId($id, $type);
+
+        $ids = [$id];
+        foreach ($children as $childCategory) {
+            $ids[] = $childCategory['id'];
+        }
+        return $ids;
     }
 }

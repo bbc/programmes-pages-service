@@ -35,36 +35,45 @@ class CoreEntityRepository extends MaterializedPathRepository
 
     private $ancestryCache = [];
 
-    public function findTleosByCategory(
-        array $ancestryDbIds,
+    public function findTleosByCategories(
+        array $categoryDbIds,
         bool $filterToAvailable,
+        bool $orderByFirstBroadcast,
         ?int $limit,
         int $offset
     ): array {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                   ->select(['DISTINCT programme', 'image', 'masterbrand', 'mbImage'])
-                   ->from('ProgrammesPagesService:Programme', 'programme')
-                   ->leftJoin('programme.image', 'image')
-                   ->leftJoin('programme.masterBrand', 'masterbrand')
-                   ->leftJoin('masterbrand.image', 'mbImage')
-                   ->innerJoin('programme.categories', 'category')
-                   ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
-                   ->andWhere('programme.parent IS NULL')
-                   ->andWhere('category.ancestry LIKE :ancestry')
-                   ->orderBy('programme.firstBroadcastDate', 'DESC')
-                   ->setFirstResult($offset)
-                   ->setMaxResults($limit)
-                   ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+            ->select(['DISTINCT programme', 'image', 'masterBrand', 'mbImage', 'network', 'nwImage'])
+            ->from('ProgrammesPagesService:Programme', 'programme')
+            ->leftJoin('programme.image', 'image')
+            ->leftJoin('programme.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('network.image', 'nwImage')
+            ->innerJoin('programme.categories', 'category')
+            ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
+            ->andWhere('programme.parent IS NULL')
+            // We use a list of categories obtained from a previous query rather than a simple WHERE clause
+            // on the ancestry because the MySQL DB optimiser handles this much better, reducing this query's
+            // execution time by an order of magnitude in some pathological cases
+            ->andWhere('category.id IN (:dbids)')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('dbids', $categoryDbIds);
 
+        if ($orderByFirstBroadcast) {
+            $qb->orderBy('programme.firstBroadcastDate', 'DESC');
+        }
         if ($filterToAvailable) {
             $qb->andWhere('programme.streamable = 1');
         }
 
-        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
     }
 
-    public function countTleosByCategory(
-        array $ancestryDbIds,
+    public function countTleosByCategories(
+        array $categoryDbIds,
         bool $filterToAvailable
     ): int {
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -73,8 +82,8 @@ class CoreEntityRepository extends MaterializedPathRepository
             ->innerJoin('programme.categories', 'category')
             ->andWhere('programme INSTANCE OF (ProgrammesPagesService:Series, ProgrammesPagesService:Episode, ProgrammesPagesService:Brand)')
             ->andWhere('programme.parent IS NULL')
-            ->andWhere('category.ancestry LIKE :ancestry')
-            ->setParameter('ancestry', $this->ancestryIdsToString($ancestryDbIds) . '%');
+            ->andWhere('category.id IN (:dbids)')
+            ->setParameter('dbids', $categoryDbIds);
 
         if ($filterToAvailable) {
             $qb->andWhere('programme.streamable = 1');

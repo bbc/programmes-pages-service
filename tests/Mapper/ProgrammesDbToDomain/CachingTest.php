@@ -157,16 +157,17 @@ class CachingTest extends BaseCoreEntityMapperTestCase
             ['{1,!,!,@,!}', ['id' => 1, 'masterBrand' => null]],
 
             // Categories fetched and set
-            ['{1,!,!,!,[{6,@},{7,@}]}', ['id' => 1, 'categories' => [['id' => 6, 'parent' => null], ['id' => 7, 'parent' => null]]]],
+            ['{1,!,!,!,[{6,@,!},{7,@,!}]}', ['id' => 1, 'categories' => [['id' => 6, 'parent' => null], ['id' => 7, 'parent' => null]]]],
             // Recursive Categories fetched
             [
-                '{1,!,!,!,[{8,@},{10,{11,@}}]}',
+                '{1,!,!,!,[{8,@,[]},{10,{11,@,!},[]}]}',
                 [
                     'id' => 1,
                     'categories' => [
                         [
                             'id' => 8,
                             'parent' => null,
+                            'children' => [],
                         ],
                         [
                             'id' => 10,
@@ -174,6 +175,7 @@ class CachingTest extends BaseCoreEntityMapperTestCase
                                 'id' => 11,
                                 'parent' => null,
                             ],
+                            'children' => [],
                         ],
                     ],
                 ],

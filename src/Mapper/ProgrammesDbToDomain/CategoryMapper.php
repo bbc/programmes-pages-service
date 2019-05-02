@@ -6,17 +6,23 @@ use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\Format;
 use BBC\ProgrammesPagesService\Domain\Entity\Genre;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedGenre;
+use BBC\ProgrammesPagesService\Mapper\Traits\AncestryArrayTrait;
 use InvalidArgumentException;
 
 class CategoryMapper extends AbstractMapper
 {
+    use AncestryArrayTrait;
+
     private $cache = [];
 
     public function getCacheKey(array $dbCategory): string
     {
-        return $this->buildCacheKey($dbCategory, 'id', [
-            'parent' => 'Category',
-        ]);
+        return $this->buildCacheKey(
+            $dbCategory,
+            'id',
+            ['parent' => 'Category'],
+            ['children' => 'Category']
+        );
     }
 
     public function getDomainModel(array $dbCategory): Category
@@ -95,16 +101,5 @@ class CategoryMapper extends AbstractMapper
         }
 
         return $children;
-    }
-
-    private function getAncestryArray(array $dbCategory, string $key = 'ancestry'): array
-    {
-        // ancestry contains a string of all IDs including the current one with
-        // a trailing comma at the end (which makes it an empty item when exploding)
-        // Thus we want an array of all but the final item (which is null)
-        $ancestors = explode(',', $dbCategory[$key], -1) ?? [];
-        return array_map(function ($a) {
-            return (int) $a;
-        }, $ancestors);
     }
 }

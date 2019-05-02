@@ -20,12 +20,14 @@ use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedMasterBrand;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedOptions;
 use BBC\ProgrammesPagesService\Domain\Entity\Unfetched\UnfetchedProgramme;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
+use BBC\ProgrammesPagesService\Mapper\Traits\AncestryArrayTrait;
 use BBC\ProgrammesPagesService\Mapper\Traits\SynopsesTrait;
 use InvalidArgumentException;
 
 class CoreEntityMapper extends AbstractMapper
 {
     use SynopsesTrait;
+    use AncestryArrayTrait;
 
     private const PROGRAMME_TYPES = ['brand', 'clip', 'episode', 'series'];
     private const GROUP_TYPES = ['collection', 'franchise', 'gallery', 'season'];
@@ -317,17 +319,6 @@ class CoreEntityMapper extends AbstractMapper
             $this->castDateTime($dbProgramme['streamableUntil']),
             $dbProgramme['downloadableMediaSets'] ?? []
         );
-    }
-
-    private function getAncestryArray(array $dbEntity, string $key = 'ancestry'): array
-    {
-        // ancestry contains a string of all IDs including the current one with
-        // a trailing comma at the end (which makes it an empty item when exploding)
-        // Thus we want an array of all but the final item (which is null)
-        $ancestors = explode(',', $dbEntity[$key], -1) ?? [];
-        return array_map(function ($a) {
-            return (int) $a;
-        }, $ancestors);
     }
 
     private function getOptionsModel(array $dbEntity, string $key = 'options'): Options

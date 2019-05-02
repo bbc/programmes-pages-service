@@ -65,7 +65,7 @@ class CategoriesService extends AbstractService
         );
     }
 
-    public function findGenreByUrlKeyAncestry(array $urlHierarchy, $ttl = CacheInterface::NORMAL): ?Genre
+    public function findGenreByUrlKeyAncestryWithDescendants(array $urlHierarchy, $ttl = CacheInterface::NORMAL): ?Genre
     {
         $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, implode('|', $urlHierarchy), $ttl);
 
@@ -73,28 +73,18 @@ class CategoriesService extends AbstractService
             $key,
             $ttl,
             function () use ($urlHierarchy) {
-                $genre = $this->repository->findByUrlKeyAncestryAndType($urlHierarchy, 'genre');
-                return $this->mapSingleEntity($genre);
-            }
-        );
-    }
+                $result = $this->repository->findByUrlKeyAncestryAndType($urlHierarchy, 'genre');
 
-    /**
-     * @return Genre[]
-     */
-    public function findPopulatedChildGenres(Genre $genre, $ttl = CacheInterface::NORMAL): array
-    {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $genre->getDbId(), $ttl);
-
-        return $this->cache->getOrSet(
-            $key,
-            $ttl,
-            function () use ($genre) {
-                $subcategories = $this->repository->findPopulatedChildCategories(
-                    $genre->getDbId(),
+                if (!$result) {
+                    // not found, return null
+                    return $result;
+                }
+                // get descendants
+                $result['children'] = $this->repository->findAllDescendantsByParentId(
+                    $result['id'],
                     'genre'
                 );
-                return $this->mapManyEntities($subcategories);
+                return $this->mapSingleEntity($result);
             }
         );
     }
