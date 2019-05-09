@@ -34,9 +34,7 @@ class FindBySegmentTest extends AbstractDatabaseTest
             }, $pids);
 
             $entities = $repo->findBySegmentFull($ids, $groupByVersionId, $limit, $offset);
-            // Group by leaves ordering undefined
-            $actualPids = array_column($entities, 'pid');
-            $this->assertEquals(sort($expectedPids), sort($actualPids));
+            $this->assertEquals($expectedPids, array_column($entities, 'pid'));
 
             // findBySegment query and ancestry hydration queries
             $this->assertCount($numQueries, $this->getDbQueries());
