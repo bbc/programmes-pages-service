@@ -63,27 +63,27 @@ class CoreEntityRepository extends MaterializedPathRepository
             'network' => 'n',
             'nwImage' => 'ni',
         ]);
-        $query = $this->getEntityManager()->createNativeQuery(
-            'SELECT ' . $selectClause . ' ' .
-            'FROM core_entity ce ' .
-            'LEFT JOIN master_brand mb ON ce.master_brand_id = mb.id ' .
-            'LEFT JOIN image mi ON mb.image_id = mi.id ' .
-            'LEFT JOIN network n ON mb.network_id = n.id ' .
-            'LEFT JOIN image ni ON n.image_id = ni.id ' .
-            'WHERE ' .
-            'ce.id IN (SELECT a.id FROM (' .
-                '(SELECT ct.id FROM core_entity ct INNER JOIN membership m1 ON ct.tleo_id = m1.member_core_entity_id WHERE m1.group_id = :groupDbId AND ct.type=\'episode\') ' .
-                'UNION ' .
-                '(SELECT cp.id FROM core_entity cp INNER JOIN membership m2 ON cp.parent_id = m2.member_core_entity_id WHERE m2.group_id = :groupDbId AND cp.type=\'episode\') ' .
-                'UNION ' .
-                '(SELECT cc.id FROM core_entity cc INNER JOIN membership m3 ON cc.id = m3.member_core_entity_id WHERE m3.group_id = :groupDbId AND cc.type=\'episode\') ' .
-                ') AS a) ' .
-            'AND ce.streamable = 1 ' .
-            'ORDER BY ce.streamable_from DESC ' .
-            'LIMIT :limit ' .
-            'OFFSET :offset ',
-            $rsmb
-        );
+        $sql = 'SELECT ' . $selectClause ;
+        $sql .= <<<'EOQ'
+            FROM core_entity ce
+            LEFT JOIN master_brand mb ON ce.master_brand_id = mb.id
+            LEFT JOIN image mi ON mb.image_id = mi.id
+            LEFT JOIN network n ON mb.network_id = n.id
+            LEFT JOIN image ni ON n.image_id = ni.id
+            WHERE
+            ce.id IN (SELECT a.id FROM ( 
+                (SELECT ct.id FROM core_entity ct INNER JOIN membership m1 ON ct.tleo_id = m1.member_core_entity_id WHERE m1.group_id = :groupDbId AND ct.type='episode')
+                UNION
+                (SELECT cp.id FROM core_entity cp INNER JOIN membership m2 ON cp.parent_id = m2.member_core_entity_id WHERE m2.group_id = :groupDbId AND cp.type='episode')
+                UNION
+                (SELECT cc.id FROM core_entity cc INNER JOIN membership m3 ON cc.id = m3.member_core_entity_id WHERE m3.group_id = :groupDbId AND cc.type='episode')
+                ) AS a)
+            AND ce.streamable = 1
+            ORDER BY ce.streamable_from DESC
+            LIMIT :limit
+            OFFSET :offset
+EOQ;
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsmb);
         $query->setParameter('groupDbId', $groupDbId);
         $query->setParameter('limit', $limit);
         $query->setParameter('offset', $offset);
