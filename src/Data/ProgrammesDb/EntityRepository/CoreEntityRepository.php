@@ -2,9 +2,15 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Membership;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\SearchUtilitiesTrait;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use DateTimeInterface;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
@@ -34,6 +40,56 @@ class CoreEntityRepository extends MaterializedPathRepository
     const DB_GROUP_TYPES = ['collection', 'season', 'franchise', 'gallery'];
 
     private $ancestryCache = [];
+
+    public function prayToJebus(int $groupDbId, ?int $limit, int $offset)
+    {
+        /**
+         * This magically creates a select statement and mappers that allow doctrine to map a native query into the format
+         * our own mappers expect from a DQL query
+         */
+        $rsmb = new Query\ResultSetMappingBuilder($this->getEntityManager(), Query\ResultSetMappingBuilder::COLUMN_RENAMING_INCREMENT);
+        $rsmb->addRootEntityFromClassMetadata(Episode::class, 'core_entity', ['type' => 'magic_type']);
+        // Little bit of magic here to override doctrine's handling of the magic "type" field on the CoreEntity MappedSuperClass
+        $rsmb->addMetaResult('core_entity', 'magic_type', 'type', true, 'string');
+        $rsmb->addJoinedEntityFromClassMetadata(MasterBrand::class, 'masterBrand', 'core_entity', 'masterBrand');
+        $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'mbImage', 'masterBrand', 'image');
+        $rsmb->addJoinedEntityFromClassMetadata(Network::class, 'network', 'masterBrand', 'network');
+        $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'nwImage', 'network', 'image');
+        // Map SQL table aliases to doctrine aliases
+        $selectClause = $rsmb->generateSelectClause([
+            'core_entity' => 'ce',
+            'masterBrand' => 'mb',
+            'mbImage' => 'mi',
+            'network' => 'n',
+            'nwImage' => 'ni',
+        ]);
+        $query = $this->getEntityManager()->createNativeQuery(
+            'SELECT ' . $selectClause . ' ' .
+            'FROM core_entity ce ' .
+            'LEFT JOIN master_brand mb ON ce.master_brand_id = mb.id ' .
+            'LEFT JOIN image mi ON mb.image_id = mi.id ' .
+            'LEFT JOIN network n ON mb.network_id = n.id ' .
+            'LEFT JOIN image ni ON n.image_id = ni.id ' .
+            'WHERE ' .
+            'ce.id IN (SELECT a.id FROM (' .
+                '(SELECT ct.id FROM core_entity ct INNER JOIN membership m1 ON ct.tleo_id = m1.member_core_entity_id WHERE m1.group_id = :groupDbId AND ct.type=\'episode\') ' .
+                'UNION ' .
+                '(SELECT cp.id FROM core_entity cp INNER JOIN membership m2 ON cp.parent_id = m2.member_core_entity_id WHERE m2.group_id = :groupDbId AND cp.type=\'episode\') ' .
+                'UNION ' .
+                '(SELECT cc.id FROM core_entity cc INNER JOIN membership m3 ON cc.id = m3.member_core_entity_id WHERE m3.group_id = :groupDbId AND cc.type=\'episode\') ' .
+                ') AS a) ' .
+            'AND ce.streamable = 1 ' .
+            'ORDER BY ce.streamable_from DESC ' .
+            'LIMIT :limit ' .
+            'OFFSET :offset ',
+            $rsmb
+        );
+        $query->setParameter('groupDbId', $groupDbId);
+        $query->setParameter('limit', $limit);
+        $query->setParameter('offset', $offset);
+        $result = $query->getResult(AbstractQuery::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
+    }
 
     public function findTleosByCategories(
         array $categoryDbIds,

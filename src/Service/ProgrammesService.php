@@ -58,6 +58,12 @@ class ProgrammesService extends AbstractService
         );
     }
 
+    public function prayToJebus($groupId)
+    {
+        $result = $this->repository->prayToJebus($groupId, 50, 0);
+        return $this->mapManyEntities($result);
+    }
+
     /**
      * @return Programme[] types: Series|Episode|Brand
      */
