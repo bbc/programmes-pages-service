@@ -31,7 +31,10 @@ class FindActivePromotionsByContextTest extends AbstractDatabaseTest
     public function testActiveSuperpromotionsAreReceivedWithSuperPromotionsForBrand()
     {
         $brandDbAncestryIds = $this->getAncestryFromPersistentIdentifier('b010t19z', 'CoreEntity');
-        $dbPromotions = $this->promotionRepository->findActivePromotionsByContext($brandDbAncestryIds, new DateTimeImmutable(), 300, 0);
+        $dbPromotions = $this->promotionRepository->findAllActivePromotionsByContext(
+            $brandDbAncestryIds,
+            new DateTimeImmutable()
+        );
 
         // only promotions received by the current context (brand) are received in the right order
         $this->assertEquals(['p000001h', 'p000000h'], array_column($dbPromotions, 'pid'));
@@ -50,7 +53,10 @@ class FindActivePromotionsByContextTest extends AbstractDatabaseTest
     public function testActiveSuperpromotionsAreReceivedWithSuperPromotionsForSeries()
     {
         $seriesDbAncestryIds = $this->getAncestryFromPersistentIdentifier('b00swyx1', 'CoreEntity');
-        $dbPromotions = $this->promotionRepository->findActivePromotionsByContext($seriesDbAncestryIds, new DateTimeImmutable(), 300, 0);
+        $dbPromotions = $this->promotionRepository->findAllActivePromotionsByContext(
+            $seriesDbAncestryIds,
+            new DateTimeImmutable()
+        );
 
         // it fetchs promotion p000001h (super promotion placed in this context)
         $this->assertEquals(['p000003h', 'p000002h'], array_column($dbPromotions, 'pid'));
@@ -66,7 +72,10 @@ class FindActivePromotionsByContextTest extends AbstractDatabaseTest
     public function testActiveSuperpromotionsAreReceivedWithSuperPromotionsForEpisode()
     {
         $episodeDbAncestryIds = $this->getAncestryFromPersistentIdentifier('b00syxx6', 'CoreEntity');
-        $dbPromotions = $this->promotionRepository->findActivePromotionsByContext($episodeDbAncestryIds, new DateTimeImmutable(), 300, 0);
+        $dbPromotions = $this->promotionRepository->findAllActivePromotionsByContext(
+            $episodeDbAncestryIds,
+            new DateTimeImmutable()
+        );
 
         // it fetch promotions in this order: [current context by weight + parent context by weight]
         $this->assertEquals(['p000007h', 'p000006h', 'p000003h', 'p000002h'], array_column($dbPromotions, 'pid'));
@@ -82,7 +91,10 @@ class FindActivePromotionsByContextTest extends AbstractDatabaseTest
     public function testActiveSuperpromotionsAreReceivedWithSuperPromotionsForImage()
     {
         $seriesdDbAncestryIds = $this->getAncestryFromPersistentIdentifier('b010t150', 'CoreEntity');
-        $dbPromotions = $this->promotionRepository->findActivePromotionsByContext($seriesdDbAncestryIds, new DateTimeImmutable(), 300, 0);
+        $dbPromotions = $this->promotionRepository->findAllActivePromotionsByContext(
+            $seriesdDbAncestryIds,
+            new DateTimeImmutable()
+        );
 
         // we fetch the only promotion of image in this context.
         // Nor super propmotions are inherited in this context and the promotions promoting an embargoed clip is not received

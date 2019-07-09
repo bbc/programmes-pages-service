@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\SearchUtilitiesTrait;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use DateTimeInterface;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
@@ -631,6 +632,29 @@ QUERY;
         }
 
         return $this->resolveParents([$result])[0];
+    }
+
+    public function findByGroup(
+        int $groupDbId,
+        ?int $limit,
+        int $offset
+    ): array {
+        $qb = $this->createQueryBuilder('entity')
+            ->addSelect(['image', 'masterBrand', 'network', 'mbImage', 'nwImage'])
+            ->innerJoin('ProgrammesPagesService:Membership', 'membership', Query\Expr\Join::WITH, 'membership.memberCoreEntity = entity')
+            ->leftJoin('entity.image', 'image')
+            ->leftJoin('entity.masterBrand', 'masterBrand')
+            ->leftJoin('masterBrand.image', 'mbImage')
+            ->leftJoin('masterBrand.network', 'network')
+            ->leftJoin('network.image', 'nwImage')
+            ->where('membership.group = :groupId')
+            ->orderBy('membership.position', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('groupId', $groupDbId);
+
+        $results = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
+        return $this->resolveParents($results);
     }
 
     public function countByKeywords(

@@ -4,7 +4,9 @@ namespace BBC\ProgrammesPagesService\Service;
 
 use BBC\ProgrammesCachingLibrary\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\RelatedLinkRepository;
+use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
+use BBC\ProgrammesPagesService\Domain\Entity\RelatedLink;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\RelatedLinkMapper;
 
 class RelatedLinksService extends AbstractService
@@ -23,21 +25,29 @@ class RelatedLinksService extends AbstractService
         parent::__construct($repository, $mapper, $cache);
     }
 
+    /**
+     * @param CoreEntity $coreEntity
+     * @param array $linkTypes
+     * @param int|null $limit
+     * @param int $page
+     * @param string $ttl
+     * @return RelatedLink[]
+     */
     public function findByRelatedToProgramme(
-        Programme $programme,
+        CoreEntity $coreEntity,
         array $linkTypes = [],
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
     ): array {
-        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $programme->getDbId(), implode('|', $linkTypes), $limit, $page, $ttl);
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $coreEntity->getDbId(), implode('|', $linkTypes), $limit, $page, $ttl);
 
         return $this->cache->getOrSet(
             $key,
             $ttl,
-            function () use ($programme, $linkTypes, $limit, $page) {
+            function () use ($coreEntity, $linkTypes, $limit, $page) {
                 $dbEntities = $this->repository->findByRelatedTo(
-                    [$programme->getDbId()],
+                    [$coreEntity->getDbId()],
                     'programme',
                     $linkTypes,
                     $limit,

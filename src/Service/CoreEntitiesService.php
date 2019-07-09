@@ -5,6 +5,7 @@ namespace BBC\ProgrammesPagesService\Service;
 use BBC\ProgrammesCachingLibrary\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository;
 use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
+use BBC\ProgrammesPagesService\Domain\Entity\Group;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
 use InvalidArgumentException;
@@ -87,6 +88,32 @@ class CoreEntitiesService extends AbstractService
                     $indexedEntities[(string) $entity->getPid()] = $entity;
                 }
                 return $indexedEntities;
+            }
+        );
+    }
+
+    /**
+     * @param Group $group
+     * @param int|null $limit
+     * @param int $page
+     * @param string $ttl
+     * @return CoreEntity[]
+     */
+    public function findByGroup(
+        Group $group,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
+    ) {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $group->getPid(), $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($group, $limit, $page) {
+                $offset = $this->getOffset($limit, $page);
+                $result = $this->repository->findByGroup($group->getDbId(), $limit, $offset);
+                return $this->mapManyEntities($result);
             }
         );
     }
