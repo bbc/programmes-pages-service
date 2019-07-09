@@ -23,9 +23,35 @@ class PromotionsService extends AbstractService
     }
 
     /**
+     * @param CoreEntity $context
+     * @param string $ttl
+     * @param string $nullTtl
      * @return Promotion[]
      */
-    public function findActivePromotionsByContext(
+    public function findAllActivePromotionsByContext(
+        CoreEntity $context,
+        $ttl = CacheInterface::NORMAL,
+        $nullTtl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $context->getDbId(), $ttl, $nullTtl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($context) {
+                $dbEntities = $this->repository->findAllActivePromotionsByContext(
+                    $context->getDbAncestryIds(),
+                    ApplicationTime::getTime()
+                );
+
+                return $this->mapManyEntities($dbEntities);
+            },
+            [],
+            $nullTtl
+        );
+    }
+
+    public function findActiveNonSuperPromotionsByContext(
         CoreEntity $context,
         ?int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE,
@@ -38,8 +64,8 @@ class PromotionsService extends AbstractService
             $key,
             $ttl,
             function () use ($context, $limit, $page) {
-                $dbEntities = $this->repository->findActivePromotionsByContext(
-                    $context->getDbAncestryIds(),
+                $dbEntities = $this->repository->findActiveNonSuperPromotionsByContext(
+                    $context->getDbId(),
                     ApplicationTime::getTime(),
                     $limit,
                     $this->getOffset($limit, $page)
@@ -52,13 +78,11 @@ class PromotionsService extends AbstractService
         );
     }
 
-    public function findActivePromotionsByEntityGroupedByType(
+    public function findAllActivePromotionsByEntityGroupedByType(
         CoreEntity $context,
-        ?int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE,
         $ttl = CacheInterface::NORMAL
     ): array {
-        $promotions = $this->findActivePromotionsByContext($context, $limit, $page, $ttl);
+        $promotions = $this->findAllActivePromotionsByContext($context, $ttl);
 
         $groupedPromotions = [
             'regular' => [],

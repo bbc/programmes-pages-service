@@ -21,37 +21,23 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
         ]);
     }
 
-    /**
-     * @dataProvider paginationProvider
-     */
-    public function testProtocolWithDatabase(int $expectedLimit, int $expectedOffset, array $paramsPagination)
+    public function testProtocolWithDatabase()
     {
         $this->mockRepository->expects($this->once())
-            ->method('findActivePromotionsByContext')
+            ->method('findAllActivePromotionsByContext')
             ->with(
                 $this->context->getDbAncestryIds(),
-                $this->isInstanceOf(DateTimeImmutable::class),
-                $expectedLimit,
-                $expectedOffset
+                $this->isInstanceOf(DateTimeImmutable::class)
             );
 
-        $this->service()->findActivePromotionsByEntityGroupedByType($this->context, ...$paramsPagination);
-    }
-
-    public function paginationProvider(): array
-    {
-        return [
-            // [expectedLimit, expectedOffset, [limit, page]]
-            'CASE: default pagination' => [300, 0, []],
-            'CASE: custom pagination' => [5, 10, [5, 3]],
-        ];
+        $this->service()->findAllActivePromotionsByEntityGroupedByType($this->context);
     }
 
     public function testStructureIsCorrectWhenNoPromotionsResultsFound()
     {
-        $this->mockRepository->method('findActivePromotionsByContext')->willReturn([]);
+        $this->mockRepository->method('findAllActivePromotionsByContext')->willReturn([]);
 
-        $promotions = $this->service()->findActivePromotionsByEntityGroupedByType($this->context);
+        $promotions = $this->service()->findAllActivePromotionsByEntityGroupedByType($this->context);
 
         $this->assertInternalType('array', $promotions);
         $this->assertArrayHasKey('regular', $promotions);
@@ -68,14 +54,14 @@ class FindActivePromotionsByEntityGroupedByTypeTest extends AbstractPromotionSer
 
     public function testStructureIsCorrectWhenFoundPromotionsResults()
     {
-        $this->mockRepository->method('findActivePromotionsByContext')->willReturn(
+        $this->mockRepository->method('findAllActivePromotionsByContext')->willReturn(
             [
                 ['pid' => 'p000000h', 'cascadesToDescendants' => false],
                 ['pid' => 'p000001h', 'cascadesToDescendants' => true],
             ]
         );
 
-        $promotions = $this->service()->findActivePromotionsByEntityGroupedByType($this->context);
+        $promotions = $this->service()->findAllActivePromotionsByEntityGroupedByType($this->context);
 
         $this->assertInternalType('array', $promotions);
         $this->assertArrayHasKey('regular', $promotions);

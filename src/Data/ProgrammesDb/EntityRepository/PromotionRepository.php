@@ -2,6 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Service\AbstractService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
@@ -13,10 +14,11 @@ class PromotionRepository extends EntityRepository
 
     /**
      * @param int[] $ancestryIds
+     * @param DateTimeImmutable $datetime
      * @return array[]
      * @throws InvalidArgumentException when we pass an empty array of ancestryIds
      */
-    public function findActivePromotionsByContext(array $ancestryIds, DateTimeImmutable $datetime, ?int $limit, int $offset): array
+    public function findAllActivePromotionsByContext(array $ancestryIds, DateTimeImmutable $datetime): array
     {
         // $contextId is the current context. We want to get both cascading and non-cascading promos for this id
         // $ancestryIds is an array ids of the parents of the current context. For these ids we only want cascading promos
@@ -52,8 +54,7 @@ class PromotionRepository extends EntityRepository
             ->andWhere('promotionOfCoreEntity.isEmbargoed = 0 OR promotionOfImage.isEmbargoed = 0')
             ->addOrderBy('promotion.weighting', 'ASC')
             ->addOrderBy('relatedLinks.position', 'ASC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
+            ->setMaxResults(AbstractService::DEFAULT_LIMIT)
             ->setParameter('datetime', $datetime);
 
         if ($parentIds) {
@@ -87,6 +88,63 @@ class PromotionRepository extends EntityRepository
         }
 
         return $this->resolveParentsForPromosOfCoreEntities($promotions);
+    }
+
+    /**
+     * @param int $contextId
+     * @param DateTimeImmutable $datetime
+     * @param int|null $limit
+     * @param int $offset
+     * @return array[]
+     */
+    public function findActiveNonSuperPromotionsByContext(
+        int $contextId,
+        DateTimeImmutable $datetime,
+        ?int $limit,
+        int $offset
+    ): array {
+        // First we get the promotion IDs, then our actual result
+        $qb = $this->createQueryBuilder('promotion')
+            ->leftJoin('promotion.promotionOfImage', 'promotionOfImage')
+            ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
+            ->andWhere('promotion.isActive = 1')
+            ->andWhere('promotion.startDate <= :datetime')
+            ->andWhere('promotion.endDate > :datetime')
+            ->andWhere('promotion.promotionOfCoreEntity is not null OR promotion.promotionOfImage is not null')
+            ->andWhere('promotionOfCoreEntity.isEmbargoed = 0 OR promotionOfImage.isEmbargoed = 0')
+            ->andWhere('promotion.context = :contextId')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->setParameter('datetime', $datetime)
+            ->setParameter('contextId', $contextId);
+
+        $promotions = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        $promoIds = [];
+        foreach ($promotions as $promotion) {
+            $promoIds[] = $promotion['id'];
+        }
+
+        // Two step process, basically so we can honor the limit passed in correctly
+        // (relatedLink is a one-to-many relationship)
+
+        $qb = $this->createQueryBuilder('promotion')
+            ->addSelect(['relatedLinks', 'promotionOfImage', 'promotionOfCoreEntity', 'pceImage', 'pceMasterBrand', 'pceNetwork', 'pcembImage'])
+            ->leftJoin('promotion.relatedLinks', 'relatedLinks')
+            ->leftJoin('promotion.promotionOfImage', 'promotionOfImage')
+            ->leftJoin('promotion.promotionOfCoreEntity', 'promotionOfCoreEntity')
+            ->leftJoin('promotionOfCoreEntity.image', 'pceImage')
+            ->leftJoin('promotionOfCoreEntity.masterBrand', 'pceMasterBrand')
+            ->leftJoin('pceMasterBrand.network', 'pceNetwork')
+            ->leftJoin('pceMasterBrand.image', 'pcembImage')
+            ->where('promotion IN (:promoIds)')
+            ->addOrderBy('promotion.weighting', 'ASC')
+            ->addOrderBy('relatedLinks.position', 'ASC')
+            ->setParameter('promoIds', $promoIds);
+
+        $promotionsWithRelatedLinks = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+
+        return $this->resolveParentsForPromosOfCoreEntities($promotionsWithRelatedLinks);
     }
 
     /**
