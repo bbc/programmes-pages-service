@@ -9,6 +9,7 @@ use BBC\ProgrammesPagesService\Domain\ApplicationTime;
 use BBC\ProgrammesPagesService\Domain\Entity\Broadcast;
 use BBC\ProgrammesPagesService\Domain\Entity\Category;
 use BBC\ProgrammesPagesService\Domain\Entity\CollapsedBroadcast;
+use BBC\ProgrammesPagesService\Domain\Entity\Group;
 use BBC\ProgrammesPagesService\Domain\Entity\Programme;
 use BBC\ProgrammesPagesService\Mapper\MapperInterface;
 use DateTimeImmutable;
@@ -192,6 +193,41 @@ class CollapsedBroadcastsService extends AbstractService
             },
             [],
             $nullTtl
+        );
+    }
+
+    /**
+     * Find all upcoming broadcasts of Episodes within the supplied group OR episodes under TLEOs within the
+     * supplied group. Ordered by broadcast end time, ascending.
+     *
+     * @param Group $group
+     * @param int|null $limit
+     * @param int $page
+     * @param string $ttl
+     * @return CollapsedBroadcast[]
+     */
+    public function findUpcomingUnderGroup(
+        Group $group,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $group->getDbId(), $limit, $page, $ttl);
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($group, $limit, $page) {
+                $broadcasts = $this->repository->findUpcomingUnderGroup(
+                    $group->getDbId(),
+                    ApplicationTime::getTime(),
+                    $limit,
+                    $this->getOffset($limit, $page)
+                );
+                $broadcasts = $this->stripWebcasts($broadcasts);
+                $services = $this->fetchUsedServices($broadcasts, true);
+
+                return $this->mapManyEntities($broadcasts, $services);
+            }
         );
     }
 
