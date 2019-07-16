@@ -94,6 +94,24 @@ class CoreEntitiesService extends AbstractService
 
     /**
      * @param Group $group
+     * @param string $ttl
+     * @return int
+     */
+    public function countByGroup(Group $group, $ttl = CacheInterface::NORMAL)
+    {
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, (string) $group->getPid(), $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($group) {
+                return $this->repository->countByGroup($group->getDbId());
+            }
+        );
+    }
+
+    /**
+     * @param Group $group
      * @param int|null $limit
      * @param int $page
      * @param string $ttl

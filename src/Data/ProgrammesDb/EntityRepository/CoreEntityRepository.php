@@ -634,6 +634,18 @@ QUERY;
         return $this->resolveParents([$result])[0];
     }
 
+    public function countByGroup(int $groupDbId): int
+    {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->addSelect(['COUNT(entity)'])
+            ->from('ProgrammesPagesService:CoreEntity', 'entity')
+            ->innerJoin('ProgrammesPagesService:Membership', 'membership', Query\Expr\Join::WITH, 'membership.memberCoreEntity = entity')
+            ->where('membership.group = :groupId')
+            ->setParameter('groupId', $groupDbId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     public function findByGroup(
         int $groupDbId,
         ?int $limit,
