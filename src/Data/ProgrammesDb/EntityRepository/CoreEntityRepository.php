@@ -637,7 +637,7 @@ QUERY;
     public function countByGroup(int $groupDbId): int
     {
         return $this->getEntityManager()->createQueryBuilder()
-            ->addSelect(['COUNT(DISTINCT entity)'])
+            ->addSelect(['COUNT(entity)'])
             ->from('ProgrammesPagesService:CoreEntity', 'entity')
             ->innerJoin('ProgrammesPagesService:Membership', 'membership', Query\Expr\Join::WITH, 'membership.memberCoreEntity = entity')
             ->where('membership.group = :groupId')
