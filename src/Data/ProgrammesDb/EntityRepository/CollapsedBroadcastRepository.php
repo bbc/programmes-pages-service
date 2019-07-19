@@ -356,6 +356,7 @@ QUERY;
             LEFT JOIN network n ON mb.network_id = n.id
             LEFT JOIN image ni ON n.image_id = ni.id
             WHERE cb2.id IS NULL
+            AND ce.is_embargoed = 0
             ORDER BY cb.end_at ASC
             LIMIT :limit
             OFFSET :offset
