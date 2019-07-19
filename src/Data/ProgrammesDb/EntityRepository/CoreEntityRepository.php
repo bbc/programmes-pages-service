@@ -721,6 +721,7 @@ QUERY;
                 (SELECT cc.id FROM core_entity cc INNER JOIN membership m3 ON cc.id = m3.member_core_entity_id WHERE m3.group_id = :groupDbId AND cc.type=:ceType)
                 ) AS a)
             AND ce.streamable = 1
+            AND ce.is_embargoed = 0
             ORDER BY ce.on_demand_sort_date DESC
             LIMIT :limit
             OFFSET :offset
