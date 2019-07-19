@@ -2,6 +2,10 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Util\SearchUtilitiesTrait;
 use BBC\ProgrammesPagesService\Domain\ValueObject\PartialDate;
 use DateTimeInterface;
@@ -668,6 +672,69 @@ QUERY;
         $results = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
         return $this->resolveParents($results);
     }
+
+    public function findStreamableUnderGroup(
+        int $groupDbId,
+        string $entityType,
+        ?int $limit,
+        int $offset
+    ): array {
+        $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);
+        /**
+         * We're using native queries here due to Doctrine's lack of support for UNION and making certain types of
+         * subquery difficult. We use the ResultSetMappingBuilder to get the result from the native query into the
+         * format Doctrine usually returns to our mappers
+         */
+        $rsmb = new Query\ResultSetMappingBuilder($this->getEntityManager(), Query\ResultSetMappingBuilder::COLUMN_RENAMING_INCREMENT);
+        $rsmb->addRootEntityFromClassMetadata(Episode::class, 'core_entity', ['type' => 'magic_type']);
+        /**
+         * Little bit of magic here to override doctrine's handling of the magic "type" field on the CoreEntity MappedSuperClass
+         * This makes the "type" field available in the array doctrine returns so our mappers can correctly identify the core
+         * entity type.
+         */
+        $rsmb->addMetaResult('core_entity', 'magic_type', 'type', true, 'string');
+        $rsmb->addJoinedEntityFromClassMetadata(MasterBrand::class, 'masterBrand', 'core_entity', 'masterBrand');
+        $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'mbImage', 'masterBrand', 'image');
+        $rsmb->addJoinedEntityFromClassMetadata(Network::class, 'network', 'masterBrand', 'network');
+        $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'nwImage', 'network', 'image');
+        // Map raw SQL table aliases to doctrine aliases and have doctrine make the SELECT part of the query
+        $selectClause = $rsmb->generateSelectClause([
+            'core_entity' => 'ce',
+            'masterBrand' => 'mb',
+            'mbImage' => 'mi',
+            'network' => 'n',
+            'nwImage' => 'ni',
+        ]);
+        $sql = 'SELECT ' . $selectClause ;
+        $sql .= <<<'EOQ'
+            FROM core_entity ce
+            LEFT JOIN master_brand mb ON ce.master_brand_id = mb.id
+            LEFT JOIN image mi ON mb.image_id = mi.id
+            LEFT JOIN network n ON mb.network_id = n.id
+            LEFT JOIN image ni ON n.image_id = ni.id
+            WHERE
+            ce.id IN (SELECT a.id FROM ( 
+                (SELECT ct.id FROM core_entity ct INNER JOIN membership m1 ON ct.tleo_id = m1.member_core_entity_id WHERE m1.group_id = :groupDbId AND ct.type=:ceType)
+                UNION
+                (SELECT cp.id FROM core_entity cp INNER JOIN membership m2 ON cp.parent_id = m2.member_core_entity_id WHERE m2.group_id = :groupDbId AND cp.type=:ceType)
+                UNION
+                (SELECT cc.id FROM core_entity cc INNER JOIN membership m3 ON cc.id = m3.member_core_entity_id WHERE m3.group_id = :groupDbId AND cc.type=:ceType)
+                ) AS a)
+            AND ce.streamable = 1
+            ORDER BY ce.on_demand_sort_date DESC
+            LIMIT :limit
+            OFFSET :offset
+EOQ;
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsmb);
+        $query->setParameter('groupDbId', $groupDbId)
+            ->setParameter('ceType', strtolower($entityType))
+            ->setParameter('limit', $limit)
+            ->setParameter('offset', $offset);
+
+        $result = $query->getResult(AbstractQuery::HYDRATE_ARRAY);
+        return $this->resolveParents($result);
+    }
+
 
     public function countByKeywords(
         string $keywords,

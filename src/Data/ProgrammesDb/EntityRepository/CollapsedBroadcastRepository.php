@@ -2,7 +2,13 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\CollapsedBroadcast;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Episode;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Image;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\MasterBrand;
+use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Network;
 use DateTimeImmutable;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -262,6 +268,106 @@ QUERY;
 
         $result = $this->explodeFields($result);
 
+        return $this->resolveProgrammeParents($result);
+    }
+
+    /**
+     * Find all upcoming broadcasts of Episodes within the supplied group OR episodes under TLEOs within the
+     * supplied group. Ordered by broadcast time ASC.
+     *
+     * @param int $groupDbId
+     * @param DateTimeImmutable $cutoffTime
+     * @param int|null $limit
+     * @param int $offset
+     * @return array
+     */
+    public function findUpcomingUnderGroup(
+        int $groupDbId,
+        DateTimeImmutable $cutoffTime,
+        ?int $limit,
+        int $offset
+    ): array {
+        /**
+         * We're using native queries here due to Doctrine's lack of support for UNION and making certain types of
+         * subquery difficult.
+         *
+         * The actual query part is explained below. Here we are creating the select statement and
+         * mapping the result of that query back into Doctrine. This is (mostly automagically) done using the
+         * ResultSetMappingBuilder. It's worth noting here that doctrine doesn't really support using
+         * MappedSuperClass (the abstraction that splits our core_entity table into brand/series/collection etc.
+         * doctrine entities based on type ) in a ResultSetMappingBuilder, so we have to use one of the child entities
+         * (in this case Episode) rather than CoreEntity and hack around the "type" field.
+         */
+        $rsmb = new Query\ResultSetMappingBuilder($this->getEntityManager(), Query\ResultSetMappingBuilder::COLUMN_RENAMING_INCREMENT);
+        $rsmb->addRootEntityFromClassMetadata(CollapsedBroadcast::class, 'collapsedBroadcast');
+        $rsmb->addJoinedEntityFromClassMetadata(Episode::class, 'coreEntity', 'collapsedBroadcast', 'programmeItem', ['type' => 'magic_type']);
+        /**
+         * Little bit of magic here to override doctrine's handling of the type field on the CoreEntity MappedSuperClass
+         * This makes the "type" field available in the array doctrine returns so our mappers can correctly identify
+         * the core entity type.
+         */
+        $rsmb->addMetaResult('coreEntity', 'magic_type', 'type', true, 'string');
+        $rsmb->addJoinedEntityFromClassMetadata(MasterBrand::class, 'masterBrand', 'coreEntity', 'masterBrand');
+        $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'mbImage', 'masterBrand', 'image');
+        $rsmb->addJoinedEntityFromClassMetadata(Network::class, 'network', 'masterBrand', 'network');
+        $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'nwImage', 'network', 'image');
+
+        // Map raw SQL table aliases to doctrine aliases and have doctrine make the SELECT part of the query
+        $selectClause = $rsmb->generateSelectClause([
+            'collapsedBroadcast' => 'cb',
+            'coreEntity' => 'ce',
+            'masterBrand' => 'mb',
+            'mbImage' => 'mi',
+            'network' => 'n',
+            'nwImage' => 'ni',
+        ]);
+        /**
+         * It's worth a note to explain what this query actually does. It's not that obvious.
+         * The derived table takes all upcoming collapsed broadcasts that are
+         * a) broadcasts of episodes directly in the group
+         * or b) broadcasts of episodes under TLEOs placed in the group
+         * and retrieves them.
+         *
+         * This derived table (cb) is then left joined to collapsed broadcast (cb2), with a where clause that requires
+         * the join to be to a NULL record, and cb2.start_at < cb.start_at. This acts like
+         * "GROUP BY cb.programme_item_id", but allows us to pull only the next upcoming broadcast into the group.
+         * It's a common enough pattern but not obvious at first glance.
+         *
+         * The rest of the query is obvious and deals with getting the relevant metadata around the core entity etc.
+         */
+        $sql = 'SELECT ' . $selectClause ;
+        $sql .= <<<'EOQ'
+            FROM
+                ( 
+                    SELECT cb.* 
+                        FROM membership m
+                        INNER JOIN collapsed_broadcast cb ON m.`member_core_entity_id` = cb.`programme_item_id`
+                        WHERE m.group_id = :groupDbId AND cb.end_at > :cutoffTime
+                    UNION
+                        SELECT cb.* 
+                        FROM membership m
+                        INNER JOIN collapsed_broadcast cb ON m.`member_core_entity_id` = cb.`tleo_id`
+                        WHERE m.group_id = :groupDbId AND cb.end_at > :cutoffTime
+                ) AS cb
+            LEFT JOIN collapsed_broadcast cb2 ON cb.`programme_item_id` = cb2.`programme_item_id` AND cb.`end_at` > cb2.`end_at` AND cb2.end_at > :cutoffTime
+            INNER JOIN core_entity ce ON cb.`programme_item_id` = ce.id
+            LEFT JOIN master_brand mb ON ce.master_brand_id = mb.id
+            LEFT JOIN image mi ON mb.image_id = mi.id
+            LEFT JOIN network n ON mb.network_id = n.id
+            LEFT JOIN image ni ON n.image_id = ni.id
+            WHERE cb2.id IS NULL
+            ORDER BY cb.end_at ASC
+            LIMIT :limit
+            OFFSET :offset
+EOQ;
+
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsmb);
+        $query->setParameter('groupDbId', $groupDbId)
+            ->setParameter('cutoffTime', $cutoffTime)
+            ->setParameter('limit', $limit)
+            ->setParameter('offset', $offset);
+        $result = $query->getResult(AbstractQuery::HYDRATE_ARRAY);
+        $result = $this->explodeFields($result);
         return $this->resolveProgrammeParents($result);
     }
 
