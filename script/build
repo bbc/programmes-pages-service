@@ -3,9 +3,9 @@
 set -e
 RESULT=0
 
-# If we're not already using php70+, try and solve that
-if ! (php --version | grep -q "PHP 7") ; then
-    echo "You're not using PHP 7, please install it."
+# Fail if we're not using php71+
+if ! (php --version | grep -q "PHP 7.") ; then
+    echo "You're not using PHP 7.1+, please install it."
     php --version
     exit 1
 fi
