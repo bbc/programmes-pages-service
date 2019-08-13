@@ -29,7 +29,7 @@ php --version
 vendor/bin/phpunit || RESULT=1
 
 # Run PHPCS
-vendor/bin/phpcs --report=checkstyle --report-file=build/reports/checkstyle.xml --no-colors || RESULT=1
+vendor/bin/phpcs --report=checkstyle --report-file=build/reports/checkstyle.xml || RESULT=1
 
 # Run PHPStan
 vendor/bin/phpstan analyse -c phpstan.neon src tests --level=7 --memory-limit=256M || RESULT=1
