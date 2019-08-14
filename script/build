@@ -17,19 +17,11 @@ fi
 
 composer --no-ansi --no-interaction install
 
-# Make sure the reports directory exists
-if [ ! -d "build/reports" ]; then
-    mkdir -p build/reports
-fi
-
-# Show php version for debugging
-php --version
-
 # Run PHPUnit
 vendor/bin/phpunit || RESULT=1
 
 # Run PHPCS
-vendor/bin/phpcs --report=checkstyle --report-file=build/reports/checkstyle.xml || RESULT=1
+vendor/bin/phpcs || RESULT=1
 
 # Run PHPStan
 vendor/bin/phpstan analyse -c phpstan.neon src tests --level=7 --memory-limit=256M || RESULT=1
