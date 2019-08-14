@@ -1,0 +1,10 @@
+version: 0.2
+
+env:
+    parameter-store:
+        OAUTH: "OAUTH_TOKEN"
+
+phases:
+    build:
+        commands:
+            - script/build

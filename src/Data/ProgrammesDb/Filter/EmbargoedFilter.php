@@ -2,7 +2,7 @@
 
 namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\Filter;
 
-use Doctrine\ORM\Mapping\ClassMetaData;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 
 class EmbargoedFilter extends SQLFilter
