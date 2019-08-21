@@ -41,7 +41,8 @@ class CategoryRepository extends MaterializedPathRepository
         $finalI = count($urlKeys);
         $query->addSelect('category' . $finalI)
             ->leftJoin('category' . ($finalI - 1) . '.parent', 'category' . $finalI)
-            ->andWhere('category' . $finalI . '.id IS NULL');
+            ->andWhere('category' . $finalI . '.id IS NULL')
+            ->setMaxResults(1);
 
         return $query->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
