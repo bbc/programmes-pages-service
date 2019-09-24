@@ -4,6 +4,7 @@ namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
 use BBC\ProgrammesPagesService\Domain\ValueObject\ContactDetails;
+use BBC\ProgrammesPagesService\Domain\ValueObject\UGCContactDetails;
 
 class OptionsMapper extends AbstractMapper
 {
@@ -77,12 +78,19 @@ class OptionsMapper extends AbstractMapper
             $contacts = [];
 
             foreach ($options['contact_details'] as $contactDetails) {
-                if ($this->isValidContactDetails($contactDetails)) {
-                    $contacts[] = new ContactDetails(
-                        $contactDetails['type'],
-                        $contactDetails['value'],
-                        $contactDetails['freetext']
-                    );
+                if (!$this->isValidContactDetails($contactDetails)) {
+                    continue;
+                }
+                switch (strtolower($contactDetails['type'])) {
+                    case 'ugc':
+                        $contacts[] = new UGCContactDetails($contactDetails);
+                        break;
+                    default:
+                        $contacts[] = new ContactDetails(
+                            $contactDetails['type'],
+                            $contactDetails['value'],
+                            $contactDetails['freetext']
+                        );
                 }
             }
 
