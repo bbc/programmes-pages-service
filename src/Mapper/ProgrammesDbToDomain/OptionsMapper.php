@@ -3,6 +3,7 @@
 namespace BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain;
 
 use BBC\ProgrammesPagesService\Domain\Entity\Options;
+use BBC\ProgrammesPagesService\Domain\Enumeration\ContactMediumEnum;
 use BBC\ProgrammesPagesService\Domain\ValueObject\ContactDetails;
 use BBC\ProgrammesPagesService\Domain\ValueObject\UGCContactDetails;
 
@@ -82,7 +83,7 @@ class OptionsMapper extends AbstractMapper
                     continue;
                 }
                 switch (strtolower($contactDetails['type'])) {
-                    case 'ugc':
+                    case ContactMediumEnum::UGC:
                         $contacts[] = new UGCContactDetails($contactDetails);
                         break;
                     default:
