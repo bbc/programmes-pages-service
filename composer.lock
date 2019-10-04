@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97c2bcda23219bcca3c2cd910cd7e17e",
+    "content-hash": "4bcacd462bd9dc6d95ab2aa8650fc852",
     "packages": [
         {
             "name": "bbc/doctrine-extensions",
@@ -93,16 +93,16 @@
         },
         {
             "name": "bbc/programmes-caching-library",
-            "version": "v1.1.0",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bbc/programmes-caching-library.git",
-                "reference": "80751814ab8acdd03930ef8905b067290e0b2328"
+                "reference": "95c10713c38864b19e65d19fa41feae79acce5bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bbc/programmes-caching-library/zipball/80751814ab8acdd03930ef8905b067290e0b2328",
-                "reference": "80751814ab8acdd03930ef8905b067290e0b2328",
+                "url": "https://api.github.com/repos/bbc/programmes-caching-library/zipball/95c10713c38864b19e65d19fa41feae79acce5bd",
+                "reference": "95c10713c38864b19e65d19fa41feae79acce5bd",
                 "shasum": ""
             },
             "require": {
@@ -123,10 +123,10 @@
             },
             "description": "Caching for /programmes projects",
             "support": {
-                "source": "https://github.com/bbc/programmes-caching-library/tree/v1.1.0",
+                "source": "https://github.com/bbc/programmes-caching-library/tree/v1.1.2",
                 "issues": "https://github.com/bbc/programmes-caching-library/issues"
             },
-            "time": "2019-09-10T12:01:30+00:00"
+            "time": "2019-09-13T15:28:13+00:00"
         },
         {
             "name": "behat/transliterator",

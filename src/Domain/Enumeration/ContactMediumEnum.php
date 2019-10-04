@@ -18,4 +18,5 @@ class ContactMediumEnum
     public const STUMBLEUPON = 'stumbleupon';
     public const INSTAGRAM = 'instagram';
     public const OTHER = 'other';
+    public const UGC = 'ugc';
 }
