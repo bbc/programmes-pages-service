@@ -9,6 +9,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
 
 /**
+ * @ORM\Table(indexes={
+ *     @ORM\Index(name="ref_appw_programme_deleted", columns={"deleted"}),
+ * })
  * @ORM\Entity()
  */
 class RefAppwProgramme
@@ -39,6 +42,13 @@ class RefAppwProgramme
      */
     private $sequencer;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    protected $deleted = false;
+
     public function __construct(
         ProgrammeItem $programmeItem,
         ?string $sequencer
@@ -65,5 +75,15 @@ class RefAppwProgramme
     public function setSequencer(?string $sequencer): void
     {
         $this->sequencer = $sequencer;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): void
+    {
+        $this->deleted = $deleted;
     }
 }

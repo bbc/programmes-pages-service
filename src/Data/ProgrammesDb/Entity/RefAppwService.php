@@ -24,7 +24,7 @@ class RefAppwService
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=256, nullable=false, unique=true)
+     * @ORM\Column(type="string", length=220, nullable=false, unique=true)
      */
     private $sid;
 
