@@ -30,7 +30,7 @@ class RefAppwProgramme
     /**
      * @var ProgrammeItem
      *
-     * @ORM\ManyToOne(targetEntity="ProgrammeItem")
+     * @ORM\OneToOne(targetEntity="ProgrammeItem")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $programmeItem;
