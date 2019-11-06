@@ -694,12 +694,14 @@ QUERY;
          */
         $rsmb->addMetaResult('core_entity', 'magic_type', 'type', true, 'string');
         $rsmb->addJoinedEntityFromClassMetadata(MasterBrand::class, 'masterBrand', 'core_entity', 'masterBrand');
+        $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'image', 'core_entity', 'image');
         $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'mbImage', 'masterBrand', 'image');
         $rsmb->addJoinedEntityFromClassMetadata(Network::class, 'network', 'masterBrand', 'network');
         $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'nwImage', 'network', 'image');
         // Map raw SQL table aliases to doctrine aliases and have doctrine make the SELECT part of the query
         $selectClause = $rsmb->generateSelectClause([
             'core_entity' => 'ce',
+            'image' => 'ci',
             'masterBrand' => 'mb',
             'mbImage' => 'mi',
             'network' => 'n',
@@ -708,6 +710,7 @@ QUERY;
         $sql = 'SELECT ' . $selectClause ;
         $sql .= <<<'EOQ'
             FROM core_entity ce
+            LEFT JOIN image ci ON ce.image_id = ci.id
             LEFT JOIN master_brand mb ON ce.master_brand_id = mb.id
             LEFT JOIN image mi ON mb.image_id = mi.id
             LEFT JOIN network n ON mb.network_id = n.id

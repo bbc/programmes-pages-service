@@ -307,6 +307,7 @@ QUERY;
          * the core entity type.
          */
         $rsmb->addMetaResult('coreEntity', 'magic_type', 'type', true, 'string');
+        $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'image', 'coreEntity', 'image');
         $rsmb->addJoinedEntityFromClassMetadata(MasterBrand::class, 'masterBrand', 'coreEntity', 'masterBrand');
         $rsmb->addJoinedEntityFromClassMetadata(Image::class, 'mbImage', 'masterBrand', 'image');
         $rsmb->addJoinedEntityFromClassMetadata(Network::class, 'network', 'masterBrand', 'network');
@@ -316,6 +317,7 @@ QUERY;
         $selectClause = $rsmb->generateSelectClause([
             'collapsedBroadcast' => 'cb',
             'coreEntity' => 'ce',
+            'image' => 'ci',
             'masterBrand' => 'mb',
             'mbImage' => 'mi',
             'network' => 'n',
@@ -351,6 +353,7 @@ QUERY;
                 ) AS cb
             LEFT JOIN collapsed_broadcast cb2 ON cb.`programme_item_id` = cb2.`programme_item_id` AND cb.`end_at` > cb2.`end_at` AND cb2.end_at > :cutoffTime
             INNER JOIN core_entity ce ON cb.`programme_item_id` = ce.id
+            LEFT JOIN image ci ON ce.image_id = ci.id
             LEFT JOIN master_brand mb ON ce.master_brand_id = mb.id
             LEFT JOIN image mi ON mb.image_id = mi.id
             LEFT JOIN network n ON mb.network_id = n.id
