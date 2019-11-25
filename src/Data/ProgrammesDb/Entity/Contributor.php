@@ -109,6 +109,34 @@ class Contributor
      */
     private $contributions;
 
+    /**
+     * @var string|null
+     * 
+     * @ORM\Column(type="string", length=36, nullable=true)
+     */
+    private $bbcThingId;
+
+    /**
+     * @var string|null
+     * 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $wikidataItemId;
+
+    /**
+     * @var string|null
+     * 
+     * @ORM\Column(type="string", length=2083, nullable=true)
+     */
+    private $imdbUri;
+
+    /**
+     * @var string|null
+     * 
+     * @ORM\Column(type="string", length=2083, nullable=true)
+     */
+    private $wikipediaUri;
+
     public function __construct(string $pid, string $type)
     {
         $this->pid = $pid;
