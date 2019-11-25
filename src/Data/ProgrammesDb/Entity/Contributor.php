@@ -111,29 +111,29 @@ class Contributor
 
     /**
      * @var string|null
-     * 
+     *
      * @ORM\Column(type="string", length=36, nullable=true)
      */
     private $bbcThingId;
 
     /**
      * @var string|null
-     * 
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $wikidataItemId;
 
     /**
      * @var string|null
-     * 
-     * @ORM\Column(type="string", length=2083, nullable=true)
+     *
+     * @ORM\Column(type="text", nullable=true)
      */
     private $imdbUri;
 
     /**
      * @var string|null
-     * 
-     * @ORM\Column(type="string", length=2083, nullable=true)
+     *
+     * @ORM\Column(type="text", nullable=true)
      */
     private $wikipediaUri;
 
@@ -257,5 +257,45 @@ class Contributor
     public function setGender(?string $gender)
     {
         $this->gender = $gender;
+    }
+
+    public function getBbcThingId(): ?string
+    {
+        return $this->bbcThingId;
+    }
+
+    public function setBbcThingId(?string $bbcThingId)
+    {
+        $this->bbcThingId = $bbcThingId;
+    }
+
+    public function getWikidataItemId(): ?string
+    {
+        return $this->wikidataItemId;
+    }
+
+    public function setWikidataItemId(?string $wikidataItemId)
+    {
+        $this->wikidataItemId = $wikidataItemId;
+    }
+
+    public function getImdbUri(): ?string
+    {
+        return $this->imdbUri;
+    }
+
+    public function setImdbUri(?string $imdbUri)
+    {
+        $this->imdbUri = $imdbUri;
+    }
+
+    public function getWikipediaUri(): ?string
+    {
+        return $this->wikipediaUri;
+    }
+
+    public function setWikipediaUri(?string $wikipediaUri)
+    {
+        $this->wikipediaUri = $wikipediaUri;
     }
 }
