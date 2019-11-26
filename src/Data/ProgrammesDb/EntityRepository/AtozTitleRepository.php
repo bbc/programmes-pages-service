@@ -78,6 +78,7 @@ class AtozTitleRepository extends EntityRepository
 
     private function resolveParents(array $programmes): array
     {
+        /** @var CoreEntityRepository $programmeRepo */
         $programmeRepo = $this->getEntityManager()->getRepository('ProgrammesPagesService:Programme');
         return $this->abstractResolveAncestry(
             $programmes,
