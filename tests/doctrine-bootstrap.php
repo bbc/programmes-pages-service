@@ -2,7 +2,9 @@
 
 \Gedmo\DoctrineExtensions::registerAnnotations();
 // add our custom types
-\Doctrine\DBAL\Types\Type::addType('date_partial', 'BBC\ProgrammesPagesService\Data\ProgrammesDb\Type\DatePartialType');
+if (!\Doctrine\DBAL\Types\Type::hasType('date_partial')) {
+    \Doctrine\DBAL\Types\Type::addType('date_partial', 'BBC\ProgrammesPagesService\Data\ProgrammesDb\Type\DatePartialType');
+}
 
 $cachedAnnotationReader = new \Doctrine\Common\Annotations\CachedReader(
     new \Doctrine\Common\Annotations\AnnotationReader(),

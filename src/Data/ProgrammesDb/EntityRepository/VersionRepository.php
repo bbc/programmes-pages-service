@@ -301,6 +301,7 @@ class VersionRepository extends EntityRepository
 
     private function resolveProgrammeParents(array $result)
     {
+        /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
         return $this->abstractResolveAncestry(
             $result,
@@ -382,6 +383,7 @@ class VersionRepository extends EntityRepository
 
     private function resolveProgrammeParentsForPlayout(array $result)
     {
+        /** @var CoreEntityRepository $repo */
         $repo = $this->getEntityManager()->getRepository('ProgrammesPagesService:CoreEntity');
         return $this->abstractResolveAncestry(
             $result,

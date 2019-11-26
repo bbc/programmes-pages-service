@@ -23,7 +23,7 @@
         "php": ">=7.1.0",
         "bbc/doctrine-extensions": "^2.4.137",
         "bbc/programmes-caching-library": "^1.1",
-        "doctrine/orm": "^2.5",
+        "doctrine/orm": "^2.6",
         "psr/cache": "^1.0",
         "psr/log": "^1.0",
         "symfony/stopwatch": "^3.2 | ^4.3"
