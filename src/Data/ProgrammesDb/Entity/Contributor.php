@@ -113,6 +113,7 @@ class Contributor
      * @var string|null
      *
      * @ORM\Column(type="string", length=36, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Thing")
      */
     private $bbcThingId;
 
