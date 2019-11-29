@@ -110,12 +110,12 @@ class Contributor
     private $contributions;
 
     /**
-     * @var string|null
+     * @var Thing|null
      *
-     * @ORM\Column(type="string", length=36, nullable=true)
      * @ORM\ManyToOne(targetEntity="Thing")
+     * @JoinColumn(name="thing_id", referencedColumnName="id")
      */
-    private $bbcThingId;
+    private $thing;
 
     /**
      * @var string|null
@@ -260,14 +260,14 @@ class Contributor
         $this->gender = $gender;
     }
 
-    public function getBbcThingId(): ?string
+    public function getThing(): ?Thing
     {
-        return $this->bbcThingId;
+        return $this->thing;
     }
 
-    public function setBbcThingId(?string $bbcThingId)
+    public function setThing(?Thing $thing)
     {
-        $this->bbcThingId = $bbcThingId;
+        $this->thing = $thing;
     }
 
     public function getWikidataItemId(): ?string
