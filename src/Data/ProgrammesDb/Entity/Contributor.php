@@ -113,7 +113,7 @@ class Contributor
      * @var Thing|null
      *
      * @ORM\ManyToOne(targetEntity="Thing")
-     * @JoinColumn(name="thing_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="thing_id", referencedColumnName="id")
      */
     private $thing;
 
