@@ -20,9 +20,10 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.3.0",
         "bbc/doctrine-extensions": "^2.4.137",
         "bbc/programmes-caching-library": "^1.1",
+        "doctrine/dbal": "2.9",
         "doctrine/orm": "^2.6",
         "psr/cache": "^1.0",
         "psr/log": "^1.0",
@@ -39,7 +40,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.1.0"
+            "php": "7.3.0"
         },
         "sort-packages": true
     },
