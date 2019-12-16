@@ -34,6 +34,13 @@ class Thing
      */
     private $disambiguationHint;
 
+    public function __construct(string $id, string $preferredLabel, string $disambiguationHint)
+    {
+        $this->id = $id;
+        $this->preferredLabel = $preferredLabel;
+        $this->disambiguationHint = $disambiguationHint;
+    }
+
     public function getId(): string
     {
         return $this->id;
