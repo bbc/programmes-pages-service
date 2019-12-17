@@ -78,7 +78,7 @@ class Contributor
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=511, nullable=true)
      */
     private $sortName;
 
@@ -108,6 +108,35 @@ class Contributor
      * @ORM\OneToMany(targetEntity="Contribution", mappedBy="contributor")
      */
     private $contributions;
+
+    /**
+     * @var Thing|null
+     *
+     * @ORM\ManyToOne(targetEntity="Thing")
+     * @ORM\JoinColumn(name="thing_id", referencedColumnName="id")
+     */
+    private $thing;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $wikidataItemId;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $imdbUri;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $wikipediaUri;
 
     public function __construct(string $pid, string $type)
     {
@@ -229,5 +258,45 @@ class Contributor
     public function setGender(?string $gender)
     {
         $this->gender = $gender;
+    }
+
+    public function getThing(): ?Thing
+    {
+        return $this->thing;
+    }
+
+    public function setThing(?Thing $thing)
+    {
+        $this->thing = $thing;
+    }
+
+    public function getWikidataItemId(): ?string
+    {
+        return $this->wikidataItemId;
+    }
+
+    public function setWikidataItemId(?string $wikidataItemId)
+    {
+        $this->wikidataItemId = $wikidataItemId;
+    }
+
+    public function getImdbUri(): ?string
+    {
+        return $this->imdbUri;
+    }
+
+    public function setImdbUri(?string $imdbUri)
+    {
+        $this->imdbUri = $imdbUri;
+    }
+
+    public function getWikipediaUri(): ?string
+    {
+        return $this->wikipediaUri;
+    }
+
+    public function setWikipediaUri(?string $wikipediaUri)
+    {
+        $this->wikipediaUri = $wikipediaUri;
     }
 }
