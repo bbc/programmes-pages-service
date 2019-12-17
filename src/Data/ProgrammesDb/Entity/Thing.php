@@ -28,17 +28,16 @@ class Thing
     private $preferredLabel;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $disambiguationHint;
 
-    public function __construct(string $id, string $preferredLabel, string $disambiguationHint)
+    public function __construct(string $id, string $preferredLabel)
     {
         $this->id = $id;
         $this->preferredLabel = $preferredLabel;
-        $this->disambiguationHint = $disambiguationHint;
     }
 
     public function getId(): string
@@ -61,12 +60,12 @@ class Thing
         $this->preferredLabel = $preferredLabel;
     }
 
-    public function getDisambiguationHint(): string
+    public function getDisambiguationHint(): ?string
     {
         return $this->disambiguationHint;
     }
 
-    public function setDisambiguationHint(string $disambiguationHint)
+    public function setDisambiguationHint(?string $disambiguationHint)
     {
         $this->disambiguationHint = $disambiguationHint;
     }
