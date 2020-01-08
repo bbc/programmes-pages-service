@@ -840,6 +840,33 @@ QUERY;
         return $cached;
     }
 
+    public function findByThing(
+        string $thingDbId,
+        ?int $limit,
+        int $offset
+    ): array {
+        return $this->resolveParents(
+            $this->getEntityManager()->createQueryBuilder()
+                ->addSelect(['coreEntity', 'image', 'masterBrand', 'mbImage', 'network', 'nwImage'])
+                ->from('ProgrammesPagesService:ProgrammeItem', 'coreEntity')
+                ->leftJoin('coreEntity.image', 'image')
+                ->leftJoin('coreEntity.masterBrand', 'masterBrand')
+                ->leftJoin('masterBrand.image', 'mbImage')
+                ->leftJoin('masterBrand.network', 'network')
+                ->leftJoin('network.image', 'nwImage')
+                ->innerJoin('ProgrammesPagesService:Contribution', 'contribution', Query\Expr\Join::WITH, 'contribution.contributionToCoreEntity = coreEntity')
+                ->innerJoin('contribution.contributor', 'contributor')
+                ->innerJoin('contributor.thing', 'thing')
+                ->where('thing.id = :thingId')
+                ->orderBy('coreEntity.onDemandSortDate', 'DESC')
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->setParameter('thingId', $thingDbId)
+                ->getQuery()
+                ->getResult(AbstractQuery::HYDRATE_ARRAY)
+        );
+    }
+
     private function findFullCommon(string $entityType): QueryBuilder
     {
         $this->assertEntityType($entityType, self::ALL_VALID_ENTITY_TYPES);

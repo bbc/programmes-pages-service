@@ -31,9 +31,10 @@ class ContributionRepository extends EntityRepository
         $columnName = $columnNameLookup[$type] ?? 'contributionToCoreEntity';
 
         $qb = $this->createQueryBuilder('contribution')
-            ->addSelect(['contributor', 'creditRole'])
+            ->addSelect(['contributor', 'creditRole', 'thing'])
             ->join('contribution.contributor', 'contributor')
             ->join('contribution.creditRole', 'creditRole')
+            ->leftJoin('contributor.thing', 'thing')
             ->andWhere('contribution.' . $columnName . ' IN (:dbIds)')
             ->orderBy('contribution.position')
             ->setFirstResult($offset)

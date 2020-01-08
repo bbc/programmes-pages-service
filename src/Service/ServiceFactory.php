@@ -263,6 +263,19 @@ class ServiceFactory
         return $this->instances[ServicesService::class];
     }
 
+    public function getThingsService(): ThingsService
+    {
+        if (!isset($this->instances[ThingsService::class])) {
+            $this->instances[ThingsService::class] = new ThingsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:Thing'),
+                $this->mapperFactory->getThingMapper(),
+                $this->cache
+            );
+        }
+
+        return $this->instances[ThingsService::class];
+    }
+
     public function getVersionsService(): VersionsService
     {
         if (!isset($this->instances[VersionsService::class])) {

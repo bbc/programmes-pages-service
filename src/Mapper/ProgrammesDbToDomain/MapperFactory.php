@@ -186,6 +186,15 @@ class MapperFactory
         return $this->instances[ServiceMapper::class];
     }
 
+    public function getThingMapper(): ThingMapper
+    {
+        if (!isset($this->instances[ThingMapper::class])) {
+            $this->instances[ThingMapper::class] = new ThingMapper($this);
+        }
+
+        return $this->instances[ThingMapper::class];
+    }
+
     public function getVersionMapper(): VersionMapper
     {
         if (!isset($this->instances[VersionMapper::class])) {

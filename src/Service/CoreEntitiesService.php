@@ -7,6 +7,7 @@ use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepo
 use BBC\ProgrammesPagesService\Domain\Entity\CoreEntity;
 use BBC\ProgrammesPagesService\Domain\Entity\Episode;
 use BBC\ProgrammesPagesService\Domain\Entity\Group;
+use BBC\ProgrammesPagesService\Domain\Entity\Thing;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\CoreEntityMapper;
 use InvalidArgumentException;
@@ -166,6 +167,37 @@ class CoreEntitiesService extends AbstractService
                     $this->getOffset($limit, $page)
                 );
                 return $this->mapManyEntities($result);
+            }
+        );
+    }
+
+    /**
+     * @param Thing $thing
+     * @param int|null $limit
+     * @param int $page
+     * @param string $ttl
+     * @return CoreEntity[]
+     */
+    public function findByThing(
+        Thing $thing,
+        ?int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        $ttl = CacheInterface::NORMAL
+    ): array {
+        $id = $thing->getId();
+        $key = $this->cache->keyHelper(__CLASS__, __FUNCTION__, $id, $limit, $page, $ttl);
+
+        return $this->cache->getOrSet(
+            $key,
+            $ttl,
+            function () use ($id, $limit, $page) {
+                return $this->mapManyEntities(
+                    $this->repository->findByThing(
+                        $id,
+                        $limit,
+                        $this->getOffset($limit, $page)
+                    )
+                );
             }
         );
     }

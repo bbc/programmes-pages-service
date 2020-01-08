@@ -30,6 +30,9 @@ class Contributor
     /** @var string|null */
     private $musicBrainzId;
 
+    /** @var Thing|null */
+    private $thing;
+
     public function __construct(
         int $dbId,
         Pid $pid,
@@ -38,7 +41,8 @@ class Contributor
         ?string $sortName = null,
         ?string $givenName = null,
         ?string $familyName = null,
-        ?string $musicBrainzId = null
+        ?string $musicBrainzId = null,
+        ?Thing $thing = null
     ) {
         $this->dbId = $dbId;
         $this->pid = $pid;
@@ -48,6 +52,7 @@ class Contributor
         $this->givenName = $givenName;
         $this->familyName = $familyName;
         $this->musicBrainzId = $musicBrainzId;
+        $this->thing = $thing;
     }
 
     /**
@@ -94,5 +99,10 @@ class Contributor
     public function getMusicBrainzId(): ?string
     {
         return $this->musicBrainzId;
+    }
+
+    public function getThing(): ?Thing
+    {
+        return $this->thing;
     }
 }
