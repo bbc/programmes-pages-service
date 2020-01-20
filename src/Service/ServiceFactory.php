@@ -159,6 +159,19 @@ class ServiceFactory
         return $this->instances[NetworksService::class];
     }
 
+    public function getMasterBrandsService(): MasterBrandsService
+    {
+        if (!isset($this->instances[MasterBrandsService::class])) {
+            $this->instances[MasterBrandsService::class] = new MasterBrandsService(
+                $this->entityManager->getRepository('ProgrammesPagesService:MasterBrand'),
+                $this->mapperFactory->getMasterBrandMapper(),
+                $this->cache
+            );
+        }
+
+        return $this->instances[MasterBrandsService::class];
+    }
+
     public function getPodcastsService(): PodcastsService
     {
         if (!isset($this->instances[PodcastsService::class])) {

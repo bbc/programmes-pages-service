@@ -183,7 +183,9 @@ class CoreEntityMapper extends AbstractMapper
             $dbGroup['contributionsCount'],
             $this->getOptionsModel($dbGroup),
             $dbGroup['aggregatedBroadcastsCount'],
-            $this->getMasterBrandModel($dbGroup)
+            $this->getMasterBrandModel($dbGroup),
+            $dbGroup['startDate'],
+            $dbGroup['endDate']
         );
     }
 

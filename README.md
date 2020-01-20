@@ -141,3 +141,131 @@ This repository is available under the terms of the Apache 2.0 license.
 View the [LICENSE file](LICENSE) for more information.
 
 Copyright (c) 2017 BBC
+
+
+New Yaml
+--------
+
+in services.yml
+
+```yaml
+
+framework:
+    cache:
+        pools:
+            cache.programmes:
+                adapter: 'cache.adapter.psr6'
+                provider: cache.null_provider
+services:
+    cache.null_provider:
+        class: Symfony\Component\Cache\Adapter\NullAdapter
+
+    BBC\ProgrammesCachingLibrary\Cache:
+        arguments:
+            - '@cache.null_provider'
+            - 'nullcache'
+
+#    BBC\ProgrammesCachingLibrary\Cache:
+#        arguments: ['@cache.programmes', 'programmes-frontend.%cosmos_component_release%']
+
+    BBC\ProgrammesCachingLibrary\CacheWithResilience:
+        arguments:
+            - '@logger'
+            - '@cache.programmes'
+            - 'programmes-frontend.%cosmos_component_release%'
+            - '%app.cache.resilient_cache_time%'
+            - []
+            - ['Doctrine\DBAL\Exception\DriverException']
+
+    BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory: ~
+
+    BBC\ProgrammesPagesService\Service\ServiceFactory:
+        public: true
+        autowire: true
+        arguments:
+            - '@doctrine.orm.faucet_entity_manager'
+            - '@BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory'
+            - '@BBC\ProgrammesCachingLibrary\Cache'
+
+    BBC\ProgrammesPagesService\Service\SegmentsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getSegmentsService']
+
+
+    BBC\ProgrammesPagesService\Service\SegmentEventsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getSegmentEventsService']
+
+    BBC\ProgrammesPagesService\Service\AtozTitlesService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getAtozTitlesService']
+
+    BBC\ProgrammesPagesService\Service\CategoriesService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getCategoriesService']
+
+    BBC\ProgrammesPagesService\Service\BroadcastsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getBroadcastsService']
+
+    BBC\ProgrammesPagesService\Service\CollapsedBroadcastsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getCollapsedBroadcastsService']
+
+    BBC\ProgrammesPagesService\Service\ContributorsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getContributorsService']
+
+    BBC\ProgrammesPagesService\Service\ContributionsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getContributionsService']
+
+    BBC\ProgrammesPagesService\Service\CoreEntitiesService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getCoreEntitiesService']
+
+    BBC\ProgrammesPagesService\Service\GroupsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getGroupsService']
+
+    BBC\ProgrammesPagesService\Service\ImagesService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getImagesService']
+
+    BBC\ProgrammesPagesService\Service\NetworksService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getNetworksService']
+
+    BBC\ProgrammesPagesService\Service\MasterBrandsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getMasterBrandsService']
+
+    BBC\ProgrammesPagesService\Service\PodcastsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getPodcastsService']
+
+    BBC\ProgrammesPagesService\Service\ProgrammesService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getProgrammesService']
+
+    BBC\ProgrammesPagesService\Service\ProgrammesAggregationService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getProgrammesAggregationService']
+
+    BBC\ProgrammesPagesService\Service\PromotionsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getPromotionsService']
+
+    BBC\ProgrammesPagesService\Service\RelatedLinksService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getRelatedLinksService']
+
+    BBC\ProgrammesPagesService\Service\ServicesService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getServicesService']
+
+    BBC\ProgrammesPagesService\Service\VersionsService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getVersionsService']
+
+```
