@@ -5,7 +5,8 @@ namespace BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
-class MasterBrandRepository extends EntityRepository {
+class MasterBrandRepository extends EntityRepository
+{
     public function findByMid(string $mid): ?array
     {
         $qb = $this->createQueryBuilder('master_brand')
