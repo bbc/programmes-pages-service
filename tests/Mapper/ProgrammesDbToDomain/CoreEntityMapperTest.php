@@ -466,6 +466,8 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
 
     public function testGetDomainModelSeason()
     {
+        $startDate = new DateTime('2015-01-03');
+        $endDate = new DateTime('2015-01-03');
         $dbEntityArray = [
             'id' => 1,
             'type' => 'season',
@@ -481,8 +483,8 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
             'relatedLinksCount' => 2,
             'contributionsCount' => 10,
             'aggregatedBroadcastsCount' => 100,
-            'startDate' => new DateTime('2015-01-03'),
-            'endDate' => new DateTime('2015-01-03'),
+            'startDate' => $startDate,
+            'endDate' => $endDate,
             'parent' => null,
             'masterBrand' => null,
             'options' => [],
@@ -500,7 +502,9 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
             10,
             $this->mockOptions,
             100,
-            null
+            null,
+            $startDate,
+            $endDate
         );
 
         $mapper = $this->getMapper();
