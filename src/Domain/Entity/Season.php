@@ -4,7 +4,7 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 use BBC\ProgrammesPagesService\Domain\ValueObject\Pid;
 use BBC\ProgrammesPagesService\Domain\ValueObject\Synopses;
-use \DateTime;
+use \DateTimeImmutable;
 
 class Season extends Group
 {
@@ -13,10 +13,10 @@ class Season extends Group
     /* @var int */
     private $aggregatedBroadcastsCount;
 
-    /* @var DateTime */
+    /* @var DateTimeImmutable */
     private $endDate;
 
-    /* @var DateTime */
+    /* @var DateTimeImmutable */
     private $startDate;
 
     public function __construct(
@@ -32,8 +32,8 @@ class Season extends Group
         Options $options,
         int $aggregatedBroadcastsCount,
         ?MasterBrand $masterBrand = null,
-        ?DateTime $startDate = null,
-        ?DateTime $endDate = null
+        ?DateTimeImmutable $startDate = null,
+        ?DateTimeImmutable $endDate = null
     ) {
         parent::__construct(
             $dbAncestryIds,
@@ -59,12 +59,12 @@ class Season extends Group
         return $this->aggregatedBroadcastsCount;
     }
 
-    public function getStartDate(): ?DateTime
+    public function getStartDate(): ?DateTimeImmutable
     {
         return $this->startDate;
     }
 
-    public function getEndDate(): ?DateTime
+    public function getEndDate(): ?DateTimeImmutable
     {
         return $this->endDate;
     }

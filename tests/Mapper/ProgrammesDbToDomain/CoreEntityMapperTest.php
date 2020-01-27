@@ -466,8 +466,8 @@ class CoreEntityMapperTest extends BaseCoreEntityMapperTestCase
 
     public function testGetDomainModelSeason()
     {
-        $startDate = new DateTime('2015-01-03');
-        $endDate = new DateTime('2015-01-03');
+        $startDate = new DateTimeImmutable('2015-01-03');
+        $endDate = new DateTimeImmutable('2015-01-03');
         $dbEntityArray = [
             'id' => 1,
             'type' => 'season',
