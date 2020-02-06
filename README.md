@@ -146,7 +146,7 @@ Copyright (c) 2017 BBC
 New Yaml
 --------
 
-in services.yml
+To use PPS, as a minimum pull in bbc/programmes-caching-library, then in services.yml:
 
 ```yaml
 
@@ -165,27 +165,19 @@ services:
             - '@cache.null_provider'
             - 'nullcache'
 
-    BBC\ProgrammesCachingLibrary\CacheWithResilience:
-        arguments:
-            - '@logger'
-            - '@cache.programmes'
-            - 'programmes-frontend.%cosmos_component_release%'
-            - '%app.cache.resilient_cache_time%'
-            - []
-            - ['Doctrine\DBAL\Exception\DriverException']
-
     BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory: ~
 
     BBC\ProgrammesPagesService\Service\ServiceFactory:
         public: true
         autowire: true
         arguments:
-            - '@doctrine.orm.faucet_entity_manager'
+            - '@doctrine.orm.programmesdb_entity_manager'
             - '@BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory'
             - '@BBC\ProgrammesCachingLibrary\Cache'
 
     BBC\ProgrammesPagesService\Service\CoreEntitiesService:
         public: true
         factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getCoreEntitiesService']
-
+        
+    # follow the above pattern for other services
 ```
