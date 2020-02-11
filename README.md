@@ -141,3 +141,43 @@ This repository is available under the terms of the Apache 2.0 license.
 View the [LICENSE file](LICENSE) for more information.
 
 Copyright (c) 2017 BBC
+
+
+New Yaml
+--------
+
+To use PPS, as a minimum pull in bbc/programmes-caching-library, then in services.yml:
+
+```yaml
+
+framework:
+    cache:
+        pools:
+            cache.programmes:
+                adapter: 'cache.adapter.psr6'
+                provider: cache.null_provider
+services:
+    cache.null_provider:
+        class: Symfony\Component\Cache\Adapter\NullAdapter
+
+    BBC\ProgrammesCachingLibrary\Cache:
+        arguments:
+            - '@cache.null_provider'
+            - 'nullcache'
+
+    BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory: ~
+
+    BBC\ProgrammesPagesService\Service\ServiceFactory:
+        public: true
+        autowire: true
+        arguments:
+            - '@doctrine.orm.programmesdb_entity_manager'
+            - '@BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\MapperFactory'
+            - '@BBC\ProgrammesCachingLibrary\Cache'
+
+    BBC\ProgrammesPagesService\Service\CoreEntitiesService:
+        public: true
+        factory: ['@BBC\ProgrammesPagesService\Service\ServiceFactory', 'getCoreEntitiesService']
+        
+    # follow the above pattern for other services
+```
