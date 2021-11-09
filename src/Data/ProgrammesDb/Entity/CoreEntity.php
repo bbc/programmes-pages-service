@@ -27,8 +27,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *   @ORM\Index(name="core_entity_ft_all", columns={"search_title","short_synopsis"}, flags={"fulltext"}),
  *   @ORM\Index(name="core_entity_ft_search_title", columns={"search_title"}, flags={"fulltext"}),
  *   @ORM\Index(name="core_entity_ft_short_synopsis", columns={"short_synopsis"}, flags={"fulltext"}),
- *   @ORM\Index(name="core_entity_tleo_id_streamable_from_idx", columns={"tleo_id", "streamable_from"}),
- *   @ORM\Index(name="core_entity_parent_id_streamable_from_idx", columns={"parent_id", "streamable_from"}),
+ *   @ORM\Index(name="core_entity_tleo_id_type_streamable_from_idx", columns={"tleo_id", "type", "streamable_from"}),
  *  })
  * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\CoreEntityRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
