@@ -10,6 +10,9 @@ use InvalidArgumentException;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table(name="ref_availability_mabel", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="UC_version_media_set", columns={"version_id", "media_set_id"})
+ * })
  */
 class RefAvailabilityMabel
 {
