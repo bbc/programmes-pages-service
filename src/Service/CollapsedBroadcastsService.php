@@ -815,7 +815,7 @@ class CollapsedBroadcastsService extends AbstractService
 
     private function isDazzlerBroadcast(mixed $serviceId): bool
     {
-        return in_array($serviceId, $this->dazzlerServiceIds, true);
+        return in_array($serviceId, $this->dazzlerServiceIds, false);
     }
 
     private function stripWebcasts(array $broadcasts): array
