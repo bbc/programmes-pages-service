@@ -25,6 +25,9 @@ class CollapsedBroadcastsService extends AbstractService
     /** @var array[] */
     private $servicesCache = [];
 
+    /** @var array[] */
+    private $dazzlerServiceIds = [1094, 1095, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103];
+
     public function __construct(
         CollapsedBroadcastRepository $repository,
         MapperInterface $mapper,
@@ -810,6 +813,11 @@ class CollapsedBroadcastsService extends AbstractService
         return $this->mapManyEntities($broadcasts, $services);
     }
 
+    private function isDazzlerBroadcast(int $serviceId): bool
+    {
+        return in_array($serviceId, $this->dazzlerServiceIds, true);
+    }
+
     private function stripWebcasts(array $broadcasts): array
     {
         $withoutWebcasts = [];
@@ -817,7 +825,9 @@ class CollapsedBroadcastsService extends AbstractService
             $cleanedBroadcast = $broadcast;
             $cleaned = false;
             foreach ($broadcast['areWebcasts'] as $i => $isWebcast) {
-                if ($isWebcast || !$broadcast['serviceIds'][$i]) {
+                if ($isWebcast && $this->isDazzlerBroadcast($broadcast['serviceIds'][$i])) {
+                    continue;
+                } else if ($isWebcast || !$broadcast['serviceIds'][$i]) {
                     unset($cleanedBroadcast['areWebcasts'][$i]);
                     unset($cleanedBroadcast['serviceIds'][$i]);
                     unset($cleanedBroadcast['broadcastIds'][$i]);
