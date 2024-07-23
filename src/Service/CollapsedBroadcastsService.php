@@ -813,7 +813,7 @@ class CollapsedBroadcastsService extends AbstractService
         return $this->mapManyEntities($broadcasts, $services);
     }
 
-    private function isDazzlerBroadcast(int $serviceId): bool
+    private function isDazzlerBroadcast(mixed $serviceId): bool
     {
         return in_array($serviceId, $this->dazzlerServiceIds, true);
     }

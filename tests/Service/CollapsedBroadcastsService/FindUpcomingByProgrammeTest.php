@@ -38,14 +38,33 @@ class FindUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
         $this->mockRepository
             ->method('findUpcomingByProgramme')
             ->willReturn([
-                 ['areWebcasts' => [0, '0'], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
-                 ['areWebcasts' => [1, '1'], 'serviceIds' => [333, 444], 'broadcastIds' => [3, 4, 56, 67]],
-                 ['areWebcasts' => [1, 0], 'serviceIds' => [555, 666], 'broadcastIds' => [5, 6, 100]],
+                ['areWebcasts' => [0, '0'], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
+                ['areWebcasts' => [1, '1'], 'serviceIds' => [333, 444], 'broadcastIds' => [3, 4, 56, 67]],
+                ['areWebcasts' => [1, 0], 'serviceIds' => [555, 666], 'broadcastIds' => [5, 6, 100]],
             ]);
 
         $this->mockServiceRepository->expects($this->once())
             ->method('findByIds')
             ->with([111, 222, 666]);
+
+        $this->service()->findUpcomingByProgramme($programme);
+    }
+
+    public function testDazzlerWebcastIsRetained()
+    {
+        $programme = $this->createConfiguredMock(Programme::class, ['getDbAncestryIds' => [1, 2, 3]]);
+
+        $this->mockRepository
+            ->method('findUpcomingByProgramme')
+            ->willReturn([
+                ['areWebcasts' => [0, '0'], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
+                ['areWebcasts' => [1, '1'], 'serviceIds' => [333, 1097], 'broadcastIds' => [3, 4, 56, 67]],
+                ['areWebcasts' => [1, 0], 'serviceIds' => [1101, 666], 'broadcastIds' => [5, 6, 100]],
+            ]);
+
+        $this->mockServiceRepository->expects($this->once())
+            ->method('findByIds')
+            ->with([111, 222, 1097, 1101, 666]);
 
         $this->service()->findUpcomingByProgramme($programme);
     }
@@ -57,8 +76,8 @@ class FindUpcomingByProgrammeTest extends AbstractCollapsedBroadcastServiceTest
         $this->mockRepository
             ->method('findUpcomingByProgramme')
             ->willReturn([
-                 ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
-             ]);
+                ['areWebcasts' => [false, false], 'serviceIds' => [111, 222], 'broadcastIds' => [1, 2, 3, 4]],
+            ]);
 
         $this->mockServiceRepository
             ->method('findByIds')
