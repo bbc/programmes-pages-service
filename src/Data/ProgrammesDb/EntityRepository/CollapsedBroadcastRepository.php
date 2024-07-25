@@ -337,19 +337,19 @@ QUERY;
          *
          * The rest of the query is obvious and deals with getting the relevant metadata around the core entity etc.
          */
-        $sql = 'SELECT ' . $selectClause ;
+        $sql = 'SELECT ' . $selectClause;
         $sql .= <<<'EOQ'
             FROM
-                ( 
-                    SELECT cb.* 
+                (
+                    SELECT cb.*
                         FROM membership m
                         INNER JOIN collapsed_broadcast cb ON m.`member_core_entity_id` = cb.`programme_item_id`
-                        WHERE m.group_id = :groupDbId AND cb.end_at > :cutoffTime
+                        WHERE m.group_id = :groupDbId AND cb.end_at > :cutoffTime AND cb.is_webcast_only IS NOT 1
                     UNION
-                        SELECT cb.* 
+                        SELECT cb.*
                         FROM membership m
                         INNER JOIN collapsed_broadcast cb ON m.`member_core_entity_id` = cb.`tleo_id`
-                        WHERE m.group_id = :groupDbId AND cb.end_at > :cutoffTime
+                        WHERE m.group_id = :groupDbId AND cb.end_at > :cutoffTime AND cb.is_webcast_only IS NOT 1
                 ) AS cb
             LEFT JOIN collapsed_broadcast cb2 ON cb.`programme_item_id` = cb2.`programme_item_id` AND cb.`end_at` > cb2.`end_at` AND cb2.end_at > :cutoffTime
             INNER JOIN core_entity ce ON cb.`programme_item_id` = ce.id
