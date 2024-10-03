@@ -19,4 +19,5 @@ class ContactMediumEnum
     public const INSTAGRAM = 'instagram';
     public const OTHER = 'other';
     public const UGC = 'ugc';
+    public const WHATSAPP = 'whatsapp';
 }
