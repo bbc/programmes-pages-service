@@ -21,7 +21,7 @@ class ContactDetails
 
     public function __construct(string $mediaType, string $value, string $freetext)
     {
-        $this->type = $mediaType;
+        $this->type = 'test';
         $this->value = $value;
         $this->freetext = $freetext;
     }
