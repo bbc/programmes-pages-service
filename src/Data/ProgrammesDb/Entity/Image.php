@@ -56,6 +56,20 @@ class Image implements MemberOfGroupInterface, RelatedLinkContextInterface, Prom
      */
     private $extension = 'jpg';
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $height;
+
+     /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $width;
+
 
     public function __construct(string $pid, string $title)
     {
@@ -106,5 +120,25 @@ class Image implements MemberOfGroupInterface, RelatedLinkContextInterface, Prom
     public function setExtension(string $extension): void
     {
         $this->extension = $extension;
+    }
+
+    public function getHeight(): int
+    {
+        return $this->height;
+    }
+
+    public function setHeight(int $height): void
+    {
+        $this->height = $height;
+    }
+
+    public function getWidth(): int
+    {
+        return $this->width;
+    }
+
+    public function setWidth(int $width): void
+    {
+        $this->width = $width;
     }
 }
