@@ -122,7 +122,7 @@ class Image implements MemberOfGroupInterface, RelatedLinkContextInterface, Prom
         $this->extension = $extension;
     }
 
-    public function getHeight(): int
+    public function getHeight(): ?int
     {
         return $this->height;
     }
@@ -132,7 +132,7 @@ class Image implements MemberOfGroupInterface, RelatedLinkContextInterface, Prom
         $this->height = $height;
     }
 
-    public function getWidth(): int
+    public function getWidth(): ?int
     {
         return $this->width;
     }
