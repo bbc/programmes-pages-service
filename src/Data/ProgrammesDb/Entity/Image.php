@@ -57,14 +57,14 @@ class Image implements MemberOfGroupInterface, RelatedLinkContextInterface, Prom
     private $extension = 'jpg';
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $height;
 
      /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(type="integer", nullable=true)
      */
