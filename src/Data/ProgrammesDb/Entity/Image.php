@@ -127,7 +127,7 @@ class Image implements MemberOfGroupInterface, RelatedLinkContextInterface, Prom
         return $this->height;
     }
 
-    public function setHeight(int $height): void
+    public function setHeight(?int $height): void
     {
         $this->height = $height;
     }
@@ -137,7 +137,7 @@ class Image implements MemberOfGroupInterface, RelatedLinkContextInterface, Prom
         return $this->width;
     }
 
-    public function setWidth(int $width): void
+    public function setWidth(?int $width): void
     {
         $this->width = $width;
     }
