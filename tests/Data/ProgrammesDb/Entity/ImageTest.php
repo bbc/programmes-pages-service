@@ -32,6 +32,8 @@ class ImageTest extends TestCase
         $this->assertSame('standard', $image->getType());
         $this->assertSame('jpg', $image->getExtension());
         $this->assertSame(false, $image->getIsEmbargoed());
+        $this->assertSame(null, $image->getHeight());
+        $this->assertSame(null, $image->getWidth());
     }
 
     /**
@@ -56,6 +58,8 @@ class ImageTest extends TestCase
             ['Type', 'standard'],
             ['Extension', 'png'],
             ['IsEmbargoed', true],
+            ['Height', 600],
+            ['Width', 400],
         ];
     }
 }
