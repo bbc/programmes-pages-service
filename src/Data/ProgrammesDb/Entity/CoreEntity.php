@@ -276,6 +276,13 @@ abstract class CoreEntity implements ContributableToInterface, MemberOfGroupInte
      */
     private $contributionsCount = 0;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $type;
+
     public function __construct(string $pid, string $title)
     {
         $this->pid = $pid;
@@ -380,5 +387,10 @@ abstract class CoreEntity implements ContributableToInterface, MemberOfGroupInte
     public function setContributionsCount(int $contributionsCount): void
     {
         $this->contributionsCount = $contributionsCount;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
     }
 }
