@@ -20,4 +20,5 @@ class ContactMediumEnum
     public const OTHER = 'other';
     public const UGC = 'ugc';
     public const WHATSAPP = 'whatsapp';
+    public const PRIVACY_POLICY = 'privacy-policy';
 }
