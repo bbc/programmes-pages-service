@@ -38,7 +38,7 @@ class Ancestry implements MemberOfGroupInterface, RelatedLinkContextInterface, P
      */
     private $ancestorId;
 
-    public function __construct(string $ancestorId, string $coreEntityId)
+    public function __construct(int $ancestorId, int $coreEntityId)
     {
         $this->ancestorId = $ancestorId;
         $this->coreEntityId = $coreEntityId;
@@ -54,14 +54,9 @@ class Ancestry implements MemberOfGroupInterface, RelatedLinkContextInterface, P
         return $this->coreEntityId;
     }
 
-    public function setAncestorId(string $pid): void
-    {
-        $this->ancestorId = $pid;
-    }
+    // ancestry doesn't have a setter
+    // based on tests/Data/ProgrammesDb/Entity/CoreEntityTest.php line 71:
+    // 'ancestry doesn't have a setter as it is provided by Tree logic'
 
-    public function setCoreEntityId(string $pid): void
-    {
-        $this->coreEntityId = $pid;
-    }
 
 }

@@ -21,29 +21,14 @@ class AncestryTest extends TestCase
 
     public function testDefaults()
     {
-        $ancestor = new Ancestry('pidAncestor', 'pidCoreEntity');
+        $ancestor = new Ancestry(12345 , 12345);
 
 
-        $this->assertSame('pidAncestor', $ancestor->getAncestorId());
-        $this->assertSame('pidCoreEntity', $ancestor->getCoreEntityId());
+        $this->assertSame(12345, $ancestor->getAncestorId());
+        $this->assertSame(12345, $ancestor->getCoreEntityId());
     }
 
-    /**
-     * @dataProvider setterDataProvider
-     */
-    public function testSetters($name, $validValue)
-    {
-        $ancestor = new Ancestry('pid', 'title');
-
-        $ancestor->{'set' . $name}($validValue);
-        $this->assertEquals($validValue, $ancestor->{'get' . $name}());
-    }
-
-    public function setterDataProvider()
-    {
-        return [
-            ['AncestorId', 12577],
-            ['CoreEntityId', 12578],
-        ];
-    }
+    // ancestry doesn't have a setter
+    // based on tests/Data/ProgrammesDb/Entity/CoreEntityTest.php line 71:
+    // 'ancestry doesn't have a setter as it is provided by Tree logic'
 }
