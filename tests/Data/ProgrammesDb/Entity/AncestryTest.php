@@ -21,14 +21,9 @@ class AncestryTest extends TestCase
 
     public function testDefaults()
     {
-        $ancestor = new Ancestry(12345 , 12345);
-
+        $ancestor = new Ancestry(12345, 12345);
 
         $this->assertSame(12345, $ancestor->getAncestorId());
         $this->assertSame(12345, $ancestor->getCoreEntityId());
     }
-
-    // ancestry doesn't have a setter
-    // based on tests/Data/ProgrammesDb/Entity/CoreEntityTest.php line 71:
-    // 'ancestry doesn't have a setter as it is provided by Tree logic'
 }

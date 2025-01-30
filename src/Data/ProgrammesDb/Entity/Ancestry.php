@@ -44,6 +44,10 @@ class Ancestry implements MemberOfGroupInterface, RelatedLinkContextInterface, P
         $this->coreEntityId = $coreEntityId;
     }
 
+    // ancestry doesn't have a setter
+    // based on tests/Data/ProgrammesDb/Entity/CoreEntityTest.php line 71:
+    // 'ancestry doesn't have a setter as it is provided by Tree logic'
+
     public function getAncestorId(): ?int
     {
         return $this->ancestorId;
@@ -53,10 +57,4 @@ class Ancestry implements MemberOfGroupInterface, RelatedLinkContextInterface, P
     {
         return $this->coreEntityId;
     }
-
-    // ancestry doesn't have a setter
-    // based on tests/Data/ProgrammesDb/Entity/CoreEntityTest.php line 71:
-    // 'ancestry doesn't have a setter as it is provided by Tree logic'
-
-
 }
