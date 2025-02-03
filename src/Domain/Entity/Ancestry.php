@@ -11,11 +11,11 @@ class Ancestry
     private $ancestorId;
 
     public function __construct(
-      int $coreEntityId,
-      int $ancestorId
+        int $coreEntityId,
+        int $ancestorId
     ) {
-      $this->coreEntityId = $coreEntityId;
-      $this->ancestorId = $ancestorId;
+        $this->coreEntityId = $coreEntityId;
+        $this->ancestorId = $ancestorId;
     }
 
     public function getCoreEntityId(): int
@@ -26,5 +26,5 @@ class Ancestry
     public function getAncestorId(): int
     {
         return $this->ancestorId;
-    } 
+    }
 }
