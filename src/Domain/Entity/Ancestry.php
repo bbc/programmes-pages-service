@@ -4,10 +4,10 @@ namespace BBC\ProgrammesPagesService\Domain\Entity;
 
 class Ancestry
 {
-  /** @var coreEntityId */
+  /** @var int */
   private $coreEntityId;
 
-  /** @var ancestorId */
+  /** @var int */
   private $ancestorId;
 
   public function __construct(

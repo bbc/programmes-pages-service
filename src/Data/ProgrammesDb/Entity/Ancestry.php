@@ -12,6 +12,7 @@ class Ancestry
     /**
      * @var int
      *
+     * @ORM\Id()
      * @ORM\Column(type="integer", unique=true)
      * @ORM\ManyToOne(targetEntity="CoreEntity")
      * @ORM\JoinColumn(nullable=false, referencedColumnName="id", onDelete="NO ACTION")
@@ -21,6 +22,7 @@ class Ancestry
     /**
      * @var int
      *
+     * @ORM\Id()
      * @ORM\Column(type="integer", unique=true)
      * @ORM\ManyToOne(targetEntity="CoreEntity")
      * @ORM\JoinColumn(nullable=false, referencedColumnName="id", onDelete="NO ACTION")
