@@ -20,7 +20,7 @@ class Ancestry implements MemberOfGroupInterface, RelatedLinkContextInterface, P
      * @ORM\Id()
      * @ORM\Column(type="integer", unique=true)
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(name: "coreEntity_id", referencedColumnName: "id")
+     * @ORM\JoinColumn(name: "core_Entity_id", referencedColumnName: "id")
      */
     private $coreEntityId;
 
