@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AncestryRepository")
  */
-class Ancestry implements MemberOfGroupInterface, RelatedLinkContextInterface, PromotableInterface
+class Ancestry
 {
 
     /**
