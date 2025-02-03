@@ -14,7 +14,7 @@ class Ancestry
      *
      * @ORM\Column(type="integer", unique=true)
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(name:"core_entity_id", referencedColumnName:"id")
+     * @ORM\JoinColumn(nullable="false", referencedColumnName:"id", onDelete="NO ACTION")
      */
     private $coreEntityId;
 
@@ -23,7 +23,7 @@ class Ancestry
      *
      * @ORM\Column(type="integer", unique=true)
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(name:"ancestor_id", referencedColumnName:"id")
+     * @ORM\JoinColumn(nullable="false", referencedColumnName:"id", onDelete="NO ACTION")
      */
     private $ancestorId;
 
