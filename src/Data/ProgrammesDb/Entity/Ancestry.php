@@ -13,28 +13,24 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Ancestry implements MemberOfGroupInterface, RelatedLinkContextInterface, PromotableInterface
 {
-    use TimestampableEntity;
-    use Traits\IsEmbargoedTrait;
-    use Traits\PartnerPidTrait;
-    use Traits\SynopsesTrait;
 
     /**
-     * @var int|null
+     * @var CoreEntity|null
      *
      * @ORM\Id()
      * @ORM\Column(type="integer", nullable=true, unique=true)
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(name: "core_entity_id", referencedColumnName: "id", nullable=true)
      */
     private $coreEntityId;
 
     /**
-     * @var int|null
+     * @var CoreEntity|null
      *
      * @ORM\Id()
      * @ORM\Column(type="integer",  nullable=true, unique=true)
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(name: "ancestor_id", referencedColumnName: "id", nullable=true)
      */
     private $ancestorId;
 
