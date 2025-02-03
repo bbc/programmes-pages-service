@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ancestry
 {
-
     /**
      * @var int
      *
@@ -34,12 +33,12 @@ class Ancestry
         $this->coreEntityId = $coreEntityId;
     }
 
-    public function getAncestorId(): ?int
+    public function getAncestorId(): int
     {
         return $this->ancestorId;
     }
 
-    public function getCoreEntityId(): ?int
+    public function getCoreEntityId(): int
     {
         return $this->coreEntityId;
     }
