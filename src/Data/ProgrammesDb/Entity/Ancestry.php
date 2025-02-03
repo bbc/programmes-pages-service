@@ -9,28 +9,28 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\ImageRepository")
+ * @ORM\Entity(repositoryClass="BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AncestryRepository")
  */
 class Ancestry implements MemberOfGroupInterface, RelatedLinkContextInterface, PromotableInterface
 {
 
     /**
-     * @var CoreEntity|null
+     * @var int
      *
      * @ORM\Id()
-     * @ORM\Column(type="integer", nullable=true, unique=true)
+     * @ORM\Column(type="integer", unique=true)
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(name: "core_entity_id", referencedColumnName: "id", nullable=true)
+     * @ORM\JoinColumn(name: "core_entity_id", referencedColumnName: "id")
      */
     private $coreEntityId;
 
     /**
-     * @var CoreEntity|null
+     * @var int
      *
      * @ORM\Id()
-     * @ORM\Column(type="integer",  nullable=true, unique=true)
+     * @ORM\Column(type="integer", unique=true)
      * @ORM\ManyToOne(targetEntity="CoreEntity")
-     * @ORM\JoinColumn(name: "ancestor_id", referencedColumnName: "id", nullable=true)
+     * @ORM\JoinColumn(name: "ancestor_id", referencedColumnName: "id")
      */
     private $ancestorId;
 

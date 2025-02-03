@@ -11,8 +11,7 @@ class AncestryTest extends TestCase
 
     public function testDefaults()
     {
-        $entity = $this->getMockForAbstractClass( 
-      12345,      12345);
+      $entity = new Ancestry(12345, 12345);
         
         $this->assertSame(12345, $entity->getAncestorId());
         $this->assertSame(12345, $entity->getCoreEntityId());
