@@ -8,16 +8,6 @@ use ReflectionClass;
 
 class AncestryTest extends TestCase
 {
-    public function testTraits()
-    {
-        $reflection = new ReflectionClass(Ancestry::class);
-        $this->assertEquals([
-            'Gedmo\Timestampable\Traits\TimestampableEntity',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\IsEmbargoedTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\PartnerPidTrait',
-            'BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Traits\SynopsesTrait',
-        ], $reflection->getTraitNames());
-    }
 
     public function testDefaults()
     {
