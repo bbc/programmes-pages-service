@@ -33,6 +33,15 @@ class MapperFactory
         return $this->options[$key];
     }
 
+    public function getAncestryMapper(): AncestryMapper
+    {
+        if (!isset($this->instances[AncestryMapper::class])) {
+            $this->instances[AncestryMapper::class] = new AncestryMapper($this);
+        }
+
+        return $this->instances[AncestryMapper::class];
+    }
+
     public function getAtozTitleMapper(): AtozTitleMapper
     {
         if (!isset($this->instances[AtozTitleMapper::class])) {
