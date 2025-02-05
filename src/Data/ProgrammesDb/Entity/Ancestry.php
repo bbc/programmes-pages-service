@@ -44,4 +44,14 @@ class Ancestry
     {
         return $this->coreEntityId;
     }
+
+    public function setAncestorId(int $ancestorId): int
+    {
+        return $this->ancestorId = $ancestorId;
+    }
+
+    public function setCoreEntityId(int $coreEntityId): int
+    {
+        return $this->coreEntityId = $coreEntityId;
+    }
 }
