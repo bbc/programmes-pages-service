@@ -23,7 +23,7 @@ class AncestryMapper extends AbstractMapper
         if (!isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new Ancestry(
                 $dbAncestry['coreEntityId'],
-                $dbAncestry['ancestorId'],
+                $dbAncestry['ancestorId']
             );
         }
 

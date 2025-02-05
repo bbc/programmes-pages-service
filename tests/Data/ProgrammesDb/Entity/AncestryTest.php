@@ -5,7 +5,6 @@ namespace Tests\BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\Entity\Ancestry;
 use PHPUnit\Framework\TestCase;
 
-
 class AncestryTest extends TestCase
 {
 

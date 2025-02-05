@@ -6,7 +6,6 @@ use BBC\ProgrammesCachingLibrary\CacheInterface;
 use BBC\ProgrammesPagesService\Data\ProgrammesDb\EntityRepository\AncestryRepository;
 use BBC\ProgrammesPagesService\Mapper\ProgrammesDbToDomain\AncestryMapper;
 
-
 class AncestryService extends AbstractService
 {
     /** @var AncestryMapper */
